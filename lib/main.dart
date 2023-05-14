@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:winget_gui/content.dart';
@@ -54,13 +51,17 @@ class _MyHomePageState extends State<MyHomePage> {
             //overflowBehavior: CommandBarOverflowBehavior.wrap,
             primaryItems: [
               _menuButton(
-                  text: "Show updates",
+                  text: "Updates",
                   command: ['upgrade'],
-                  icon: FluentIcons.update_restore),
+                  icon: FluentIcons.substitutions_in),
               _menuButton(
-                  text: "Show installed",
+                  text: "Installed",
                   command: ['list'],
-                  icon: FluentIcons.list),
+                  icon: FluentIcons.library),
+              _reloadButton(
+                  text: "Reload Page",
+                  icon: FluentIcons.update_restore),
+
               menuSearchField(
                   text: "Search Package",
                   command: ['search'],
@@ -68,7 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
               menuSearchField(
                   text: "Show Package",
                   command: ['show'],
-                  icon: FluentIcons.search)
+                  icon: FluentIcons.search),
+
             ],
           ),
         ),
@@ -92,6 +94,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  CommandBarButton _reloadButton(
+      {required String text, IconData? icon}) {
+    return CommandBarButton(
+      icon: (icon != null) ? Icon(icon) : null,
+      label: Text(text),
+      onPressed: () {
+        setState(
+              () {
+            content.reload();
+          },
+        );
+      },
+    );
+  }
+
   CommandBarBuilderItem menuSearchField(
       {required String text, required List<String> command, IconData? icon}) {
     return CommandBarBuilderItem(
@@ -101,7 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
             prefix: Text(text),
             suffix: (icon != null) ? Icon(icon) : null,
             onSubmitted: (String string) {
-              print(string);
               setState(
                 () {
                   List<String> fullCommand = [...command]..add(string);
