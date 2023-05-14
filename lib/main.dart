@@ -63,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
               _menuSearchField(
                   text: "Search Package",
                   command: ['search'],
+                  optionalParameters: ['--count', '1000'],
                   icon: FluentIcons.search),
               _menuSearchField(
                   text: "Show Package",
@@ -108,22 +109,24 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  CommandBarBuilderItem _menuSearchField(
-      {required String text, required List<String> command, IconData? icon}) {
-    return _wrapWidget(
-        TextBox(
-          prefix: Text(text),
-          suffix: (icon != null) ? Icon(icon) : null,
-          onSubmitted: (String string) {
-            setState(
-                  () {
-                List<String> fullCommand = [...command, string];
-                content.showResultOfCommand(fullCommand);
-              },
-            );
+  CommandBarBuilderItem _menuSearchField({
+    required String text,
+    required List<String> command,
+    List<String>? optionalParameters,
+    IconData? icon,
+  }) {
+    return _wrapWidget(TextBox(
+      prefix: Text(text),
+      suffix: (icon != null) ? Icon(icon) : null,
+      onSubmitted: (String string) {
+        setState(
+          () {
+            List<String> fullCommand = [...command, string, ...?optionalParameters];
+            content.showResultOfCommand(fullCommand);
           },
-        )
-    );
+        );
+      },
+    ));
   }
 
   CommandBarBuilderItem _commandPrompt({required String text, IconData? icon}) {
