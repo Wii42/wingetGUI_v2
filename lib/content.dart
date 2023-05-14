@@ -18,6 +18,7 @@ class Content extends StatefulWidget {
     _command = command;
     _rebuild();
   }
+
   void reload() {
     _rebuild();
   }
@@ -36,31 +37,11 @@ class _ContentState extends State<Content> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Stream<List<String>>>(
-      future: _lineStream(),
+      future: getOutputStreamOfProcess(),
       builder: (BuildContext context,
           AsyncSnapshot<Stream<List<String>>> processSnapshot) {
         if (processSnapshot.hasData) {
-          return StreamBuilder<List<String>>(
-            stream: processSnapshot.data,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<String>> streamSnapshot) {
-              return ListView(children: [
-                Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (streamSnapshot.connectionState !=
-                              ConnectionState.done)
-                            const ProgressBar(),
-                          if (streamSnapshot.hasData)
-                            //for (String line in _splitLines(streamSnapshot.data!))
-                            for (String line in streamSnapshot.data!)
-                              Text(line),
-                        ]))
-              ]);
-            },
-          );
+          return _displayStreamOfOutput(processSnapshot.data!);
         } else if (processSnapshot.hasError) {
           return Text('Error: ${processSnapshot.error}');
         } else {
@@ -70,7 +51,7 @@ class _ContentState extends State<Content> {
     );
   }
 
-  Future<Stream<List<String>>> _lineStream() async {
+  Future<Stream<List<String>>> getOutputStreamOfProcess() async {
     _process = await Process.start('winget', widget._command);
     Stream<String> stream = _process.stdout.transform(utf8.decoder);
 
@@ -78,5 +59,32 @@ class _ContentState extends State<Content> {
         .splitStreamElementsOnNewLine()
         .removeLoadingElementsFromStream()
         .rememberingStream();
+  }
+
+  StreamBuilder<List<String>> _displayStreamOfOutput(
+      Stream<List<String>> stream) {
+    return StreamBuilder<List<String>>(
+      stream: stream,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<String>> streamSnapshot) {
+        return ListView(children: [
+          Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (streamSnapshot.connectionState != ConnectionState.done)
+                      const ProgressBar(),
+                    if (streamSnapshot.hasData)
+                      ..._displayOutput(streamSnapshot.data!),
+                  ]))
+        ]);
+      },
+    );
+  }
+
+  List<Widget> _displayOutput(List<String> output) {
+    List<Widget> list = [for (String line in output) Text(line)];
+    return list;
   }
 }
