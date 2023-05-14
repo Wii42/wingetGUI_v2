@@ -59,18 +59,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   command: ['list'],
                   icon: FluentIcons.library),
               _reloadButton(
-                  text: "Reload Page",
-                  icon: FluentIcons.update_restore),
-
-              menuSearchField(
+                  text: "Reload Page", icon: FluentIcons.update_restore),
+              _menuSearchField(
                   text: "Search Package",
                   command: ['search'],
                   icon: FluentIcons.search),
-              menuSearchField(
+              _menuSearchField(
                   text: "Show Package",
                   command: ['show'],
                   icon: FluentIcons.search),
-
+              _commandPrompt(
+                text: "Execute Command",
+              )
             ],
           ),
         ),
@@ -94,14 +94,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  CommandBarButton _reloadButton(
-      {required String text, IconData? icon}) {
+  CommandBarButton _reloadButton({required String text, IconData? icon}) {
     return CommandBarButton(
       icon: (icon != null) ? Icon(icon) : null,
       label: Text(text),
       onPressed: () {
         setState(
-              () {
+          () {
             content.reload();
           },
         );
@@ -109,23 +108,45 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  CommandBarBuilderItem menuSearchField(
+  CommandBarBuilderItem _menuSearchField(
       {required String text, required List<String> command, IconData? icon}) {
+    return _wrapWidget(
+        TextBox(
+          prefix: Text(text),
+          suffix: (icon != null) ? Icon(icon) : null,
+          onSubmitted: (String string) {
+            setState(
+                  () {
+                List<String> fullCommand = [...command, string];
+                content.showResultOfCommand(fullCommand);
+              },
+            );
+          },
+        )
+    );
+  }
+
+  CommandBarBuilderItem _commandPrompt({required String text, IconData? icon}) {
+    return _wrapWidget(
+      TextBox(
+        prefix: Text(text),
+        suffix: (icon != null) ? Icon(icon) : null,
+        onSubmitted: (String command) {
+          setState(
+            () {
+              content.showResultOfCommand(command.split(' '));
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  CommandBarBuilderItem _wrapWidget(Widget widget) {
     return CommandBarBuilderItem(
         builder: (BuildContext context, CommandBarItemDisplayMode displayMode,
             Widget child) {
-          return TextBox(
-            prefix: Text(text),
-            suffix: (icon != null) ? Icon(icon) : null,
-            onSubmitted: (String string) {
-              setState(
-                () {
-                  List<String> fullCommand = [...command]..add(string);
-                  content.showResultOfCommand(fullCommand);
-                },
-              );
-            },
-          );
+          return widget;
         },
         wrappedItem: CommandBarButton(onPressed: () {}));
   }
