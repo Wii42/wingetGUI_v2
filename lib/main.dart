@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
               _menuSearchField(
                   text: "Search Package",
                   command: ['search'],
-                  optionalParameters: ['--count', '1000'],
+                  optionalParameters: ['--count', '500'],
                   icon: FluentIcons.search),
               _menuSearchField(
                   text: "Show Package",
@@ -121,7 +121,11 @@ class _MyHomePageState extends State<MyHomePage> {
       onSubmitted: (String string) {
         setState(
           () {
-            List<String> fullCommand = [...command, string, ...?optionalParameters];
+            List<String> fullCommand = [
+              ...command,
+              string,
+              ...?optionalParameters
+            ];
             content.showResultOfCommand(fullCommand);
           },
         );

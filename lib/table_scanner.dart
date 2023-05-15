@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/string_extension.dart';
+import 'package:winget_gui/widget_list_extension.dart';
 
 import 'output_handling.dart';
 
@@ -100,18 +101,18 @@ class TableScanner extends Scanner {
 
 class TablePart extends OutputPart {
   TablePart(super.lines);
-  late Table table;
+  late PackageList table;
 
   @override
   Widget representation() {
     _makeTable();
-    return const Text('table');
+    return table;
   }
 
   _makeTable() {
     List<int> columnsPos = _getColumnsPos();
     _correctLinesWithNonWesternGlyphs(columnsPos);
-    createTable(columnsPos);
+    _createPackageList(columnsPos);
   }
 
   List<int> _getColumnsPos() {
@@ -119,7 +120,7 @@ class TablePart extends OutputPart {
     String head = lines[0];
 
     Iterable<Match> matches = pattern.allMatches(head);
-    return [for (Match match in matches) match.start];
+    return [0, for (Match match in matches) match.start];
   }
 
   void _correctLinesWithNonWesternGlyphs(List<int> columnsPos) {
@@ -145,19 +146,27 @@ class TablePart extends OutputPart {
     }
   }
 
-  void createTable(columnsPos) {
+  void _createPackageList(List<int> columnsPos) {
     List<String> columnNames = _getColumnNames(columnsPos);
 
-    List<Map<String, String>> data = [];
+    List<PackageShortInfo> packages = [];
     List<String> body = lines.sublist(2);
     for (String entry in body) {
-      Map<String, String> infos = {};
-      for (int i = 0; i < columnNames.length; i++) {
-        int end = i + 1 < columnNames.length ? columnsPos[i + 1] : entry.length;
-        infos[columnNames[i]] = (entry.substring(columnsPos[i], end)).trim();
-      }
+      Map<String, String> infos =
+          _getDictFromLine(entry, columnNames, columnsPos);
+      packages.add(PackageShortInfo(infos));
     }
-    table = Table(columnNames,data);
+    table = PackageList(packages);
+  }
+
+  Map<String, String> _getDictFromLine(
+      String entry, List<String> columnNames, List<int> columnsPos) {
+    Map<String, String> infos = {};
+    for (int i = 0; i < columnNames.length; i++) {
+      int end = i + 1 < columnNames.length ? columnsPos[i + 1] : entry.length;
+      infos[columnNames[i]] = (entry.substring(columnsPos[i], end)).trim();
+    }
+    return infos;
   }
 
   List<String> _getColumnNames(List<int> columnsPos) {
@@ -172,8 +181,62 @@ class TablePart extends OutputPart {
   }
 }
 
-class Table {
-  List<String> columnNames;
-  List<Map<String, String>> data;
-  Table(this.columnNames, this.data);
+class PackageList extends StatelessWidget {
+  final List<PackageShortInfo> packages;
+  const PackageList(this.packages, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: packages.withSpaceBetween(height: 10));
+  }
+}
+
+class PackageShortInfo extends StatelessWidget {
+  final Map<String, String> infos;
+  const PackageShortInfo(this.infos, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(color: FluentTheme.of(context).cardColor),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  infos['Name']!,
+                  style: const TextStyle(fontSize: 20),
+                ),
+                Text(infos['ID']!),
+                if (_hasEntry('Quelle'))
+                  Text(
+                    "from ${infos['Quelle']!}",
+                    style:
+                        TextStyle(color: FluentTheme.of(context).disabledColor),
+                  )
+              ],
+            ),
+            const Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if (_hasEntry('Version')) Text("Version: ${infos['Version']!}"),
+                if (_hasEntry('Verfügbar'))
+                  Text("Verfügbar: ${infos['Verfügbar']!}")
+              ],
+            ),
+            //Text(infos.toString())
+          ],
+        ),
+      ),
+    );
+    return Text(infos.toString());
+  }
+
+  bool _hasEntry(String key) {
+    return (infos.containsKey(key) && infos[key]!.isNotEmpty);
+  }
 }
