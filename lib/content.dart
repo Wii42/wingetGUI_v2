@@ -35,6 +35,16 @@ class _ContentState extends State<Content> {
     };
   }
 
+  Future<Stream<List<String>>> getOutputStreamOfProcess() async {
+    _process = await Process.start('winget', widget._command);
+    Stream<String> stream = _process.stdout.transform(utf8.decoder);
+
+    return stream
+        .splitStreamElementsOnNewLine()
+        .removeLoadingElementsFromStream()
+        .rememberingStream();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Stream<List<String>>>(
@@ -50,16 +60,6 @@ class _ContentState extends State<Content> {
         }
       },
     );
-  }
-
-  Future<Stream<List<String>>> getOutputStreamOfProcess() async {
-    _process = await Process.start('winget', widget._command);
-    Stream<String> stream = _process.stdout.transform(utf8.decoder);
-
-    return stream
-        .splitStreamElementsOnNewLine()
-        .removeLoadingElementsFromStream()
-        .rememberingStream();
   }
 
   StreamBuilder<List<String>> _displayStreamOfOutput(

@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:system_theme/system_theme.dart';
+//import 'package:system_theme/system_theme.dart';
 import 'package:winget_gui/content.dart';
 
 Future<void> main() async {
@@ -14,13 +14,14 @@ class MyApp extends StatelessWidget {
     return FluentApp(
       title: 'Flutter Demo',
       theme: FluentThemeData(
-          accentColor: SystemTheme.accentColor.accent.toAccentColor(),
+          accentColor: Colors.blue,//SystemTheme.accentColor.accent.toAccentColor(),
           brightness: Brightness.light),
       darkTheme: FluentThemeData(
-        accentColor: SystemTheme.accentColor.accent.toAccentColor(),
+        accentColor: Colors.blue,//SystemTheme.accentColor.accent.toAccentColor(),
         brightness: Brightness.dark,
       ),
       themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
       home: const MyHomePage(title: "Stream Test"),
     );
   }

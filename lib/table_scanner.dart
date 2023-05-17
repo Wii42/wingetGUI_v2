@@ -228,12 +228,10 @@ class PackageShortInfo extends StatelessWidget {
                   Text("Verfügbar: ${infos['Verfügbar']!}")
               ],
             ),
-            //Text(infos.toString())
           ],
         ),
       ),
     );
-    return Text(infos.toString());
   }
 
   bool _hasEntry(String key) {
