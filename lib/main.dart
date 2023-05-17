@@ -3,11 +3,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/content.dart';
 
 Future<void> main() async {
-  runApp(const MyApp());
+  runApp(const WingetGui());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class WingetGui extends StatelessWidget {
+  const WingetGui({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/table_scanner.dart';
+import 'package:winget_gui/table/table_scanner.dart';
 
 class OutputHandler {
   List<String> output;

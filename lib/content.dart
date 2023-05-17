@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling.dart';
-import 'package:winget_gui/stream_modifier.dart';
+import 'package:winget_gui/extensions/stream_modifier.dart';
 
 class Content extends StatefulWidget {
   Content({super.key});
