@@ -7,6 +7,12 @@ class PlainTextPart extends OutputPart {
 
   @override
   Widget representation() {
-    return Column(children: [for (String line in lines) Text(line)]);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [for (String line in lines) Text(line)]);
+  }
+
+  addLine(String line) {
+    lines.add(line);
   }
 }

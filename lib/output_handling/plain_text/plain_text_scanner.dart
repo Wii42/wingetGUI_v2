@@ -7,10 +7,21 @@ class PlainTextScanner extends Scanner {
   PlainTextScanner(super.respList);
   @override
   void markResponsibleLines() {
+    PlainTextPart? prevPart;
+    bool isSamePart = false;
     for (Responsibility resp in respList) {
       if (resp.respPart == null) {
-        PlainTextPart rest = PlainTextPart([resp.line]);
-        resp.respPart = rest;
+        if (isSamePart) {
+          prevPart!.addLine(resp.line);
+          resp.respPart = prevPart;
+        } else {
+          PlainTextPart rest = PlainTextPart([resp.line]);
+          resp.respPart = rest;
+          prevPart = rest;
+          isSamePart = true;
+        }
+      } else {
+        isSamePart = false;
       }
     }
   }

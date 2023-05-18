@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/plain_text/plain_text_scanner.dart';
 import 'package:winget_gui/output_handling/responsibility.dart';
 import 'package:winget_gui/output_handling/scanner.dart';
@@ -14,6 +15,7 @@ class OutputHandler {
 
   OutputHandler(this.output, this.command) {
     responsibilityList = [for (String line in output) Responsibility(line)];
+
     outputScanners = [
       TableScanner(responsibilityList),
       PlainTextScanner(responsibilityList)
@@ -40,6 +42,6 @@ class OutputHandler {
       }
       prevPart = part;
     }
-    return list;
+    return list.withSpaceBetween(height: 20);
   }
 }
