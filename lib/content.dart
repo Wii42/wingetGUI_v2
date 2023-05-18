@@ -68,18 +68,36 @@ class _ContentState extends State<Content> {
       stream: stream,
       builder:
           (BuildContext context, AsyncSnapshot<List<String>> streamSnapshot) {
-        return ListView(children: [
-          Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (streamSnapshot.connectionState != ConnectionState.done)
-                      const ProgressBar(),
-                    if (streamSnapshot.hasData)
-                      ..._displayOutput(streamSnapshot.data!),
-                  ]))
-        ]);
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            if (streamSnapshot.connectionState != ConnectionState.done)
+              LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return SizedBox(
+                      height: 0,
+                      width: constraints.maxWidth,
+                      child: const ProgressBar());
+                },
+              ),
+            Expanded(
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (streamSnapshot.hasData)
+                          ..._displayOutput(streamSnapshot.data!),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
       },
     );
   }

@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
               _menuSearchField(
                   text: "Search Package",
                   command: ['search'],
-                  optionalParameters: ['--count', '500'],
+                  optionalParameters: ['--count', '250'],
                   icon: FluentIcons.search),
               _menuSearchField(
                   text: "Show Package",
