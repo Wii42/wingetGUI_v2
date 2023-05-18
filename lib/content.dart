@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/output_handling.dart';
+import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/extensions/stream_modifier.dart';
 
 class Content extends StatefulWidget {

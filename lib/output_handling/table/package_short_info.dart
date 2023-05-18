@@ -24,7 +24,7 @@ class PackageShortInfo extends StatelessWidget {
                   Text(
                     "from ${infos['Quelle']!}",
                     style:
-                    TextStyle(color: FluentTheme.of(context).disabledColor),
+                        TextStyle(color: FluentTheme.of(context).disabledColor),
                   )
               ],
             ),

@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/extensions/string_extension.dart';
-import 'package:winget_gui/table/package_list.dart';
-import 'package:winget_gui/table/package_short_info.dart';
+import 'package:winget_gui/output_handling/table/package_list.dart';
+import 'package:winget_gui/output_handling/table/package_short_info.dart';
 
-import '../output_handling.dart';
+import '../output_part.dart';
 
 class TablePart extends OutputPart {
   TablePart(super.lines);
@@ -59,7 +59,7 @@ class TablePart extends OutputPart {
     List<String> body = lines.sublist(2);
     for (String entry in body) {
       Map<String, String> infos =
-      _getDictFromLine(entry, columnNames, columnsPos);
+          _getDictFromLine(entry, columnNames, columnsPos);
       packages.add(PackageShortInfo(infos));
     }
     packageList = PackageList(packages);

@@ -1,7 +1,9 @@
 import 'package:winget_gui/extensions/string_extension.dart';
-import 'package:winget_gui/table/table_part.dart';
+import 'package:winget_gui/output_handling/table/table_part.dart';
 
-import '../output_handling.dart';
+import '../output_part.dart';
+import '../responsibility.dart';
+import '../scanner.dart';
 
 class TableScanner extends Scanner {
   TableScanner(super.respList);

@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
-import 'package:winget_gui/table/package_short_info.dart';
+import 'package:winget_gui/output_handling/table/package_short_info.dart';
 
 class PackageList extends StatelessWidget {
   final List<PackageShortInfo> packages;
