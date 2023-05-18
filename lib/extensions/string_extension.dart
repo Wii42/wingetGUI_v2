@@ -1,5 +1,4 @@
 extension ContainsExtentsion on String {
-
   bool isLoadingSymbols() {
     if (isEmpty) {
       return false;
@@ -22,5 +21,9 @@ extension ContainsExtentsion on String {
       }
     }
     return false;
+  }
+
+  bool isProgressBar() {
+    return (contains('█') || contains('░') || contains('▒'));
   }
 }
