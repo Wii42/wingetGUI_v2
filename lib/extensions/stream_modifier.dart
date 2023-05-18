@@ -3,8 +3,6 @@ import 'dart:convert';
 
 import 'package:winget_gui/extensions/string_extension.dart';
 
-
-
 extension StringStreamModifier on Stream<String> {
   Stream<String> splitStreamElementsOnNewLine() {
     final controller = StreamController<String>();
@@ -27,6 +25,20 @@ extension StringStreamModifier on Stream<String> {
 
     listen((newData) {
       if (!newData.isLoadingSymbols()) {
+        controller.add(newData);
+      }
+    }, onDone: () {
+      controller.close();
+    });
+
+    return controller.stream;
+  }
+
+  Stream<String> removeLoadingBarsFromStream() {
+    final controller = StreamController<String>();
+
+    listen((newData) {
+      if (!newData.isProgressBar()) {
         controller.add(newData);
       }
     }, onDone: () {

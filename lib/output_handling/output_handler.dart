@@ -4,6 +4,7 @@ import 'package:winget_gui/output_handling/loading_bar/loading_bar_scanner.dart'
 import 'package:winget_gui/output_handling/plain_text/plain_text_scanner.dart';
 import 'package:winget_gui/output_handling/responsibility.dart';
 import 'package:winget_gui/output_handling/scanner.dart';
+import 'package:winget_gui/output_handling/show/show_scanner.dart';
 import 'package:winget_gui/output_handling/table/table_scanner.dart';
 
 import 'output_part.dart';
@@ -20,6 +21,7 @@ class OutputHandler {
     outputScanners = [
       TableScanner(responsibilityList),
       LoadingBarScanner(responsibilityList),
+      ShowScanner(responsibilityList, command),
       PlainTextScanner(responsibilityList),
     ];
   }

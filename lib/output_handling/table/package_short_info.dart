@@ -25,7 +25,7 @@ class PackageShortInfo extends StatelessWidget {
               children: [
                 Text(
                   infos['Name']!,
-                  style: const TextStyle(fontSize: 20),
+                  style: FluentTheme.of(context).typography.title,
                 ),
                 Text(infos['ID']!),
                 if (_hasEntry('Quelle'))
