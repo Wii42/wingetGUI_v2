@@ -5,5 +5,5 @@ abstract class OutputPart {
 
   OutputPart(this.lines);
 
-  Widget representation();
+  Widget? representation();
 }

@@ -39,8 +39,10 @@ class OutputHandler {
         if (part == null) {
           throw Exception("Not all lines are assigned to a part");
         }
-
-        list.add(part.representation());
+        Widget? rep = part.representation();
+        if(rep != null){
+          list.add(rep);
+        }
       }
       prevPart = part;
     }
