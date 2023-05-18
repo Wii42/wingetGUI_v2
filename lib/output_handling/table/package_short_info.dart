@@ -10,12 +10,14 @@ class PackageShortInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Button(
-      onPressed: () {
-        Content? target = ContentPlace.maybeOf(context)?.content;
-        if (target != null && infos.containsKey('ID')) {
-          target.showResultOfCommand(['show', '--id', infos['ID']!]);
-        }
-      },
+      onPressed: (_hasEntry('Quelle'))
+          ? () {
+              Content? target = ContentPlace.maybeOf(context)?.content;
+              if (target != null && infos.containsKey('ID')) {
+                target.showResultOfCommand(['show', '--id', infos['ID']!]);
+              }
+            }
+          : null,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
@@ -25,7 +27,7 @@ class PackageShortInfo extends StatelessWidget {
               children: [
                 Text(
                   infos['Name']!,
-                  style: FluentTheme.of(context).typography.title,
+                  style: _titleStyle(context)
                 ),
                 Text(infos['ID']!),
                 if (_hasEntry('Quelle'))
@@ -50,6 +52,14 @@ class PackageShortInfo extends StatelessWidget {
       ),
     );
     //return ;
+  }
+
+  TextStyle? _titleStyle(BuildContext context) {
+    TextStyle? style = FluentTheme.of(context).typography.title;
+    if (!_hasEntry('Quelle')) {
+      style = style?.apply(color: FluentTheme.of(context).disabledColor);
+    }
+    return style;
   }
 
   bool _hasEntry(String key) {
