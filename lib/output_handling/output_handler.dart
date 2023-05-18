@@ -40,7 +40,7 @@ class OutputHandler {
           throw Exception("Not all lines are assigned to a part");
         }
         Widget? rep = part.representation();
-        if(rep != null){
+        if (rep != null) {
           list.add(rep);
         }
       }

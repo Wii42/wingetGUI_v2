@@ -2,6 +2,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 //import 'package:system_theme/system_theme.dart';
 import 'package:winget_gui/content.dart';
 
+import 'content_place.dart';
+
 Future<void> main() async {
   runApp(const WingetGui());
 }
@@ -61,6 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: FluentIcons.library),
               _reloadButton(
                   text: "Reload Page", icon: FluentIcons.update_restore),
+              _reloadButton(
+                  text: "Go Back", icon: FluentIcons.back, goBack: true),
               _menuSearchField(
                   text: "Search Package",
                   command: ['search'],
@@ -77,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      content: content,
+      content: ContentPlace(content: content, child: content),
     );
   }
 
@@ -96,14 +100,15 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  CommandBarButton _reloadButton({required String text, IconData? icon}) {
+  CommandBarButton _reloadButton(
+      {required String text, IconData? icon, bool goBack = false}) {
     return CommandBarButton(
       icon: (icon != null) ? Icon(icon) : null,
       label: Text(text),
       onPressed: () {
         setState(
           () {
-            content.reload();
+            goBack ? content.goBack() : content.reload();
           },
         );
       },

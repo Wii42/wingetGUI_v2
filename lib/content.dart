@@ -1,15 +1,16 @@
-import 'dart:async';
 import 'dart:convert';
+import 'dart:core';
 import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/extensions/stream_modifier.dart';
+import 'package:winget_gui/stack.dart';
 
 class Content extends StatefulWidget {
   Content({super.key});
 
-  late Function _rebuild;
+  late Function({bool goBack}) _rebuild;
   List<String> _command = ['--help'];
 
   @override
@@ -23,15 +24,26 @@ class Content extends StatefulWidget {
   void reload() {
     _rebuild();
   }
+
+  void goBack(){
+    _rebuild(goBack: true);
+  }
 }
 
 class _ContentState extends State<Content> {
   late Process _process;
+  ListStack<ContentSnapshot> stack = ListStack();
+  bool _goBack = false;
+
   @override
   void initState() {
     super.initState();
-    widget._rebuild = () {
-      setState(() {});
+    widget._rebuild = ({goBack = false}) {
+      setState(
+        () {
+          _goBack = goBack;
+        },
+      );
     };
   }
 
@@ -47,6 +59,17 @@ class _ContentState extends State<Content> {
 
   @override
   Widget build(BuildContext context) {
+    if(_goBack) {
+      if (stack.isNotEmpty) {
+        ContentSnapshot prevState = stack.pop();
+        if(stack.isNotEmpty){
+          prevState = stack.peek();
+        }
+        widget._command = prevState.command;
+        _goBack = false;
+        return _wrapInListView(prevState.widgets);
+      }
+    }
     return FutureBuilder<Stream<List<String>>>(
       future: getOutputStreamOfProcess(),
       builder: (BuildContext context,
@@ -68,6 +91,13 @@ class _ContentState extends State<Content> {
       stream: stream,
       builder:
           (BuildContext context, AsyncSnapshot<List<String>> streamSnapshot) {
+        List<Widget> widgets = [];
+        if (streamSnapshot.hasData) {
+          widgets = _displayOutput(streamSnapshot.data!);
+          if (streamSnapshot.connectionState == ConnectionState.done) {
+            stack.push(ContentSnapshot(widget._command, widgets));
+          }
+        }
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -80,22 +110,8 @@ class _ContentState extends State<Content> {
                       child: const ProgressBar());
                 },
               ),
-            Expanded(
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (streamSnapshot.hasData)
-                          ..._displayOutput(streamSnapshot.data!),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            if (streamSnapshot.hasData)
+              Expanded(child: _wrapInListView(widgets)),
           ],
         );
       },
@@ -107,4 +123,23 @@ class _ContentState extends State<Content> {
     handler.determineResponsibility();
     return handler.displayOutput();
   }
+
+  Widget _wrapInListView(List<Widget> widgets) {
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, children: widgets),
+        ),
+      ],
+    );
+  }
+}
+
+class ContentSnapshot {
+  List<String> command;
+  List<Widget> widgets;
+
+  ContentSnapshot(this.command, this.widgets);
 }

@@ -1,13 +1,21 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../../content.dart';
+import '../../content_place.dart';
+
 class PackageShortInfo extends StatelessWidget {
   final Map<String, String> infos;
   const PackageShortInfo(this.infos, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(color: FluentTheme.of(context).cardColor),
+    return Button(
+      onPressed: () {
+        Content? target = ContentPlace.maybeOf(context)?.content;
+        if (target != null && infos.containsKey('ID')) {
+          target.showResultOfCommand(['show', '--id', infos['ID']!]);
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
@@ -41,6 +49,7 @@ class PackageShortInfo extends StatelessWidget {
         ),
       ),
     );
+    //return ;
   }
 
   bool _hasEntry(String key) {
