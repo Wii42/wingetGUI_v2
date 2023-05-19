@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:url_launcher/link.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
+import 'package:winget_gui/output_handling/show/link_button.dart';
 
 import '../../command_button.dart';
 import '../info_enum.dart';
@@ -37,9 +38,16 @@ class PackageNameWidget extends StatelessWidget {
                   ],
                 ),
                 if (hasVersion()) const SizedBox(height: 10),
-                infos.hasEntry(Info.publisher.key)
-                    ? _herausgeber()
-                    : Text(infos[Info.id.key]!),
+                Wrap(
+                  spacing: 5,
+                  runSpacing: 5,
+                  children: [
+                    infos.hasEntry(Info.publisher.key)
+                        ? publisher()
+                        : Text(infos[Info.id.key]!),
+                    if (infos.hasEntry(Info.website.key)) _website(),
+                  ],
+                )
               ],
             ),
           ),
@@ -67,35 +75,20 @@ class PackageNameWidget extends StatelessWidget {
     );
   }
 
-  Widget _herausgeber() {
+  Widget publisher() {
     if (infos.hasEntry(Info.publisherUrl.key)) {
-      return _herausgeberWithLink();
+      return _publisherWithLink();
     } else {
-      return _herausgeberText();
+      return _publisherOnlyText();
     }
   }
 
-  Widget _herausgeberWithLink() {
-    return Link(
-      uri: Uri.parse(checkUrlContainsHttp(infos[Info.publisherUrl.key]!)),
-      builder: (context, open) {
-        return HyperlinkButton(
-          onPressed: open,
-          child: _herausgeberText(),
-        );
-      },
-    );
+  Widget _publisherWithLink() {
+    return LinkButton(
+        url: infos[Info.publisherUrl.key]!, text: _publisherOnlyText());
   }
 
-  String checkUrlContainsHttp(String url) {
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return url;
-    } else {
-      return 'https://$url';
-    }
-  }
-
-  Text _herausgeberText() {
+  Text _publisherOnlyText() {
     return Text(infos[Info.publisher.key]!);
   }
 
@@ -117,5 +110,10 @@ class PackageNameWidget extends StatelessWidget {
 
   List<String> _createCommand(String command) {
     return [command, '--id', infos[Info.id.key]!];
+  }
+
+  Widget _website() {
+    return LinkButton(
+        url: infos[Info.website.key]!, text: const Text("show online"));
   }
 }

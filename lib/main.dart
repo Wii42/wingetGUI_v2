@@ -70,6 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   text: "Reload Page", icon: FluentIcons.update_restore),
               _reloadButton(
                   text: "Go Back", icon: FluentIcons.back, goBack: true),
+              _menuButton(
+                  text: "About Winget",
+                  command: ['--info'],
+                  icon: FluentIcons.info),
               _menuSearchField(
                   text: "Search Package",
                   command: ['search'],

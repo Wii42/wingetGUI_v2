@@ -7,9 +7,11 @@ enum Info {
   availableVersion(key: 'Verfügbar'),
   tags(key: 'Markierungen'),
   releaseNotes(key: 'Versionshinweise'),
+  releaseNotesUrl(key: 'URL der Versionshinweise'),
   installer(key: 'Installationsprogramm'),
   id(key: 'ID'),
-  source(key: 'Quelle');
+  source(key: 'Quelle'),
+  website(key: 'Startseite');
 
   final String key;
 

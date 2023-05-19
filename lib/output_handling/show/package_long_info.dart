@@ -6,6 +6,8 @@ import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/package_name_widget.dart';
 
 import '../info_enum.dart';
+import 'expandable_widget.dart';
+import 'link_button.dart';
 
 class PackageLongInfo extends StatelessWidget {
   static final List<Info> manuallyHandledKeys = [
@@ -17,6 +19,8 @@ class PackageLongInfo extends StatelessWidget {
     Info.tags,
     Info.releaseNotes,
     Info.installer,
+    Info.website,
+    Info.releaseNotesUrl,
   ];
   final Map<String, String> infos;
   const PackageLongInfo(this.infos, {super.key});
@@ -27,12 +31,12 @@ class PackageLongInfo extends StatelessWidget {
         _wrapInDecoratedBox(PackageNameWidget(infos), context),
         if (infos.hasEntry(Info.tags.key)) _tags(context),
         if (infos.hasEntry(Info.description.key))
-          _wrapInDecoratedBox(_description(context), context),
+          _wrapInDecoratedBox(_description(), context),
         if (infos.hasEntry(Info.releaseNotes.key))
-          _wrapInDecoratedBox(_releaseNotes(context), context),
-        _wrapInDecoratedBox(_displayRest(context), context),
+          _wrapInDecoratedBox(_releaseNotes(), context),
+        _wrapInDecoratedBox(_displayRest(), context),
         if (infos.hasEntry(Info.installer.key))
-          _wrapInDecoratedBox(_installer(context), context),
+          _wrapInDecoratedBox(_installer(), context),
       ].withSpaceBetween(height: 10),
     );
   }
@@ -46,50 +50,27 @@ class PackageLongInfo extends StatelessWidget {
         child: widget);
   }
 
-  Widget _description(BuildContext context) {
-    return _expandableWidget(
-        context: context, title: 'About', text: infos[Info.description.key]!);
+  Widget _description() {
+    return ExpandableWidget(title: 'About', text: infos[Info.description.key]!);
   }
 
-  Widget _releaseNotes(BuildContext context) {
-    return _expandableWidget(
-        context: context,
-        title: 'Release notes',
-        text: infos[Info.releaseNotes.key]!);
+  Widget _releaseNotes() {
+    LinkButton? linkButton;
+    if(infos.hasEntry(Info.releaseNotesUrl.key)){
+      linkButton = LinkButton(url: infos[Info.releaseNotesUrl.key]!, text: const Text('show online'));
+    }
+    return ExpandableWidget(
+        title: 'Release notes', text: infos[Info.releaseNotes.key]!, linkButton: linkButton);
   }
 
-  Widget _expandableWidget(
-      {required BuildContext context,
-      required String title,
-      required String text,
-      int maxLines = 5}) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(title, style: FluentTheme.of(context).typography.title),
-          ExpandableText(
-            text,
-            expandText: 'show more',
-            collapseText: 'show less',
-            maxLines: maxLines,
-            linkColor: FluentTheme.of(context).accentColor,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _displayRest(BuildContext context) {
+  Widget _displayRest() {
     List<String> rest = [];
     for (String key in infos.keys) {
       if (!manuallyHandledStringKeys().contains(key)) {
         rest.add("$key: ${infos[key]}");
       }
     }
-    return _expandableWidget(
-        context: context, title: 'Details', text: rest.join('\n'));
+    return ExpandableWidget(title: 'Details', text: rest.join('\n'));
   }
 
   Widget _tags(BuildContext context) {
@@ -117,9 +98,9 @@ class PackageLongInfo extends StatelessWidget {
     );
   }
 
-  Widget _installer(BuildContext context) {
-    return _expandableWidget(
-        context: context, title: 'Installer', text: infos[Info.installer.key]!);
+  Widget _installer() {
+    return ExpandableWidget(
+        title: 'Installer', text: infos[Info.installer.key]!);
   }
 
   static Iterable<String> manuallyHandledStringKeys() =>
