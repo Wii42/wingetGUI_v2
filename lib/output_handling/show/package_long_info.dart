@@ -14,6 +14,7 @@ class PackageLongInfo extends StatelessWidget {
     'Version',
     'Markierungen',
     'Versionshinweise',
+    'Installationsprogramm',
   ];
   final Map<String, String> infos;
   const PackageLongInfo(this.infos, {super.key});
@@ -22,12 +23,14 @@ class PackageLongInfo extends StatelessWidget {
     return Column(
       children: [
         _wrapInDecoratedBox(PackageNameWidget(infos), context),
+        if (infos.hasEntry('Markierungen')) _tags(context),
         if (infos.hasEntry('Beschreibung'))
           _wrapInDecoratedBox(_description(context), context),
         if (infos.hasEntry('Versionshinweise'))
           _wrapInDecoratedBox(_releaseNotes(context), context),
-        if (infos.hasEntry('Markierungen')) _tags(context),
-        _displayRest(),
+        _wrapInDecoratedBox(_displayRest(context), context),
+        if (infos.hasEntry('Installationsprogramm'))
+          _wrapInDecoratedBox(_installer(context), context),
       ].withSpaceBetween(height: 10),
     );
   }
@@ -76,17 +79,15 @@ class PackageLongInfo extends StatelessWidget {
     );
   }
 
-  Widget _displayRest() {
+  Widget _displayRest(BuildContext context) {
     List<String> rest = [];
     for (String key in infos.keys) {
       if (!manuallyHandledKeys.contains(key)) {
         rest.add("$key: ${infos[key]}");
       }
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [for (String info in rest) Text(info)],
-    );
+    return _expandableWidget(
+        context: context, title: 'Details', text: rest.join('\n'));
   }
 
   Widget _tags(BuildContext context) {
@@ -97,8 +98,10 @@ class PackageLongInfo extends StatelessWidget {
         tags.add(s.trim());
       }
     }
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      runSpacing: 5,
+      spacing: 5,
+      alignment: WrapAlignment.center,
       children: [
         for (String tag in tags)
           Button(
@@ -108,7 +111,14 @@ class PackageLongInfo extends StatelessWidget {
                     .showResultOfCommand(['search', tag]);
               },
               child: Text(tag))
-      ].withSpaceBetween(width: 5),
+      ],
     );
+  }
+
+  Widget _installer(BuildContext context) {
+    return _expandableWidget(
+        context: context,
+        title: 'Installer',
+        text: infos['Installationsprogramm']!);
   }
 }

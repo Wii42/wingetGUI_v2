@@ -51,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: CommandBar(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
+            isCompact: false,
             //overflowBehavior: CommandBarOverflowBehavior.wrap,
             primaryItems: [
               _menuButton(

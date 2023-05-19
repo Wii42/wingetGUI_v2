@@ -21,21 +21,18 @@ class PackageNameWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Wrap(
+                  spacing: 18,
                   crossAxisAlignment: WrapCrossAlignment.end,
                   children: [
-                    Text(
-                      infos['Name'] ?? "<unknown name>",
-                      style: FluentTheme.of(context).typography.display,
-                      softWrap: true,
-                    ),
-                    if (hasVersion()) const SizedBox(width: 10),
+                    ..._name(context),
                     if (hasVersion())
                       Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            'v${infos['Version']!}',
-                            style: FluentTheme.of(context).typography.title,
-                          ))
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          'v${infos['Version']!}',
+                          style: FluentTheme.of(context).typography.title,
+                        ),
+                      )
                   ],
                 ),
                 if (hasVersion()) const SizedBox(height: 10),
@@ -48,6 +45,24 @@ class PackageNameWidget extends StatelessWidget {
           _buttons(context),
         ],
       ),
+    );
+  }
+
+  List<Widget> _name(BuildContext context) {
+    if (!infos.containsKey('Name')) {
+      return [_nameFragment('<unknown>', context)];
+    }
+    List<String> nameFragments = infos['Name']!.split(' ');
+    return nameFragments
+        .map<Widget>((String fragment) => _nameFragment(fragment, context))
+        .toList();
+  }
+
+  Text _nameFragment(String fragment, BuildContext context) {
+    return Text(
+      fragment,
+      style: FluentTheme.of(context).typography.display,
+      softWrap: true,
     );
   }
 
