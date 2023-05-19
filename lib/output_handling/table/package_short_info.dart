@@ -5,6 +5,7 @@ import 'package:winget_gui/extensions/widget_list_extension.dart';
 import '../../command_button.dart';
 import '../../content.dart';
 import '../../content_place.dart';
+import '../info_enum.dart';
 
 class PackageShortInfo extends StatelessWidget {
   final Map<String, String> infos;
@@ -13,11 +14,12 @@ class PackageShortInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Button(
-      onPressed: (infos.hasEntry('Quelle'))
+      onPressed: (isClickable())
           ? () {
               Content? target = ContentPlace.maybeOf(context)?.content;
-              if (target != null && infos.containsKey('ID')) {
-                target.showResultOfCommand(['show', '--id', infos['ID']!]);
+              if (target != null && infos.containsKey(Info.id.key)) {
+                target
+                    .showResultOfCommand(['show', '--id', infos[Info.id.key]!]);
               }
             }
           : null,
@@ -31,31 +33,41 @@ class PackageShortInfo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    infos['Name']!,
+                    infos[Info.name.key]!,
                     style: _titleStyle(context),
                     softWrap: true,
                     textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                   ),
-                  Text(infos['ID']!),
-                  if (infos.hasEntry('Quelle'))
+                  Text(
+                    infos[Info.id.key]!,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                  if (infos.hasEntry(Info.source.key))
                     Text(
-                      "from ${infos['Quelle']!}",
+                      "from ${infos[Info.source.key]!}",
                       style: TextStyle(
-                          color: FluentTheme.of(context).disabledColor),
+                        color: FluentTheme.of(context).disabledColor,
+                      ),
+                      textAlign: TextAlign.start,
                     )
                 ],
               ),
             ),
-            if (infos.hasEntry('Quelle')) _buttons(context),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (infos.hasEntry('Version'))
-                  Text("Version: ${infos['Version']!}"),
-                if (infos.hasEntry('Verfügbar'))
-                  Text("Verfügbar: ${infos['Verfügbar']!}")
+                if (infos.hasEntry(Info.version.key))
+                  Text("Version: ${infos[Info.version.key]!}"),
+                if (infos.hasEntry(Info.availableVersion.key))
+                  Text("Verfügbar: ${infos[Info.availableVersion.key]!}")
               ],
             ),
+            if (isClickable()) const SizedBox(width: 20),
+            if (isClickable()) _buttons(context),
           ],
         ),
       ),
@@ -65,23 +77,28 @@ class PackageShortInfo extends StatelessWidget {
 
   TextStyle? _titleStyle(BuildContext context) {
     TextStyle? style = FluentTheme.of(context).typography.title;
-    if (!infos.hasEntry('Quelle')) {
+    if (!isClickable()) {
       style = style?.apply(color: FluentTheme.of(context).disabledColor);
     }
     return style;
   }
 
   Widget _buttons(BuildContext context) {
-    return Wrap(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         CommandButton(text: 'Install', command: _createCommand('install')),
         CommandButton(text: 'Upgrade', command: _createCommand('upgrade')),
         CommandButton(text: 'Uninstall', command: _createCommand('uninstall')),
-      ].withSpaceBetween(width: 5),
+      ].withSpaceBetween(width: 5, height: 5),
     );
   }
 
   List<String> _createCommand(String command) {
     return [command, '--id', infos['ID']!];
+  }
+
+  bool isClickable() {
+    return infos.hasEntry(Info.source.key);
   }
 }

@@ -5,16 +5,18 @@ import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/package_name_widget.dart';
 
+import '../info_enum.dart';
+
 class PackageLongInfo extends StatelessWidget {
-  static final List<String> manuallyHandledKeys = [
-    'Beschreibung',
-    'Name',
-    'Herausgeber',
-    'Herausgeber-URL',
-    'Version',
-    'Markierungen',
-    'Versionshinweise',
-    'Installationsprogramm',
+  static final List<Info> manuallyHandledKeys = [
+    Info.description,
+    Info.name,
+    Info.publisher,
+    Info.publisherUrl,
+    Info.version,
+    Info.tags,
+    Info.releaseNotes,
+    Info.installer,
   ];
   final Map<String, String> infos;
   const PackageLongInfo(this.infos, {super.key});
@@ -23,13 +25,13 @@ class PackageLongInfo extends StatelessWidget {
     return Column(
       children: [
         _wrapInDecoratedBox(PackageNameWidget(infos), context),
-        if (infos.hasEntry('Markierungen')) _tags(context),
-        if (infos.hasEntry('Beschreibung'))
+        if (infos.hasEntry(Info.tags.key)) _tags(context),
+        if (infos.hasEntry(Info.description.key))
           _wrapInDecoratedBox(_description(context), context),
-        if (infos.hasEntry('Versionshinweise'))
+        if (infos.hasEntry(Info.releaseNotes.key))
           _wrapInDecoratedBox(_releaseNotes(context), context),
         _wrapInDecoratedBox(_displayRest(context), context),
-        if (infos.hasEntry('Installationsprogramm'))
+        if (infos.hasEntry(Info.installer.key))
           _wrapInDecoratedBox(_installer(context), context),
       ].withSpaceBetween(height: 10),
     );
@@ -46,14 +48,14 @@ class PackageLongInfo extends StatelessWidget {
 
   Widget _description(BuildContext context) {
     return _expandableWidget(
-        context: context, title: 'About', text: infos['Beschreibung']!);
+        context: context, title: 'About', text: infos[Info.description.key]!);
   }
 
   Widget _releaseNotes(BuildContext context) {
     return _expandableWidget(
         context: context,
         title: 'Release notes',
-        text: infos['Versionshinweise']!);
+        text: infos[Info.releaseNotes.key]!);
   }
 
   Widget _expandableWidget(
@@ -82,7 +84,7 @@ class PackageLongInfo extends StatelessWidget {
   Widget _displayRest(BuildContext context) {
     List<String> rest = [];
     for (String key in infos.keys) {
-      if (!manuallyHandledKeys.contains(key)) {
+      if (!manuallyHandledStringKeys().contains(key)) {
         rest.add("$key: ${infos[key]}");
       }
     }
@@ -91,7 +93,7 @@ class PackageLongInfo extends StatelessWidget {
   }
 
   Widget _tags(BuildContext context) {
-    List<String> split = infos['Markierungen']!.split('\n');
+    List<String> split = infos[Info.tags.key]!.split('\n');
     List<String> tags = [];
     for (String s in split) {
       if (s.isNotEmpty) {
@@ -117,8 +119,9 @@ class PackageLongInfo extends StatelessWidget {
 
   Widget _installer(BuildContext context) {
     return _expandableWidget(
-        context: context,
-        title: 'Installer',
-        text: infos['Installationsprogramm']!);
+        context: context, title: 'Installer', text: infos[Info.installer.key]!);
   }
+
+  static Iterable<String> manuallyHandledStringKeys() =>
+      manuallyHandledKeys.map<String>((Info info) => info.key);
 }

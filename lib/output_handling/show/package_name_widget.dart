@@ -4,6 +4,7 @@ import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
 
 import '../../command_button.dart';
+import '../info_enum.dart';
 
 class PackageNameWidget extends StatelessWidget {
   final Map<String, String> infos;
@@ -29,16 +30,16 @@ class PackageNameWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Text(
-                          'v${infos['Version']!}',
+                          'v${infos[Info.version.key]!}',
                           style: FluentTheme.of(context).typography.title,
                         ),
                       )
                   ],
                 ),
                 if (hasVersion()) const SizedBox(height: 10),
-                infos.hasEntry('Herausgeber')
+                infos.hasEntry(Info.publisher.key)
                     ? _herausgeber()
-                    : Text(infos['ID']!),
+                    : Text(infos[Info.id.key]!),
               ],
             ),
           ),
@@ -49,10 +50,10 @@ class PackageNameWidget extends StatelessWidget {
   }
 
   List<Widget> _name(BuildContext context) {
-    if (!infos.containsKey('Name')) {
+    if (!infos.containsKey(Info.name.key)) {
       return [_nameFragment('<unknown>', context)];
     }
-    List<String> nameFragments = infos['Name']!.split(' ');
+    List<String> nameFragments = infos[Info.name.key]!.split(' ');
     return nameFragments
         .map<Widget>((String fragment) => _nameFragment(fragment, context))
         .toList();
@@ -67,7 +68,7 @@ class PackageNameWidget extends StatelessWidget {
   }
 
   Widget _herausgeber() {
-    if (infos.hasEntry('Herausgeber-URL')) {
+    if (infos.hasEntry(Info.publisherUrl.key)) {
       return _herausgeberWithLink();
     } else {
       return _herausgeberText();
@@ -76,7 +77,7 @@ class PackageNameWidget extends StatelessWidget {
 
   Widget _herausgeberWithLink() {
     return Link(
-      uri: Uri.parse(checkUrlContainsHttp(infos['Herausgeber-URL']!)),
+      uri: Uri.parse(checkUrlContainsHttp(infos[Info.publisherUrl.key]!)),
       builder: (context, open) {
         return HyperlinkButton(
           onPressed: open,
@@ -95,11 +96,12 @@ class PackageNameWidget extends StatelessWidget {
   }
 
   Text _herausgeberText() {
-    return Text(infos['Herausgeber']!);
+    return Text(infos[Info.publisher.key]!);
   }
 
   bool hasVersion() {
-    return (infos.hasEntry('Version') && infos['Version']! != 'Unknown');
+    return (infos.hasEntry(Info.version.key) &&
+        infos[Info.version.key]! != 'Unknown');
   }
 
   Widget _buttons(BuildContext context) {
@@ -114,6 +116,6 @@ class PackageNameWidget extends StatelessWidget {
   }
 
   List<String> _createCommand(String command) {
-    return [command, '--id', infos['ID']!];
+    return [command, '--id', infos[Info.id.key]!];
   }
 }

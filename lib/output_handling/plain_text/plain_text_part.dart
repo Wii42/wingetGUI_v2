@@ -7,7 +7,9 @@ class PlainTextPart extends OutputPart {
 
   @override
   Widget? representation() {
-    if(lines.isEmpty){
+    _removeLeadingEmptyLines();
+    _removeTrailingEmptyLines();
+    if (lines.isEmpty) {
       return null;
     }
     return Column(
@@ -17,5 +19,31 @@ class PlainTextPart extends OutputPart {
 
   addLine(String line) {
     lines.add(line);
+  }
+
+  _removeLeadingEmptyLines() {
+    bool foundNotEmpty = false;
+    while (!foundNotEmpty && lines.isNotEmpty) {
+      String line = lines.first;
+      if (line.trim().isEmpty) {
+        lines.removeAt(0);
+      }
+      else{
+        foundNotEmpty = true;
+      }
+    }
+  }
+
+  _removeTrailingEmptyLines() {
+    bool foundNotEmpty = false;
+    while (!foundNotEmpty && lines.isNotEmpty) {
+      String line = lines.last;
+      if (line.trim().isEmpty) {
+        lines.removeLast();
+      }
+      else{
+        foundNotEmpty = true;
+      }
+    }
   }
 }

@@ -1,10 +1,14 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_acrylic/flutter_acrylic.dart';
 //import 'package:system_theme/system_theme.dart';
 import 'package:winget_gui/content.dart';
 
 import 'content_place.dart';
 
 Future<void> main() async {
+  //WidgetsFlutterBinding.ensureInitialized();
+  //await Window.initialize();
+  //Window.setEffect(effect: WindowEffect.acrylic, color: Colors.black);
   runApp(const WingetGui());
 }
 
@@ -17,14 +21,14 @@ class WingetGui extends StatelessWidget {
       title: 'Flutter Demo',
       theme: FluentThemeData(
           //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
-          brightness: Brightness.light),
+          brightness: Brightness.light,),
       darkTheme: FluentThemeData(
         //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
         brightness: Brightness.dark,
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: const MyHomePage(title: "Stream Test"),
+      home: const MyHomePage(title: "WingetGUI"),
     );
   }
 }
