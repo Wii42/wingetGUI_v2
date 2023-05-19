@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/content_place.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
+import 'package:winget_gui/output_handling/show/agreement_widget.dart';
 import 'package:winget_gui/output_handling/show/package_name_widget.dart';
 
 import '../info_enum.dart';
@@ -21,6 +22,10 @@ class PackageLongInfo extends StatelessWidget {
     Info.installer,
     Info.website,
     Info.releaseNotesUrl,
+    Info.license,
+    Info.licenseUrl,
+    Info.copyright,
+    Info.copyrightUrl,
   ];
   final Map<String, String> infos;
   const PackageLongInfo(this.infos, {super.key});
@@ -35,6 +40,7 @@ class PackageLongInfo extends StatelessWidget {
         if (infos.hasEntry(Info.releaseNotes.key))
           _wrapInDecoratedBox(_releaseNotes(), context),
         _wrapInDecoratedBox(_displayRest(), context),
+        _wrapInDecoratedBox(AgreementWidget(infos: infos), context),
         if (infos.hasEntry(Info.installer.key))
           _wrapInDecoratedBox(_installer(), context),
       ].withSpaceBetween(height: 10),
@@ -56,11 +62,15 @@ class PackageLongInfo extends StatelessWidget {
 
   Widget _releaseNotes() {
     LinkButton? linkButton;
-    if(infos.hasEntry(Info.releaseNotesUrl.key)){
-      linkButton = LinkButton(url: infos[Info.releaseNotesUrl.key]!, text: const Text('show online'));
+    if (infos.hasEntry(Info.releaseNotesUrl.key)) {
+      linkButton = LinkButton(
+          url: infos[Info.releaseNotesUrl.key]!,
+          text: const Text('show online'));
     }
     return ExpandableWidget(
-        title: 'Release notes', text: infos[Info.releaseNotes.key]!, linkButton: linkButton);
+        title: 'Release notes',
+        text: infos[Info.releaseNotes.key]!,
+        linkButton: linkButton);
   }
 
   Widget _displayRest() {

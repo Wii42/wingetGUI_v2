@@ -11,7 +11,11 @@ enum Info {
   installer(key: 'Installationsprogramm'),
   id(key: 'ID'),
   source(key: 'Quelle'),
-  website(key: 'Startseite');
+  website(key: 'Startseite'),
+  license(key: 'Lizenz'),
+  licenseUrl(key: 'Lizenz-URL'),
+  copyright(key: 'Copyright'),
+  copyrightUrl(key: 'Copyright-URL');
 
   final String key;
 
