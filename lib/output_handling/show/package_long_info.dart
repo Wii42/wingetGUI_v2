@@ -35,8 +35,9 @@ class PackageLongInfo extends StatelessWidget {
   Widget _wrapInDecoratedBox(Widget widget, BuildContext context) {
     return DecoratedBox(
         decoration: BoxDecoration(
-            color: FluentTheme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(5)),
+          color: FluentTheme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(5),
+        ),
         child: widget);
   }
 

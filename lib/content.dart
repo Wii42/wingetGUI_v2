@@ -56,7 +56,7 @@ class _ContentState extends State<Content> {
     return stream
         .splitStreamElementsOnNewLine()
         .removeLoadingElementsFromStream()
-        .removeLoadingBarsFromStream()
+        //.removeLoadingBarsFromStream()
         .rememberingStream();
   }
 

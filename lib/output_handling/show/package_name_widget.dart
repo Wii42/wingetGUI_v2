@@ -1,6 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:url_launcher/link.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
+import 'package:winget_gui/extensions/widget_list_extension.dart';
+
+import '../../command_button.dart';
 
 class PackageNameWidget extends StatelessWidget {
   final Map<String, String> infos;
@@ -13,33 +16,36 @@ class PackageNameWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    infos['Name'] ?? "<unknown name>",
-                    style: FluentTheme.of(context).typography.display,
-                    softWrap: true,
-                  ),
-                  if (hasVersion()) const SizedBox(width: 10),
-                  if (hasVersion())
-                    Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          'v${infos['Version']!}',
-                          style: FluentTheme.of(context).typography.title,
-                        ))
-                ],
-              ),
-              if (hasVersion()) const SizedBox(height: 10),
-              infos.hasEntry('Herausgeber')
-                  ? _herausgeber()
-                  : Text(infos['ID']!),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.end,
+                  children: [
+                    Text(
+                      infos['Name'] ?? "<unknown name>",
+                      style: FluentTheme.of(context).typography.display,
+                      softWrap: true,
+                    ),
+                    if (hasVersion()) const SizedBox(width: 10),
+                    if (hasVersion())
+                      Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text(
+                            'v${infos['Version']!}',
+                            style: FluentTheme.of(context).typography.title,
+                          ))
+                  ],
+                ),
+                if (hasVersion()) const SizedBox(height: 10),
+                infos.hasEntry('Herausgeber')
+                    ? _herausgeber()
+                    : Text(infos['ID']!),
+              ],
+            ),
           ),
+          _buttons(context),
         ],
       ),
     );
@@ -79,5 +85,20 @@ class PackageNameWidget extends StatelessWidget {
 
   bool hasVersion() {
     return (infos.hasEntry('Version') && infos['Version']! != 'Unknown');
+  }
+
+  Widget _buttons(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        CommandButton(text: 'Install', command: _createCommand('install')),
+        CommandButton(text: 'Upgrade', command: _createCommand('upgrade')),
+        CommandButton(text: 'Uninstall', command: _createCommand('uninstall')),
+      ].withSpaceBetween(height: 5),
+    );
+  }
+
+  List<String> _createCommand(String command) {
+    return [command, '--id', infos['ID']!];
   }
 }

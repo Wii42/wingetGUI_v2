@@ -5,10 +5,11 @@ class LoadingBarPart extends OutputPart {
   LoadingBarPart(super.lines);
 
   @override
-  Widget representation() {
-    return Column(children: [
-      for (String line in lines) ProgressBar(value: _getPercentage(line))
-    ]);
+  Widget? representation() {
+    if (lines.isEmpty) {
+      return null;
+    }
+    return Text(lines.last.trim());
   }
 
   double _getPercentage(String line) {

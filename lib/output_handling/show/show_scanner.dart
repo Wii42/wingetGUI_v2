@@ -7,7 +7,7 @@ class ShowScanner extends Scanner {
 
   @override
   void markResponsibleLines() {
-    if (respList.isEmpty || command.isEmpty) {
+    if (respList.isEmpty || command.isEmpty || command[0] != 'show') {
       return;
     }
     int identifierPos = _findIdentifier();
