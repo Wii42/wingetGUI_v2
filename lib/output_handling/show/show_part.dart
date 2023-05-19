@@ -32,7 +32,8 @@ class ShowPart extends OutputPart {
     List<String> details = lines.sublist(1);
     String? key, value;
     for (String line in details) {
-      if (!line.startsWith(' ') && (line.contains(': ') || line.endsWith(':'))) {
+      if (!line.startsWith(' ') &&
+          (line.contains(': ') || line.endsWith(':'))) {
         if (key != null && value != null) {
           infos[key] = value;
         }
@@ -43,7 +44,7 @@ class ShowPart extends OutputPart {
         value = "$value\n${line.trim()}";
       }
     }
-      return infos;
+    return infos;
   }
 
   addLine(String line) {

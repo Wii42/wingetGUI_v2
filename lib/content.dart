@@ -21,11 +21,13 @@ class Content extends StatefulWidget {
     _rebuild();
   }
 
+  List<String> get command => _command;
+
   void reload() {
     _rebuild();
   }
 
-  void goBack(){
+  void goBack() {
     _rebuild(goBack: true);
   }
 }
@@ -54,15 +56,16 @@ class _ContentState extends State<Content> {
     return stream
         .splitStreamElementsOnNewLine()
         .removeLoadingElementsFromStream()
+        .removeLoadingBarsFromStream()
         .rememberingStream();
   }
 
   @override
   Widget build(BuildContext context) {
-    if(_goBack) {
+    if (_goBack) {
       if (stack.isNotEmpty) {
         ContentSnapshot prevState = stack.pop();
-        if(stack.isNotEmpty){
+        if (stack.isNotEmpty) {
           prevState = stack.peek();
         }
         widget._command = prevState.command;

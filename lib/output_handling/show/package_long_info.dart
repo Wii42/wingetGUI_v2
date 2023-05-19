@@ -47,7 +47,9 @@ class PackageLongInfo extends StatelessWidget {
 
   Widget _releaseNotes(BuildContext context) {
     return _expandableWidget(
-        context: context, title: 'Release notes', text: infos['Versionshinweise']!);
+        context: context,
+        title: 'Release notes',
+        text: infos['Versionshinweise']!);
   }
 
   Widget _expandableWidget(
