@@ -32,11 +32,11 @@ class ShowPart extends OutputPart {
     List<String> details = lines.sublist(1);
     String? key, value;
     for (String line in details) {
-      if (!line.startsWith(' ') && line.contains(': ')) {
+      if (!line.startsWith(' ') && (line.contains(': ') || line.endsWith(':'))) {
         if (key != null && value != null) {
           infos[key] = value;
         }
-        int splitPos = line.indexOf(': ');
+        int splitPos = line.indexOf(':');
         key = line.substring(0, splitPos).trim();
         value = line.substring(splitPos + 1).trim();
       } else {

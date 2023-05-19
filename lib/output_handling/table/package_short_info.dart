@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/extensions/string_map_extension.dart';
 
 import '../../content.dart';
 import '../../content_place.dart';
@@ -10,7 +11,7 @@ class PackageShortInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Button(
-      onPressed: (_hasEntry('Quelle'))
+      onPressed: (infos.hasEntry('Quelle'))
           ? () {
               Content? target = ContentPlace.maybeOf(context)?.content;
               if (target != null && infos.containsKey('ID')) {
@@ -27,10 +28,11 @@ class PackageShortInfo extends StatelessWidget {
               children: [
                 Text(
                   infos['Name']!,
-                  style: _titleStyle(context)
+                  style: _titleStyle(context),
+                  softWrap: true,
                 ),
                 Text(infos['ID']!),
-                if (_hasEntry('Quelle'))
+                if (infos.hasEntry('Quelle'))
                   Text(
                     "from ${infos['Quelle']!}",
                     style:
@@ -42,8 +44,8 @@ class PackageShortInfo extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (_hasEntry('Version')) Text("Version: ${infos['Version']!}"),
-                if (_hasEntry('Verfügbar'))
+                if (infos.hasEntry('Version')) Text("Version: ${infos['Version']!}"),
+                if (infos.hasEntry('Verfügbar'))
                   Text("Verfügbar: ${infos['Verfügbar']!}")
               ],
             ),
@@ -56,13 +58,9 @@ class PackageShortInfo extends StatelessWidget {
 
   TextStyle? _titleStyle(BuildContext context) {
     TextStyle? style = FluentTheme.of(context).typography.title;
-    if (!_hasEntry('Quelle')) {
+    if (!infos.hasEntry('Quelle')) {
       style = style?.apply(color: FluentTheme.of(context).disabledColor);
     }
     return style;
-  }
-
-  bool _hasEntry(String key) {
-    return (infos.containsKey(key) && infos[key]!.isNotEmpty);
   }
 }
