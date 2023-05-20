@@ -59,12 +59,7 @@ class PackageShortInfo extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if (infos.hasEntry(Info.version.key))
-                  Text("Version: ${infos[Info.version.key]!}"),
-                if (infos.hasEntry(Info.availableVersion.key))
-                  Text("Verfügbar: ${infos[Info.availableVersion.key]!}")
-              ],
+              children: _versions([Info.version, Info.availableVersion]),
             ),
             if (isClickable()) const SizedBox(width: 20),
             if (isClickable()) _buttons(context),
@@ -92,6 +87,14 @@ class PackageShortInfo extends StatelessWidget {
         CommandButton(text: 'Uninstall', command: _createCommand('uninstall')),
       ].withSpaceBetween(width: 5, height: 5),
     );
+  }
+
+  List<Widget> _versions(List<Info> versions){
+    return [
+    for(Info info in versions)
+      if (infos.hasEntry(info.key))
+        Text("${info.title}: ${infos[info.key]!}"),
+    ];
   }
 
   List<String> _createCommand(String command) {

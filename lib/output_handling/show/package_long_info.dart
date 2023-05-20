@@ -4,6 +4,7 @@ import 'package:winget_gui/content_place.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/agreement_widget.dart';
+import 'package:winget_gui/output_handling/show/details_widget.dart';
 import 'package:winget_gui/output_handling/show/package_name_widget.dart';
 
 import '../info_enum.dart';
@@ -22,6 +23,7 @@ class PackageLongInfo extends StatelessWidget {
     Info.installer,
     Info.website,
     Info.releaseNotesUrl,
+    Info.moniker,
   ];
   final Map<String, String> infos;
   const PackageLongInfo(this.infos, {super.key});
@@ -32,14 +34,15 @@ class PackageLongInfo extends StatelessWidget {
         _wrapInDecoratedBox(PackageNameWidget(infos), context),
         if (infos.hasEntry(Info.tags.key)) _tags(context),
         if (infos.hasEntry(Info.description.key))
-          _wrapInDecoratedBox(_description(), context),
+          _wrapInDecoratedBox(
+              _expandableCompartment(Info.description), context),
         if (infos.hasEntry(Info.releaseNotes.key))
           _wrapInDecoratedBox(_releaseNotes(), context),
-        _wrapInDecoratedBox(_displayRest(), context),
+        _wrapInDecoratedBox(DetailsWidget(infos: infos), context),
         if (AgreementWidget.containsData(infos))
           _wrapInDecoratedBox(AgreementWidget(infos: infos), context),
         if (infos.hasEntry(Info.installer.key))
-          _wrapInDecoratedBox(_installer(), context),
+          _wrapInDecoratedBox(_expandableCompartment(Info.installer), context),
       ].withSpaceBetween(height: 10),
     );
   }
@@ -53,8 +56,8 @@ class PackageLongInfo extends StatelessWidget {
         child: widget);
   }
 
-  Widget _description() {
-    return ExpandableWidget(title: 'About', text: infos[Info.description.key]!);
+  Widget _expandableCompartment(Info info) {
+    return ExpandableWidget(title: info.title, text: infos[info.key]!);
   }
 
   Widget _releaseNotes() {
@@ -65,7 +68,7 @@ class PackageLongInfo extends StatelessWidget {
           text: const Text('show online'));
     }
     return ExpandableWidget(
-        title: 'Release notes',
+        title: Info.releaseNotes.title,
         text: infos[Info.releaseNotes.key]!,
         linkButton: linkButton);
   }
@@ -73,12 +76,11 @@ class PackageLongInfo extends StatelessWidget {
   Widget _displayRest() {
     List<String> rest = [];
     for (String key in infos.keys) {
-      if (!manuallyHandledStringKeys().contains(key) &&
-          !AgreementWidget.manuallyHandledStringKeys().contains(key)) {
+      if (!isManuallyHandled(key)) {
         rest.add("$key: ${infos[key]}");
       }
     }
-    return ExpandableWidget(title: 'Details', text: rest.join('\n'));
+    return ExpandableWidget(title: 'Rest', text: rest.join('\n'));
   }
 
   Widget _tags(BuildContext context) {
@@ -94,6 +96,14 @@ class PackageLongInfo extends StatelessWidget {
       spacing: 5,
       alignment: WrapAlignment.center,
       children: [
+        if (infos.hasEntry(Info.moniker.key))
+          Button(
+              onPressed: () {
+                ContentPlace.maybeOf(context)
+                    ?.content
+                    .showResultOfCommand(['search', infos[Info.moniker.key]!]);
+              },
+              child: Text(infos[Info.moniker.key]!)),
         for (String tag in tags)
           Button(
               onPressed: () {
@@ -106,11 +116,21 @@ class PackageLongInfo extends StatelessWidget {
     );
   }
 
-  Widget _installer() {
-    return ExpandableWidget(
-        title: 'Installer', text: infos[Info.installer.key]!);
-  }
-
   static Iterable<String> manuallyHandledStringKeys() =>
       manuallyHandledKeys.map<String>((Info info) => info.key);
+
+  static bool isManuallyHandled(String key) {
+    return (manuallyHandledStringKeys().contains(key) ||
+        AgreementWidget.manuallyHandledStringKeys().contains(key) ||
+        DetailsWidget.manuallyHandledStringKeys().contains(key));
+  }
+
+  bool existUnhandledKeys(){
+    for (String key in infos.keys){
+      if(!isManuallyHandled(key)){
+        return true;
+      }
+    }
+    return false;
+  }
 }
