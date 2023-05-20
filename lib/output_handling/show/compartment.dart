@@ -56,8 +56,7 @@ abstract class Compartment extends StatelessWidget {
     String text = infos[key]!.trim();
     if (isURL(text) ||
         (text.startsWith('ms-windows-store://') && !text.contains(' '))) {
-      return LinkButton(
-          url: text, text: Text(title ?? text));
+      return LinkButton(url: text, text: Text(title ?? text));
     }
     return ExpandableText(
       text,
@@ -67,6 +66,7 @@ abstract class Compartment extends StatelessWidget {
       linkColor: FluentTheme.of(context).accentColor,
     );
   }
+
   Widget buttonRow(List<Info> links, BuildContext context) {
     return Wrap(
       spacing: 5,
@@ -75,7 +75,8 @@ abstract class Compartment extends StatelessWidget {
       children: [
         for (Info info in links)
           if (infos.hasEntry(info.key))
-            checkIfTextIsLink(context: context, key: info.key, title: info.title),
+            checkIfTextIsLink(
+                context: context, key: info.key, title: info.title),
       ],
     );
   }

@@ -20,8 +20,9 @@ class WingetGui extends StatelessWidget {
     return FluentApp(
       title: 'Flutter Demo',
       theme: FluentThemeData(
-          //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
-          brightness: Brightness.light,),
+        //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
+        brightness: Brightness.light,
+      ),
       darkTheme: FluentThemeData(
         //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
         brightness: Brightness.dark,

@@ -13,7 +13,6 @@ class DetailsWidget extends Compartment {
     Info.id,
     Info.publisherSupportUrl,
     Info.documentation,
-
     Info.agreement,
     Info.category,
     Info.pricing,
@@ -63,8 +62,7 @@ class DetailsWidget extends Compartment {
       for (String key in restKeys)
         if (infos.hasEntry(key))
           wrapInWrap(
-              title: key,
-              body: checkIfTextIsLink(context: context, key: key)),
+              title: key, body: checkIfTextIsLink(context: context, key: key)),
     ];
   }
 

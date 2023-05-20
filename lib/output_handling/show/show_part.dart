@@ -44,7 +44,7 @@ class ShowPart extends OutputPart {
         value = "$value\n${line.trim()}";
       }
     }
-    if(key != null ) {
+    if (key != null) {
       infos[key] = value!;
     }
     return infos;

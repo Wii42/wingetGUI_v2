@@ -125,9 +125,9 @@ class PackageLongInfo extends StatelessWidget {
         DetailsWidget.manuallyHandledStringKeys().contains(key));
   }
 
-  bool existUnhandledKeys(){
-    for (String key in infos.keys){
-      if(!isManuallyHandled(key)){
+  bool existUnhandledKeys() {
+    for (String key in infos.keys) {
+      if (!isManuallyHandled(key)) {
         return true;
       }
     }

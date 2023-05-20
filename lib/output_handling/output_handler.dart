@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/extensions/string_list_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/loading_bar/loading_bar_scanner.dart';
 import 'package:winget_gui/output_handling/plain_text/plain_text_scanner.dart';
@@ -16,6 +17,7 @@ class OutputHandler {
   late final List<Responsibility> responsibilityList;
 
   OutputHandler(this.output, this.command) {
+    output.trim();
     responsibilityList = [for (String line in output) Responsibility(line)];
 
     outputScanners = [
