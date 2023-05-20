@@ -8,6 +8,18 @@ import 'package:winget_gui/output_handling/show/link_button.dart';
 import '../info_enum.dart';
 
 class AgreementWidget extends StatelessWidget {
+  static final List<Info> manuallyHandledKeys = [
+    Info.license,
+    Info.licenseUrl,
+    Info.copyright,
+    Info.copyrightUrl,
+    Info.privacyUrl,
+    Info.buyUrl,
+    Info.termsOfTransaction,
+    Info.seizureWarning,
+    Info.storeLicenseTerms,
+  ];
+
   final Map<String, String> infos;
   const AgreementWidget({super.key, required this.infos});
 
@@ -25,6 +37,7 @@ class AgreementWidget extends StatelessWidget {
           if (infos.hasEntry(Info.copyright.key) ||
               infos.hasEntry(Info.copyrightUrl.key))
             _wrapInWrap(title: 'Copyright', body: _copyright(context)),
+          _buttonRow(context),
         ].withSpaceBetween(height: 5),
       ),
     );
@@ -33,6 +46,7 @@ class AgreementWidget extends StatelessWidget {
   Wrap _wrapInWrap({required String title, required Widget body}) {
     return Wrap(
       spacing: 5,
+      runSpacing: 5,
       crossAxisAlignment: WrapCrossAlignment.start,
       children: [
         Padding(
@@ -82,5 +96,47 @@ class AgreementWidget extends StatelessWidget {
   Widget _copyright(BuildContext context) {
     return _textOrLink(
         context: context, name: Info.copyright, url: Info.copyrightUrl);
+  }
+
+  Widget _buttonRow(BuildContext context) {
+    return Wrap(
+      spacing: 5,
+      runSpacing: 5,
+      crossAxisAlignment: WrapCrossAlignment.start,
+      children: [
+        if (infos.hasEntry(Info.privacyUrl.key))
+          _checkIfTextIsLink(
+              context: context, name: Info.privacyUrl, title: 'Privacy'),
+        if (infos.hasEntry(Info.buyUrl.key))
+          _checkIfTextIsLink(context: context, name: Info.buyUrl, title: 'Buy'),
+        if (infos.hasEntry(Info.termsOfTransaction.key))
+          _checkIfTextIsLink(
+              context: context,
+              name: Info.termsOfTransaction,
+              title: 'Terms of Transaction'),
+        if (infos.hasEntry(Info.seizureWarning.key))
+          _checkIfTextIsLink(
+              context: context,
+              name: Info.seizureWarning,
+              title: 'Seizure Warning'),
+        if (infos.hasEntry(Info.storeLicenseTerms.key))
+          _checkIfTextIsLink(
+              context: context,
+              name: Info.storeLicenseTerms,
+              title: 'Store License Terms'),
+      ],
+    );
+  }
+
+  static Iterable<String> manuallyHandledStringKeys() =>
+      manuallyHandledKeys.map<String>((Info info) => info.key);
+
+  static bool containsData(Map<String, String> infos) {
+    for(String key in manuallyHandledStringKeys()){
+      if(infos.hasEntry(key)){
+        return true;
+      }
+    }
+    return false;
   }
 }

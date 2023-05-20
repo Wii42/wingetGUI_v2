@@ -22,10 +22,6 @@ class PackageLongInfo extends StatelessWidget {
     Info.installer,
     Info.website,
     Info.releaseNotesUrl,
-    Info.license,
-    Info.licenseUrl,
-    Info.copyright,
-    Info.copyrightUrl,
   ];
   final Map<String, String> infos;
   const PackageLongInfo(this.infos, {super.key});
@@ -40,7 +36,8 @@ class PackageLongInfo extends StatelessWidget {
         if (infos.hasEntry(Info.releaseNotes.key))
           _wrapInDecoratedBox(_releaseNotes(), context),
         _wrapInDecoratedBox(_displayRest(), context),
-        _wrapInDecoratedBox(AgreementWidget(infos: infos), context),
+        if (AgreementWidget.containsData(infos))
+          _wrapInDecoratedBox(AgreementWidget(infos: infos), context),
         if (infos.hasEntry(Info.installer.key))
           _wrapInDecoratedBox(_installer(), context),
       ].withSpaceBetween(height: 10),
@@ -76,7 +73,8 @@ class PackageLongInfo extends StatelessWidget {
   Widget _displayRest() {
     List<String> rest = [];
     for (String key in infos.keys) {
-      if (!manuallyHandledStringKeys().contains(key)) {
+      if (!manuallyHandledStringKeys().contains(key) &&
+          !AgreementWidget.manuallyHandledStringKeys().contains(key)) {
         rest.add("$key: ${infos[key]}");
       }
     }

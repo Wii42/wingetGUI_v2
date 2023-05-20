@@ -15,7 +15,12 @@ enum Info {
   license(key: 'Lizenz'),
   licenseUrl(key: 'Lizenz-URL'),
   copyright(key: 'Copyright'),
-  copyrightUrl(key: 'Copyright-URL');
+  copyrightUrl(key: 'Copyright-URL'),
+  privacyUrl(key: 'Datenschutz-URL'),
+  buyUrl(key: 'Kauf-URL'),
+  termsOfTransaction(key: 'Terms of Transaction'),
+  seizureWarning(key: 'Seizure Warning'),
+  storeLicenseTerms(key: 'Store License Terms');
 
   final String key;
 
