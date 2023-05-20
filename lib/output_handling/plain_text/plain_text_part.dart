@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/extensions/string_list_extension.dart';
 
 import '../output_part.dart';
 
@@ -7,8 +8,7 @@ class PlainTextPart extends OutputPart {
 
   @override
   Widget? representation() {
-    _removeLeadingEmptyLines();
-    _removeTrailingEmptyLines();
+    lines.trim();
     if (lines.isEmpty) {
       return null;
     }
@@ -19,31 +19,5 @@ class PlainTextPart extends OutputPart {
 
   addLine(String line) {
     lines.add(line);
-  }
-
-  _removeLeadingEmptyLines() {
-    bool foundNotEmpty = false;
-    while (!foundNotEmpty && lines.isNotEmpty) {
-      String line = lines.first;
-      if (line.trim().isEmpty) {
-        lines.removeAt(0);
-      }
-      else{
-        foundNotEmpty = true;
-      }
-    }
-  }
-
-  _removeTrailingEmptyLines() {
-    bool foundNotEmpty = false;
-    while (!foundNotEmpty && lines.isNotEmpty) {
-      String line = lines.last;
-      if (line.trim().isEmpty) {
-        lines.removeLast();
-      }
-      else{
-        foundNotEmpty = true;
-      }
-    }
   }
 }

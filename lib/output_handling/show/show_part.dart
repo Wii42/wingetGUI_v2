@@ -2,6 +2,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/output_part.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
 
+import '../info_enum.dart';
+
 class ShowPart extends OutputPart {
   ShowPart(super.lines);
 
@@ -21,9 +23,9 @@ class ShowPart extends OutputPart {
     Map<String, String> infos = {};
     List<String> details = lines[0].trim().split(' ');
 
-    infos['Name'] = details.sublist(1, details.length - 1).join(' ');
+    infos[Info.name.key] = details.sublist(1, details.length - 1).join(' ');
     String id = details.last.trim();
-    infos['ID'] = id.replaceAll('[', '').replaceAll(']', '');
+    infos[Info.id.key] = id.replaceAll('[', '').replaceAll(']', '');
     return infos;
   }
 
@@ -35,7 +37,7 @@ class ShowPart extends OutputPart {
       if (!line.startsWith(' ') &&
           (line.contains(': ') || line.endsWith(':'))) {
         if (key != null && value != null) {
-          infos[key] = value;
+          infos[key] = value.trim();
         }
         int splitPos = line.indexOf(':');
         key = line.substring(0, splitPos).trim();
@@ -45,7 +47,7 @@ class ShowPart extends OutputPart {
       }
     }
     if (key != null) {
-      infos[key] = value!;
+      infos[key] = value!.trim();
     }
     return infos;
   }
