@@ -71,7 +71,7 @@ class DetailsWidget extends Compartment {
 
   static bool containsData(Map<String, String> infos) {
     for (String key in manuallyHandledStringKeys()) {
-      if (infos.hasEntry(key)) {
+      if (infos.hasEntry(key) || !PackageLongInfo.isManuallyHandled(key)) {
         return true;
       }
     }

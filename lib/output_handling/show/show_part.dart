@@ -30,10 +30,14 @@ class ShowPart extends OutputPart {
   }
 
   Map<String, String> _extractOtherInfos() {
-    Map<String, String> infos = {};
     List<String> details = lines.sublist(1);
+    return extractDetails(details);
+  }
+
+  static Map<String, String> extractDetails(List<String> data) {
+    Map<String, String> infos = {};
     String? key, value;
-    for (String line in details) {
+    for (String line in data) {
       if (!line.startsWith(' ') &&
           (line.contains(': ') || line.endsWith(':'))) {
         if (key != null && value != null) {

@@ -5,6 +5,7 @@ import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/agreement_widget.dart';
 import 'package:winget_gui/output_handling/show/details_widget.dart';
+import 'package:winget_gui/output_handling/show/installer_details.dart';
 import 'package:winget_gui/output_handling/show/package_name_widget.dart';
 
 import '../info_enum.dart';
@@ -38,11 +39,12 @@ class PackageLongInfo extends StatelessWidget {
               _expandableCompartment(Info.description), context),
         if (infos.hasEntry(Info.releaseNotes.key))
           _wrapInDecoratedBox(_releaseNotes(), context),
-        _wrapInDecoratedBox(DetailsWidget(infos: infos), context),
+        if (DetailsWidget.containsData(infos))
+          _wrapInDecoratedBox(DetailsWidget(infos: infos), context),
         if (AgreementWidget.containsData(infos))
           _wrapInDecoratedBox(AgreementWidget(infos: infos), context),
         if (infos.hasEntry(Info.installer.key))
-          _wrapInDecoratedBox(_expandableCompartment(Info.installer), context),
+          _wrapInDecoratedBox(InstallerDetails(infos: infos), context),
       ].withSpaceBetween(height: 10),
     );
   }

@@ -1,5 +1,5 @@
 enum Info {
-  id(key: 'ID', title: 'App-ID'),
+  id(key: 'ID', title: 'App ID'),
   description(key: 'Beschreibung', title: 'About'),
   name(key: 'Name', title: 'Name'),
   publisher(key: 'Herausgeber', title: 'Publisher'),
@@ -35,6 +35,13 @@ enum Info {
   pricing(key: 'Pricing', title: 'Pricing'),
   freeTrial(key: 'Free Trial', title: 'Free Trial'),
   ageRating(key: 'Age Ratings', title: 'Age Rating'),
+
+  installerType(key: 'Installertyp', title: 'Installer Type'),
+  storeProductID(key: 'Store-Produkt-ID', title: 'Store Product ID'),
+  installerURL(key: 'Installer-URL', title: 'Download Installer Manually'),
+  sha256Installer(key: 'Sha256-Installer', title: 'SHA256 Installer'),
+  installerLocale(key: 'Installer-Gebietsschema', title: 'Locale'),
+  releaseDate(key: 'Freigabedatum', title: 'Release Date'),
   ;
 
   final String key;
