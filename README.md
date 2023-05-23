@@ -20,4 +20,5 @@ samples, guidance on mobile development, and a full API reference.
 - fix back button
 - store if app ist installed/upgradeable
 - move navigation to side
+- -handle emails properly
 

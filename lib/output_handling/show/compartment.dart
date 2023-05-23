@@ -55,7 +55,7 @@ abstract class Compartment extends StatelessWidget {
       {required BuildContext context, required String key, String? title}) {
     String text = infos[key]!.trim();
     if (isURL(text) ||
-        (text.startsWith('ms-windows-store://') && !text.contains(' '))) {
+        (text.startsWith('ms-windows-store://') && !text.contains(' ')) || (text.startsWith('mailto:') && !text.contains(' ')) && text.contains('@')) {
       return LinkButton(url: text, text: Text(title ?? text));
     }
     return ExpandableText(

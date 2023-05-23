@@ -1,5 +1,6 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/command_button.dart';
 import 'package:winget_gui/content_place.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
@@ -99,21 +100,9 @@ class PackageLongInfo extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: [
         if (infos.hasEntry(Info.moniker.key))
-          Button(
-              onPressed: () {
-                ContentPlace.maybeOf(context)
-                    ?.content
-                    .showResultOfCommand(['search', infos[Info.moniker.key]!]);
-              },
-              child: Text(infos[Info.moniker.key]!)),
+          _tagButton(searchTarget: infos[Info.moniker.key]!, context: context),
         for (String tag in tags)
-          Button(
-              onPressed: () {
-                ContentPlace.maybeOf(context)
-                    ?.content
-                    .showResultOfCommand(['search', tag]);
-              },
-              child: Text(tag))
+          _tagButton(searchTarget: tag, context: context)
       ],
     );
   }
@@ -134,5 +123,22 @@ class PackageLongInfo extends StatelessWidget {
       }
     }
     return false;
+  }
+
+  Widget _tagButton({required String searchTarget, required BuildContext context}){
+    List<String> command = ['search', searchTarget];
+    return Tooltip(
+      message: CommandButton.message(command),
+      useMousePosition: false,
+      style: const TooltipThemeData(preferBelow: true),
+      child: Button(
+          onPressed: () {
+            ContentPlace.maybeOf(context)
+                ?.content
+                .showResultOfCommand(command);
+          },
+          child: Text(searchTarget))
+      );
+    
   }
 }
