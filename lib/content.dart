@@ -98,7 +98,12 @@ class _ContentState extends State<Content> {
         if (streamSnapshot.hasData) {
           widgets = _displayOutput(streamSnapshot.data!);
           if (streamSnapshot.connectionState == ConnectionState.done) {
-            stack.push(ContentSnapshot(widget._command, widgets));
+            ContentSnapshot snapshot = ContentSnapshot(widget._command, widgets);
+
+            if( stack.isNotEmpty && stack.peek().command == snapshot.command){
+              stack.pop();
+            }
+            stack.push(snapshot);
           }
         }
         return Column(

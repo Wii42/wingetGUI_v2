@@ -9,14 +9,18 @@ class LinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Link(
-      uri: Uri.parse(checkUrlContainsHttp(url)),
-      builder: (context, open) {
-        return HyperlinkButton(
-          onPressed: open,
-          child: text,
-        );
-      },
-    );
+        uri: Uri.parse(checkUrlContainsHttp(url)),
+        builder: (context, open) {
+          return Tooltip(
+            message: url,
+            useMousePosition: false,
+            style: const TooltipThemeData(preferBelow: true),
+            child: HyperlinkButton(
+              onPressed: open,
+              child: text,
+            ),
+          );
+        });
   }
 
   String checkUrlContainsHttp(String url) {
