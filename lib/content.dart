@@ -8,10 +8,13 @@ import 'package:winget_gui/extensions/stream_modifier.dart';
 import 'package:winget_gui/stack.dart';
 
 class Content extends StatefulWidget {
-  Content({super.key});
+  Content({List<String>? command, super.key}){
+    _command = command ?? ['-?'];
+  }
+
 
   late Function({bool goBack}) _rebuild;
-  List<String> _command = ['--help'];
+  late List<String> _command;
 
   @override
   State<Content> createState() => _ContentState();

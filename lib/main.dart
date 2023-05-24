@@ -1,7 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 //import 'package:system_theme/system_theme.dart';
 import 'package:winget_gui/content.dart';
+import 'package:winget_gui/winget_commands.dart';
 
 import 'content_place.dart';
 
@@ -44,54 +46,147 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Content content = Content();
+  ContentPlace contentPlace = _getContentPlace(Content());
+  int? topIndex;
+
+  List<NavigationPaneItem> items = [
+    //...createNavItems([Winget.updates, Winget.installed])
+  ];
+  List<NavigationPaneItem> footerItems = [
+    //...createNavItems([Winget.about, Winget.help])
+  ];
 
   @override
   Widget build(BuildContext context) {
     return NavigationView(
-      appBar: NavigationAppBar(
-        backgroundColor: FluentTheme.of(context).acrylicBackgroundColor,
-        title: Text(widget.title),
-        actions: CommandBarCard(
-          child: CommandBar(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            isCompact: false,
-            //overflowBehavior: CommandBarOverflowBehavior.wrap,
-            primaryItems: [
-              _menuButton(
-                  text: "Updates",
-                  command: ['upgrade'],
-                  icon: FluentIcons.substitutions_in),
-              _menuButton(
-                  text: "Installed",
-                  command: ['list'],
-                  icon: FluentIcons.library),
-              _reloadButton(
-                  text: "Reload Page", icon: FluentIcons.update_restore),
-              _reloadButton(
-                  text: "Go Back", icon: FluentIcons.back, goBack: true),
-              _menuButton(
-                  text: "About Winget",
-                  command: ['--info'],
-                  icon: FluentIcons.info),
-              _menuSearchField(
-                  text: "Search Package",
-                  command: ['search'],
-                  optionalParameters: ['--count', '250'],
-                  icon: FluentIcons.search),
-              _menuSearchField(
-                  text: "Show Package",
-                  command: ['show'],
-                  icon: FluentIcons.search),
-              _commandPrompt(
-                text: "Execute Command",
-              )
-            ],
-          ),
-        ),
+      appBar: _navBar(),
+      pane: NavigationPane(
+        items: [
+          ...createNavItems([Winget.updates, Winget.installed])
+        ],
+        footerItems: [
+          ...createNavItems([Winget.about, Winget.help])
+        ],
+        selected: topIndex,
+        onChanged: (index) {
+          setState(() => topIndex = index);
+        },
       ),
-      content: ContentPlace(content: content, child: content),
+    );
+  }
+
+  List<PaneItem> createNavItems(List<Winget> commands) {
+    return [for (Winget winget in commands) _navButton(winget)];
+  }
+
+  PaneItem _navButton(Winget winget) {
+    Content content = Content(command: winget.command);
+    return PaneItem(
+      title: Text(winget.name),
+      icon: Icon(winget.icon),
+      body: contentPlace,
+      onTap: () {
+        setState(
+          () {
+            contentPlace.content.showResultOfCommand(winget.command);
+          },
+        );
+      },
+    );
+  }
+
+  NavigationAppBar _navBar() {
+    return NavigationAppBar(
+        //backgroundColor: FluentTheme.of(context).acrylicBackgroundColor,
+        leading: _reloadAppBarButton(icon: FluentIcons.back, goBack: true),
+        title: Text(
+          widget.title,
+          style: FluentTheme.of(context).typography.bodyLarge,
+        ),
+        actions: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return SizedBox(
+              height: constraints.maxHeight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    width: 200,
+                  ),
+                  SizedBox(
+                      width: constraints.maxWidth / 3,
+                      child: _searchField(Winget.search)),
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.symmetric(horizontal: 10),
+                    child:
+                        _reloadAppBarButton(icon: FluentIcons.update_restore),
+                  )
+                ],
+              ),
+            );
+          },
+        )
+
+        //actions: CommandBarCard(
+        //  child: CommandBar(
+        //    crossAxisAlignment: CrossAxisAlignment.center,
+        //    mainAxisAlignment: MainAxisAlignment.center,
+        //    isCompact: false,
+        //    //overflowBehavior: CommandBarOverflowBehavior.wrap,
+        //    primaryItems: [
+        //      _menuButton(
+        //          text: "Updates",
+        //          command: ['upgrade'],
+        //          icon: FluentIcons.substitutions_in),
+        //      _menuButton(
+        //          text: "Installed",
+        //          command: ['list'],
+        //          icon: FluentIcons.library),
+        //      _reloadButton(
+        //          text: "Reload Page", icon: FluentIcons.update_restore),
+        //      _reloadButton(
+        //          text: "Go Back", icon: FluentIcons.back, goBack: true),
+        //      _menuButton(
+        //          text: "About Winget",
+        //          command: ['--info'],
+        //          icon: FluentIcons.info),
+        //      _menuSearchField(
+        //          text: "Search Package",
+        //          command: ['search'],
+        //          optionalParameters: ['--count', '250'],
+        //          icon: FluentIcons.search),
+        //      _menuSearchField(
+        //          text: "Show Package",
+        //          command: ['show'],
+        //          icon: FluentIcons.search),
+        //      _commandPrompt(
+        //        text: "Execute Command",
+        //      )
+        //    ],
+        //  ),
+        //),
+        );
+  }
+
+  TextBox _searchField(Winget winget) {
+    TextEditingController controller = TextEditingController();
+    return TextBox(
+      controller: controller,
+      onSubmitted: (input) {
+        setState(
+          () {
+            contentPlace.content
+                .showResultOfCommand([...winget.command, input, "-n", '200']);
+            controller.clear();
+          },
+        );
+      },
+      prefix: Padding(
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
+          child: Icon(winget.icon)),
+      placeholder: winget.name,
     );
   }
 
@@ -103,7 +198,23 @@ class _MyHomePageState extends State<MyHomePage> {
       onPressed: () {
         setState(
           () {
-            content.showResultOfCommand(command);
+            contentPlace.content.showResultOfCommand(command);
+          },
+        );
+      },
+    );
+  }
+
+  IconButton _reloadAppBarButton(
+      {required IconData icon, bool goBack = false}) {
+    return IconButton(
+      icon: Icon(icon),
+      onPressed: () {
+        setState(
+          () {
+            goBack
+                ? contentPlace.content.goBack()
+                : contentPlace.content.reload();
           },
         );
       },
@@ -118,7 +229,9 @@ class _MyHomePageState extends State<MyHomePage> {
       onPressed: () {
         setState(
           () {
-            goBack ? content.goBack() : content.reload();
+            goBack
+                ? contentPlace.content.goBack()
+                : contentPlace.content.reload();
           },
         );
       },
@@ -142,7 +255,7 @@ class _MyHomePageState extends State<MyHomePage> {
               string,
               ...?optionalParameters
             ];
-            content.showResultOfCommand(fullCommand);
+            contentPlace.content.showResultOfCommand(fullCommand);
           },
         );
       },
@@ -157,7 +270,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onSubmitted: (String command) {
           setState(
             () {
-              content.showResultOfCommand(command.split(' '));
+              contentPlace.content.showResultOfCommand(command.split(' '));
             },
           );
         },
@@ -173,4 +286,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         wrappedItem: CommandBarButton(onPressed: () {}));
   }
+
+  static ContentPlace _getContentPlace(Content content) =>
+      ContentPlace(content: content, child: content);
 }
