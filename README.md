@@ -16,9 +16,7 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 ## TO-DO:
-- add on hover to links
 - fix back button
 - store if app ist installed/upgradeable
-- move navigation to side
 - -handle emails properly
 

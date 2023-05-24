@@ -1,6 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
-import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
 
 import '../info_enum.dart';
@@ -24,21 +23,23 @@ class DetailsWidget extends Compartment {
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
-    return [
-      Text(title, style: FluentTheme.of(context).typography.title),
-      ..._detailsList([
-        Info.author,
-        Info.agreement,
-        Info.category,
-        Info.pricing,
-        Info.freeTrial,
-        Info.ageRating,
-        Info.id,
-        Info.documentation,
-      ], context),
-      ..._displayRest(context),
-      buttonRow([Info.publisherSupportUrl], context),
-    ].withSpaceBetween(height: 5);
+    return fullCompartment(
+        title: title,
+        mainColumn: [
+          ..._detailsList([
+            Info.author,
+            Info.agreement,
+            Info.category,
+            Info.pricing,
+            Info.freeTrial,
+            Info.ageRating,
+            Info.id,
+            Info.documentation,
+          ], context),
+          ..._displayRest(context)
+        ],
+        buttonRow: buttonRow([Info.publisherSupportUrl], context),
+        context: context);
   }
 
   List<Widget> _detailsList(List<Info> details, BuildContext context) {

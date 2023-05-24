@@ -1,4 +1,3 @@
-import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/command_button.dart';
 import 'package:winget_gui/content_place.dart';
@@ -36,8 +35,7 @@ class PackageLongInfo extends StatelessWidget {
         _wrapInDecoratedBox(PackageNameWidget(infos), context),
         if (infos.hasEntry(Info.tags.key)) _tags(context),
         if (infos.hasEntry(Info.description.key))
-          _wrapInDecoratedBox(
-              _expandableCompartment(Info.description), context),
+          _wrapInDecoratedBox(_description(), context),
         if (infos.hasEntry(Info.releaseNotes.key))
           _wrapInDecoratedBox(_releaseNotes(), context),
         if (DetailsWidget.containsData(infos))
@@ -60,6 +58,13 @@ class PackageLongInfo extends StatelessWidget {
   }
 
   Widget _expandableCompartment(Info info) {
+    return ExpandableWidget(title: info.title, text: infos[info.key]!);
+  }
+
+  Widget _description() {
+    Info info = Info.description;
+    List<String> lines = infos[info.key]!.split('\n');
+
     return ExpandableWidget(title: info.title, text: infos[info.key]!);
   }
 
@@ -101,8 +106,7 @@ class PackageLongInfo extends StatelessWidget {
       children: [
         if (infos.hasEntry(Info.moniker.key))
           _tagButton(searchTarget: infos[Info.moniker.key]!, context: context),
-        for (String tag in tags)
-          _tagButton(searchTarget: tag, context: context)
+        for (String tag in tags) _tagButton(searchTarget: tag, context: context)
       ],
     );
   }
@@ -125,20 +129,19 @@ class PackageLongInfo extends StatelessWidget {
     return false;
   }
 
-  Widget _tagButton({required String searchTarget, required BuildContext context}){
+  Widget _tagButton(
+      {required String searchTarget, required BuildContext context}) {
     List<String> command = ['search', searchTarget];
     return Tooltip(
-      message: CommandButton.message(command),
-      useMousePosition: false,
-      style: const TooltipThemeData(preferBelow: true),
-      child: Button(
-          onPressed: () {
-            ContentPlace.maybeOf(context)
-                ?.content
-                .showResultOfCommand(command);
-          },
-          child: Text(searchTarget))
-      );
-    
+        message: CommandButton.message(command),
+        useMousePosition: false,
+        style: const TooltipThemeData(preferBelow: true),
+        child: Button(
+            onPressed: () {
+              ContentPlace.maybeOf(context)
+                  ?.content
+                  .showResultOfCommand(command);
+            },
+            child: Text(searchTarget)));
   }
 }

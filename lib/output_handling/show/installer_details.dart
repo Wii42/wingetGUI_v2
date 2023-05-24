@@ -2,7 +2,6 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
-import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/show_part.dart';
 
 import '../info_enum.dart';
@@ -31,18 +30,20 @@ class InstallerDetails extends Compartment {
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
-    return [
-      Text(title, style: FluentTheme.of(context).typography.title),
-      ..._installerDetailsList([
-        Info.installerType,
-        Info.storeProductID,
-        Info.installerLocale,
-        Info.sha256Installer,
-        Info.releaseDate,
-      ], context),
-      ..._displayRest(context),
-      buttonRow([Info.installerURL], context)
-    ].withSpaceBetween(height: 5);
+    return fullCompartment(
+        title: title,
+        mainColumn: [
+          ..._installerDetailsList([
+            Info.installerType,
+            Info.storeProductID,
+            Info.installerLocale,
+            Info.sha256Installer,
+            Info.releaseDate,
+          ], context),
+          ..._displayRest(context),
+        ],
+        buttonRow: buttonRow([Info.installerURL], context),
+        context: context);
   }
 
   List<Widget> _displayRest(BuildContext context) {
@@ -88,7 +89,7 @@ class InstallerDetails extends Compartment {
   }
 
   @override
-  Widget buttonRow(List<Info> links, BuildContext context) {
+  Wrap buttonRow(List<Info> links, BuildContext context) {
     return Wrap(
       spacing: 5,
       runSpacing: 5,

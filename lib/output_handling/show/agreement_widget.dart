@@ -1,6 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
-import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/compartment.dart';
 
 import '../info_enum.dart';
@@ -24,22 +23,24 @@ class AgreementWidget extends Compartment {
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
-    return [
-      Text(title, style: FluentTheme.of(context).typography.title),
-      if (infos.hasEntry(Info.license.key) ||
-          infos.hasEntry(Info.licenseUrl.key))
-        wrapInWrap(title: Info.license.title, body: _license(context)),
-      if (infos.hasEntry(Info.copyright.key) ||
-          infos.hasEntry(Info.copyrightUrl.key))
-        wrapInWrap(title: Info.copyright.title, body: _copyright(context)),
-      buttonRow([
-        Info.privacyUrl,
-        Info.buyUrl,
-        Info.termsOfTransaction,
-        Info.seizureWarning,
-        Info.storeLicenseTerms
-      ], context),
-    ].withSpaceBetween(height: 5);
+    return fullCompartment(
+        title: title,
+        mainColumn: [
+          if (infos.hasEntry(Info.license.key) ||
+              infos.hasEntry(Info.licenseUrl.key))
+            wrapInWrap(title: Info.license.title, body: _license(context)),
+          if (infos.hasEntry(Info.copyright.key) ||
+              infos.hasEntry(Info.copyrightUrl.key))
+            wrapInWrap(title: Info.copyright.title, body: _copyright(context)),
+        ],
+        buttonRow: buttonRow([
+          Info.privacyUrl,
+          Info.buyUrl,
+          Info.termsOfTransaction,
+          Info.seizureWarning,
+          Info.storeLicenseTerms
+        ], context),
+        context: context);
   }
 
   Widget _license(BuildContext context) {

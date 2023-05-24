@@ -1,7 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter_acrylic/flutter_acrylic.dart';
-//import 'package:system_theme/system_theme.dart';
+
+/// 'package:system_theme/system_theme.dart';
 import 'package:winget_gui/content.dart';
 import 'package:winget_gui/winget_commands.dart';
 
@@ -20,7 +19,7 @@ class WingetGui extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FluentApp(
-      title: 'Flutter Demo',
+      title: 'WingetGUI',
       theme: FluentThemeData(
         //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
         brightness: Brightness.light,
@@ -49,23 +48,18 @@ class _MyHomePageState extends State<MyHomePage> {
   ContentPlace contentPlace = _getContentPlace(Content());
   int? topIndex;
 
-  List<NavigationPaneItem> items = [
-    //...createNavItems([Winget.updates, Winget.installed])
-  ];
-  List<NavigationPaneItem> footerItems = [
-    //...createNavItems([Winget.about, Winget.help])
-  ];
-
   @override
   Widget build(BuildContext context) {
     return NavigationView(
       appBar: _navBar(),
       pane: NavigationPane(
+        autoSuggestBox: _commandPrompt(),
         items: [
           ...createNavItems([Winget.updates, Winget.installed])
         ],
         footerItems: [
-          ...createNavItems([Winget.about, Winget.help])
+          ...createNavItems(
+              [Winget.about, Winget.sources, Winget.help, Winget.settings])
         ],
         selected: topIndex,
         onChanged: (index) {
@@ -80,7 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   PaneItem _navButton(Winget winget) {
-    Content content = Content(command: winget.command);
     return PaneItem(
       title: Text(winget.name),
       icon: Icon(winget.icon),
@@ -97,7 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   NavigationAppBar _navBar() {
     return NavigationAppBar(
-        //backgroundColor: FluentTheme.of(context).acrylicBackgroundColor,
         leading: _reloadAppBarButton(icon: FluentIcons.back, goBack: true),
         title: Text(
           widget.title,
@@ -127,47 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             );
           },
-        )
-
-        //actions: CommandBarCard(
-        //  child: CommandBar(
-        //    crossAxisAlignment: CrossAxisAlignment.center,
-        //    mainAxisAlignment: MainAxisAlignment.center,
-        //    isCompact: false,
-        //    //overflowBehavior: CommandBarOverflowBehavior.wrap,
-        //    primaryItems: [
-        //      _menuButton(
-        //          text: "Updates",
-        //          command: ['upgrade'],
-        //          icon: FluentIcons.substitutions_in),
-        //      _menuButton(
-        //          text: "Installed",
-        //          command: ['list'],
-        //          icon: FluentIcons.library),
-        //      _reloadButton(
-        //          text: "Reload Page", icon: FluentIcons.update_restore),
-        //      _reloadButton(
-        //          text: "Go Back", icon: FluentIcons.back, goBack: true),
-        //      _menuButton(
-        //          text: "About Winget",
-        //          command: ['--info'],
-        //          icon: FluentIcons.info),
-        //      _menuSearchField(
-        //          text: "Search Package",
-        //          command: ['search'],
-        //          optionalParameters: ['--count', '250'],
-        //          icon: FluentIcons.search),
-        //      _menuSearchField(
-        //          text: "Show Package",
-        //          command: ['show'],
-        //          icon: FluentIcons.search),
-        //      _commandPrompt(
-        //        text: "Execute Command",
-        //      )
-        //    ],
-        //  ),
-        //),
-        );
+        ));
   }
 
   TextBox _searchField(Winget winget) {
@@ -180,6 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
             contentPlace.content
                 .showResultOfCommand([...winget.command, input, "-n", '200']);
             controller.clear();
+            topIndex = null;
           },
         );
       },
@@ -187,21 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
           child: Icon(winget.icon)),
       placeholder: winget.name,
-    );
-  }
-
-  CommandBarButton _menuButton(
-      {required String text, required List<String> command, IconData? icon}) {
-    return CommandBarButton(
-      icon: (icon != null) ? Icon(icon) : null,
-      label: Text(text),
-      onPressed: () {
-        setState(
-          () {
-            contentPlace.content.showResultOfCommand(command);
-          },
-        );
-      },
     );
   }
 
@@ -221,70 +159,24 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  CommandBarButton _reloadButton(
-      {required String text, IconData? icon, bool goBack = false}) {
-    return CommandBarButton(
-      icon: (icon != null) ? Icon(icon) : null,
-      label: Text(text),
-      onPressed: () {
+  TextBox _commandPrompt() {
+    TextEditingController controller = TextEditingController();
+    return TextBox(
+      controller: controller,
+      onSubmitted: (String command) {
         setState(
           () {
-            goBack
-                ? contentPlace.content.goBack()
-                : contentPlace.content.reload();
+            contentPlace.content.showResultOfCommand(command.split(' '));
+            controller.clear();
+            topIndex = null;
           },
         );
       },
+      prefix: const Padding(
+          padding: EdgeInsetsDirectional.symmetric(horizontal: 5),
+          child: Icon(FluentIcons.command_prompt)),
+      placeholder: 'Run command',
     );
-  }
-
-  CommandBarBuilderItem _menuSearchField({
-    required String text,
-    required List<String> command,
-    List<String>? optionalParameters,
-    IconData? icon,
-  }) {
-    return _wrapWidget(TextBox(
-      prefix: Text(text),
-      suffix: (icon != null) ? Icon(icon) : null,
-      onSubmitted: (String string) {
-        setState(
-          () {
-            List<String> fullCommand = [
-              ...command,
-              string,
-              ...?optionalParameters
-            ];
-            contentPlace.content.showResultOfCommand(fullCommand);
-          },
-        );
-      },
-    ));
-  }
-
-  CommandBarBuilderItem _commandPrompt({required String text, IconData? icon}) {
-    return _wrapWidget(
-      TextBox(
-        prefix: Text(text),
-        suffix: (icon != null) ? Icon(icon) : null,
-        onSubmitted: (String command) {
-          setState(
-            () {
-              contentPlace.content.showResultOfCommand(command.split(' '));
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  CommandBarBuilderItem _wrapWidget(Widget widget) {
-    return CommandBarBuilderItem(
-        builder: (BuildContext context, CommandBarItemDisplayMode displayMode,
-            Widget child) {
-          return widget;
-        },
-        wrappedItem: CommandBarButton(onPressed: () {}));
   }
 
   static ContentPlace _getContentPlace(Content content) =>

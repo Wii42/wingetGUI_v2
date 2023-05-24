@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:url_launcher/link.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/link_button.dart';
@@ -39,6 +38,7 @@ class PackageNameWidget extends StatelessWidget {
                 ),
                 if (hasVersion()) const SizedBox(height: 10),
                 Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 5,
                   runSpacing: 5,
                   children: [

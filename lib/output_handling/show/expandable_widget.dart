@@ -1,5 +1,6 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/extensions/widget_list_extension.dart';
 
 import 'link_button.dart';
 
@@ -42,7 +43,7 @@ class ExpandableWidget extends StatelessWidget {
             maxLines: maxLines,
             linkColor: FluentTheme.of(context).accentColor,
           ),
-        ],
+        ].withSpaceBetween(height: 10),
       ),
     );
   }

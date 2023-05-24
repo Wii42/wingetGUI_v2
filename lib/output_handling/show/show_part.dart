@@ -41,7 +41,7 @@ class ShowPart extends OutputPart {
       if (!line.startsWith(' ') &&
           (line.contains(': ') || line.endsWith(':'))) {
         if (key != null && value != null) {
-          infos[key] = value.trim();
+          infos[key] = value.replaceAll('\n\n', '\n').trim();
         }
         int splitPos = line.indexOf(':');
         key = line.substring(0, splitPos).trim();
@@ -51,7 +51,7 @@ class ShowPart extends OutputPart {
       }
     }
     if (key != null) {
-      infos[key] = value!.trim();
+      infos[key] = value!.replaceAll('\n\n', '\n').trim();
     }
     return infos;
   }

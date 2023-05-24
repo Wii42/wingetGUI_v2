@@ -10,7 +10,9 @@ enum Winget {
       name: "About Winget", command: ['--info'], icon: FluentIcons.info),
   help(
       name: "Help", command: ['--help'], icon: FluentIcons.help),
-  search(name: "Search Packages", command:  ['search'], icon: FluentIcons.search)
+  search(name: "Search Packages", command:  ['search'], icon: FluentIcons.search),
+  settings(name: "Winget Settings", command: ['settings'], icon: FluentIcons.settings),
+sources(name: 'Sources', command: ['source'], icon: FluentIcons.database_source)
   ;
 
   final String name;
