@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/extensions/string_list_extension.dart';
 
+import '../../link_text.dart';
 import '../output_part.dart';
 
 class PlainTextPart extends OutputPart {
@@ -13,8 +14,11 @@ class PlainTextPart extends OutputPart {
       return null;
     }
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [for (String line in lines) Text(line)]);
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (String line in lines) LinkText(line: line),
+      ],
+    );
   }
 
   addLine(String line) {

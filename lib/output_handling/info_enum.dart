@@ -10,13 +10,13 @@ enum Info {
   tags(key: 'Markierungen', title: 'Tags'),
   releaseNotes(key: 'Versionshinweise', title: 'Release Notes'),
   releaseNotesUrl(
-      key: 'URL der Versionshinweise', title: 'Link to Release Notes'),
+      key: 'URL der Versionshinweise', title: 'Show Online'),
   installer(key: 'Installationsprogramm', title: 'Installer'),
   source(key: 'Quelle', title: 'Source'),
   website(key: 'Startseite', title: 'Website'),
 
   license(key: 'Lizenz', title: 'License'),
-  licenseUrl(key: 'Lizenz-URL', title: 'License URL'),
+  licenseUrl(key: 'Lizenz-URL', title: 'License Link'),
   copyright(key: 'Copyright', title: 'Copyright'),
   copyrightUrl(key: 'Copyright-URL', title: 'Copyright URL'),
   privacyUrl(key: 'Datenschutz-URL', title: 'Privacy'),

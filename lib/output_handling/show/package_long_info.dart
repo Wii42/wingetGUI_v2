@@ -5,6 +5,7 @@ import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/agreement_widget.dart';
 import 'package:winget_gui/output_handling/show/details_widget.dart';
+import 'package:winget_gui/output_handling/show/expandable_compartment.dart';
 import 'package:winget_gui/output_handling/show/installer_details.dart';
 import 'package:winget_gui/output_handling/show/package_name_widget.dart';
 
@@ -35,9 +36,20 @@ class PackageLongInfo extends StatelessWidget {
         _wrapInDecoratedBox(PackageNameWidget(infos), context),
         if (infos.hasEntry(Info.tags.key)) _tags(context),
         if (infos.hasEntry(Info.description.key))
-          _wrapInDecoratedBox(_description(), context),
+          _wrapInDecoratedBox(
+              ExpandableCompartment(
+                infos: infos,
+                expandableInfo: Info.description,
+              ),
+              context),
         if (infos.hasEntry(Info.releaseNotes.key))
-          _wrapInDecoratedBox(_releaseNotes(), context),
+          _wrapInDecoratedBox(
+              ExpandableCompartment(
+                infos: infos,
+                expandableInfo: Info.releaseNotes,
+                buttonInfos: const [Info.releaseNotesUrl],
+              ),
+              context),
         if (DetailsWidget.containsData(infos))
           _wrapInDecoratedBox(DetailsWidget(infos: infos), context),
         if (AgreementWidget.containsData(infos))

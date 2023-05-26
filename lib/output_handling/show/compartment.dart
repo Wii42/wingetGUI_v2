@@ -1,8 +1,10 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:string_validator/string_validator.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
+import 'package:winget_gui/link_text.dart';
 
 import '../info_enum.dart';
 import 'link_button.dart';
@@ -69,7 +71,7 @@ abstract class Compartment extends StatelessWidget {
       return LinkButton(
           url: infos[url.key]!, text: Text(infos[name.key] ?? infos[url.key]!));
     } else {
-      return checkIfTextIsLink(context: context, key: name.key);
+      return textWithLinks(key: name.key, context: context);
     }
   }
 
@@ -82,13 +84,12 @@ abstract class Compartment extends StatelessWidget {
             text.contains('@')) {
       return LinkButton(url: text, text: Text(title ?? text));
     }
-    return ExpandableText(
-      text,
-      expandText: 'show more',
-      collapseText: 'show less',
-      maxLines: 1,
-      linkColor: FluentTheme.of(context).accentColor,
-    );
+    return textWithLinks(key: key, context: context);
+  }
+
+  Widget textWithLinks(
+      {required String key, required BuildContext context, int maxLines = 1}) {
+    return LinkText(line: infos[key]!.trim(), maxLines: maxLines,);
   }
 
   Wrap buttonRow(List<Info> links, BuildContext context) {

@@ -24,6 +24,7 @@ dependencies:
   expandable_text: ^2.3.0
   string_validator: ^1.0.0
   intl: ^0.18.0
+  flutter_linkify: ^6.0.0
 
 dev_dependencies:
   flutter_test:
