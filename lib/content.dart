@@ -8,12 +8,11 @@ import 'package:winget_gui/extensions/stream_modifier.dart';
 import 'package:winget_gui/stack.dart';
 
 class Content extends StatefulWidget {
-  Content({List<String>? command, super.key}){
+  Content({List<String>? command, super.key}) {
     _command = command ?? ['-?'];
   }
 
-
-  late Function({bool goBack}) _rebuild;
+  late Function({bool goBack, bool runCommand}) _rebuild;
   late List<String> _command;
 
   @override
@@ -21,17 +20,17 @@ class Content extends StatefulWidget {
 
   void showResultOfCommand(List<String> command) {
     _command = command;
-    _rebuild();
+    _rebuild(runCommand: true);
   }
 
   List<String> get command => _command;
 
   void reload() {
-    _rebuild();
+    _rebuild(runCommand: true);
   }
 
   void goBack() {
-    _rebuild(goBack: true);
+    _rebuild(goBack: true, runCommand: false);
   }
 }
 
@@ -39,14 +38,16 @@ class _ContentState extends State<Content> {
   late Process _process;
   ListStack<ContentSnapshot> stack = ListStack();
   bool _goBack = false;
+  bool _runCommand = false;
 
   @override
   void initState() {
     super.initState();
-    widget._rebuild = ({goBack = false}) {
+    widget._rebuild = ({goBack = false, runCommand = false}) {
       setState(
         () {
           _goBack = goBack;
+          _runCommand = runCommand;
         },
       );
     };
@@ -72,10 +73,18 @@ class _ContentState extends State<Content> {
           prevState = stack.peek();
         }
         widget._command = prevState.command;
-        _goBack = false;
-        return _wrapInListView(prevState.widgets);
+      }
+      _goBack = false;
+    }
+    if (!_runCommand) {
+      if (stack.isNotEmpty) {
+        ContentSnapshot state = stack.peek();
+
+        widget._command = state.command;
+        return _wrapInListView(state.widgets);
       }
     }
+    _runCommand = false;
     return FutureBuilder<Stream<List<String>>>(
       future: getOutputStreamOfProcess(),
       builder: (BuildContext context,
@@ -101,9 +110,10 @@ class _ContentState extends State<Content> {
         if (streamSnapshot.hasData) {
           widgets = _displayOutput(streamSnapshot.data!);
           if (streamSnapshot.connectionState == ConnectionState.done) {
-            ContentSnapshot snapshot = ContentSnapshot(widget._command, widgets);
+            ContentSnapshot snapshot =
+                ContentSnapshot(widget._command, widgets);
 
-            if( stack.isNotEmpty && stack.peek().command == snapshot.command){
+            if (stack.isNotEmpty && stack.peek().command == snapshot.command) {
               stack.pop();
             }
             stack.push(snapshot);

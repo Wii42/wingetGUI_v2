@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
 import 'package:winget_gui/extensions/widget_list_extension.dart';
+import 'package:winget_gui/link_text.dart';
 import 'package:winget_gui/output_handling/show/link_button.dart';
 
 import '../../command_button.dart';
@@ -46,6 +47,8 @@ class PackageNameWidget extends StatelessWidget {
                         ? publisher()
                         : Text(infos[Info.id.key]!),
                     if (infos.hasEntry(Info.website.key)) _website(),
+                    if (infos.hasEntry(Info.category.key))
+                      ...[const Text('|'),LinkText(line: infos[Info.category.key]!)]
                   ],
                 )
               ],
