@@ -2,6 +2,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:string_validator/string_validator.dart';
 import 'package:winget_gui/extensions/string_map_extension.dart';
+import 'package:winget_gui/link_text.dart';
 import 'package:winget_gui/output_handling/show/show_part.dart';
 
 import '../info_enum.dart';
@@ -79,13 +80,7 @@ class InstallerDetails extends Compartment {
         (text.startsWith('ms-windows-store://') && !text.contains(' '))) {
       return LinkButton(url: text, text: Text(title ?? text));
     }
-    return ExpandableText(
-      text,
-      expandText: 'show more',
-      collapseText: 'show less',
-      maxLines: 1,
-      linkColor: FluentTheme.of(context).accentColor,
-    );
+    return LinkText(line: text, maxLines: 1,);
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:winget_gui/link_text.dart';
 import 'package:winget_gui/output_handling/show/link_button.dart';
 
 import '../../command_button.dart';
+import '../../winget_commands.dart';
 import '../info_enum.dart';
 
 class PackageNameWidget extends StatelessWidget {
@@ -45,16 +46,22 @@ class PackageNameWidget extends StatelessWidget {
                   children: [
                     infos.hasEntry(Info.publisher.key)
                         ? publisher()
-                        : Text(infos[Info.id.key]!),
+                        : Padding(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 10),
+                            child: Text(infos[Info.id.key]!)),
                     if (infos.hasEntry(Info.website.key)) _website(),
-                    if (infos.hasEntry(Info.category.key))
-                      ...[const Text('|'),LinkText(line: infos[Info.category.key]!)]
+                    if (infos.hasEntry(Info.category.key)) ...[
+                      //const Text('|'),
+    Padding(padding: const EdgeInsetsDirectional.symmetric(horizontal: 10), child:
+                      LinkText(line: infos[Info.category.key]!))
+                    ]
                   ],
                 )
               ],
             ),
           ),
-          _buttons(context),
+          _buttons([Winget.install, Winget.upgrade, Winget.uninstall], context),
         ],
       ),
     );
@@ -82,7 +89,9 @@ class PackageNameWidget extends StatelessWidget {
     if (infos.hasEntry(Info.publisherUrl.key)) {
       return _publisherWithLink();
     } else {
-      return _publisherOnlyText();
+      return Padding(
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
+          child: _publisherOnlyText());
     }
   }
 
@@ -100,23 +109,33 @@ class PackageNameWidget extends StatelessWidget {
         infos[Info.version.key]! != 'Unknown');
   }
 
-  Widget _buttons(BuildContext context) {
+  Widget _buttons(List<Winget> commands, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        CommandButton(text: 'Install', command: _createCommand('install')),
-        CommandButton(text: 'Upgrade', command: _createCommand('upgrade')),
-        CommandButton(text: 'Uninstall', command: _createCommand('uninstall')),
+        for (Winget winget in commands) _createButton(winget),
+
+        //CommandButton(text: 'Install', command: _createCommand('install'), title: 'Install ${infos[Info.name.key]}',),
+        //CommandButton(text: 'Upgrade', command: _createCommand('upgrade')),
+        //CommandButton(text: 'Uninstall', command: _createCommand('uninstall')),
       ].withSpaceBetween(height: 5),
     );
   }
 
-  List<String> _createCommand(String command) {
-    return [command, '--id', infos[Info.id.key]!];
+  CommandButton _createButton(Winget winget) {
+    return CommandButton(
+      text: winget.name,
+      command: _createCommand(winget.command),
+      title: '${winget.name} ${infos[Info.name.key]}',
+    );
+  }
+
+  List<String> _createCommand(List<String> command) {
+    return [...command, '--id', infos[Info.id.key]!];
   }
 
   Widget _website() {
     return LinkButton(
-        url: infos[Info.website.key]!, text: const Text("show online"));
+        url: infos[Info.website.key]!, text: Text(Info.website.title));
   }
 }

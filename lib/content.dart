@@ -7,20 +7,22 @@ import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/extensions/stream_modifier.dart';
 import 'package:winget_gui/stack.dart';
 
+import 'content_place.dart';
+
 class Content extends StatefulWidget {
   Content({List<String>? command, super.key}) {
     _command = command ?? ['-?'];
   }
 
-  late Function({bool goBack, bool runCommand}) _rebuild;
+  late Function({bool goBack, bool runCommand, String? title}) _rebuild;
   late List<String> _command;
 
   @override
   State<Content> createState() => _ContentState();
 
-  void showResultOfCommand(List<String> command) {
+  void showResultOfCommand(List<String> command, {String? title}) {
     _command = command;
-    _rebuild(runCommand: true);
+    _rebuild(runCommand: true, title: title);
   }
 
   List<String> get command => _command;
@@ -36,18 +38,20 @@ class Content extends StatefulWidget {
 
 class _ContentState extends State<Content> {
   late Process _process;
-  ListStack<ContentSnapshot> stack = ListStack();
   bool _goBack = false;
   bool _runCommand = false;
+  String? _title;
 
   @override
   void initState() {
     super.initState();
-    widget._rebuild = ({goBack = false, runCommand = false}) {
+    widget._rebuild = ({goBack = false, runCommand = false, String? title}) {
       setState(
         () {
           _goBack = goBack;
           _runCommand = runCommand;
+          _title = title;
+          print('manual rebuild');
         },
       );
     };
@@ -66,6 +70,8 @@ class _ContentState extends State<Content> {
 
   @override
   Widget build(BuildContext context) {
+    print("run command: $_runCommand");
+    ListStack<ContentSnapshot> stack = ContentPlace.of(context).stack;
     if (_goBack) {
       if (stack.isNotEmpty) {
         ContentSnapshot prevState = stack.pop();
@@ -73,6 +79,8 @@ class _ContentState extends State<Content> {
           prevState = stack.peek();
         }
         widget._command = prevState.command;
+        _goBack = false;
+        return _wrapInListView(prevState.widgets);
       }
       _goBack = false;
     }
@@ -81,16 +89,19 @@ class _ContentState extends State<Content> {
         ContentSnapshot state = stack.peek();
 
         widget._command = state.command;
-        return _wrapInListView(state.widgets);
+        print('no run');
+        //_runCommand = false;
+        //return _wrapInListView(state.widgets);
       }
     }
-    _runCommand = false;
+    print(stack);
+    //_runCommand = false;
     return FutureBuilder<Stream<List<String>>>(
       future: getOutputStreamOfProcess(),
       builder: (BuildContext context,
           AsyncSnapshot<Stream<List<String>>> processSnapshot) {
         if (processSnapshot.hasData) {
-          return _displayStreamOfOutput(processSnapshot.data!);
+          return _displayStreamOfOutput(processSnapshot.data!, context);
         } else if (processSnapshot.hasError) {
           return Text('Error: ${processSnapshot.error}');
         } else {
@@ -101,15 +112,16 @@ class _ContentState extends State<Content> {
   }
 
   StreamBuilder<List<String>> _displayStreamOfOutput(
-      Stream<List<String>> stream) {
+      Stream<List<String>> stream, BuildContext context) {
     return StreamBuilder<List<String>>(
       stream: stream,
       builder:
           (BuildContext context, AsyncSnapshot<List<String>> streamSnapshot) {
         List<Widget> widgets = [];
         if (streamSnapshot.hasData) {
-          widgets = _displayOutput(streamSnapshot.data!);
+          widgets = _displayOutput(streamSnapshot.data!, context);
           if (streamSnapshot.connectionState == ConnectionState.done) {
+            ListStack<ContentSnapshot> stack = ContentPlace.of(context).stack;
             ContentSnapshot snapshot =
                 ContentSnapshot(widget._command, widgets);
 
@@ -117,6 +129,7 @@ class _ContentState extends State<Content> {
               stack.pop();
             }
             stack.push(snapshot);
+            print(stack);
           }
         }
         return Column(
@@ -139,10 +152,10 @@ class _ContentState extends State<Content> {
     );
   }
 
-  List<Widget> _displayOutput(List<String> output) {
-    OutputHandler handler = OutputHandler(output, widget._command);
+  List<Widget> _displayOutput(List<String> output, BuildContext context) {
+    OutputHandler handler = OutputHandler(output, widget._command, title: _title);
     handler.determineResponsibility();
-    return handler.displayOutput();
+    return handler.displayOutput(context);
   }
 
   Widget _wrapInListView(List<Widget> widgets) {
@@ -163,4 +176,8 @@ class ContentSnapshot {
   List<Widget> widgets;
 
   ContentSnapshot(this.command, this.widgets);
+
+  String toString(){
+    return command.toString();
+  }
 }

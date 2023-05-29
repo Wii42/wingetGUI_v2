@@ -13,7 +13,6 @@ class DetailsWidget extends Compartment {
     Info.publisherSupportUrl,
     Info.documentation,
     Info.agreement,
-    Info.category,
     Info.pricing,
     Info.freeTrial,
     Info.ageRating,
@@ -29,7 +28,6 @@ class DetailsWidget extends Compartment {
           ..._detailsList([
             Info.author,
             Info.agreement,
-            Info.category,
             Info.pricing,
             Info.freeTrial,
             Info.ageRating,

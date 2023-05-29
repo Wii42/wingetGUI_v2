@@ -1,6 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-
-/// 'package:system_theme/system_theme.dart';
+// 'package:system_theme/system_theme.dart';
 import 'package:winget_gui/content.dart';
 import 'package:winget_gui/winget_commands.dart';
 
@@ -54,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: _navBar(),
       pane: NavigationPane(
         autoSuggestBox: _commandPrompt(),
+        autoSuggestBoxReplacement: const Icon(FluentIcons.command_prompt),
         items: [
           ...createNavItems([Winget.updates, Winget.installed])
         ],

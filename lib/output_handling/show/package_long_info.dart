@@ -26,6 +26,7 @@ class PackageLongInfo extends StatelessWidget {
     Info.website,
     Info.releaseNotesUrl,
     Info.moniker,
+    Info.category
   ];
   final Map<String, String> infos;
   const PackageLongInfo(this.infos, {super.key});

@@ -12,7 +12,10 @@ enum Winget {
       name: "Help", command: ['--help'], icon: FluentIcons.help),
   search(name: "Search Packages", command:  ['search'], icon: FluentIcons.search),
   settings(name: "Winget Settings", command: ['settings'], icon: FluentIcons.settings),
-sources(name: 'Sources', command: ['source'], icon: FluentIcons.database_source)
+sources(name: 'Sources', command: ['source'], icon: FluentIcons.database_source),
+  install(name: 'Install', command: ['install'], icon: FluentIcons.installation),
+  upgrade(name: 'Upgrade', command: ['upgrade'], icon: FluentIcons.substitutions_in),
+  uninstall(name: 'Uninstall', command: ['uninstall'], icon: FluentIcons.delete),
   ;
 
   final String name;

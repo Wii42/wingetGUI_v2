@@ -13,10 +13,11 @@ import 'output_part.dart';
 class OutputHandler {
   List<String> output;
   List<String> command;
+  String? title;
   late List<Scanner> outputScanners;
   late final List<Responsibility> responsibilityList;
 
-  OutputHandler(this.output, this.command) {
+  OutputHandler(this.output, this.command, {this.title}) {
     output.trim();
     responsibilityList = [for (String line in output) Responsibility(line)];
 
@@ -34,9 +35,19 @@ class OutputHandler {
     }
   }
 
-  List<Widget> displayOutput() {
+  List<Widget> displayOutput(BuildContext context) {
     List<Widget> list = [];
     OutputPart? prevPart;
+
+    if (title != null) {
+      list.add(
+        Text(
+          title!,
+          style: FluentTheme.of(context).typography.titleLarge,
+        ),
+      );
+    }
+
     for (Responsibility resp in responsibilityList) {
       OutputPart? part = resp.respPart;
       if (part != prevPart) {

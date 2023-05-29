@@ -39,7 +39,7 @@ class ShowPart extends OutputPart {
     String? key, value;
     for (String line in data) {
       if (!line.startsWith(' ') &&
-          (line.contains(': ') || line.endsWith(':'))) {
+          (line.contains(': ') || line.endsWith(':')) && line.indexOf(':')<= 100) {
         if (key != null && value != null) {
           infos[key] = value.replaceAll('\n\n', '\n').trim();
         }

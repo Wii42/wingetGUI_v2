@@ -7,10 +7,12 @@ class CommandButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.command,
+    this.title,
   });
 
   final String text;
   final List<String> command;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class CommandButton extends StatelessWidget {
       style: const TooltipThemeData(preferBelow: true),
       child: FilledButton(
         onPressed: () {
-          ContentPlace.maybeOf(context)?.content.showResultOfCommand(command);
+          ContentPlace.maybeOf(context)?.content.showResultOfCommand(command, title: title ?? text);
         },
         child: Text(text),
       ),
@@ -28,6 +30,6 @@ class CommandButton extends StatelessWidget {
   }
 
   static String message(List<String> command){
-  return 'Execute command "winget ${command.join(" ")}"';
+  return 'Run command "winget ${command.join(" ")}"';
   }
 }

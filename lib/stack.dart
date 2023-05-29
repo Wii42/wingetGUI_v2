@@ -24,4 +24,9 @@ class ListStack<T> {
   bool get isNotEmpty => _items.isNotEmpty;
 
   int get length => _items.length;
+
+  @override
+  String toString(){
+    return "{${super.hashCode}, ${_items.toString()}}";
+}
 }

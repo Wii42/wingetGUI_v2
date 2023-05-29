@@ -30,13 +30,15 @@ class AgreementWidget extends Compartment {
           if (infos.hasEntry(Info.license.key) &&
               !isURL(infos[Info.license.key]))
             wrapInWrap(title: Info.license.title, body: _license(context)),
-          if (infos.hasEntry(Info.copyright.key) ||
-              infos.hasEntry(Info.copyrightUrl.key))
+          if (infos.hasEntry(Info.copyright.key) &&
+              !isURL(infos[Info.copyright.key]))
             wrapInWrap(title: Info.copyright.title, body: _copyright(context)),
         ],
         buttonRow: buttonRow([
           if (isURL(infos[Info.license.key])) Info.license,
           if (!infos.hasEntry(Info.license.key)) Info.licenseUrl,
+          if (isURL(infos[Info.copyright.key])) Info.copyright,
+          if (!infos.hasEntry(Info.copyright.key)) Info.copyrightUrl,
           Info.privacyUrl,
           Info.buyUrl,
           Info.termsOfTransaction,

@@ -16,9 +16,9 @@ enum Info {
   website(key: 'Startseite', title: 'Website'),
 
   license(key: 'Lizenz', title: 'License'),
-  licenseUrl(key: 'Lizenz-URL', title: 'License Link'),
+  licenseUrl(key: 'Lizenz-URL', title: 'License'),
   copyright(key: 'Copyright', title: 'Copyright'),
-  copyrightUrl(key: 'Copyright-URL', title: 'Copyright URL'),
+  copyrightUrl(key: 'Copyright-URL', title: 'Copyright'),
   privacyUrl(key: 'Datenschutz-URL', title: 'Privacy'),
   buyUrl(key: 'Kauf-URL', title: 'Buy'),
   termsOfTransaction(
