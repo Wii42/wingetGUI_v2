@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:winget_gui/buttons/command_button.dart';
-import 'package:winget_gui/content/content_place.dart';
+import 'package:winget_gui/content/content_holder.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/compartments/agreement_widget.dart';
@@ -118,7 +118,7 @@ class PackageLongInfo extends StatelessWidget {
         style: const TooltipThemeData(preferBelow: true),
         child: Button(
             onPressed: () {
-              ContentPlace.maybeOf(context)
+              ContentHolder.maybeOf(context)
                   ?.content
                   .showResultOfCommand(command);
             },

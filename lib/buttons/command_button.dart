@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-import '../content/content_place.dart';
+import '../content/content_holder.dart';
 
 class CommandButton extends StatelessWidget {
   const CommandButton({
@@ -22,7 +22,7 @@ class CommandButton extends StatelessWidget {
       style: const TooltipThemeData(preferBelow: true),
       child: FilledButton(
         onPressed: () {
-          ContentPlace.maybeOf(context)
+          ContentHolder.maybeOf(context)
               ?.content
               .showResultOfCommand(command, title: title ?? text);
         },

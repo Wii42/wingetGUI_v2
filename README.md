@@ -16,7 +16,6 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 ## TO-DO:
-- fix back button
 - store if app ist installed/upgradeable
 - -handle emails properly
 

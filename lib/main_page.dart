@@ -2,8 +2,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/nav_bar.dart';
 import 'package:winget_gui/winget_commands.dart';
 
-import 'content/content.dart';
-import 'content/content_place.dart';
+import 'content/content_pane.dart';
+import 'content/content_holder.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.title});
@@ -15,7 +15,7 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
-  ContentPlace contentPlace = _getContentPlace(Content());
+  ContentHolder contentPlace = _getContentPlace(ContentPane());
   int? topIndex;
 
   @override
@@ -84,6 +84,6 @@ class MainPageState extends State<MainPage> {
     );
   }
 
-  static ContentPlace _getContentPlace(Content content) =>
-      ContentPlace(content: content, child: content);
+  static ContentHolder _getContentPlace(ContentPane content) =>
+      ContentHolder(content: content, child: content);
 }

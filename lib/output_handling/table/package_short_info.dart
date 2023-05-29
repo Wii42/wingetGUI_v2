@@ -2,8 +2,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/right_side_buttons.dart';
 
-import '../../content/content.dart';
-import '../../content/content_place.dart';
+import '../../content/content_pane.dart';
+import '../../content/content_holder.dart';
 import '../info_enum.dart';
 
 class PackageShortInfo extends StatelessWidget {
@@ -16,7 +16,7 @@ class PackageShortInfo extends StatelessWidget {
     return Button(
       onPressed: (isClickable())
           ? () {
-              Content? target = ContentPlace.maybeOf(context)?.content;
+              ContentPane? target = ContentHolder.maybeOf(context)?.content;
               if (target != null && infos.containsKey(Info.id.key)) {
                 target
                     .showResultOfCommand(['show', '--id', infos[Info.id.key]!]);
