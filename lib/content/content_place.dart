@@ -1,11 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/stack.dart';
+import 'package:winget_gui/helpers/stack.dart';
 
 import 'content.dart';
+import 'content_snapshot.dart';
 
 class ContentPlace extends InheritedWidget {
   final Content content;
   final ListStack<ContentSnapshot> stack = ListStack();
+
   ContentPlace({super.key, required super.child, required this.content});
 
   @override

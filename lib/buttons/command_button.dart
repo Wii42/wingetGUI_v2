@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
-import 'content_place.dart';
+import '../content/content_place.dart';
 
 class CommandButton extends StatelessWidget {
   const CommandButton({
@@ -22,14 +22,16 @@ class CommandButton extends StatelessWidget {
       style: const TooltipThemeData(preferBelow: true),
       child: FilledButton(
         onPressed: () {
-          ContentPlace.maybeOf(context)?.content.showResultOfCommand(command, title: title ?? text);
+          ContentPlace.maybeOf(context)
+              ?.content
+              .showResultOfCommand(command, title: title ?? text);
         },
         child: Text(text),
       ),
     );
   }
 
-  static String message(List<String> command){
-  return 'Run command "winget ${command.join(" ")}"';
+  static String message(List<String> command) {
+    return 'Run command "winget ${command.join(" ")}"';
   }
 }

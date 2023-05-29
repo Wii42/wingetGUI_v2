@@ -3,6 +3,7 @@ import 'package:winget_gui/output_handling/show/show_part.dart';
 
 class ShowScanner extends Scanner {
   List<String> command;
+
   ShowScanner(super.respList, this.command);
 
   @override

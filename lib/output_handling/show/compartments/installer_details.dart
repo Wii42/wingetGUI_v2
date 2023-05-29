@@ -1,13 +1,12 @@
-import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:string_validator/string_validator.dart';
-import 'package:winget_gui/extensions/string_map_extension.dart';
-import 'package:winget_gui/link_text.dart';
+import 'package:winget_gui/buttons/link_text.dart';
+import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/show/show_part.dart';
 
-import '../info_enum.dart';
-import 'Compartment.dart';
-import 'link_button.dart';
+import '../../../buttons/link_button.dart';
+import '../../info_enum.dart';
+import 'compartment.dart';
 
 class InstallerDetails extends Compartment {
   static final List<Info> manuallyHandledKeys = [
@@ -80,7 +79,10 @@ class InstallerDetails extends Compartment {
         (text.startsWith('ms-windows-store://') && !text.contains(' '))) {
       return LinkButton(url: text, text: Text(title ?? text));
     }
-    return LinkText(line: text, maxLines: 1,);
+    return LinkText(
+      line: text,
+      maxLines: 1,
+    );
   }
 
   @override

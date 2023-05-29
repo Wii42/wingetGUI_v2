@@ -1,14 +1,14 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/extensions/string_map_extension.dart';
-import 'package:winget_gui/extensions/widget_list_extension.dart';
+import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
+import 'package:winget_gui/output_handling/right_side_buttons.dart';
 
-import '../../command_button.dart';
-import '../../content.dart';
-import '../../content_place.dart';
+import '../../content/content.dart';
+import '../../content/content_place.dart';
 import '../info_enum.dart';
 
 class PackageShortInfo extends StatelessWidget {
   final Map<String, String> infos;
+
   const PackageShortInfo(this.infos, {super.key});
 
   @override
@@ -62,7 +62,7 @@ class PackageShortInfo extends StatelessWidget {
               children: _versions([Info.version, Info.availableVersion]),
             ),
             if (isClickable()) const SizedBox(width: 20),
-            if (isClickable()) _buttons(context),
+            if (isClickable()) RightSideButtons(infos: infos),
           ],
         ),
       ),
@@ -78,27 +78,12 @@ class PackageShortInfo extends StatelessWidget {
     return style;
   }
 
-  Widget _buttons(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        CommandButton(text: 'Install', command: _createCommand('install')),
-        CommandButton(text: 'Upgrade', command: _createCommand('upgrade')),
-        CommandButton(text: 'Uninstall', command: _createCommand('uninstall')),
-      ].withSpaceBetween(width: 5, height: 5),
-    );
-  }
-
-  List<Widget> _versions(List<Info> versions){
+  List<Widget> _versions(List<Info> versions) {
     return [
-    for(Info info in versions)
-      if (infos.hasEntry(info.key))
-        Text("${info.title}: ${infos[info.key]!}"),
+      for (Info info in versions)
+        if (infos.hasEntry(info.key))
+          Text("${info.title}: ${infos[info.key]!}"),
     ];
-  }
-
-  List<String> _createCommand(String command) {
-    return [command, '--id', infos['ID']!];
   }
 
   bool isClickable() {

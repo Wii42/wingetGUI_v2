@@ -26,7 +26,7 @@ class ListStack<T> {
   int get length => _items.length;
 
   @override
-  String toString(){
+  String toString() {
     return "{${super.hashCode}, ${_items.toString()}}";
-}
+  }
 }

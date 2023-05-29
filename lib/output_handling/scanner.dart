@@ -4,5 +4,6 @@ abstract class Scanner {
   List<Responsibility> respList;
 
   Scanner(this.respList);
+
   void markResponsibleLines();
 }

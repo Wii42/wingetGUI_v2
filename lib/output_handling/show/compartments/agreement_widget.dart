@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:string_validator/string_validator.dart';
-import 'package:winget_gui/extensions/string_map_extension.dart';
-import 'package:winget_gui/output_handling/show/compartment.dart';
+import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
+import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 
-import '../info_enum.dart';
+import '../../info_enum.dart';
 
 class AgreementWidget extends Compartment {
   static final List<Info> manuallyHandledKeys = [

@@ -5,6 +5,7 @@ import '../scanner.dart';
 
 class PlainTextScanner extends Scanner {
   PlainTextScanner(super.respList);
+
   @override
   void markResponsibleLines() {
     PlainTextPart? prevPart;

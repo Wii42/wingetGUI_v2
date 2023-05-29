@@ -23,7 +23,7 @@ extension StringListExtension on List<String> {
     }
   }
 
-  trim(){
+  trim() {
     trimLeading();
     trimTrailing();
   }

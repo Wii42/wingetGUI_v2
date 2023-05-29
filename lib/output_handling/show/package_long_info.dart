@@ -1,17 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/command_button.dart';
-import 'package:winget_gui/content_place.dart';
-import 'package:winget_gui/extensions/string_map_extension.dart';
-import 'package:winget_gui/extensions/widget_list_extension.dart';
-import 'package:winget_gui/output_handling/show/agreement_widget.dart';
-import 'package:winget_gui/output_handling/show/details_widget.dart';
-import 'package:winget_gui/output_handling/show/expandable_compartment.dart';
-import 'package:winget_gui/output_handling/show/installer_details.dart';
-import 'package:winget_gui/output_handling/show/package_name_widget.dart';
+
+import 'package:winget_gui/buttons/command_button.dart';
+import 'package:winget_gui/content/content_place.dart';
+import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/output_handling/show/compartments/agreement_widget.dart';
+import 'package:winget_gui/output_handling/show/compartments/details_widget.dart';
+import 'package:winget_gui/output_handling/show/compartments/expandable_compartment.dart';
+import 'package:winget_gui/output_handling/show/compartments/installer_details.dart';
+import 'package:winget_gui/output_handling/show/title_widget.dart';
 
 import '../info_enum.dart';
-import 'expandable_widget.dart';
-import 'link_button.dart';
 
 class PackageLongInfo extends StatelessWidget {
   static final List<Info> manuallyHandledKeys = [
@@ -29,12 +28,14 @@ class PackageLongInfo extends StatelessWidget {
     Info.category
   ];
   final Map<String, String> infos;
+
   const PackageLongInfo(this.infos, {super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _wrapInDecoratedBox(PackageNameWidget(infos), context),
+        _wrapInDecoratedBox(TitleWidget(infos), context),
         if (infos.hasEntry(Info.tags.key)) _tags(context),
         if (infos.hasEntry(Info.description.key))
           _wrapInDecoratedBox(
@@ -68,40 +69,6 @@ class PackageLongInfo extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
         child: widget);
-  }
-
-  Widget _expandableCompartment(Info info) {
-    return ExpandableWidget(title: info.title, text: infos[info.key]!);
-  }
-
-  Widget _description() {
-    Info info = Info.description;
-    List<String> lines = infos[info.key]!.split('\n');
-
-    return ExpandableWidget(title: info.title, text: infos[info.key]!);
-  }
-
-  Widget _releaseNotes() {
-    LinkButton? linkButton;
-    if (infos.hasEntry(Info.releaseNotesUrl.key)) {
-      linkButton = LinkButton(
-          url: infos[Info.releaseNotesUrl.key]!,
-          text: const Text('show online'));
-    }
-    return ExpandableWidget(
-        title: Info.releaseNotes.title,
-        text: infos[Info.releaseNotes.key]!,
-        linkButton: linkButton);
-  }
-
-  Widget _displayRest() {
-    List<String> rest = [];
-    for (String key in infos.keys) {
-      if (!isManuallyHandled(key)) {
-        rest.add("$key: ${infos[key]}");
-      }
-    }
-    return ExpandableWidget(title: 'Rest', text: rest.join('\n'));
   }
 
   Widget _tags(BuildContext context) {

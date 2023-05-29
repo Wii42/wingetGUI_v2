@@ -1,8 +1,7 @@
-
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/output_handling/show/Compartment.dart';
 
-import '../info_enum.dart';
+import '../../info_enum.dart';
+import 'compartment.dart';
 
 class ExpandableCompartment extends Compartment {
   final String? title;
@@ -20,9 +19,15 @@ class ExpandableCompartment extends Compartment {
   @override
   List<Widget> buildCompartment(BuildContext context) {
     return fullCompartment(
-        title: title?? expandableInfo?.title,
+        title: title ?? expandableInfo?.title,
         mainColumn: (expandableInfo != null
-            ? [textWithLinks(key: expandableInfo!.key,  context: context, maxLines: 5,)]
+            ? [
+                textWithLinks(
+                  key: expandableInfo!.key,
+                  context: context,
+                  maxLines: 5,
+                )
+              ]
             : null),
         buttonRow:
             (buttonInfos != null ? buttonRow(buttonInfos!, context) : null),

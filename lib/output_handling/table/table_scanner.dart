@@ -1,4 +1,4 @@
-import 'package:winget_gui/extensions/string_extension.dart';
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/table_part.dart';
 
 import '../output_part.dart';

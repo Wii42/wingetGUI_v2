@@ -3,18 +3,19 @@ import 'dart:core';
 import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/extensions/stream_modifier.dart';
+import 'package:winget_gui/helpers/stack.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
-import 'package:winget_gui/extensions/stream_modifier.dart';
-import 'package:winget_gui/stack.dart';
 
 import 'content_place.dart';
+import 'content_snapshot.dart';
 
 class Content extends StatefulWidget {
   Content({List<String>? command, super.key}) {
     _command = command ?? ['-?'];
   }
 
-  late Function({bool goBack, bool runCommand, String? title}) _rebuild;
+  late Function({bool goBack}) _rebuild;
   late List<String> _command;
 
   @override
@@ -22,36 +23,31 @@ class Content extends StatefulWidget {
 
   void showResultOfCommand(List<String> command, {String? title}) {
     _command = command;
-    _rebuild(runCommand: true, title: title);
+    _rebuild();
   }
 
   List<String> get command => _command;
 
   void reload() {
-    _rebuild(runCommand: true);
+    _rebuild();
   }
 
   void goBack() {
-    _rebuild(goBack: true, runCommand: false);
+    _rebuild(goBack: true);
   }
 }
 
 class _ContentState extends State<Content> {
   late Process _process;
   bool _goBack = false;
-  bool _runCommand = false;
-  String? _title;
 
   @override
   void initState() {
     super.initState();
-    widget._rebuild = ({goBack = false, runCommand = false, String? title}) {
+    widget._rebuild = ({goBack = false}) {
       setState(
         () {
           _goBack = goBack;
-          _runCommand = runCommand;
-          _title = title;
-          print('manual rebuild');
         },
       );
     };
@@ -64,38 +60,14 @@ class _ContentState extends State<Content> {
     return stream
         .splitStreamElementsOnNewLine()
         .removeLoadingElementsFromStream()
-        //.removeLoadingBarsFromStream()
         .rememberingStream();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("run command: $_runCommand");
-    ListStack<ContentSnapshot> stack = ContentPlace.of(context).stack;
     if (_goBack) {
-      if (stack.isNotEmpty) {
-        ContentSnapshot prevState = stack.pop();
-        if (stack.isNotEmpty) {
-          prevState = stack.peek();
-        }
-        widget._command = prevState.command;
-        _goBack = false;
-        return _wrapInListView(prevState.widgets);
-      }
-      _goBack = false;
+      _loadPreviousStateFromStack();
     }
-    if (!_runCommand) {
-      if (stack.isNotEmpty) {
-        ContentSnapshot state = stack.peek();
-
-        widget._command = state.command;
-        print('no run');
-        //_runCommand = false;
-        //return _wrapInListView(state.widgets);
-      }
-    }
-    print(stack);
-    //_runCommand = false;
     return FutureBuilder<Stream<List<String>>>(
       future: getOutputStreamOfProcess(),
       builder: (BuildContext context,
@@ -121,29 +93,14 @@ class _ContentState extends State<Content> {
         if (streamSnapshot.hasData) {
           widgets = _displayOutput(streamSnapshot.data!, context);
           if (streamSnapshot.connectionState == ConnectionState.done) {
-            ListStack<ContentSnapshot> stack = ContentPlace.of(context).stack;
-            ContentSnapshot snapshot =
-                ContentSnapshot(widget._command, widgets);
-
-            if (stack.isNotEmpty && stack.peek().command == snapshot.command) {
-              stack.pop();
-            }
-            stack.push(snapshot);
-            print(stack);
+            _pushCurrentStateToStack(widgets);
           }
         }
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             if (streamSnapshot.connectionState != ConnectionState.done)
-              LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  return SizedBox(
-                      height: 0,
-                      width: constraints.maxWidth,
-                      child: const ProgressBar());
-                },
-              ),
+              _progressBar(),
             if (streamSnapshot.hasData)
               Expanded(child: _wrapInListView(widgets)),
           ],
@@ -153,31 +110,50 @@ class _ContentState extends State<Content> {
   }
 
   List<Widget> _displayOutput(List<String> output, BuildContext context) {
-    OutputHandler handler = OutputHandler(output, widget._command, title: _title);
+    OutputHandler handler = OutputHandler(output, widget._command);
     handler.determineResponsibility();
-    return handler.displayOutput(context);
+    return handler.displayOutput();
   }
 
   Widget _wrapInListView(List<Widget> widgets) {
     return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, children: widgets),
-        ),
-      ],
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(10),
+      children: widgets,
     );
   }
-}
 
-class ContentSnapshot {
-  List<String> command;
-  List<Widget> widgets;
+  Widget _progressBar() {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SizedBox(
+          height: 0,
+          width: constraints.maxWidth,
+          child: const ProgressBar(),
+        );
+      },
+    );
+  }
 
-  ContentSnapshot(this.command, this.widgets);
+  _pushCurrentStateToStack(List<Widget> widgets) {
+    ListStack<ContentSnapshot> stack = ContentPlace.of(context).stack;
+    ContentSnapshot snapshot = ContentSnapshot(widget._command, widgets);
 
-  String toString(){
-    return command.toString();
+    if (stack.isNotEmpty && stack.peek().command == snapshot.command) {
+      stack.pop();
+    }
+    stack.push(snapshot);
+  }
+
+  _loadPreviousStateFromStack() {
+    ListStack<ContentSnapshot> stack = ContentPlace.of(context).stack;
+    if (stack.isNotEmpty) {
+      ContentSnapshot prevState = stack.pop();
+      if (stack.isNotEmpty) {
+        prevState = stack.peek();
+      }
+      widget._command = prevState.command;
+    }
+    _goBack = false;
   }
 }

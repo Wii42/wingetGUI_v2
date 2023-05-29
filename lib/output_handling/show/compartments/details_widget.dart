@@ -1,12 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/extensions/string_map_extension.dart';
+import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
 
-import '../info_enum.dart';
-import 'Compartment.dart';
+import '../../info_enum.dart';
+import 'compartment.dart';
 
 class DetailsWidget extends Compartment {
   const DetailsWidget({super.key, required super.infos});
+
   static final List<Info> manuallyHandledKeys = [
     Info.author,
     Info.id,

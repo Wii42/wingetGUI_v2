@@ -1,13 +1,13 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LinkText extends StatelessWidget {
-  static  const int maxValue = -1 >>> 1;
+  static const int maxValue = -1 >>> 1;
   final String line;
   final int maxLines;
-  const LinkText({required this.line, this.maxLines = maxValue,super.key});
+
+  const LinkText({required this.line, this.maxLines = maxValue, super.key});
 
   @override
   Widget build(BuildContext context) {

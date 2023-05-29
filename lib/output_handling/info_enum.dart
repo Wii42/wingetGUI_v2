@@ -9,12 +9,10 @@ enum Info {
   availableVersion(key: 'Verfügbar', title: 'Available'),
   tags(key: 'Markierungen', title: 'Tags'),
   releaseNotes(key: 'Versionshinweise', title: 'Release Notes'),
-  releaseNotesUrl(
-      key: 'URL der Versionshinweise', title: 'Show Online'),
+  releaseNotesUrl(key: 'URL der Versionshinweise', title: 'Show Online'),
   installer(key: 'Installationsprogramm', title: 'Installer'),
   source(key: 'Quelle', title: 'Source'),
   website(key: 'Startseite', title: 'Website'),
-
   license(key: 'Lizenz', title: 'License'),
   licenseUrl(key: 'Lizenz-URL', title: 'License'),
   copyright(key: 'Copyright', title: 'Copyright'),
@@ -25,17 +23,14 @@ enum Info {
       key: 'Terms of Transaction', title: 'Terms of Transaction'),
   seizureWarning(key: 'Seizure Warning', title: 'Seizure Warning'),
   storeLicenseTerms(key: 'Store License Terms', title: 'Store License Terms'),
-
   author(key: 'Autor', title: 'Author'),
   moniker(key: 'Moniker', title: 'Moniker'),
   documentation(key: 'Dokumentation', title: 'Documentation'),
-
   agreement(key: 'Vereinbarungen', title: 'Agreement'),
   category(key: 'Category', title: 'Category'),
   pricing(key: 'Pricing', title: 'Pricing'),
   freeTrial(key: 'Free Trial', title: 'Free Trial'),
   ageRating(key: 'Age Ratings', title: 'Age Rating'),
-
   installerType(key: 'Installertyp', title: 'Installer Type'),
   storeProductID(key: 'Store-Produkt-ID', title: 'Store Product ID'),
   installerURL(key: 'Installer-URL', title: 'Download Installer Manually'),

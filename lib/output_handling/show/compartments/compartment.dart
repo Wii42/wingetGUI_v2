@@ -1,16 +1,15 @@
-import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:string_validator/string_validator.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:winget_gui/extensions/string_map_extension.dart';
-import 'package:winget_gui/extensions/widget_list_extension.dart';
-import 'package:winget_gui/link_text.dart';
+import 'package:winget_gui/buttons/link_text.dart';
+import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
-import '../info_enum.dart';
-import 'link_button.dart';
+import '../../../buttons/link_button.dart';
+import '../../info_enum.dart';
 
 abstract class Compartment extends StatelessWidget {
   final Map<String, String> infos;
+
   const Compartment({super.key, required this.infos});
 
   List<Widget> buildCompartment(BuildContext context);
@@ -39,7 +38,7 @@ abstract class Compartment extends StatelessWidget {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
-        body
+        body,
       ],
     );
   }
@@ -89,7 +88,10 @@ abstract class Compartment extends StatelessWidget {
 
   Widget textWithLinks(
       {required String key, required BuildContext context, int maxLines = 1}) {
-    return LinkText(line: infos[key]!.trim(), maxLines: maxLines,);
+    return LinkText(
+      line: infos[key]!.trim(),
+      maxLines: maxLines,
+    );
   }
 
   Wrap buttonRow(List<Info> links, BuildContext context) {
