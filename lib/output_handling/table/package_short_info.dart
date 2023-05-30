@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
-import 'package:winget_gui/output_handling/right_side_buttons.dart';
+import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 
-import '../../content/content_pane.dart';
 import '../../content/content_holder.dart';
+import '../../content/content_pane.dart';
 import '../info_enum.dart';
 
 class PackageShortInfo extends StatelessWidget {
@@ -25,49 +25,59 @@ class PackageShortInfo extends StatelessWidget {
           : null,
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    infos[Info.name.key]!,
-                    style: _titleStyle(context),
-                    softWrap: true,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                  Text(
-                    infos[Info.id.key]!,
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                  if (infos.hasEntry(Info.source.key))
-                    Text(
-                      "from ${infos[Info.source.key]!}",
-                      style: TextStyle(
-                        color: FluentTheme.of(context).disabledColor,
-                      ),
-                      textAlign: TextAlign.start,
-                    )
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: _versions([Info.version, Info.availableVersion]),
-            ),
-            if (isClickable()) const SizedBox(width: 20),
-            if (isClickable()) RightSideButtons(infos: infos),
-          ],
-        ),
+        child: _shortInfo(context),
       ),
     );
     //return ;
+  }
+
+  Widget _shortInfo(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: _leftSide(context),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: _versions([Info.version, Info.availableVersion]),
+        ),
+        if (isClickable()) ...[
+          const SizedBox(width: 20),
+          RightSideButtons(infos: infos)
+        ],
+      ],
+    );
+  }
+
+  Widget _leftSide(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          infos[Info.name.key]!,
+          style: _titleStyle(context),
+          softWrap: true,
+          textAlign: TextAlign.start,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
+        Text(
+          infos[Info.id.key]!,
+          textAlign: TextAlign.start,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
+        if (infos.hasEntry(Info.source.key))
+          Text(
+            "from ${infos[Info.source.key]!}",
+            style: TextStyle(
+              color: FluentTheme.of(context).disabledColor,
+            ),
+            textAlign: TextAlign.start,
+          )
+      ],
+    );
   }
 
   TextStyle? _titleStyle(BuildContext context) {

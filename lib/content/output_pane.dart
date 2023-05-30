@@ -8,6 +8,7 @@ import 'content_snapshot.dart';
 class OutputPane extends StatelessWidget {
   final Stream<List<String>> stream;
   final List<String> command;
+
   const OutputPane({required this.stream, required this.command, super.key});
 
   @override

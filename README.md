@@ -16,6 +16,6 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 ## TO-DO:
-- store if app ist installed/upgradeable
+- store if app is installed/upgradeable
 - -handle emails properly
 

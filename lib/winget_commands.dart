@@ -9,7 +9,9 @@ enum Winget {
   about(name: "About Winget", command: ['--info'], icon: FluentIcons.info),
   help(name: "Help", command: ['--help'], icon: FluentIcons.help),
   search(
-      name: "Search Packages", command: ['search', "-n", '200'], icon: FluentIcons.search),
+      name: "Search Packages",
+      command: ['search', "-n", '200'],
+      icon: FluentIcons.search),
   settings(
       name: "Winget Settings",
       command: ['settings'],

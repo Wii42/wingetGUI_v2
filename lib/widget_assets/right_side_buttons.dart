@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
-import '../buttons/command_button.dart';
+import '../output_handling/info_enum.dart';
 import '../winget_commands.dart';
-import 'info_enum.dart';
+import 'command_button.dart';
 
 class RightSideButtons extends StatelessWidget {
   final Map<String, String> infos;

@@ -1,10 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:string_validator/string_validator.dart';
-import 'package:winget_gui/buttons/link_text.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/widget_assets/link_text.dart';
 
-import '../../../buttons/link_button.dart';
+import '../../../widget_assets//link_button.dart';
+import '../../../widget_assets/decorated_box_wrap.dart';
 import '../../info_enum.dart';
 
 abstract class Compartment extends StatelessWidget {
@@ -16,13 +17,14 @@ abstract class Compartment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return DecoratedBoxWrap(
+        child: Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: buildCompartment(context),
       ),
-    );
+    ));
   }
 
   Wrap wrapInWrap({required String title, required Widget body}) {

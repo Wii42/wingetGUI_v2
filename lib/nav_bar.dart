@@ -6,6 +6,7 @@ import 'main_page.dart';
 class NavBar {
   MainPageState mainPageState;
   BuildContext context;
+
   NavBar({required this.mainPageState, required this.context});
 
   NavigationAppBar build() {

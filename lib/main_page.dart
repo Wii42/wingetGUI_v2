@@ -2,8 +2,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/nav_bar.dart';
 import 'package:winget_gui/winget_commands.dart';
 
-import 'content/content_pane.dart';
 import 'content/content_holder.dart';
+import 'content/content_pane.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.title});
