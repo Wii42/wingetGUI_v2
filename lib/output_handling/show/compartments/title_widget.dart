@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:open_store/open_store.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
@@ -92,7 +93,11 @@ class TitleWidget extends Compartment {
         if (infos.hasEntry(Info.category.key)) ...[
           Padding(
               padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
-              child: LinkText(line: infos[Info.category.key]!))
+              child: LinkText(line: infos[Info.category.key]!)),
+          if (infos.hasEntry(Info.installerType.key) &&
+              infos[Info.installerType.key]?.trim() == 'msstore' &&
+              infos.hasEntry(Info.storeProductID.key))
+            _showInStore(),
         ]
       ],
     );
@@ -111,6 +116,15 @@ class TitleWidget extends Compartment {
   Widget _website() {
     return LinkButton(
         url: infos[Info.website.key]!, text: Text(Info.website.title));
+  }
+
+  Button _showInStore() {
+    return Button(
+        child: Text("Open in Store"),
+        onPressed: () {
+          OpenStore.instance
+              .open(windowsProductId: infos[Info.storeProductID.key]!);
+        });
   }
 
   static Iterable<String> manuallyHandledStringKeys() =>

@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/output_part.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
 
@@ -16,6 +17,11 @@ class ShowPart extends OutputPart {
     Map<String, String> infos = {};
     infos.addAll(_extractMainInfos());
     infos.addAll(_extractOtherInfos());
+
+    if(infos.hasInfo(Info.installer)){
+      infos.addAll(extractInstallerDetails(infos));
+      infos.remove(Info.installer.key);
+    }
     return infos;
   }
 
@@ -32,6 +38,13 @@ class ShowPart extends OutputPart {
   Map<String, String> _extractOtherInfos() {
     List<String> details = lines.sublist(1);
     return extractDetails(details);
+  }
+
+  Map<String, String> extractInstallerDetails(Map<String, String> infos){
+    return extractDetails(infos[Info.installer.key]!
+        .split('\n')
+        .map((String line) => line.trim())
+        .toList());
   }
 
   static Map<String, String> extractDetails(List<String> data) {

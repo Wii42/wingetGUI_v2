@@ -42,7 +42,8 @@ class PackageLongInfo extends StatelessWidget {
           ),
         if (DetailsWidget.containsData(infos)) DetailsWidget(infos: infos),
         if (AgreementWidget.containsData(infos)) AgreementWidget(infos: infos),
-        if (infos.hasEntry(Info.installer.key)) InstallerDetails(infos: infos),
+        if (InstallerDetails.containsData(infos))
+          InstallerDetails(infos: infos),
       ].withSpaceBetween(height: 10),
     );
   }
@@ -76,9 +77,10 @@ class PackageLongInfo extends StatelessWidget {
 
   static bool isManuallyHandled(String key) {
     return (manuallyHandledStringKeys().contains(key) ||
-        TitleWidget.manuallyHandledStringKeys().contains(key) ||
-        AgreementWidget.manuallyHandledStringKeys().contains(key) ||
-        DetailsWidget.manuallyHandledStringKeys().contains(key));
+            TitleWidget.manuallyHandledStringKeys().contains(key) ||
+            AgreementWidget.manuallyHandledStringKeys().contains(key) ||
+            DetailsWidget.manuallyHandledStringKeys().contains(key)) ||
+        InstallerDetails.manuallyHandledStringKeys().contains(key);
   }
 
   bool existUnhandledKeys() {

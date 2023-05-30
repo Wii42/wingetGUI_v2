@@ -16,7 +16,7 @@ class LinkButton extends StatelessWidget {
             message: url,
             useMousePosition: false,
             style: const TooltipThemeData(preferBelow: true),
-            child: HyperlinkButton(
+            child: Button(
               onPressed: open,
               child: text,
             ),

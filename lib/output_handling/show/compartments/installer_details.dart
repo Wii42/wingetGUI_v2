@@ -1,10 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:string_validator/string_validator.dart';
-import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
-import 'package:winget_gui/output_handling/show/show_part.dart';
-import 'package:winget_gui/widget_assets/link_text.dart';
 
-import '../../../widget_assets/link_button.dart';
+import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import '../../info_enum.dart';
 import 'compartment.dart';
 
@@ -19,14 +15,8 @@ class InstallerDetails extends Compartment {
   ];
 
   final String title = 'Installer';
-  late final Map<String, String> installer;
 
-  InstallerDetails({super.key, required super.infos}) {
-    installer = ShowPart.extractDetails(infos[Info.installer.key]!
-        .split('\n')
-        .map((String line) => line.trim())
-        .toList());
-  }
+  const InstallerDetails({super.key, required super.infos});
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
@@ -40,7 +30,7 @@ class InstallerDetails extends Compartment {
             Info.sha256Installer,
             Info.releaseDate,
           ], context),
-          ..._displayRest(context),
+          //..._displayRest(context),
         ],
         buttonRow: buttonRow([Info.installerURL], context),
         context: context);
@@ -48,14 +38,14 @@ class InstallerDetails extends Compartment {
 
   List<Widget> _displayRest(BuildContext context) {
     List<String> restKeys = [];
-    for (String key in installer.keys) {
+    for (String key in infos.keys) {
       if (!isManuallyHandled(key)) {
         restKeys.add(key);
       }
     }
     return [
       for (String key in restKeys)
-        if (installer.hasEntry(key))
+        if (infos.hasEntry(key))
           wrapInWrap(
               title: key, body: checkIfTextIsLink(context: context, key: key)),
     ];
@@ -64,40 +54,11 @@ class InstallerDetails extends Compartment {
   List<Widget> _installerDetailsList(List<Info> details, BuildContext context) {
     return [
       for (Info info in details)
-        if (installer.hasEntry(info.key))
+        if (infos.hasEntry(info.key))
           wrapInWrap(
               title: info.title,
               body: checkIfTextIsLink(context: context, key: info.key)),
     ];
-  }
-
-  @override
-  Widget checkIfTextIsLink(
-      {required BuildContext context, required String key, String? title}) {
-    String text = installer[key]!.trim();
-    if (isURL(text) ||
-        (text.startsWith('ms-windows-store://') && !text.contains(' '))) {
-      return LinkButton(url: text, text: Text(title ?? text));
-    }
-    return LinkText(
-      line: text,
-      maxLines: 1,
-    );
-  }
-
-  @override
-  Wrap buttonRow(List<Info> links, BuildContext context) {
-    return Wrap(
-      spacing: 5,
-      runSpacing: 5,
-      crossAxisAlignment: WrapCrossAlignment.start,
-      children: [
-        for (Info info in links)
-          if (installer.hasEntry(info.key))
-            checkIfTextIsLink(
-                context: context, key: info.key, title: info.title),
-      ],
-    );
   }
 
   static Iterable<String> manuallyHandledStringKeys() =>
