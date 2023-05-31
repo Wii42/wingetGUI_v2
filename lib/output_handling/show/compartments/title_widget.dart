@@ -5,6 +5,7 @@ import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
+import 'package:winget_gui/widget_assets/store_button.dart';
 
 import '../../../widget_assets/link_button.dart';
 import '../../info_enum.dart';
@@ -115,14 +116,10 @@ class TitleWidget extends Compartment {
         url: infos.details[Info.website.key]!, text: Text(Info.website.title));
   }
 
-  Button _showInStore() {
-    return Button(
-        child: Text("Open in Store"),
-        onPressed: () {
-          OpenStore.instance.open(
-              windowsProductId:
-                  infos.installerDetails![Info.storeProductID.key]!);
-        });
+  StoreButton _showInStore() {
+    return StoreButton(
+      storeId: infos.installerDetails![Info.storeProductID.key]!,
+    );
   }
 
   static Iterable<String> manuallyHandledStringKeys() =>
