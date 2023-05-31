@@ -36,7 +36,7 @@ class TitleWidget extends Compartment {
               ].withSpaceBetween(height: 10),
             ),
           ),
-          RightSideButtons(infos: infos),
+          RightSideButtons(infos: infos.details),
         ],
       ),
     ];
@@ -48,11 +48,11 @@ class TitleWidget extends Compartment {
       crossAxisAlignment: WrapCrossAlignment.end,
       children: [
         ..._name(context),
-        if (hasVersion())
+        if (infos.hasVersion())
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              'v${infos[Info.version.key]!}',
+              'v${infos.details[Info.version.key]!}',
               style: FluentTheme.of(context).typography.title,
             ),
           )
@@ -61,10 +61,10 @@ class TitleWidget extends Compartment {
   }
 
   List<Widget> _name(BuildContext context) {
-    if (!infos.containsKey(Info.name.key)) {
+    if (!infos.details.hasInfo(Info.name)) {
       return [_nameFragment('<unknown>', context)];
     }
-    List<String> nameFragments = infos[Info.name.key]!.split(' ');
+    List<String> nameFragments = infos.details[Info.name.key]!.split(' ');
     return nameFragments
         .map<Widget>((String fragment) => _nameFragment(fragment, context))
         .toList();
@@ -84,19 +84,21 @@ class TitleWidget extends Compartment {
       spacing: 5,
       runSpacing: 5,
       children: [
-        infos.hasEntry(Info.publisher.key)
+        infos.details.hasEntry(Info.publisher.key)
             ? publisher(context)
             : Padding(
                 padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
-                child: Text(infos[Info.id.key]!)),
-        if (infos.hasEntry(Info.website.key)) _website(),
-        if (infos.hasEntry(Info.category.key)) ...[
+                child: Text(infos.details[Info.id.key]!)),
+        if (infos.details.hasEntry(Info.website.key)) _website(),
+        if (infos.details.hasEntry(Info.category.key)) ...[
           Padding(
               padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
-              child: LinkText(line: infos[Info.category.key]!)),
-          if (infos.hasEntry(Info.installerType.key) &&
-              infos[Info.installerType.key]?.trim() == 'msstore' &&
-              infos.hasEntry(Info.storeProductID.key))
+              child: LinkText(line: infos.details[Info.category.key]!)),
+          if (infos.hasInstallerDetails() &&
+              infos.installerDetails!.hasEntry(Info.installerType.key) &&
+              infos.installerDetails![Info.installerType.key]?.trim() ==
+                  'msstore' &&
+              infos.installerDetails!.hasEntry(Info.storeProductID.key))
             _showInStore(),
         ]
       ],
@@ -108,22 +110,18 @@ class TitleWidget extends Compartment {
         context: context, name: Info.publisher, url: Info.publisherUrl);
   }
 
-  bool hasVersion() {
-    return (infos.hasEntry(Info.version.key) &&
-        infos[Info.version.key]! != 'Unknown');
-  }
-
   Widget _website() {
     return LinkButton(
-        url: infos[Info.website.key]!, text: Text(Info.website.title));
+        url: infos.details[Info.website.key]!, text: Text(Info.website.title));
   }
 
   Button _showInStore() {
     return Button(
         child: Text("Open in Store"),
         onPressed: () {
-          OpenStore.instance
-              .open(windowsProductId: infos[Info.storeProductID.key]!);
+          OpenStore.instance.open(
+              windowsProductId:
+                  infos.installerDetails![Info.storeProductID.key]!);
         });
   }
 

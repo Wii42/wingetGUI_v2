@@ -3,6 +3,7 @@ import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/package_list.dart';
 import 'package:winget_gui/output_handling/table/package_short_info.dart';
 
+import '../infos.dart';
 import '../output_part.dart';
 
 class TablePart extends OutputPart {
@@ -61,7 +62,7 @@ class TablePart extends OutputPart {
     for (String entry in body) {
       Map<String, String> infos =
           _getDictFromLine(entry, columnNames, columnsPos);
-      packages.add(PackageShortInfo(infos));
+      packages.add(PackageShortInfo(Infos(details: infos)));
     }
     packageList = PackageList(packages);
   }

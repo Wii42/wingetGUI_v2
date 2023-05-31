@@ -4,6 +4,7 @@ import 'package:winget_gui/output_handling/output_part.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
 
 import '../info_enum.dart';
+import '../infos.dart';
 
 class ShowPart extends OutputPart {
   ShowPart(super.lines);
@@ -13,16 +14,25 @@ class ShowPart extends OutputPart {
     return PackageLongInfo(_extractInfos());
   }
 
-  Map<String, String> _extractInfos() {
+  Infos _extractInfos() {
     Map<String, String> infos = {};
     infos.addAll(_extractMainInfos());
     infos.addAll(_extractOtherInfos());
 
-    if(infos.hasInfo(Info.installer)){
-      infos.addAll(extractInstallerDetails(infos));
+    Map<String, String>? installerDetails;
+    if (infos.hasInfo(Info.installer)) {
+      installerDetails = extractInstallerDetails(infos);
       infos.remove(Info.installer.key);
     }
-    return infos;
+
+    List<String>? tags;
+    if (infos.hasInfo(Info.tags)) {
+      tags = extractTags(infos);
+      infos.remove(Info.tags.key);
+    }
+
+    return Infos(
+        details: infos, installerDetails: installerDetails, tags: tags);
   }
 
   Map<String, String> _extractMainInfos() {
@@ -40,11 +50,22 @@ class ShowPart extends OutputPart {
     return extractDetails(details);
   }
 
-  Map<String, String> extractInstallerDetails(Map<String, String> infos){
+  Map<String, String> extractInstallerDetails(Map<String, String> infos) {
     return extractDetails(infos[Info.installer.key]!
         .split('\n')
         .map((String line) => line.trim())
         .toList());
+  }
+
+  List<String> extractTags(Map<String, String> infos) {
+    List<String> split = infos[Info.tags.key]!.split('\n');
+    List<String> tags = [];
+    for (String s in split) {
+      if (s.isNotEmpty) {
+        tags.add(s.trim());
+      }
+    }
+    return tags;
   }
 
   static Map<String, String> extractDetails(List<String> data) {

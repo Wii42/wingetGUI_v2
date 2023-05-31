@@ -30,7 +30,7 @@ class InstallerDetails extends Compartment {
             Info.sha256Installer,
             Info.releaseDate,
           ], context),
-          //..._displayRest(context),
+          ..._displayRest(context),
         ],
         buttonRow: buttonRow([Info.installerURL], context),
         context: context);
@@ -38,14 +38,14 @@ class InstallerDetails extends Compartment {
 
   List<Widget> _displayRest(BuildContext context) {
     List<String> restKeys = [];
-    for (String key in infos.keys) {
+    for (String key in infos.installerDetails!.keys) {
       if (!isManuallyHandled(key)) {
         restKeys.add(key);
       }
     }
     return [
       for (String key in restKeys)
-        if (infos.hasEntry(key))
+        if (infos.installerDetails!.hasEntry(key))
           wrapInWrap(
               title: key, body: checkIfTextIsLink(context: context, key: key)),
     ];
@@ -54,7 +54,7 @@ class InstallerDetails extends Compartment {
   List<Widget> _installerDetailsList(List<Info> details, BuildContext context) {
     return [
       for (Info info in details)
-        if (infos.hasEntry(info.key))
+        if (infos.installerDetails!.hasEntry(info.key))
           wrapInWrap(
               title: info.title,
               body: checkIfTextIsLink(context: context, key: info.key)),

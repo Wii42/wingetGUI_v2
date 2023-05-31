@@ -44,7 +44,7 @@ class DetailsWidget extends Compartment {
   List<Widget> _detailsList(List<Info> details, BuildContext context) {
     return [
       for (Info info in details)
-        if (infos.hasEntry(info.key))
+        if (infos.details.hasEntry(info.key))
           wrapInWrap(
               title: info.title,
               body: checkIfTextIsLink(context: context, key: info.key)),
@@ -53,14 +53,14 @@ class DetailsWidget extends Compartment {
 
   List<Widget> _displayRest(BuildContext context) {
     List<String> restKeys = [];
-    for (String key in infos.keys) {
+    for (String key in infos.details.keys) {
       if (!PackageLongInfo.isManuallyHandled(key)) {
         restKeys.add(key);
       }
     }
     return [
       for (String key in restKeys)
-        if (infos.hasEntry(key))
+        if (infos.details.hasEntry(key))
           wrapInWrap(
               title: key, body: checkIfTextIsLink(context: context, key: key)),
     ];

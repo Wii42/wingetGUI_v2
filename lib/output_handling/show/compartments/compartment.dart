@@ -7,9 +7,10 @@ import 'package:winget_gui/widget_assets/link_text.dart';
 import '../../../widget_assets//link_button.dart';
 import '../../../widget_assets/decorated_box_wrap.dart';
 import '../../info_enum.dart';
+import '../../infos.dart';
 
 abstract class Compartment extends StatelessWidget {
-  final Map<String, String> infos;
+  final Infos infos;
 
   const Compartment({super.key, required this.infos});
 
@@ -68,9 +69,10 @@ abstract class Compartment extends StatelessWidget {
 
   Widget textOrLink(
       {required BuildContext context, required Info name, required Info url}) {
-    if (infos.hasEntry(url.key)) {
+    if (infos.allDetails.hasEntry(url.key)) {
       return LinkButton(
-          url: infos[url.key]!, text: Text(infos[name.key] ?? infos[url.key]!));
+          url: infos.allDetails[url.key]!,
+          text: Text(infos.allDetails[name.key] ?? infos.allDetails[url.key]!));
     } else {
       return textWithLinks(key: name.key, context: context);
     }
@@ -78,7 +80,7 @@ abstract class Compartment extends StatelessWidget {
 
   Widget checkIfTextIsLink(
       {required BuildContext context, required String key, String? title}) {
-    String text = infos[key]!.trim();
+    String text = infos.allDetails[key]!.trim();
     if (isURL(text) ||
         (text.startsWith('ms-windows-store://') && !text.contains(' ')) ||
         (text.startsWith('mailto:') && !text.contains(' ')) &&
@@ -91,7 +93,7 @@ abstract class Compartment extends StatelessWidget {
   Widget textWithLinks(
       {required String key, required BuildContext context, int maxLines = 1}) {
     return LinkText(
-      line: infos[key]!.trim(),
+      line: infos.allDetails[key]!.trim(),
       maxLines: maxLines,
     );
   }
@@ -103,7 +105,7 @@ abstract class Compartment extends StatelessWidget {
       crossAxisAlignment: WrapCrossAlignment.start,
       children: [
         for (Info info in links)
-          if (infos.hasEntry(info.key))
+          if (infos.allDetails.hasEntry(info.key))
             checkIfTextIsLink(
                 context: context, key: info.key, title: info.title),
       ],

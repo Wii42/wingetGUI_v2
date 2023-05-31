@@ -5,9 +5,10 @@ import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import '../../content/content_holder.dart';
 import '../../content/content_pane.dart';
 import '../info_enum.dart';
+import '../infos.dart';
 
 class PackageShortInfo extends StatelessWidget {
-  final Map<String, String> infos;
+  final Infos infos;
 
   const PackageShortInfo(this.infos, {super.key});
 
@@ -17,9 +18,9 @@ class PackageShortInfo extends StatelessWidget {
       onPressed: (isClickable())
           ? () {
               ContentPane? target = ContentHolder.maybeOf(context)?.content;
-              if (target != null && infos.containsKey(Info.id.key)) {
+              if (target != null && infos.details.hasInfo(Info.id)) {
                 target
-                    .showResultOfCommand(['show', '--id', infos[Info.id.key]!]);
+                    .showResultOfCommand(['show', '--id', infos.details[Info.id.key]!]);
               }
             }
           : null,
@@ -44,7 +45,7 @@ class PackageShortInfo extends StatelessWidget {
         ),
         if (isClickable()) ...[
           const SizedBox(width: 20),
-          RightSideButtons(infos: infos)
+          RightSideButtons(infos: infos.details)
         ],
       ],
     );
@@ -55,7 +56,7 @@ class PackageShortInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          infos[Info.name.key]!,
+          infos.details[Info.name.key]!,
           style: _titleStyle(context),
           softWrap: true,
           textAlign: TextAlign.start,
@@ -63,14 +64,14 @@ class PackageShortInfo extends StatelessWidget {
           maxLines: 2,
         ),
         Text(
-          infos[Info.id.key]!,
+          infos.details[Info.id.key]!,
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
         ),
-        if (infos.hasEntry(Info.source.key))
+        if (infos.details.hasEntry(Info.source.key))
           Text(
-            "from ${infos[Info.source.key]!}",
+            "from ${infos.details[Info.source.key]!}",
             style: TextStyle(
               color: FluentTheme.of(context).disabledColor,
             ),
@@ -91,12 +92,12 @@ class PackageShortInfo extends StatelessWidget {
   List<Widget> _versions(List<Info> versions) {
     return [
       for (Info info in versions)
-        if (infos.hasEntry(info.key))
-          Text("${info.title}: ${infos[info.key]!}"),
+        if (infos.details.hasEntry(info.key))
+          Text("${info.title}: ${infos.details[info.key]!}"),
     ];
   }
 
   bool isClickable() {
-    return infos.hasEntry(Info.source.key);
+    return infos.details.hasEntry(Info.source.key);
   }
 }
