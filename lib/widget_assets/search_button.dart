@@ -1,9 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/run_button.dart';
 
-import '../content/content_holder.dart';
-import 'command_button.dart';
-
 class SearchButton extends RunButton {
   const SearchButton.create(
       {super.key, required super.text, super.title, required super.command});

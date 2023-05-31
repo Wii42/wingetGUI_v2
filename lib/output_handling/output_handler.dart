@@ -11,20 +11,22 @@ import 'package:winget_gui/output_handling/table/table_scanner.dart';
 import 'output_part.dart';
 
 class OutputHandler {
-  List<String> output;
-  List<String> command;
-  String? title;
+  final List<String> output;
+  final List<String> command;
+  final List<String>? prevCommand;
+
+  final String? title;
   late List<Scanner> outputScanners;
   late final List<Responsibility> responsibilityList;
 
-  OutputHandler(this.output, this.command, {this.title}) {
+  OutputHandler(this.output, {required this.command, this.prevCommand, this.title}) {
     output.trim();
     responsibilityList = [for (String line in output) Responsibility(line)];
 
     outputScanners = [
       TableScanner(responsibilityList),
       LoadingBarScanner(responsibilityList),
-      ShowScanner(responsibilityList, command),
+      ShowScanner(responsibilityList, command: command, prevCommand: prevCommand),
       PlainTextScanner(responsibilityList),
     ];
   }

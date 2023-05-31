@@ -38,7 +38,8 @@ class OutputPane extends StatelessWidget {
   }
 
   List<Widget> _displayOutput(List<String> output, BuildContext context) {
-    OutputHandler handler = OutputHandler(output, command);
+    OutputHandler handler = OutputHandler(output,
+        command: command, prevCommand: getPrevCommand(context));
     handler.determineResponsibility();
     return handler.displayOutput();
   }
@@ -71,5 +72,18 @@ class OutputPane extends StatelessWidget {
       stack.pop();
     }
     stack.push(snapshot);
+  }
+
+  List<String>? getPrevCommand(BuildContext context) {
+    ListStack<ContentSnapshot> stack = ContentHolder.of(context).stack;
+    if (stack.isNotEmpty) {
+      if(command != stack.peek().command){
+        return stack.peek().command;
+      }
+      if (stack.hasPeekUnder) {
+        return stack.peekUnder().command;
+      }
+    }
+    return null;
   }
 }

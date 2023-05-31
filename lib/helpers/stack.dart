@@ -18,12 +18,20 @@ class ListStack<T> {
     }
     throw Exception("Stack is empty");
   }
+  T peekUnder() {
+    if (hasPeekUnder) {
+      return _items[_items.length-2];
+    }
+    throw Exception("Element does not exist");
+  }
 
   bool get isEmpty => _items.isEmpty;
 
   bool get isNotEmpty => _items.isNotEmpty;
 
   int get length => _items.length;
+
+  bool get hasPeekUnder => (_items.length >=2);
 
   @override
   String toString() {

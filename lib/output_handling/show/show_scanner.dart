@@ -3,8 +3,9 @@ import 'package:winget_gui/output_handling/show/show_part.dart';
 
 class ShowScanner extends Scanner {
   List<String> command;
+  List<String>? prevCommand;
 
-  ShowScanner(super.respList, this.command);
+  ShowScanner(super.respList, {required this.command, this.prevCommand});
 
   @override
   void markResponsibleLines() {
@@ -12,6 +13,7 @@ class ShowScanner extends Scanner {
       return;
     }
     int identifierPos = _findIdentifier();
+    print(identifierPos);
     if (identifierPos > -1) {
       ShowPart showPart = ShowPart([]);
       for (int i = identifierPos; i < respList.length; i++) {
@@ -26,14 +28,18 @@ class ShowScanner extends Scanner {
 
   int _findIdentifier() {
     for (int i = 0; i < respList.length; i++) {
-      if (respList[i].respPart == null && _isIdentifier(respList[i].line)) {
+      if (respList[i].respPart == null &&
+              (_isIdentifier(respList[i].line, command)) ||
+          (prevCommand != null &&
+              _isIdentifier(respList[i].line, prevCommand!))) {
         return i;
       }
     }
+    print(prevCommand);
     return -1;
   }
 
-  bool _isIdentifier(String line) {
+  bool _isIdentifier(String line, List<String> command) {
     line = line.trim();
     if (!line.startsWith('Gefunden')) {
       return false;
