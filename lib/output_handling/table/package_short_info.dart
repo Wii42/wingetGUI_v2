@@ -69,7 +69,7 @@ class PackageShortInfo extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
         ),
-        if (infos.details.hasEntry(Info.source.key))
+        if (infos.details.hasInfo(Info.source))
           Text(
             "from ${infos.details[Info.source.key]!}",
             style: TextStyle(
@@ -92,12 +92,12 @@ class PackageShortInfo extends StatelessWidget {
   List<Widget> _versions(List<Info> versions) {
     return [
       for (Info info in versions)
-        if (infos.details.hasEntry(info.key))
+        if (infos.details.hasInfo(info))
           Text("${info.title}: ${infos.details[info.key]!}"),
     ];
   }
 
   bool isClickable() {
-    return infos.details.hasEntry(Info.source.key);
+    return infos.details.hasInfo(Info.source);
   }
 }

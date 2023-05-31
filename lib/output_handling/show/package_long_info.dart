@@ -30,12 +30,12 @@ class PackageLongInfo extends StatelessWidget {
       children: [
         TitleWidget(infos: infos),
         if (infos.hasTags()) _tagButtons(context),
-        if (infos.details.hasEntry(Info.description.key))
+        if (infos.hasDescription())
           ExpandableCompartment(
             infos: infos,
             expandableInfo: Info.description,
           ),
-        if (infos.details.hasEntry(Info.releaseNotes.key))
+        if (infos.hasReleaseNotes())
           ExpandableCompartment(
             infos: infos,
             expandableInfo: Info.releaseNotes,
@@ -55,7 +55,7 @@ class PackageLongInfo extends StatelessWidget {
       spacing: 5,
       alignment: WrapAlignment.center,
       children: [
-        if (infos.details.hasEntry(Info.moniker.key))
+        if (infos.details.hasInfo(Info.moniker))
           SearchButton(searchTarget: infos.details[Info.moniker.key]!),
         for (String tag in infos.tags!) SearchButton(searchTarget: tag)
       ],

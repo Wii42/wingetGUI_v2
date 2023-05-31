@@ -54,7 +54,7 @@ class InstallerDetails extends Compartment {
   List<Widget> _installerDetailsList(List<Info> details, BuildContext context) {
     return [
       for (Info info in details)
-        if (infos.installerDetails!.hasEntry(info.key))
+        if (infos.installerDetails!.hasInfo(info))
           wrapInWrap(
               title: info.title,
               body: checkIfTextIsLink(context: context, key: info.key)),

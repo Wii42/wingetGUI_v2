@@ -44,7 +44,7 @@ class DetailsWidget extends Compartment {
   List<Widget> _detailsList(List<Info> details, BuildContext context) {
     return [
       for (Info info in details)
-        if (infos.details.hasEntry(info.key))
+        if (infos.details.hasInfo(info))
           wrapInWrap(
               title: info.title,
               body: checkIfTextIsLink(context: context, key: info.key)),

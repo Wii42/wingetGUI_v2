@@ -24,4 +24,8 @@ class Infos {
 
   bool hasVersion() => (details.hasInfo(Info.version) &&
       details[Info.version.key]! != 'Unknown');
+
+  bool hasDescription() => details.hasInfo(Info.description);
+
+  bool hasReleaseNotes() => details.hasInfo(Info.releaseNotes);
 }

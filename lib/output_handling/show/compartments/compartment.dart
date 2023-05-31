@@ -69,7 +69,7 @@ abstract class Compartment extends StatelessWidget {
 
   Widget textOrLink(
       {required BuildContext context, required Info name, required Info url}) {
-    if (infos.allDetails.hasEntry(url.key)) {
+    if (infos.allDetails.hasInfo(url)) {
       return LinkButton(
           url: infos.allDetails[url.key]!,
           text: Text(infos.allDetails[name.key] ?? infos.allDetails[url.key]!));
@@ -105,7 +105,7 @@ abstract class Compartment extends StatelessWidget {
       crossAxisAlignment: WrapCrossAlignment.start,
       children: [
         for (Info info in links)
-          if (infos.allDetails.hasEntry(info.key))
+          if (infos.allDetails.hasInfo(info))
             checkIfTextIsLink(
                 context: context, key: info.key, title: info.title),
       ],
