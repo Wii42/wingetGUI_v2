@@ -13,7 +13,6 @@ class ShowScanner extends Scanner {
       return;
     }
     int identifierPos = _findIdentifier();
-    print(identifierPos);
     if (identifierPos > -1) {
       ShowPart showPart = ShowPart([]);
       for (int i = identifierPos; i < respList.length; i++) {
@@ -35,7 +34,6 @@ class ShowScanner extends Scanner {
         return i;
       }
     }
-    print(prevCommand);
     return -1;
   }
 

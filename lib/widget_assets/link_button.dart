@@ -25,7 +25,9 @@ class LinkButton extends StatelessWidget {
   }
 
   String checkUrlContainsHttp(String url) {
-    if (url.startsWith('http://') || url.startsWith('https://')) {
+    if (url.startsWith('http://') ||
+        url.startsWith('https://') ||
+        url.startsWith('mailto:')) {
       return url;
     } else {
       return 'https://$url';
