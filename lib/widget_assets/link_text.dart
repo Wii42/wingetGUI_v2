@@ -1,5 +1,7 @@
+import 'package:expandable/expandable.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:linkable/linkable.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LinkText extends StatelessWidget {
@@ -11,6 +13,7 @@ class LinkText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //return ExpandablePanel(collapsed: Text(line,maxLines: maxLines), expanded: Text( line));
     return ExpandableText(
       line,
       linkEllipsis: false,
@@ -19,9 +22,7 @@ class LinkText extends StatelessWidget {
       maxLines: maxLines,
       animation: true,
       linkColor: FluentTheme.of(context).accentColor,
-      onUrlTap: (url) => launchUrl(
-        Uri.parse(url),
-      ),
+      onUrlTap: (url) => launchUrl(Uri.parse(url)),
       urlStyle: const TextStyle(
         decoration: TextDecoration.underline,
       ),

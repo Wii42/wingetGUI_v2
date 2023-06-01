@@ -17,5 +17,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## TO-DO:
 - store if app is installed/upgradeable
-- -handle emails properly
+- handle emails properly
+- fix to many links found in expandable text
+- smart decision if details in list or button row
 

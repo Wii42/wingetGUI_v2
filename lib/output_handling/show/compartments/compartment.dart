@@ -81,10 +81,7 @@ abstract class Compartment extends StatelessWidget {
   Widget checkIfTextIsLink(
       {required BuildContext context, required String key, String? title}) {
     String text = infos.allDetails[key]!.trim();
-    if (isURL(text) ||
-        (text.startsWith('ms-windows-store://') && !text.contains(' ')) ||
-        (text.startsWith('mailto:') && !text.contains(' ')) &&
-            text.contains('@')) {
+    if (isLink(text)) {
       return LinkButton(url: text, text: Text(title ?? text));
     }
     return textWithLinks(key: key, context: context);
@@ -110,5 +107,16 @@ abstract class Compartment extends StatelessWidget {
                 context: context, key: info.key, title: info.title),
       ],
     );
+  }
+
+  bool isLink(String? text) {
+    if (text == null) {
+      return false;
+    }
+    return (isURL(text) ||
+        (text.startsWith('ms-windows-store://') &&
+            !text.trim().contains(' ')) ||
+        (text.startsWith('mailto:') && !text.contains(' ')) &&
+            text.contains('@'));
   }
 }
