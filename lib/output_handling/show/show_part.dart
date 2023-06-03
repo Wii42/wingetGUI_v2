@@ -6,6 +6,8 @@ import 'package:winget_gui/output_handling/show/package_long_info.dart';
 import '../info_enum.dart';
 import '../infos.dart';
 
+const maxIdentifierLength = 100;
+
 class ShowPart extends OutputPart {
   ShowPart(super.lines);
 
@@ -74,7 +76,7 @@ class ShowPart extends OutputPart {
     for (String line in data) {
       if (!line.startsWith(' ') &&
           (line.contains(': ') || line.endsWith(':')) &&
-          line.indexOf(':') <= 100) {
+          line.indexOf(':') <= maxIdentifierLength) {
         if (key != null && value != null) {
           infos[key] = value.replaceAll('\n\n', '\n').trim();
         }

@@ -1,7 +1,5 @@
-import 'package:expandable/expandable.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:linkable/linkable.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LinkText extends StatelessWidget {
