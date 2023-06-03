@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/output_handling/list/list_scanner.dart';
 import 'package:winget_gui/output_handling/loading_bar/loading_bar_scanner.dart';
 import 'package:winget_gui/output_handling/plain_text/plain_text_scanner.dart';
 import 'package:winget_gui/output_handling/responsibility.dart';
@@ -27,6 +28,7 @@ class OutputHandler {
       TableScanner(responsibilityList),
       LoadingBarScanner(responsibilityList),
       ShowScanner(responsibilityList, command: command, prevCommand: prevCommand),
+      ListScanner(responsibilityList),
       PlainTextScanner(responsibilityList),
     ];
   }
