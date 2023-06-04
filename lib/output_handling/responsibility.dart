@@ -5,4 +5,7 @@ class Responsibility {
   OutputPart? respPart;
 
   Responsibility(this.line, {this.respPart});
+
+  bool isHandled() => respPart != null;
+
 }

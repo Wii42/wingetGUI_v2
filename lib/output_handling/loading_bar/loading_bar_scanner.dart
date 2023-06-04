@@ -11,7 +11,7 @@ class LoadingBarScanner extends Scanner {
   void markResponsibleLines() {
     LoadingBarPart loadingBarPart = LoadingBarPart([]);
     for (Responsibility resp in respList) {
-      if (resp.respPart == null) {
+      if (!resp.isHandled()) {
         if (resp.line.isProgressBar()) {
           resp.respPart = loadingBarPart;
         }

@@ -20,10 +20,10 @@ class ListScanner extends Scanner {
   int _findListStart() {
     for (int i = 0; i < respList.length; i++) {
       Responsibility resp = respList[i];
-      if (resp.respPart == null && resp.line.trim().endsWith(':')) {
+      if (!resp.isHandled() && resp.line.trim().endsWith(':')) {
         if (i + 1 < respList.length) {
           Responsibility nextResp = respList[i + 1];
-          if (nextResp.respPart == null && isPartOfList(nextResp.line)) {
+          if (!nextResp.isHandled() && isPartOfList(nextResp.line)) {
             return i;
           }
         }
@@ -36,7 +36,7 @@ class ListScanner extends Scanner {
     for (int i = start + 1; i < respList.length; i++) {
       Responsibility resp = respList[i];
       if (isPartOfList(resp.line)) {
-        if (resp.respPart != null) {
+        if (resp.isHandled()) {
           throw Exception('Line $i: Overlapping responsibilities');
         }
       } else {

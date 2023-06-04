@@ -28,13 +28,13 @@ class TableScanner extends Scanner {
   }
 
   bool _couldBePartOfTable(Responsibility resp) {
-    return (resp.respPart == null && resp.line.trim().isNotEmpty);
+    return (!resp.isHandled() && resp.line.trim().isNotEmpty);
   }
 
   int _findHorizontalLine() {
     for (int i = 0; i < respList.length; i++) {
       Responsibility resp = respList[i];
-      if (resp.line.contains('-----') && resp.respPart == null) {
+      if (resp.line.contains('-----') && !resp.isHandled()) {
         return i;
       }
     }
@@ -85,7 +85,7 @@ class TableScanner extends Scanner {
 
   bool _linesAvailable(int tableStart, int tableEnd) {
     for (int i = tableStart; i <= tableEnd; i++) {
-      if (respList[i].respPart != null) {
+      if (respList[i].isHandled()) {
         throw Exception('bad marking');
       }
     }

@@ -16,7 +16,7 @@ class ShowScanner extends Scanner {
     if (identifierPos > -1) {
       ShowPart showPart = ShowPart([]);
       for (int i = identifierPos; i < respList.length; i++) {
-        if (respList[i].respPart != null) {
+        if (respList[i].isHandled()) {
           break;
         }
         showPart.addLine(respList[i].line);
@@ -27,7 +27,7 @@ class ShowScanner extends Scanner {
 
   int _findIdentifier() {
     for (int i = 0; i < respList.length; i++) {
-      if (respList[i].respPart == null &&
+      if (!respList[i].isHandled() &&
               (_isIdentifier(respList[i].line, command)) ||
           (prevCommand != null &&
               _isIdentifier(respList[i].line, prevCommand!))) {

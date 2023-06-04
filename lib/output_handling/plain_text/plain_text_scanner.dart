@@ -11,7 +11,7 @@ class PlainTextScanner extends Scanner {
     PlainTextPart? prevPart;
     bool isSamePart = false;
     for (Responsibility resp in respList) {
-      if (resp.respPart == null) {
+      if (!resp.isHandled()) {
         if (isSamePart) {
           prevPart!.addLine(resp.line);
           resp.respPart = prevPart;
