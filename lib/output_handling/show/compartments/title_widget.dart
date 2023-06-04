@@ -84,16 +84,15 @@ class TitleWidget extends Compartment {
       spacing: 5,
       runSpacing: 5,
       children: [
-        infos.details.hasInfo(Info.publisher)
-            ? publisher(context)
-            : Padding(
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
-                child: Text(infos.details[Info.id.key]!)),
+        infos.details.hasInfo(Info.author)
+            ? textOrLink(
+                context: context, name: Info.author, url: Info.publisherUrl)
+            : infos.details.hasInfo(Info.publisher)
+                ? publisher(context)
+                : Text(infos.details[Info.id.key]!),
         if (infos.details.hasInfo(Info.website)) _website(),
         if (infos.details.hasInfo(Info.category)) ...[
-          Padding(
-              padding: const EdgeInsetsDirectional.symmetric(horizontal: 10),
-              child: LinkText(line: infos.details[Info.category.key]!)),
+          LinkText(line: infos.details[Info.category.key]!),
           if (infos.hasInstallerDetails() &&
               infos.installerDetails!.hasInfo(Info.installerType) &&
               infos.installerDetails![Info.installerType.key]?.trim() ==
@@ -101,7 +100,7 @@ class TitleWidget extends Compartment {
               infos.installerDetails!.hasInfo(Info.storeProductID))
             _showInStore(),
         ]
-      ],
+      ].withSpaceBetween(width: 5),
     );
   }
 

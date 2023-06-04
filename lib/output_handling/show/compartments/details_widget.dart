@@ -27,7 +27,7 @@ class DetailsWidget extends Compartment {
         title: title,
         mainColumn: [
           ..._detailsList([
-            Info.author,
+            if (infos.details.hasInfo(Info.author)) Info.publisher,
             Info.agreement,
             Info.pricing,
             Info.freeTrial,
