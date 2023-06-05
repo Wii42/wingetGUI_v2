@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 
+import '../../../helpers/extensions/string_extension.dart';
 import '../../info_enum.dart';
 
 class AgreementWidget extends Compartment {

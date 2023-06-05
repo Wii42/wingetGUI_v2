@@ -6,4 +6,8 @@ abstract class OutputPart {
   OutputPart(this.lines);
 
   Widget? representation();
+
+  addLine(String line) {
+    lines.add(line);
+  }
 }

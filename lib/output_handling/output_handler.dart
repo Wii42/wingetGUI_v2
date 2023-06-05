@@ -3,6 +3,7 @@ import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/list/list_scanner.dart';
 import 'package:winget_gui/output_handling/loading_bar/loading_bar_scanner.dart';
+import 'package:winget_gui/output_handling/one_line_info/one_line_info_scanner.dart';
 import 'package:winget_gui/output_handling/plain_text/plain_text_scanner.dart';
 import 'package:winget_gui/output_handling/responsibility.dart';
 import 'package:winget_gui/output_handling/scanner.dart';
@@ -29,6 +30,7 @@ class OutputHandler {
       LoadingBarScanner(responsibilityList),
       ShowScanner(responsibilityList, command: command, prevCommand: prevCommand),
       ListScanner(responsibilityList),
+      OneLineInfoScanner(responsibilityList),
       PlainTextScanner(responsibilityList),
     ];
   }

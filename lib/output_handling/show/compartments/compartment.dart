@@ -4,6 +4,7 @@ import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 
+import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets//link_button.dart';
 import '../../../widget_assets/decorated_box_wrap.dart';
 import '../../info_enum.dart';
@@ -107,16 +108,5 @@ abstract class Compartment extends StatelessWidget {
                 context: context, key: info.key, title: info.title),
       ],
     );
-  }
-
-  bool isLink(String? text) {
-    if (text == null) {
-      return false;
-    }
-    return (isURL(text) ||
-        (text.startsWith('ms-windows-store://') &&
-            !text.trim().contains(' ')) ||
-        (text.startsWith('mailto:') && !text.contains(' ')) &&
-            text.contains('@'));
   }
 }

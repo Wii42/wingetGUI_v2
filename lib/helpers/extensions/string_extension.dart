@@ -1,3 +1,5 @@
+import 'package:string_validator/string_validator.dart' as validator;
+
 extension ContainsExtentsion on String {
   bool isLoadingSymbols() {
     if (isEmpty) {
@@ -26,4 +28,15 @@ extension ContainsExtentsion on String {
   bool isProgressBar() {
     return (contains('█') || contains('░') || contains('▒'));
   }
+}
+
+bool isLink(String? text) {
+  if (text == null) {
+    return false;
+  }
+  return (validator.isURL(text) ||
+      (text.startsWith('ms-windows-store://') &&
+          !text.trim().contains(' ')) ||
+      (text.startsWith('mailto:') && !text.contains(' ')) &&
+          text.contains('@'));
 }
