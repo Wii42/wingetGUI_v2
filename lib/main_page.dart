@@ -4,6 +4,7 @@ import 'package:winget_gui/winget_commands.dart';
 
 import 'content/content_holder.dart';
 import 'content/content_pane.dart';
+import 'history_tab.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.title});
@@ -15,7 +16,7 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
-  ContentHolder contentPlace = _getContentPlace(ContentPane());
+  ContentHolder contentHolder = _getContentHolder(ContentPane());
   int? topIndex;
 
   @override
@@ -26,11 +27,12 @@ class MainPageState extends State<MainPage> {
         autoSuggestBox: _commandPrompt(),
         autoSuggestBoxReplacement: const Icon(FluentIcons.command_prompt),
         items: [
-          ...createNavItems([Winget.updates, Winget.installed])
+          ...createNavItems([Winget.updates, Winget.installed]),
+          HistoryTab(contentHolder),
         ],
         footerItems: [
           ...createNavItems(
-              [Winget.about, Winget.sources, Winget.help, Winget.settings])
+              [Winget.about, Winget.sources, Winget.help, Winget.settings]),
         ],
         selected: topIndex,
         onChanged: (index) {
@@ -48,11 +50,11 @@ class MainPageState extends State<MainPage> {
     return PaneItem(
       title: Text(winget.name),
       icon: Icon(winget.icon),
-      body: contentPlace,
+      body: contentHolder,
       onTap: () {
         setState(
           () {
-            contentPlace.content.showResultOfCommand(winget.command);
+            contentHolder.content.showResultOfCommand(winget.command);
           },
         );
       },
@@ -66,7 +68,7 @@ class MainPageState extends State<MainPage> {
       onSubmitted: (String command) {
         setState(
           () {
-            contentPlace.content.showResultOfCommand(command.split(' '));
+            contentHolder.content.showResultOfCommand(command.split(' '));
             controller.clear();
             topIndex = null;
           },
@@ -84,6 +86,6 @@ class MainPageState extends State<MainPage> {
     );
   }
 
-  static ContentHolder _getContentPlace(ContentPane content) =>
+  static ContentHolder _getContentHolder(ContentPane content) =>
       ContentHolder(content: content, child: content);
 }

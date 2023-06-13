@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 
 import '../helpers/stack.dart';
 import '../output_handling/output_handler.dart';
@@ -30,7 +31,11 @@ class OutputPane extends StatelessWidget {
             if (streamSnapshot.connectionState != ConnectionState.done)
               _progressBar(),
             if (streamSnapshot.hasData)
-              Expanded(child: _wrapInListView(widgets)),
+              Expanded(
+                  child: ScrollListWidget(
+                //title: command.join(" "),
+                listElements: widgets,
+              )),
           ],
         );
       },
@@ -42,14 +47,6 @@ class OutputPane extends StatelessWidget {
         command: command, prevCommand: getPrevCommand(context));
     handler.determineResponsibility();
     return handler.displayOutput();
-  }
-
-  Widget _wrapInListView(List<Widget> widgets) {
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(10),
-      children: widgets,
-    );
   }
 
   Widget _progressBar() {
@@ -77,7 +74,7 @@ class OutputPane extends StatelessWidget {
   List<String>? getPrevCommand(BuildContext context) {
     ListStack<ContentSnapshot> stack = ContentHolder.of(context).stack;
     if (stack.isNotEmpty) {
-      if(command != stack.peek().command){
+      if (command != stack.peek().command) {
         return stack.peek().command;
       }
       if (stack.hasPeekUnder) {

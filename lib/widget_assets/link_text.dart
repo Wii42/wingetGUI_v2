@@ -13,7 +13,8 @@ class LinkText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //return ExpandablePanel(collapsed: Text(line,maxLines: maxLines), expanded: Text( line));
+    //FluentThemeData theme = FluentTheme.of(context);
+    //return Expander(header: Linkable(text: line,textColor: theme.activeColor, maxLines: 1,), content: Linkable(text: line, textColor: theme.activeColor),);
     return ExpandableText(
       line,
       style: style,

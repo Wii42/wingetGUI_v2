@@ -18,9 +18,10 @@ class ListStack<T> {
     }
     throw Exception("Stack is empty");
   }
+
   T peekUnder() {
     if (hasPeekUnder) {
-      return _items[_items.length-2];
+      return _items[_items.length - 2];
     }
     throw Exception("Element does not exist");
   }
@@ -31,7 +32,9 @@ class ListStack<T> {
 
   int get length => _items.length;
 
-  bool get hasPeekUnder => (_items.length >=2);
+  bool get hasPeekUnder => (_items.length >= 2);
+
+  List<T> get asList => _items.toList();
 
   @override
   String toString() {

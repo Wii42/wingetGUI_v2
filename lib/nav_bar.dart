@@ -50,7 +50,7 @@ class NavBar {
       onSubmitted: (input) {
         mainPageState.setState(
           () {
-            mainPageState.contentPlace.content.showResultOfCommand(
+            mainPageState.contentHolder.content.showResultOfCommand(
               [
                 ...winget.command,
                 input,
@@ -74,8 +74,8 @@ class NavBar {
         mainPageState.setState(
           () {
             goBack
-                ? mainPageState.contentPlace.content.goBack()
-                : mainPageState.contentPlace.content.reload();
+                ? mainPageState.contentHolder.content.goBack()
+                : mainPageState.contentHolder.content.reload();
           },
         );
       },

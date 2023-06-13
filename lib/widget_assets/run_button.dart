@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/widget_assets/run_button_tooltip.dart';
 
 import '../content/content_holder.dart';
 
@@ -16,11 +17,9 @@ abstract class RunButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tooltip(
-      message: message(command),
-      useMousePosition: false,
-      style: const TooltipThemeData(preferBelow: true),
-      child: buttonType(context),
+    return RunButtonTooltip(
+      button: buttonType(context),
+      command: command,
     );
   }
 
@@ -33,8 +32,4 @@ abstract class RunButton extends StatelessWidget {
       };
 
   Widget child() => Text(text);
-
-  static String message(List<String> command) {
-    return 'Run command "winget ${command.join(" ")}"';
-  }
 }
