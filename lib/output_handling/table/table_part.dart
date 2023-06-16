@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/package_list.dart';
@@ -72,7 +74,8 @@ class TablePart extends OutputPart {
     Map<String, String> infos = {};
     for (int i = 0; i < columnNames.length; i++) {
       int end = i + 1 < columnNames.length ? columnsPos[i + 1] : entry.length;
-      infos[columnNames[i]] = (entry.substring(columnsPos[i], end)).trim();
+      infos[columnNames[i]] =
+          (entry.substring(min(columnsPos[i], entry.length), min(end, entry.length))).trim();
     }
     return infos;
   }

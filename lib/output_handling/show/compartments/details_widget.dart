@@ -47,7 +47,7 @@ class DetailsWidget extends Compartment {
         if (infos.details.hasInfo(info))
           wrapInWrap(
               title: info.title,
-              body: checkIfTextIsLink(context: context, key: info.key)),
+              body: textOrLinkButton(context: context, key: info.key)),
     ];
   }
 
@@ -62,7 +62,7 @@ class DetailsWidget extends Compartment {
       for (String key in restKeys)
         if (infos.details.hasEntry(key))
           wrapInWrap(
-              title: key, body: checkIfTextIsLink(context: context, key: key)),
+              title: key, body: textOrLinkButton(context: context, key: key)),
     ];
   }
 

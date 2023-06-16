@@ -43,6 +43,13 @@ class OneLineInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
+      child: infoWidgets(context),
+    );
+  }
+
+  Widget infoWidgets(BuildContext context) {
     if (infos.length == 1) {
       return oneLineInfo(infos.keys.single, context);
     }
@@ -75,7 +82,7 @@ class OneLineInfoWidget extends StatelessWidget {
             .substring(1, string.length - 1)
             .contains(quotationMarksRegExp())) {
       string = string.substring(1, string.length - 1);
-      print(string);
+       print(string);
     }
     return string;
   }

@@ -29,7 +29,6 @@ class PackageLongInfo extends StatelessWidget {
     return Column(
       children: [
         TitleWidget(infos: infos),
-        if (infos.hasTags()) _tagButtons(context),
         if (infos.hasDescription())
           ExpandableCompartment(
             infos: infos,
@@ -45,6 +44,7 @@ class PackageLongInfo extends StatelessWidget {
         if (AgreementWidget.containsData(infos.allDetails)) AgreementWidget(infos: infos),
         if (InstallerDetails.containsData(infos.allDetails))
           InstallerDetails(infos: infos),
+        if (infos.hasTags()) _tagButtons(context),
       ].withSpaceBetween(height: 10),
     );
   }

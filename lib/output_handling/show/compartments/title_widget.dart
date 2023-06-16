@@ -85,7 +85,7 @@ class TitleWidget extends Compartment {
       runSpacing: 5,
       children: [
         infos.details.hasInfo(Info.author)
-            ? textOrLink(
+            ? textOrInlineLink(
                 context: context, name: Info.author, url: Info.publisherUrl)
             : infos.details.hasInfo(Info.publisher)
                 ? publisher(context)
@@ -105,7 +105,7 @@ class TitleWidget extends Compartment {
   }
 
   Widget publisher(BuildContext context) {
-    return textOrLink(
+    return textOrInlineLink(
         context: context, name: Info.publisher, url: Info.publisherUrl);
   }
 

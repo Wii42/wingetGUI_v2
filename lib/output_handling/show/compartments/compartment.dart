@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:string_validator/string_validator.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
@@ -7,6 +6,7 @@ import 'package:winget_gui/widget_assets/link_text.dart';
 import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets//link_button.dart';
 import '../../../widget_assets/decorated_box_wrap.dart';
+import '../../../widget_assets/inline_link_button.dart';
 import '../../info_enum.dart';
 import '../../infos.dart';
 
@@ -68,18 +68,17 @@ abstract class Compartment extends StatelessWidget {
     ].withSpaceBetween(height: 10);
   }
 
-  Widget textOrLink(
+  Widget textOrInlineLink(
       {required BuildContext context, required Info name, required Info url}) {
     if (infos.allDetails.hasInfo(url)) {
-      return LinkButton(
+      return InlineLinkButton(
           url: infos.allDetails[url.key]!,
           text: Text(infos.allDetails[name.key] ?? infos.allDetails[url.key]!));
-    } else {
-      return textWithLinks(key: name.key, context: context);
     }
+    return textWithLinks(key: name.key, context: context);
   }
 
-  Widget checkIfTextIsLink(
+  Widget textOrLinkButton(
       {required BuildContext context, required String key, String? title}) {
     String text = infos.allDetails[key]!.trim();
     if (isLink(text)) {
@@ -104,7 +103,7 @@ abstract class Compartment extends StatelessWidget {
       children: [
         for (Info info in links)
           if (infos.allDetails.hasInfo(info))
-            checkIfTextIsLink(
+            textOrLinkButton(
                 context: context, key: info.key, title: info.title),
       ],
     );

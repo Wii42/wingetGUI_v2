@@ -13,11 +13,14 @@ class PlainTextPart extends OutputPart {
     if (lines.isEmpty) {
       return null;
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (String line in lines) LinkText(line: line),
-      ],
+    return Padding(
+      padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (String line in lines) LinkText(line: line),
+        ],
+      ),
     );
   }
 

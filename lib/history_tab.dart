@@ -25,7 +25,7 @@ class HistoryTab extends PaneItem {
               useMousePosition: true,
               button: Button(
                 onPressed: () {
-                  //contentHolder.content.showResultOfCommand(snapshot.command);
+                  contentHolder.content.showResultOfCommand(snapshot.command);
                 },
                 child: Text(
                   snapshot.command.join(' '),

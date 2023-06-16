@@ -49,12 +49,12 @@ class AgreementWidget extends Compartment {
   }
 
   Widget _license(BuildContext context) {
-    return textOrLink(
+    return textOrInlineLink(
         context: context, name: Info.license, url: Info.licenseUrl);
   }
 
   Widget _copyright(BuildContext context) {
-    return textOrLink(
+    return textOrInlineLink(
         context: context, name: Info.copyright, url: Info.copyrightUrl);
   }
 

@@ -14,7 +14,7 @@ class NavBar {
         leading: _reloadAppBarButton(icon: FluentIcons.back, goBack: true),
         title: Text(
           mainPageState.widget.title,
-          style: FluentTheme.of(context).typography.bodyLarge,
+          style: FluentTheme.of(context).typography.body,
         ),
         actions: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {

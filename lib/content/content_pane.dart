@@ -47,11 +47,13 @@ class _ContentPaneState extends State<ContentPane> {
   void initState() {
     super.initState();
     widget._rebuild = ({goBack = false}) {
-      setState(
-        () {
-          _goBack = goBack;
-        },
-      );
+      if (mounted) {
+        setState(
+          () {
+            _goBack = goBack;
+          },
+        );
+      }
     };
   }
 
