@@ -29,10 +29,12 @@ class HistoryEntry extends StatelessWidget {
             children: [
               Text(
                 snapshot.title,
+                textAlign: TextAlign.start,
                 style: theme.typography.bodyStrong,
               ),
               Text(
                 'winget ${snapshot.command.join(' ')}',
+                textAlign: TextAlign.start,
                 style: TextStyle(color: theme.disabledColor),
               ),
             ],
