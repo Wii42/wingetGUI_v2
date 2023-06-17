@@ -56,7 +56,7 @@ class PackageLongInfo extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: [
         if (infos.details.hasInfo(Info.moniker))
-          SearchButton(searchTarget: infos.details[Info.moniker.key]!),
+          SearchButton(searchTarget: infos.details[Info.moniker.key]!,),
         for (String tag in infos.tags!) SearchButton(searchTarget: tag)
       ],
     );

@@ -40,7 +40,11 @@ class TablePart extends OutputPart {
       bool test = line.containsNonWesternGlyphs();
       if (test) {
         Pattern pattern = RegExp("[ ]{2}[A-ZÄÖÜa-zäöü0-9]");
-        Match match = pattern.allMatches(line).first;
+        Iterable<Match> matches = pattern.allMatches(line);
+        if(matches.isEmpty){
+          return;
+        }
+        Match match = matches.first;
         if (match.start + 2 < columnsPos[1]) {
           int diff = columnsPos[1] - (match.start + 2);
           String str = " " * diff + line;

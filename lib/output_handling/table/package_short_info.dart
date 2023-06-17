@@ -19,8 +19,9 @@ class PackageShortInfo extends StatelessWidget {
           ? () {
               ContentPane? target = ContentHolder.maybeOf(context)?.content;
               if (target != null && infos.details.hasInfo(Info.id)) {
-                target
-                    .showResultOfCommand(['show', '--id', infos.details[Info.id.key]!]);
+                target.showResultOfCommand(
+                    ['show', '--id', infos.details[Info.id.key]!],
+                    title: infos.details[Info.name.key]);
               }
             }
           : null,

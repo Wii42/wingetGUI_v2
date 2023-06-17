@@ -54,7 +54,7 @@ class MainPageState extends State<MainPage> {
       onTap: () {
         setState(
           () {
-            contentHolder.content.showResultOfCommand(winget.command);
+            contentHolder.content.showResultOfCommand(winget.command, title: winget.name);
           },
         );
       },

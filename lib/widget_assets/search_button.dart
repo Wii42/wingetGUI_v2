@@ -1,7 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/run_button.dart';
 
+import '../winget_commands.dart';
+
+const Winget winget = Winget.search;
+
 class SearchButton extends RunButton {
+  
+  
   const SearchButton.create(
       {super.key, required super.text, super.title, required super.command});
 
@@ -13,8 +19,8 @@ class SearchButton extends RunButton {
       SearchButton.create(
         key: key,
         text: searchTarget,
-        command: ['search', searchTarget],
-        title: title,
+        command: [...winget.command, searchTarget],
+        title: title ?? winget.titleWithInput(searchTarget),
       );
 
   @override

@@ -55,6 +55,7 @@ class NavBar {
                 ...winget.command,
                 input,
               ],
+              title: winget.titleWithInput(input),
             );
             controller.clear();
             mainPageState.topIndex = null;

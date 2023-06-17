@@ -9,8 +9,9 @@ import 'content_snapshot.dart';
 class OutputPane extends StatelessWidget {
   final Stream<List<String>> stream;
   final List<String> command;
+  final String? title;
 
-  const OutputPane({required this.stream, required this.command, super.key});
+  const OutputPane({required this.stream, required this.command, super.key, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,8 @@ class OutputPane extends StatelessWidget {
 
   _pushCurrentStateToStack(List<Widget> widgets, BuildContext context) {
     ListStack<ContentSnapshot> stack = ContentHolder.of(context).stack;
-    ContentSnapshot snapshot = ContentSnapshot(command, widgets);
+    ContentSnapshot snapshot =
+        ContentSnapshot(command: command, widgets: widgets, title: title ?? command.join(' '));
 
     if (stack.isNotEmpty && stack.peek().command == snapshot.command) {
       stack.pop();

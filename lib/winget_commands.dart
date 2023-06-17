@@ -11,7 +11,8 @@ enum Winget {
   search(
       name: "Search Packages",
       command: ['search', "-n", '200'],
-      icon: FluentIcons.search),
+      icon: FluentIcons.search,
+  titlePrefix: 'Search'),
   settings(
       name: "Winget Settings",
       command: ['settings'],
@@ -31,6 +32,13 @@ enum Winget {
   final String name;
   final List<String> command;
   final IconData? icon;
+  final String? titlePrefix;
 
-  const Winget({required this.name, required this.command, this.icon});
+  const Winget(
+      {required this.name, required this.command, this.icon, this.titlePrefix});
+
+  String titleWithInput(String input){
+    String prefix = titlePrefix ?? name;
+    return "$prefix '$input'";
+  }
 }

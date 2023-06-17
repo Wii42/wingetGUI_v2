@@ -9,11 +9,13 @@ abstract class RunButton extends StatelessWidget {
     required this.text,
     required this.command,
     this.title,
+    this.contentHolder,
   });
 
   final String text;
   final List<String> command;
   final String? title;
+  final ContentHolder? contentHolder;
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +28,8 @@ abstract class RunButton extends StatelessWidget {
   BaseButton buttonType(BuildContext context);
 
   void Function() onPressed(BuildContext context) => () {
-        ContentHolder.maybeOf(context)
-            ?.content
-            .showResultOfCommand(command, title: title ?? text);
+        ContentHolder? holder = contentHolder ?? ContentHolder.maybeOf(context);
+        holder?.content.showResultOfCommand(command, title: title ?? "'$text'");
       };
 
   Widget child() => Text(text);

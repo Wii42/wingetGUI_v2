@@ -28,7 +28,7 @@ class HistoryTab extends PaneItem {
                   contentHolder.content.showResultOfCommand(snapshot.command);
                 },
                 child: Text(
-                  snapshot.command.join(' '),
+                  snapshot.title,
                   textAlign: TextAlign.start,
                 ),
               ),

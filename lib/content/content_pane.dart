@@ -7,15 +7,21 @@ import 'package:winget_gui/content/output_pane.dart';
 import 'package:winget_gui/helpers/extensions/stream_modifier.dart';
 import 'package:winget_gui/helpers/stack.dart';
 
+import '../winget_commands.dart';
 import 'content_holder.dart';
 import 'content_snapshot.dart';
+
+const Winget defaultCommand = Winget.help;
+const String winget = 'winget';
 
 class ContentPane extends StatefulWidget {
   late Function({bool goBack}) _rebuild;
   late List<String> _command;
+  late String? _title;
 
-  ContentPane({List<String>? command, super.key}) {
-    _command = command ?? ['-?'];
+  ContentPane({List<String>? command, String? title, super.key}) {
+    _command = command ?? defaultCommand.command;
+    _title = title ?? defaultCommand.name;
   }
 
   @override
@@ -23,6 +29,7 @@ class ContentPane extends StatefulWidget {
 
   void showResultOfCommand(List<String> command, {String? title}) {
     _command = command;
+    _title = title;
     _rebuild();
   }
 
@@ -38,8 +45,7 @@ class ContentPane extends StatefulWidget {
 }
 
 class _ContentPaneState extends State<ContentPane> {
-  final String winget = 'winget';
-
+  String? title;
   late Process _process;
   bool _goBack = false;
 
@@ -68,7 +74,7 @@ class _ContentPaneState extends State<ContentPane> {
           AsyncSnapshot<Stream<List<String>>> processSnapshot) {
         if (processSnapshot.hasData) {
           return OutputPane(
-              stream: processSnapshot.data!, command: widget.command);
+              stream: processSnapshot.data!, command: widget.command, title: widget._title,);
         } else if (processSnapshot.hasError) {
           return Text('Error: ${processSnapshot.error}');
         } else {
