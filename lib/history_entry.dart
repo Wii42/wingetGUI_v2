@@ -23,7 +23,7 @@ class HistoryEntry extends StatelessWidget {
           content.showResultOfCommand(snapshot.command);
         },
         child: Padding(
-          padding: EdgeInsetsDirectional.symmetric(vertical: 5),
+          padding: const EdgeInsetsDirectional.symmetric(vertical: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

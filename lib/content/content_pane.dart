@@ -74,7 +74,10 @@ class _ContentPaneState extends State<ContentPane> {
           AsyncSnapshot<Stream<List<String>>> processSnapshot) {
         if (processSnapshot.hasData) {
           return OutputPane(
-              stream: processSnapshot.data!, command: widget.command, title: widget._title,);
+            stream: processSnapshot.data!,
+            command: widget.command,
+            title: widget._title,
+          );
         } else if (processSnapshot.hasError) {
           return Text('Error: ${processSnapshot.error}');
         } else {
@@ -102,6 +105,7 @@ class _ContentPaneState extends State<ContentPane> {
         prevState = stack.peek();
       }
       widget._command = prevState.command;
+      widget._title = prevState.title;
     }
     _goBack = false;
   }

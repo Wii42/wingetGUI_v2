@@ -11,7 +11,8 @@ class OutputPane extends StatelessWidget {
   final List<String> command;
   final String? title;
 
-  const OutputPane({required this.stream, required this.command, super.key, this.title});
+  const OutputPane(
+      {required this.stream, required this.command, super.key, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class OutputPane extends StatelessWidget {
             if (streamSnapshot.hasData)
               Expanded(
                   child: ScrollListWidget(
-                //title: command.join(" "),
+                title: (command.firstOrNull != 'show') ? title : null,
                 listElements: widgets,
               )),
           ],
@@ -64,8 +65,8 @@ class OutputPane extends StatelessWidget {
 
   _pushCurrentStateToStack(List<Widget> widgets, BuildContext context) {
     ListStack<ContentSnapshot> stack = ContentHolder.of(context).stack;
-    ContentSnapshot snapshot =
-        ContentSnapshot(command: command, widgets: widgets, title: title ?? command.join(' '));
+    ContentSnapshot snapshot = ContentSnapshot(
+        command: command, widgets: widgets, title: title ?? command.join(' '));
 
     if (stack.isNotEmpty && stack.peek().command == snapshot.command) {
       stack.pop();
