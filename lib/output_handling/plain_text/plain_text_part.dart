@@ -8,7 +8,7 @@ class PlainTextPart extends OutputPart {
   PlainTextPart(super.lines);
 
   @override
-  Widget? representation() {
+  Future<Widget?> representation() async{
     lines.trim();
     if (lines.isEmpty) {
       return null;

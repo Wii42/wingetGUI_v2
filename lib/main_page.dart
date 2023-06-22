@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/nav_bar.dart';
 import 'package:winget_gui/winget_commands.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'content/content_holder.dart';
 import 'content/content_pane.dart';
@@ -16,23 +17,29 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
-  ContentHolder contentHolder = _getContentHolder(ContentPane());
+  ContentHolder? contentHolder;
   int? topIndex;
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations local = AppLocalizations.of(context)!;
+    contentHolder ??= _getContentHolder(ContentPane(
+      local: local,
+    ));
     return NavigationView(
       appBar: NavBar(mainPageState: this, context: context).build(),
       pane: NavigationPane(
         autoSuggestBox: _commandPrompt(),
         autoSuggestBoxReplacement: const Icon(FluentIcons.command_prompt),
         items: [
-          ...createNavItems([Winget.updates, Winget.installed]),
-          HistoryTab(contentHolder),
+          ...createNavItems([Winget.updates, Winget.installed], local),
+          HistoryTab(contentHolder!, local),
         ],
         footerItems: [
           ...createNavItems(
-              [Winget.about, Winget.sources, Winget.help, Winget.settings]),
+            [Winget.about, Winget.sources, Winget.help, Winget.settings],
+            local,
+          )
         ],
         selected: topIndex,
         onChanged: (index) {
@@ -42,20 +49,20 @@ class MainPageState extends State<MainPage> {
     );
   }
 
-  List<PaneItem> createNavItems(List<Winget> commands) {
-    return [for (Winget winget in commands) _navButton(winget)];
+  List<PaneItem> createNavItems(List<Winget> commands, AppLocalizations local) {
+    return [for (Winget winget in commands) _navButton(winget, local)];
   }
 
-  PaneItem _navButton(Winget winget) {
+  PaneItem _navButton(Winget winget, AppLocalizations local) {
     return PaneItem(
-      title: Text(winget.name),
+      title: Text(winget.name(local)),
       icon: Icon(winget.icon),
-      body: contentHolder,
+      body: contentHolder!,
       onTap: () {
         setState(
           () {
-            contentHolder.content
-                .showResultOfCommand(winget.command, title: winget.name);
+            contentHolder!.content
+                .showResultOfCommand(winget.command, title: winget.name(local));
           },
         );
       },
@@ -69,14 +76,14 @@ class MainPageState extends State<MainPage> {
       onSubmitted: (String command) {
         setState(
           () {
-            contentHolder.content.showResultOfCommand(command.split(' '));
+            contentHolder!.content.showResultOfCommand(command.split(' '));
             controller.clear();
             topIndex = null;
           },
         );
       },
       prefix: prefixIcon(FluentIcons.command_prompt),
-      placeholder: 'Run command',
+      placeholder: AppLocalizations.of(context)!.runCommand,
     );
   }
 

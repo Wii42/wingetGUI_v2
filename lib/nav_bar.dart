@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/winget_commands.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'main_page.dart';
 
@@ -28,8 +29,10 @@ class NavBar {
                     width: 200,
                   ),
                   SizedBox(
-                      width: constraints.maxWidth / 3,
-                      child: _searchField(Winget.search)),
+                    width: constraints.maxWidth / 3,
+                    child: _searchField(
+                        Winget.search, AppLocalizations.of(context)!),
+                  ),
                   Padding(
                     padding:
                         const EdgeInsetsDirectional.symmetric(horizontal: 10),
@@ -43,19 +46,19 @@ class NavBar {
         ));
   }
 
-  TextBox _searchField(Winget winget) {
+  TextBox _searchField(Winget winget, AppLocalizations local) {
     TextEditingController controller = TextEditingController();
     return TextBox(
       controller: controller,
       onSubmitted: (input) {
         mainPageState.setState(
           () {
-            mainPageState.contentHolder.content.showResultOfCommand(
+            mainPageState.contentHolder!.content.showResultOfCommand(
               [
                 ...winget.command,
                 input,
               ],
-              title: winget.titleWithInput(input),
+              title: winget.titleWithInput(input, localization: local),
             );
             controller.clear();
             mainPageState.topIndex = null;
@@ -63,7 +66,7 @@ class NavBar {
         );
       },
       prefix: mainPageState.prefixIcon(winget.icon),
-      placeholder: winget.name,
+      placeholder: winget.name(local),
     );
   }
 
@@ -75,8 +78,8 @@ class NavBar {
         mainPageState.setState(
           () {
             goBack
-                ? mainPageState.contentHolder.content.goBack()
-                : mainPageState.contentHolder.content.reload();
+                ? mainPageState.contentHolder!.content.goBack()
+                : mainPageState.contentHolder!.content.reload();
           },
         );
       },

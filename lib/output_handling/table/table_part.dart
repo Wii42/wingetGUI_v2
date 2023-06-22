@@ -1,3 +1,4 @@
+import 'dart:isolate';
 import 'dart:math';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -14,15 +15,15 @@ class TablePart extends OutputPart {
   late PackageList packageList;
 
   @override
-  Widget representation() {
-    _makeTable();
+  Future<Widget?> representation() async{
+    packageList = await Isolate.run<PackageList>(_makeTable);
     return packageList;
   }
 
-  _makeTable() {
+   PackageList _makeTable() {
     List<int> columnsPos = _getColumnsPos();
     _correctLinesWithNonWesternGlyphs(columnsPos);
-    _createPackageList(columnsPos);
+    return _createPackageList(columnsPos);
   }
 
   List<int> _getColumnsPos() {
@@ -60,7 +61,7 @@ class TablePart extends OutputPart {
     }
   }
 
-  void _createPackageList(List<int> columnsPos) {
+  PackageList _createPackageList(List<int> columnsPos) {
     List<String> columnNames = _getColumnNames(columnsPos);
 
     List<PackageShortInfo> packages = [];
@@ -70,7 +71,7 @@ class TablePart extends OutputPart {
           _getDictFromLine(entry, columnNames, columnsPos);
       packages.add(PackageShortInfo(Infos(details: infos)));
     }
-    packageList = PackageList(packages);
+    return PackageList(packages);
   }
 
   Map<String, String> _getDictFromLine(

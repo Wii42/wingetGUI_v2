@@ -9,7 +9,7 @@ class ListPart extends OutputPart {
   late Map<String, String> listEntries;
 
   @override
-  Widget? representation() {
+  Future<Widget?> representation() async{
     _retrieveTitle();
     _retrieveListEntries();
     return ListWidget(

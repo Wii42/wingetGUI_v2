@@ -12,7 +12,7 @@ class ShowPart extends OutputPart {
   ShowPart(super.lines);
 
   @override
-  Widget? representation() {
+  Future<Widget?> representation() async {
     return PackageLongInfo(_extractInfos());
   }
 

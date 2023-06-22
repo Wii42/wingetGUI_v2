@@ -20,31 +20,41 @@ class OutputPane extends StatelessWidget {
       stream: stream,
       builder:
           (BuildContext context, AsyncSnapshot<List<String>> streamSnapshot) {
-        List<Widget> widgets = [];
-        if (streamSnapshot.hasData) {
-          widgets = _displayOutput(streamSnapshot.data!, context);
-          if (streamSnapshot.connectionState == ConnectionState.done) {
-            _pushCurrentStateToStack(widgets, context);
-          }
-        }
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             if (streamSnapshot.connectionState != ConnectionState.done)
               _progressBar(),
             if (streamSnapshot.hasData)
-              Expanded(
-                  child: ScrollListWidget(
-                title: (command.firstOrNull != 'show') ? title : null,
-                listElements: widgets,
-              )),
+              FutureBuilder<List<Widget>>(
+                future: _displayOutput(streamSnapshot.data!, context),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (streamSnapshot.connectionState ==
+                        ConnectionState.done) {
+                      _pushCurrentStateToStack(snapshot.data!, context);
+                    }
+                    return Expanded(
+                      child: ScrollListWidget(
+                        title: (command.firstOrNull != 'show') ? title : null,
+                        listElements: snapshot.data!,
+                      ),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Text(snapshot.error.toString());
+                  }
+                  return _progressBar();
+                },
+              ),
           ],
         );
       },
     );
   }
 
-  List<Widget> _displayOutput(List<String> output, BuildContext context) {
+  Future<List<Widget>> _displayOutput(
+      List<String> output, BuildContext context) async {
     OutputHandler handler = OutputHandler(output,
         command: command, prevCommand: getPrevCommand(context));
     handler.determineResponsibility();

@@ -21,14 +21,16 @@ class OutputHandler {
   late List<Scanner> outputScanners;
   late final List<Responsibility> responsibilityList;
 
-  OutputHandler(this.output, {required this.command, this.prevCommand, this.title}) {
+  OutputHandler(this.output,
+      {required this.command, this.prevCommand, this.title}) {
     output.trim();
     responsibilityList = [for (String line in output) Responsibility(line)];
 
     outputScanners = [
       TableScanner(responsibilityList),
       LoadingBarScanner(responsibilityList),
-      ShowScanner(responsibilityList, command: command, prevCommand: prevCommand),
+      ShowScanner(responsibilityList,
+          command: command, prevCommand: prevCommand),
       ListScanner(responsibilityList),
       OneLineInfoScanner(responsibilityList),
       PlainTextScanner(responsibilityList),
@@ -41,7 +43,7 @@ class OutputHandler {
     }
   }
 
-  List<Widget> displayOutput() {
+  Future<List<Widget>> displayOutput() async {
     List<Widget> list = [];
     OutputPart? prevPart;
 
@@ -51,7 +53,7 @@ class OutputHandler {
         if (part == null) {
           throw Exception("Not all lines are assigned to a part");
         }
-        Widget? rep = part.representation();
+        Widget? rep = await part.representation();
         if (rep != null) {
           list.add(rep);
         }

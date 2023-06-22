@@ -3,6 +3,7 @@ import 'package:winget_gui/content/content_holder.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/history_entry.dart';
 import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'content/content_snapshot.dart';
 
@@ -13,9 +14,9 @@ class HistoryTab extends PaneItem {
     super.title,
   });
 
-  factory HistoryTab(ContentHolder contentHolder) {
+  factory HistoryTab(ContentHolder contentHolder, AppLocalizations local) {
     return HistoryTab._(
-      title: const Text('History'),
+      title: Text(local.history),
       icon: const Icon(FluentIcons.history),
       body: ScrollListWidget(
         title: 'History',

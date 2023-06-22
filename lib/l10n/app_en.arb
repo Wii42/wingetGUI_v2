@@ -1,0 +1,17 @@
+{
+  "@@locale" : "en",
+
+  "runCommand": "Run Command",
+  "updates": "Updates",
+  "installed": "Installed",
+  "about": "About Winget",
+  "help": "Help",
+  "search": "Search Packages",
+  "searchTitlePrefix": "Search",
+  "settings": "Winget Settings",
+  "sources": "Sources",
+  "install": "Install",
+  "upgrade": "Upgrade",
+  "uninstall": "Uninstall",
+  "history": "History"
+}

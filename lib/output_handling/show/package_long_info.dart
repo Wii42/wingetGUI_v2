@@ -7,6 +7,7 @@ import 'package:winget_gui/output_handling/show/compartments/expandable_compartm
 import 'package:winget_gui/output_handling/show/compartments/installer_details.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/widget_assets/search_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../info_enum.dart';
 import '../infos.dart';
@@ -40,8 +41,10 @@ class PackageLongInfo extends StatelessWidget {
             expandableInfo: Info.releaseNotes,
             buttonInfos: const [Info.releaseNotesUrl],
           ),
-        if (DetailsWidget.containsData(infos.allDetails)) DetailsWidget(infos: infos),
-        if (AgreementWidget.containsData(infos.allDetails)) AgreementWidget(infos: infos),
+        if (DetailsWidget.containsData(infos.allDetails))
+          DetailsWidget(infos: infos),
+        if (AgreementWidget.containsData(infos.allDetails))
+          AgreementWidget(infos: infos),
         if (InstallerDetails.containsData(infos.allDetails))
           InstallerDetails(infos: infos),
         if (infos.hasTags()) _tagButtons(context),
@@ -50,14 +53,22 @@ class PackageLongInfo extends StatelessWidget {
   }
 
   Widget _tagButtons(BuildContext context) {
+    AppLocalizations local = AppLocalizations.of(context)!;
     return Wrap(
       runSpacing: 5,
       spacing: 5,
       alignment: WrapAlignment.center,
       children: [
         if (infos.details.hasInfo(Info.moniker))
-          SearchButton(searchTarget: infos.details[Info.moniker.key]!,),
-        for (String tag in infos.tags!) SearchButton(searchTarget: tag)
+          SearchButton(
+            searchTarget: infos.details[Info.moniker.key]!,
+            local: local,
+          ),
+        for (String tag in infos.tags!)
+          SearchButton(
+            searchTarget: tag,
+            local: local,
+          )
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/content/output_pane.dart';
@@ -19,9 +20,20 @@ class ContentPane extends StatefulWidget {
   late List<String> _command;
   late String? _title;
 
-  ContentPane({List<String>? command, String? title, super.key}) {
+  /// Either [title] or [local] must not be null.
+  ContentPane(
+      {List<String>? command,
+      String? title,
+      AppLocalizations? local,
+      super.key}) {
+    assert(title != null || local != null);
     _command = command ?? defaultCommand.command;
-    _title = title ?? defaultCommand.name;
+
+    if (title != null) {
+      _title = title;
+    } else {
+      _title = defaultCommand.name(local!);
+    }
   }
 
   @override

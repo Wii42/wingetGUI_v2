@@ -1,0 +1,17 @@
+{
+  "@@locale" : "de",
+
+  "runCommand": "Führe Befehl aus",
+  "updates": "Aktualisierungen",
+  "installed": "Installiert",
+  "about": "Über Winget",
+  "help": "Hilfe",
+  "search": "Suche Apps",
+  "searchTitlePrefix": "Suche nach",
+  "settings": "Winget-Einstellungen",
+  "sources": "Quellen",
+  "install": "Installieren",
+  "upgrade": "Aktualisieren",
+  "uninstall": "Deinstallieren",
+  "history": "Verlauf"
+}
