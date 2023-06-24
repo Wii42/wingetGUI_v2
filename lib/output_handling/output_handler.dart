@@ -43,7 +43,7 @@ class OutputHandler {
     }
   }
 
-  Future<List<Widget>> displayOutput() async {
+  Future<List<Widget>> displayOutput(BuildContext context) async {
     List<Widget> list = [];
     OutputPart? prevPart;
 
@@ -53,7 +53,7 @@ class OutputHandler {
         if (part == null) {
           throw Exception("Not all lines are assigned to a part");
         }
-        Widget? rep = await part.representation();
+        Widget? rep = await part.representation(context);
         if (rep != null) {
           list.add(rep);
         }

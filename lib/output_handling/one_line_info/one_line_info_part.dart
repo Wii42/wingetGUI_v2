@@ -8,7 +8,7 @@ class OneLineInfoPart extends OutputPart {
   OneLineInfoPart(super.lines);
 
   @override
-  Future<Widget?> representation() async{
+  Future<Widget?> representation(BuildContext context) async{
     return OneLineInfoWidget(infos: extractInfos());
   }
 

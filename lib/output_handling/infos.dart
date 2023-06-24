@@ -1,4 +1,5 @@
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'info_enum.dart';
 
@@ -22,10 +23,13 @@ class Infos {
     return allDetails;
   }
 
-  bool hasVersion() => (details.hasInfo(Info.version) &&
-      details[Info.version.key]! != 'Unknown');
+  bool hasVersion(AppLocalizations locale) =>
+      (details.hasInfo(Info.version, locale) &&
+          details[Info.version.key(locale)]! != 'Unknown');
 
-  bool hasDescription() => details.hasInfo(Info.description);
+  bool hasDescription(AppLocalizations locale) =>
+      details.hasInfo(Info.description, locale);
 
-  bool hasReleaseNotes() => details.hasInfo(Info.releaseNotes);
+  bool hasReleaseNotes(AppLocalizations locale) =>
+      details.hasInfo(Info.releaseNotes, locale);
 }

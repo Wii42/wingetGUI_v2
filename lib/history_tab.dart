@@ -19,7 +19,7 @@ class HistoryTab extends PaneItem {
       title: Text(local.history),
       icon: const Icon(FluentIcons.history),
       body: ScrollListWidget(
-        title: 'History',
+        title: local.history,
         listElements: [
           for (ContentSnapshot snapshot in contentHolder.stack.asList.reversed)
             HistoryEntry(snapshot: snapshot, content: contentHolder.content)

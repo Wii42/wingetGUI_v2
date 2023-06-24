@@ -15,7 +15,7 @@ class TablePart extends OutputPart {
   late PackageList packageList;
 
   @override
-  Future<Widget?> representation() async{
+  Future<Widget?> representation(BuildContext context) async{
     packageList = await Isolate.run<PackageList>(_makeTable);
     return packageList;
   }

@@ -58,7 +58,7 @@ class OutputPane extends StatelessWidget {
     OutputHandler handler = OutputHandler(output,
         command: command, prevCommand: getPrevCommand(context));
     handler.determineResponsibility();
-    return handler.displayOutput();
+    return handler.displayOutput(context);
   }
 
   Widget _progressBar() {

@@ -5,7 +5,7 @@ abstract class OutputPart {
 
   OutputPart(this.lines);
 
-  Future<Widget?> representation();
+  Future<Widget?> representation(BuildContext context);
 
   addLine(String line) {
     lines.add(line);

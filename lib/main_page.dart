@@ -55,14 +55,14 @@ class MainPageState extends State<MainPage> {
 
   PaneItem _navButton(Winget winget, AppLocalizations local) {
     return PaneItem(
-      title: Text(winget.name(local)),
+      title: Text(winget.title(local)),
       icon: Icon(winget.icon),
       body: contentHolder!,
       onTap: () {
         setState(
           () {
-            contentHolder!.content
-                .showResultOfCommand(winget.command, title: winget.name(local));
+            contentHolder!.content.showResultOfCommand(winget.command,
+                title: winget.title(local));
           },
         );
       },

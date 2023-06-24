@@ -32,7 +32,7 @@ class ContentPane extends StatefulWidget {
     if (title != null) {
       _title = title;
     } else {
-      _title = defaultCommand.name(local!);
+      _title = defaultCommand.title(local!);
     }
   }
 

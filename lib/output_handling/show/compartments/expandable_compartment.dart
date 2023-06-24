@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../info_enum.dart';
 import 'compartment.dart';
@@ -18,12 +19,13 @@ class ExpandableCompartment extends Compartment {
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
         title: title ?? expandableInfo?.title,
         mainColumn: (expandableInfo != null
             ? [
                 textWithLinks(
-                  key: expandableInfo!.key,
+                  key: expandableInfo!.key(locale),
                   context: context,
                   maxLines: 5,
                 )

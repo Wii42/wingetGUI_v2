@@ -2,16 +2,11 @@
   "@@locale" : "de",
 
   "runCommand": "Führe Befehl aus",
-  "updates": "Aktualisierungen",
-  "installed": "Installiert",
-  "about": "Über Winget",
-  "help": "Hilfe",
-  "search": "Suche Apps",
-  "searchTitlePrefix": "Suche nach",
-  "settings": "Winget-Einstellungen",
-  "sources": "Quellen",
-  "install": "Installieren",
-  "upgrade": "Aktualisieren",
-  "uninstall": "Deinstallieren",
-  "history": "Verlauf"
+
+  "wingetTitle": "{command, select, updates{Aktualisierungen} installed{Installiert} about{Über Winget} help{Hilfe} search{Suche Apps} settings{Winget-Einstellungen} sources{Quellen} install{Installieren} upgrade{Aktualisieren} uninstall{Deinstallieren} other{NotFoundError}}",
+  "wingetTitlePrefix": "{command, select, search{Suche nach} other{NotFoundError}}",
+
+  "history": "Verlauf",
+
+  "infoKey": "{info, select, id{ID} description{Beschreibung} name{Name} publisher{Herausgeber} publisherUrl{Herausgeber-URL} publisherSupportUrl{Herausgeber-Support-URL} version{Version}  availableVersion{Verfügbar} tags{Markierungen} releaseNotes{Versionshinweise} releaseNotesUrl{URL der Versionshinweise} installer{Installationsprogramm} source{Quelle} website{Startseite} license{Lizenz} licenseUrl{Lizenz-URL} copyright{Copyright} copyrightUrl{Copyright-URL} privacyUrl{Datenschutz-URL} buyUrl{Kauf-URL} termsOfTransaction{Terms of Transaction} seizureWarning{Seizure Warning} storeLicenseTerms{Store License Terms} author{Autor} moniker{Moniker} documentation{Dokumentation} agreement{Vereinbarungen} category{Category} pricing{Pricing} freeTrial{Free Trial} ageRating{Age Ratings} installerType{Installertyp} storeProductID{Store-Produkt-ID} installerURL{Installer-URL} sha256Installer{Sha256-Installer} installerLocale{Installer-Gebietsschema} releaseDate{Freigabedatum} other{NotFoundError}}"
 }

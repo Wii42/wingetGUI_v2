@@ -2,16 +2,44 @@
   "@@locale" : "en",
 
   "runCommand": "Run Command",
-  "updates": "Updates",
-  "installed": "Installed",
-  "about": "About Winget",
-  "help": "Help",
-  "search": "Search Packages",
-  "searchTitlePrefix": "Search",
-  "settings": "Winget Settings",
-  "sources": "Sources",
-  "install": "Install",
-  "upgrade": "Upgrade",
-  "uninstall": "Uninstall",
-  "history": "History"
+
+  "wingetTitle": "{command, select, updates{Updates} installed{Installed} about{About Winget} help{Help} search{Search Packages} settings{Winget Settings} sources{Sources} install{Install} upgrade{Upgrade} uninstall{Uninstall} other{NotFoundError}}",
+  "wingetTitlePrefix": "{command, select, search{Search} other{NotFoundError}}",
+
+  "history": "History",
+
+  "infoKey": "{info, select, id{ID} description{Beschreibung} name{Name} publisher{Herausgeber} publisherUrl{Herausgeber-URL} publisherSupportUrl{Herausgeber-Support-URL} version{Version}  availableVersion{Verfügbar} tags{Markierungen} releaseNotes{Versionshinweise} releaseNotesUrl{URL der Versionshinweise} installer{Installationsprogramm} source{Quelle} website{Startseite} license{Lizenz} licenseUrl{Lizenz-URL} copyright{Copyright} copyrightUrl{Copyright-URL} privacyUrl{Datenschutz-URL} buyUrl{Kauf-URL} termsOfTransaction{Terms of Transaction} seizureWarning{Seizure Warning} storeLicenseTerms{Store License Terms} author{Autor} moniker{Moniker} documentation{Dokumentation} agreement{Vereinbarungen} category{Category} pricing{Pricing} freeTrial{Free Trial} ageRating{Age Ratings} installerType{Installertyp} storeProductID{Store-Produkt-ID} installerURL{Installer-URL} sha256Installer{Sha256-Installer} installerLocale{Installer-Gebietsschema} releaseDate{Freigabedatum} other{NotFoundError}}",
+
+
+  "@_INFO_ENUM": {},
+  "idKey": "ID",
+  "idTitle": "App ID",
+  "descriptionKey": "Beschreibung",
+  "descriptionTitle": "About",
+  "nameKey": "Name",
+  "nameTitle": "Name",
+  "publisherKey": "Herausgeber",
+  "publisherTitle": "Publisher",
+  "publisherUrlKey": "Herausgeber-URL",
+  "publisherUrlTitle": "Publisher URL",
+  "publisherSupportUrlKey": "Herausgeber-Support-URL",
+  "publisherSupportUrlTitle": "Support",
+  "versionKey": "Version",
+  "versionTitle": "Version",
+  "availableVersionKey": "Available",
+  "tagsKey": "Markierungen",
+  "tagsTitle": "Tags",
+  "releaseNotesKey": "Versionshinweise",
+  "releaseNotesTitle": "Release Notes",
+  "releaseNotesUrlKey": "URL der Versionshinweise",
+  "releaseNotesUrlTitle": "Show Online",
+  "installerKey": "Installationsprogramm",
+  "installerTitle": "Installer",
+  "sourceKey": "Quelle",
+  "sourceTitle": "Source"
+
+
+
+
+
 }

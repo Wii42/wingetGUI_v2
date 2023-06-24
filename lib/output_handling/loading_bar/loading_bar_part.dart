@@ -5,7 +5,7 @@ class LoadingBarPart extends OutputPart {
   LoadingBarPart(super.lines);
 
   @override
-  Future<Widget?> representation() async{
+  Future<Widget?> representation(BuildContext context) async{
     if (lines.isEmpty) {
       return null;
     }

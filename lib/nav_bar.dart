@@ -66,7 +66,7 @@ class NavBar {
         );
       },
       prefix: mainPageState.prefixIcon(winget.icon),
-      placeholder: winget.name(local),
+      placeholder: winget.title(local),
     );
   }
 

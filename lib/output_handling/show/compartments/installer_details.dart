@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import '../../info_enum.dart';
@@ -37,9 +38,10 @@ class InstallerDetails extends Compartment {
   }
 
   List<Widget> _displayRest(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     List<String> restKeys = [];
     for (String key in infos.installerDetails!.keys) {
-      if (!isManuallyHandled(key)) {
+      if (!isManuallyHandled(key, locale)) {
         restKeys.add(key);
       }
     }
@@ -52,20 +54,21 @@ class InstallerDetails extends Compartment {
   }
 
   List<Widget> _installerDetailsList(List<Info> details, BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return [
       for (Info info in details)
-        if (infos.installerDetails!.hasInfo(info))
+        if (infos.installerDetails!.hasInfo(info, locale))
           wrapInWrap(
               title: info.title,
-              body: textOrLinkButton(context: context, key: info.key)),
+              body: textOrLinkButton(context: context, key: info.key(locale))),
     ];
   }
 
-  static Iterable<String> manuallyHandledStringKeys() =>
-      manuallyHandledKeys.map<String>((Info info) => info.key);
+  static Iterable<String> manuallyHandledStringKeys(AppLocalizations locale) =>
+      manuallyHandledKeys.map<String>((Info info) => info.key(locale));
 
-  static bool containsData(Map<String, String> infos) {
-    for (String key in manuallyHandledStringKeys()) {
+  static bool containsData(Map<String, String> infos, AppLocalizations locale) {
+    for (String key in manuallyHandledStringKeys(locale)) {
       if (infos.hasEntry(key)) {
         return true;
       }
@@ -73,7 +76,7 @@ class InstallerDetails extends Compartment {
     return false;
   }
 
-  static bool isManuallyHandled(String key) {
-    return (manuallyHandledStringKeys().contains(key));
+  static bool isManuallyHandled(String key, AppLocalizations locale) {
+    return (manuallyHandledStringKeys(locale).contains(key));
   }
 }

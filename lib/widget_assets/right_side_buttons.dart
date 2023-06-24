@@ -17,24 +17,24 @@ class RightSideButtons extends StatelessWidget {
   }
 
   Widget buttons(List<Winget> commands, BuildContext context) {
-    AppLocalizations local = AppLocalizations.of(context)!;
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        for (Winget winget in commands) createButton(winget, local),
+        for (Winget winget in commands) createButton(winget, locale),
       ].withSpaceBetween(height: 5),
     );
   }
 
-  CommandButton createButton(Winget winget, AppLocalizations local) {
+  CommandButton createButton(Winget winget, AppLocalizations locale) {
     return CommandButton(
-      text: winget.name(local),
-      command: _createCommand(winget.command),
-      title: '${winget.name(local)} ${infos[Info.name.key]}',
+      text: winget.title(locale),
+      command: _createCommand(winget.command, locale),
+      title: '${winget.title(locale)} ${infos[Info.name.key(locale)]}',
     );
   }
 
-  List<String> _createCommand(List<String> command) {
-    return [...command, '--id', infos[Info.id.key]!];
+  List<String> _createCommand(List<String> command, AppLocalizations locale) {
+    return [...command, '--id', infos[Info.id.key(locale)]!];
   }
 }

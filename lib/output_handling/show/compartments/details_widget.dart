@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../info_enum.dart';
 import 'compartment.dart';
@@ -23,11 +24,12 @@ class DetailsWidget extends Compartment {
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
         title: title,
         mainColumn: [
           ..._detailsList([
-            if (infos.details.hasInfo(Info.author)) Info.publisher,
+            if (infos.details.hasInfo(Info.author, locale)) Info.publisher,
             Info.agreement,
             Info.pricing,
             Info.freeTrial,
@@ -42,19 +44,21 @@ class DetailsWidget extends Compartment {
   }
 
   List<Widget> _detailsList(List<Info> details, BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return [
       for (Info info in details)
-        if (infos.details.hasInfo(info))
+        if (infos.details.hasInfo(info, locale))
           wrapInWrap(
               title: info.title,
-              body: textOrLinkButton(context: context, key: info.key)),
+              body: textOrLinkButton(context: context, key: info.key(locale))),
     ];
   }
 
   List<Widget> _displayRest(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     List<String> restKeys = [];
     for (String key in infos.details.keys) {
-      if (!PackageLongInfo.isManuallyHandled(key)) {
+      if (!PackageLongInfo.isManuallyHandled(key, locale)) {
         restKeys.add(key);
       }
     }
@@ -66,12 +70,13 @@ class DetailsWidget extends Compartment {
     ];
   }
 
-  static Iterable<String> manuallyHandledStringKeys() =>
-      manuallyHandledKeys.map<String>((Info info) => info.key);
+  static Iterable<String> manuallyHandledStringKeys(AppLocalizations locale) =>
+      manuallyHandledKeys.map<String>((Info info) => info.key(locale));
 
-  static bool containsData(Map<String, String> infos) {
-    for (String key in manuallyHandledStringKeys()) {
-      if (infos.hasEntry(key) || !PackageLongInfo.isManuallyHandled(key)) {
+  static bool containsData(Map<String, String> infos, AppLocalizations locale) {
+    for (String key in manuallyHandledStringKeys(locale)) {
+      if (infos.hasEntry(key) ||
+          !PackageLongInfo.isManuallyHandled(key, locale)) {
         return true;
       }
     }

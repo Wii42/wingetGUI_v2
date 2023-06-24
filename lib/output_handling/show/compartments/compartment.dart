@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets//link_button.dart';
@@ -70,12 +71,13 @@ abstract class Compartment extends StatelessWidget {
 
   Widget textOrInlineLink(
       {required BuildContext context, required Info name, required Info url}) {
-    if (infos.allDetails.hasInfo(url)) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    if (infos.allDetails.hasInfo(url, locale)) {
       return InlineLinkButton(
-          url: infos.allDetails[url.key]!,
-          text: Text(infos.allDetails[name.key] ?? infos.allDetails[url.key]!));
+          url: infos.allDetails[url.key(locale)]!,
+          text: Text(infos.allDetails[name.key(locale)] ?? infos.allDetails[url.key(locale)]!));
     }
-    return textWithLinks(key: name.key, context: context);
+    return textWithLinks(key: name.key(locale), context: context);
   }
 
   Widget textOrLinkButton(
@@ -96,15 +98,16 @@ abstract class Compartment extends StatelessWidget {
   }
 
   Wrap buttonRow(List<Info> links, BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return Wrap(
       spacing: 5,
       runSpacing: 5,
       crossAxisAlignment: WrapCrossAlignment.start,
       children: [
         for (Info info in links)
-          if (infos.allDetails.hasInfo(info))
+          if (infos.allDetails.hasInfo(info, locale))
             textOrLinkButton(
-                context: context, key: info.key, title: info.title),
+                context: context, key: info.key(locale), title: info.title),
       ],
     );
   }

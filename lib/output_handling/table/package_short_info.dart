@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../content/content_holder.dart';
 import '../../content/content_pane.dart';
@@ -14,14 +15,15 @@ class PackageShortInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return Button(
-      onPressed: (isClickable())
+      onPressed: (isClickable(locale))
           ? () {
               ContentPane? target = ContentHolder.maybeOf(context)?.content;
-              if (target != null && infos.details.hasInfo(Info.id)) {
+              if (target != null && infos.details.hasInfo(Info.id, locale)) {
                 target.showResultOfCommand(
-                    ['show', '--id', infos.details[Info.id.key]!],
-                    title: infos.details[Info.name.key]);
+                    ['show', '--id', infos.details[Info.id.key(locale)]!],
+                    title: infos.details[Info.name.key(locale)]);
               }
             }
           : null,
@@ -34,6 +36,7 @@ class PackageShortInfo extends StatelessWidget {
   }
 
   Widget _shortInfo(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -42,9 +45,9 @@ class PackageShortInfo extends StatelessWidget {
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: _versions([Info.version, Info.availableVersion]),
+          children: _versions([Info.version, Info.availableVersion], locale),
         ),
-        if (isClickable()) ...[
+        if (isClickable(locale)) ...[
           const SizedBox(width: 20),
           RightSideButtons(infos: infos.details)
         ],
@@ -53,11 +56,12 @@ class PackageShortInfo extends StatelessWidget {
   }
 
   Widget _leftSide(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          infos.details[Info.name.key]!,
+          infos.details[Info.name.key(locale)]!,
           style: _titleStyle(context),
           softWrap: true,
           textAlign: TextAlign.start,
@@ -65,14 +69,14 @@ class PackageShortInfo extends StatelessWidget {
           maxLines: 2,
         ),
         Text(
-          infos.details[Info.id.key]!,
+          infos.details[Info.id.key(locale)]!,
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
           maxLines: 2,
         ),
-        if (infos.details.hasInfo(Info.source))
+        if (infos.details.hasInfo(Info.source, locale))
           Text(
-            "from ${infos.details[Info.source.key]!}",
+            "from ${infos.details[Info.source.key(locale)]!}",
             style: TextStyle(
               color: FluentTheme.of(context).disabledColor,
             ),
@@ -83,22 +87,23 @@ class PackageShortInfo extends StatelessWidget {
   }
 
   TextStyle? _titleStyle(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     TextStyle? style = FluentTheme.of(context).typography.title;
-    if (!isClickable()) {
+    if (!isClickable(locale)) {
       style = style?.apply(color: FluentTheme.of(context).disabledColor);
     }
     return style;
   }
 
-  List<Widget> _versions(List<Info> versions) {
+  List<Widget> _versions(List<Info> versions, AppLocalizations locale) {
     return [
       for (Info info in versions)
-        if (infos.details.hasInfo(info))
-          Text("${info.title}: ${infos.details[info.key]!}"),
+        if (infos.details.hasInfo(info, locale))
+          Text("${info.title}: ${infos.details[info.key(locale)]!}"),
     ];
   }
 
-  bool isClickable() {
-    return infos.details.hasInfo(Info.source);
+  bool isClickable(AppLocalizations locale) {
+    return infos.details.hasInfo(Info.source, locale);
   }
 }

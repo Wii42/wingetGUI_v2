@@ -27,6 +27,7 @@ class WingetGui extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      //supportedLocales: [Locale("en")],
       home: const MainPage(title: "WingetGUI"),
     );
   }
