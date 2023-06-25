@@ -25,22 +25,24 @@ class AgreementWidget extends Compartment {
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
-    AppLocalizations local = AppLocalizations.of(context)!;
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
         title: title,
         mainColumn: [
-          if (infos.details.hasInfo(Info.license, local) &&
-              !isLink(infos.details[Info.license.key(local)]))
-            wrapInWrap(title: Info.license.title, body: _license(context)),
-          if (infos.details.hasInfo(Info.copyright, local) &&
-              !isLink(infos.details[Info.copyright.key(local)]))
-            wrapInWrap(title: Info.copyright.title, body: _copyright(context)),
+          if (infos.details.hasInfo(Info.license, locale) &&
+              !isLink(infos.details[Info.license.key(locale)]))
+            wrapInWrap(
+                title: Info.license.title(locale), body: _license(context)),
+          if (infos.details.hasInfo(Info.copyright, locale) &&
+              !isLink(infos.details[Info.copyright.key(locale)]))
+            wrapInWrap(
+                title: Info.copyright.title(locale), body: _copyright(context)),
         ],
         buttonRow: buttonRow([
-          if (isLink(infos.details[Info.license.key(local)])) Info.license,
-          if (!infos.details.hasInfo(Info.license, local)) Info.licenseUrl,
-          if (isLink(infos.details[Info.copyright.key(local)])) Info.copyright,
-          if (!infos.details.hasInfo(Info.copyright, local)) Info.copyrightUrl,
+          if (isLink(infos.details[Info.license.key(locale)])) Info.license,
+          if (!infos.details.hasInfo(Info.license, locale)) Info.licenseUrl,
+          if (isLink(infos.details[Info.copyright.key(locale)])) Info.copyright,
+          if (!infos.details.hasInfo(Info.copyright, locale)) Info.copyrightUrl,
           Info.privacyUrl,
           Info.buyUrl,
           Info.termsOfTransaction,

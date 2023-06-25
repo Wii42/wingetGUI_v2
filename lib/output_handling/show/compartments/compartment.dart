@@ -75,7 +75,8 @@ abstract class Compartment extends StatelessWidget {
     if (infos.allDetails.hasInfo(url, locale)) {
       return InlineLinkButton(
           url: infos.allDetails[url.key(locale)]!,
-          text: Text(infos.allDetails[name.key(locale)] ?? infos.allDetails[url.key(locale)]!));
+          text: Text(infos.allDetails[name.key(locale)] ??
+              infos.allDetails[url.key(locale)]!));
     }
     return textWithLinks(key: name.key(locale), context: context);
   }
@@ -107,7 +108,9 @@ abstract class Compartment extends StatelessWidget {
         for (Info info in links)
           if (infos.allDetails.hasInfo(info, locale))
             textOrLinkButton(
-                context: context, key: info.key(locale), title: info.title),
+                context: context,
+                key: info.key(locale),
+                title: info.title(locale)),
       ],
     );
   }

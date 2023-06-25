@@ -99,7 +99,7 @@ class PackageShortInfo extends StatelessWidget {
     return [
       for (Info info in versions)
         if (infos.details.hasInfo(info, locale))
-          Text("${info.title}: ${infos.details[info.key(locale)]!}"),
+          Text("${info.title(locale)}: ${infos.details[info.key(locale)]!}"),
     ];
   }
 

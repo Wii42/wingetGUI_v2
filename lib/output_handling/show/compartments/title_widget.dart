@@ -116,7 +116,8 @@ class TitleWidget extends Compartment {
 
   Widget _website(AppLocalizations locale) {
     return LinkButton(
-        url: infos.details[Info.website.key(locale)]!, text: Text(Info.website.title));
+        url: infos.details[Info.website.key(locale)]!,
+        text: Text(Info.website.title(locale)));
   }
 
   StoreButton _showInStore(AppLocalizations locale) {

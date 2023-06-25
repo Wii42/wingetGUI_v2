@@ -49,7 +49,7 @@ class DetailsWidget extends Compartment {
       for (Info info in details)
         if (infos.details.hasInfo(info, locale))
           wrapInWrap(
-              title: info.title,
+              title: info.title(locale),
               body: textOrLinkButton(context: context, key: info.key(locale))),
     ];
   }
