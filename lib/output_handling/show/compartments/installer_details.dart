@@ -15,14 +15,13 @@ class InstallerDetails extends Compartment {
     Info.releaseDate,
   ];
 
-  final String title = 'Installer';
-
   const InstallerDetails({super.key, required super.infos});
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
-        title: title,
+        title: compartmentTitle(locale),
         mainColumn: [
           ..._installerDetailsList([
             Info.installerType,
@@ -35,6 +34,11 @@ class InstallerDetails extends Compartment {
         ],
         buttonRow: buttonRow([Info.installerURL], context),
         context: context);
+  }
+
+  @override
+  String compartmentTitle(AppLocalizations locale) {
+    return Info.installer.title(locale);
   }
 
   List<Widget> _displayRest(BuildContext context) {

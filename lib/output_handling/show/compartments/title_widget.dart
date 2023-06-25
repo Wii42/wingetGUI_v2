@@ -43,6 +43,11 @@ class TitleWidget extends Compartment {
     ];
   }
 
+  @override
+  String compartmentTitle(AppLocalizations locale) {
+    return Info.name.title(locale);
+  }
+
   Widget _nameAndVersion(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Wrap(

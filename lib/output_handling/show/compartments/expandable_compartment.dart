@@ -21,7 +21,7 @@ class ExpandableCompartment extends Compartment {
   List<Widget> buildCompartment(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
-        title: title ?? expandableInfo?.title(locale),
+        title: compartmentTitle(locale),
         mainColumn: (expandableInfo != null
             ? [
                 textWithLinks(
@@ -34,5 +34,10 @@ class ExpandableCompartment extends Compartment {
         buttonRow:
             (buttonInfos != null ? buttonRow(buttonInfos!, context) : null),
         context: context);
+  }
+
+  @override
+  String? compartmentTitle(AppLocalizations locale) {
+    return title ?? expandableInfo?.title(locale);
   }
 }

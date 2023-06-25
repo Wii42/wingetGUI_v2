@@ -20,13 +20,11 @@ class DetailsWidget extends Compartment {
     Info.ageRating,
   ];
 
-  final String title = 'Details';
-
   @override
   List<Widget> buildCompartment(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
-        title: title,
+        title: compartmentTitle(locale),
         mainColumn: [
           ..._detailsList([
             if (infos.details.hasInfo(Info.author, locale)) Info.publisher,
@@ -41,6 +39,11 @@ class DetailsWidget extends Compartment {
         ],
         buttonRow: buttonRow([Info.publisherSupportUrl], context),
         context: context);
+  }
+
+  @override
+  String compartmentTitle(AppLocalizations locale) {
+    return locale.details;
   }
 
   List<Widget> _detailsList(List<Info> details, BuildContext context) {

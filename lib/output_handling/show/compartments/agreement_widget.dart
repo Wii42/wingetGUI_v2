@@ -19,15 +19,13 @@ class AgreementWidget extends Compartment {
     Info.storeLicenseTerms,
   ];
 
-  final String title = 'Agreement';
-
   const AgreementWidget({super.key, required super.infos});
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
-        title: title,
+        title: compartmentTitle(locale),
         mainColumn: [
           if (infos.details.hasInfo(Info.license, locale) &&
               !isLink(infos.details[Info.license.key(locale)]))
@@ -50,6 +48,11 @@ class AgreementWidget extends Compartment {
           Info.storeLicenseTerms,
         ], context),
         context: context);
+  }
+
+  @override
+  String compartmentTitle(AppLocalizations locale) {
+    return Info.agreement.title(locale);
   }
 
   Widget _license(BuildContext context) {

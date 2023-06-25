@@ -18,6 +18,8 @@ abstract class Compartment extends StatelessWidget {
 
   List<Widget> buildCompartment(BuildContext context);
 
+  String? compartmentTitle(AppLocalizations locale);
+
   @override
   Widget build(BuildContext context) {
     return DecoratedBoxWrap(
