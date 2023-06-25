@@ -13,5 +13,5 @@
   "infoTitle": "{info, select, id{App ID} description{About} name{Name} publisher{Publisher} publisherUrl{Publisher URL} publisherSupportUrl{Support} version{Version}  availableVersion{Available} tags{Tags} releaseNotes{Release Notes} releaseNotesUrl{Show Online} installer{Installer} source{Source} website{Website} license{License} licenseUrl{License} copyright{Copyright} copyrightUrl{Copyright} privacyUrl{Privacy} buyUrl{Buy} termsOfTransaction{Terms of Transaction} seizureWarning{Seizure Warning} storeLicenseTerms{Store License Terms} author{Author} moniker{Moniker} documentation{Documentation} agreement{Agreement} category{Category} pricing{Pricing} freeTrial{Free Trial} ageRating{Age Rating} installerType{Installer Type} storeProductID{Store Product ID} installerURL{Download Installer Manually} sha256Installer{SHA256 Installer} installerLocale{Locale} releaseDate{Release Date} other{NotFoundError}}",
 
   "details": "Details",
-  "fromSource": "from"
+  "fromSource": "from {source}"
 }

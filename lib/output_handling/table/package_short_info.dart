@@ -76,7 +76,8 @@ class PackageShortInfo extends StatelessWidget {
         ),
         if (infos.details.hasInfo(Info.source, locale))
           Text(
-            "from ${infos.details[Info.source.key(locale)]!}",
+            locale.fromSource(infos.details[Info.source.key(locale)]!),
+            //"from ${infos.details[Info.source.key(locale)]!}",
             style: TextStyle(
               color: FluentTheme.of(context).disabledColor,
             ),
