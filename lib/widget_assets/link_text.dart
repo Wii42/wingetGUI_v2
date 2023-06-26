@@ -1,6 +1,7 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LinkText extends StatelessWidget {
   static const int maxValue = -1 >>> 1;
@@ -13,14 +14,15 @@ class LinkText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     //FluentThemeData theme = FluentTheme.of(context);
     //return Expander(header: Linkable(text: line,textColor: theme.activeColor, maxLines: 1,), content: Linkable(text: line, textColor: theme.activeColor),);
     return ExpandableText(
       line,
       style: style,
       linkEllipsis: false,
-      expandText: 'show more',
-      collapseText: 'show less',
+      expandText: locale.showMore,
+      collapseText: locale.showLess,
       maxLines: maxLines,
       animation: true,
       linkColor: FluentTheme.of(context).accentColor,
