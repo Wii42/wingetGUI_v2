@@ -15,5 +15,6 @@
   "details": "Details",
   "fromSource": "from {source}",
 
-  "packageLongInfoIdentifier": "Gefunden"
+  "packageLongInfoIdentifier": "Gefunden",
+  "showInStore": "Show in Store"
 }
