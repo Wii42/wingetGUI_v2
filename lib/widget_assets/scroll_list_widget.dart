@@ -13,15 +13,14 @@ class ScrollListWidget extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       children: [
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          if (title != null) ...[
-            Text(
-              title!,
-              style: FluentTheme.of(context).typography.title,
+          if (title != null)
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                title!,
+                style: FluentTheme.of(context).typography.title,
+              ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-          ],
           ...listElements
         ])
       ],
