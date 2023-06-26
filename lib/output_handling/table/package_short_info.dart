@@ -11,6 +11,8 @@ import '../infos.dart';
 class PackageShortInfo extends StatelessWidget {
   final Infos infos;
 
+  final MainAxisAlignment columnAlign = MainAxisAlignment.center;
+
   const PackageShortInfo(this.infos, {super.key});
 
   @override
@@ -29,7 +31,7 @@ class PackageShortInfo extends StatelessWidget {
           : null,
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: _shortInfo(context),
+        child: SizedBox(height: 90, child: _shortInfo(context)),
       ),
     );
     //return ;
@@ -39,17 +41,20 @@ class PackageShortInfo extends StatelessWidget {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
           child: _leftSide(context),
         ),
         Column(
+          mainAxisAlignment: columnAlign,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: _versions([Info.version, Info.availableVersion], locale),
         ),
         if (isClickable(locale)) ...[
           const SizedBox(width: 20),
-          RightSideButtons(infos: infos.details)
+          RightSideButtons(
+              infos: infos.details, alignment: MainAxisAlignment.spaceEvenly)
         ],
       ],
     );
@@ -59,29 +64,27 @@ class PackageShortInfo extends StatelessWidget {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: columnAlign,
       children: [
         Text(
           infos.details[Info.name.key(locale)]!,
           style: _titleStyle(context),
-          softWrap: true,
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
-          maxLines: 2,
         ),
         Text(
           infos.details[Info.id.key(locale)]!,
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
-          maxLines: 2,
         ),
         if (infos.details.hasInfo(Info.source, locale))
           Text(
             locale.fromSource(infos.details[Info.source.key(locale)]!),
-            //"from ${infos.details[Info.source.key(locale)]!}",
             style: TextStyle(
               color: FluentTheme.of(context).disabledColor,
             ),
             textAlign: TextAlign.start,
+            overflow: TextOverflow.ellipsis,
           )
       ],
     );

@@ -76,7 +76,8 @@ class MainPageState extends State<MainPage> {
       onSubmitted: (String command) {
         setState(
           () {
-            contentHolder!.content.showResultOfCommand(command.split(' '));
+            contentHolder!.content
+                .showResultOfCommand(command.split(' '), title: "'$command'");
             controller.clear();
             topIndex = null;
           },

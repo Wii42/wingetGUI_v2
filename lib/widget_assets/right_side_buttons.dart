@@ -8,8 +8,12 @@ import 'command_button.dart';
 
 class RightSideButtons extends StatelessWidget {
   final Map<String, String> infos;
+  final MainAxisAlignment alignment;
 
-  const RightSideButtons({required this.infos, super.key});
+  const RightSideButtons(
+      {required this.infos,
+      super.key,
+      this.alignment = MainAxisAlignment.center});
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +23,7 @@ class RightSideButtons extends StatelessWidget {
   Widget buttons(List<Winget> commands, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Column(
+      mainAxisAlignment: alignment,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         for (Winget winget in commands) createButton(winget, locale),
