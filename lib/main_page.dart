@@ -37,7 +37,7 @@ class MainPageState extends State<MainPage> {
         ],
         footerItems: [
           ...createNavItems(
-            [Winget.about, Winget.sources, Winget.help, Winget.settings],
+            [Winget.about, Winget.help, Winget.sources, Winget.settings],
             local,
           )
         ],

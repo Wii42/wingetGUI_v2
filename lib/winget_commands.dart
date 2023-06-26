@@ -16,7 +16,7 @@ enum Winget {
     icon: FluentIcons.search,
   ),
   settings(command: ['settings'], icon: FluentIcons.settings),
-  sources(command: ['source'], icon: FluentIcons.database_source),
+  sources(command: ['source', 'list'], icon: FluentIcons.database_source),
   install(command: ['install'], icon: FluentIcons.installation),
   upgrade(command: ['upgrade'], icon: FluentIcons.substitutions_in),
   uninstall(command: ['uninstall'], icon: FluentIcons.delete),
@@ -26,6 +26,14 @@ enum Winget {
   final IconData? icon;
 
   const Winget({required this.command, this.icon});
+
+  String title(AppLocalizations local) {
+    String title = local.wingetTitle(name);
+    if (title == notFoundError) {
+      throw Exception(title);
+    }
+    return title;
+  }
 
   String titleWithInput(String input,
       {required AppLocalizations localization}) {
@@ -37,13 +45,5 @@ enum Winget {
       prefix = title(localization);
     }
     return "$prefix '$input'";
-  }
-
-  String title(AppLocalizations local) {
-    String title = local.wingetTitle(name);
-    if (title == notFoundError) {
-      throw Exception(title);
-    }
-    return title;
   }
 }
