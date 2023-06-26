@@ -11,8 +11,4 @@ class LoadingBarPart extends OutputPart {
     }
     return Text(lines.last.trim());
   }
-
-  addLine(String line) {
-    lines.add(line);
-  }
 }

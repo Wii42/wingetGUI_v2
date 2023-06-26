@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/plain_text/plain_text_part.dart';
 
 import '../responsibility.dart';
@@ -7,7 +8,7 @@ class PlainTextScanner extends Scanner {
   PlainTextScanner(super.respList);
 
   @override
-  void markResponsibleLines() {
+  void markResponsibleLines(BuildContext context) {
     PlainTextPart? prevPart;
     bool isSamePart = false;
     for (Responsibility resp in respList) {

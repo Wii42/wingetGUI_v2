@@ -23,8 +23,4 @@ class PlainTextPart extends OutputPart {
       ),
     );
   }
-
-  addLine(String line) {
-    lines.add(line);
-  }
 }

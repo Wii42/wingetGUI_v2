@@ -37,9 +37,9 @@ class OutputHandler {
     ];
   }
 
-  determineResponsibility() {
+  determineResponsibility(BuildContext context) {
     for (Scanner scanner in outputScanners) {
-      scanner.markResponsibleLines();
+      scanner.markResponsibleLines(context);
     }
   }
 

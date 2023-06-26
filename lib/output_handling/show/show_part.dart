@@ -94,8 +94,4 @@ class ShowPart extends OutputPart {
     }
     return infos;
   }
-
-  addLine(String line) {
-    lines.add(line);
-  }
 }

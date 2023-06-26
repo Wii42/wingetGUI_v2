@@ -20,21 +20,6 @@ class ListWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('$title:', style: typography.bodyStrong),
-            //Table(
-            //  children: [
-            //    for (String key in list.keys)
-            //      TableRow(children: [
-            //        Text(
-            //          key,
-            //          style: typography.bodyStrong,
-            //        ),
-            //        Text(list[key]!)
-            //      ].withSpaceBetween(width: 10, height: 30))
-            //  ],
-            //  defaultColumnWidth: const IntrinsicColumnWidth(),
-            //),
-
-            //GridView.extent(maxCrossAxisExtent: 200, shrinkWrap: true, children: [
             for (String key in list.keys)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +31,6 @@ class ListWidget extends StatelessWidget {
                   if (list[key]!.isNotEmpty) LinkText(line: list[key]!)
                 ],
               )
-            //])
           ].withSpaceBetween(height: 15),
         ),
       ),

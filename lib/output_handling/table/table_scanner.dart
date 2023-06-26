@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/table_part.dart';
 
@@ -9,10 +10,10 @@ class TableScanner extends Scanner {
   TableScanner(super.respList);
 
   @override
-  void markResponsibleLines() {
+  void markResponsibleLines(BuildContext context) {
     if (hasTable()) {
       _makeTable();
-      markResponsibleLines();
+      markResponsibleLines(context);
     }
   }
 

@@ -57,7 +57,7 @@ class OutputPane extends StatelessWidget {
       List<String> output, BuildContext context) async {
     OutputHandler handler = OutputHandler(output,
         command: command, prevCommand: getPrevCommand(context));
-    handler.determineResponsibility();
+    handler.determineResponsibility(context);
     return handler.displayOutput(context);
   }
 

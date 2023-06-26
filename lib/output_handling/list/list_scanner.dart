@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/list/list_part.dart';
 import 'package:winget_gui/output_handling/output_part.dart';
 import 'package:winget_gui/output_handling/responsibility.dart';
@@ -7,13 +8,13 @@ class ListScanner extends Scanner {
   ListScanner(super.respList);
 
   @override
-  void markResponsibleLines() {
+  void markResponsibleLines(BuildContext context) {
     if (hasList()) {
       int start = _findListStart();
       int end = _findListEnd(start);
       _markLines(start, end);
 
-      markResponsibleLines();
+      markResponsibleLines(context);
     }
   }
 

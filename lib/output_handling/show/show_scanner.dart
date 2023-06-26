@@ -1,5 +1,7 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/scanner.dart';
 import 'package:winget_gui/output_handling/show/show_part.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShowScanner extends Scanner {
   List<String> command;
@@ -8,11 +10,12 @@ class ShowScanner extends Scanner {
   ShowScanner(super.respList, {required this.command, this.prevCommand});
 
   @override
-  void markResponsibleLines() {
+  void markResponsibleLines(BuildContext context) {
     if (respList.isEmpty || command.isEmpty) {
       return;
     }
-    int identifierPos = _findIdentifier();
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    int identifierPos = _findIdentifier(locale);
     if (identifierPos > -1) {
       ShowPart showPart = ShowPart([]);
       for (int i = identifierPos; i < respList.length; i++) {
@@ -25,21 +28,21 @@ class ShowScanner extends Scanner {
     }
   }
 
-  int _findIdentifier() {
+  int _findIdentifier(AppLocalizations locale) {
     for (int i = 0; i < respList.length; i++) {
       if (!respList[i].isHandled() &&
-              (_isIdentifier(respList[i].line, command)) ||
+              (_isIdentifier(respList[i].line, command, locale)) ||
           (prevCommand != null &&
-              _isIdentifier(respList[i].line, prevCommand!))) {
+              _isIdentifier(respList[i].line, prevCommand!, locale))) {
         return i;
       }
     }
     return -1;
   }
 
-  bool _isIdentifier(String line, List<String> command) {
+  bool _isIdentifier(String line, List<String> command, AppLocalizations locale) {
     line = line.trim();
-    if (!line.startsWith('Gefunden')) {
+    if (!line.startsWith(locale.packageLongInfoIdentifier)) {
       return false;
     }
     line = line.toLowerCase();

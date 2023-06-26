@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_part.dart';
 import 'package:winget_gui/output_handling/responsibility.dart';
 import 'package:winget_gui/output_handling/scanner.dart';
@@ -11,7 +12,7 @@ class OneLineInfoScanner extends Scanner {
   OneLineInfoScanner(super.respList);
 
   @override
-  void markResponsibleLines() {
+  void markResponsibleLines(BuildContext context) {
     OutputPart? prevPart;
     bool isSamePart = false;
     for (Responsibility resp in respList) {

@@ -23,13 +23,14 @@ abstract class Compartment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBoxWrap(
-        child: Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: buildCompartment(context),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: buildCompartment(context),
+        ),
       ),
-    ));
+    );
   }
 
   Wrap wrapInWrap({required String title, required Widget body}) {

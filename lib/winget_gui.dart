@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// 'package:system_theme/system_theme.dart';
+// import 'package:system_theme/system_theme.dart';
 
 import 'main_page.dart';
 
@@ -27,7 +27,7 @@ class WingetGui extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      //supportedLocales: [Locale("en")],
+      //supportedLocales: const [Locale("en")],
       home: const MainPage(title: "WingetGUI"),
     );
   }
