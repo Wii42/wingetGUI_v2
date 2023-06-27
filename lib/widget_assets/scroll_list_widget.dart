@@ -7,23 +7,36 @@ class ScrollListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(10),
-      children: [
-        Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 1200),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           if (title != null)
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(15),
               child: Text(
                 title!,
                 style: FluentTheme.of(context).typography.title,
               ),
             ),
-          ...listElements
-        ])
-      ],
+          Expanded(
+            child: Center(
+              child: ListView(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(10),
+                shrinkWrap: true,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: listElements,
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
