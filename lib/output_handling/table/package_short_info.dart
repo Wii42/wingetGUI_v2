@@ -54,7 +54,10 @@ class PackageShortInfo extends StatelessWidget {
         if (isClickable(locale)) ...[
           const SizedBox(width: 20),
           RightSideButtons(
-              infos: infos.details, alignment: MainAxisAlignment.spaceEvenly)
+            infos: infos.details,
+            alignment: columnAlign,
+            upgrade: infos.details.hasInfo(Info.availableVersion, locale),
+          )
         ],
       ],
     );

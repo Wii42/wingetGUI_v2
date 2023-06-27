@@ -9,15 +9,23 @@ import 'command_button.dart';
 class RightSideButtons extends StatelessWidget {
   final Map<String, String> infos;
   final MainAxisAlignment alignment;
+  final bool install, upgrade, uninstall;
 
   const RightSideButtons(
       {required this.infos,
       super.key,
-      this.alignment = MainAxisAlignment.center});
+      this.alignment = MainAxisAlignment.center,
+      this.install = true,
+      this.upgrade = true,
+      this.uninstall = true});
 
   @override
   Widget build(BuildContext context) {
-    return buttons([Winget.install, Winget.upgrade, Winget.uninstall], context);
+    return buttons([
+      if (install) Winget.install,
+      if (upgrade) Winget.upgrade,
+      if (uninstall) Winget.uninstall
+    ], context);
   }
 
   Widget buttons(List<Winget> commands, BuildContext context) {
