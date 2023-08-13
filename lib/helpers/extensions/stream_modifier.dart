@@ -23,9 +23,26 @@ extension StringStreamModifier on Stream<String> {
   Stream<String> removeLoadingElementsFromStream() {
     final controller = StreamController<String>();
 
+
     listen((newData) {
       if (!newData.isLoadingSymbols()) {
         controller.add(newData);
+      }
+    }, onDone: () {
+      controller.close();
+    });
+
+    return controller.stream;
+  }
+
+  Stream<String> removeLeadingEmptyStringsFromStream() {
+    final controller = StreamController<String>();
+
+bool isFirstData = true;
+    listen((newData) {
+      if (newData.isNotEmpty || !isFirstData) {
+        controller.add(newData);
+        isFirstData = false;
       }
     }, onDone: () {
       controller.close();

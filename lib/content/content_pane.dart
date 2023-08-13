@@ -106,6 +106,7 @@ class _ContentPaneState extends State<ContentPane> {
     return stream
         .splitStreamElementsOnNewLine()
         .removeLoadingElementsFromStream()
+        .removeLeadingEmptyStringsFromStream()
         .rememberingStream();
   }
 

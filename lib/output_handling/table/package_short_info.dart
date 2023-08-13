@@ -86,7 +86,7 @@ class PackageShortInfo extends StatelessWidget {
           Text(
             locale.fromSource(infos.details[Info.source.key(locale)]!),
             style: TextStyle(
-              color: FluentTheme.of(context).disabledColor,
+              color: FluentTheme.of(context).inactiveColor,
             ),
             textAlign: TextAlign.start,
             overflow: TextOverflow.ellipsis,
@@ -99,7 +99,7 @@ class PackageShortInfo extends StatelessWidget {
     AppLocalizations locale = AppLocalizations.of(context)!;
     TextStyle? style = FluentTheme.of(context).typography.title;
     if (!isClickable(locale)) {
-      style = style?.apply(color: FluentTheme.of(context).disabledColor);
+      style = style?.apply(color: FluentTheme.of(context).inactiveColor);
     }
     return style;
   }

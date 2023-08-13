@@ -35,7 +35,7 @@ class HistoryEntry extends StatelessWidget {
               Text(
                 'winget ${snapshot.command.join(' ')}',
                 textAlign: TextAlign.start,
-                style: TextStyle(color: theme.disabledColor),
+                style: TextStyle(color: theme.inactiveColor),
               ),
             ],
           ),
