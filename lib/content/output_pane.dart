@@ -20,6 +20,7 @@ class OutputPane extends StatelessWidget {
       stream: stream,
       builder:
           (BuildContext context, AsyncSnapshot<List<String>> streamSnapshot) {
+        if(streamSnapshot.hasData)print(streamSnapshot.data);
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

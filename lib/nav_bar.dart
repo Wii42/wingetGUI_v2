@@ -12,38 +12,38 @@ class NavBar {
 
   NavigationAppBar build() {
     return NavigationAppBar(
-        leading: _reloadAppBarButton(icon: FluentIcons.back, goBack: true),
-        title: Text(
-          mainPageState.widget.title,
-          style: FluentTheme.of(context).typography.body,
-        ),
-        actions: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return SizedBox(
-              height: constraints.maxHeight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    width: 200,
-                  ),
-                  SizedBox(
-                    width: constraints.maxWidth / 3,
-                    child: _searchField(
-                        Winget.search, AppLocalizations.of(context)!),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.symmetric(horizontal: 10),
-                    child:
-                        _reloadAppBarButton(icon: FluentIcons.update_restore),
-                  )
-                ],
-              ),
-            );
-          },
-        ));
+      leading: _reloadAppBarButton(icon: FluentIcons.back, goBack: true),
+      title: Text(
+        mainPageState.widget.title,
+        style: FluentTheme.of(context).typography.body,
+      ),
+      actions: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return SizedBox(
+            height: constraints.maxHeight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  width: 200,
+                ),
+                SizedBox(
+                  width: constraints.maxWidth / 3,
+                  child: _searchField(
+                      Winget.search, AppLocalizations.of(context)!),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsetsDirectional.symmetric(horizontal: 10),
+                  child: _reloadAppBarButton(icon: FluentIcons.update_restore),
+                )
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   TextBox _searchField(Winget winget, AppLocalizations local) {

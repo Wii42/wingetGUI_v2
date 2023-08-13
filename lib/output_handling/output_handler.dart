@@ -27,7 +27,7 @@ class OutputHandler {
     responsibilityList = [for (String line in output) Responsibility(line)];
 
     outputScanners = [
-      TableScanner(responsibilityList),
+      TableScanner(responsibilityList, command: command),
       LoadingBarScanner(responsibilityList),
       ShowScanner(responsibilityList,
           command: command, prevCommand: prevCommand),

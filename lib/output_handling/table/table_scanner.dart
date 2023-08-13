@@ -7,7 +7,10 @@ import '../responsibility.dart';
 import '../scanner.dart';
 
 class TableScanner extends Scanner {
-  TableScanner(super.respList);
+
+  final List<String> command;
+
+  TableScanner(super.respList, {required this.command});
 
   @override
   void markResponsibleLines(BuildContext context) {
@@ -50,7 +53,7 @@ class TableScanner extends Scanner {
       List<String> tableLines = [
         for (int i = tableStart; i <= tableEnd; i++) respList[i].line
       ];
-      _markLines(tableStart, tableEnd, TablePart(tableLines));
+      _markLines(tableStart, tableEnd, TablePart(tableLines, command: command));
     }
   }
 

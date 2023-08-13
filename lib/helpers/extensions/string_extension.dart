@@ -6,10 +6,11 @@ extension ContainsExtentsion on String {
       return false;
     }
 
-    String bs = String.fromCharCode(8);
-    List<String> spinning = ['$bs-', '$bs\\', '$bs/', '$bs|', bs];
+    String bs = String.fromCharCode(32);
+    String bs2 = String.fromCharCode(8);
 
-    return (spinning.contains(trim()));
+    return (contains(RegExp('^[$bs$bs2-\\/|]+\$')) || contains('\\')) &&
+        !contains(RegExp(r'-{2,}'));
   }
 
   bool containsNonWesternGlyphs() {
@@ -35,8 +36,7 @@ bool isLink(String? text) {
     return false;
   }
   return (validator.isURL(text) ||
-      (text.startsWith('ms-windows-store://') &&
-          !text.trim().contains(' ')) ||
+      (text.startsWith('ms-windows-store://') && !text.trim().contains(' ')) ||
       (text.startsWith('mailto:') && !text.contains(' ')) &&
           text.contains('@'));
 }

@@ -10,17 +10,19 @@ import '../infos.dart';
 import '../output_part.dart';
 
 class TablePart extends OutputPart {
-  TablePart(super.lines);
+  TablePart(super.lines, {required this.command});
+
+  List<String> command;
 
   late PackageList packageList;
 
   @override
-  Future<Widget?> representation(BuildContext context) async{
+  Future<Widget?> representation(BuildContext context) async {
     packageList = await Isolate.run<PackageList>(_makeTable);
     return packageList;
   }
 
-   PackageList _makeTable() {
+  PackageList _makeTable() {
     List<int> columnsPos = _getColumnsPos();
     _correctLinesWithNonWesternGlyphs(columnsPos);
     return _createPackageList(columnsPos);
@@ -42,7 +44,7 @@ class TablePart extends OutputPart {
       if (test) {
         Pattern pattern = RegExp("[ ]{2}[A-ZÄÖÜa-zäöü0-9]");
         Iterable<Match> matches = pattern.allMatches(line);
-        if(matches.isEmpty){
+        if (matches.isEmpty) {
           return;
         }
         Match match = matches.first;
@@ -69,9 +71,14 @@ class TablePart extends OutputPart {
     for (String entry in body) {
       Map<String, String> infos =
           _getDictFromLine(entry, columnNames, columnsPos);
-      packages.add(PackageShortInfo(Infos(details: infos)));
+      packages.add(
+        PackageShortInfo(
+          Infos(details: infos),
+          command: command,
+        ),
+      );
     }
-    return PackageList(packages);
+    return PackageList(packages, command: command);
   }
 
   Map<String, String> _getDictFromLine(
@@ -79,8 +86,9 @@ class TablePart extends OutputPart {
     Map<String, String> infos = {};
     for (int i = 0; i < columnNames.length; i++) {
       int end = i + 1 < columnNames.length ? columnsPos[i + 1] : entry.length;
-      infos[columnNames[i]] =
-          (entry.substring(min(columnsPos[i], entry.length), min(end, entry.length))).trim();
+      infos[columnNames[i]] = (entry.substring(
+              min(columnsPos[i], entry.length), min(end, entry.length)))
+          .trim();
     }
     return infos;
   }

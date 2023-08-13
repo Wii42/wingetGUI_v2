@@ -10,10 +10,11 @@ import '../infos.dart';
 
 class PackageShortInfo extends StatelessWidget {
   final Infos infos;
+  final List<String> command;
 
   final MainAxisAlignment columnAlign = MainAxisAlignment.center;
 
-  const PackageShortInfo(this.infos, {super.key});
+  const PackageShortInfo(this.infos, {super.key, required this.command});
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +58,7 @@ class PackageShortInfo extends StatelessWidget {
             infos: infos.details,
             alignment: columnAlign,
             upgrade: infos.details.hasInfo(Info.availableVersion, locale),
+            install: !(command[0] == 'upgrade' || command[0] == 'list'),
           )
         ],
       ],
