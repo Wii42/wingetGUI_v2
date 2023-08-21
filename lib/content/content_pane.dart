@@ -7,6 +7,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/content/output_pane.dart';
 import 'package:winget_gui/helpers/extensions/stream_modifier.dart';
 import 'package:winget_gui/helpers/stack.dart';
+import 'package:winget_gui/winget_process.dart';
 
 import '../winget_commands.dart';
 import 'content_holder.dart';
@@ -58,7 +59,7 @@ class ContentPane extends StatefulWidget {
 
 class _ContentPaneState extends State<ContentPane> {
   String? title;
-  late Process _process;
+  late WingetProcess _process;
   bool _goBack = false;
 
   @override
@@ -85,11 +86,12 @@ class _ContentPaneState extends State<ContentPane> {
       builder: (BuildContext context,
           AsyncSnapshot<Stream<List<String>>> processSnapshot) {
         if (processSnapshot.hasData) {
-          return OutputPane(
-            stream: processSnapshot.data!,
-            command: widget.command,
-            title: widget._title,
-          );
+          return Text('');
+          //return OutputPane(
+          //  stream: processSnapshot.data!,
+          //  command: widget.command,
+          //  title: widget._title,
+          //);
         } else if (processSnapshot.hasError) {
           return Text('Error: ${processSnapshot.error}');
         } else {
@@ -100,14 +102,8 @@ class _ContentPaneState extends State<ContentPane> {
   }
 
   Future<Stream<List<String>>> getOutputStreamOfProcess() async {
-    _process = await Process.start(winget, widget.command);
-    Stream<String> stream = _process.stdout.transform(utf8.decoder);
-
-    return stream
-        .splitStreamElementsOnNewLine()
-        .removeLoadingElementsFromStream()
-        .removeLeadingEmptyStringsFromStream()
-        .rememberingStream();
+    _process = await WingetProcess.startProcess(widget.command);
+    return _process.outputStream;
   }
 
   _loadPreviousStateFromStack() {

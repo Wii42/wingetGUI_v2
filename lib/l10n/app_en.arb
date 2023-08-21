@@ -18,5 +18,8 @@
   "packageLongInfoIdentifier": "Gefunden",
   "showInStore": "Show in Store",
   "showMore": "show more",
-  "showLess": "show less"
+  "showLess": "show less",
+
+
+  "endProcess": "End Current Process"
 }

@@ -18,5 +18,7 @@
   "packageLongInfoIdentifier": "Gefunden",
   "showInStore": "Im Store anzeigen",
   "showMore": "mehr anzeigen",
-  "showLess": "weniger anzeigen"
+  "showLess": "weniger anzeigen",
+
+  "endProcess": "Laufenden Prozess beenden"
 }

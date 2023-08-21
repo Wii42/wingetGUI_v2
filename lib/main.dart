@@ -1,27 +1,32 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
+import 'package:go_router/go_router.dart';
 // import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:winget_gui/content/output_pane.dart';
+import 'package:winget_gui/content/process_starter.dart';
+import 'package:winget_gui/main_navigation.dart';
+import 'package:winget_gui/winget_commands.dart';
 
 import 'main_page.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await flutter_acrylic.Window.initialize();
   await WindowManager.instance.ensureInitialized();
   windowManager.waitUntilReadyToShow().then((_) async {
     await windowManager.setMinimumSize(const Size(400, 500));
   });
-  runApp(const WingetGui());
+  runApp(WingetGui());
 }
 
 class WingetGui extends StatelessWidget {
-  const WingetGui({super.key});
+  WingetGui({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return FluentApp(
+    return FluentApp.router(
       title: 'WingetGUI',
       theme: FluentThemeData(
         //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
@@ -35,8 +40,34 @@ class WingetGui extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      routerConfig: router,
       //supportedLocales: const [Locale("en")],
-      home: const Acrylic(child: MainPage(title: "WingetGUI")),
     );
   }
+
+  final GoRouter router = GoRouter(
+    routes: [
+      ShellRoute(
+        routes: [
+          for (Winget winget in Winget.values)
+            GoRoute(
+              path: winget.route,
+              builder: (context, state) {
+                return ProcessStarter(
+                  command: winget.command,
+                  winget: winget,
+                );
+              },
+            ),
+        ],
+        builder: (context, state, widget) {
+          return MainNavigation(
+            title: '',
+            child: widget,
+          );
+        },
+      ),
+    ],
+    initialLocation: Winget.help.route,
+  );
 }
