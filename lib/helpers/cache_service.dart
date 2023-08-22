@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheService {
@@ -20,10 +21,14 @@ class CacheService {
     SharedPreferences.getInstance().then((value) {
       _prefs = value;
       completer.complete(true);
-      print('initialized');
+      if (kDebugMode) {
+        print('initialized');
+      }
     });
     _initialized = true;
-    print('initialized2');
+    if (kDebugMode) {
+      print('initialized2');
+    }
   }
 
   set installed(List<String> installed) {

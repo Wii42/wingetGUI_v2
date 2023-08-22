@@ -2,13 +2,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:go_router/go_router.dart';
-// import 'package:system_theme/system_theme.dart';
+ import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/content/process_starter.dart';
 import 'package:winget_gui/main_navigation.dart';
 import 'package:winget_gui/winget_commands.dart';
-
-import 'main_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,11 +26,11 @@ class WingetGui extends StatelessWidget {
     return FluentApp(
       title: 'WingetGUI',
       theme: FluentThemeData(
-        //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
+        accentColor: SystemTheme.accentColor.accent.toAccentColor(),
         brightness: Brightness.light,
       ),
       darkTheme: FluentThemeData(
-        //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
+        accentColor: SystemTheme.accentColor.accent.toAccentColor(),
         brightness: Brightness.dark,
       ),
       themeMode: ThemeMode.system,

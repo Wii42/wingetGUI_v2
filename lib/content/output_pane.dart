@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,7 +22,9 @@ class OutputPane extends StatelessWidget {
       builder:
           (BuildContext context, AsyncSnapshot<List<String>> streamSnapshot) {
         if (streamSnapshot.hasData) {
-          print(streamSnapshot.data);
+          if (kDebugMode) {
+            print(streamSnapshot.data);
+          }
         }
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
