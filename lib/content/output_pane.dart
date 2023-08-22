@@ -1,12 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../helpers/stack.dart';
 import '../output_handling/output_handler.dart';
+import '../widget_assets/full_width_progress_bar.dart';
 import '../winget_process.dart';
-import 'content_holder.dart';
-import 'content_snapshot.dart';
 
 class OutputPane extends StatelessWidget {
   final WingetProcess process;
@@ -29,24 +28,44 @@ class OutputPane extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (streamSnapshot.connectionState != ConnectionState.done)
-              _progressBar(),
-            if (title != null)
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: Text(
-                  title!,
-                  style: FluentTheme.of(context).typography.title,
-                ),
+              const FullWidthProgressbar(),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).maybePop();
+                      },
+                      icon: const Icon(FluentIcons.back)),
+                  if (title != null)
+                    Expanded(
+                      child: Text(
+                        title!,
+                        style: FluentTheme.of(context).typography.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  IconButton(
+                    onPressed: () async {
+                      NavigatorState navigator = Navigator.of(context);
+                      WingetProcess newProcess = await process.clone();
+
+                      navigator.pushReplacement(FluentPageRoute(
+                          builder: (_) => OutputPane(process: newProcess, title: title,)));
+                    },
+                    icon: const Icon(FluentIcons.update_restore),
+                  )
+                ].withSpaceBetween(width: 10),
               ),
+            ),
             if (streamSnapshot.hasData)
               FutureBuilder<List<Widget>>(
                 future: _displayOutput(streamSnapshot.data!, context),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    //if (streamSnapshot.connectionState ==
-                    //    ConnectionState.done) {
-                    //  _pushCurrentStateToStack(snapshot.data!, context);
-                    //}
                     return Expanded(
                       child: ScrollListWidget(
                         listElements: snapshot.data!,
@@ -56,8 +75,18 @@ class OutputPane extends StatelessWidget {
                   if (snapshot.hasError) {
                     return Text(snapshot.error.toString());
                   }
-                  return _progressBar();
+                  return const Center(child: ProgressRing());
                 },
+              ),
+            if (streamSnapshot.hasError)
+              Center(child: Text(streamSnapshot.error.toString())),
+            if (!(streamSnapshot.hasData ||
+                streamSnapshot.hasError ||
+                streamSnapshot.connectionState != ConnectionState.done))
+              const Expanded(
+                child: Center(
+                  child: Text('waiting on data...'),
+                ),
               ),
             if (streamSnapshot.connectionState != ConnectionState.done)
               Padding(
@@ -78,42 +107,4 @@ class OutputPane extends StatelessWidget {
     handler.determineResponsibility(context);
     return handler.displayOutput(context);
   }
-
-  Widget _progressBar() {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        return SizedBox(
-          height: 0,
-          width: constraints.maxWidth,
-          child: const ProgressBar(),
-        );
-      },
-    );
-  }
-
-  //_pushCurrentStateToStack(List<Widget> widgets, BuildContext context) {
-  //  ListStack<ContentSnapshot> stack = ContentHolder.of(context).stack;
-  //  ContentSnapshot snapshot = ContentSnapshot(
-  //      command: process.command,
-  //      widgets: widgets,
-  //      title: title ?? process.command.join(' '));
-  //
-  //  if (stack.isNotEmpty && stack.peek().command == snapshot.command) {
-  //    stack.pop();
-  //  }
-  //  stack.push(snapshot);
-  //}
-
-  //List<String>? getPrevCommand(BuildContext context) {
-  //  ListStack<ContentSnapshot> stack = ContentHolder.of(context).stack;
-  //  if (stack.isNotEmpty) {
-  //    if (process.command != stack.peek().command) {
-  //      return stack.peek().command;
-  //    }
-  //    if (stack.hasPeekUnder) {
-  //      return stack.peekUnder().command;
-  //    }
-  //  }
-  //  return null;
-  //}
 }

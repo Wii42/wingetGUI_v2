@@ -102,7 +102,7 @@ class _ContentPaneState extends State<ContentPane> {
   }
 
   Future<Stream<List<String>>> getOutputStreamOfProcess() async {
-    _process = await WingetProcess.startProcess(widget.command);
+    _process = await WingetProcess.runCommand(widget.command);
     return _process.outputStream;
   }
 

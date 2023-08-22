@@ -1,10 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/content/content_holder.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/history_entry.dart';
 import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'content/content_holder.dart';
 import 'content/content_snapshot.dart';
 
 class HistoryTab extends PaneItem {

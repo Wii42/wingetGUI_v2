@@ -1,13 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:go_router/go_router.dart';
 import 'package:winget_gui/content/output_pane.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../content/content_holder.dart';
-import '../../content/content_pane.dart';
-import '../../winget_commands.dart';
 import '../../winget_process.dart';
 import '../info_enum.dart';
 import '../infos.dart';
@@ -25,18 +21,9 @@ class PackageShortInfo extends StatelessWidget {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Button(
       onPressed: (isClickable(locale))
-          ? () async {
-              NavigatorState router = Navigator.of(context);
-              WingetProcess process = await WingetProcess.startProcess(
-                ['show', '--id', infos.details[Info.id.key(locale)]!],
-              );
-              router.push(FluentPageRoute(builder: (_)=> OutputPane(process: process)) );
-
-              ContentPane? target = ContentHolder.maybeOf(context)?.content;
-              if (target != null && infos.details.hasInfo(Info.id, locale)) {
-                target.showResultOfCommand(
-                    ['show', '--id', infos.details[Info.id.key(locale)]!],
-                    title: infos.details[Info.name.key(locale)]);
+          ? () {
+              if (infos.details.hasInfo(Info.id, locale)) {
+                pushPackageDetails(context, locale, infos);
               }
             }
           : null,
@@ -46,6 +33,15 @@ class PackageShortInfo extends StatelessWidget {
       ),
     );
     //return ;
+  }
+
+  Future<void> pushPackageDetails(
+      BuildContext context, AppLocalizations locale, Infos infos) async {
+    NavigatorState router = Navigator.of(context);
+    String packageId = Info.id.key(locale);
+    List<String> command = ['show', '--id', infos.details[packageId]!];
+    WingetProcess process = await WingetProcess.runCommand(command);
+    router.push(FluentPageRoute(builder: (_) => OutputPane(process: process)));
   }
 
   Widget _shortInfo(BuildContext context) {

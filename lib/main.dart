@@ -4,7 +4,6 @@ import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:go_router/go_router.dart';
 // import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:winget_gui/content/output_pane.dart';
 import 'package:winget_gui/content/process_starter.dart';
 import 'package:winget_gui/main_navigation.dart';
 import 'package:winget_gui/winget_commands.dart';
@@ -26,7 +25,7 @@ class WingetGui extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FluentApp.router(
+    return FluentApp(
       title: 'WingetGUI',
       theme: FluentThemeData(
         //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
@@ -40,7 +39,8 @@ class WingetGui extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      routerConfig: router,
+      home: MainNavigation(title: "WingetGUI"),
+      //routerConfig: router,
       //supportedLocales: const [Locale("en")],
     );
   }
@@ -63,7 +63,7 @@ class WingetGui extends StatelessWidget {
         builder: (context, state, widget) {
           return MainNavigation(
             title: '',
-            child: widget,
+            //child: widget,
           );
         },
       ),
