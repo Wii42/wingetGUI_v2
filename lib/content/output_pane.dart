@@ -1,11 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_handling/output_handler.dart';
 import '../widget_assets/full_width_progress_bar.dart';
+import '../widget_assets/pane_item_body.dart';
 import '../winget_process.dart';
 
 class OutputPane extends StatelessWidget {
@@ -32,71 +32,51 @@ class OutputPane extends StatelessWidget {
           children: [
             if (streamSnapshot.connectionState != ConnectionState.done)
               const FullWidthProgressbar(),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.of(context).maybePop();
-                      },
-                      icon: const Icon(FluentIcons.back)),
-                  if (title != null)
-                    Expanded(
-                      child: Text(
-                        title!,
-                        style: FluentTheme.of(context).typography.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+            Expanded(
+              child: PaneItemBody(
+                title: title,
+                process: process,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    if (streamSnapshot.hasData)
+                      FutureBuilder<List<Widget>>(
+                        future: _displayOutput(streamSnapshot.data!, context),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Expanded(
+                              child: ScrollListWidget(
+                                listElements: snapshot.data!,
+                              ),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            return Text(snapshot.error.toString());
+                          }
+                          return const Center(child: ProgressRing());
+                        },
                       ),
-                    ),
-                  IconButton(
-                    onPressed: () async {
-                      NavigatorState navigator = Navigator.of(context);
-                      WingetProcess newProcess = await process.clone();
-
-                      navigator.pushReplacement(FluentPageRoute(
-                          builder: (_) => OutputPane(process: newProcess, title: title,)));
-                    },
-                    icon: const Icon(FluentIcons.update_restore),
-                  )
-                ].withSpaceBetween(width: 10),
-              ),
-            ),
-            if (streamSnapshot.hasData)
-              FutureBuilder<List<Widget>>(
-                future: _displayOutput(streamSnapshot.data!, context),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Expanded(
-                      child: ScrollListWidget(
-                        listElements: snapshot.data!,
+                    if (streamSnapshot.hasError)
+                      Center(child: Text(streamSnapshot.error.toString())),
+                    if (!(streamSnapshot.hasData ||
+                        streamSnapshot.hasError ||
+                        streamSnapshot.connectionState == ConnectionState.done))
+                      const Expanded(
+                        child: Center(
+                          child: Text('waiting on data...'),
+                        ),
                       ),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return Text(snapshot.error.toString());
-                  }
-                  return const Center(child: ProgressRing());
-                },
-              ),
-            if (streamSnapshot.hasError)
-              Center(child: Text(streamSnapshot.error.toString())),
-            if (!(streamSnapshot.hasData ||
-                streamSnapshot.hasError ||
-                streamSnapshot.connectionState != ConnectionState.done))
-              const Expanded(
-                child: Center(
-                  child: Text('waiting on data...'),
+                    if (streamSnapshot.connectionState != ConnectionState.done)
+                      Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Button(
+                              onPressed: process.process.kill,
+                              child: Text(locale.endProcess))),
+                  ],
                 ),
               ),
-            if (streamSnapshot.connectionState != ConnectionState.done)
-              Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Button(
-                      onPressed: process.process.kill,
-                      child: Text(locale.endProcess))),
+            ),
           ],
         );
       },

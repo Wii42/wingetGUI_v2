@@ -24,16 +24,13 @@ class ScrollListWidget extends StatelessWidget {
           ),
         Expanded(
           //child: Center(
-          child: ListView(
+          child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(10),
-            shrinkWrap: true,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: listElements,
-              )
-            ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: listElements,
+            ),
           ),
         ),
         //)

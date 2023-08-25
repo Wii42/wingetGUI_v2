@@ -2,18 +2,17 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:go_router/go_router.dart';
- import 'package:system_theme/system_theme.dart';
+import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:winget_gui/content/process_starter.dart';
 import 'package:winget_gui/main_navigation.dart';
-import 'package:winget_gui/winget_commands.dart';
+import 'package:winget_gui/routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await flutter_acrylic.Window.initialize();
   await WindowManager.instance.ensureInitialized();
   windowManager.waitUntilReadyToShow().then((_) async {
-    await windowManager.setMinimumSize(const Size(400, 500));
+    await windowManager.setMinimumSize(const Size(460, 300));
   });
   runApp(WingetGui());
 }
@@ -47,14 +46,11 @@ class WingetGui extends StatelessWidget {
     routes: [
       ShellRoute(
         routes: [
-          for (Winget winget in Winget.values)
+          for (Routes route in Routes.values)
             GoRoute(
-              path: winget.route,
+              path: route.route,
               builder: (context, state) {
-                return ProcessStarter(
-                  command: winget.command,
-                  winget: winget,
-                );
+                return route.buildPage();
               },
             ),
         ],
@@ -66,6 +62,6 @@ class WingetGui extends StatelessWidget {
         },
       ),
     ],
-    initialLocation: Winget.help.route,
+    initialLocation: Routes.help.route,
   );
 }

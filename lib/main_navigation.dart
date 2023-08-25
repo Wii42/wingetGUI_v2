@@ -1,36 +1,36 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'content/process_starter.dart';
 
 class MainNavigation extends StatefulWidget {
   MainNavigation({super.key, required this.title});
   final String title;
 
-  final List<Winget> mainItems = [Winget.updates, Winget.installed];
-  final List<Winget> footerItems = [
-    Winget.about,
-    Winget.help,
-    Winget.sources,
-    Winget.settings
+  final List<Routes> mainItems = [Routes.search, Routes.updates, Routes.installed];
+  final List<Routes> footerItems = [
+    Routes.about,
+    Routes.help,
+    Routes.sources,
+    Routes.settings
   ];
 
-  List<Winget> get allItems => [...mainItems, ...footerItems];
+  List<Routes> get allItems => [...mainItems, ...footerItems];
 
   @override
   State<MainNavigation> createState() => MainNavigationState();
 }
 
 class MainNavigationState extends State<MainNavigation> {
-  late Map<Winget, Navigator> navigators;
+  late Map<Routes, Navigator> navigators;
   int? topIndex = 0;
 
   @override
   void initState() {
     super.initState();
     navigators = {
-      for (Winget winget in widget.allItems) winget: navigator(winget)
+      for (Routes winget in widget.allItems) winget: navigator(winget)
     };
   }
 
@@ -44,13 +44,11 @@ class MainNavigationState extends State<MainNavigation> {
                 automaticallyImplyLeading: false, title: Text(widget.title))
             : null,
         pane: NavigationPane(
-          autoSuggestBox: _commandPrompt(),
-          autoSuggestBoxReplacement: const Icon(FluentIcons.command_prompt),
-          items: [
-            ...createNavItems(widget.mainItems),
-            //HistoryTab(contentHolder!, local),
-          ],
-          footerItems: [...createNavItems(widget.footerItems)],
+          //autoSuggestBox:
+          // _searchField(
+          //   Winget.search, AppLocalizations.of(context)!),
+          items: createNavItems(widget.mainItems),
+          footerItems: createNavItems(widget.footerItems),
           selected: topIndex,
           onChanged: (index) {
             setState(() => topIndex = index);
@@ -60,39 +58,36 @@ class MainNavigationState extends State<MainNavigation> {
     });
   }
 
-  List<PaneItem> createNavItems(List<Winget> commands) {
-    return [for (Winget winget in commands) _navButton(winget)];
+  PaneItemAction buildPaneItemAction() => PaneItemAction(
+      icon: const Icon(FluentIcons.add), title: const Text('hi'), onTap: () {});
+
+  List<PaneItem> createNavItems(List<Routes> commands) {
+    return [for (Routes winget in commands) _navButton(winget)];
   }
 
-  PaneItem _navButton(Winget winget) {
+  PaneItem _navButton(Routes route) {
     AppLocalizations local = AppLocalizations.of(context)!;
     return PaneItem(
-      title: Text(winget.title(local)),
-      icon: Icon(winget.icon),
-      body: navigators[winget] ?? notFoundMessage(),
+      title: Text(route.title(local)),
+      icon: Icon(route.icon),
+      body: navigators[route] ?? notFoundMessage(),
       //onTap: () => context.go(winget.route),
     );
   }
 
-  Navigator navigator(Winget winget) {
+  Navigator navigator(Routes winget) {
     return Navigator(
       initialRoute: winget.route,
-      onGenerateInitialRoutes: (_, __) => [
+      onGenerateInitialRoutes: (state, __) => [
         FluentPageRoute<dynamic>(builder: (context) {
-          return ProcessStarter(
-            command: winget.command,
-            winget: winget,
-          );
+          return winget.buildPage();
         })
       ],
       onGenerateRoute: (settings) {
         Widget? page;
-        for (Winget route in Winget.values) {
+        for (Routes route in Routes.values) {
           if (settings.name == route.route) {
-            page = ProcessStarter(
-              command: winget.command,
-              winget: winget,
-            );
+            page = winget.buildPage();
           }
         }
 
@@ -184,7 +179,7 @@ class MainNavigationState extends State<MainNavigation> {
       //    },
       //  );
       //},
-      prefix: prefixIcon(winget.icon),
+      //prefix: prefixIcon(winget.icon),
       placeholder: winget.title(local),
     );
   }

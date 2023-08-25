@@ -1,41 +1,26 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'content/process_starter.dart';
+
 const String notFoundError = "NotFoundError";
 
 enum Winget {
-  updates(
-      command: ['upgrade'],
-      icon: FluentIcons.substitutions_in,
-      route: '/updates'),
-  installed(command: ['list'], icon: FluentIcons.library, route: '/installed'),
-  about(command: ['--info'], icon: FluentIcons.info, route: '/about'),
-  help(command: ['--help'], icon: FluentIcons.help, route: '/help'),
-  search(
-      command: ['search', "-n", '200'],
-      icon: FluentIcons.search,
-      route: '/search'),
-  settings(
-      command: ['settings'], icon: FluentIcons.settings, route: '/settings'),
-  sources(
-      command: ['source', 'list'],
-      icon: FluentIcons.database_source,
-      route: '/sources'),
-  install(
-      command: ['install'], icon: FluentIcons.installation, route: '/install'),
-  upgrade(
-      command: ['upgrade'],
-      icon: FluentIcons.substitutions_in,
-      route: '/upgrade'),
-  uninstall(
-      command: ['uninstall'], icon: FluentIcons.delete, route: '/uninstall'),
-  show(command: ['show'], route: '/show');
+  updates(command: ['upgrade']),
+  installed(command: ['list']),
+  about(command: ['--info']),
+  help(command: ['--help']),
+  search(command: ['search', "-n", '200']),
+  settings(command: ['settings']),
+  sources(command: ['source', 'list']),
+  install(command: ['install']),
+  upgrade(command: ['upgrade']),
+  uninstall(command: ['uninstall']),
+  show(command: ['show']);
 
   final List<String> command;
-  final IconData? icon;
-  final String route;
 
-  const Winget({required this.command, this.icon, required this.route});
+  const Winget({required this.command});
 
   String title(AppLocalizations local) {
     String title = local.wingetTitle(name);
@@ -55,5 +40,12 @@ enum Winget {
       prefix = title(localization);
     }
     return "$prefix '$input'";
+  }
+
+  Widget processPage(List<String>? parameters) {
+    return ProcessStarter(
+      command: [...command, ...?parameters],
+      winget: this,
+    );
   }
 }
