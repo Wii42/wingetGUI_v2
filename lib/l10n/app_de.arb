@@ -3,7 +3,7 @@
 
   "runCommand": "Führe Befehl aus",
 
-  "wingetTitle": "{command, select, updates{Aktualisierungen} installed{Installiert} about{Über Winget} help{Hilfe} search{Suche Apps} settings{Winget-Einstellungen} sources{Quellen} install{Installieren} upgrade{Aktualisieren} uninstall{Deinstallieren} other{NotFoundError}}",
+  "wingetTitle": "{command, select, updates{Aktualisierungen} installed{Installiert} about{Über Winget} help{Hilfe} search{Suche Apps} settings{Winget-Einstellungen} sources{Quellen} install{Installieren} upgrade{Aktualisieren} uninstall{Deinstallieren} show {Anzeigen} searchPage{Suche Apps} other{NotFoundError}}",
   "wingetTitlePrefix": "{command, select, search{Suche nach} other{NotFoundError}}",
 
   "history": "Verlauf",

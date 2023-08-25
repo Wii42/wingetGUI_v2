@@ -1,8 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/widget_assets/pane_item_body.dart';
+import 'package:winget_gui/search_page.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 enum Routes {
   updates(
@@ -13,8 +12,9 @@ enum Routes {
       icon: FluentIcons.library, route: '/installed', winget: Winget.installed),
   about(icon: FluentIcons.info, route: '/about', winget: Winget.about),
   help(icon: FluentIcons.help, route: '/help', winget: Winget.help),
+
   search(
-      icon: FluentIcons.search, route: '/search', body: PaneItemBody.inRoute),
+      icon: FluentIcons.search, route: '/search', winget: Winget.search),
   settings(
       icon: FluentIcons.settings, route: '/settings', winget: Winget.settings),
   sources(
@@ -31,7 +31,10 @@ enum Routes {
       winget: Winget.upgrade),
   uninstall(
       icon: FluentIcons.delete, route: '/uninstall', winget: Winget.uninstall),
-  show(route: '/show', winget: Winget.show);
+  show(route: '/show', winget: Winget.show),
+  searchPage(
+      icon: FluentIcons.search, route: '/searchPage', body: SearchPage.inRoute),
+  ;
 
   final String route;
   final IconData? icon;
@@ -39,7 +42,7 @@ enum Routes {
   final Widget Function(dynamic parameters)? body;
   const Routes({required this.route, this.body, this.winget, this.icon});
 
-  Widget buildPage({dynamic parameters}) {
+  Widget buildPage([dynamic parameters]) {
     assert(winget != null || body != null);
     if (body != null) return body!(parameters);
     return winget!.processPage(parameters);

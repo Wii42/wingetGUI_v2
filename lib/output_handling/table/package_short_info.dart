@@ -1,10 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/content/output_pane.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
+import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../winget_process.dart';
+import '../../routes.dart';
 import '../info_enum.dart';
 import '../infos.dart';
 
@@ -38,10 +38,12 @@ class PackageShortInfo extends StatelessWidget {
   Future<void> pushPackageDetails(
       BuildContext context, AppLocalizations locale, Infos infos) async {
     NavigatorState router = Navigator.of(context);
-    String packageId = Info.id.key(locale);
-    List<String> command = ['show', '--id', infos.details[packageId]!];
-    WingetProcess process = await WingetProcess.runCommand(command);
-    router.push(FluentPageRoute(builder: (_) => OutputPane(process: process)));
+    String id = Info.id.key(locale);
+    String name = Info.name.key(locale);
+    router.pushNamed(Routes.show.route,
+        arguments: RouteParameter(
+            commandParameter: ['--id', infos.details[id]!],
+            titleAddon: infos.details[name]));
   }
 
   Widget _shortInfo(BuildContext context) {

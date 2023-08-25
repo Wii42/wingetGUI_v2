@@ -9,8 +9,10 @@ import 'output_pane.dart';
 class ProcessStarter extends StatelessWidget {
   final List<String> command;
   final Winget? winget;
+  final String? titleInput;
 
-  const ProcessStarter({super.key, required this.command, this.winget});
+  const ProcessStarter(
+      {super.key, required this.command, this.winget, this.titleInput});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,11 @@ class ProcessStarter extends StatelessWidget {
       future: futureProcess,
       builder: (BuildContext context, AsyncSnapshot<dynamic> processSnapshot) {
         if (processSnapshot.hasData) {
-          return OutputPane(process: processSnapshot.data, title: winget?.title(locale));
+          return OutputPane(
+              process: processSnapshot.data,
+              title: titleInput != null
+                  ? winget?.titleWithInput(titleInput!, localization: locale)
+                  : winget?.title(locale));
         } else if (processSnapshot.hasError) {
           return Center(child: Text('Error: ${processSnapshot.error}'));
         } else {

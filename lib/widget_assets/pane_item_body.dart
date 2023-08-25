@@ -76,5 +76,5 @@ class PaneItemBody extends StatelessWidget {
 
   bool canGoBack(BuildContext context) => Navigator.of(context).canPop();
 
-  factory PaneItemBody.inRoute(dynamic _) => const PaneItemBody(title: 'empty',child: Text('text'));
+  factory PaneItemBody.inRoute([Object? _]) => const PaneItemBody(title: 'empty',child: Text('text'));
 }

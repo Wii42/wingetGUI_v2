@@ -3,12 +3,15 @@ import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class MainNavigation extends StatefulWidget {
   MainNavigation({super.key, required this.title});
   final String title;
 
-  final List<Routes> mainItems = [Routes.search, Routes.updates, Routes.installed];
+  final List<Routes> mainItems = [
+    Routes.updates,
+    Routes.installed,
+    Routes.searchPage
+  ];
   final List<Routes> footerItems = [
     Routes.about,
     Routes.help,
@@ -87,7 +90,7 @@ class MainNavigationState extends State<MainNavigation> {
         Widget? page;
         for (Routes route in Routes.values) {
           if (settings.name == route.route) {
-            page = winget.buildPage();
+            page = route.buildPage(settings.arguments);
           }
         }
 

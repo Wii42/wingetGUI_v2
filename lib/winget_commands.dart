@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/route_parameter.dart';
 
 import 'content/process_starter.dart';
 
@@ -42,10 +43,11 @@ enum Winget {
     return "$prefix '$input'";
   }
 
-  Widget processPage(List<String>? parameters) {
+  Widget processPage(RouteParameter? parameters) {
     return ProcessStarter(
-      command: [...command, ...?parameters],
+      command: [...command, ...?parameters?.commandParameter],
       winget: this,
+      titleInput: parameters?.titleAddon,
     );
   }
 }
