@@ -1,6 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/routes.dart';
-import 'package:winget_gui/winget_commands.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -14,8 +13,8 @@ class MainNavigation extends StatefulWidget {
   ];
   final List<Routes> footerItems = [
     Routes.about,
-    Routes.help,
     Routes.sources,
+    Routes.commandPromptPage,
     Routes.settings
   ];
 
@@ -47,9 +46,10 @@ class MainNavigationState extends State<MainNavigation> {
                 automaticallyImplyLeading: false, title: Text(widget.title))
             : null,
         pane: NavigationPane(
-          //autoSuggestBox:
-          // _searchField(
-          //   Winget.search, AppLocalizations.of(context)!),
+          header: const Padding(
+            padding: EdgeInsets.all(10),
+            child: Text('WingetGUI'),
+          ),
           items: createNavItems(widget.mainItems),
           footerItems: createNavItems(widget.footerItems),
           selected: topIndex,
@@ -74,7 +74,6 @@ class MainNavigationState extends State<MainNavigation> {
       title: Text(route.title(local)),
       icon: Icon(route.icon),
       body: navigators[route] ?? notFoundMessage(),
-      //onTap: () => context.go(winget.route),
     );
   }
 
@@ -105,85 +104,4 @@ class MainNavigationState extends State<MainNavigation> {
   }
 
   Center notFoundMessage() => const Center(child: Text('Oops, page not found'));
-
-  TextBox _commandPrompt() {
-    TextEditingController controller = TextEditingController();
-    return TextBox(
-      controller: controller,
-      //onSubmitted: (String command) {
-      //  setState(
-      //    () {
-      //      contentHolder!.content
-      //          .showResultOfCommand(command.split(' '), title: "'$command'");
-      //      controller.clear();
-      //      topIndex = null;
-      //    },
-      //  );
-      //},
-      prefix: prefixIcon(FluentIcons.command_prompt),
-      placeholder: AppLocalizations.of(context)!.runCommand,
-    );
-  }
-
-  Widget prefixIcon(IconData? icon) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
-      child: Icon(icon),
-    );
-  }
-
-  NavigationAppBar navBar() {
-    return NavigationAppBar(
-      automaticallyImplyLeading: false,
-      title: Text(
-        widget.title,
-        style: FluentTheme.of(context).typography.body,
-      ),
-      actions: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return SizedBox(
-            height: constraints.maxHeight,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  width: 200,
-                ),
-                SizedBox(
-                  width: constraints.maxWidth / 3,
-                  child: _searchField(
-                      Winget.search, AppLocalizations.of(context)!),
-                )
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  TextBox _searchField(Winget winget, AppLocalizations local) {
-    TextEditingController controller = TextEditingController();
-    return TextBox(
-      controller: controller,
-      //onSubmitted: (input) {
-      //  setState(
-      //    () {
-      //      contentHolder!.content.showResultOfCommand(
-      //        [
-      //          ...winget.command,
-      //          input,
-      //        ],
-      //        title: winget.titleWithInput(input, localization: local),
-      //      );
-      //      controller.clear();
-      //      topIndex = null;
-      //    },
-      //  );
-      //},
-      //prefix: prefixIcon(winget.icon),
-      placeholder: winget.title(local),
-    );
-  }
 }

@@ -47,5 +47,5 @@ class SearchPage extends StatelessWidget {
     };
   }
 
-  factory SearchPage.inRoute([Object? _]) => SearchPage();
+  factory SearchPage.inRoute([RouteParameter? _]) => SearchPage();
 }
