@@ -35,10 +35,10 @@ class WingetGui extends StatelessWidget {
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+      //supportedLocales: AppLocalizations.supportedLocales,
       home: MainNavigation(title: "WingetGUI"),
       //routerConfig: router,
-      //supportedLocales: const [Locale("en")],
+      supportedLocales: const [Locale("en")],
     );
   }
 

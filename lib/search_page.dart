@@ -43,7 +43,7 @@ class SearchPage extends StatelessWidget {
   void Function(String) search(BuildContext context) {
     NavigatorState navigator = Navigator.of(context);
     return (input) {
-      navigator.pushNamed(Routes.search.route, arguments: RouteParameter(commandParameter: [input], titleAddon: input));
+      navigator.pushNamed(Routes.search.route, arguments: RouteParameter(commandParameter: [input], titleAddon: "'$input'"));
     };
   }
 

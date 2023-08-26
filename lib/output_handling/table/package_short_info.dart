@@ -41,9 +41,14 @@ class PackageShortInfo extends StatelessWidget {
     String id = Info.id.key(locale);
     String name = Info.name.key(locale);
     router.pushNamed(Routes.show.route,
-        arguments: RouteParameter(
-            commandParameter: ['--id', infos.details[id]!],
-            titleAddon: infos.details[name]));
+        arguments: RouteParameter(commandParameter: [
+          '--id',
+          infos.details[id]!,
+          if (infos.details.hasInfo(Info.version, locale)) ...[
+            '-v',
+            infos.details[Info.version.key(locale)]!
+          ]
+        ], titleAddon: infos.details[name]));
   }
 
   Widget _shortInfo(BuildContext context) {

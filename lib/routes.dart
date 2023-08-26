@@ -70,6 +70,6 @@ enum Routes {
     } else {
       prefix = title(localization);
     }
-    return "$prefix '$input'";
+    return "$prefix $input";
   }
 }

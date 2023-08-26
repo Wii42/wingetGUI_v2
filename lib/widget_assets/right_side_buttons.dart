@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -42,12 +43,21 @@ class RightSideButtons extends StatelessWidget {
   CommandButton createButton(Winget winget, AppLocalizations locale) {
     return CommandButton(
       text: winget.title(locale),
-      command: _createCommand(winget.command, locale),
-      title: '${winget.title(locale)} ${infos[Info.name.key(locale)]}',
+      command: _createCommand(winget, locale),
+      title: winget.titleWithInput(infos[Info.name.key(locale)]!,
+          localization: locale),
     );
   }
 
-  List<String> _createCommand(List<String> command, AppLocalizations locale) {
-    return [...command, '--id', infos[Info.id.key(locale)]!];
+  List<String> _createCommand(Winget winget, AppLocalizations locale) {
+    return [
+      ...winget.command,
+      '--id',
+      infos[Info.id.key(locale)]!,
+      if (winget != Winget.upgrade && infos.hasInfo(Info.version, locale)) ...[
+        '-v',
+        infos[Info.version.key(locale)]!
+      ]
+    ];
   }
 }

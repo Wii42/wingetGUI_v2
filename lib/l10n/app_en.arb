@@ -4,7 +4,7 @@
   "runCommand": "Run Command",
 
   "wingetTitle": "{command, select, updates{Updates} installed{Installed} about{About Winget} help{Help} search{Search Packages} settings{Winget Settings} sources{Sources} install{Install} upgrade{Upgrade} uninstall{Uninstall}  show{Show}  searchPage{Search Packages} commandPromptPage{Run Command} other{NotFoundError}}",
-  "wingetTitlePrefix": "{command, select, search{Search} other{NotFoundError}}",
+  "wingetTitlePrefix": "{command, select, search{Search} show {} other{NotFoundError}}",
 
   "history": "History",
 

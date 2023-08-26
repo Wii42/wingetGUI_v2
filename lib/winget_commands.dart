@@ -40,7 +40,7 @@ enum Winget {
     } else {
       prefix = title(localization);
     }
-    return "$prefix '$input'";
+    return "$prefix $input".trim();
   }
 
   Widget processPage(RouteParameter? parameters) {
