@@ -1,8 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/content/simple_output_starter.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
+import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process.dart';
 
 import 'content/output_page.dart';
@@ -16,11 +18,13 @@ class CommandPromptPage extends StatelessWidget {
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     String title = Routes.commandPromptPage.title(locale);
-    return PaneItemBody(
-      title: title,
-      child: Center(
-        child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 400),
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: PaneItemBody(
+        title: title,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,14 +44,31 @@ class CommandPromptPage extends StatelessWidget {
                 const SizedBox(
                   height: 40,
                 ),
-                Button(
-                    onPressed: () {
-                      NavigatorState navigator = Navigator.of(context);
-                      navigator.pushNamed(Routes.help.route);
-                    },
-                    child: Text(Routes.help.title(locale)))
+                Expander(
+                  header: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: [
+                      Text(Routes.help.title(locale)),
+                      Button(
+                        onPressed: () {
+                          NavigatorState navigator = Navigator.of(context);
+                          navigator.pushNamed(Routes.help.route);
+                        },
+                        child: Text(locale.showInSeparatePage),
+                      ),
+                    ],
+                  ),
+                  content: SizedBox(
+                      width: 500,
+                      height: 500,
+                      child: SimpleOutputStarter(command: Winget.help.command)),
+                )
               ],
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }

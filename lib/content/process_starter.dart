@@ -1,18 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/content/process_output.dart';
 import 'package:winget_gui/winget_process.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widget_assets/full_width_progress_bar.dart';
 import '../winget_commands.dart';
-import 'output_page.dart';
 
-class ProcessStarter extends StatelessWidget {
+abstract class ProcessStarter extends StatelessWidget {
   final List<String> command;
   final Winget? winget;
-  final String? titleInput;
 
-  const ProcessStarter(
-      {super.key, required this.command, this.winget, this.titleInput});
+  const ProcessStarter({super.key, required this.command, this.winget});
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +18,10 @@ class ProcessStarter extends StatelessWidget {
     Future<WingetProcess> futureProcess = WingetProcess.runCommand(command);
     return FutureBuilder<WingetProcess>(
       future: futureProcess,
-      builder: (BuildContext context, AsyncSnapshot<dynamic> processSnapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<WingetProcess> processSnapshot) {
         if (processSnapshot.hasData) {
-          return OutputPage(
-              process: processSnapshot.data,
-              title: titleInput != null
-                  ? winget?.titleWithInput(titleInput!, localization: locale)
-                  : winget?.title(locale));
+          return processOutput(processSnapshot.data!, locale);
         } else if (processSnapshot.hasError) {
           return Center(child: Text('Error: ${processSnapshot.error}'));
         } else {
@@ -35,4 +30,6 @@ class ProcessStarter extends StatelessWidget {
       },
     );
   }
+
+  ProcessOutput processOutput(WingetProcess process, AppLocalizations locale);
 }

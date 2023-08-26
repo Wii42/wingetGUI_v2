@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_handling/output_handler.dart';
 import '../winget_process.dart';
@@ -28,20 +29,21 @@ abstract class ProcessOutput extends StatelessWidget {
 
   List<Widget> outputList(
       AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return [
       if (streamSnapshot.hasData) onData(streamSnapshot, context),
       if (streamSnapshot.hasError) onError(streamSnapshot),
-      if (isWaitingOnData(streamSnapshot)) onWaiting(),
+      if (isWaitingOnData(streamSnapshot)) onWaiting(locale),
     ];
   }
 
   Widget buildPage(
       AsyncSnapshot<List<String>> streamSnapshot, BuildContext context);
 
-  Expanded onWaiting() {
-    return const Expanded(
+  Expanded onWaiting(AppLocalizations locale) {
+    return Expanded(
       child: Center(
-        child: Text('waiting on data...'),
+        child: Text(locale.waitOnData),
       ),
     );
   }

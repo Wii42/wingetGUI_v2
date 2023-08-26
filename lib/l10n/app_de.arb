@@ -20,5 +20,9 @@
   "showMore": "mehr anzeigen",
   "showLess": "weniger anzeigen",
 
-  "endProcess": "Laufenden Prozess beenden"
+  "endProcess": "Laufenden Prozess beenden",
+
+  "showInSeparatePage": "In separatem Fenster öffen",
+
+  "waitOnData": "auf Daten warten..."
 }

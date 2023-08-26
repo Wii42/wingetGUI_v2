@@ -21,5 +21,9 @@
   "showLess": "show less",
 
 
-  "endProcess": "End Current Process"
+  "endProcess": "End Current Process",
+
+  "showInSeparatePage": "Open in separate window",
+
+  "waitOnData": "waiting on data..."
 }
