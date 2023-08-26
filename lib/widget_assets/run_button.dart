@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/run_button_tooltip.dart';
 
-import '../content/output_pane.dart';
+import '../content/output_page.dart';
 import '../winget_process.dart';
 
 abstract class RunButton extends StatelessWidget {
@@ -30,7 +30,7 @@ abstract class RunButton extends StatelessWidget {
         NavigatorState router = Navigator.of(context);
         WingetProcess process = await WingetProcess.runCommand(command);
         router.push(FluentPageRoute(
-            builder: (_) => OutputPane(
+            builder: (_) => OutputPage(
                   process: process,
                   title: title ?? "'$text'",
                 )));

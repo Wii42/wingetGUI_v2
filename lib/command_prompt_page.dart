@@ -5,7 +5,7 @@ import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/winget_process.dart';
 
-import 'content/output_pane.dart';
+import 'content/output_page.dart';
 
 class CommandPromptPage extends StatelessWidget {
   CommandPromptPage({super.key});
@@ -58,7 +58,7 @@ class CommandPromptPage extends StatelessWidget {
     return (input) async {
       WingetProcess process = await WingetProcess.runCommand(input.split(' '));
       navigator.push(FluentPageRoute(
-          builder: (_) => OutputPane(
+          builder: (_) => OutputPage(
                 process: process,
                 title: "${locale.runCommand} '$input'",
               )));

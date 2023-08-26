@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
-import '../content/output_pane.dart';
+import '../content/output_page.dart';
 import '../winget_process.dart';
 
 class PaneItemBody extends StatelessWidget {
@@ -61,7 +61,7 @@ class PaneItemBody extends StatelessWidget {
                 onPressed: () async {
                   WingetProcess newProcess = await process!.clone();
                   navigator.pushReplacement(FluentPageRoute(
-                      builder: (_) => OutputPane(
+                      builder: (_) => OutputPage(
                         process: newProcess,
                         title: title,
                       )));

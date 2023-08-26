@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widget_assets/full_width_progress_bar.dart';
 import '../winget_commands.dart';
-import 'output_pane.dart';
+import 'output_page.dart';
 
 class ProcessStarter extends StatelessWidget {
   final List<String> command;
@@ -22,7 +22,7 @@ class ProcessStarter extends StatelessWidget {
       future: futureProcess,
       builder: (BuildContext context, AsyncSnapshot<dynamic> processSnapshot) {
         if (processSnapshot.hasData) {
-          return OutputPane(
+          return OutputPage(
               process: processSnapshot.data,
               title: titleInput != null
                   ? winget?.titleWithInput(titleInput!, localization: locale)
