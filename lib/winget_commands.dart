@@ -16,6 +16,7 @@ enum Winget {
   sources(command: ['source', 'list']),
   install(command: ['install']),
   upgrade(command: ['upgrade']),
+  upgradeAll(command: ['upgrade', '--all']),
   uninstall(command: ['uninstall']),
   show(command: ['show']);
 

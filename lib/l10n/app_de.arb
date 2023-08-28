@@ -3,7 +3,7 @@
 
   "runCommand": "Führe Befehl aus",
 
-  "wingetTitle": "{command, select, updates{Aktualisierungen} installed{Installiert} about{Über Winget} help{Hilfe} search{Suche Apps} settings{Winget-Einstellungen} sources{Quellen} install{Installieren} upgrade{Aktualisieren} uninstall{Deinstallieren} show {Anzeigen} searchPage{Suche Apps} commandPromptPage{Befehl Ausführen} other{NotFoundError}}",
+  "wingetTitle": "{command, select, updates{Aktualisierungen} installed{Installiert} about{Über Winget} help{Hilfe} search{Suche Apps} settings{Winget-Einstellungen} sources{Quellen} install{Installieren} upgrade{Aktualisieren} uninstall{Deinstallieren} show {Anzeigen} searchPage{Suche Apps} commandPromptPage{Befehl Ausführen} upgradeAll{Alle Aktualisieren} other{NotFoundError}}",
   "wingetTitlePrefix": "{command, select, search{Suche nach} install{Installiere} upgrade{Aktualisiere} uninstall{Deinstalliere} show {} other{NotFoundError}}",
 
   "history": "Verlauf",
@@ -24,5 +24,7 @@
 
   "showInSeparatePage": "In separatem Fenster öffen",
 
-  "waitOnData": "auf Daten warten..."
+  "waitOnData": "auf Daten warten...",
+
+  "showOnlyClickablePackages": "nur anwählbare Apps anzeigen"
 }

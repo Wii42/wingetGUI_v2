@@ -33,6 +33,7 @@ enum Routes {
   uninstall(
       icon: FluentIcons.delete, route: '/uninstall', winget: Winget.uninstall),
   show(route: '/show', winget: Winget.show),
+  upgradeAll(route: '/upgradeAll', winget: Winget.upgradeAll),
 
   searchPage(
       icon: FluentIcons.search, route: '/searchPage', body: SearchPage.inRoute),
@@ -45,6 +46,7 @@ enum Routes {
   final IconData? icon;
   final Winget? winget;
   final Widget Function(RouteParameter? parameters)? body;
+
   const Routes({required this.route, this.body, this.winget, this.icon});
 
   Widget buildPage([dynamic parameters]) {

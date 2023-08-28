@@ -47,7 +47,7 @@ class CommandPromptPage extends StatelessWidget {
                 Expander(
                   header: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 10,
+                    spacing: 20,
                     runSpacing: 10,
                     children: [
                       Text(Routes.help.title(locale)),
