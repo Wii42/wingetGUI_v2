@@ -27,9 +27,22 @@ extension ContainsExtentsion on String {
   }
 
   bool isProgressBar() {
-    return (contains('█') || contains('░') || contains('▒'));
+    if (!(contains('█') || contains('░') || contains('▒'))) {
+      return false;
+    }
+    String trimmed = trim();
+    int end = trimmed.indexOf(' ');
+    String progressBarPart = (end >= 0) ? trimmed.substring(0, end) : trimmed;
+    return progressBarPart.containsOnlyProgressBarSymbols();
+  }
+
+  bool containsOnlyProgressBarSymbols() {
+    RegExp onlyProgressBarSymbols = RegExp(r'^[█░▒]*$');
+    return contains(onlyProgressBarSymbols);
   }
 }
+
+
 
 bool isLink(String? text) {
   if (text == null) {
