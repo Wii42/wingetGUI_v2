@@ -3,7 +3,7 @@ import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../info_enum.dart';
+import '../../infos/info_enum.dart';
 import 'compartment.dart';
 
 class DetailsWidget extends Compartment {

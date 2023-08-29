@@ -3,7 +3,7 @@ import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../output_handling/info_enum.dart';
+import '../output_handling/infos/info_enum.dart';
 import '../winget_commands.dart';
 import 'command_button.dart';
 

@@ -8,7 +8,7 @@ import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets//link_button.dart';
 import '../../../widget_assets/decorated_box_wrap.dart';
 import '../../../widget_assets/inline_link_button.dart';
-import '../../info_enum.dart';
+import '../../infos/info_enum.dart';
 import '../../infos.dart';
 
 abstract class Compartment extends StatelessWidget {

@@ -8,7 +8,7 @@ import 'package:winget_gui/widget_assets/store_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../widget_assets/link_button.dart';
-import '../../info_enum.dart';
+import '../../infos/info_enum.dart';
 
 class TitleWidget extends Compartment {
   static final List<Info> manuallyHandledKeys = [

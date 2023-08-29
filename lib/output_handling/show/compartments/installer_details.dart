@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
-import '../../info_enum.dart';
+import '../../infos/info_enum.dart';
 import 'compartment.dart';
 
 class InstallerDetails extends Compartment {

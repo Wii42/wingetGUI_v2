@@ -1,6 +1,6 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../winget_commands.dart';
+import '../../winget_commands.dart';
 
 enum Info {
   id(),

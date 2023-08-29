@@ -1,7 +1,7 @@
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'info_enum.dart';
+import 'infos/info_enum.dart';
 
 class Infos {
   final Map<String, String> details;

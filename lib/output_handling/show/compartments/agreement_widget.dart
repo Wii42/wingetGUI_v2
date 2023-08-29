@@ -4,7 +4,7 @@ import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
-import '../../info_enum.dart';
+import '../../infos/info_enum.dart';
 
 class AgreementWidget extends Compartment {
   static final List<Info> manuallyHandledKeys = [

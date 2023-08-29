@@ -9,7 +9,7 @@ import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/widget_assets/search_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../info_enum.dart';
+import '../infos/info_enum.dart';
 import '../infos.dart';
 
 class PackageLongInfo extends StatelessWidget {

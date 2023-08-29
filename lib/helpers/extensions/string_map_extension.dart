@@ -1,4 +1,4 @@
-import '../../output_handling/info_enum.dart';
+import '../../output_handling/infos/info_enum.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 extension HasEntryExtension<T> on Map<T, String> {

@@ -4,7 +4,7 @@ import 'package:winget_gui/output_handling/output_part.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../info_enum.dart';
+import '../infos/info_enum.dart';
 import '../infos.dart';
 
 const maxIdentifierLength = 100;

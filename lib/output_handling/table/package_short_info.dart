@@ -5,7 +5,7 @@ import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../routes.dart';
-import '../info_enum.dart';
+import '../infos/info_enum.dart';
 import '../infos.dart';
 
 class PackageShortInfo extends StatelessWidget {
