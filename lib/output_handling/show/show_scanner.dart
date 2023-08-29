@@ -3,6 +3,8 @@ import 'package:winget_gui/output_handling/scanner.dart';
 import 'package:winget_gui/output_handling/show/show_part.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../winget_commands.dart';
+
 class ShowScanner extends Scanner {
   List<String> command;
   List<String>? prevCommand;
@@ -11,7 +13,7 @@ class ShowScanner extends Scanner {
 
   @override
   void markResponsibleLines(BuildContext context) {
-    if (respList.isEmpty || command.isEmpty) {
+    if (respList.isEmpty || command.isEmpty || command[0] != Winget.show.command[0]) {
       return;
     }
     AppLocalizations locale = AppLocalizations.of(context)!;
