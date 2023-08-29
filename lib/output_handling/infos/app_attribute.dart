@@ -2,7 +2,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../winget_commands.dart';
 
-enum Info {
+enum AppAttribute {
   id(),
   description(),
   name(),
@@ -42,7 +42,7 @@ enum Info {
   releaseDate(),
   ;
 
-  const Info();
+  const AppAttribute();
 
   String key(AppLocalizations local) {
     String key = local.infoKey(this.name);

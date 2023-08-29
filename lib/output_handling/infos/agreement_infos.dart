@@ -1,14 +1,17 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'info_enum.dart';
+import 'app_attribute.dart';
+import 'info.dart';
 import 'info_map_parser.dart';
 import 'info_with_link.dart';
 
 class AgreementInfos {
+  final String Function(AppLocalizations) title;
   final InfoWithLink? publisher, license, copyright;
-  final Uri? privacyUrl, buyUrl;
-  final String? termsOfTransaction, seizureWarning, storeLicenseTerms;
+  final Info<Uri>? privacyUrl, buyUrl;
+  final Info<String>? termsOfTransaction, seizureWarning, storeLicenseTerms;
 
   AgreementInfos({
+    required this.title,
     this.publisher,
     this.license,
     this.copyright,
@@ -27,17 +30,20 @@ class AgreementInfos {
     InfoMapParser parser = InfoMapParser(map: map, locale: locale);
 
     AgreementInfos agreement = AgreementInfos(
+      title: AppAttribute.agreement.title,
       publisher: parser.maybeInfoWithLinkFromMap(
-          textInfo: Info.publisher, urlInfo: Info.publisherUrl),
+          textInfo: AppAttribute.publisher, urlInfo: AppAttribute.publisherUrl),
       license: parser.maybeInfoWithLinkFromMap(
-          textInfo: Info.license, urlInfo: Info.licenseUrl),
+          textInfo: AppAttribute.license, urlInfo: AppAttribute.licenseUrl),
       copyright: parser.maybeInfoWithLinkFromMap(
-          textInfo: Info.copyright, urlInfo: Info.copyrightUrl),
-      privacyUrl: parser.maybeLinkFromMap(Info.privacyUrl),
-      buyUrl: parser.maybeLinkFromMap(Info.buyUrl),
-      termsOfTransaction: parser.maybeDetailFromMap(Info.termsOfTransaction),
-      seizureWarning: parser.maybeDetailFromMap(Info.seizureWarning),
-      storeLicenseTerms: parser.maybeDetailFromMap(Info.storeLicenseTerms),
+          textInfo: AppAttribute.copyright, urlInfo: AppAttribute.copyrightUrl),
+      privacyUrl: parser.maybeLinkFromMap(AppAttribute.privacyUrl),
+      buyUrl: parser.maybeLinkFromMap(AppAttribute.buyUrl),
+      termsOfTransaction:
+          parser.maybeDetailFromMap(AppAttribute.termsOfTransaction),
+      seizureWarning: parser.maybeDetailFromMap(AppAttribute.seizureWarning),
+      storeLicenseTerms:
+          parser.maybeDetailFromMap(AppAttribute.storeLicenseTerms),
     );
     return agreement.isNotEmpty() ? agreement : null;
   }

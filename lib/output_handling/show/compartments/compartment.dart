@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,13 +7,10 @@ import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets//link_button.dart';
 import '../../../widget_assets/decorated_box_wrap.dart';
 import '../../../widget_assets/inline_link_button.dart';
-import '../../infos/info_enum.dart';
-import '../../infos.dart';
+import '../../infos/info.dart';
 
 abstract class Compartment extends StatelessWidget {
-  final Infos infos;
-
-  const Compartment({super.key, required this.infos});
+  const Compartment({super.key});
 
   List<Widget> buildCompartment(BuildContext context);
 
@@ -73,47 +69,51 @@ abstract class Compartment extends StatelessWidget {
   }
 
   Widget textOrInlineLink(
-      {required BuildContext context, required Info name, required Info url}) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    if (infos.allDetails.hasInfo(url, locale)) {
-      return InlineLinkButton(
-          url: infos.allDetails[url.key(locale)]!,
-          text: Text(infos.allDetails[name.key(locale)] ??
-              infos.allDetails[url.key(locale)]!));
+      {required BuildContext context,
+      required String? text,
+      required Uri? url}) {
+    if (url != null) {
+      return InlineLinkButton(url: url, text: Text(text ?? url.toString()));
     }
-    return textWithLinks(key: name.key(locale), context: context);
+    return textWithLinks(text: text!, context: context);
   }
 
   Widget textOrLinkButton(
-      {required BuildContext context, required String key, String? title}) {
-    String text = infos.allDetails[key]!.trim();
-    if (isLink(text)) {
-      return LinkButton(url: text, text: Text(title ?? text));
+      {required BuildContext context, required Info<String> text}) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    if (isLink(text.value)) {
+      return LinkButton(
+          url: Uri.parse(text.value), text: Text(text.title(locale)));
     }
-    return textWithLinks(key: key, context: context);
+    return textWithLinks(text: text.value, context: context);
+  }
+
+  Widget linkButton(
+      {required Info<Uri> link, required AppLocalizations locale}) {
+    return LinkButton(url: link.value, text: Text(link.title(locale)));
   }
 
   Widget textWithLinks(
-      {required String key, required BuildContext context, int maxLines = 1}) {
+      {required String text, required BuildContext context, int maxLines = 1}) {
     return LinkText(
-      line: infos.allDetails[key]!.trim(),
+      line: text,
       maxLines: maxLines,
     );
   }
 
-  Wrap buttonRow(List<Info> links, BuildContext context) {
+  Wrap buttonRow(List<Info<Uri>?> links, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Wrap(
       spacing: 5,
       runSpacing: 5,
       crossAxisAlignment: WrapCrossAlignment.start,
       children: [
-        for (Info info in links)
-          if (infos.allDetails.hasInfo(info, locale))
-            textOrLinkButton(
-                context: context,
-                key: info.key(locale),
-                title: info.title(locale)),
+        for (Info<Uri>? link in links)
+          if (link != null)
+            linkButton(
+              locale: locale,
+              link: link,
+            )
       ],
     );
   }

@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:url_launcher/link.dart';
 
 class LinkButton extends StatelessWidget {
-  final String url;
+  final Uri url;
   final Text text;
 
   const LinkButton({super.key, required this.url, required this.text});
@@ -10,10 +10,10 @@ class LinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Link(
-      uri: Uri.parse(checkUrlContainsHttp(url)),
+      uri: url,
       builder: (context, open) {
         return Tooltip(
-          message: url,
+          message: url.toString(),
           useMousePosition: false,
           style: const TooltipThemeData(preferBelow: true),
           child: button(context, open),

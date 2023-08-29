@@ -1,7 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/output_handling/show/compartments/agreement_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/details_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/expandable_compartment.dart';
 import 'package:winget_gui/output_handling/show/compartments/installer_details.dart';
@@ -9,45 +7,31 @@ import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/widget_assets/search_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../infos/info_enum.dart';
-import '../infos.dart';
+import '../infos/package_infos.dart';
+import 'compartments/agreement_widget.dart';
 
 class PackageLongInfo extends StatelessWidget {
-  static final List<Info> manuallyHandledKeys = [
-    Info.description,
-    Info.tags,
-    Info.releaseNotes,
-    Info.installer,
-    Info.releaseNotesUrl,
-    Info.moniker,
-  ];
-  final Infos infos;
+  final PackageInfos infos;
 
   const PackageLongInfo(this.infos, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
     return Column(
       children: [
         TitleWidget(infos: infos),
-        if (infos.hasDescription(locale))
+        if (infos.hasDescription())
           ExpandableCompartment(
-            infos: infos,
-            expandableInfo: Info.description,
+            text: infos.description!,
           ),
-        if (infos.hasReleaseNotes(locale))
+        if (infos.hasReleaseNotes())
           ExpandableCompartment(
-            infos: infos,
-            expandableInfo: Info.releaseNotes,
-            buttonInfos: const [Info.releaseNotesUrl],
+            text: infos.releaseNotes!.toInfoString(),
+            buttonInfos: [infos.releaseNotes?.toInfoUri()],
           ),
-        if (DetailsWidget.containsData(infos.allDetails, locale))
-          DetailsWidget(infos: infos),
-        if (AgreementWidget.containsData(infos.allDetails, locale))
-          AgreementWidget(infos: infos),
-        if (InstallerDetails.containsData(infos.allDetails, locale))
-          InstallerDetails(infos: infos),
+        DetailsWidget(infos: infos),
+        if (infos.agreement != null) AgreementWidget(infos: infos.agreement!),
+        if (infos.installer != null) InstallerDetails(infos: infos.installer!),
         if (infos.hasTags()) _tagButtons(context),
       ].withSpaceBetween(height: 10),
     );
@@ -60,9 +44,9 @@ class PackageLongInfo extends StatelessWidget {
       spacing: 5,
       alignment: WrapAlignment.center,
       children: [
-        if (infos.details.hasInfo(Info.moniker, locale))
+        if (infos.moniker != null)
           SearchButton(
-            searchTarget: infos.details[Info.moniker.key(locale)]!,
+            searchTarget: infos.moniker!.value,
             local: locale,
           ),
         for (String tag in infos.tags!)
@@ -72,16 +56,5 @@ class PackageLongInfo extends StatelessWidget {
           )
       ],
     );
-  }
-
-  static Iterable<String> manuallyHandledStringKeys(AppLocalizations locale) =>
-      manuallyHandledKeys.map<String>((Info info) => info.key(locale));
-
-  static bool isManuallyHandled(String key, AppLocalizations locale) {
-    return (manuallyHandledStringKeys(locale).contains(key) ||
-            TitleWidget.manuallyHandledStringKeys(locale).contains(key) ||
-            AgreementWidget.manuallyHandledStringKeys(locale).contains(key) ||
-            DetailsWidget.manuallyHandledStringKeys(locale).contains(key)) ||
-        InstallerDetails.manuallyHandledStringKeys(locale).contains(key);
   }
 }

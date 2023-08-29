@@ -1,24 +1,15 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
-import 'package:winget_gui/output_handling/show/package_long_info.dart';
+import 'package:winget_gui/output_handling/infos/package_infos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../infos/info_enum.dart';
+import '../../infos/info.dart';
 import 'compartment.dart';
 
 class DetailsWidget extends Compartment {
-  const DetailsWidget({super.key, required super.infos});
+  final PackageInfos infos;
 
-  static final List<Info> manuallyHandledKeys = [
-    Info.author,
-    Info.id,
-    Info.publisherSupportUrl,
-    Info.documentation,
-    Info.agreement,
-    Info.pricing,
-    Info.freeTrial,
-    Info.ageRating,
-  ];
+  const DetailsWidget({super.key, required this.infos});
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
@@ -27,17 +18,17 @@ class DetailsWidget extends Compartment {
         title: compartmentTitle(locale),
         mainColumn: [
           ..._detailsList([
-            if (infos.details.hasInfo(Info.author, locale)) Info.publisher,
-            Info.agreement,
-            Info.pricing,
-            Info.freeTrial,
-            Info.ageRating,
-            Info.id,
-            Info.documentation,
+            if (infos.author != null)
+              infos.agreement?.publisher?.tryToInfoString(),
+            infos.pricing,
+            infos.freeTrial,
+            infos.ageRating,
+            infos.id,
+            infos.documentation,
           ], context),
           ..._displayRest(context)
         ],
-        buttonRow: buttonRow([Info.publisherSupportUrl], context),
+        buttonRow: buttonRow([infos.supportUrl], context),
         context: context);
   }
 
@@ -46,43 +37,38 @@ class DetailsWidget extends Compartment {
     return locale.details;
   }
 
-  List<Widget> _detailsList(List<Info> details, BuildContext context) {
+  List<Widget> _detailsList(List<Info<String>?> details, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return [
-      for (Info info in details)
-        if (infos.details.hasInfo(info, locale))
+      for (Info<String>? string in details)
+        if (string != null)
           wrapInWrap(
-              title: info.title(locale),
-              body: textOrLinkButton(context: context, key: info.key(locale))),
+              title: string.title(locale),
+              body: textOrLinkButton(context: context, text: string)),
     ];
   }
 
   List<Widget> _displayRest(BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    List<String> restKeys = [];
-    for (String key in infos.details.keys) {
-      if (!PackageLongInfo.isManuallyHandled(key, locale)) {
-        restKeys.add(key);
-      }
+    if (infos.otherInfos == null) {
+      return [];
     }
+    Iterable<String> restKeys = infos.otherInfos!.keys;
+
     return [
       for (String key in restKeys)
-        if (infos.details.hasEntry(key))
+        if (infos.otherInfos!.hasEntry(key))
           wrapInWrap(
-              title: key, body: textOrLinkButton(context: context, key: key)),
+            title: key,
+            body: textOrLinkButton(
+              context: context,
+              text: Info<String>(
+                value: infos.otherInfos![key]!,
+                title: (AppLocalizations _) {
+                  return key;
+                },
+              ),
+            ),
+          ),
     ];
-  }
-
-  static Iterable<String> manuallyHandledStringKeys(AppLocalizations locale) =>
-      manuallyHandledKeys.map<String>((Info info) => info.key(locale));
-
-  static bool containsData(Map<String, String> infos, AppLocalizations locale) {
-    for (String key in manuallyHandledStringKeys(locale)) {
-      if (infos.hasEntry(key) ||
-          !PackageLongInfo.isManuallyHandled(key, locale)) {
-        return true;
-      }
-    }
-    return false;
   }
 }

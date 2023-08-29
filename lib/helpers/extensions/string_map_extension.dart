@@ -1,4 +1,4 @@
-import '../../output_handling/infos/info_enum.dart';
+import '../../output_handling/infos/app_attribute.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 extension HasEntryExtension<T> on Map<T, String> {
@@ -8,7 +8,7 @@ extension HasEntryExtension<T> on Map<T, String> {
 }
 
 extension HasInfoExtension on Map<String, String> {
-  bool hasInfo(Info info, AppLocalizations local){
-    return hasEntry(info.key(local));
+  bool hasInfo(AppAttribute attribute, AppLocalizations local) {
+    return hasEntry(attribute.key(local));
   }
 }

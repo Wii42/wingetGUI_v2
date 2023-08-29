@@ -1,15 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../routes.dart';
-import '../infos/info_enum.dart';
-import '../infos.dart';
+import '../infos/package_infos.dart';
 
 class PackageShortInfo extends StatelessWidget {
-  final Infos infos;
+  final PackageInfos infos;
   final List<String> command;
 
   final MainAxisAlignment columnAlign = MainAxisAlignment.center;
@@ -22,8 +20,8 @@ class PackageShortInfo extends StatelessWidget {
     return Button(
       onPressed: (isClickable(locale))
           ? () {
-              if (infos.details.hasInfo(Info.id, locale)) {
-                pushPackageDetails(context, locale, infos);
+              if (infos.id != null) {
+                pushPackageDetails(context, locale);
               }
             }
           : null,
@@ -36,19 +34,14 @@ class PackageShortInfo extends StatelessWidget {
   }
 
   Future<void> pushPackageDetails(
-      BuildContext context, AppLocalizations locale, Infos infos) async {
+      BuildContext context, AppLocalizations locale) async {
     NavigatorState router = Navigator.of(context);
-    String id = Info.id.key(locale);
-    String name = Info.name.key(locale);
     router.pushNamed(Routes.show.route,
         arguments: RouteParameter(commandParameter: [
           '--id',
-          infos.details[id]!,
-          if (infos.details.hasInfo(Info.version, locale)) ...[
-            '-v',
-            infos.details[Info.version.key(locale)]!
-          ]
-        ], titleAddon: infos.details[name]));
+          infos.id!.value,
+          if (infos.hasVersion()) ...['-v', infos.version!.value]
+        ], titleAddon: infos.name?.value));
   }
 
   Widget _shortInfo(BuildContext context) {
@@ -63,14 +56,14 @@ class PackageShortInfo extends StatelessWidget {
         Column(
           mainAxisAlignment: columnAlign,
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: _versions([Info.version, Info.availableVersion], locale),
+          children: _versions(locale),
         ),
         if (isClickable(locale)) ...[
           const SizedBox(width: 20),
           RightSideButtons(
-            infos: infos.details,
+            infos: infos,
             alignment: columnAlign,
-            upgrade: infos.details.hasInfo(Info.availableVersion, locale),
+            upgrade: infos.availableVersion != null,
             install: !(command[0] == 'upgrade' || command[0] == 'list'),
           )
         ],
@@ -85,19 +78,19 @@ class PackageShortInfo extends StatelessWidget {
       mainAxisAlignment: columnAlign,
       children: [
         Text(
-          infos.details[Info.name.key(locale)]!,
+          infos.name!.value,
           style: _titleStyle(context),
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
         ),
         Text(
-          infos.details[Info.id.key(locale)]!,
+          infos.id!.value,
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
         ),
-        if (infos.details.hasInfo(Info.source, locale))
+        if (infos.source != null && infos.source!.value.isNotEmpty)
           Text(
-            locale.fromSource(infos.details[Info.source.key(locale)]!),
+            locale.fromSource(infos.source!.value),
             style: TextStyle(
               color: FluentTheme.of(context).inactiveColor,
             ),
@@ -117,19 +110,22 @@ class PackageShortInfo extends StatelessWidget {
     return style;
   }
 
-  List<Widget> _versions(List<Info> versions, AppLocalizations locale) {
+  List<Widget> _versions(AppLocalizations locale) {
     return [
-      for (Info info in versions)
-        if (infos.details.hasInfo(info, locale))
-          Text("${info.title(locale)}: ${infos.details[info.key(locale)]!}"),
+      if (infos.version != null)
+        Text("${infos.version!.title(locale)}: ${infos.version!.value}"),
+      if (infos.availableVersion != null &&
+          infos.availableVersion!.value.isNotEmpty)
+        Text(
+            "${infos.availableVersion!.title(locale)}: ${infos.availableVersion!.value}"),
     ];
   }
 
   bool isClickable(AppLocalizations locale) {
-    return infos.details.hasInfo(Info.source, locale);
+    return infos.source != null && infos.source!.value.isNotEmpty;
   }
 
-  String? name(AppLocalizations locale) => infos.details[Info.name.key(locale)];
+  String? name() => infos.name?.value;
 
-  String? id(AppLocalizations locale) => infos.details[Info.id.key(locale)];
+  String? id() => infos.id?.value;
 }

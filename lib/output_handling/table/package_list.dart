@@ -76,10 +76,10 @@ class _PackageListState extends State<PackageList> {
     }
     return [
       for (PackageShortInfo package in searchablePackages)
-        if ((package.name(locale) != null &&
-                package.name(locale)!.containsCaseInsensitive(filter)) ||
-            (package.id(locale) != null &&
-                package.id(locale)!.containsCaseInsensitive(filter)))
+        if ((package.name() != null &&
+                package.name()!.containsCaseInsensitive(filter)) ||
+            (package.id() != null &&
+                package.id()!.containsCaseInsensitive(filter)))
           package
     ];
   }

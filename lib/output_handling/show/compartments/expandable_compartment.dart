@@ -1,19 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../infos/info_enum.dart';
+import '../../infos/info.dart';
 import 'compartment.dart';
 
 class ExpandableCompartment extends Compartment {
-  final String? title;
-  final Info? expandableInfo;
-  final List<Info>? buttonInfos;
+  final Info<String> text;
+  final List<Info<Uri>?>? buttonInfos;
 
   const ExpandableCompartment({
     super.key,
-    required super.infos,
-    this.title,
-    this.expandableInfo,
+    required this.text,
     this.buttonInfos,
   });
 
@@ -22,15 +19,13 @@ class ExpandableCompartment extends Compartment {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
         title: compartmentTitle(locale),
-        mainColumn: (expandableInfo != null
-            ? [
-                textWithLinks(
-                  key: expandableInfo!.key(locale),
-                  context: context,
-                  maxLines: 5,
-                )
-              ]
-            : null),
+        mainColumn: ([
+          textWithLinks(
+            text: text.value,
+            context: context,
+            maxLines: 5,
+          )
+        ]),
         buttonRow:
             (buttonInfos != null ? buttonRow(buttonInfos!, context) : null),
         context: context);
@@ -38,6 +33,6 @@ class ExpandableCompartment extends Compartment {
 
   @override
   String? compartmentTitle(AppLocalizations locale) {
-    return title ?? expandableInfo?.title(locale);
+    return text.title(locale);
   }
 }

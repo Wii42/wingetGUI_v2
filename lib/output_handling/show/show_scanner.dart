@@ -13,13 +13,15 @@ class ShowScanner extends Scanner {
 
   @override
   void markResponsibleLines(BuildContext context) {
-    if (respList.isEmpty || command.isEmpty || command[0] != Winget.show.command[0]) {
+    if (respList.isEmpty ||
+        command.isEmpty ||
+        command[0] != Winget.show.command[0]) {
       return;
     }
     AppLocalizations locale = AppLocalizations.of(context)!;
     int identifierPos = _findIdentifier(locale);
     if (identifierPos > -1) {
-      ShowPart showPart = ShowPart([]);
+      ShowPart showPart = ShowPart([], locale);
       for (int i = identifierPos; i < respList.length; i++) {
         if (respList[i].isHandled()) {
           break;
@@ -42,7 +44,8 @@ class ShowScanner extends Scanner {
     return -1;
   }
 
-  bool _isIdentifier(String line, List<String> command, AppLocalizations locale) {
+  bool _isIdentifier(
+      String line, List<String> command, AppLocalizations locale) {
     line = line.trim();
     if (!line.startsWith(locale.packageLongInfoIdentifier)) {
       return false;

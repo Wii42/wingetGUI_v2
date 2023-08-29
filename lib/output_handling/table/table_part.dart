@@ -5,14 +5,16 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/package_list.dart';
 import 'package:winget_gui/output_handling/table/package_short_info.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../infos.dart';
+import '../infos/package_infos.dart';
 import '../output_part.dart';
 
 class TablePart extends OutputPart {
-  TablePart(super.lines, {required this.command});
+  TablePart(super.lines, {required this.command, required this.locale});
 
   List<String> command;
+  AppLocalizations locale;
 
   late PackageList packageList;
 
@@ -73,7 +75,7 @@ class TablePart extends OutputPart {
           _getDictFromLine(entry, columnNames, columnsPos);
       packages.add(
         PackageShortInfo(
-          Infos(details: infos),
+          PackageInfos.fromMap(details: infos, locale: locale),
           command: command,
         ),
       );

@@ -64,7 +64,7 @@ class OneLineInfoWidget extends StatelessWidget {
   Widget oneLineInfo(String key, BuildContext context) {
     String value = stripOfQuotationMarks(infos[key]!);
     if (isLink(value)) {
-      return LinkButton(url: value, text: Text(key));
+      return LinkButton(url: Uri.parse(value), text: Text(key));
     }
     return Wrap(
       spacing: 5,
@@ -83,9 +83,9 @@ class OneLineInfoWidget extends StatelessWidget {
             .substring(1, string.length - 1)
             .contains(quotationMarksRegExp())) {
       string = string.substring(1, string.length - 1);
-       if (kDebugMode) {
-         print(string);
-       }
+      if (kDebugMode) {
+        print(string);
+      }
     }
     return string;
   }

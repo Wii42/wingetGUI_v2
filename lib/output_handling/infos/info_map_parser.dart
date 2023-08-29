@@ -1,7 +1,8 @@
-import 'package:winget_gui/output_handling/infos/package_infos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'info_enum.dart';
+import 'agreement_infos.dart';
+import 'app_attribute.dart';
+import 'info.dart';
 import 'info_with_link.dart';
 
 class InfoMapParser {
@@ -9,19 +10,21 @@ class InfoMapParser {
   Map<String, String> map;
   InfoMapParser({required this.map, required this.locale});
 
-  String? maybeDetailFromMap(Info infoKey) {
-    String key = infoKey.key(locale);
+  Info<String>? maybeDetailFromMap(AppAttribute attribute) {
+    String key = attribute.key(locale);
     String? detail = map[key];
     map.remove(key);
-    return detail;
+    return (detail != null)
+        ? Info<String>(title: attribute.title, value: detail)
+        : null;
   }
 
-  Uri? maybeLinkFromMap(Info infoKey) {
-    String? link = maybeDetailFromMap(infoKey);
+  Info<Uri>? maybeLinkFromMap(AppAttribute infoKey) {
+    Info<String>? link = maybeDetailFromMap(infoKey);
     if (link == null) {
       return null;
     }
-    return Uri.parse(link);
+    return Info<Uri>(title: link.title, value: Uri.parse(link.value));
   }
 
   AgreementInfos? maybeAgreementFromMap() {
@@ -32,7 +35,7 @@ class InfoMapParser {
   }
 
   InfoWithLink? maybeInfoWithLinkFromMap(
-      {required Info textInfo, required Info urlInfo}) {
+      {required AppAttribute textInfo, required AppAttribute urlInfo}) {
     return InfoWithLink.maybeFromMap(
       map: map,
       textInfo: textInfo,
@@ -41,8 +44,17 @@ class InfoMapParser {
     );
   }
 
+  Info<DateTime>? maybeDateTimeFromMap(AppAttribute attribute) {
+    Info<String>? dateInfo = maybeDetailFromMap(AppAttribute.releaseDate);
+    if (dateInfo == null) {
+      return null;
+    }
+    return Info<DateTime>(
+        title: dateInfo.title, value: DateTime.parse(dateInfo.value));
+  }
+
   List<String>? maybeTagsFromMap() {
-    String key = Info.tags.key(locale);
+    String key = AppAttribute.tags.key(locale);
     String? tagString = map[key];
     if (tagString != null) {
       List<String> tags = _extractTags(tagString);
