@@ -40,6 +40,10 @@ extension ContainsExtentsion on String {
     RegExp onlyProgressBarSymbols = RegExp(r'^[█░▒]*$');
     return contains(onlyProgressBarSymbols);
   }
+
+  bool containsCaseInsensitive(String other, [int startIndex = 0]){
+    return toLowerCase().contains(other.toLowerCase(), startIndex);
+  }
 }
 
 

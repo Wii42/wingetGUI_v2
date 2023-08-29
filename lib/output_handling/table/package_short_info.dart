@@ -128,4 +128,8 @@ class PackageShortInfo extends StatelessWidget {
   bool isClickable(AppLocalizations locale) {
     return infos.details.hasInfo(Info.source, locale);
   }
+
+  String? name(AppLocalizations locale) => infos.details[Info.name.key(locale)];
+
+  String? id(AppLocalizations locale) => infos.details[Info.id.key(locale)];
 }

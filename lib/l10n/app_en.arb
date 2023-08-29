@@ -26,5 +26,7 @@
 
   "waitOnData": "waiting on data...",
 
-  "showOnlyClickablePackages": "show only selectable apps"
+  "showOnlyClickablePackages": "show only selectable apps",
+  "filterFor": "filter for:",
+  "nrOfPackagesShown": "{number} of {total} apps are displayed"
 }
