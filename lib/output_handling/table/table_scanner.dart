@@ -69,7 +69,7 @@ class TableScanner extends Scanner {
 
       if (line.length != firstLine.length) {
         // no idea why this works
-        if (line.length > lastindexOfIdentifier + 10) {
+        if (line.length > lastindexOfIdentifier + 10 && !(line.codeUnitAt(lastindexOfIdentifier) == ' '.codeUnits.first)) {
           if (!line.contains('…')) {
             return i - 1;
           }

@@ -40,7 +40,7 @@ class PackageShortInfo extends StatelessWidget {
         arguments: RouteParameter(commandParameter: [
           '--id',
           infos.id!.value,
-          if (infos.hasVersion()) ...['-v', infos.version!.value]
+          //if (infos.hasVersion()) ...['-v', infos.version!.value]
         ], titleAddon: infos.name?.value));
   }
 

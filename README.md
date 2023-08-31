@@ -21,3 +21,5 @@ samples, guidance on mobile development, and a full API reference.
 - fix to many links found in expandable text
 - smart decision if details in list or button row
 
+- fix sources page
+

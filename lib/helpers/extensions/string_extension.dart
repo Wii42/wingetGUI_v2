@@ -9,7 +9,7 @@ extension ContainsExtentsion on String {
     String bs = String.fromCharCode(32);
     String bs2 = String.fromCharCode(8);
 
-    return (contains(RegExp('^[$bs$bs2-\\/|]+\$')) || contains('\\')) &&
+    return (contains(RegExp('^[$bs$bs2-\\/|]+\$')) || (contains('\\') && !contains(RegExp(r'a-zA-Z0-9')))) &&
         !contains(RegExp(r'-{2,}'));
   }
 
