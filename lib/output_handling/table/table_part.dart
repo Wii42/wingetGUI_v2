@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:isolate';
 import 'dart:math';
 
@@ -36,7 +35,12 @@ abstract class TablePart extends OutputPart {
     Iterable<Match> matches = pattern.allMatches(head);
     List<int> columnsPos = [0, for (Match match in matches) match.start];
 
-    List<String> additionalColumns = _findNoNameColumns(lines[2]);
+    List<int> additionalColumns = _findNoNameColumns(lines[2], columnsPos);
+    if (additionalColumns.isNotEmpty){
+      columnsPos.addAll(additionalColumns);
+      columnsPos = columnsPos.toSet().toList();
+      columnsPos.sort();
+    }
 
     return columnsPos;
   }
@@ -107,7 +111,7 @@ abstract class TablePart extends OutputPart {
     return columnNames;
   }
 
-  List<int> _findNoNameColumns(String testedLine) {
+  List<int> _findNoNameColumns(String testedLine, List<int> alreadyKnownCols) {
     testedLine = testedLine.trim();
 
     List<String> body = lines.sublist(2);
@@ -115,9 +119,9 @@ abstract class TablePart extends OutputPart {
 
     List<int> additionalPos = [];
     Iterable<Match> matches = pattern.allMatches(testedLine);
-    List<int> possibleColumnsPos = [0, for (Match match in matches) match.end];
+    List<int> possibleColumnsPos = [for (Match match in matches) match.end];
     for(int possiblePos in possibleColumnsPos){
-      if (body.every((line) => line.codeUnitAt(possiblePos-1)==' '.codeUnits.first)){
+      if (!alreadyKnownCols.contains(possiblePos) &&body.every((line) => line.codeUnitAt(possiblePos-1)==' '.codeUnits.first)){
         additionalPos.add(possiblePos);
       }
     }

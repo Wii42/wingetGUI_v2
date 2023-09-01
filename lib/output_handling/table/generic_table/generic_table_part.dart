@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:winget_gui/widget_assets/link_button.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
+import '../../../widget_assets/decorated_box_wrap.dart';
 import '../table_part.dart';
 
 class GenericTablePart extends TablePart {
@@ -11,9 +12,12 @@ class GenericTablePart extends TablePart {
 
   @override
   Widget buildTableRepresentation(List<Map<String, String>> tableData) {
-    return material.DataTable(
-      columns: tableColumns(tableData),
-      rows: tableRows(tableData),
+    return DecoratedBoxWrap(
+          child: material.DataTable(
+          columns: tableColumns(tableData),
+          rows: tableRows(tableData),
+        ),
+
     );
   }
 
