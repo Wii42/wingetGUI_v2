@@ -56,7 +56,6 @@ abstract class TableScanner extends Scanner {
     for (int i = 0; i < respList.length; i++) {
       Responsibility resp = respList[i];
       if (resp.line.contains('-----') && !resp.isHandled() && !falsePositives.contains(i)) {
-        print(resp.line);
         return i;
       }
     }

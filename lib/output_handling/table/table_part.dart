@@ -29,11 +29,11 @@ abstract class TablePart extends OutputPart {
   }
 
   List<int> _getColumnsPos() {
-    Pattern pattern = RegExp(r"\s[A-ZÄÖÜ]");
+    Pattern pattern = RegExp(r"\s{2,}[A-ZÄÖÜ]");
     String head = lines[0];
 
     Iterable<Match> matches = pattern.allMatches(head);
-    List<int> columnsPos = [0, for (Match match in matches) match.start];
+    List<int> columnsPos = [0, for (Match match in matches) match.end-1];
 
     List<int> additionalColumns = _findNoNameColumns(lines[2], columnsPos);
     if (additionalColumns.isNotEmpty){
