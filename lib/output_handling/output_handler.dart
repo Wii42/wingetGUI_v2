@@ -8,7 +8,8 @@ import 'package:winget_gui/output_handling/plain_text/plain_text_scanner.dart';
 import 'package:winget_gui/output_handling/responsibility.dart';
 import 'package:winget_gui/output_handling/scanner.dart';
 import 'package:winget_gui/output_handling/show/show_scanner.dart';
-import 'package:winget_gui/output_handling/table/table_scanner.dart';
+import 'package:winget_gui/output_handling/table/apps_table/apps_table_scanner.dart';
+import 'package:winget_gui/output_handling/table/generic_table/generic_table_scanner.dart';
 
 import 'output_part.dart';
 
@@ -27,7 +28,8 @@ class OutputHandler {
     responsibilityList = [for (String line in output) Responsibility(line)];
 
     outputScanners = [
-      TableScanner(responsibilityList, command: command),
+      AppsTableScanner(responsibilityList, command: command),
+      GenericTableScanner(responsibilityList, command: command),
       LoadingBarScanner(responsibilityList),
       ShowScanner(responsibilityList,
           command: command, prevCommand: prevCommand),

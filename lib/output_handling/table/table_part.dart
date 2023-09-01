@@ -3,31 +3,29 @@ import 'dart:math';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/output_handling/table/package_list.dart';
-import 'package:winget_gui/output_handling/table/package_short_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../infos/package_infos.dart';
 import '../output_part.dart';
 
-class TablePart extends OutputPart {
+abstract class TablePart extends OutputPart {
   TablePart(super.lines, {required this.command, required this.locale});
 
   List<String> command;
   AppLocalizations locale;
 
-  late PackageList packageList;
+  late Widget tableRepresentation;
 
   @override
   Future<Widget?> representation(BuildContext context) async {
-    packageList = await Isolate.run<PackageList>(_makeTable);
-    return packageList;
+    tableRepresentation = await Isolate.run<Widget>(_makeTable);
+    return tableRepresentation;
   }
 
-  PackageList _makeTable() {
+  Widget _makeTable() {
     List<int> columnsPos = _getColumnsPos();
     _correctLinesWithNonWesternGlyphs(columnsPos);
-    return _createPackageList(columnsPos);
+    List<Map<String, String>> tableData = _extractTableData(columnsPos);
+    return buildTableRepresentation(tableData);
   }
 
   List<int> _getColumnsPos() {
@@ -65,22 +63,18 @@ class TablePart extends OutputPart {
     }
   }
 
-  PackageList _createPackageList(List<int> columnsPos) {
+  List<Map<String, String>> _extractTableData(List<int> columnsPos) {
     List<String> columnNames = _getColumnNames(columnsPos);
 
-    List<PackageShortInfo> packages = [];
     List<String> body = lines.sublist(2);
+    List<Map<String, String>> tableData = [];
+
     for (String entry in body) {
       Map<String, String> infos =
           _getDictFromLine(entry, columnNames, columnsPos);
-      packages.add(
-        PackageShortInfo(
-          PackageInfos.fromMap(details: infos, locale: locale),
-          command: command,
-        ),
-      );
+      tableData.add(infos);
     }
-    return PackageList(packages, command: command);
+    return tableData;
   }
 
   Map<String, String> _getDictFromLine(
@@ -94,6 +88,8 @@ class TablePart extends OutputPart {
     }
     return infos;
   }
+
+  Widget buildTableRepresentation(List<Map<String, String>> tableData);
 
   List<String> _getColumnNames(List<int> columnsPos) {
     List<String> columnNames = [];

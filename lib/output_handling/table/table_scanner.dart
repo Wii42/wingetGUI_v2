@@ -7,20 +7,20 @@ import '../output_part.dart';
 import '../responsibility.dart';
 import '../scanner.dart';
 
-class TableScanner extends Scanner {
+abstract class TableScanner extends Scanner {
   final List<String> command;
 
   TableScanner(super.respList, {required this.command});
 
   @override
   void markResponsibleLines(BuildContext context) {
-    if (hasTable()) {
+    if (hasTable(context)) {
       _makeTable(context);
       markResponsibleLines(context);
     }
   }
 
-  bool hasTable() {
+  bool hasTable(BuildContext context) {
     int posHorizontalLine = _findHorizontalLine();
     if (posHorizontalLine < 0) {
       //found none
@@ -28,7 +28,10 @@ class TableScanner extends Scanner {
     }
     Responsibility prevLine = respList[posHorizontalLine - 1];
     Responsibility nextLine = respList[posHorizontalLine + 1];
-    return (_couldBePartOfTable(prevLine) && _couldBePartOfTable(nextLine));
+    if (!(_couldBePartOfTable(prevLine) && _couldBePartOfTable(nextLine))) {
+      return false;
+    }
+    return isSpecificTable(prevLine.line, context);
   }
 
   bool _couldBePartOfTable(Responsibility resp) {
@@ -54,10 +57,11 @@ class TableScanner extends Scanner {
         for (int i = tableStart; i <= tableEnd; i++) respList[i].line
       ];
       AppLocalizations locale = AppLocalizations.of(context)!;
-      _markLines(tableStart, tableEnd,
-          TablePart(tableLines, command: command, locale: locale));
+      _markLines(tableStart, tableEnd, tablePart(tableLines, locale));
     }
   }
+
+  TablePart tablePart(List<String> tableLines, AppLocalizations locale);
 
   int _findTableEnd(int tableStart) {
     String firstLine = respList[tableStart].line;
@@ -69,7 +73,8 @@ class TableScanner extends Scanner {
 
       if (line.length != firstLine.length) {
         // no idea why this works
-        if (line.length > lastindexOfIdentifier + 10 && !(line.codeUnitAt(lastindexOfIdentifier) == ' '.codeUnits.first)) {
+        if (line.length > lastindexOfIdentifier + 10 &&
+            !(line.codeUnitAt(lastindexOfIdentifier) == ' '.codeUnits.first)) {
           if (!line.contains('…')) {
             return i - 1;
           }
@@ -103,4 +108,6 @@ class TableScanner extends Scanner {
       respList[i].respPart = part;
     }
   }
+
+  bool isSpecificTable(String headerLine, BuildContext context);
 }

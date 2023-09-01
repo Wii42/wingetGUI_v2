@@ -3,8 +3,8 @@ import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../routes.dart';
-import '../infos/package_infos.dart';
+import '../../../routes.dart';
+import '../../infos/package_infos.dart';
 
 class PackageShortInfo extends StatelessWidget {
   final PackageInfos infos;
