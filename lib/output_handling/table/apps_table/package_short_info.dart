@@ -16,12 +16,11 @@ class PackageShortInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
     return Button(
-      onPressed: (isClickable(locale))
+      onPressed: (isClickable())
           ? () {
               if (infos.id != null) {
-                pushPackageDetails(context, locale);
+                pushPackageDetails(context);
               }
             }
           : null,
@@ -30,11 +29,9 @@ class PackageShortInfo extends StatelessWidget {
         child: SizedBox(height: 90, child: _shortInfo(context)),
       ),
     );
-    //return ;
   }
 
-  Future<void> pushPackageDetails(
-      BuildContext context, AppLocalizations locale) async {
+  Future<void> pushPackageDetails(BuildContext context) async {
     NavigatorState router = Navigator.of(context);
     router.pushNamed(Routes.show.route,
         arguments: RouteParameter(commandParameter: [
@@ -58,7 +55,7 @@ class PackageShortInfo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: _versions(locale),
         ),
-        if (isClickable(locale)) ...[
+        if (isClickable()) ...[
           const SizedBox(width: 20),
           RightSideButtons(
             infos: infos,
@@ -102,9 +99,8 @@ class PackageShortInfo extends StatelessWidget {
   }
 
   TextStyle? _titleStyle(BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
     TextStyle? style = FluentTheme.of(context).typography.title;
-    if (!isClickable(locale)) {
+    if (!isClickable()) {
       style = style?.apply(color: FluentTheme.of(context).inactiveColor);
     }
     return style;
@@ -121,11 +117,11 @@ class PackageShortInfo extends StatelessWidget {
     ];
   }
 
-  bool isClickable(AppLocalizations locale) {
+  bool isClickable() {
     return infos.source != null &&
         infos.source!.value.isNotEmpty &&
-        infos.id != null; // &&
-    // !infos.id!.value.endsWith('…');
+        infos.id != null &&
+        !infos.id!.value.endsWith('…');
   }
 
   String? name() => infos.name?.value;

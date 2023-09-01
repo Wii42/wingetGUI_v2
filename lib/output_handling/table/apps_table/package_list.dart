@@ -20,9 +20,9 @@ class PackageList extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _PackageListState();
 
-  bool hasUnClickablePackages(AppLocalizations locale) {
+  bool hasUnClickablePackages() {
     for (PackageShortInfo package in packages) {
-      if (!package.isClickable(locale)) {
+      if (!package.isClickable()) {
         return true;
       }
     }
@@ -39,38 +39,30 @@ class _PackageListState extends State<PackageList> {
   void initState() {
     super.initState();
     onlyClickablePackages = widget.initialOnlyClickablePackages;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    searchablePackages = selectedPackages(locale);
+    searchablePackages = selectedPackages();
   }
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          settings(locale),
-          ...listWithNrOfPackagesInfo(filteredPackages(locale), locale),
-          //...filteredPackages(locale),
+          settings(),
+          ...listWithNrOfPackagesInfo(filteredPackages()),
         ].withSpaceBetween(height: 10));
   }
 
-  List<PackageShortInfo> selectedPackages(AppLocalizations locale) {
+  List<PackageShortInfo> selectedPackages() {
     if (onlyClickablePackages) {
       return [
         for (PackageShortInfo package in widget.packages)
-          if (package.isClickable(locale)) package
+          if (package.isClickable()) package
       ];
     }
     return widget.packages;
   }
 
-  List<PackageShortInfo> filteredPackages(AppLocalizations locale) {
+  List<PackageShortInfo> filteredPackages() {
     if (filter.isEmpty) {
       searchablePackages;
     }
@@ -84,8 +76,8 @@ class _PackageListState extends State<PackageList> {
     ];
   }
 
-  List<Widget> listWithNrOfPackagesInfo(
-      List<Widget> shownPackages, AppLocalizations locale) {
+  List<Widget> listWithNrOfPackagesInfo(List<Widget> shownPackages) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return [
       ...shownPackages,
       Padding(
@@ -99,22 +91,22 @@ class _PackageListState extends State<PackageList> {
     ];
   }
 
-  Widget settings(AppLocalizations locale) {
+  Widget settings() {
     return Wrap(
       spacing: 50,
       runSpacing: 10,
       alignment: WrapAlignment.spaceBetween,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        if (widget.hasUnClickablePackages(locale))
-          onlyClickableCheckbox(locale),
-        if (isUpdatesList()) updateAllButton(locale),
-        if (searchablePackages.length >= 5) filterField(locale),
+        if (widget.hasUnClickablePackages()) onlyClickableCheckbox(),
+        if (isUpdatesList()) updateAllButton(),
+        if (searchablePackages.length >= 5) filterField(),
       ],
     );
   }
 
-  Widget onlyClickableCheckbox(AppLocalizations locale) {
+  Widget onlyClickableCheckbox() {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return Wrap(
       spacing: 10,
       children: [
@@ -124,7 +116,7 @@ class _PackageListState extends State<PackageList> {
             if (value != null) {
               setState(() {
                 onlyClickablePackages = value;
-                searchablePackages = selectedPackages(locale);
+                searchablePackages = selectedPackages();
               });
             }
           },
@@ -136,7 +128,8 @@ class _PackageListState extends State<PackageList> {
 
   bool isUpdatesList() => (widget.command[0] == Winget.updates.command[0]);
 
-  Button updateAllButton(AppLocalizations locale) {
+  Button updateAllButton() {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return Button(
       onPressed: () {
         NavigatorState navigator = Navigator.of(context);
@@ -146,7 +139,8 @@ class _PackageListState extends State<PackageList> {
     );
   }
 
-  Widget filterField(AppLocalizations locale) {
+  Widget filterField() {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 400),
       child: TextFormBox(
