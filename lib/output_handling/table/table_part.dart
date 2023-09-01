@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:isolate';
 import 'dart:math';
 
@@ -29,11 +30,15 @@ abstract class TablePart extends OutputPart {
   }
 
   List<int> _getColumnsPos() {
-    Pattern pattern = RegExp("[ ][A-ZÄÖÜ]");
+    Pattern pattern = RegExp(r"\s[A-ZÄÖÜ]");
     String head = lines[0];
 
     Iterable<Match> matches = pattern.allMatches(head);
-    return [0, for (Match match in matches) match.start];
+    List<int> columnsPos = [0, for (Match match in matches) match.start];
+
+    List<String> additionalColumns = _findNoNameColumns(lines[2]);
+
+    return columnsPos;
   }
 
   void _correctLinesWithNonWesternGlyphs(List<int> columnsPos) {
@@ -42,7 +47,7 @@ abstract class TablePart extends OutputPart {
       line = lines[i];
       bool test = line.containsNonWesternGlyphs();
       if (test) {
-        Pattern pattern = RegExp("[ ]{2}[A-ZÄÖÜa-zäöü0-9]");
+        Pattern pattern = RegExp(r"\s{2}[A-ZÄÖÜa-zäöü0-9]");
         Iterable<Match> matches = pattern.allMatches(line);
         if (matches.isEmpty) {
           return;
@@ -100,5 +105,22 @@ abstract class TablePart extends OutputPart {
       columnNames.add((head.substring(columnsPos[i], end)).trim());
     }
     return columnNames;
+  }
+
+  List<int> _findNoNameColumns(String testedLine) {
+    testedLine = testedLine.trim();
+
+    List<String> body = lines.sublist(2);
+    Pattern pattern = RegExp(r"\s{3,}");
+
+    List<int> additionalPos = [];
+    Iterable<Match> matches = pattern.allMatches(testedLine);
+    List<int> possibleColumnsPos = [0, for (Match match in matches) match.end];
+    for(int possiblePos in possibleColumnsPos){
+      if (body.every((line) => line.codeUnitAt(possiblePos-1)==' '.codeUnits.first)){
+        additionalPos.add(possiblePos);
+      }
+    }
+    return additionalPos;
   }
 }
