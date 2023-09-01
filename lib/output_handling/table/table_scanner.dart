@@ -10,6 +10,8 @@ import '../scanner.dart';
 abstract class TableScanner extends Scanner {
   final List<String> command;
 
+  List<int> falsePositives = [];
+
   TableScanner(super.respList, {required this.command});
 
   @override
@@ -26,12 +28,24 @@ abstract class TableScanner extends Scanner {
       //found none
       return false;
     }
+
+    bool isFalsePositive = false;
+
     Responsibility prevLine = respList[posHorizontalLine - 1];
     Responsibility nextLine = respList[posHorizontalLine + 1];
     if (!(_couldBePartOfTable(prevLine) && _couldBePartOfTable(nextLine))) {
-      return false;
+      isFalsePositive = true;
     }
-    return isSpecificTable(prevLine.line, context);
+    if(!isSpecificTable(prevLine.line, context)) {
+      isFalsePositive = true;
+    }
+
+    if(isFalsePositive){
+      falsePositives.add(posHorizontalLine);
+      return hasTable(context);
+    }
+    return true;
+
   }
 
   bool _couldBePartOfTable(Responsibility resp) {
@@ -41,7 +55,8 @@ abstract class TableScanner extends Scanner {
   int _findHorizontalLine() {
     for (int i = 0; i < respList.length; i++) {
       Responsibility resp = respList[i];
-      if (resp.line.contains('-----') && !resp.isHandled()) {
+      if (resp.line.contains('-----') && !resp.isHandled() && !falsePositives.contains(i)) {
+        print(resp.line);
         return i;
       }
     }
