@@ -54,7 +54,12 @@ abstract class Compartment extends StatelessWidget {
       required BuildContext context}) {
     return [
       if (title != null)
-        Text(title, style: FluentTheme.of(context).typography.title),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: Text(title,
+              style: FluentTheme.of(context).typography.bodyLarge?.merge(
+                  const TextStyle(inherit: true, fontWeight: FontWeight.w500))),
+        ),
       ...?mainColumn,
       if (mainColumn != null &&
           mainColumn.isNotEmpty &&

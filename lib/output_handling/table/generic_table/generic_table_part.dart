@@ -13,11 +13,10 @@ class GenericTablePart extends TablePart {
   @override
   Widget buildTableRepresentation(List<Map<String, String>> tableData) {
     return DecoratedBoxWrap(
-          child: material.DataTable(
-          columns: tableColumns(tableData),
-          rows: tableRows(tableData),
-        ),
-
+      child: material.DataTable(
+        columns: tableColumns(tableData),
+        rows: tableRows(tableData),
+      ),
     );
   }
 

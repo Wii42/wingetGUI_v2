@@ -1,4 +1,7 @@
+import 'package:favicon/favicon.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_fadein/flutter_fadein.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/infos/package_infos.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
@@ -7,6 +10,7 @@ import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:winget_gui/widget_assets/store_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../widget_assets/decorated_box_wrap.dart';
 import '../../../widget_assets/link_button.dart';
 import '../../infos/app_attribute.dart';
 
@@ -17,21 +21,25 @@ class TitleWidget extends Compartment {
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
-    return [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _nameAndVersion(context),
-                _detailsBelow(context),
-              ].withSpaceBetween(height: 10),
+    return <Widget>[
+      AnimatedSize(
+        duration: const Duration(milliseconds: 100),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            favicon(),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  nameAndVersion(context),
+                  _detailsBelow(context),
+                ].withSpaceBetween(height: 10),
+              ),
             ),
-          ),
-          RightSideButtons(infos: infos),
-        ],
+            RightSideButtons(infos: infos),
+          ],
+        ),
       ),
     ];
   }
@@ -41,38 +49,18 @@ class TitleWidget extends Compartment {
     return AppAttribute.name.title(locale);
   }
 
-  Widget _nameAndVersion(BuildContext context) {
-    return Wrap(
-      spacing: 18,
-      crossAxisAlignment: WrapCrossAlignment.end,
-      children: [
-        ..._name(context),
-        if (infos.hasVersion())
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              'v${infos.version!.value}',
-              style: FluentTheme.of(context).typography.title,
-            ),
-          )
-      ],
-    );
-  }
-
-  List<Widget> _name(BuildContext context) {
-    if (infos.name == null) {
-      return [_nameFragment('<unknown>', context)];
-    }
-    List<String> nameFragments = infos.name!.value.split(' ');
-    return nameFragments
-        .map<Widget>((String fragment) => _nameFragment(fragment, context))
-        .toList();
-  }
-
-  Text _nameFragment(String fragment, BuildContext context) {
-    return Text(
-      fragment,
-      style: FluentTheme.of(context).typography.display,
+  Widget nameAndVersion(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+          text: '${infos.name?.value ?? '<unknown>'} ',
+          style: FluentTheme.of(context).typography.titleLarge,
+          children: [
+            if (infos.hasVersion())
+              TextSpan(
+                text: 'v${infos.version!.value}',
+                style: FluentTheme.of(context).typography.title,
+              )
+          ]),
       softWrap: true,
     );
   }
@@ -119,6 +107,62 @@ class TitleWidget extends Compartment {
   StoreButton _showInStore(AppLocalizations locale) {
     return StoreButton(
       storeId: infos.installer!.storeProductID!.value,
+    );
+  }
+
+  Uri? get faviconUrl =>
+      infos.website?.value ?? infos.agreement?.publisher?.url;
+
+  Widget favicon() {
+    double size = 70;
+
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 100),
+      child: FutureBuilder<Favicon?>(
+        future: FaviconFinder.getBest(faviconUrl.toString()),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            Favicon? favicon = snapshot.data;
+            if (favicon != null) {
+              String imageType =
+                  favicon.url.substring(favicon.url.lastIndexOf('.') + 1);
+              Widget image;
+
+              if (imageType == 'svg') {
+                image = SvgPicture.network(
+                  favicon.url,
+                  width: size,
+                  height: size,
+                );
+              } else {
+                image = Image.network(
+                  favicon.url,
+                  width: size,
+                  height: size,
+                  filterQuality: FilterQuality.high,
+                  isAntiAlias: true,
+                  //fit: BoxFit.contain,
+                );
+              }
+
+              return FadeIn(
+                duration: const Duration(milliseconds: 500),
+                // The green box must be a child of the AnimatedOpacity widget.
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 25),
+                  child: DecoratedBoxWrap(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: image,
+                    ),
+                  ),
+                ),
+              );
+            }
+          }
+          return const SizedBox();
+        },
+      ),
     );
   }
 }

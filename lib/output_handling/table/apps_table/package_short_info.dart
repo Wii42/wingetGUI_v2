@@ -122,7 +122,10 @@ class PackageShortInfo extends StatelessWidget {
   }
 
   bool isClickable(AppLocalizations locale) {
-    return infos.source != null && infos.source!.value.isNotEmpty;
+    return infos.source != null &&
+        infos.source!.value.isNotEmpty &&
+        infos.id != null; // &&
+    // !infos.id!.value.endsWith('…');
   }
 
   String? name() => infos.name?.value;
