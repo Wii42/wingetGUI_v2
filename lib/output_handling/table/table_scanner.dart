@@ -36,16 +36,15 @@ abstract class TableScanner extends Scanner {
     if (!(_couldBePartOfTable(prevLine) && _couldBePartOfTable(nextLine))) {
       isFalsePositive = true;
     }
-    if(!isSpecificTable(prevLine.line, context)) {
+    if (!isSpecificTable(prevLine.line, context)) {
       isFalsePositive = true;
     }
 
-    if(isFalsePositive){
+    if (isFalsePositive) {
       falsePositives.add(posHorizontalLine);
       return hasTable(context);
     }
     return true;
-
   }
 
   bool _couldBePartOfTable(Responsibility resp) {
@@ -55,7 +54,9 @@ abstract class TableScanner extends Scanner {
   int _findHorizontalLine() {
     for (int i = 0; i < respList.length; i++) {
       Responsibility resp = respList[i];
-      if (resp.line.contains('-----') && !resp.isHandled() && !falsePositives.contains(i)) {
+      if (resp.line.contains('-----') &&
+          !resp.isHandled() &&
+          !falsePositives.contains(i)) {
         return i;
       }
     }
@@ -79,6 +80,18 @@ abstract class TableScanner extends Scanner {
 
   int _findTableEnd(int tableStart) {
     String firstLine = respList[tableStart].line;
+
+    if (!firstLine.trim().contains(RegExp(r'\s{2,}'))) {
+      Responsibility resp;
+      for (int i = tableStart + 2; i < respList.length; i++) {
+        resp = respList[i];
+        if (resp.respPart != null || resp.line.isEmpty) {
+          return i - 1;
+        }
+      }
+      return respList.length - 1;
+    }
+
     int lastindexOfIdentifier = firstLine.lastIndexOf(' ');
     Responsibility resp;
     for (int i = tableStart + 2; i < respList.length; i++) {
@@ -88,7 +101,7 @@ abstract class TableScanner extends Scanner {
       if (line.length != firstLine.length) {
         // no idea why this works
         if (line.length > lastindexOfIdentifier + 10 &&
-            !(line.codeUnitAt(lastindexOfIdentifier) == ' '.codeUnits.first)) {
+            (line.codeUnitAt(lastindexOfIdentifier) != ' '.codeUnits.first)) {
           if (!line.contains('…')) {
             return i - 1;
           }
@@ -97,7 +110,7 @@ abstract class TableScanner extends Scanner {
 
       if ((line.lastIndexOf(' ') != lastindexOfIdentifier)) {
         if (line.containsNonWesternGlyphs()) {
-          if (!line.contains(RegExp("[ ][A-ZÄÖÜa-zäöü0-9]"))) {
+          if (!line.contains(RegExp(r"[A-ZÄÖÜa-zäöü0-9]"))) {
             return i - 1;
           }
         } else {

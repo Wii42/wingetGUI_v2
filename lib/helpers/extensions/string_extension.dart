@@ -19,7 +19,7 @@ extension ContainsExtentsion on String {
     }
     List<int> codePoints = codeUnits;
     for (int codePoint in codePoints) {
-      if (codePoint >= 1329 && String.fromCharCode(codePoint) != '…') {
+      if (codePoint >= 1329 && String.fromCharCode(codePoint) != '…' && String.fromCharCode(codePoint) != r'\') {
         return true;
       }
     }

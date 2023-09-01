@@ -33,10 +33,10 @@ abstract class TablePart extends OutputPart {
     String head = lines[0];
 
     Iterable<Match> matches = pattern.allMatches(head);
-    List<int> columnsPos = [0, for (Match match in matches) match.end-1];
+    List<int> columnsPos = [0, for (Match match in matches) match.end - 1];
 
     List<int> additionalColumns = _findNoNameColumns(lines[2], columnsPos);
-    if (additionalColumns.isNotEmpty){
+    if (additionalColumns.isNotEmpty) {
       columnsPos.addAll(additionalColumns);
       columnsPos = columnsPos.toSet().toList();
       columnsPos.sort();
@@ -120,8 +120,11 @@ abstract class TablePart extends OutputPart {
     List<int> additionalPos = [];
     Iterable<Match> matches = pattern.allMatches(testedLine);
     List<int> possibleColumnsPos = [for (Match match in matches) match.end];
-    for(int possiblePos in possibleColumnsPos){
-      if (!alreadyKnownCols.contains(possiblePos) &&body.every((line) => line.codeUnitAt(possiblePos-1)==' '.codeUnits.first)){
+    for (int possiblePos in possibleColumnsPos) {
+      if (!alreadyKnownCols.contains(possiblePos) &&
+          body.every((line) =>
+              line.containsNonWesternGlyphs() || (line.codeUnitAt(possiblePos - 1) == ' '.codeUnits.first)
+             )) {
         additionalPos.add(possiblePos);
       }
     }

@@ -19,7 +19,9 @@ abstract class ProcessOutput extends StatelessWidget {
           (BuildContext context, AsyncSnapshot<List<String>> streamSnapshot) {
         if (streamSnapshot.hasData) {
           if (kDebugMode) {
-            print(streamSnapshot.data);
+            if (streamSnapshot.hasData) {
+              print('\n${streamSnapshot.data!.join('\n')}\n\n\n\n');
+            }
           }
         }
         return buildPage(streamSnapshot, context);
@@ -70,6 +72,11 @@ abstract class ProcessOutput extends StatelessWidget {
           );
         }
         if (snapshot.hasError) {
+          if (snapshot.error is Error) {
+            Error error = snapshot.error as Error;
+            return Text('$error\n\n${error.stackTrace}');
+          }
+
           return Text(snapshot.error.toString());
         }
         return const Center(child: ProgressRing());
