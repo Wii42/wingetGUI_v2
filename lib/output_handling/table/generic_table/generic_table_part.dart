@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:winget_gui/widget_assets/link_button.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets/decorated_box_wrap.dart';
+import '../../../widget_assets/inline_link_button.dart';
 import '../table_part.dart';
 
 class GenericTablePart extends TablePart {
@@ -45,7 +45,7 @@ class GenericTablePart extends TablePart {
 
   Widget tableCell(String text) {
     return (isLink(text))
-        ? LinkButton(url: Uri.parse(text), text: Text(text))
+        ? InlineLinkButton(url: Uri.parse(text), text: Text(text))
         : Text(text);
   }
 }
