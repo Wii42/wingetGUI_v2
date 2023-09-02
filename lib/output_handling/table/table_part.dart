@@ -29,8 +29,13 @@ abstract class TablePart extends OutputPart {
   }
 
   List<int> _getColumnsPos() {
-    Pattern pattern = RegExp(r"\s{2,}[A-ZÄÖÜ]");
     String head = lines[0];
+    Pattern pattern;
+    if (head.trim().contains(RegExp(r"\s{2,}"))) {
+      pattern = RegExp(r"\s+[A-ZÄÖÜ]");
+    } else {
+      pattern = RegExp(r"\s{2,}[A-ZÄÖÜ]");
+    }
 
     Iterable<Match> matches = pattern.allMatches(head);
     List<int> columnsPos = [0, for (Match match in matches) match.end - 1];
@@ -123,8 +128,8 @@ abstract class TablePart extends OutputPart {
     for (int possiblePos in possibleColumnsPos) {
       if (!alreadyKnownCols.contains(possiblePos) &&
           body.every((line) =>
-              line.containsNonWesternGlyphs() || (line.codeUnitAt(possiblePos - 1) == ' '.codeUnits.first)
-             )) {
+              line.containsNonWesternGlyphs() ||
+              (line.codeUnitAt(possiblePos - 1) == ' '.codeUnits.first))) {
         additionalPos.add(possiblePos);
       }
     }

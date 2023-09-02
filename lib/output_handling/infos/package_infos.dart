@@ -20,7 +20,8 @@ class PackageInfos {
       category,
       pricing,
       freeTrial,
-      ageRating;
+      ageRating,
+  match;
   final InfoWithLink? releaseNotes;
   final List<String>? tags;
   final AgreementInfos? agreement;
@@ -44,6 +45,7 @@ class PackageInfos {
     this.pricing,
     this.freeTrial,
     this.ageRating,
+    this.match,
     this.releaseNotes,
     this.agreement,
     this.tags,
@@ -80,6 +82,7 @@ class PackageInfos {
         pricing: parser.maybeDetailFromMap(AppAttribute.pricing),
         freeTrial: parser.maybeDetailFromMap(AppAttribute.freeTrial),
         ageRating: parser.maybeDetailFromMap(AppAttribute.ageRating),
+        match: parser.maybeDetailFromMap(AppAttribute.match),
         releaseNotes: parser.maybeInfoWithLinkFromMap(
             textInfo: AppAttribute.releaseNotes,
             urlInfo: AppAttribute.releaseNotesUrl),

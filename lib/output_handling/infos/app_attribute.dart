@@ -40,6 +40,7 @@ enum AppAttribute {
   sha256Installer(),
   installerLocale(),
   releaseDate(),
+  match(),
   ;
 
   const AppAttribute();

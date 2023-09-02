@@ -48,12 +48,15 @@ class PackageShortInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          child: _leftSide(context),
+          child: nameAndSource(context),
         ),
         Column(
           mainAxisAlignment: columnAlign,
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: _versions(locale),
+          children: [
+            ..._versions(locale),
+            //if (infos.match != null) Text("${infos.match!.title(locale)}: ${infos.match!.value}", style: FluentTheme.of(context).typography.caption,),
+          ],
         ),
         if (isClickable()) ...[
           const SizedBox(width: 20),
@@ -68,7 +71,7 @@ class PackageShortInfo extends StatelessWidget {
     );
   }
 
-  Widget _leftSide(BuildContext context) {
+  Widget nameAndSource(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,20 +91,28 @@ class PackageShortInfo extends StatelessWidget {
         if (infos.source != null && infos.source!.value.isNotEmpty)
           Text(
             locale.fromSource(infos.source!.value),
-            style: TextStyle(
-              color: FluentTheme.of(context).inactiveColor,
-            ),
+            style: correctColor(
+                FluentTheme.of(context).typography.caption, context),
+            //style: TextStyle(
+            // color: FluentTheme.of(context).inactiveColor,
+            //),
             textAlign: TextAlign.start,
             overflow: TextOverflow.ellipsis,
-          )
+          ),
       ],
     );
   }
 
   TextStyle? _titleStyle(BuildContext context) {
     TextStyle? style = FluentTheme.of(context).typography.title;
+    return correctColor(style, context);
+  }
+
+  TextStyle? correctColor(TextStyle? style, BuildContext context) {
     if (!isClickable()) {
-      style = style?.apply(color: FluentTheme.of(context).inactiveColor);
+      style = style?.apply(
+          color: ButtonThemeData.buttonForegroundColor(
+              context, {ButtonStates.disabled}));
     }
     return style;
   }

@@ -16,6 +16,8 @@ class GenericTablePart extends TablePart {
       child: material.DataTable(
         columns: tableColumns(tableData),
         rows: tableRows(tableData),
+        columnSpacing: 20,
+
       ),
     );
   }
