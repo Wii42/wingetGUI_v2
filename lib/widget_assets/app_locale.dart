@@ -9,7 +9,8 @@ typedef OnChangeLocale = void Function(Locale locale);
 /// Builds the widget in the [Locale].
 typedef LocaleBuilder = Widget Function(
   BuildContext context,
-  Locale locale,
+  Locale guiLocale,
+  Locale wingetLocale,
 );
 
 /// Class with actions to manipulate [Locale].
@@ -17,24 +18,36 @@ typedef LocaleBuilder = Widget Function(
 @visibleForTesting
 class LocaleData {
   const LocaleData({
-    required this.locale,
-    required this.setLocale,
+    required this.guiLocale,
+    required this.setGuiLocale,
+    required this.wingetLocale,
+    required this.setWingetLocale,
   });
 
   /// Gets the current [Locale].
-  final Locale locale;
+  final Locale guiLocale;
 
   /// Changes [Locale].
-  final OnChangeLocale setLocale;
+  final OnChangeLocale setGuiLocale;
+
+  /// Gets the current [Locale].
+  final Locale wingetLocale;
+
+  /// Changes [Locale].
+  final OnChangeLocale setWingetLocale;
 
   /// Create a new [LocaleData] based in other.
   LocaleData copyWith({
-    Locale? locale,
-    OnChangeLocale? setLocale,
+    Locale? guiLocale,
+    OnChangeLocale? setGuiLocale,
+    Locale? wingetLocale,
+    OnChangeLocale? setWingetLocale,
   }) {
     return LocaleData(
-      locale: locale ?? this.locale,
-      setLocale: setLocale ?? this.setLocale,
+      guiLocale: guiLocale ?? this.guiLocale,
+      setGuiLocale: setGuiLocale ?? this.setGuiLocale,
+      wingetLocale: wingetLocale ?? this.wingetLocale,
+      setWingetLocale: setWingetLocale ?? this.setWingetLocale,
     );
   }
 
@@ -43,12 +56,15 @@ class LocaleData {
     if (identical(this, other)) return true;
 
     return other is LocaleData &&
-        other.locale == locale &&
-        other.setLocale == setLocale;
+        other.guiLocale == guiLocale &&
+        other.setGuiLocale == setGuiLocale &&
+        other.wingetLocale == wingetLocale &&
+        other.setWingetLocale == setWingetLocale;
   }
 
   @override
-  int get hashCode => Object.hashAll([locale, setLocale]);
+  int get hashCode =>
+      Object.hashAll([guiLocale, setGuiLocale, wingetLocale, setWingetLocale]);
 }
 
 /// Provides access to [LocaleData] in its descendant widgets to
@@ -58,14 +74,21 @@ class AppLocale extends StatefulWidget {
   AppLocale({
     required this.builder,
     this.onChangeLocale,
-    Locale? initialLocale,
+    Locale? initialGuiLocale,
+    Locale? initialWingetLocale,
     super.key,
-  }) : initialLocale = initialLocale ??
+  })  : initialGuiLocale = initialGuiLocale ??
+            determineClosestSupportedLocale(parse(Intl.getCurrentLocale())),
+        initialWingetLocale = initialWingetLocale ??
             determineClosestSupportedLocale(parse(Intl.getCurrentLocale()));
 
   /// [Locale] initial, changing it later does not
   /// change the current [Locale].
-  final Locale initialLocale;
+  final Locale initialGuiLocale;
+
+  /// [Locale] initial, changing it later does not
+  /// change the current [Locale].
+  final Locale initialWingetLocale;
 
   /// Builders the widget every time that a new [Locale] is set.
   final LocaleBuilder builder;
@@ -97,7 +120,10 @@ class AppLocale extends StatefulWidget {
     super.debugFillProperties(properties);
     properties
       ..add(
-        EnumProperty('defaultLocale', initialLocale),
+        EnumProperty('defaultGuiLocale', initialGuiLocale),
+      )
+      ..add(
+        EnumProperty('defaultWingetLocale', initialWingetLocale),
       )
       ..add(
         ObjectFlagProperty<LocaleBuilder>.has('builder', builder),
@@ -142,26 +168,41 @@ class AppLocale extends StatefulWidget {
 
 class _AppLocaleState extends State<AppLocale> {
   late LocaleData _localeData = LocaleData(
-    locale: widget.initialLocale,
-    setLocale: _setLocale,
+    guiLocale: widget.initialGuiLocale,
+    wingetLocale: widget.initialWingetLocale,
+    setGuiLocale: _setGuiLocale,
+    setWingetLocale: _setWingetLocale,
   );
 
-  Locale get _currentLocale => _localeData.locale;
+  Locale get _currentGuiLocale => _localeData.guiLocale;
+  Locale get _currentWingetLocale => _localeData.wingetLocale;
 
   @override
   Widget build(BuildContext context) {
     return _InheritedLocaleData(
       localeData: _localeData,
-      child: widget.builder(context, _currentLocale),
+      child: widget.builder(context,
+          _currentGuiLocale, _currentWingetLocale),
     );
   }
 
-  void _setLocale(Locale locale) {
-    if (_currentLocale != locale) {
+  void _setGuiLocale(Locale locale) {
+    if (_currentGuiLocale != locale) {
       widget.onChangeLocale?.call(locale);
       setState(
         () => _localeData = _localeData.copyWith(
-          locale: locale,
+          guiLocale: locale,
+        ),
+      );
+    }
+  }
+
+  void _setWingetLocale(Locale locale) {
+    if (_currentGuiLocale != locale) {
+      widget.onChangeLocale?.call(locale);
+      setState(
+        () => _localeData = _localeData.copyWith(
+          wingetLocale: locale,
         ),
       );
     }
@@ -170,7 +211,8 @@ class _AppLocaleState extends State<AppLocale> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(EnumProperty('locale', _currentLocale));
+    properties.add(EnumProperty('guiLocale', _currentGuiLocale));
+    properties.add(EnumProperty('wingetLocale', _currentWingetLocale));
   }
 }
 
@@ -184,5 +226,6 @@ class _InheritedLocaleData extends InheritedWidget {
 
   @override
   bool updateShouldNotify(_InheritedLocaleData oldWidget) =>
-      localeData.locale != oldWidget.localeData.locale;
+      localeData.guiLocale != oldWidget.localeData.guiLocale ||
+      localeData.wingetLocale != oldWidget.localeData.wingetLocale;
 }

@@ -28,9 +28,9 @@ class WingetGui extends StatelessWidget {
       initialThemeMode: ThemeMode.system,
       builder: (BuildContext context, ThemeMode themeMode) {
         return AppLocale(
-          builder: (BuildContext context, Locale locale) {
+          builder: (BuildContext context, Locale guiLocale, Locale _) {
             return FluentApp(
-              locale: locale,
+              locale: guiLocale,
               title: 'WingetGUI',
               theme: FluentThemeData(
                 accentColor: SystemTheme.accentColor.accent.toAccentColor(),

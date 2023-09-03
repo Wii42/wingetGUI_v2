@@ -28,10 +28,10 @@ class _SettingsPageSate extends State<SettingsPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    locale = AppLocale.of(context).locale;
+    locale = AppLocale.of(context).guiLocale;
     print(locale);
     themeMode = AppThemeMode.of(context).themeMode;
-    wingetLocale = AppLocale.of(context).locale;
+    wingetLocale = AppLocale.of(context).wingetLocale;
   }
 
   @override
@@ -72,7 +72,7 @@ class _SettingsPageSate extends State<SettingsPage> {
                   setState(() {
                     locale = value;
                     if (locale != null) {
-                      AppLocale.of(context).setLocale(locale!);
+                      AppLocale.of(context).setGuiLocale(locale!);
                     }
                   });
                 },
@@ -92,6 +92,9 @@ class _SettingsPageSate extends State<SettingsPage> {
                 onChanged: (value) {
                   setState(() {
                     wingetLocale = value;
+                    if (locale != null) {
+                      AppLocale.of(context).setWingetLocale(locale!);
+                    }
                   });
                 },
                 items: [
