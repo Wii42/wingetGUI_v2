@@ -48,7 +48,7 @@ enum AppAttribute {
   String key(AppLocalizations local) {
     String key = local.infoKey(this.name);
     if (key == notFoundError) {
-      throw Exception(key);
+      throw Exception("$key: ${this.name} in AppAttributes.key");
     }
     return key;
   }
@@ -56,7 +56,7 @@ enum AppAttribute {
   String title(AppLocalizations local) {
     String title = local.infoTitle(this.name);
     if (title == notFoundError) {
-      throw Exception(title);
+      throw Exception("$title: ${this.name} in AppAttributes.title");
     }
     return title;
   }

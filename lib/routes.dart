@@ -69,7 +69,7 @@ enum Routes {
   String title(AppLocalizations local) {
     String title = local.wingetTitle(name);
     if (title == notFoundError) {
-      throw Exception(title);
+      throw Exception("$title: $name in Routes.title");
     }
     return title;
   }
