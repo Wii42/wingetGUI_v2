@@ -7,6 +7,7 @@ import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/main_navigation.dart';
 import 'package:winget_gui/routes.dart';
+import 'package:winget_gui/widget_assets/app_locale.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,24 +27,28 @@ class WingetGui extends StatelessWidget {
     return AppThemeMode(
       initialThemeMode: ThemeMode.system,
       builder: (BuildContext context, ThemeMode themeMode) {
-        return FluentApp(
-          locale: Locale('en'),
-          title: 'WingetGUI',
-          theme: FluentThemeData(
-            accentColor: SystemTheme.accentColor.accent.toAccentColor(),
-            brightness: Brightness.light,
-          ),
-          darkTheme: FluentThemeData(
-            accentColor: SystemTheme.accentColor.accent.toAccentColor(),
-            brightness: Brightness.dark,
-          ),
-          themeMode: themeMode,
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: MainNavigation(title: "WingetGUI"),
-          //routerConfig: router,
-          //supportedLocales: const [Locale("en")],
+        return AppLocale(
+          builder: (BuildContext context, Locale locale) {
+            return FluentApp(
+              locale: locale,
+              title: 'WingetGUI',
+              theme: FluentThemeData(
+                accentColor: SystemTheme.accentColor.accent.toAccentColor(),
+                brightness: Brightness.light,
+              ),
+              darkTheme: FluentThemeData(
+                accentColor: SystemTheme.accentColor.accent.toAccentColor(),
+                brightness: Brightness.dark,
+              ),
+              themeMode: themeMode,
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: MainNavigation(title: "WingetGUI"),
+              //routerConfig: router,
+              //supportedLocales: const [Locale("en")],
+            );
+          },
         );
       },
     );

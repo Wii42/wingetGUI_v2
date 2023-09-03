@@ -6,6 +6,7 @@ import 'package:winget_gui/winget_process.dart';
 
 import '../helpers/route_parameter.dart';
 import '../routes.dart';
+import '../widget_assets/app_locale.dart';
 import '../widget_assets/decorated_box_wrap.dart';
 import '../widget_assets/pane_item_body.dart';
 import '../winget_commands.dart';
@@ -21,26 +22,29 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageSate extends State<SettingsPage> {
   ThemeMode? themeMode;
-  Locale? language;
+  Locale? locale;
+  Locale? wingetLocale;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    language = Localizations.localeOf(context);
+    locale = AppLocale.of(context).locale;
+    print(locale);
     themeMode = AppThemeMode.of(context).themeMode;
+    wingetLocale = AppLocale.of(context).locale;
   }
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
+    AppLocalizations localizations = AppLocalizations.of(context)!;
     return PaneItemBody(
-      title: Routes.settingsPage.title(locale),
+      title: Routes.settingsPage.title(localizations),
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
             settingsItem(
-              locale.chooseDisplayMode,
+              localizations.chooseDisplayMode,
               ComboBox<ThemeMode>(
                 value: themeMode,
                 onChanged: (mode) {
@@ -55,18 +59,39 @@ class _SettingsPageSate extends State<SettingsPage> {
                   for (ThemeMode themeMode in ThemeMode.values)
                     ComboBoxItem<ThemeMode>(
                       value: themeMode,
-                      child: Text(locale.themeMode(themeMode.name)),
+                      child: Text(localizations.themeMode(themeMode.name)),
                     ),
                 ],
               ),
             ),
             settingsItem(
-              locale.chooseLanguage,
+              localizations.chooseLanguage,
               ComboBox<Locale>(
-                value: language,
+                value: locale,
                 onChanged: (value) {
                   setState(() {
-                    language = value;
+                    locale = value;
+                    if (locale != null) {
+                      AppLocale.of(context).setLocale(locale!);
+                    }
+                  });
+                },
+                items: [
+                  for (Locale locale in AppLocalizations.supportedLocales)
+                    ComboBoxItem<Locale>(
+                      value: locale,
+                      child: Text(locale.toLanguageTag()),
+                    ),
+                ],
+              ),
+            ),
+            settingsItem(
+              'set winget Language',
+              ComboBox<Locale>(
+                value: wingetLocale,
+                onChanged: (value) {
+                  setState(() {
+                    wingetLocale = value;
                   });
                 },
                 items: [
@@ -79,12 +104,12 @@ class _SettingsPageSate extends State<SettingsPage> {
               ),
             ),
             settingsItem(
-                Winget.settings.title(locale),
+                Winget.settings.title(localizations),
                 Button(
                   onPressed: () {
                     WingetProcess.runWinget(Winget.settings);
                   },
-                  child: Text(locale.openWingetSettingsFile),
+                  child: Text(localizations.openWingetSettingsFile),
                 ))
           ].withSpaceBetween(height: 10),
         ),
