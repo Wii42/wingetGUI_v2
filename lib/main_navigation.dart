@@ -11,14 +11,23 @@ class MainNavigation extends StatefulWidget {
     Routes.installed,
     Routes.searchPage
   ];
-  final List<Routes> footerItems = [
+
+  static const List<Routes> advancedFooterItems = [
     Routes.about,
     Routes.sources,
-    Routes.commandPromptPage,
-    Routes.settings
+    Routes.commandPromptPage
   ];
 
-  List<Routes> get allItems => [...mainItems, ...footerItems];
+  final Routes expanderFooterItem = Routes.advancedOptions;
+
+  final List<Routes> otherFooterItems = [Routes.settings];
+
+  List<Routes> get allItems => [
+        ...mainItems,
+        expanderFooterItem,
+        ...advancedFooterItems,
+        ...otherFooterItems
+      ];
 
   @override
   State<MainNavigation> createState() => MainNavigationState();
@@ -32,7 +41,7 @@ class MainNavigationState extends State<MainNavigation> {
   void initState() {
     super.initState();
     navigators = {
-      for (Routes winget in widget.allItems) winget: navigator(winget)
+      for (Routes route in widget.allItems) route: navigator(route)
     };
   }
 
@@ -51,7 +60,11 @@ class MainNavigationState extends State<MainNavigation> {
             child: Text('WingetGUI'),
           ),
           items: createNavItems(widget.mainItems),
-          footerItems: createNavItems(widget.footerItems),
+          footerItems: [
+            _navExpander(
+                Routes.advancedOptions, MainNavigation.advancedFooterItems),
+            ...createNavItems(widget.otherFooterItems)
+          ],
           selected: topIndex,
           onChanged: (index) {
             setState(() => topIndex = index);
@@ -64,16 +77,26 @@ class MainNavigationState extends State<MainNavigation> {
   PaneItemAction buildPaneItemAction() => PaneItemAction(
       icon: const Icon(FluentIcons.add), title: const Text('hi'), onTap: () {});
 
-  List<PaneItem> createNavItems(List<Routes> commands) {
-    return [for (Routes winget in commands) _navButton(winget)];
+  List<NavigationPaneItem> createNavItems(List<Routes> commands) {
+    return [for (Routes winget in commands) _navItem(winget)];
   }
 
-  PaneItem _navButton(Routes route) {
+  PaneItem _navItem(Routes route) {
     AppLocalizations local = AppLocalizations.of(context)!;
     return PaneItem(
       title: Text(route.title(local)),
       icon: Icon(route.icon),
       body: navigators[route] ?? notFoundMessage(),
+    );
+  }
+
+  PaneItem _navExpander(Routes route, List<Routes> children) {
+    AppLocalizations local = AppLocalizations.of(context)!;
+    return PaneItemExpander(
+      title: Text(route.title(local)),
+      icon: Icon(route.icon),
+      body: navigators[route] ?? notFoundMessage(),
+      items: createNavItems(children),
     );
   }
 

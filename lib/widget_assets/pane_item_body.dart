@@ -12,7 +12,7 @@ class PaneItemBody extends StatelessWidget {
   final WingetProcess? process;
 
   const PaneItemBody(
-      {super.key, this.title, required this.child, this.process});
+      {super.key, required this.title, required this.child, this.process});
 
   @override
   Widget build(BuildContext context) {
