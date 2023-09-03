@@ -18,6 +18,6 @@ class AdvancedOptionsPage extends StatelessWidget {
     );
   }
 
-  factory AdvancedOptionsPage.inRoute(RouteParameter? params) =>
+  factory AdvancedOptionsPage.inRoute([RouteParameter? params]) =>
       const AdvancedOptionsPage();
 }

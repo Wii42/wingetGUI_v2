@@ -20,7 +20,7 @@ class MainNavigation extends StatefulWidget {
 
   final Routes expanderFooterItem = Routes.advancedOptions;
 
-  final List<Routes> otherFooterItems = [Routes.settings];
+  final List<Routes> otherFooterItems = [Routes.settingsPage];
 
   List<Routes> get allItems => [
         ...mainItems,

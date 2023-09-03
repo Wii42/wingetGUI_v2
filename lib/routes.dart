@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/navigation_pages/command_prompt_page.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/navigation_pages/advanced_options_page.dart';
+import 'package:winget_gui/navigation_pages/settings_page.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -39,15 +40,18 @@ enum Routes {
   searchPage(
       icon: FluentIcons.search, route: '/searchPage', body: SearchPage.inRoute),
   commandPromptPage(
-    icon: FluentIcons.command_prompt,
-    route: '/commandPromptPage',
-    body: CommandPromptPage.inRoute,
-  ),
+      icon: FluentIcons.command_prompt,
+      route: '/commandPromptPage',
+      body: CommandPromptPage.inRoute),
   advancedOptions(
-    icon: FluentIcons.lightning_bolt,
-    route: '/advancedOptions',
-    body: AdvancedOptionsPage.inRoute,
-  );
+      icon: FluentIcons.lightning_bolt,
+      route: '/advancedOptions',
+      body: AdvancedOptionsPage.inRoute),
+  settingsPage(
+      icon: FluentIcons.settings,
+      route: '/settingsPage',
+      body: SettingsPage.inRoute),
+  ;
 
   final String route;
   final IconData? icon;

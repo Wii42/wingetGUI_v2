@@ -7,7 +7,8 @@ import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process.dart';
 
-import 'content/output_page.dart';
+import '../content/output_page.dart';
+
 
 class CommandPromptPage extends StatelessWidget {
   CommandPromptPage({super.key});
