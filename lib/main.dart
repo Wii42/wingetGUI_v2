@@ -1,3 +1,4 @@
+import 'package:app_theme_mode/app_theme_mode.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
@@ -22,23 +23,29 @@ class WingetGui extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FluentApp(
-      title: 'WingetGUI',
-      theme: FluentThemeData(
-        accentColor: SystemTheme.accentColor.accent.toAccentColor(),
-        brightness: Brightness.light,
-      ),
-      darkTheme: FluentThemeData(
-        accentColor: SystemTheme.accentColor.accent.toAccentColor(),
-        brightness: Brightness.dark,
-      ),
-      themeMode: ThemeMode.system,
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: MainNavigation(title: "WingetGUI"),
-      //routerConfig: router,
-      //supportedLocales: const [Locale("en")],
+    return AppThemeMode(
+      initialThemeMode: ThemeMode.system,
+      builder: (BuildContext context, ThemeMode themeMode) {
+        return FluentApp(
+          locale: Locale('en'),
+          title: 'WingetGUI',
+          theme: FluentThemeData(
+            accentColor: SystemTheme.accentColor.accent.toAccentColor(),
+            brightness: Brightness.light,
+          ),
+          darkTheme: FluentThemeData(
+            accentColor: SystemTheme.accentColor.accent.toAccentColor(),
+            brightness: Brightness.dark,
+          ),
+          themeMode: themeMode,
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: MainNavigation(title: "WingetGUI"),
+          //routerConfig: router,
+          //supportedLocales: const [Locale("en")],
+        );
+      },
     );
   }
 

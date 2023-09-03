@@ -1,3 +1,4 @@
+import 'package:app_theme_mode/app_theme_mode.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
@@ -19,13 +20,14 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageSate extends State<SettingsPage> {
-  ThemeMode? themeMode = ThemeMode.system;
+  ThemeMode? themeMode;
   Locale? language;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     language = Localizations.localeOf(context);
+    themeMode = AppThemeMode.of(context).themeMode;
   }
 
   @override
@@ -44,6 +46,9 @@ class _SettingsPageSate extends State<SettingsPage> {
                 onChanged: (mode) {
                   setState(() {
                     themeMode = mode;
+                    if (themeMode != null) {
+                      AppThemeMode.of(context).setThemeMode(themeMode!);
+                    }
                   });
                 },
                 items: [
