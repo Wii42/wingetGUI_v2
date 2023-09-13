@@ -7,8 +7,7 @@ import '../../../widget_assets/inline_link_button.dart';
 import '../table_part.dart';
 
 class GenericTablePart extends TablePart {
-  GenericTablePart(super.lines,
-      {required super.command, required super.locale});
+  GenericTablePart(super.lines);
 
   @override
   Widget buildTableRepresentation(List<Map<String, String>> tableData) {
@@ -17,7 +16,6 @@ class GenericTablePart extends TablePart {
         columns: tableColumns(tableData),
         rows: tableRows(tableData),
         columnSpacing: 20,
-
       ),
     );
   }

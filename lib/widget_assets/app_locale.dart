@@ -51,6 +51,14 @@ class LocaleData {
     );
   }
 
+  AppLocalizations getWingetAppLocalization() {
+    return lookupAppLocalizations(wingetLocale);
+  }
+
+  AppLocalizations getGuiAppLocalization() {
+    return lookupAppLocalizations(guiLocale);
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
@@ -181,8 +189,7 @@ class _AppLocaleState extends State<AppLocale> {
   Widget build(BuildContext context) {
     return _InheritedLocaleData(
       localeData: _localeData,
-      child: widget.builder(context,
-          _currentGuiLocale, _currentWingetLocale),
+      child: widget.builder(context, _currentGuiLocale, _currentWingetLocale),
     );
   }
 
@@ -192,13 +199,14 @@ class _AppLocaleState extends State<AppLocale> {
       setState(
         () => _localeData = _localeData.copyWith(
           guiLocale: locale,
+
         ),
       );
     }
   }
 
   void _setWingetLocale(Locale locale) {
-    if (_currentGuiLocale != locale) {
+    if (_currentWingetLocale != locale) {
       widget.onChangeLocale?.call(locale);
       setState(
         () => _localeData = _localeData.copyWith(

@@ -32,6 +32,7 @@
 
   "chooseDisplayMode": "Modus auswählen",
   "chooseLanguage": "Sprache wählen",
+  "chooseWingetLanguage" : "Sprache von Winget wählen",
   "openWingetSettingsFile": "Öffne Winget-Einstellungen-Dokument",
 
   "themeMode": "{mode, select, system{System} light{Hell} dark{Dunkel} other{NotFoundError}}"

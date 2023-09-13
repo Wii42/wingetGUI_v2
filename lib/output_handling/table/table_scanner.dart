@@ -3,16 +3,17 @@ import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/table_part.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../widget_assets/app_locale.dart';
 import '../output_part.dart';
 import '../responsibility.dart';
 import '../scanner.dart';
 
 abstract class TableScanner extends Scanner {
-  final List<String> command;
+
 
   List<int> falsePositives = [];
 
-  TableScanner(super.respList, {required this.command});
+  TableScanner(super.respList);
 
   @override
   void markResponsibleLines(BuildContext context) {
@@ -66,17 +67,16 @@ abstract class TableScanner extends Scanner {
   _makeTable(BuildContext context) {
     int tableStart = _findHorizontalLine() - 1;
     int tableEnd = _findTableEnd(tableStart);
-
+    AppLocalizations wingetLocale = AppLocale.of(context).getWingetAppLocalization();
     if (_linesAvailable(tableStart, tableEnd)) {
       List<String> tableLines = [
         for (int i = tableStart; i <= tableEnd; i++) respList[i].line
       ];
-      AppLocalizations locale = AppLocalizations.of(context)!;
-      _markLines(tableStart, tableEnd, tablePart(tableLines, locale));
+      _markLines(tableStart, tableEnd, tablePart(tableLines, wingetLocale));
     }
   }
 
-  TablePart tablePart(List<String> tableLines, AppLocalizations locale);
+  TablePart tablePart(List<String> tableLines, AppLocalizations wingetLocale);
 
   int _findTableEnd(int tableStart) {
     String firstLine = respList[tableStart].line;

@@ -3,15 +3,12 @@ import 'dart:math';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_part.dart';
 
 abstract class TablePart extends OutputPart {
-  TablePart(super.lines, {required this.command, required this.locale});
+  TablePart(super.lines);
 
-  List<String> command;
-  AppLocalizations locale;
 
   late Widget tableRepresentation;
 

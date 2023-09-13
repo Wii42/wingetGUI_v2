@@ -28,6 +28,8 @@ class WingetGui extends StatelessWidget {
       initialThemeMode: ThemeMode.system,
       builder: (BuildContext context, ThemeMode themeMode) {
         return AppLocale(
+          initialGuiLocale: const Locale('de'),
+          initialWingetLocale: const Locale('de'),
           builder: (BuildContext context, Locale guiLocale, Locale _) {
             return FluentApp(
               locale: guiLocale,
@@ -41,7 +43,6 @@ class WingetGui extends StatelessWidget {
                 brightness: Brightness.dark,
               ),
               themeMode: themeMode,
-              debugShowCheckedModeBanner: false,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
               home: MainNavigation(title: "WingetGUI"),

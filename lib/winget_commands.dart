@@ -7,7 +7,7 @@ import 'content/output_page_starter.dart';
 const String notFoundError = "NotFoundError";
 
 enum Winget {
-  updates(command: ['upgrade']),
+  updates(command: ['upgrade', '--include-unknown']),
   installed(command: ['list']),
   about(command: ['--info']),
   help(command: ['--help']),

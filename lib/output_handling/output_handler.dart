@@ -29,7 +29,7 @@ class OutputHandler {
 
     outputScanners = [
       AppsTableScanner(responsibilityList, command: command),
-      GenericTableScanner(responsibilityList, command: command),
+      GenericTableScanner(responsibilityList),
       LoadingBarScanner(responsibilityList),
       ShowScanner(responsibilityList,
           command: command, prevCommand: prevCommand),

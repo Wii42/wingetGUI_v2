@@ -40,10 +40,11 @@ class RightSideButtons extends StatelessWidget {
   }
 
   CommandButton createButton(Winget winget, AppLocalizations locale) {
+    String appName = infos.name?.value ?? infos.id!.value;
     return CommandButton(
       text: winget.title(locale),
       command: _createCommand(winget, locale),
-      title: winget.titleWithInput(infos.name!.value, localization: locale),
+      title: winget.titleWithInput(appName, localization: locale),
     );
   }
 

@@ -29,7 +29,6 @@ class _SettingsPageSate extends State<SettingsPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     locale = AppLocale.of(context).guiLocale;
-    print(locale);
     themeMode = AppThemeMode.of(context).themeMode;
     wingetLocale = AppLocale.of(context).wingetLocale;
   }
@@ -86,14 +85,14 @@ class _SettingsPageSate extends State<SettingsPage> {
               ),
             ),
             settingsItem(
-              'set winget Language',
+              localizations.chooseWingetLanguage,
               ComboBox<Locale>(
                 value: wingetLocale,
                 onChanged: (value) {
                   setState(() {
                     wingetLocale = value;
-                    if (locale != null) {
-                      AppLocale.of(context).setWingetLocale(locale!);
+                    if (wingetLocale != null) {
+                      AppLocale.of(context).setWingetLocale(wingetLocale!);
                     }
                   });
                 },

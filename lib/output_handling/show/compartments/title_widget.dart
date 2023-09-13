@@ -37,7 +37,7 @@ class TitleWidget extends Compartment {
                 ].withSpaceBetween(height: 10),
               ),
             ),
-            RightSideButtons(infos: infos),
+            if (infos.id != null) RightSideButtons(infos: infos),
           ],
         ),
       ),
@@ -79,7 +79,7 @@ class TitleWidget extends Compartment {
                 url: infos.agreement?.publisher?.url)
             : infos.agreement?.publisher != null
                 ? publisher(context)
-                : Text(infos.id!.value),
+                : Text(infos.id?.value ?? '<unknown>'),
         if (infos.website != null) _website(locale),
         if (infos.category != null) ...[
           LinkText(line: infos.category!.value),
