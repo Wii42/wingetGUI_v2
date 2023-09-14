@@ -14,25 +14,23 @@ class ListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
     return DecoratedCard(
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('$title:', style: typography.bodyStrong),
-            for (String key in list.keys)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  LinkText(
-                    line: key,
-                    style: typography.bodyStrong,
-                  ),
-                  if (list[key]!.isNotEmpty) LinkText(line: list[key]!)
-                ],
-              )
-          ].withSpaceBetween(height: 15),
-        ),
+      padding: 10,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('$title:', style: typography.bodyStrong),
+          for (String key in list.keys)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                LinkText(
+                  line: key,
+                  style: typography.bodyStrong,
+                ),
+                if (list[key]!.isNotEmpty) LinkText(line: list[key]!)
+              ],
+            )
+        ].withSpaceBetween(height: 15),
       ),
     );
   }

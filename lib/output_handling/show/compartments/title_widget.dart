@@ -151,10 +151,8 @@ class TitleWidget extends Compartment {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 25),
                   child: DecoratedCard(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: image,
-                    ),
+                    padding: 10,
+                    child: image,
                   ),
                 ),
               );

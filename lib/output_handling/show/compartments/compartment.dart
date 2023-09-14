@@ -19,12 +19,10 @@ abstract class Compartment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedCard(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: buildCompartment(context),
-        ),
+      padding: 20,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: buildCompartment(context),
       ),
     );
   }

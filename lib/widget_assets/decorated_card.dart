@@ -2,8 +2,9 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 class DecoratedCard extends StatelessWidget {
   final Widget child;
+  final double? padding;
 
-  const DecoratedCard({required this.child, super.key});
+  const DecoratedCard({required this.child, super.key, this.padding});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,12 @@ class DecoratedCard extends StatelessWidget {
           color: FluentTheme.of(context).cardColor,
           borderRadius: BorderRadius.circular(5),
         ),
-        child: child);
+        child: padding == null
+            ? child
+            :
+        Padding(
+          padding: EdgeInsets.all(padding!),
+          child: child,
+        ));
   }
 }

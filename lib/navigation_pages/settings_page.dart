@@ -132,11 +132,9 @@ class _SettingsPageSate extends State<SettingsPage> {
 
   Widget settingsItem(String title, Widget options) {
     return DecoratedCard(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Row(
-          children: [Expanded(child: Text(title)), options],
-        ),
+      padding: 20,
+      child: Row(
+        children: [Expanded(child: Text(title)), options],
       ),
     );
   }
