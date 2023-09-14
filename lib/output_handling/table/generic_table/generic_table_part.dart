@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
 
 import '../../../helpers/extensions/string_extension.dart';
-import '../../../widget_assets/decorated_box_wrap.dart';
+import '../../../widget_assets/decorated_card.dart';
 import '../../../widget_assets/inline_link_button.dart';
 import '../table_part.dart';
 
@@ -11,7 +11,7 @@ class GenericTablePart extends TablePart {
 
   @override
   Widget buildTableRepresentation(List<Map<String, String>> tableData) {
-    return DecoratedBoxWrap(
+    return DecoratedCard(
       child: material.DataTable(
         columns: tableColumns(tableData),
         rows: tableRows(tableData),

@@ -10,7 +10,7 @@ import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:winget_gui/widget_assets/store_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../widget_assets/decorated_box_wrap.dart';
+import '../../../widget_assets/decorated_card.dart';
 import '../../../widget_assets/link_button.dart';
 import '../../infos/app_attribute.dart';
 
@@ -150,7 +150,7 @@ class TitleWidget extends Compartment {
                 // The green box must be a child of the AnimatedOpacity widget.
                 child: Padding(
                   padding: const EdgeInsets.only(right: 25),
-                  child: DecoratedBoxWrap(
+                  child: DecoratedCard(
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: image,

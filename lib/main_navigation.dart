@@ -49,13 +49,15 @@ class MainNavigationState extends State<MainNavigation> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
+      bool displayModeIsMinimal = constraints.maxWidth <= 640;
       return NavigationView(
-        appBar: constraints.maxWidth <= 640
+        contentShape: contentShape(context, displayModeIsMinimal),
+        appBar: displayModeIsMinimal
             ? NavigationAppBar(
                 automaticallyImplyLeading: false, title: Text(widget.title))
             : null,
         pane: NavigationPane(
-          header:  Padding(
+          header: Padding(
             padding: const EdgeInsets.all(10),
             child: Text(widget.title),
           ),
@@ -72,6 +74,18 @@ class MainNavigationState extends State<MainNavigation> {
         ),
       );
     });
+  }
+
+  RoundedRectangleBorder contentShape(
+      BuildContext context, bool displayModeIsMinimal) {
+    return RoundedRectangleBorder(
+      side: const BorderSide(color: Colors.transparent),
+      borderRadius: displayModeIsMinimal
+          ? BorderRadius.zero
+          : const BorderRadiusDirectional.only(
+              topStart: Radius.circular(8.0),
+            ).resolve(Directionality.of(context)),
+    );
   }
 
   PaneItemAction buildPaneItemAction() => PaneItemAction(

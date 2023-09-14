@@ -7,7 +7,7 @@ import 'package:winget_gui/winget_process.dart';
 import '../helpers/route_parameter.dart';
 import '../routes.dart';
 import '../widget_assets/app_locale.dart';
-import '../widget_assets/decorated_box_wrap.dart';
+import '../widget_assets/decorated_card.dart';
 import '../widget_assets/pane_item_body.dart';
 import '../winget_commands.dart';
 
@@ -131,7 +131,7 @@ class _SettingsPageSate extends State<SettingsPage> {
   }
 
   Widget settingsItem(String title, Widget options) {
-    return DecoratedBoxWrap(
+    return DecoratedCard(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(

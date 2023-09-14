@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets//link_button.dart';
-import '../../../widget_assets/decorated_box_wrap.dart';
+import '../../../widget_assets/decorated_card.dart';
 import '../../../widget_assets/inline_link_button.dart';
 import '../../infos/info.dart';
 
@@ -18,7 +18,7 @@ abstract class Compartment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBoxWrap(
+    return DecoratedCard(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

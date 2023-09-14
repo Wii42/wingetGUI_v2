@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
-import '../../widget_assets/decorated_box_wrap.dart';
+import '../../widget_assets/decorated_card.dart';
 import '../../widget_assets/link_text.dart';
 
 class ListWidget extends StatelessWidget {
@@ -13,7 +13,7 @@ class ListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
-    return DecoratedBoxWrap(
+    return DecoratedCard(
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
