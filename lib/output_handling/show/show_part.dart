@@ -16,7 +16,9 @@ class ShowPart extends OutputPart {
 
   @override
   Future<Widget?> representation(BuildContext context) async {
-    AppLocalizations wingetLocale = AppLocale.of(context).getWingetAppLocalization();
+    AppLocalizations wingetLocale =
+        AppLocale.of(context).getWingetAppLocalization() ??
+            AppLocalizations.of(context)!;
     return PackageLongInfo(_extractInfos(wingetLocale));
   }
 

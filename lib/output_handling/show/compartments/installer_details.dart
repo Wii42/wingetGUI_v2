@@ -1,8 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/infos/installer_infos.dart';
+import '../../../widget_assets/app_locale.dart';
 import '../../infos/app_attribute.dart';
 import '../../infos/info.dart';
 import 'compartment.dart';
@@ -14,16 +16,17 @@ class InstallerDetails extends Compartment {
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
+    AppLocalizations localization = AppLocalizations.of(context)!;
+    Locale? locale = AppLocale.of(context).guiLocale;
     return fullCompartment(
-        title: compartmentTitle(locale),
+        title: compartmentTitle(localization),
         mainColumn: [
           ..._installerDetailsList([
             infos.type,
             infos.storeProductID,
             infos.locale,
             infos.sha256Hash,
-            tryFromDateTimeInfo(infos.releaseDate),
+            tryFromDateTimeInfo(infos.releaseDate, locale),
           ], context),
           ..._displayRest(context),
         ],
@@ -71,10 +74,10 @@ class InstallerDetails extends Compartment {
     ];
   }
 
-  Info<String>? tryFromDateTimeInfo(Info<DateTime>? info) {
+  Info<String>? tryFromDateTimeInfo(Info<DateTime>? info, [Locale? locale]) {
     if (info == null) return null;
 
-    String? string = info.value.toString();
+    String string = DateFormat.yMd(locale.toString()).format(info.value);
     return Info<String>(title: info.title, value: string);
   }
 }

@@ -15,7 +15,8 @@ class AppsTableScanner extends TableScanner {
   bool isSpecificTable(String headerLine, BuildContext context) {
     List<String> columnTitles =
         headerLine.split(' ').map<String>((e) => e.trim()).toList();
-    AppLocalizations locale = AppLocale.of(context).getWingetAppLocalization();
+    AppLocalizations locale = AppLocale.of(context).getWingetAppLocalization() ??
+        AppLocalizations.of(context)!;
     return (columnTitles.contains(AppAttribute.name.key(locale)) &&
         columnTitles.contains(AppAttribute.id.key(locale)));
   }

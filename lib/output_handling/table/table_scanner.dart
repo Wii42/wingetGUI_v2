@@ -67,7 +67,8 @@ abstract class TableScanner extends Scanner {
   _makeTable(BuildContext context) {
     int tableStart = _findHorizontalLine() - 1;
     int tableEnd = _findTableEnd(tableStart);
-    AppLocalizations wingetLocale = AppLocale.of(context).getWingetAppLocalization();
+    AppLocalizations wingetLocale = AppLocale.of(context).getWingetAppLocalization() ??
+        AppLocalizations.of(context)!;
     if (_linesAvailable(tableStart, tableEnd)) {
       List<String> tableLines = [
         for (int i = tableStart; i <= tableEnd; i++) respList[i].line

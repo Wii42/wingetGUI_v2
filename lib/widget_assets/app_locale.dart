@@ -3,14 +3,16 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../helpers/extensions/locale_parser.dart';
+
 /// When the language is changed.
-typedef OnChangeLocale = void Function(Locale locale);
+typedef OnChangeLocale = void Function(Locale? locale);
 
 /// Builds the widget in the [Locale].
 typedef LocaleBuilder = Widget Function(
   BuildContext context,
-  Locale guiLocale,
-  Locale wingetLocale,
+  Locale? guiLocale,
+  Locale? wingetLocale,
 );
 
 /// Class with actions to manipulate [Locale].
@@ -25,13 +27,13 @@ class LocaleData {
   });
 
   /// Gets the current [Locale].
-  final Locale guiLocale;
+  final Locale? guiLocale;
 
   /// Changes [Locale].
   final OnChangeLocale setGuiLocale;
 
   /// Gets the current [Locale].
-  final Locale wingetLocale;
+  final Locale? wingetLocale;
 
   /// Changes [Locale].
   final OnChangeLocale setWingetLocale;
@@ -51,12 +53,18 @@ class LocaleData {
     );
   }
 
-  AppLocalizations getWingetAppLocalization() {
-    return lookupAppLocalizations(wingetLocale);
+  AppLocalizations? getWingetAppLocalization() {
+    if (wingetLocale == null) {
+      return null;
+    }
+    return lookupAppLocalizations(wingetLocale!);
   }
 
-  AppLocalizations getGuiAppLocalization() {
-    return lookupAppLocalizations(guiLocale);
+  AppLocalizations? getGuiAppLocalization() {
+    if (guiLocale == null) {
+      return null;
+    }
+    return lookupAppLocalizations(guiLocale!);
   }
 
   @override
@@ -79,24 +87,21 @@ class LocaleData {
 /// manage your [Locale]. Rebuilds every time that a new [Locale] is set.
 
 class AppLocale extends StatefulWidget {
-  AppLocale({
+  const AppLocale({
     required this.builder,
     this.onChangeLocale,
-    Locale? initialGuiLocale,
-    Locale? initialWingetLocale,
+    this.initialGuiLocale,
+    this.initialWingetLocale,
     super.key,
-  })  : initialGuiLocale = initialGuiLocale ??
-            determineClosestSupportedLocale(parse(Intl.getCurrentLocale())),
-        initialWingetLocale = initialWingetLocale ??
-            determineClosestSupportedLocale(parse(Intl.getCurrentLocale()));
+  });
 
   /// [Locale] initial, changing it later does not
   /// change the current [Locale].
-  final Locale initialGuiLocale;
+  final Locale? initialGuiLocale;
 
   /// [Locale] initial, changing it later does not
   /// change the current [Locale].
-  final Locale initialWingetLocale;
+  final Locale? initialWingetLocale;
 
   /// Builders the widget every time that a new [Locale] is set.
   final LocaleBuilder builder;
@@ -144,13 +149,6 @@ class AppLocale extends StatefulWidget {
       );
   }
 
-  static Locale parse(String string) {
-    List<String> tags = string.split('_');
-    String language = tags.first;
-    String? country = tags.length >= 2 ? tags[1] : null;
-    return Locale(language, country);
-  }
-
   static Locale determineClosestSupportedLocale(Locale locale) {
     List<Locale> supportedLocales = AppLocalizations.supportedLocales;
     if (supportedLocales.contains(locale)) {
@@ -182,8 +180,8 @@ class _AppLocaleState extends State<AppLocale> {
     setWingetLocale: _setWingetLocale,
   );
 
-  Locale get _currentGuiLocale => _localeData.guiLocale;
-  Locale get _currentWingetLocale => _localeData.wingetLocale;
+  Locale? get _currentGuiLocale => _localeData.guiLocale;
+  Locale? get _currentWingetLocale => _localeData.wingetLocale;
 
   @override
   Widget build(BuildContext context) {
@@ -193,19 +191,18 @@ class _AppLocaleState extends State<AppLocale> {
     );
   }
 
-  void _setGuiLocale(Locale locale) {
+  void _setGuiLocale(Locale? locale) {
     if (_currentGuiLocale != locale) {
       widget.onChangeLocale?.call(locale);
       setState(
         () => _localeData = _localeData.copyWith(
           guiLocale: locale,
-
         ),
       );
     }
   }
 
-  void _setWingetLocale(Locale locale) {
+  void _setWingetLocale(Locale? locale) {
     if (_currentWingetLocale != locale) {
       widget.onChangeLocale?.call(locale);
       setState(

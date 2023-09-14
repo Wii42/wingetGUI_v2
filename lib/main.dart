@@ -5,6 +5,7 @@ import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:go_router/go_router.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/main_navigation.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/app_locale.dart';
@@ -16,10 +17,13 @@ void main() async {
   windowManager.waitUntilReadyToShow().then((_) async {
     await windowManager.setMinimumSize(const Size(460, 300));
   });
+  SettingsCache settings = SettingsCache.instance;
+  await settings.init();
   runApp(WingetGui());
 }
 
 class WingetGui extends StatelessWidget {
+  final String appTitle = 'WingetGUI';
   WingetGui({super.key});
 
   @override
@@ -28,12 +32,12 @@ class WingetGui extends StatelessWidget {
       initialThemeMode: ThemeMode.system,
       builder: (BuildContext context, ThemeMode themeMode) {
         return AppLocale(
-          initialGuiLocale: const Locale('de'),
-          initialWingetLocale: const Locale('de'),
-          builder: (BuildContext context, Locale guiLocale, Locale _) {
+          initialGuiLocale: SettingsCache.instance.guiLocale,
+          initialWingetLocale: SettingsCache.instance.wingetLocale,
+          builder: (BuildContext context, Locale? guiLocale, Locale? _) {
             return FluentApp(
               locale: guiLocale,
-              title: 'WingetGUI',
+              title: appTitle,
               theme: FluentThemeData(
                 accentColor: SystemTheme.accentColor.accent.toAccentColor(),
                 brightness: Brightness.light,
@@ -45,7 +49,7 @@ class WingetGui extends StatelessWidget {
               themeMode: themeMode,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              home: MainNavigation(title: "WingetGUI"),
+              home: MainNavigation(title: appTitle),
               //routerConfig: router,
               //supportedLocales: const [Locale("en")],
             );

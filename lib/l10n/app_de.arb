@@ -35,5 +35,6 @@
   "chooseWingetLanguage" : "Sprache von Winget wählen",
   "openWingetSettingsFile": "Öffne Winget-Einstellungen-Dokument",
 
-  "themeMode": "{mode, select, system{System} light{Hell} dark{Dunkel} other{NotFoundError}}"
+  "themeMode": "{mode, select, system{System} light{Hell} dark{Dunkel} other{NotFoundError}}",
+  "autoLanguage": "auto"
 }
