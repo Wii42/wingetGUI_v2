@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:intl/locale.dart' as intl;
-extension LocaleParser on Locale{
+class LocaleParser{
 
 
 

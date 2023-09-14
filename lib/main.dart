@@ -29,7 +29,7 @@ class WingetGui extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppThemeMode(
-      initialThemeMode: ThemeMode.system,
+      initialThemeMode: SettingsCache.instance.themeMode,
       builder: (BuildContext context, ThemeMode themeMode) {
         return AppLocale(
           initialGuiLocale: SettingsCache.instance.guiLocale,

@@ -70,6 +70,7 @@ class _SettingsPageSate extends State<SettingsPage> {
             themeMode = mode;
             if (themeMode != null) {
               AppThemeMode.of(context).setThemeMode(themeMode!);
+              SettingsCache.instance.themeMode = themeMode;
             }
           });
         },

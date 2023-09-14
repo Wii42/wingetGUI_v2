@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../helpers/extensions/locale_parser.dart';
+import '../helpers/locale_parser.dart';
 
 /// When the language is changed.
 typedef OnChangeLocale = void Function(Locale? locale);

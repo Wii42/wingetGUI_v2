@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:winget_gui/helpers/extensions/locale_parser.dart';
+import 'package:winget_gui/helpers/locale_parser.dart';
 
 class SettingsCache {
   static const String _guiLocaleKey = 'guiLocale',
