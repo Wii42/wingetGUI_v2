@@ -70,7 +70,6 @@ class _SettingsPageSate extends State<SettingsPage> {
             themeMode = mode;
             if (themeMode != null) {
               AppThemeMode.of(context).setThemeMode(themeMode!);
-              SettingsCache.instance.themeMode = themeMode;
             }
           });
         },
@@ -95,7 +94,6 @@ class _SettingsPageSate extends State<SettingsPage> {
           setState(() {
             guiLocale = value;
             AppLocale.of(context).setGuiLocale(guiLocale);
-            SettingsCache.instance.guiLocale = guiLocale;
           });
         },
         items: [
@@ -120,7 +118,6 @@ class _SettingsPageSate extends State<SettingsPage> {
           setState(() {
             wingetLocale = value;
             AppLocale.of(context).setWingetLocale(wingetLocale);
-            SettingsCache.instance.wingetLocale = wingetLocale;
           });
         },
         items: [

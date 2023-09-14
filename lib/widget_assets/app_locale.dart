@@ -1,9 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../helpers/locale_parser.dart';
 
 /// When the language is changed.
 typedef OnChangeLocale = void Function(Locale? locale);
@@ -89,7 +86,8 @@ class LocaleData {
 class AppLocale extends StatefulWidget {
   const AppLocale({
     required this.builder,
-    this.onChangeLocale,
+    this.onChangeGuiLocale,
+    this.onChangeWingetLocale,
     this.initialGuiLocale,
     this.initialWingetLocale,
     super.key,
@@ -106,8 +104,11 @@ class AppLocale extends StatefulWidget {
   /// Builders the widget every time that a new [Locale] is set.
   final LocaleBuilder builder;
 
-  /// It's called every time when a new different [Locale] is set.
-  final OnChangeLocale? onChangeLocale;
+  /// It's called every time when a new different guiLocale is set.
+  final OnChangeLocale? onChangeGuiLocale;
+
+  /// It's called every time when a new different guiLocale is set.
+  final OnChangeLocale? onChangeWingetLocale;
 
   @override
   State<AppLocale> createState() => _AppLocaleState();
@@ -143,10 +144,15 @@ class AppLocale extends StatefulWidget {
       )
       ..add(
         ObjectFlagProperty<OnChangeLocale>.has(
-          'onChangeLocale',
-          onChangeLocale,
+          'onChangeGuiLocale',
+          onChangeGuiLocale,
         ),
-      );
+      )..add(
+      ObjectFlagProperty<OnChangeLocale>.has(
+        'onChangeWingetLocale',
+        onChangeWingetLocale,
+      ),
+    );
   }
 
   static Locale determineClosestSupportedLocale(Locale locale) {
@@ -193,7 +199,7 @@ class _AppLocaleState extends State<AppLocale> {
 
   void _setGuiLocale(Locale? locale) {
     if (_currentGuiLocale != locale) {
-      widget.onChangeLocale?.call(locale);
+      widget.onChangeGuiLocale?.call(locale);
       setState(
         () => _localeData = _localeData.copyWith(
           guiLocale: locale,
@@ -204,7 +210,7 @@ class _AppLocaleState extends State<AppLocale> {
 
   void _setWingetLocale(Locale? locale) {
     if (_currentWingetLocale != locale) {
-      widget.onChangeLocale?.call(locale);
+      widget.onChangeWingetLocale?.call(locale);
       setState(
         () => _localeData = _localeData.copyWith(
           wingetLocale: locale,

@@ -55,9 +55,9 @@ class MainNavigationState extends State<MainNavigation> {
                 automaticallyImplyLeading: false, title: Text(widget.title))
             : null,
         pane: NavigationPane(
-          header: const Padding(
-            padding: EdgeInsets.all(10),
-            child: Text('WingetGUI'),
+          header:  Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(widget.title),
           ),
           items: createNavItems(widget.mainItems),
           footerItems: [
