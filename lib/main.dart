@@ -12,7 +12,9 @@ const String appTitle = 'WingetGUI';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Window.initialize();
+  await Window.setEffect(effect: WindowEffect.mica);
+  await Window.setWindowBackgroundColorToClear();
   await WindowManager.instance.ensureInitialized();
   await windowManager.waitUntilReadyToShow().then(
         (_) => Future.wait(
@@ -26,11 +28,14 @@ void main() async {
 
   SettingsCache settings = SettingsCache.instance;
   await settings.init();
-  runApp(const WingetGui());
+  runApp(WingetGui());
 }
 
 class WingetGui extends StatelessWidget {
-  const WingetGui({super.key});
+  final FluentThemeData lightTheme = theme(Brightness.light);
+  final FluentThemeData darkTheme = theme(Brightness.dark);
+
+  WingetGui({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +44,8 @@ class WingetGui extends StatelessWidget {
       builder: (context, themeMode, guiLocale) {
         return FluentApp(
           title: appTitle,
-          theme: lightTheme(),
-          darkTheme: darkTheme(),
+          theme: lightTheme,
+          darkTheme: darkTheme,
           themeMode: themeMode,
           locale: guiLocale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -51,17 +56,13 @@ class WingetGui extends StatelessWidget {
     );
   }
 
-  FluentThemeData lightTheme() {
+  static FluentThemeData theme(Brightness brightness) {
     return FluentThemeData(
       accentColor: SystemTheme.accentColor.dark.toAccentColor(),
-      brightness: Brightness.light,
-    );
-  }
-
-  FluentThemeData darkTheme() {
-    return FluentThemeData(
-      accentColor: SystemTheme.accentColor.accent.toAccentColor(),
-      brightness: Brightness.dark,
+      brightness: brightness,
+      navigationPaneTheme: const NavigationPaneThemeData(
+        backgroundColor: Colors.transparent,
+      ),
     );
   }
 }
