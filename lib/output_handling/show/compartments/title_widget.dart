@@ -37,7 +37,11 @@ class TitleWidget extends Compartment {
                 ].withSpaceBetween(height: 10),
               ),
             ),
-            if (infos.id != null) RightSideButtons(infos: infos),
+            if (infos.id != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 25),
+                child: RightSideButtons(infos: infos),
+              ),
           ],
         ),
       ),

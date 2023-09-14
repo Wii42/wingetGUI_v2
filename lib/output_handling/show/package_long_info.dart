@@ -27,7 +27,7 @@ class PackageLongInfo extends StatelessWidget {
         if (infos.hasReleaseNotes())
           ExpandableCompartment(
             text: infos.releaseNotes!.toInfoString(),
-            buttonInfos: [infos.releaseNotes?.toInfoUri()],
+            buttonInfos: [infos.releaseNotes?.tryToInfoUri()],
           ),
         DetailsWidget(infos: infos),
         if (infos.agreement != null) AgreementWidget(infos: infos.agreement!),
