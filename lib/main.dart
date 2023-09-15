@@ -25,27 +25,25 @@ void main() async {
           ],
         ),
       );
+  await SystemTheme.accentColor.load();
 
   SettingsCache settings = SettingsCache.instance;
   await settings.init();
-  runApp(WingetGui());
+  runApp(const WingetGui());
 }
 
 class WingetGui extends StatelessWidget {
-  final FluentThemeData lightTheme = theme(Brightness.light);
-  final FluentThemeData darkTheme = theme(Brightness.dark);
-
-  WingetGui({super.key});
+  const WingetGui({super.key});
 
   @override
   Widget build(BuildContext context) {
     WindowManager.instance.setTitle(appTitle);
     return GlobalAppData(
-      builder: (context, themeMode, guiLocale) {
+      builder: (context, themeMode, guiLocale, systemAccentColor) {
         return FluentApp(
           title: appTitle,
-          theme: lightTheme,
-          darkTheme: darkTheme,
+          theme: theme(Brightness.light, systemAccentColor.dark),
+          darkTheme: theme(Brightness.dark, systemAccentColor.light),
           themeMode: themeMode,
           locale: guiLocale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -56,10 +54,10 @@ class WingetGui extends StatelessWidget {
     );
   }
 
-  static FluentThemeData theme(Brightness brightness) {
+  static FluentThemeData theme(Brightness brightness, Color accentColor) {
     return FluentThemeData(
       scaffoldBackgroundColor: Colors.transparent,
-      accentColor: SystemTheme.accentColor.dark.toAccentColor(),
+      accentColor: accentColor.toAccentColor(),
       brightness: brightness,
       navigationPaneTheme: const NavigationPaneThemeData(
         backgroundColor: Colors.transparent,
@@ -81,8 +79,8 @@ class WindowBrightnessSetter extends StatelessWidget {
 }
 
 class GlobalAppData extends StatelessWidget {
-  final Widget Function(
-      BuildContext context, ThemeMode themeMode, Locale? guiLocale) builder;
+  final Widget Function(BuildContext context, ThemeMode themeMode,
+      Locale? guiLocale, SystemAccentColor systemAccentColor) builder;
   const GlobalAppData({super.key, required this.builder});
 
   @override
@@ -103,8 +101,16 @@ class GlobalAppData extends StatelessWidget {
               onChangeWingetLocale: (Locale? wingetLocale) {
                 settings.wingetLocale = wingetLocale;
               },
-              builder: (BuildContext context, Locale? guiLocale, Locale? _) =>
-                  builder(context, themeMode, guiLocale));
+              builder: (BuildContext context, Locale? guiLocale, Locale? _) {
+                return StreamBuilder<SystemAccentColor>(
+                    stream: SystemTheme.onChange,
+                    builder: (context, snapshot) {
+                      SystemAccentColor systemAccentColor =
+                          snapshot.data ?? SystemTheme.accentColor;
+                      return builder(
+                          context, themeMode, guiLocale, systemAccentColor);
+                    });
+              });
         });
   }
 }
