@@ -79,7 +79,10 @@ abstract class ProcessOutput extends StatelessWidget {
 
           return Text(snapshot.error.toString());
         }
-        return const Center(child: ProgressRing());
+        return const Center(
+            child: ProgressRing(
+          backgroundColor: Colors.transparent,
+        ));
       },
     );
   }

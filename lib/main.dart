@@ -58,6 +58,7 @@ class WingetGui extends StatelessWidget {
 
   static FluentThemeData theme(Brightness brightness) {
     return FluentThemeData(
+      scaffoldBackgroundColor: Colors.transparent,
       accentColor: SystemTheme.accentColor.dark.toAccentColor(),
       brightness: brightness,
       navigationPaneTheme: const NavigationPaneThemeData(

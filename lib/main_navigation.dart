@@ -76,16 +76,10 @@ class MainNavigationState extends State<MainNavigation> {
     });
   }
 
-  RoundedRectangleBorder contentShape(
+  ShapeBorder contentShape(
       BuildContext context, bool displayModeIsMinimal) {
-    return RoundedRectangleBorder(
-      side: const BorderSide(color: Colors.transparent),
-      borderRadius: displayModeIsMinimal
-          ? BorderRadius.zero
-          : const BorderRadiusDirectional.only(
-              topStart: Radius.circular(8.0),
-            ).resolve(Directionality.of(context)),
-    );
+    return const RoundedRectangleBorder();
+
   }
 
   PaneItemAction buildPaneItemAction() => PaneItemAction(
