@@ -1,4 +1,3 @@
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
@@ -12,25 +11,28 @@ import 'global_app_data.dart';
 const String appTitle = 'WingetGUI';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Window.initialize();
-  await Window.setEffect(effect: WindowEffect.mica);
-  await Window.setWindowBackgroundColorToClear();
-  await WindowManager.instance.ensureInitialized();
-  await windowManager.waitUntilReadyToShow().then(
-        (_) => Future.wait(
-          [
-            windowManager.setTitle(appTitle),
-            windowManager.setMinimumSize(const Size(460, 300)),
-            windowManager.setAlignment(Alignment.center),
-          ],
-        ),
-      );
-  await SystemTheme.accentColor.load();
-
-  SettingsCache settings = SettingsCache.instance;
-  await settings.init();
+  await initAppPrerequisites();
   runApp(const WingetGui());
+}
+
+Future<void> initAppPrerequisites() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Future.wait([
+    Window.initialize().then((_) async => await Future.wait([
+          Window.setEffect(effect: WindowEffect.mica),
+          Window.setWindowBackgroundColorToClear(),
+        ])),
+    WindowManager.instance.ensureInitialized().then((_) async =>
+        await WindowManager.instance
+            .waitUntilReadyToShow()
+            .then((_) async => await Future.wait([
+                  WindowManager.instance.setTitle(appTitle),
+                  WindowManager.instance.setMinimumSize(const Size(460, 300)),
+                  WindowManager.instance.setAlignment(Alignment.center),
+                ]))),
+    SystemTheme.accentColor.load(),
+    SettingsCache.instance.ensureInitialized(),
+  ]);
 }
 
 class WingetGui extends StatelessWidget {
@@ -38,7 +40,6 @@ class WingetGui extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WindowManager.instance.setTitle(appTitle);
     return GlobalAppData(
       builder: (context, themeMode, guiLocale, systemAccentColor) {
         return FluentApp(

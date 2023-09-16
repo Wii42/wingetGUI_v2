@@ -9,8 +9,8 @@ class SettingsCache {
   static final SettingsCache instance = SettingsCache._();
   SettingsCache._();
 
-  Future<void> init() async {
-    _prefs = await SharedPreferences.getInstance();
+  Future<void> ensureInitialized() async {
+    _prefs ??= await SharedPreferences.getInstance();
   }
 
   set guiLocale(Locale? guiLocale) {
