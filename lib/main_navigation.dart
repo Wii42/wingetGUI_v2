@@ -54,13 +54,23 @@ class MainNavigationState extends State<MainNavigation> {
         contentShape: contentShape(context, displayModeIsMinimal),
         appBar: displayModeIsMinimal
             ? NavigationAppBar(
-                automaticallyImplyLeading: false, title: Text(widget.title))
+                automaticallyImplyLeading: false,
+                height: 52,
+                title: Text(
+                  widget.title,
+                  style: FluentTheme.of(context)
+                      .typography
+                      .body
+                      ?.merge(const TextStyle(fontWeight: FontWeight.w600)),
+                ))
             : null,
         pane: NavigationPane(
-          header: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(widget.title),
-          ),
+          header: displayModeIsMinimal
+              ? null
+              : Padding(
+                  padding: const EdgeInsets.all(13.5),
+                  child: Text(widget.title),
+                ),
           items: createNavItems(widget.mainItems),
           footerItems: [
             _navExpander(
@@ -76,10 +86,8 @@ class MainNavigationState extends State<MainNavigation> {
     });
   }
 
-  ShapeBorder contentShape(
-      BuildContext context, bool displayModeIsMinimal) {
+  ShapeBorder contentShape(BuildContext context, bool displayModeIsMinimal) {
     return const RoundedRectangleBorder();
-
   }
 
   PaneItemAction buildPaneItemAction() => PaneItemAction(

@@ -26,7 +26,7 @@ Future<void> initAppPrerequisites() async {
         await WindowManager.instance
             .waitUntilReadyToShow()
             .then((_) async => await Future.wait([
-                  WindowManager.instance.setTitle(appTitle),
+                  WindowManager.instance.setIcon(''),
                   WindowManager.instance.setMinimumSize(const Size(460, 300)),
                   WindowManager.instance.setAlignment(Alignment.center),
                 ]))),
