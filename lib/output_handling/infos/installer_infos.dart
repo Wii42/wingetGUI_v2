@@ -1,6 +1,6 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'app_attribute.dart';
+import 'package_attribute.dart';
 import 'info.dart';
 import 'info_map_parser.dart';
 
@@ -30,13 +30,13 @@ class InstallerInfos {
     }
     InfoMapParser parser = InfoMapParser(map: installerDetails, locale: locale);
     return InstallerInfos(
-        title: AppAttribute.installer.title,
-        type: parser.maybeDetailFromMap(AppAttribute.installerType),
-        url: parser.maybeLinkFromMap(AppAttribute.installerURL),
-        sha256Hash: parser.maybeDetailFromMap(AppAttribute.sha256Installer),
-        locale: parser.maybeDetailFromMap(AppAttribute.installerLocale),
-        storeProductID: parser.maybeDetailFromMap(AppAttribute.storeProductID),
-        releaseDate: parser.maybeDateTimeFromMap(AppAttribute.releaseDate),
+        title: PackageAttribute.installer.title,
+        type: parser.maybeDetailFromMap(PackageAttribute.installerType),
+        url: parser.maybeLinkFromMap(PackageAttribute.installerURL),
+        sha256Hash: parser.maybeDetailFromMap(PackageAttribute.sha256Installer),
+        locale: parser.maybeDetailFromMap(PackageAttribute.installerLocale),
+        storeProductID: parser.maybeDetailFromMap(PackageAttribute.storeProductID),
+        releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate),
         otherInfos: installerDetails);
   }
 }

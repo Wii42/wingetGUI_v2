@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/infos/installer_infos.dart';
 import '../../../widget_assets/app_locale.dart';
-import '../../infos/app_attribute.dart';
+import '../../infos/package_attribute.dart';
 import '../../infos/info.dart';
 import 'compartment.dart';
 
@@ -36,7 +36,7 @@ class InstallerDetails extends Compartment {
 
   @override
   String compartmentTitle(AppLocalizations locale) {
-    return AppAttribute.installer.title(locale);
+    return PackageAttribute.installer.title(locale);
   }
 
   List<Widget> _displayRest(BuildContext context) {

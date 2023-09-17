@@ -5,8 +5,8 @@ import 'package:winget_gui/output_handling/show/package_long_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../widget_assets/app_locale.dart';
-import '../infos/app_attribute.dart';
-import '../infos/package_infos.dart';
+import '../infos/package_attribute.dart';
+import '../infos/package_infos_full.dart';
 
 const maxIdentifierLength = 100;
 
@@ -22,18 +22,18 @@ class ShowPart extends OutputPart {
     return PackageLongInfo(_extractInfos(wingetLocale));
   }
 
-  PackageInfos _extractInfos(AppLocalizations locale) {
+  PackageInfosFull _extractInfos(AppLocalizations locale) {
     Map<String, String> infos = {};
     infos.addAll(_extractMainInfos());
     infos.addAll(_extractOtherInfos());
 
     Map<String, String>? installerDetails;
-    if (infos.hasInfo(AppAttribute.installer, locale)) {
+    if (infos.hasInfo(PackageAttribute.installer, locale)) {
       installerDetails = extractInstallerDetails(infos);
-      infos.remove(AppAttribute.installer.key(locale));
+      infos.remove(PackageAttribute.installer.key(locale));
     }
 
-    return PackageInfos.fromMap(
+    return PackageInfosFull.fromMap(
         details: infos, installerDetails: installerDetails, locale: locale);
   }
 
@@ -41,10 +41,10 @@ class ShowPart extends OutputPart {
     Map<String, String> infos = {};
     List<String> details = lines[0].trim().split(' ');
 
-    infos[AppAttribute.name.key(wingetLocale)] =
+    infos[PackageAttribute.name.key(wingetLocale)] =
         details.sublist(1, details.length - 1).join(' ');
     String id = details.last.trim();
-    infos[AppAttribute.id.key(wingetLocale)] =
+    infos[PackageAttribute.id.key(wingetLocale)] =
         id.replaceAll('[', '').replaceAll(']', '');
     return infos;
   }
@@ -55,7 +55,7 @@ class ShowPart extends OutputPart {
   }
 
   Map<String, String> extractInstallerDetails(Map<String, String> infos) {
-    return extractDetails(infos[AppAttribute.installer.key(wingetLocale)]!
+    return extractDetails(infos[PackageAttribute.installer.key(wingetLocale)]!
         .split('\n')
         .map((String line) => line.trim())
         .toList());

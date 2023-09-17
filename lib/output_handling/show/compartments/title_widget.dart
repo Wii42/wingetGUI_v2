@@ -3,7 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/output_handling/infos/package_infos.dart';
+import 'package:winget_gui/output_handling/infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
@@ -12,10 +12,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../widget_assets/decorated_card.dart';
 import '../../../widget_assets/link_button.dart';
-import '../../infos/app_attribute.dart';
+import '../../infos/package_attribute.dart';
 
 class TitleWidget extends Compartment {
-  final PackageInfos infos;
+  final PackageInfosFull infos;
 
   const TitleWidget({required this.infos, super.key});
 
@@ -50,7 +50,7 @@ class TitleWidget extends Compartment {
 
   @override
   String compartmentTitle(AppLocalizations locale) {
-    return AppAttribute.name.title(locale);
+    return PackageAttribute.name.title(locale);
   }
 
   Widget nameAndVersion(BuildContext context) {
@@ -105,7 +105,7 @@ class TitleWidget extends Compartment {
   Widget _website(AppLocalizations locale) {
     return LinkButton(
         url: infos.website!.value,
-        text: Text(AppAttribute.website.title(locale)));
+        text: Text(PackageAttribute.website.title(locale)));
   }
 
   StoreButton _showInStore(AppLocalizations locale) {

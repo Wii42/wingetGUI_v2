@@ -1,13 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
-import 'package:winget_gui/output_handling/infos/package_infos.dart';
+import 'package:winget_gui/output_handling/infos/package_infos_full.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../infos/info.dart';
 import 'compartment.dart';
 
 class DetailsWidget extends Compartment {
-  final PackageInfos infos;
+  final PackageInfosFull infos;
 
   const DetailsWidget({super.key, required this.infos});
 

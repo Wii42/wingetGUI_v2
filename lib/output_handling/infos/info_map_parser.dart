@@ -1,7 +1,7 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'agreement_infos.dart';
-import 'app_attribute.dart';
+import 'package_attribute.dart';
 import 'info.dart';
 import 'info_with_link.dart';
 
@@ -10,7 +10,7 @@ class InfoMapParser {
   Map<String, String> map;
   InfoMapParser({required this.map, required this.locale});
 
-  Info<String>? maybeDetailFromMap(AppAttribute attribute) {
+  Info<String>? maybeDetailFromMap(PackageAttribute attribute) {
     String key = attribute.key(locale);
     String? detail = map[key];
     map.remove(key);
@@ -19,7 +19,7 @@ class InfoMapParser {
         : null;
   }
 
-  Info<Uri>? maybeLinkFromMap(AppAttribute infoKey) {
+  Info<Uri>? maybeLinkFromMap(PackageAttribute infoKey) {
     Info<String>? link = maybeDetailFromMap(infoKey);
     if (link == null) {
       return null;
@@ -35,7 +35,7 @@ class InfoMapParser {
   }
 
   InfoWithLink? maybeInfoWithLinkFromMap(
-      {required AppAttribute textInfo, required AppAttribute urlInfo}) {
+      {required PackageAttribute textInfo, required PackageAttribute urlInfo}) {
     return InfoWithLink.maybeFromMap(
       map: map,
       textInfo: textInfo,
@@ -44,8 +44,8 @@ class InfoMapParser {
     );
   }
 
-  Info<DateTime>? maybeDateTimeFromMap(AppAttribute attribute) {
-    Info<String>? dateInfo = maybeDetailFromMap(AppAttribute.releaseDate);
+  Info<DateTime>? maybeDateTimeFromMap(PackageAttribute attribute) {
+    Info<String>? dateInfo = maybeDetailFromMap(PackageAttribute.releaseDate);
     if (dateInfo == null) {
       return null;
     }
@@ -54,7 +54,7 @@ class InfoMapParser {
   }
 
   List<String>? maybeTagsFromMap() {
-    String key = AppAttribute.tags.key(locale);
+    String key = PackageAttribute.tags.key(locale);
     String? tagString = map[key];
     if (tagString != null) {
       List<String> tags = _extractTags(tagString);

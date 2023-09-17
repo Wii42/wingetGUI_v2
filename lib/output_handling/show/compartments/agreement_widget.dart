@@ -3,7 +3,7 @@ import 'package:winget_gui/output_handling/infos/agreement_infos.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../infos/app_attribute.dart';
+import '../../infos/package_attribute.dart';
 import '../../infos/info.dart';
 
 class AgreementWidget extends Compartment {
@@ -20,11 +20,11 @@ class AgreementWidget extends Compartment {
         mainColumn: [
           if (infos.license?.text != null)
             wrapInWrap(
-                title: AppAttribute.license.title(locale),
+                title: PackageAttribute.license.title(locale),
                 body: _license(context)),
           if (infos.copyright?.text != null)
             wrapInWrap(
-                title: AppAttribute.copyright.title(locale),
+                title: PackageAttribute.copyright.title(locale),
                 body: _copyright(context)),
         ],
         buttonRow: buttonRow([
@@ -41,7 +41,7 @@ class AgreementWidget extends Compartment {
 
   @override
   String compartmentTitle(AppLocalizations locale) {
-    return AppAttribute.agreement.title(locale);
+    return PackageAttribute.agreement.title(locale);
   }
 
   Widget _license(BuildContext context) {

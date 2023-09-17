@@ -1,7 +1,7 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../helpers/extensions/string_extension.dart';
-import 'app_attribute.dart';
+import 'package_attribute.dart';
 import 'info.dart';
 
 class InfoWithLink {
@@ -14,8 +14,8 @@ class InfoWithLink {
 
   static InfoWithLink? maybeFromMap(
       {required Map<String, String>? map,
-      required AppAttribute textInfo,
-      required AppAttribute urlInfo,
+      required PackageAttribute textInfo,
+      required PackageAttribute urlInfo,
       required AppLocalizations locale}) {
     if (map == null) {
       return null;

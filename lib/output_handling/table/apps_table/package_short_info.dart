@@ -4,10 +4,10 @@ import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../routes.dart';
-import '../../infos/package_infos.dart';
+import '../../infos/package_infos_peek.dart';
 
 class PackageShortInfo extends StatelessWidget {
-  final PackageInfos infos;
+  final PackageInfosPeek infos;
   final List<String> command;
 
   final MainAxisAlignment columnAlign = MainAxisAlignment.center;
@@ -128,12 +128,7 @@ class PackageShortInfo extends StatelessWidget {
     ];
   }
 
-  bool isClickable() {
-    return infos.source != null &&
-        infos.source!.value.isNotEmpty &&
-        infos.id != null &&
-        !infos.id!.value.endsWith('…');
-  }
+  bool isClickable() => infos.hasInfosFull();
 
   String? name() => infos.name?.value;
 

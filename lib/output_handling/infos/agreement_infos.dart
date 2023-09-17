@@ -1,5 +1,5 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'app_attribute.dart';
+import 'package_attribute.dart';
 import 'info.dart';
 import 'info_map_parser.dart';
 import 'info_with_link.dart';
@@ -30,20 +30,20 @@ class AgreementInfos {
     InfoMapParser parser = InfoMapParser(map: map, locale: locale);
 
     AgreementInfos agreement = AgreementInfos(
-      title: AppAttribute.agreement.title,
+      title: PackageAttribute.agreement.title,
       publisher: parser.maybeInfoWithLinkFromMap(
-          textInfo: AppAttribute.publisher, urlInfo: AppAttribute.publisherUrl),
+          textInfo: PackageAttribute.publisher, urlInfo: PackageAttribute.publisherUrl),
       license: parser.maybeInfoWithLinkFromMap(
-          textInfo: AppAttribute.license, urlInfo: AppAttribute.licenseUrl),
+          textInfo: PackageAttribute.license, urlInfo: PackageAttribute.licenseUrl),
       copyright: parser.maybeInfoWithLinkFromMap(
-          textInfo: AppAttribute.copyright, urlInfo: AppAttribute.copyrightUrl),
-      privacyUrl: parser.maybeLinkFromMap(AppAttribute.privacyUrl),
-      buyUrl: parser.maybeLinkFromMap(AppAttribute.buyUrl),
+          textInfo: PackageAttribute.copyright, urlInfo: PackageAttribute.copyrightUrl),
+      privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl),
+      buyUrl: parser.maybeLinkFromMap(PackageAttribute.buyUrl),
       termsOfTransaction:
-          parser.maybeDetailFromMap(AppAttribute.termsOfTransaction),
-      seizureWarning: parser.maybeDetailFromMap(AppAttribute.seizureWarning),
+          parser.maybeDetailFromMap(PackageAttribute.termsOfTransaction),
+      seizureWarning: parser.maybeDetailFromMap(PackageAttribute.seizureWarning),
       storeLicenseTerms:
-          parser.maybeDetailFromMap(AppAttribute.storeLicenseTerms),
+          parser.maybeDetailFromMap(PackageAttribute.storeLicenseTerms),
     );
     return agreement.isNotEmpty() ? agreement : null;
   }
