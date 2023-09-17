@@ -1,4 +1,4 @@
-import '../../output_handling/infos/package_attribute.dart';
+import '../../output_handling/package_infos/package_attribute.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 extension HasEntryExtension<T> on Map<T, String> {

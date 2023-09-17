@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../output_handling/infos/package_infos.dart';
+import '../output_handling/package_infos/package_infos.dart';
 import '../winget_commands.dart';
 import 'command_button.dart';
 

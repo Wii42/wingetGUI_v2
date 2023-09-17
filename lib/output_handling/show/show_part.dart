@@ -5,8 +5,8 @@ import 'package:winget_gui/output_handling/show/package_long_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../widget_assets/app_locale.dart';
-import '../infos/package_attribute.dart';
-import '../infos/package_infos_full.dart';
+import '../package_infos/package_attribute.dart';
+import '../package_infos/package_infos_full.dart';
 
 const maxIdentifierLength = 100;
 

@@ -4,15 +4,15 @@ import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../routes.dart';
-import '../../infos/package_infos_peek.dart';
+import '../../package_infos/package_infos_peek.dart';
 
-class PackageShortInfo extends StatelessWidget {
+class PackagePeek extends StatelessWidget {
   final PackageInfosPeek infos;
   final List<String> command;
 
   final MainAxisAlignment columnAlign = MainAxisAlignment.center;
 
-  const PackageShortInfo(this.infos, {super.key, required this.command});
+  const PackagePeek(this.infos, {super.key, required this.command});
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/widget_assets/search_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../infos/package_infos_full.dart';
+import '../package_infos/package_infos_full.dart';
 import 'compartments/agreement_widget.dart';
 
 class PackageLongInfo extends StatelessWidget {

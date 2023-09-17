@@ -3,10 +3,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
-import 'package:winget_gui/output_handling/infos/installer_infos.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import '../../../widget_assets/app_locale.dart';
-import '../../infos/package_attribute.dart';
-import '../../infos/info.dart';
+import '../../package_infos/package_attribute.dart';
+import '../../package_infos/info.dart';
 import 'compartment.dart';
 
 class InstallerDetails extends Compartment {

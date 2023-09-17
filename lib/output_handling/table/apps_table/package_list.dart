@@ -8,7 +8,7 @@ import '../../../routes.dart';
 import '../../../winget_commands.dart';
 
 class PackageList extends StatefulWidget {
-  final List<PackageShortInfo> packages;
+  final List<PackagePeek> packages;
   final List<String> command;
   final bool initialOnlyClickablePackages;
 
@@ -21,7 +21,7 @@ class PackageList extends StatefulWidget {
   State<StatefulWidget> createState() => _PackageListState();
 
   bool hasUnClickablePackages() {
-    for (PackageShortInfo package in packages) {
+    for (PackagePeek package in packages) {
       if (!package.isClickable()) {
         return true;
       }
@@ -32,7 +32,7 @@ class PackageList extends StatefulWidget {
 
 class _PackageListState extends State<PackageList> {
   late bool onlyClickablePackages;
-  late List<PackageShortInfo> searchablePackages;
+  late List<PackagePeek> searchablePackages;
   TextEditingController filterController = TextEditingController();
 
   @override
@@ -52,22 +52,22 @@ class _PackageListState extends State<PackageList> {
         ].withSpaceBetween(height: 10));
   }
 
-  List<PackageShortInfo> selectedPackages() {
+  List<PackagePeek> selectedPackages() {
     if (onlyClickablePackages) {
       return [
-        for (PackageShortInfo package in widget.packages)
+        for (PackagePeek package in widget.packages)
           if (package.isClickable()) package
       ];
     }
     return widget.packages;
   }
 
-  List<PackageShortInfo> filteredPackages() {
+  List<PackagePeek> filteredPackages() {
     if (filter.isEmpty) {
       searchablePackages;
     }
     return [
-      for (PackageShortInfo package in searchablePackages)
+      for (PackagePeek package in searchablePackages)
         if ((package.name() != null &&
                 package.name()!.containsCaseInsensitive(filter)) ||
             (package.id() != null &&

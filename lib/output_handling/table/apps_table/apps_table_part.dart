@@ -3,7 +3,7 @@ import 'package:winget_gui/output_handling/table/apps_table/package_list.dart';
 import 'package:winget_gui/output_handling/table/apps_table/package_short_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../infos/package_infos_peek.dart';
+import '../../package_infos/package_infos_peek.dart';
 import '../table_part.dart';
 
 class AppsTablePart extends TablePart {
@@ -15,10 +15,10 @@ class AppsTablePart extends TablePart {
 
   @override
   Widget buildTableRepresentation(List<Map<String, String>> tableData) {
-    List<PackageShortInfo> packages = [];
+    List<PackagePeek> packages = [];
     for (Map<String, String> tableRow in tableData) {
       packages.add(
-        PackageShortInfo(
+        PackagePeek(
           PackageInfosPeek.fromMap(details: tableRow, locale: wingetLocale),
           command: command,
         ),

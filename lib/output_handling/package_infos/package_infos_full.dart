@@ -1,5 +1,5 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/output_handling/infos/package_infos.dart';
+import './package_infos.dart';
 
 import 'agreement_infos.dart';
 import 'package_attribute.dart';

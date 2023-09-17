@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../infos/info.dart';
+import '../../package_infos/info.dart';
 import 'compartment.dart';
 
 class ExpandableCompartment extends Compartment {
