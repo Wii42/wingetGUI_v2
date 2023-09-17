@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 
-import 'content/output_page_starter.dart';
+import 'winget_process/output_page_starter.dart';
 
 const String notFoundError = "NotFoundError";
 

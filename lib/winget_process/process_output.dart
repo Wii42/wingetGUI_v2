@@ -4,7 +4,7 @@ import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_handling/output_handler.dart';
-import '../winget_process.dart';
+import 'winget_process.dart';
 
 abstract class ProcessOutput extends StatelessWidget {
   final WingetProcess process;

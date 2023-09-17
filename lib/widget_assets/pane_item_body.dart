@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
-import '../content/output_page.dart';
-import '../winget_process.dart';
+import '../winget_process/output_page.dart';
+import '../winget_process/winget_process.dart';
 
 class PaneItemBody extends StatelessWidget {
   static const double iconSize = 40;

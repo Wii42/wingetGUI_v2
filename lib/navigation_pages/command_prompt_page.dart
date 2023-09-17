@@ -1,13 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/content/simple_output_starter.dart';
+import 'package:winget_gui/winget_process/simple_output_starter.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/winget_commands.dart';
-import 'package:winget_gui/winget_process.dart';
+import 'package:winget_gui/winget_process/winget_process.dart';
 
-import '../content/output_page.dart';
+import '../winget_process/output_page.dart';
 
 
 class CommandPromptPage extends StatelessWidget {

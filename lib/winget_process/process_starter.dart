@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/content/process_output.dart';
-import 'package:winget_gui/winget_process.dart';
+import './process_output.dart';
+import './winget_process.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widget_assets/full_width_progress_bar.dart';

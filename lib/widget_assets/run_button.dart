@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/run_button_tooltip.dart';
 
-import '../content/output_page.dart';
-import '../winget_process.dart';
+import '../winget_process/output_page.dart';
+import '../winget_process/winget_process.dart';
 
 abstract class RunButton extends StatelessWidget {
   const RunButton({
