@@ -1,28 +1,51 @@
+import 'dart:async';
 import 'dart:isolate';
 import 'dart:math';
 
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
+import 'package:winget_gui/output_handling/output_builder.dart';
+import 'package:winget_gui/output_handling/table/generic_table/table_builder.dart';
 
-import '../output_part.dart';
+import '../output_parser.dart';
+import '../package_infos/package_attribute.dart';
+import '../package_infos/package_infos_peek.dart';
+import 'apps_table/package_list.dart';
+import 'apps_table/package_short_info.dart';
 
-abstract class TablePart extends OutputPart {
-  TablePart(super.lines);
+typedef TableData = List<Map<String, String>>;
 
-
-  late Widget tableRepresentation;
+class TableParser extends OutputParser {
+  final List<String> command;
+  TableParser(super.lines, {required this.command});
 
   @override
-  Future<Widget?> representation(BuildContext context) async {
-    tableRepresentation = await Isolate.run<Widget>(_makeTable);
-    return tableRepresentation;
+  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) async {
+    TableData table = await Isolate.run<TableData>(_makeTable);
+    List<String> columnTitles = table.first.keys.toList();
+    if (columnTitles.contains(PackageAttribute.name.key(wingetLocale)) &&
+        columnTitles.contains(PackageAttribute.id.key(wingetLocale))) {
+      return QuickOutputBuilder((context) {
+        List<PackagePeek> packages = [];
+        for (Map<String, String> tableRow in table) {
+          packages.add(
+            PackagePeek(
+              PackageInfosPeek.fromMap(details: tableRow, locale: wingetLocale),
+              command: command,
+            ),
+          );
+        }
+        return PackageList(packages, command: command);
+      });
+    }
+
+    return TableBuilder(table);
   }
 
-  Widget _makeTable() {
+  TableData _makeTable() {
     List<int> columnsPos = _getColumnsPos();
     _correctLinesWithNonWesternGlyphs(columnsPos);
-    List<Map<String, String>> tableData = _extractTableData(columnsPos);
-    return buildTableRepresentation(tableData);
+    return _extractTableData(columnsPos);
   }
 
   List<int> _getColumnsPos() {
@@ -99,8 +122,6 @@ abstract class TablePart extends OutputPart {
     }
     return infos;
   }
-
-  Widget buildTableRepresentation(List<Map<String, String>> tableData);
 
   List<String> _getColumnNames(List<int> columnsPos) {
     List<String> columnNames = [];

@@ -1,10 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/output_handling/list/list_part.dart';
-import 'package:winget_gui/output_handling/output_part.dart';
+import 'package:winget_gui/output_handling/list/list_parser.dart';
+import 'package:winget_gui/output_handling/output_parser.dart';
 import 'package:winget_gui/output_handling/responsibility.dart';
-import 'package:winget_gui/output_handling/scanner.dart';
+import 'package:winget_gui/output_handling/output_scanner.dart';
 
-class ListScanner extends Scanner {
+class ListScanner extends OutputScanner {
   ListScanner(super.respList);
 
   @override
@@ -49,11 +49,11 @@ class ListScanner extends Scanner {
 
   _markLines(int start, int end) {
     List<String> lines = [for (int i = start; i <= end; i++) respList[i].line];
-    ListPart part = ListPart(lines);
+    ListParser part = ListParser(lines);
     _setPartForLines(start, end, part);
   }
 
-  _setPartForLines(int listStart, int listEnd, OutputPart part) {
+  _setPartForLines(int listStart, int listEnd, OutputParser part) {
     for (int i = listStart; i <= listEnd; i++) {
       respList[i].respPart = part;
     }

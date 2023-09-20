@@ -1,11 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/output_handling/scanner.dart';
-import 'package:winget_gui/output_handling/show/show_part.dart';
+import 'package:winget_gui/output_handling/output_scanner.dart';
+import 'package:winget_gui/output_handling/show/show_parser.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../winget_commands.dart';
 
-class ShowScanner extends Scanner {
+class ShowScanner extends OutputScanner {
   List<String> command;
   List<String>? prevCommand;
 
@@ -21,7 +21,7 @@ class ShowScanner extends Scanner {
     AppLocalizations locale = AppLocalizations.of(context)!;
     int identifierPos = _findIdentifier(locale);
     if (identifierPos > -1) {
-      ShowPart showPart = ShowPart([], locale);
+      ShowParser showPart = ShowParser([], locale);
       for (int i = identifierPos; i < respList.length; i++) {
         if (respList[i].isHandled()) {
           break;

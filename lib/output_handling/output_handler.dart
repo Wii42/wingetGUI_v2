@@ -1,17 +1,19 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
-import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/output_handling/list/list_scanner.dart';
-import 'package:winget_gui/output_handling/loading_bar/loading_bar_scanner.dart';
-import 'package:winget_gui/output_handling/one_line_info/one_line_info_scanner.dart';
-import 'package:winget_gui/output_handling/plain_text/plain_text_scanner.dart';
-import 'package:winget_gui/output_handling/responsibility.dart';
-import 'package:winget_gui/output_handling/scanner.dart';
-import 'package:winget_gui/output_handling/show/show_scanner.dart';
-import 'package:winget_gui/output_handling/table/apps_table/apps_table_scanner.dart';
-import 'package:winget_gui/output_handling/table/generic_table/generic_table_scanner.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/table/table_scanner.dart';
 
-import 'output_part.dart';
+import './list/list_scanner.dart';
+import './loading_bar/loading_bar_scanner.dart';
+import './one_line_info/one_line_info_scanner.dart';
+import './output_builder.dart';
+import './plain_text/plain_text_scanner.dart';
+import './responsibility.dart';
+import './output_scanner.dart';
+import './show/show_scanner.dart';
+
+import '../widget_assets/app_locale.dart';
+import 'output_parser.dart';
 
 class OutputHandler {
   final List<String> output;
@@ -19,7 +21,7 @@ class OutputHandler {
   final List<String>? prevCommand;
 
   final String? title;
-  late List<Scanner> outputScanners;
+  late List<OutputScanner> outputScanners;
   late final List<Responsibility> responsibilityList;
 
   OutputHandler(this.output,
@@ -28,8 +30,7 @@ class OutputHandler {
     responsibilityList = [for (String line in output) Responsibility(line)];
 
     outputScanners = [
-      AppsTableScanner(responsibilityList, command: command),
-      GenericTableScanner(responsibilityList),
+      TableScanner(responsibilityList, command: command),
       LoadingBarScanner(responsibilityList),
       ShowScanner(responsibilityList,
           command: command, prevCommand: prevCommand),
@@ -40,28 +41,37 @@ class OutputHandler {
   }
 
   determineResponsibility(BuildContext context) {
-    for (Scanner scanner in outputScanners) {
+    for (OutputScanner scanner in outputScanners) {
       scanner.markResponsibleLines(context);
     }
   }
 
-  Future<List<Widget>> displayOutput(BuildContext context) async {
-    List<Widget> list = [];
-    OutputPart? prevPart;
-
-    for (Responsibility resp in responsibilityList) {
-      OutputPart? part = resp.respPart;
-      if (part != prevPart) {
-        if (part == null) {
-          throw Exception("Not all lines are assigned to a part");
-        }
-        Widget? rep = await part.representation(context);
-        if (rep != null) {
-          list.add(rep);
-        }
+  Future<List<OutputBuilder>> getRepresentation(BuildContext context) async {
+    Set<OutputParser> parts =
+        responsibilityList.map<OutputParser>((Responsibility resp) {
+      if (resp.respPart == null) {
+        throw Exception("Not all lines are assigned to a part.\n"
+            "Unassigned line: ${resp.line}");
       }
-      prevPart = part;
-    }
-    return list.withSpaceBetween(height: 20);
+      return resp.respPart!;
+    }).toSet();
+
+    AppLocalizations wingetLocale =
+        AppLocale.of(context).getWingetAppLocalization() ??
+            AppLocalizations.of(context)!;
+
+    List<Future<OutputBuilder?>> builderFutures = parts
+        .map<Future<OutputBuilder?>>((part) async => part.parse(wingetLocale))
+        .toList();
+
+    List<OutputBuilder?> builders =
+        await Future.wait<OutputBuilder?>(builderFutures);
+
+    List<OutputBuilder> finalBuilders = builders
+        .where((builder) => builder != null)
+        .map<OutputBuilder>((OutputBuilder? builder) => builder!)
+        .toList();
+
+    return finalBuilders;
   }
 }

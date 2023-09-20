@@ -1,8 +1,8 @@
-import 'output_part.dart';
+import 'output_parser.dart';
 
 class Responsibility {
   final String line;
-  OutputPart? respPart;
+  OutputParser? respPart;
 
   Responsibility(this.line, {this.respPart});
 

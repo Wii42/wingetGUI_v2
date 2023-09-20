@@ -5,6 +5,7 @@ import 'package:winget_gui/widget_assets/link_button.dart';
 
 import '../../helpers/extensions/string_extension.dart';
 import '../../widget_assets/link_text.dart';
+import '../output_builder.dart';
 
 const quotationMarks = [
   '«',
@@ -38,9 +39,9 @@ const quotationMarks = [
   '“'
 ];
 
-class OneLineInfoWidget extends StatelessWidget {
+class OneLineInfoBuilder extends OutputBuilder {
   final Map<String, String> infos;
-  const OneLineInfoWidget({required this.infos, super.key});
+  OneLineInfoBuilder({required this.infos});
 
   @override
   Widget build(BuildContext context) {

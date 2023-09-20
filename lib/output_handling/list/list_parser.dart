@@ -1,21 +1,21 @@
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/output_handling/list/list_widget.dart';
-import 'package:winget_gui/output_handling/output_part.dart';
+import 'dart:async';
 
-class ListPart extends OutputPart {
-  ListPart(super.lines);
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/list/list_builder.dart';
+import 'package:winget_gui/output_handling/output_builder.dart';
+import 'package:winget_gui/output_handling/output_parser.dart';
+
+class ListParser extends OutputParser {
+  ListParser(super.lines);
 
   late String title;
   late Map<String, String> listEntries;
 
   @override
-  Future<Widget?> representation(BuildContext context) async{
+  FutureOr<OutputBuilder> parse(AppLocalizations wingetLocale) {
     _retrieveTitle();
     _retrieveListEntries();
-    return ListWidget(
-      title: title,
-      list: listEntries,
-    );
+    return ListBuilder(title: title, list: listEntries);
   }
 
   _retrieveTitle() {

@@ -1,25 +1,24 @@
-import 'package:fluent_ui/fluent_ui.dart';
+import 'dart:async';
+
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
-import 'package:winget_gui/output_handling/output_part.dart';
+import 'package:winget_gui/output_handling/output_builder.dart';
+import 'package:winget_gui/output_handling/output_parser.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../widget_assets/app_locale.dart';
 import '../package_infos/package_attribute.dart';
 import '../package_infos/package_infos_full.dart';
 
 const maxIdentifierLength = 100;
 
-class ShowPart extends OutputPart {
+class ShowParser extends OutputParser {
   AppLocalizations wingetLocale;
-  ShowPart(super.lines, this.wingetLocale);
+  ShowParser(super.lines, this.wingetLocale);
 
   @override
-  Future<Widget?> representation(BuildContext context) async {
-    AppLocalizations wingetLocale =
-        AppLocale.of(context).getWingetAppLocalization() ??
-            AppLocalizations.of(context)!;
-    return PackageLongInfo(_extractInfos(wingetLocale));
+  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) {
+    return QuickOutputBuilder(
+        (context) => PackageLongInfo(_extractInfos(wingetLocale)));
   }
 
   PackageInfosFull _extractInfos(AppLocalizations locale) {

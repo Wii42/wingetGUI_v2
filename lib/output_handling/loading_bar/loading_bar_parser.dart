@@ -1,19 +1,24 @@
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/output_handling/output_part.dart';
+import 'dart:async';
 
-class LoadingBarPart extends OutputPart {
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
+import 'package:winget_gui/output_handling/loading_bar/loading_bar_builder.dart';
+import 'package:winget_gui/output_handling/output_builder.dart';
+import 'package:winget_gui/output_handling/output_parser.dart';
+
+typedef LoadingBar = ({double value, String? text});
+
+class LoadingBarParser extends OutputParser {
   static const String progressBarKey = 'progressBar', restKey = 'rest';
 
-  LoadingBarPart(super.lines);
+  LoadingBarParser(super.lines);
 
   @override
-  Future<Widget?> representation(BuildContext context) async {
+  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) {
     if (lines.isEmpty) {
       return null;
     }
-    //return Column(children: [for (String line in lines) progressBar(line, context)]);
-    return progressBar(lines.last, context);
+    return LoadingBarBuilder(progressBar(lines.last));
   }
 
   Map<String, String> separateLoadingBar(String line) {
@@ -31,19 +36,19 @@ class LoadingBarPart extends OutputPart {
     return splitIndex >= 0;
   }
 
-  int numberOfFilledBars(String loadingBar){
+  int numberOfFilledBars(String loadingBar) {
     assert(loadingBar.containsOnlyProgressBarSymbols());
 
     int bars = 0;
     bool hasBars = true;
-    while (hasBars && bars < loadingBar.length){
+    while (hasBars && bars < loadingBar.length) {
       hasBars = (loadingBar.codeUnitAt(bars) == '█'.codeUnits.single);
       bars++;
     }
     return bars;
   }
 
-  double loadingBarValue(String loadingBar){
+  double loadingBarValue(String loadingBar) {
     assert(loadingBar.containsOnlyProgressBarSymbols());
 
     int totalBars = loadingBar.length;
@@ -51,8 +56,11 @@ class LoadingBarPart extends OutputPart {
     return (numberOfFilled / totalBars) * 100;
   }
 
-  Widget progressBar(String line, BuildContext context){
+  LoadingBar progressBar(String line) {
     Map<String, String> parts = separateLoadingBar(line);
-    return Row(children: [ProgressBar(value: loadingBarValue(parts[progressBarKey]!),backgroundColor: FluentTheme.of(context).accentColor.withAlpha(50),), if(parts.containsKey(restKey))Text(parts[restKey]!)]);
+    return (
+      text: parts[restKey],
+      value: loadingBarValue(parts[progressBarKey]!)
+    );
   }
 }

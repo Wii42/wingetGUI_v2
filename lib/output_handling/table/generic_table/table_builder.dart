@@ -4,13 +4,16 @@ import 'package:flutter/material.dart' as material;
 import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets/decorated_card.dart';
 import '../../../widget_assets/inline_link_button.dart';
-import '../table_part.dart';
+import '../../output_builder.dart';
+import '../table_parser.dart';
 
-class GenericTablePart extends TablePart {
-  GenericTablePart(super.lines);
+class TableBuilder extends OutputBuilder {
+  final TableData tableData;
+
+  TableBuilder(this.tableData);
 
   @override
-  Widget buildTableRepresentation(List<Map<String, String>> tableData) {
+  Widget build(BuildContext context) {
     return DecoratedCard(
       child: material.DataTable(
         columns: tableColumns(tableData),

@@ -1,19 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/output_handling/table/table_part.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/table/table_parser.dart';
 
-import '../../widget_assets/app_locale.dart';
-import '../output_part.dart';
+import '../output_parser.dart';
 import '../responsibility.dart';
-import '../scanner.dart';
+import '../output_scanner.dart';
 
-abstract class TableScanner extends Scanner {
-
-
+class TableScanner extends OutputScanner {
+  final List<String> command;
   List<int> falsePositives = [];
 
-  TableScanner(super.respList);
+  TableScanner(super.respList, {required this.command});
 
   @override
   void markResponsibleLines(BuildContext context) {
@@ -35,9 +32,6 @@ abstract class TableScanner extends Scanner {
     Responsibility prevLine = respList[posHorizontalLine - 1];
     Responsibility nextLine = respList[posHorizontalLine + 1];
     if (!(_couldBePartOfTable(prevLine) && _couldBePartOfTable(nextLine))) {
-      isFalsePositive = true;
-    }
-    if (!isSpecificTable(prevLine.line, context)) {
       isFalsePositive = true;
     }
 
@@ -67,17 +61,14 @@ abstract class TableScanner extends Scanner {
   _makeTable(BuildContext context) {
     int tableStart = _findHorizontalLine() - 1;
     int tableEnd = _findTableEnd(tableStart);
-    AppLocalizations wingetLocale = AppLocale.of(context).getWingetAppLocalization() ??
-        AppLocalizations.of(context)!;
     if (_linesAvailable(tableStart, tableEnd)) {
       List<String> tableLines = [
         for (int i = tableStart; i <= tableEnd; i++) respList[i].line
       ];
-      _markLines(tableStart, tableEnd, tablePart(tableLines, wingetLocale));
+      _markLines(
+          tableStart, tableEnd, TableParser(tableLines, command: command));
     }
   }
-
-  TablePart tablePart(List<String> tableLines, AppLocalizations wingetLocale);
 
   int _findTableEnd(int tableStart) {
     String firstLine = respList[tableStart].line;
@@ -131,11 +122,9 @@ abstract class TableScanner extends Scanner {
     return true;
   }
 
-  _markLines(int tableStart, int tableEnd, OutputPart part) {
+  _markLines(int tableStart, int tableEnd, OutputParser part) {
     for (int i = tableStart; i <= tableEnd; i++) {
       respList[i].respPart = part;
     }
   }
-
-  bool isSpecificTable(String headerLine, BuildContext context);
 }
