@@ -12,19 +12,21 @@ class PlainTextParser extends OutputParser {
   PlainTextParser(super.lines);
 
   @override
-  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) {
+  FlexibleOutputBuilder? parse(AppLocalizations wingetLocale) {
     lines.trim();
     if (lines.isEmpty) {
       return null;
     }
-    return QuickOutputBuilder(
-      (context) => Padding(
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (String line in lines) LinkText(line: line),
-          ],
+    return Either.b(
+      QuickOutputBuilder(
+        (context) => Padding(
+          padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (String line in lines) LinkText(line: line),
+            ],
+          ),
         ),
       ),
     );

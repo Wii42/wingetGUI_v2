@@ -11,8 +11,8 @@ class OneLineInfoParser extends OutputParser {
   OneLineInfoParser(super.lines);
 
   @override
-  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) =>
-       OneLineInfoBuilder(infos: extractInfos());
+  FlexibleOutputBuilder? parse(AppLocalizations wingetLocale) =>
+       Either.b(OneLineInfoBuilder(infos: extractInfos()));
 
   Map<String, String> extractInfos() {
     Map<String, String> infos = {};

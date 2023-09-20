@@ -60,36 +60,37 @@ abstract class ProcessOutput extends StatelessWidget {
   Center onError(AsyncSnapshot<List<String>> streamSnapshot) =>
       Center(child: Text(streamSnapshot.error.toString()));
 
-  FutureBuilder<List<OutputBuilder>> onData(
+  Widget onData(
       AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
-    return FutureBuilder<List<OutputBuilder>>(
-      future: _displayOutput(streamSnapshot.data!, context),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Expanded(
-            child: ScrollListWidget(
-              outputBuilders: snapshot.data!,
-            ),
-          );
-        }
-        if (snapshot.hasError) {
-          if (snapshot.error is Error) {
-            Error error = snapshot.error as Error;
-            return Text('$error\n\n${error.stackTrace}');
-          }
-
-          return Text(snapshot.error.toString());
-        }
-        return const Center(
-            child: ProgressRing(
-          backgroundColor: Colors.transparent,
-        ));
-      },
-    );
+    return ScrollListWidget(outputBuilders: _displayOutput(streamSnapshot.data!, context),)   ;
+    //return FutureBuilder<List<OutputBuilder>>(
+    //  future: _displayOutput(streamSnapshot.data!, context),
+    //  builder: (context, snapshot) {
+    //    if (snapshot.hasData) {
+    //      return Expanded(
+    //        child: ScrollListWidget(
+    //          outputBuilders: snapshot.data!,
+    //        ),
+    //      );
+    //    }
+    //    if (snapshot.hasError) {
+    //      if (snapshot.error is Error) {
+    //        Error error = snapshot.error as Error;
+    //        return Text('$error\n\n${error.stackTrace}');
+    //      }
+    //
+    //      return Text(snapshot.error.toString());
+    //    }
+    //    return const Center(
+    //        child: ProgressRing(
+    //      backgroundColor: Colors.transparent,
+    //    ));
+    //},
+    //);
   }
 
-  Future<List<OutputBuilder>> _displayOutput(
-      List<String> output, BuildContext context) async {
+  Stream<List<OutputBuilder>> _displayOutput(
+      List<String> output, BuildContext context) {
     OutputHandler handler =
         OutputHandler(output, command: process.command, prevCommand: []);
     handler.determineResponsibility(context);

@@ -4,7 +4,7 @@ import '../output_handling/output_builder.dart';
 
 class ScrollListWidget extends StatelessWidget {
   final List<Widget>? listElements;
-  final List<OutputBuilder>? outputBuilders;
+  final Stream<List<OutputBuilder>>? outputBuilders;
   final String? title;
   ScrollListWidget(
       {super.key, this.listElements, this.outputBuilders, this.title}) {
@@ -50,16 +50,24 @@ class ScrollListWidget extends StatelessWidget {
         ),
       );
     }
-    return ListView.builder(
-
-      itemBuilder: (context, index) =>
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: outputBuilders![index].getWidget(context),
-          ),
-      itemCount: outputBuilders!.length,
-      physics: physics,
-      padding: padding,
-    );
+    return StreamBuilder(
+        stream: outputBuilders,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<OutputBuilder> data = snapshot.data!;
+            return Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: data[index].getWidget(context),
+                ),
+                itemCount: data.length,
+                physics: physics,
+                padding: padding,
+              ),
+            );
+          }
+          return const Text('no data');
+        });
   }
 }

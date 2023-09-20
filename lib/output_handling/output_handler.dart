@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:stream_transform/stream_transform.dart';
+import 'package:winget_gui/helpers/extensions/stream_modifier.dart';
 import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/table/table_scanner.dart';
@@ -46,8 +50,8 @@ class OutputHandler {
     }
   }
 
-  Future<List<OutputBuilder>> getRepresentation(BuildContext context) async {
-    Set<OutputParser> parts =
+  Stream<List<OutputBuilder>> getRepresentation(BuildContext context) {
+    Set<OutputParser> parsers =
         responsibilityList.map<OutputParser>((Responsibility resp) {
       if (resp.respPart == null) {
         throw Exception("Not all lines are assigned to a part.\n"
@@ -60,18 +64,33 @@ class OutputHandler {
         AppLocale.of(context).getWingetAppLocalization() ??
             AppLocalizations.of(context)!;
 
-    List<Future<OutputBuilder?>> builderFutures = parts
-        .map<Future<OutputBuilder?>>((part) async => part.parse(wingetLocale))
-        .toList();
+    List<FlexibleOutputBuilder?> builders =
+        parsers.map((e) => e.parse(wingetLocale)).toList();
+    List<FlexibleOutputBuilder> nonNullBuilders =
+        builders.where((element) => element != null).map((e) => e!).toList();
 
-    List<OutputBuilder?> builders =
-        await Future.wait<OutputBuilder?>(builderFutures);
+    Stream<List<List<OutputBuilder>>> stream =
+        combineLatest(nonNullBuilders.map((e) {
+      if (e.isA) {
+        return e.a!.rememberingStream();
+      } else {
+        return Stream.value([e.b!]);
+      }
+    }));
 
-    List<OutputBuilder> finalBuilders = builders
-        .where((builder) => builder != null)
-        .map<OutputBuilder>((OutputBuilder? builder) => builder!)
-        .toList();
+    Stream<List<OutputBuilder>> flatStream = stream.map<List<OutputBuilder>>(
+        (List<List<OutputBuilder>> builderList) =>
+            [for (List<OutputBuilder> list in builderList) ...list]);
 
-    return finalBuilders;
+    //List<OutputBuilder> builders =
+    //    await Future.wait<OutputBuilder>(builders.map<Future<OutputBuilder>>((FutureOr<OutputBuilder> builder) => (builder is OutputBuilder ? )));
+
+    return flatStream;
+  }
+
+  Stream<List<T>> combineLatest<T>(Iterable<Stream<T>> streams) {
+    final Stream<T> first = streams.first;
+    final List<Stream<T>> others = [...streams.skip(1)];
+    return first.combineLatestAll(others);
   }
 }

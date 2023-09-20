@@ -16,9 +16,9 @@ class ShowParser extends OutputParser {
   ShowParser(super.lines, this.wingetLocale);
 
   @override
-  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) {
-    return QuickOutputBuilder(
-        (context) => PackageLongInfo(_extractInfos(wingetLocale)));
+  FlexibleOutputBuilder? parse(AppLocalizations wingetLocale) {
+    return Either.b(QuickOutputBuilder(
+        (context) => PackageLongInfo(_extractInfos(wingetLocale))));
   }
 
   PackageInfosFull _extractInfos(AppLocalizations locale) {

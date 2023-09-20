@@ -6,13 +6,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../routes.dart';
 import '../../../winget_commands.dart';
+import '../../package_infos/package_infos_peek.dart';
 
 class PackageList extends StatefulWidget {
-  final List<PackagePeek> packages;
+  final List<PackageInfosPeek> packagesInfos;
   final List<String> command;
   final bool initialOnlyClickablePackages;
 
-  const PackageList(this.packages,
+  const PackageList(this.packagesInfos,
       {super.key,
       required this.command,
       this.initialOnlyClickablePackages = false});
@@ -21,8 +22,8 @@ class PackageList extends StatefulWidget {
   State<StatefulWidget> createState() => _PackageListState();
 
   bool hasUnClickablePackages() {
-    for (PackagePeek package in packages) {
-      if (!package.isClickable()) {
+    for (PackageInfosPeek package in packagesInfos) {
+      if (!package.hasInfosFull()) {
         return true;
       }
     }
@@ -32,7 +33,7 @@ class PackageList extends StatefulWidget {
 
 class _PackageListState extends State<PackageList> {
   late bool onlyClickablePackages;
-  late List<PackagePeek> searchablePackages;
+  late List<PackageInfosPeek> searchablePackages;
   TextEditingController filterController = TextEditingController();
 
   @override
@@ -48,30 +49,30 @@ class _PackageListState extends State<PackageList> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           settings(),
-          ...listWithNrOfPackagesInfo(filteredPackages()),
+          ...listWithNrOfPackagesInfo(filteredPackages().map((e) => PackagePeek(e, command: widget.command)).toList()),
         ].withSpaceBetween(height: 10));
   }
 
-  List<PackagePeek> selectedPackages() {
+  List<PackageInfosPeek> selectedPackages() {
     if (onlyClickablePackages) {
       return [
-        for (PackagePeek package in widget.packages)
-          if (package.isClickable()) package
+        for (PackageInfosPeek package in widget.packagesInfos)
+          if (package.hasInfosFull()) package
       ];
     }
-    return widget.packages;
+    return widget.packagesInfos;
   }
 
-  List<PackagePeek> filteredPackages() {
+  List<PackageInfosPeek> filteredPackages() {
     if (filter.isEmpty) {
       searchablePackages;
     }
     return [
-      for (PackagePeek package in searchablePackages)
-        if ((package.name() != null &&
-                package.name()!.containsCaseInsensitive(filter)) ||
-            (package.id() != null &&
-                package.id()!.containsCaseInsensitive(filter)))
+      for (PackageInfosPeek package in searchablePackages)
+        if ((package.name != null &&
+                package.name!.value.containsCaseInsensitive(filter)) ||
+            (package.id != null &&
+                package.id!.value.containsCaseInsensitive(filter)))
           package
     ];
   }
@@ -84,7 +85,7 @@ class _PackageListState extends State<PackageList> {
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Text(
           locale.nrOfPackagesShown(
-              shownPackages.length, widget.packages.length),
+              shownPackages.length, widget.packagesInfos.length),
           style: FluentTheme.of(context).typography.caption,
         ),
       ),

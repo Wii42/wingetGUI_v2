@@ -14,11 +14,11 @@ class LoadingBarParser extends OutputParser {
   LoadingBarParser(super.lines);
 
   @override
-  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) {
+  FlexibleOutputBuilder? parse(AppLocalizations wingetLocale) {
     if (lines.isEmpty) {
       return null;
     }
-    return LoadingBarBuilder(progressBar(lines.last));
+    return Either.b(LoadingBarBuilder(progressBar(lines.last)));
   }
 
   Map<String, String> separateLoadingBar(String line) {

@@ -12,10 +12,10 @@ class ListParser extends OutputParser {
   late Map<String, String> listEntries;
 
   @override
-  FutureOr<OutputBuilder> parse(AppLocalizations wingetLocale) {
+  FlexibleOutputBuilder? parse(AppLocalizations wingetLocale) {
     _retrieveTitle();
     _retrieveListEntries();
-    return ListBuilder(title: title, list: listEntries);
+    return Either.b(ListBuilder(title: title, list: listEntries));
   }
 
   _retrieveTitle() {

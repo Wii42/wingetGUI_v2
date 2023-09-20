@@ -11,7 +11,7 @@ enum Winget {
   installed(command: ['list']),
   about(command: ['--info']),
   help(command: ['--help']),
-  search(command: ['search', "-n", '200']),
+  search(command: ['search', "-n", '1000']),
   settings(command: ['settings']),
   sources(command: ['source', 'list']),
   install(command: ['install']),

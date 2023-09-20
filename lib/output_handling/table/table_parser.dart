@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/output_builder.dart';
-import 'package:winget_gui/output_handling/table/generic_table/table_builder.dart';
+import 'package:winget_gui/output_handling/table/table_builder.dart';
 
 import '../output_parser.dart';
 import '../package_infos/package_attribute.dart';
@@ -20,26 +20,21 @@ class TableParser extends OutputParser {
   TableParser(super.lines, {required this.command});
 
   @override
-  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) async {
-    TableData table = await Isolate.run<TableData>(_makeTable);
+  FlexibleOutputBuilder? parse(AppLocalizations wingetLocale) {
+    TableData table = _makeTable();
     List<String> columnTitles = table.first.keys.toList();
     if (columnTitles.contains(PackageAttribute.name.key(wingetLocale)) &&
         columnTitles.contains(PackageAttribute.id.key(wingetLocale))) {
-      return QuickOutputBuilder((context) {
-        List<PackagePeek> packages = [];
-        for (Map<String, String> tableRow in table) {
-          packages.add(
-            PackagePeek(
-              PackageInfosPeek.fromMap(details: tableRow, locale: wingetLocale),
-              command: command,
-            ),
-          );
-        }
+      return Either.b(QuickOutputBuilder((context) {
+        List<PackageInfosPeek> packages = [
+          for (Map<String, String> tableRow in table)
+            PackageInfosPeek.fromMap(details: tableRow, locale: wingetLocale),
+        ];
         return PackageList(packages, command: command);
-      });
+      }));
     }
 
-    return TableBuilder(table);
+    return Either.b(TableBuilder(table));
   }
 
   TableData _makeTable() {
