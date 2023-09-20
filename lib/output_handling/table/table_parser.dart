@@ -11,7 +11,6 @@ import '../output_parser.dart';
 import '../package_infos/package_attribute.dart';
 import '../package_infos/package_infos_peek.dart';
 import 'apps_table/package_list.dart';
-import 'apps_table/package_short_info.dart';
 
 typedef TableData = List<Map<String, String>>;
 
@@ -26,15 +25,11 @@ class TableParser extends OutputParser {
     if (columnTitles.contains(PackageAttribute.name.key(wingetLocale)) &&
         columnTitles.contains(PackageAttribute.id.key(wingetLocale))) {
       return QuickOutputBuilder((context) {
-        List<PackagePeek> packages = [];
-        for (Map<String, String> tableRow in table) {
-          packages.add(
-            PackagePeek(
-              PackageInfosPeek.fromMap(details: tableRow, locale: wingetLocale),
-              command: command,
-            ),
-          );
-        }
+        List<PackageInfosPeek> packages = [
+          for (Map<String, String> tableRow in table)
+            PackageInfosPeek.fromMap(details: tableRow, locale: wingetLocale),
+        ];
+
         return PackageList(packages, command: command);
       });
     }
