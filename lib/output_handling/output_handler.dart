@@ -42,7 +42,7 @@ class OutputHandler {
 
   determineResponsibility(BuildContext context) {
     for (OutputScanner scanner in outputScanners) {
-      scanner.markResponsibleLines(context);
+      scanner.markResponsibleLines(getWingetLocale(context));
     }
   }
 
@@ -56,9 +56,7 @@ class OutputHandler {
       return resp.respPart!;
     }).toSet();
 
-    AppLocalizations wingetLocale =
-        AppLocale.of(context).getWingetAppLocalization() ??
-            AppLocalizations.of(context)!;
+    AppLocalizations wingetLocale = getWingetLocale(context);
 
     List<Future<OutputBuilder?>> builderFutures = parts
         .map<Future<OutputBuilder?>>((part) async => part.parse(wingetLocale))
@@ -73,5 +71,12 @@ class OutputHandler {
         .toList();
 
     return finalBuilders;
+  }
+
+  AppLocalizations getWingetLocale(BuildContext context) {
+    AppLocalizations wingetLocale =
+        AppLocale.of(context).getWingetAppLocalization() ??
+            AppLocalizations.of(context)!;
+    return wingetLocale;
   }
 }

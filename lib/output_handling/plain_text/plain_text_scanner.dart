@@ -1,5 +1,6 @@
-import 'package:fluent_ui/fluent_ui.dart';
+
 import 'package:winget_gui/output_handling/plain_text/plain_text_parser.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../responsibility.dart';
 import '../output_scanner.dart';
@@ -8,7 +9,7 @@ class PlainTextScanner extends OutputScanner {
   PlainTextScanner(super.respList);
 
   @override
-  void markResponsibleLines(BuildContext context) {
+  void markResponsibleLines(AppLocalizations wingetLocale) {
     PlainTextParser? prevPart;
     bool isSamePart = false;
     for (Responsibility resp in respList) {

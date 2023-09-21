@@ -1,20 +1,20 @@
-import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/list/list_parser.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
 import 'package:winget_gui/output_handling/responsibility.dart';
 import 'package:winget_gui/output_handling/output_scanner.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ListScanner extends OutputScanner {
   ListScanner(super.respList);
 
   @override
-  void markResponsibleLines(BuildContext context) {
+  void markResponsibleLines(AppLocalizations wingetLocale) {
     if (hasList()) {
       int start = _findListStart();
       int end = _findListEnd(start);
       _markLines(start, end);
 
-      markResponsibleLines(context);
+      markResponsibleLines(wingetLocale);
     }
   }
 

@@ -46,6 +46,10 @@ class ListParser extends OutputParser {
 
   bool _areSpacesMatchingAtPos(int pos, List<String> lines) {
     for (String line in lines) {
+      if (pos >= line.length) {
+        return false;
+        //throw Exception("pos $pos is out of bounds for line $line");
+      }
       if (line[pos] != ' ') {
         return false;
       }

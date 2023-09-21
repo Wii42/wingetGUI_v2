@@ -1,6 +1,6 @@
-import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/table_parser.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_parser.dart';
 import '../responsibility.dart';
@@ -13,14 +13,15 @@ class TableScanner extends OutputScanner {
   TableScanner(super.respList, {required this.command});
 
   @override
-  void markResponsibleLines(BuildContext context) {
-    if (hasTable(context)) {
-      _makeTable(context);
-      markResponsibleLines(context);
+  void markResponsibleLines(AppLocalizations wingetLocale) {
+    if (hasTable()) {
+      _makeTable();
+      markResponsibleLines(wingetLocale);
     }
+    falsePositives = [];
   }
 
-  bool hasTable(BuildContext context) {
+  bool hasTable() {
     int posHorizontalLine = _findHorizontalLine();
     if (posHorizontalLine < 0) {
       //found none
@@ -37,7 +38,7 @@ class TableScanner extends OutputScanner {
 
     if (isFalsePositive) {
       falsePositives.add(posHorizontalLine);
-      return hasTable(context);
+      return hasTable();
     }
     return true;
   }
@@ -58,7 +59,7 @@ class TableScanner extends OutputScanner {
     return -1;
   }
 
-  _makeTable(BuildContext context) {
+  _makeTable() {
     int tableStart = _findHorizontalLine() - 1;
     int tableEnd = _findTableEnd(tableStart);
     if (_linesAvailable(tableStart, tableEnd)) {

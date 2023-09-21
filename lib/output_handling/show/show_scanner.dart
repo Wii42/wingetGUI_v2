@@ -1,9 +1,6 @@
-import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/output_scanner.dart';
 import 'package:winget_gui/output_handling/show/show_parser.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../winget_commands.dart';
 
 class ShowScanner extends OutputScanner {
   List<String> command;
@@ -12,17 +9,15 @@ class ShowScanner extends OutputScanner {
   ShowScanner(super.respList, {required this.command, this.prevCommand});
 
   @override
-  void markResponsibleLines(BuildContext context) {
-    if (respList.isEmpty ||
-        command.isEmpty )//||
-        //command[0] != Winget.show.command[0])
+  void markResponsibleLines(AppLocalizations wingetLocale) {
+    if (respList.isEmpty || command.isEmpty) //||
+    //command[0] != Winget.show.command[0])
     {
       return;
     }
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    int identifierPos = _findIdentifier(locale);
+    int identifierPos = _findIdentifier(wingetLocale);
     if (identifierPos > -1) {
-      ShowParser showPart = ShowParser([], locale);
+      ShowParser showPart = ShowParser([], wingetLocale);
       for (int i = identifierPos; i < respList.length; i++) {
         if (respList[i].isHandled()) {
           break;
@@ -33,12 +28,12 @@ class ShowScanner extends OutputScanner {
     }
   }
 
-  int _findIdentifier(AppLocalizations locale) {
+  int _findIdentifier(AppLocalizations wingetLocale) {
     for (int i = 0; i < respList.length; i++) {
       if (!respList[i].isHandled() &&
-              (_isIdentifier(respList[i].line, command, locale)) ||
+              (_isIdentifier(respList[i].line, command, wingetLocale)) ||
           (prevCommand != null &&
-              _isIdentifier(respList[i].line, prevCommand!, locale))) {
+              _isIdentifier(respList[i].line, prevCommand!, wingetLocale))) {
         return i;
       }
     }
