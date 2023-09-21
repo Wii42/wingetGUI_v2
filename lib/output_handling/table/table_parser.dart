@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/output_builder.dart';
-import 'package:winget_gui/output_handling/table/generic_table/table_builder.dart';
+import 'package:winget_gui/output_handling/table/table_builder.dart';
 
 import '../output_parser.dart';
 import '../package_infos/package_attribute.dart';
@@ -21,9 +21,7 @@ class TableParser extends OutputParser {
   @override
   FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) async {
     TableData table = await Isolate.run<TableData>(_makeTable);
-    List<String> columnTitles = table.first.keys.toList();
-    if (columnTitles.contains(PackageAttribute.name.key(wingetLocale)) &&
-        columnTitles.contains(PackageAttribute.id.key(wingetLocale))) {
+    if (isAppTable(table, wingetLocale)) {
       return QuickOutputBuilder((context) {
         List<PackageInfosPeek> packages = [
           for (Map<String, String> tableRow in table)
@@ -147,5 +145,11 @@ class TableParser extends OutputParser {
       }
     }
     return additionalPos;
+  }
+
+  bool isAppTable(TableData table, AppLocalizations wingetLocale) {
+    List<String> columnTitles = table.first.keys.toList();
+    return columnTitles.contains(PackageAttribute.name.key(wingetLocale)) &&
+        columnTitles.contains(PackageAttribute.id.key(wingetLocale));
   }
 }
