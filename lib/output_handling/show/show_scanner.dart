@@ -14,8 +14,9 @@ class ShowScanner extends OutputScanner {
   @override
   void markResponsibleLines(BuildContext context) {
     if (respList.isEmpty ||
-        command.isEmpty ||
-        command[0] != Winget.show.command[0]) {
+        command.isEmpty )//||
+        //command[0] != Winget.show.command[0])
+    {
       return;
     }
     AppLocalizations locale = AppLocalizations.of(context)!;
