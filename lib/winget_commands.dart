@@ -14,7 +14,12 @@ enum Winget {
   search(command: ['search', "-n", '200']),
   settings(command: ['settings']),
   sources(command: ['source', 'list']),
-  install(command: ['install']),
+  install(command: [
+    'install',
+    '--disable-interactivity',
+    '--accept-source-agreements',
+    '--accept-package-agreements'
+  ]),
   upgrade(command: ['upgrade']),
   upgradeAll(command: ['upgrade', '--all']),
   uninstall(command: ['uninstall']),
