@@ -1,68 +1,79 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 
-class InheritedSnackBar extends InheritedWidget {
-  final SnackBarState snackBarState;
-  const InheritedSnackBar(
-      {super.key, required super.child, required this.snackBarState});
-
-  @override
-  bool updateShouldNotify(covariant InheritedSnackBar oldWidget) {
-    return false;
-  }
-}
-
-class SnackBar extends StatefulWidget {
-  const SnackBar({super.key, required this.child});
+class SnackBarWrapper extends StatelessWidget {
+  const SnackBarWrapper({super.key, required this.child});
   final Widget child;
 
   @override
-  State<SnackBar> createState() => SnackBarState();
+  Widget build(BuildContext context) {
+    return InheritedSnackBar(
+      child: Column(
+        children: [
+          Expanded(child: child),
+          const SnackBar(),
 
-  static SnackBarState? of(BuildContext context) {
+        ],
+      ),
+    );
+  }
+
+  static SnackBarHolder? of(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedSnackBar>()
-        ?.snackBarState;
+        ?.snackBarHolder;
   }
 }
 
-class SnackBarState extends State<SnackBar>
-    with AutomaticKeepAliveClientMixin<SnackBar> {
-  Widget? snackBarChild;
+
+
+class InheritedSnackBar extends InheritedWidget {
+  final SnackBarHolder snackBarHolder = SnackBarHolder();
+  InheritedSnackBar({super.key, required super.child});
+
+  @override
+  bool updateShouldNotify(covariant InheritedSnackBar oldWidget) {
+    return snackBarHolder.snackBar != oldWidget.snackBarHolder.snackBar;
+  }
+
+  static SnackBarHolder? of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<InheritedSnackBar>()
+        ?.snackBarHolder;
+  }
+}
+
+class SnackBar extends StatelessWidget {
+  const SnackBar({super.key});
+
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return InheritedSnackBar(
-      snackBarState: this,
-      child: _buildWithSnackBar(widget.child),
-    );
+    Widget? snackBar = SnackBarWrapper.of(context)!.snackBar;
+    if (snackBar == null) {
+      return const SizedBox();
+    }
+    return SizedBox(
+        height: 50,
+        child: DecoratedCard(child: Center(child: SnackBarWrapper.of(context)!.snackBar)));
   }
+}
 
-  Widget _buildWithSnackBar(Widget child) {
-    if (snackBarChild == null) return child;
-    return Column(
-      children: [
-        Expanded(child: child),
-        SizedBox(
-          height: 50,
-          child: DecoratedCard(child: Center(child: snackBarChild!)),
-        )
-      ],
-    );
-  }
 
-  void showSnackBar(Widget? snackBarChild, {Duration? duration}) {
-    setState(() {
-      this.snackBarChild = snackBarChild;
-    });
+
+class SnackBarHolder {
+  Widget? snackBar;
+
+  void showSnackBar(Widget? snackBar, {Duration? duration}) {
+    this.snackBar = snackBar;
     if (duration != null) {
       Future.delayed(duration, () {
-        showSnackBar(null);
+        removeSnackBar();
       });
     }
   }
 
-  @override
-  bool get wantKeepAlive => true;
+  void removeSnackBar() {
+    snackBar = null;
+  }
 }

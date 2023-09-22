@@ -1,7 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/widget_assets/snack_bar.dart';
 
 class MainNavigation extends StatefulWidget {
   MainNavigation({super.key, required this.title});
@@ -43,8 +42,7 @@ class MainNavigationState extends State<MainNavigation>
   void initState() {
     super.initState();
     navigators = {
-      for (Routes route in widget.allItems)
-        route: SnackBar(child: NavigationNavigator(route))
+      for (Routes route in widget.allItems) route: NavigationNavigator(route)
     };
   }
 

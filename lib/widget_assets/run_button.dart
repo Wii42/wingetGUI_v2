@@ -1,6 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/run_button_tooltip.dart';
-import 'package:winget_gui/widget_assets/snack_bar.dart';
 
 import '../winget_process/output_page.dart';
 import '../winget_process/winget_process.dart';
@@ -28,7 +27,6 @@ abstract class RunButton extends StatelessWidget {
   BaseButton buttonType(BuildContext context);
 
   void Function() onPressed(BuildContext context) => () async {
-    SnackBar.of(context)!.showSnackBar(const Text('Hi'), duration: const Duration(seconds: 1));
         NavigatorState router = Navigator.of(context);
         WingetProcess process = await WingetProcess.runCommand(command);
         router.push(FluentPageRoute(

@@ -4,7 +4,6 @@ import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../routes.dart';
-import '../../../widget_assets/snack_bar.dart';
 import '../../package_infos/package_infos_peek.dart';
 
 class PackagePeek extends StatelessWidget {
