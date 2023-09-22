@@ -40,5 +40,8 @@
   "autoLanguage": "auto",
 
   "error": "Error",
-  "unexpectedError": "Unexpected error"
+  "unexpectedError": "Unexpected error",
+
+  "installSuccessful": "Installation successful",
+  "uninstallSuccessful": "Uninstall successful"
 }
