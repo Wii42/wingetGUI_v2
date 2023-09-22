@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/widget_assets/snack_bar.dart';
 
 class MainNavigation extends StatefulWidget {
   MainNavigation({super.key, required this.title});
@@ -33,20 +34,23 @@ class MainNavigation extends StatefulWidget {
   State<MainNavigation> createState() => MainNavigationState();
 }
 
-class MainNavigationState extends State<MainNavigation> {
-  late Map<Routes, Navigator> navigators;
+class MainNavigationState extends State<MainNavigation>
+    with AutomaticKeepAliveClientMixin<MainNavigation> {
+  late Map<Routes, Widget> navigators;
   int? topIndex = 0;
 
   @override
   void initState() {
     super.initState();
     navigators = {
-      for (Routes route in widget.allItems) route: navigator(route)
+      for (Routes route in widget.allItems)
+        route: SnackBar(child: NavigationNavigator(route))
     };
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       bool displayModeIsMinimal = constraints.maxWidth <= 640;
@@ -116,7 +120,7 @@ class MainNavigationState extends State<MainNavigation> {
     );
   }
 
-  Navigator navigator(Routes winget) {
+  Widget navigator(Routes winget) {
     return Navigator(
       initialRoute: winget.route,
       onGenerateInitialRoutes: (state, __) => [
@@ -142,5 +146,51 @@ class MainNavigationState extends State<MainNavigation> {
     );
   }
 
-  Center notFoundMessage() => const Center(child: Text('Oops, page not found'));
+  static Center notFoundMessage() =>
+      const Center(child: Text('Oops, page not found'));
+
+  @override
+  bool get wantKeepAlive => true;
+}
+
+class NavigationNavigator extends StatefulWidget {
+  final Routes winget;
+  const NavigationNavigator(this.winget, {super.key});
+
+  @override
+  State<StatefulWidget> createState() => _NavigationNavigatorState();
+}
+
+class _NavigationNavigatorState extends State<NavigationNavigator>
+    with AutomaticKeepAliveClientMixin<NavigationNavigator> {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return Navigator(
+      initialRoute: widget.winget.route,
+      onGenerateInitialRoutes: (state, __) => [
+        FluentPageRoute<dynamic>(builder: (context) {
+          return widget.winget.buildPage();
+        })
+      ],
+      onGenerateRoute: (settings) {
+        Widget? page;
+        for (Routes route in Routes.values) {
+          if (settings.name == route.route) {
+            page = route.buildPage(settings.arguments);
+          }
+        }
+
+        return FluentPageRoute<dynamic>(
+          builder: (context) {
+            return page ?? MainNavigationState.notFoundMessage();
+          },
+          settings: settings,
+        );
+      },
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
