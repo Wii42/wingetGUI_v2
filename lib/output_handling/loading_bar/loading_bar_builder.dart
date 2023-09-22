@@ -9,14 +9,17 @@ class LoadingBarBuilder extends OutputBuilder {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        ProgressBar(
-          value: loadingBar.value,
-          backgroundColor: FluentTheme.of(context).accentColor.withAlpha(50),
-        ),
-        if (loadingBar.text != null) Text(loadingBar.text!),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        children: [
+          ProgressBar(
+            value: loadingBar.value,
+            backgroundColor: FluentTheme.of(context).accentColor.withAlpha(50),
+          ),
+          if (loadingBar.text != null) Text(loadingBar.text!),
+        ],
+      ),
     );
   }
 }
