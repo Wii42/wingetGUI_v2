@@ -36,5 +36,8 @@
   "openWingetSettingsFile": "Öffne Winget-Einstellungen-Dokument",
 
   "themeMode": "{mode, select, system{System} light{Hell} dark{Dunkel} other{NotFoundError}}",
-  "autoLanguage": "auto"
+  "autoLanguage": "auto",
+
+  "error": "Fehler",
+  "unexpectedError": "Unerwarteter Fehler"
 }

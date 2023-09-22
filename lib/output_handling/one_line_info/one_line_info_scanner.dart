@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_parser.dart';
 
-const String identifierSemicolon = ': ';
+const String identifierColon = ': ';
 
 class OneLineInfoScanner extends OutputScanner {
   OneLineInfoScanner(super.respList);
@@ -17,8 +17,8 @@ class OneLineInfoScanner extends OutputScanner {
     bool isSamePart = false;
     for (Responsibility resp in respList) {
       if (!resp.isHandled() &&
-          resp.line.contains(identifierSemicolon) &&
-          resp.line.trim().indexOf(identifierSemicolon) <=
+          resp.line.contains(identifierColon) &&
+          resp.line.trim().indexOf(identifierColon) <=
               maxIdentifierLength) {
         if (isSamePart) {
           prevPart!.addLine(resp.line);
