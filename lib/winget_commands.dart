@@ -55,11 +55,11 @@ enum Winget {
     return "$prefix $input".trim();
   }
 
-  List<String> get command => [baseCommand, ...options];
+  List<String> get fullCommand => [baseCommand, ...options];
 
   Widget processPage(RouteParameter? parameters) {
     return OutputPageStarter(
-      command: [...command, ...?parameters?.commandParameter],
+      command: [...fullCommand, ...?parameters?.commandParameter],
       winget: this,
       titleInput: parameters?.titleAddon,
     );

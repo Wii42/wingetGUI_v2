@@ -50,7 +50,7 @@ class RightSideButtons extends StatelessWidget {
 
   List<String> _createCommand(Winget winget, AppLocalizations locale) {
     return [
-      ...winget.command,
+      ...winget.fullCommand,
       '--id',
       infos.id!.value,
       if (winget != Winget.upgrade && infos.hasVersion()) ...[

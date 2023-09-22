@@ -40,7 +40,7 @@ class WingetProcess {
   }
 
   static Future<WingetProcess> runWinget(Winget winget) async {
-    return await runCommand(winget.command, name: winget.name);
+    return await runCommand(winget.fullCommand, name: winget.name);
   }
 
   Future<WingetProcess> clone() async {

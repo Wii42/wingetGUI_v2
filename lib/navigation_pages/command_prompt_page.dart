@@ -64,7 +64,7 @@ class CommandPromptPage extends StatelessWidget {
                   content: SizedBox(
                       width: 500,
                       height: 500,
-                      child: SimpleOutputStarter(command: Winget.help.command)),
+                      child: SimpleOutputStarter(command: Winget.help.fullCommand)),
                 )
               ],
             ),

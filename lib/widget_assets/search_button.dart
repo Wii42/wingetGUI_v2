@@ -19,7 +19,7 @@ class SearchButton extends RunButton {
       SearchButton.create(
         key: key,
         text: searchTarget,
-        command: [...winget.command, searchTarget],
+        command: [...winget.fullCommand, searchTarget],
         title:
             title ?? winget.titleWithInput(searchTarget, localization: local),
       );
