@@ -7,27 +7,33 @@ import 'winget_process/output_page_starter.dart';
 const String notFoundError = "NotFoundError";
 
 enum Winget {
-  updates(command: ['upgrade', '--include-unknown']),
-  installed(command: ['list']),
-  about(command: ['--info']),
-  help(command: ['--help']),
-  search(command: ['search', "-n", '200']),
-  settings(command: ['settings']),
-  sources(command: ['source', 'list']),
-  install(command: [
+  updates('upgrade', options: ['--include-unknown'], aliases: ['update']),
+  installed('list', aliases: ['ls']),
+  about('--info'),
+  help('--help', aliases: ['-?']),
+  search('search', options: ["-n", '200'], aliases: ['find']),
+  settings('settings', aliases: ['config']),
+  sources('source', options: ['list']),
+  install(
     'install',
-    '--disable-interactivity',
-    '--accept-source-agreements',
-    '--accept-package-agreements'
-  ]),
-  upgrade(command: ['upgrade']),
-  upgradeAll(command: ['upgrade', '--all']),
-  uninstall(command: ['uninstall']),
-  show(command: ['show']);
+    options: [
+      '--disable-interactivity',
+      '--accept-source-agreements',
+      '--accept-package-agreements',
+    ],
+    aliases: ['add'],
+  ),
+  upgrade('upgrade', aliases: ['update']),
+  upgradeAll('upgrade', options: ['--all'], aliases: ['update']),
+  uninstall('uninstall', aliases: ['remove', 'rm']),
+  show('show', aliases: ['view']);
 
-  final List<String> command;
+  final String baseCommand;
+  final List<String> options;
+  final List<String> aliases;
 
-  const Winget({required this.command});
+  const Winget(this.baseCommand,
+      {this.options = const [], this.aliases = const []});
 
   String title(AppLocalizations local) {
     String title = local.wingetTitle(name);
@@ -49,6 +55,8 @@ enum Winget {
     return "$prefix $input".trim();
   }
 
+  List<String> get command => [baseCommand, ...options];
+
   Widget processPage(RouteParameter? parameters) {
     return OutputPageStarter(
       command: [...command, ...?parameters?.commandParameter],
@@ -56,4 +64,6 @@ enum Winget {
       titleInput: parameters?.titleAddon,
     );
   }
+
+  List<String> get allNames => [baseCommand, ...aliases];
 }

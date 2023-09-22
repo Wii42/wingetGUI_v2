@@ -49,7 +49,9 @@ class _PackageListState extends State<PackageList> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           settings(),
-          ...listWithNrOfPackagesInfo(filteredPackages().map((e) => PackagePeek(e, command: widget.command)).toList()),
+          ...listWithNrOfPackagesInfo(filteredPackages()
+              .map((e) => PackagePeek(e, command: widget.command))
+              .toList()),
         ].withSpaceBetween(height: 10));
   }
 
@@ -127,7 +129,7 @@ class _PackageListState extends State<PackageList> {
     );
   }
 
-  bool isUpdatesList() => (widget.command[0] == Winget.updates.command[0]);
+  bool isUpdatesList() => (Winget.updates.allNames.contains(widget.command[0]));
 
   Button updateAllButton() {
     AppLocalizations locale = AppLocalizations.of(context)!;
