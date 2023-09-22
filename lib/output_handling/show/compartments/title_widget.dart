@@ -27,7 +27,7 @@ class TitleWidget extends Compartment {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            favicon(),
+            favicon(faviconSize()),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +40,7 @@ class TitleWidget extends Compartment {
             if (infos.id != null)
               Padding(
                 padding: const EdgeInsets.only(left: 25),
-                child: RightSideButtons(infos: infos),
+                child: buildRightSide(),
               ),
           ],
         ),
@@ -48,25 +48,36 @@ class TitleWidget extends Compartment {
     ];
   }
 
+  Widget buildRightSide() => RightSideButtons(infos: infos);
+
   @override
   String compartmentTitle(AppLocalizations locale) {
     return PackageAttribute.name.title(locale);
   }
 
   Widget nameAndVersion(BuildContext context) {
+    Typography typography = FluentTheme.of(context).typography;
     return RichText(
       text: TextSpan(
           text: '${infos.name?.value ?? '<unknown>'} ',
-          style: FluentTheme.of(context).typography.titleLarge,
+          style: titleStyle(typography),
           children: [
             if (infos.hasVersion())
               TextSpan(
                 text: 'v${infos.version!.value}',
-                style: FluentTheme.of(context).typography.title,
+                style: versionStyle(typography),
               )
           ]),
       softWrap: true,
     );
+  }
+
+  TextStyle? titleStyle(Typography typography) {
+    return typography.titleLarge;
+  }
+
+  TextStyle? versionStyle(Typography typography) {
+    return typography.title;
   }
 
   Widget _detailsBelow(BuildContext context) {
@@ -117,8 +128,7 @@ class TitleWidget extends Compartment {
   Uri? get faviconUrl =>
       infos.website?.value ?? infos.agreement?.publisher?.url;
 
-  Widget favicon() {
-    double size = 70;
+  Widget favicon(double faviconSize) {
 
     return AnimatedSize(
       duration: const Duration(milliseconds: 100),
@@ -135,14 +145,14 @@ class TitleWidget extends Compartment {
               if (imageType == 'svg') {
                 image = SvgPicture.network(
                   favicon.url,
-                  width: size,
-                  height: size,
+                  width: faviconSize,
+                  height: faviconSize,
                 );
               } else {
                 image = Image.network(
                   favicon.url,
-                  width: size,
-                  height: size,
+                  width: faviconSize,
+                  height: faviconSize,
                   filterQuality: FilterQuality.high,
                   isAntiAlias: true,
                   //fit: BoxFit.contain,
@@ -167,4 +177,6 @@ class TitleWidget extends Compartment {
       ),
     );
   }
+
+  double faviconSize() => 70;
 }

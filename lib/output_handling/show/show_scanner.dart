@@ -1,13 +1,13 @@
 import 'package:winget_gui/output_handling/output_scanner.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
+import 'package:winget_gui/output_handling/responsibility.dart';
 import 'package:winget_gui/output_handling/show/show_parser.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShowScanner extends OutputScanner {
   List<String> command;
-  List<String>? prevCommand;
 
-  ShowScanner(super.respList, {required this.command, this.prevCommand});
+  ShowScanner(super.respList, {required this.command});
 
   @override
   void markResponsibleLines(AppLocalizations wingetLocale) {
@@ -18,23 +18,30 @@ class ShowScanner extends OutputScanner {
     }
     int identifierPos = _findIdentifier(wingetLocale);
     if (identifierPos > -1) {
-      ShowParser showPart = ShowParser([]);
+      ShowParser showPart = ShowParser([], command: command);
       for (int i = identifierPos; i < respList.length; i++) {
-        if (respList[i].isHandled()) {
+        Responsibility resp = respList[i];
+        if (resp.isHandled()) {
           break;
         }
-        showPart.addLine(respList[i].line);
-        respList[i].respPart = showPart;
+        if (i > identifierPos) {
+          if (!resp.line.startsWith(' ') &&
+              !resp.line.trim().contains(':') &&
+              resp.line.isNotEmpty) {
+            break;
+          }
+        }
+        showPart.addLine(resp.line);
+        resp.respPart = showPart;
       }
+      markResponsibleLines(wingetLocale);
     }
   }
 
   int _findIdentifier(AppLocalizations wingetLocale) {
     for (int i = 0; i < respList.length; i++) {
       if (!respList[i].isHandled() &&
-              (_isIdentifier(respList[i].line, command, wingetLocale)) ||
-          (prevCommand != null &&
-              _isIdentifier(respList[i].line, prevCommand!, wingetLocale))) {
+          (_isIdentifier(respList[i].line, command, wingetLocale))) {
         return i;
       }
     }
@@ -44,15 +51,16 @@ class ShowScanner extends OutputScanner {
   bool _isIdentifier(
       String line, List<String> command, AppLocalizations locale) {
     line = line.trim();
-    if (!line.startsWith(locale.packageLongInfoIdentifier)) {
+    if (!line.startsWith(locale.found) &&
+        !line.startsWith(locale.agreementsFor)) {
       return false;
     }
     line = line.toLowerCase();
     if (command.contains('--id')) {
       String id = command[command.indexOf('--id') + 1].toLowerCase();
       return (line.endsWith('[$id]') ||
-          line.contains(
-              '[$id] ${locale.infoKey(PackageAttribute.version.name)}'.toLowerCase()));
+          line.contains('[$id] ${locale.infoKey(PackageAttribute.version.name)}'
+              .toLowerCase()));
     }
 
     if (command.contains('--name')) {

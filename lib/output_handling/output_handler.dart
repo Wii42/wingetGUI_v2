@@ -18,14 +18,13 @@ import 'output_parser.dart';
 class OutputHandler {
   final List<String> output;
   final List<String> command;
-  final List<String>? prevCommand;
 
   final String? title;
   late List<OutputScanner> outputScanners;
   late final List<Responsibility> responsibilityList;
 
   OutputHandler(this.output,
-      {required this.command, this.prevCommand, this.title}) {
+      {required this.command, this.title}) {
     output.trim();
     responsibilityList = [for (String line in output) Responsibility(line)];
 
@@ -33,7 +32,7 @@ class OutputHandler {
       TableScanner(responsibilityList, command: command),
       LoadingBarScanner(responsibilityList),
       ShowScanner(responsibilityList,
-          command: command, prevCommand: prevCommand),
+          command: command),
       ListScanner(responsibilityList),
       OneLineInfoScanner(responsibilityList),
       PlainTextScanner(responsibilityList),

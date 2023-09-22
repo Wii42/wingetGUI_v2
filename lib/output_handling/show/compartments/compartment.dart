@@ -55,8 +55,7 @@ abstract class Compartment extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 5),
           child: Text(title,
-              style: FluentTheme.of(context).typography.bodyLarge?.merge(
-                  const TextStyle(inherit: true, fontWeight: FontWeight.w500))),
+              style: compartmentTitleStyle(FluentTheme.of(context).typography)),
         ),
       ...?mainColumn,
       if (mainColumn != null &&
@@ -69,6 +68,11 @@ abstract class Compartment extends StatelessWidget {
         ),
       if (buttonRow != null) buttonRow
     ].withSpaceBetween(height: 10);
+  }
+
+  TextStyle? compartmentTitleStyle(Typography typography) {
+    return typography.bodyLarge
+        ?.merge(const TextStyle(inherit: true, fontWeight: FontWeight.w500));
   }
 
   Widget textOrInlineLink(

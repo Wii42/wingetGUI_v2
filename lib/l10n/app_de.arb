@@ -15,7 +15,8 @@
   "details": "Details",
   "fromSource": "via {source}",
 
-  "packageLongInfoIdentifier": "Gefunden",
+  "found": "Gefunden",
+  "agreementsFor": "Vereinbarungen für",
   "showInStore": "Im Store anzeigen",
   "showMore": "mehr anzeigen",
   "showLess": "weniger anzeigen",

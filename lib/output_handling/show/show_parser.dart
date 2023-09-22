@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/output_builder.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
-import 'package:winget_gui/output_handling/show/package_long_info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/show/show_builder.dart';
 
 import '../package_infos/package_attribute.dart';
 import '../package_infos/package_infos_full.dart';
@@ -12,12 +12,12 @@ import '../package_infos/package_infos_full.dart';
 const maxIdentifierLength = 100;
 
 class ShowParser extends OutputParser {
-  ShowParser(super.lines);
+  final List<String> command;
+  ShowParser(super.lines, {required this.command});
 
   @override
   FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) {
-    return QuickOutputBuilder(
-        (context) => PackageLongInfo(_extractInfos(wingetLocale)));
+    return ShowBuilder(infos: _extractInfos(wingetLocale), command: command);
   }
 
   PackageInfosFull _extractInfos(AppLocalizations locale) {
@@ -44,8 +44,10 @@ class ShowParser extends OutputParser {
     if (idIndex == -1) {
       throw Exception('No id found in first line of show part: $firstLine');
     }
+    int startOffset = lines[0].trim().startsWith(wingetLocale.found) ? 1 : 2;
+
     infos[PackageAttribute.name.key(wingetLocale)] =
-        firstLine.sublist(1, idIndex).join(' ');
+        firstLine.sublist(startOffset, idIndex).join(' ');
     String id = firstLine[idIndex].trim();
     infos[PackageAttribute.id.key(wingetLocale)] =
         id.replaceAll('[', '').replaceAll(']', '');

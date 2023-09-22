@@ -91,7 +91,7 @@ abstract class ProcessOutput extends StatelessWidget {
   Future<List<OutputBuilder>> _displayOutput(
       List<String> output, BuildContext context) async {
     OutputHandler handler =
-        OutputHandler(output, command: process.command, prevCommand: []);
+        OutputHandler(output, command: process.command);
     handler.determineResponsibility(context);
     return handler.getRepresentation(context);
   }
