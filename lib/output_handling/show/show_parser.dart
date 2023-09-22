@@ -12,8 +12,7 @@ import '../package_infos/package_infos_full.dart';
 const maxIdentifierLength = 100;
 
 class ShowParser extends OutputParser {
-  AppLocalizations wingetLocale;
-  ShowParser(super.lines, this.wingetLocale);
+  ShowParser(super.lines);
 
   @override
   FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) {
@@ -23,12 +22,12 @@ class ShowParser extends OutputParser {
 
   PackageInfosFull _extractInfos(AppLocalizations locale) {
     Map<String, String> infos = {};
-    infos.addAll(_extractMainInfos());
+    infos.addAll(_extractMainInfos(locale));
     infos.addAll(_extractOtherInfos());
 
     Map<String, String>? installerDetails;
     if (infos.hasInfo(PackageAttribute.installer, locale)) {
-      installerDetails = extractInstallerDetails(infos);
+      installerDetails = extractInstallerDetails(infos, locale);
       infos.remove(PackageAttribute.installer.key(locale));
     }
 
@@ -36,15 +35,27 @@ class ShowParser extends OutputParser {
         details: infos, installerDetails: installerDetails, locale: locale);
   }
 
-  Map<String, String> _extractMainInfos() {
+  Map<String, String> _extractMainInfos(AppLocalizations wingetLocale) {
     Map<String, String> infos = {};
-    List<String> details = lines[0].trim().split(' ');
+    List<String> firstLine = lines[0].trim().split(' ');
 
+    int idIndex = firstLine.indexWhere((element) =>
+        element.trim().startsWith('[') && element.trim().endsWith(']'));
+    if (idIndex == -1) {
+      throw Exception('No id found in first line of show part: $firstLine');
+    }
     infos[PackageAttribute.name.key(wingetLocale)] =
-        details.sublist(1, details.length - 1).join(' ');
-    String id = details.last.trim();
+        firstLine.sublist(1, idIndex).join(' ');
+    String id = firstLine[idIndex].trim();
     infos[PackageAttribute.id.key(wingetLocale)] =
         id.replaceAll('[', '').replaceAll(']', '');
+    if (idIndex < firstLine.length - 1) {
+      if (firstLine[idIndex + 1].trim() ==
+          wingetLocale.infoKey(PackageAttribute.version.name)) {
+        infos[PackageAttribute.version.key(wingetLocale)] =
+            firstLine.sublist(idIndex + 2).join(' ');
+      }
+    }
     return infos;
   }
 
@@ -53,7 +64,8 @@ class ShowParser extends OutputParser {
     return extractDetails(details);
   }
 
-  Map<String, String> extractInstallerDetails(Map<String, String> infos) {
+  Map<String, String> extractInstallerDetails(
+      Map<String, String> infos, wingetLocale) {
     return extractDetails(infos[PackageAttribute.installer.key(wingetLocale)]!
         .split('\n')
         .map((String line) => line.trim())
