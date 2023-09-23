@@ -160,10 +160,11 @@ class NavigationNavigator extends StatefulWidget {
 }
 
 class _NavigationNavigatorState extends State<NavigationNavigator>
-    with AutomaticKeepAliveClientMixin<NavigationNavigator> {
+    //with AutomaticKeepAliveClientMixin<NavigationNavigator>
+{
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    //super.build(context);
     return Navigator(
       initialRoute: widget.winget.route,
       onGenerateInitialRoutes: (state, __) => [
@@ -189,6 +190,6 @@ class _NavigationNavigatorState extends State<NavigationNavigator>
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
+  //@override
+  //bool get wantKeepAlive => true;
 }
