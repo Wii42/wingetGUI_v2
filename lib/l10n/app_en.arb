@@ -28,6 +28,7 @@
   "waitOnData": "waiting on data...",
 
   "showOnlyClickablePackages": "show only selectable apps",
+  "showOnlyPackagesWithSpecificVersion": "show only apps with known specific version",
   "filterFor": "filter for:",
   "nrOfPackagesShown": "{number} of {total} apps are displayed",
 

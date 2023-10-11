@@ -13,4 +13,7 @@ abstract class PackageInfos {
   });
 
   bool hasVersion() => (version != null && version?.value != 'Unknown');
+  bool hasSpecificVersion() => (version != null &&
+      version?.value != 'Unknown' &&
+      !version!.value.contains('<'));
 }

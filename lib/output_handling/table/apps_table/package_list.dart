@@ -12,11 +12,13 @@ class PackageList extends StatefulWidget {
   final List<PackageInfosPeek> packagesInfos;
   final List<String> command;
   final bool initialOnlyClickablePackages;
+  final bool initialOnlyWithSpecificVersion;
 
   const PackageList(this.packagesInfos,
       {super.key,
       required this.command,
-      this.initialOnlyClickablePackages = false});
+      this.initialOnlyClickablePackages = false,
+      this.initialOnlyWithSpecificVersion = true});
 
   @override
   State<StatefulWidget> createState() => _PackageListState();
@@ -29,10 +31,20 @@ class PackageList extends StatefulWidget {
     }
     return false;
   }
+
+  bool hasPackagesWithoutSpecificVersion() {
+    for (PackageInfosPeek package in packagesInfos) {
+      if (!package.hasSpecificVersion()) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 class _PackageListState extends State<PackageList> {
   late bool onlyClickablePackages;
+  late bool onlyWithSpecificVersion;
   late List<PackageInfosPeek> searchablePackages;
   TextEditingController filterController = TextEditingController();
 
@@ -40,6 +52,7 @@ class _PackageListState extends State<PackageList> {
   void initState() {
     super.initState();
     onlyClickablePackages = widget.initialOnlyClickablePackages;
+    onlyWithSpecificVersion = widget.initialOnlyWithSpecificVersion;
     searchablePackages = selectedPackages();
   }
 
@@ -56,13 +69,21 @@ class _PackageListState extends State<PackageList> {
   }
 
   List<PackageInfosPeek> selectedPackages() {
+    List<PackageInfosPeek> visiblePackages = [];
     if (onlyClickablePackages) {
-      return [
-        for (PackageInfosPeek package in widget.packagesInfos)
-          if (package.hasInfosFull()) package
-      ];
+      visiblePackages = widget.packagesInfos
+          .where((element) => element.hasInfosFull())
+          .toList();
+    } else {
+      visiblePackages = widget.packagesInfos;
     }
-    return widget.packagesInfos;
+
+    if (onlyWithSpecificVersion) {
+      visiblePackages = visiblePackages
+          .where((element) => element.hasSpecificVersion())
+          .toList();
+    }
+    return visiblePackages;
   }
 
   List<PackageInfosPeek> filteredPackages() {
@@ -102,6 +123,8 @@ class _PackageListState extends State<PackageList> {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         if (widget.hasUnClickablePackages()) onlyClickableCheckbox(),
+        if (widget.hasPackagesWithoutSpecificVersion())
+          onlyWithSpecificVersionCheckbox(),
         if (isUpdatesList()) updateAllButton(),
         if (searchablePackages.length >= 5) filterField(),
       ],
@@ -117,6 +140,22 @@ class _PackageListState extends State<PackageList> {
         if (value != null) {
           setState(() {
             onlyClickablePackages = value;
+            searchablePackages = selectedPackages();
+          });
+        }
+      },
+    );
+  }
+
+  Widget onlyWithSpecificVersionCheckbox() {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    return Checkbox(
+      checked: onlyWithSpecificVersion,
+      content: Text(locale.showOnlyPackagesWithSpecificVersion),
+      onChanged: (value) {
+        if (value != null) {
+          setState(() {
+            onlyWithSpecificVersion = value;
             searchablePackages = selectedPackages();
           });
         }
