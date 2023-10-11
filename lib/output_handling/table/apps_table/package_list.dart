@@ -110,22 +110,17 @@ class _PackageListState extends State<PackageList> {
 
   Widget onlyClickableCheckbox() {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    return Wrap(
-      spacing: 10,
-      children: [
-        Checkbox(
-          checked: onlyClickablePackages,
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                onlyClickablePackages = value;
-                searchablePackages = selectedPackages();
-              });
-            }
-          },
-        ),
-        Text(locale.showOnlyClickablePackages),
-      ],
+    return Checkbox(
+      checked: onlyClickablePackages,
+      content: Text(locale.showOnlyClickablePackages),
+      onChanged: (value) {
+        if (value != null) {
+          setState(() {
+            onlyClickablePackages = value;
+            searchablePackages = selectedPackages();
+          });
+        }
+      },
     );
   }
 
