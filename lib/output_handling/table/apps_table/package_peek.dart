@@ -19,7 +19,7 @@ class PackagePeek extends StatelessWidget {
     return Button(
       onPressed: (isClickable())
           ? () {
-        //SnackBar.of(context)!.showSnackBar(const Text('Hi'), duration: const Duration(seconds: 1));
+              //SnackBar.of(context)!.showSnackBar(const Text('Hi'), duration: const Duration(seconds: 1));
               if (infos.id != null) {
                 pushPackageDetails(context);
               }
@@ -63,9 +63,10 @@ class PackagePeek extends StatelessWidget {
           const SizedBox(width: 20),
           RightSideButtons(
             infos: infos,
-            alignment: columnAlign,
+            mainAlignment: MainAxisAlignment.spaceEvenly,
             upgrade: infos.availableVersion != null,
             install: !(command[0] == 'upgrade' || command[0] == 'list'),
+            iconsOnly: true,
           )
         ],
       ],

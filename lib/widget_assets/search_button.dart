@@ -10,19 +10,16 @@ class SearchButton extends RunButton {
   const SearchButton.create(
       {super.key, required super.text, super.title, required super.command});
 
-  factory SearchButton({
-    Key? key,
+  SearchButton({
+    super.key,
     required String searchTarget,
-    required AppLocalizations local,
+    required AppLocalizations localization,
     String? title,
-  }) =>
-      SearchButton.create(
-        key: key,
-        text: searchTarget,
-        command: [...winget.fullCommand, searchTarget],
-        title:
-            title ?? winget.titleWithInput(searchTarget, localization: local),
-      );
+  }) : super(
+            text: searchTarget,
+            title: title ??
+                winget.titleWithInput(searchTarget, localization: localization),
+            command: [...winget.fullCommand, searchTarget]);
 
   @override
   BaseButton buttonType(BuildContext context) =>

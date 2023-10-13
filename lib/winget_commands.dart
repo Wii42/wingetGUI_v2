@@ -22,18 +22,20 @@ enum Winget {
       '--accept-package-agreements',
     ],
     aliases: ['add'],
+    icon: FluentIcons.installation,
   ),
-  upgrade('upgrade', aliases: ['update']),
+  upgrade('upgrade', aliases: ['update'], icon: FluentIcons.substitutions_in),
   upgradeAll('upgrade', options: ['--all'], aliases: ['update']),
-  uninstall('uninstall', aliases: ['remove', 'rm']),
+  uninstall('uninstall', aliases: ['remove', 'rm'], icon: FluentIcons.delete),
   show('show', aliases: ['view']);
 
   final String baseCommand;
   final List<String> options;
   final List<String> aliases;
+  final IconData? icon;
 
   const Winget(this.baseCommand,
-      {this.options = const [], this.aliases = const []});
+      {this.options = const [], this.aliases = const [], this.icon});
 
   String title(AppLocalizations local) {
     String title = local.wingetTitle(name);

@@ -47,12 +47,12 @@ class PackageLongInfo extends StatelessWidget {
         if (infos.moniker != null)
           SearchButton(
             searchTarget: infos.moniker!.value,
-            local: locale,
+            localization: locale,
           ),
         for (String tag in infos.tags!)
           SearchButton(
             searchTarget: tag,
-            local: locale,
+            localization: locale,
           )
       ],
     );

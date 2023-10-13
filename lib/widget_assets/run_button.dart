@@ -1,20 +1,22 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/run_button_tooltip.dart';
 
 import '../winget_process/output_page.dart';
 import '../winget_process/winget_process.dart';
 
 abstract class RunButton extends StatelessWidget {
+  final String text;
+  final List<String> command;
+  final String? title;
+  final IconData? icon;
+
   const RunButton({
     super.key,
     required this.text,
     required this.command,
-    this.title,
+    this.title, this.icon,
   });
-
-  final String text;
-  final List<String> command;
-  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -36,5 +38,10 @@ abstract class RunButton extends StatelessWidget {
                 )));
       };
 
-  Widget child() => Text(text);
+  Widget child() => icon != null? Row(
+    children: [
+      Icon(icon),
+      Text(text),
+    ].withSpaceBetween(width: 10),
+  ): Text(text);
 }
