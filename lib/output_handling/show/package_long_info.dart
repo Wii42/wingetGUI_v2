@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/helpers/package_screenshots_list.dart';
 import 'package:winget_gui/output_handling/show/compartments/details_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/expandable_compartment.dart';
 import 'package:winget_gui/output_handling/show/compartments/installer_details.dart';
@@ -19,7 +19,9 @@ class PackageLongInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(infos.screenshots);
+    if (kDebugMode) {
+    //  print(infos.screenshots);
+    }
     return Column(
       children: [
         TitleWidget(infos: infos),

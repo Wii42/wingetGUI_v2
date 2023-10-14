@@ -25,7 +25,7 @@ class PackageInfosPeek extends PackageInfos {
       return PackageInfosPeek();
     }
     InfoMapParser parser = InfoMapParser(map: details, locale: locale);
-    return PackageInfosPeek(
+    PackageInfosPeek infos = PackageInfosPeek(
       name: parser.maybeDetailFromMap(PackageAttribute.name),
       id: parser.maybeDetailFromMap(PackageAttribute.id),
       version: parser.maybeDetailFromMap(PackageAttribute.version),
@@ -35,6 +35,8 @@ class PackageInfosPeek extends PackageInfos {
       match: parser.maybeDetailFromMap(PackageAttribute.match),
       otherInfos: details.isNotEmpty ? details : null,
     );
+    return infos;
+      //..screenshots = PackageScreenshotsList.instance.getPackage(infos);
   }
 
   bool hasInfosFull() {

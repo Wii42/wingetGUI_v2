@@ -37,7 +37,8 @@ class TableParser extends OutputParser {
 
   TableData _makeTable() {
     List<int> columnsPos = _getColumnsPos();
-    _correctLinesWithNonWesternGlyphs(columnsPos);
+    //_correctLinesWithNonWesternGlyphs(columnsPos);
+    _correctLinesWithCjKIdeographs();
     return _extractTableData(columnsPos);
   }
 
@@ -90,6 +91,25 @@ class TableParser extends OutputParser {
     }
   }
 
+  void _correctLinesWithCjKIdeographs() {
+    for (int i = 2; i < lines.length; i++) {
+      String line = lines[i];
+      bool test = line.containsCjkIdeograph();
+      if (test) {
+        List<String> words = line.split(' ');
+        for (int i = 0; i < words.length; i++) {
+          String word = words[i];
+          if (word.containsCjkIdeograph()) {
+            word = word + (' ' * word.countCjkIdeographs());
+          }
+          words[i] = word;
+        }
+        line = words.join(' ');
+      }
+      lines[i] = line;
+    }
+  }
+
   List<Map<String, String>> _extractTableData(List<int> columnsPos) {
     List<String> columnNames = _getColumnNames(columnsPos);
 
@@ -109,9 +129,19 @@ class TableParser extends OutputParser {
     Map<String, String> infos = {};
     for (int i = 0; i < columnNames.length; i++) {
       int end = i + 1 < columnNames.length ? columnsPos[i + 1] : entry.length;
-      infos[columnNames[i]] = (entry.substring(
-              min(columnsPos[i], entry.length), min(end, entry.length)))
-          .trim();
+      String tableCell = (entry.substring(
+          min(columnsPos[i], entry.length), min(end, entry.length)));
+      if (tableCell.isNotEmpty) {
+        if (tableCell.lastChar() != ' ') {
+          int nextCharIndex = end;
+          while (nextCharIndex < entry.length &&
+              entry.charAt(nextCharIndex) != ' ') {
+            tableCell = tableCell + entry.charAt(nextCharIndex);
+            nextCharIndex++;
+          }
+        }
+      }
+      infos[columnNames[i]] = tableCell.trim();
     }
     return infos;
   }

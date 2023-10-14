@@ -1,9 +1,11 @@
+import '../../helpers/package_screenshots.dart';
 import 'info.dart';
 
 abstract class PackageInfos {
   final Info<String>? name, id, version;
 
   final Map<String, String>? otherInfos;
+  PackageScreenshots? screenshots;
 
   PackageInfos({
     this.name,

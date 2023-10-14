@@ -18,7 +18,6 @@ class WebImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String imageType = url.substring(url.lastIndexOf('.') + 1);
-    Widget image;
 
     if (imageType == 'svg') {
       return SvgPicture.network(

@@ -1,5 +1,4 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../helpers/package_screenshots.dart';
 import '../../helpers/package_screenshots_list.dart';
 import './package_infos.dart';
 
@@ -24,7 +23,6 @@ class PackageInfosFull extends PackageInfos {
   final AgreementInfos? agreement;
   final Info<Uri>? website, supportUrl;
   final InstallerInfos? installer;
-  PackageScreenshots? screenshots;
 
   PackageInfosFull({
     super.name,

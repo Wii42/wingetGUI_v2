@@ -4,8 +4,6 @@ import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 
-import '../../../widget_assets/web_image.dart';
-
 class ScreenshotsWidget extends Compartment {
   final PackageScreenshots screenshots;
   const ScreenshotsWidget(this.screenshots, {super.key});
