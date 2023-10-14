@@ -9,6 +9,7 @@ import 'package:winget_gui/widget_assets/link_text.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:winget_gui/widget_assets/store_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/widget_assets/web_image.dart';
 
 import '../../../widget_assets/decorated_card.dart';
 import '../../../widget_assets/link_button.dart';
@@ -129,54 +130,58 @@ class TitleWidget extends Compartment {
       infos.website?.value ?? infos.agreement?.publisher?.url;
 
   Widget favicon(double faviconSize) {
-
     return AnimatedSize(
       duration: const Duration(milliseconds: 100),
-      child: FutureBuilder<Favicon?>(
-        future: FaviconFinder.getBest(faviconUrl.toString()),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            Favicon? favicon = snapshot.data;
-            if (favicon != null) {
-              String imageType =
-                  favicon.url.substring(favicon.url.lastIndexOf('.') + 1);
-              Widget image;
-
-              if (imageType == 'svg') {
-                image = SvgPicture.network(
-                  favicon.url,
-                  width: faviconSize,
-                  height: faviconSize,
-                );
-              } else {
-                image = Image.network(
-                  favicon.url,
-                  width: faviconSize,
-                  height: faviconSize,
-                  filterQuality: FilterQuality.high,
-                  isAntiAlias: true,
-                  //fit: BoxFit.contain,
-                );
-              }
-
-              return FadeIn(
-                duration: const Duration(milliseconds: 500),
-                // The green box must be a child of the AnimatedOpacity widget.
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 25),
-                  child: DecoratedCard(
-                    padding: 10,
-                    child: image,
-                  ),
-                ),
-              );
-            }
-          }
-          return const SizedBox();
-        },
-      ),
+      child: infos.screenshots?.icon != null &&
+              infos.screenshots!.icon.toString().isNotEmpty
+          ? loadFavicon(faviconSize, infos.screenshots!.icon.toString())
+          : FutureBuilder<Favicon?>(
+              future: FaviconFinder.getBest(faviconUrl.toString()),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  Favicon? favicon = snapshot.data;
+                  if (favicon != null) {
+                    return loadFavicon(faviconSize, favicon.url);
+                  }
+                }
+                return const SizedBox();
+              },
+            ),
     );
   }
 
   double faviconSize() => 70;
+
+  Widget loadFavicon(double faviconSize, String url) {
+    Widget image;
+
+    image = WebImage(
+      url: url,
+      imageHeight: faviconSize,
+      imageWidth: faviconSize,
+      imageConfig: ImageConfig(
+        filterQuality: FilterQuality.high,
+        isAntiAlias: true,
+        errorBuilder: (context, error, stackTrace) {
+          return SizedBox(
+            width: faviconSize,
+            height: faviconSize,
+            child: const Icon(FluentIcons.error),
+          );
+        },
+      ),
+    );
+
+    return FadeIn(
+      duration: const Duration(milliseconds: 500),
+      // The green box must be a child of the AnimatedOpacity widget.
+      child: Padding(
+        padding: const EdgeInsets.only(right: 25),
+        child: DecoratedCard(
+          padding: 10,
+          child: image,
+        ),
+      ),
+    );
+  }
 }

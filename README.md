@@ -23,3 +23,5 @@ samples, guidance on mobile development, and a full API reference.
 
 - fix sources page
 
+- FIX Python 3.11 page because they are stupid
+

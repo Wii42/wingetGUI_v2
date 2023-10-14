@@ -3,15 +3,22 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/main_navigation.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 
 import 'global_app_data.dart';
+import 'helpers/package_screenshots_list.dart';
 
 const String appTitle = 'WingetGUI';
 
 void main() async {
   await initAppPrerequisites();
+  PackageScreenshotsList.instance.fetchScreenshots().then((_) {
+    PackageScreenshotsList.instance.getPackage(PackageInfosPeek());
+    print('search complete');
+  });
   runApp(const WingetGui());
 }
 
@@ -32,6 +39,7 @@ Future<void> initAppPrerequisites() async {
                 ]))),
     SystemTheme.accentColor.load(),
     SettingsCache.instance.ensureInitialized(),
+    PackageScreenshotsList.instance.ensureInitialized(),
   ]);
 }
 

@@ -1,8 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/helpers/package_screenshots_list.dart';
 import 'package:winget_gui/output_handling/show/compartments/details_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/expandable_compartment.dart';
 import 'package:winget_gui/output_handling/show/compartments/installer_details.dart';
+import 'package:winget_gui/output_handling/show/compartments/screenshots_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/widget_assets/search_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,9 +19,12 @@ class PackageLongInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(infos.screenshots);
     return Column(
       children: [
         TitleWidget(infos: infos),
+        if(infos.screenshots?.screenshots != null && infos.screenshots!.screenshots!.isNotEmpty)
+         ScreenshotsWidget(infos.screenshots!),
         if (infos.hasDescription())
           ExpandableCompartment(
             text: infos.description!,

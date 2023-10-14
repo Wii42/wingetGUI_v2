@@ -1,4 +1,6 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../helpers/package_screenshots.dart';
+import '../../helpers/package_screenshots_list.dart';
 import './package_infos.dart';
 
 import 'agreement_infos.dart';
@@ -22,6 +24,7 @@ class PackageInfosFull extends PackageInfos {
   final AgreementInfos? agreement;
   final Info<Uri>? website, supportUrl;
   final InstallerInfos? installer;
+  PackageScreenshots? screenshots;
 
   PackageInfosFull({
     super.name,
@@ -56,7 +59,7 @@ class PackageInfosFull extends PackageInfos {
     if (details != null) {
       InfoMapParser parser = InfoMapParser(map: details, locale: locale);
 
-      return PackageInfosFull(
+      PackageInfosFull infos =  PackageInfosFull(
         name: parser.maybeDetailFromMap(PackageAttribute.name),
         id: parser.maybeDetailFromMap(PackageAttribute.id),
         description: parser.maybeDetailFromMap(PackageAttribute.description),
@@ -80,6 +83,7 @@ class PackageInfosFull extends PackageInfos {
         installer: installer,
         otherInfos: details.isNotEmpty ? details : null,
       );
+      return infos..screenshots = PackageScreenshotsList.instance.getPackage(infos);
     } else {
       return PackageInfosFull(installer: installer);
     }

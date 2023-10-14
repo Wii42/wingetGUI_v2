@@ -64,7 +64,8 @@ class PackagePeek extends StatelessWidget {
           RightSideButtons(
             infos: infos,
             mainAlignment: MainAxisAlignment.spaceEvenly,
-            upgrade: infos.availableVersion != null,
+            upgrade: infos.availableVersion != null &&
+                infos.availableVersion!.value.isNotEmpty,
             install: !(command[0] == 'upgrade' || command[0] == 'list'),
             iconsOnly: true,
           )
