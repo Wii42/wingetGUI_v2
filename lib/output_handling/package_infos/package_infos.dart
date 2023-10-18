@@ -66,4 +66,10 @@ abstract class PackageInfos {
     }
     return id!.value.replaceFirst('$publisherID.', '').replaceAll('.', '').toLowerCase();
   }
+  String? get idWithoutPublisherIDAndHyphen {
+    if (id == null) {
+      return null;
+    }
+    return id!.value.replaceFirst('$publisherID.', '').replaceAll('.', '-').toLowerCase();
+  }
 }

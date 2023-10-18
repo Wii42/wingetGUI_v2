@@ -20,7 +20,7 @@ class PackageLongInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (kDebugMode) {
-    //  print(infos.screenshots);
+    print(infos.screenshots);
     }
     return Column(
       children: [

@@ -124,12 +124,15 @@ class PackageScreenshotsList {
     if (screenshotList.isEmpty) {
       return null;
     }
+    print(
+        'looking for: ${packageInfos.nameWithoutVersion}, ${packageInfos.nameWithoutPublisherIDAndVersion}, ${packageInfos.idWithHyphen}, ${packageInfos.idWithoutPublisherID}, ${packageInfos.idWithoutPublisherIDAndHyphen}, ${packageInfos.id?.value}');
     List<bool Function(PackageScreenshots)> conditions = [
       (element) => element.packageKey == packageInfos.nameWithoutVersion,
       (element) =>
           element.packageKey == packageInfos.nameWithoutPublisherIDAndVersion,
       (element) => element.packageKey == packageInfos.idWithHyphen,
       (element) => element.packageKey == packageInfos.idWithoutPublisherID,
+    (element) => element.packageKey == packageInfos.idWithoutPublisherIDAndHyphen,
       (element) => element.packageKey == packageInfos.id?.value,
     ];
     for (bool Function(PackageScreenshots) condition in conditions) {

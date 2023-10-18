@@ -53,7 +53,7 @@ class PackagePeek extends StatelessWidget {
       children: [
         //if (infos.screenshots?.icon != null &&
         //    infos.screenshots!.icon.toString().isNotEmpty)
-         // favicon(faviconSize()),
+        // favicon(faviconSize()),
         Expanded(
           child: nameAndSource(context),
         ),
@@ -100,8 +100,8 @@ class PackagePeek extends StatelessWidget {
         if (infos.source != null && infos.source!.value.isNotEmpty)
           Text(
             locale.fromSource(infos.source!.value),
-            style: correctColor(
-                FluentTheme.of(context).typography.caption, context),
+            style: withoutColor(
+                FluentTheme.of(context).typography.caption),
             //style: TextStyle(
             // color: FluentTheme.of(context).inactiveColor,
             //),
@@ -113,8 +113,8 @@ class PackagePeek extends StatelessWidget {
   }
 
   TextStyle? _titleStyle(BuildContext context) {
-    TextStyle? style = FluentTheme.of(context).typography.title;
-    return correctColor(style, context);
+    TextStyle? blueprint = FluentTheme.of(context).typography.title;
+   return withoutColor(blueprint);
   }
 
   TextStyle? correctColor(TextStyle? style, BuildContext context) {
@@ -124,6 +124,30 @@ class PackagePeek extends StatelessWidget {
               context, {ButtonStates.disabled}));
     }
     return style;
+  }
+
+  TextStyle? withoutColor(TextStyle? blueprint) {
+    if (blueprint == null) return null;
+    return TextStyle(
+      fontSize: blueprint.fontSize,
+      fontWeight: blueprint.fontWeight,
+      fontFamily: blueprint.fontFamily,
+      fontFamilyFallback: blueprint.fontFamilyFallback,
+      fontStyle: blueprint.fontStyle,
+      letterSpacing: blueprint.letterSpacing,
+      wordSpacing: blueprint.wordSpacing,
+      textBaseline: blueprint.textBaseline,
+      height: blueprint.height,
+      locale: blueprint.locale,
+      leadingDistribution: blueprint.leadingDistribution,
+      debugLabel: blueprint.debugLabel,
+      shadows: blueprint.shadows,
+      fontFeatures: blueprint.fontFeatures,
+      decoration: blueprint.decoration,
+      decorationColor: blueprint.decorationColor,
+      decorationStyle: blueprint.decorationStyle,
+      decorationThickness: blueprint.decorationThickness,
+    );
   }
 
   List<Widget> _versions(AppLocalizations locale) {
@@ -145,9 +169,8 @@ class PackagePeek extends StatelessWidget {
 
   Widget favicon(double faviconSize) {
     return AnimatedSize(
-      duration: const Duration(milliseconds: 100),
-      child: loadFavicon(faviconSize, infos.screenshots!.icon.toString())
-    );
+        duration: const Duration(milliseconds: 100),
+        child: loadFavicon(faviconSize, infos.screenshots!.icon.toString()));
   }
 
   double faviconSize() => 40;
