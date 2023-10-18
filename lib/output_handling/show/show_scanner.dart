@@ -19,19 +19,31 @@ class ShowScanner extends OutputScanner {
     int identifierPos = _findIdentifier(wingetLocale);
     if (identifierPos > -1) {
       ShowParser showPart = ShowParser([], command: command);
+      bool isPartOfCopyright = false;
       for (int i = identifierPos; i < respList.length; i++) {
         Responsibility resp = respList[i];
+        String line = resp.line;
         if (resp.isHandled()) {
           break;
         }
         if (i > identifierPos) {
-          if (!resp.line.startsWith(' ') &&
-              !resp.line.trim().contains(':') &&
-              resp.line.isNotEmpty) {
+          if (!line.startsWith(' ') &&
+              !line.trim().contains(':') &&
+              !_isPartOfCopyright(line, isPartOfCopyright) &&
+              line.isNotEmpty) {
             break;
           }
         }
-        showPart.addLine(resp.line);
+        if(isPartOfCopyright) {
+         if(!_isPartOfCopyright(line, isPartOfCopyright)){
+           isPartOfCopyright = false;
+         }
+        }
+        if (_isStartOfCopyright(line, wingetLocale)) {
+          isPartOfCopyright = true;
+        }
+
+        showPart.addLine(line);
         resp.respPart = showPart;
       }
       markResponsibleLines(wingetLocale);
@@ -86,5 +98,14 @@ class ShowScanner extends OutputScanner {
       prevWasNotOption = isNotOption;
     }
     return null;
+  }
+
+  bool _isPartOfCopyright(String line, bool isPartOfCopyright) {
+    return  isPartOfCopyright && line.startsWith('Copyright ');
+  }
+
+  bool _isStartOfCopyright(String line, AppLocalizations wingetLocale) {
+    return line.startsWith(
+        '${wingetLocale.infoKey(PackageAttribute.copyright.name)}:');
   }
 }
