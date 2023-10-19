@@ -37,6 +37,40 @@ abstract class PackageInfos {
     return Info<Uri>(
         title: (locale) => locale.infoTitle(PackageAttribute.manifest.name),
         value: Uri.parse(
-            'https://github.com/microsoft/winget-pkgs/tree/master/manifests/${id!.value.firstChar().toLowerCase()}/${id!.value.replaceAll('.', '/')}'));
+            'https://github.com/microsoft/winget-pkgs/tree/master/manifests/$idInitialLetter/$idAsPath'));
+  }
+
+  Info<Uri>? get manifestApi {
+    if (id == null && isWinget()) {
+      return null;
+    }
+    return Info<Uri>(
+        title: (locale) => locale.infoTitle(PackageAttribute.manifest.name),
+        value: Uri.parse(
+            'https://api.github.com/repos/microsoft/winget-pkgs/contents/manifests/$idInitialLetter/$idAsPath'));
+  }
+
+  Info<Uri>? get versionManifest {
+    if (id == null && isWinget() && hasSpecificVersion()) {
+      return null;
+    }
+    return Info<Uri>(
+        title: (locale) => locale.infoTitle(PackageAttribute.manifest.name),
+        value: Uri.parse(
+            'https://raw.githubusercontent.com/microsoft/winget-pkgs/master/manifests/$idInitialLetter/$idAsPath/${version!.value}/${id!.value}.yaml'));
+  }
+
+  String? get idInitialLetter {
+    if (id == null) {
+      return null;
+    }
+    return id!.value.firstChar().toLowerCase();
+  }
+
+  String? get idAsPath {
+    if (id == null) {
+      return null;
+    }
+    return id!.value.replaceAll('.', '/');
   }
 }

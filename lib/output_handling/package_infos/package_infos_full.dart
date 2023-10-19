@@ -96,9 +96,11 @@ class PackageInfosFull extends PackageInfos {
 
   bool hasReleaseNotes() => releaseNotes?.text != null;
 
+  @override
   bool isMicrosoftStore() => (installer?.type?.value.trim() == 'msstore' &&
       installer?.storeProductID != null);
 
+  @override
   bool isWinget() =>
       !isMicrosoftStore() && id != null && id!.value.contains('.');
 }
