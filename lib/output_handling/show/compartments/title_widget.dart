@@ -1,13 +1,13 @@
 import 'package:favicon/favicon.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:winget_gui/widget_assets/store_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/widget_assets/web_image.dart';
 
 import '../../../widget_assets/decorated_card.dart';
@@ -98,8 +98,7 @@ class TitleWidget extends Compartment {
         if (infos.website != null) _website(locale),
         if (infos.category != null) ...[
           LinkText(line: infos.category!.value),
-          if (infos.isMicrosoftStore())
-            _showInStore(locale),
+          if (infos.isMicrosoftStore()) _showInStore(locale),
         ]
       ].withSpaceBetween(width: 5),
     );

@@ -37,13 +37,11 @@ class PaneItemBody extends StatelessWidget {
           SizedBox(
               width: iconSize,
               height: iconSize,
-              child:
-              IconButton(
-                  onPressed: canGoBack(context)? navigator.maybePop : null,
+              child: IconButton(
+                  onPressed: canGoBack(context) ? navigator.maybePop : null,
                   icon: const Icon(
                     FluentIcons.back,
-                  ))
-          ),
+                  ))),
           if (title != null)
             Expanded(
               child: Text(
@@ -62,9 +60,9 @@ class PaneItemBody extends StatelessWidget {
                   WingetProcess newProcess = await process!.clone();
                   navigator.pushReplacement(FluentPageRoute(
                       builder: (_) => OutputPage(
-                        process: newProcess,
-                        title: title,
-                      )));
+                            process: newProcess,
+                            title: title,
+                          )));
                 },
                 icon: const Icon(FluentIcons.update_restore),
               ),
@@ -76,5 +74,6 @@ class PaneItemBody extends StatelessWidget {
 
   bool canGoBack(BuildContext context) => Navigator.of(context).canPop();
 
-  factory PaneItemBody.inRoute([Object? _]) => const PaneItemBody(title: 'empty',child: Text('text'));
+  factory PaneItemBody.inRoute([Object? _]) =>
+      const PaneItemBody(title: 'empty', child: Text('text'));
 }

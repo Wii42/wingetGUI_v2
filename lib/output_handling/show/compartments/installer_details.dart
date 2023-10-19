@@ -1,12 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
+
 import '../../../widget_assets/app_locale.dart';
-import '../../package_infos/package_attribute.dart';
 import '../../package_infos/info.dart';
+import '../../package_infos/package_attribute.dart';
 import 'compartment.dart';
 
 class InstallerDetails extends Compartment {

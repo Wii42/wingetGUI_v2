@@ -12,7 +12,6 @@ class SnackBarWrapper extends StatelessWidget {
         children: [
           Expanded(child: child),
           const SnackBar(),
-
         ],
       ),
     );
@@ -24,8 +23,6 @@ class SnackBarWrapper extends StatelessWidget {
         ?.snackBarHolder;
   }
 }
-
-
 
 class InheritedSnackBar extends InheritedWidget {
   final SnackBarHolder snackBarHolder = SnackBarHolder();
@@ -46,7 +43,6 @@ class InheritedSnackBar extends InheritedWidget {
 class SnackBar extends StatelessWidget {
   const SnackBar({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     Widget? snackBar = SnackBarWrapper.of(context)!.snackBar;
@@ -55,11 +51,10 @@ class SnackBar extends StatelessWidget {
     }
     return SizedBox(
         height: 50,
-        child: DecoratedCard(child: Center(child: SnackBarWrapper.of(context)!.snackBar)));
+        child: DecoratedCard(
+            child: Center(child: SnackBarWrapper.of(context)!.snackBar)));
   }
 }
-
-
 
 class SnackBarHolder {
   Widget? snackBar;

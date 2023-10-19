@@ -1,17 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
 import 'package:winget_gui/output_handling/table/table_scanner.dart';
 
 import './list/list_scanner.dart';
 import './loading_bar/loading_bar_scanner.dart';
 import './one_line_info/one_line_info_scanner.dart';
 import './output_builder.dart';
+import './output_scanner.dart';
 import './plain_text/plain_text_scanner.dart';
 import './responsibility.dart';
-import './output_scanner.dart';
 import './show/show_scanner.dart';
-
 import '../widget_assets/app_locale.dart';
 import 'output_parser.dart';
 
@@ -23,16 +22,14 @@ class OutputHandler {
   late List<OutputScanner> outputScanners;
   late final List<Responsibility> responsibilityList;
 
-  OutputHandler(this.output,
-      {required this.command, this.title}) {
+  OutputHandler(this.output, {required this.command, this.title}) {
     output.trim();
     responsibilityList = [for (String line in output) Responsibility(line)];
 
     outputScanners = [
       TableScanner(responsibilityList, command: command),
       LoadingBarScanner(responsibilityList),
-      ShowScanner(responsibilityList,
-          command: command),
+      ShowScanner(responsibilityList, command: command),
       ListScanner(responsibilityList),
       OneLineInfoScanner(responsibilityList),
       PlainTextScanner(responsibilityList),

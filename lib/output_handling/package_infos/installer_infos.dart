@@ -1,8 +1,8 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package_attribute.dart';
 import 'info.dart';
 import 'info_map_parser.dart';
+import 'package_attribute.dart';
 
 class InstallerInfos {
   final String Function(AppLocalizations) title;
@@ -35,7 +35,8 @@ class InstallerInfos {
         url: parser.maybeLinkFromMap(PackageAttribute.installerURL),
         sha256Hash: parser.maybeDetailFromMap(PackageAttribute.sha256Installer),
         locale: parser.maybeDetailFromMap(PackageAttribute.installerLocale),
-        storeProductID: parser.maybeDetailFromMap(PackageAttribute.storeProductID),
+        storeProductID:
+            parser.maybeDetailFromMap(PackageAttribute.storeProductID),
         releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate),
         otherInfos: installerDetails);
   }

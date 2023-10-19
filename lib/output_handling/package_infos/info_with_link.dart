@@ -1,8 +1,8 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../helpers/extensions/string_extension.dart';
-import 'package_attribute.dart';
 import 'info.dart';
+import 'package_attribute.dart';
 
 class InfoWithLink {
   final String Function(AppLocalizations) title;

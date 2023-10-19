@@ -1,8 +1,8 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/output_scanner.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/responsibility.dart';
 import 'package:winget_gui/output_handling/show/show_parser.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShowScanner extends OutputScanner {
   List<String> command;
@@ -34,10 +34,10 @@ class ShowScanner extends OutputScanner {
             break;
           }
         }
-        if(isPartOfCopyright) {
-         if(!_isPartOfCopyright(line, isPartOfCopyright)){
-           isPartOfCopyright = false;
-         }
+        if (isPartOfCopyright) {
+          if (!_isPartOfCopyright(line, isPartOfCopyright)) {
+            isPartOfCopyright = false;
+          }
         }
         if (_isStartOfCopyright(line, wingetLocale)) {
           isPartOfCopyright = true;
@@ -101,7 +101,7 @@ class ShowScanner extends OutputScanner {
   }
 
   bool _isPartOfCopyright(String line, bool isPartOfCopyright) {
-    return  isPartOfCopyright && line.startsWith('Copyright ');
+    return isPartOfCopyright && line.startsWith('Copyright ');
   }
 
   bool _isStartOfCopyright(String line, AppLocalizations wingetLocale) {

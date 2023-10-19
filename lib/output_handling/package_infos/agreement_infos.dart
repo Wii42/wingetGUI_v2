@@ -1,8 +1,9 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package_attribute.dart';
+
 import 'info.dart';
 import 'info_map_parser.dart';
 import 'info_with_link.dart';
+import 'package_attribute.dart';
 
 class AgreementInfos {
   final String Function(AppLocalizations) title;
@@ -32,16 +33,20 @@ class AgreementInfos {
     AgreementInfos agreement = AgreementInfos(
       title: PackageAttribute.agreement.title,
       publisher: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.publisher, urlInfo: PackageAttribute.publisherUrl),
+          textInfo: PackageAttribute.publisher,
+          urlInfo: PackageAttribute.publisherUrl),
       license: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.license, urlInfo: PackageAttribute.licenseUrl),
+          textInfo: PackageAttribute.license,
+          urlInfo: PackageAttribute.licenseUrl),
       copyright: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.copyright, urlInfo: PackageAttribute.copyrightUrl),
+          textInfo: PackageAttribute.copyright,
+          urlInfo: PackageAttribute.copyrightUrl),
       privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl),
       buyUrl: parser.maybeLinkFromMap(PackageAttribute.buyUrl),
       termsOfTransaction:
           parser.maybeDetailFromMap(PackageAttribute.termsOfTransaction),
-      seizureWarning: parser.maybeDetailFromMap(PackageAttribute.seizureWarning),
+      seizureWarning:
+          parser.maybeDetailFromMap(PackageAttribute.seizureWarning),
       storeLicenseTerms:
           parser.maybeDetailFromMap(PackageAttribute.storeLicenseTerms),
     );

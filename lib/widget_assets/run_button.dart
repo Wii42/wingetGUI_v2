@@ -15,7 +15,8 @@ abstract class RunButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.command,
-    this.title, this.icon,
+    this.title,
+    this.icon,
   });
 
   @override
@@ -38,10 +39,12 @@ abstract class RunButton extends StatelessWidget {
                 )));
       };
 
-  Widget child() => icon != null? Row(
-    children: [
-      Icon(icon),
-      Text(text),
-    ].withSpaceBetween(width: 10),
-  ): Text(text);
+  Widget child() => icon != null
+      ? Row(
+          children: [
+            Icon(icon),
+            Text(text),
+          ].withSpaceBetween(width: 10),
+        )
+      : Text(text);
 }

@@ -1,9 +1,9 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import './package_infos.dart';
 
-import 'package_attribute.dart';
+import './package_infos.dart';
 import 'info.dart';
 import 'info_map_parser.dart';
+import 'package_attribute.dart';
 
 class PackageInfosPeek extends PackageInfos {
   final Info<String>? availableVersion, source, match;
@@ -36,7 +36,7 @@ class PackageInfosPeek extends PackageInfos {
       otherInfos: details.isNotEmpty ? details : null,
     );
     return infos;
-      //..setImplicitInfos();
+    //..setImplicitInfos();
   }
 
   bool hasInfosFull() {

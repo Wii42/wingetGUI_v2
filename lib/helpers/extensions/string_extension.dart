@@ -59,14 +59,15 @@ extension ContainsExtentsion on String {
     return codePoints.where((codePoint) => isCjkIdeograph(codePoint)).length;
   }
 
-  String charAt(int index){
+  String charAt(int index) {
     return String.fromCharCode(codeUnitAt(index));
   }
 
-  String firstChar(){
+  String firstChar() {
     return String.fromCharCode(codeUnits.first);
   }
-  String lastChar(){
+
+  String lastChar() {
     return String.fromCharCode(codeUnits.last);
   }
 }
@@ -77,8 +78,6 @@ bool isCjkIdeograph(int codePoint) {
       codePoint.isBetween(0x7800, 0x8CFF) ||
       codePoint.isBetween(0x8D00, 0x9FFF));
 }
-
-
 
 bool isLink(String? text) {
   if (text == null) {

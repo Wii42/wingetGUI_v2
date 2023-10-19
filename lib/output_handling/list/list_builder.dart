@@ -9,7 +9,7 @@ class ListBuilder extends OutputBuilder {
   final String title;
   final Map<String, String> list;
 
-  ListBuilder({ required this.title, required this.list});
+  ListBuilder({required this.title, required this.list});
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({super.key});
@@ -43,7 +43,9 @@ class SearchPage extends StatelessWidget {
   void Function(String) search(BuildContext context) {
     NavigatorState navigator = Navigator.of(context);
     return (input) {
-      navigator.pushNamed(Routes.search.route, arguments: RouteParameter(commandParameter: [input], titleAddon: "'$input'"));
+      navigator.pushNamed(Routes.search.route,
+          arguments: RouteParameter(
+              commandParameter: [input], titleAddon: "'$input'"));
     };
   }
 

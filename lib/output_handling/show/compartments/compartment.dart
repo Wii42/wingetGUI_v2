@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/icon_link_button.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets//link_button.dart';
@@ -80,16 +80,24 @@ abstract class Compartment extends StatelessWidget {
       {required BuildContext context,
       required String? text,
       required Uri? url}) {
-    if(url!= null) {
-      return Row(mainAxisSize: MainAxisSize.min, children: [Text(text??url.toString(),), IconLinkButton(url: url)].withSpaceBetween(width: 5),);
+    if (url != null) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            text ?? url.toString(),
+          ),
+          IconLinkButton(url: url)
+        ].withSpaceBetween(width: 5),
+      );
     }
     return textWithLinks(text: text!, context: context);
   }
 
   Widget textOrInlineLink(
       {required BuildContext context,
-        required String? text,
-        required Uri? url}) {
+      required String? text,
+      required Uri? url}) {
     if (url != null) {
       return InlineLinkButton(url: url, text: Text(text ?? url.toString()));
     }

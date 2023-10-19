@@ -51,12 +51,10 @@ class ScrollListWidget extends StatelessWidget {
       );
     }
     return ListView.builder(
-
-      itemBuilder: (context, index) =>
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: outputBuilders![index].getWidget(context),
-          ),
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: outputBuilders![index].getWidget(context),
+      ),
       itemCount: outputBuilders!.length,
       physics: physics,
       padding: padding,

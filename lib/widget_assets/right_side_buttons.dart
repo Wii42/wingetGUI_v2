@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
 import '../output_handling/package_infos/package_infos.dart';
 import '../winget_commands.dart';
@@ -49,9 +49,9 @@ class RightSideButtons extends StatelessWidget {
 
   List<Widget> buttonList(List<Winget> commands, AppLocalizations locale) {
     List<Widget> list = [
-        for (Winget winget in commands) createButton(winget, locale),
-      ];
-    if(iconsOnly){
+      for (Winget winget in commands) createButton(winget, locale),
+    ];
+    if (iconsOnly) {
       return list;
     }
     return list.withSpaceBetween(height: 5);
@@ -66,7 +66,9 @@ class RightSideButtons extends StatelessWidget {
         command: _createCommand(winget, locale),
         title: winget.titleWithInput(appName, localization: locale),
         icon: winget.icon ?? FluentIcons.error,
-        padding: numberOfButtons < 3? const EdgeInsets.all(5): const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+        padding: numberOfButtons < 3
+            ? const EdgeInsets.all(5)
+            : const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       );
     }
     return CommandButton(

@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:open_store/open_store.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:open_store/open_store.dart';
 
 class StoreButton extends StatelessWidget {
   final String storeId;

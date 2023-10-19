@@ -1,9 +1,9 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'agreement_infos.dart';
-import 'package_attribute.dart';
 import 'info.dart';
 import 'info_with_link.dart';
+import 'package_attribute.dart';
 
 class InfoMapParser {
   AppLocalizations locale;

@@ -21,20 +21,15 @@ class ScreenshotsWidget extends Compartment {
       context: context,
       title: compartmentTitle(locale),
       mainColumn: [
-
-
-           LayoutBuilder(
-             builder: (context, constraints) {
-               return GalleryImageView(
-                boxFit: BoxFit.scaleDown,
-                listImage: imageProviders,
-                width: constraints.maxWidth,
-                height: 200,
-                galleryType: 1,
+        LayoutBuilder(builder: (context, constraints) {
+          return GalleryImageView(
+            boxFit: BoxFit.scaleDown,
+            listImage: imageProviders,
+            width: constraints.maxWidth,
+            height: 200,
+            galleryType: 1,
           );
-             }
-           ),
-
+        }),
       ],
     );
   }

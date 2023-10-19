@@ -1,13 +1,12 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../helpers/package_screenshots_list.dart';
-import './package_infos.dart';
 
+import './package_infos.dart';
 import 'agreement_infos.dart';
-import 'package_attribute.dart';
 import 'info.dart';
 import 'info_map_parser.dart';
 import 'info_with_link.dart';
 import 'installer_infos.dart';
+import 'package_attribute.dart';
 
 class PackageInfosFull extends PackageInfos {
   final Info<String>? description,
@@ -81,8 +80,7 @@ class PackageInfosFull extends PackageInfos {
         installer: installer,
         otherInfos: details.isNotEmpty ? details : null,
       );
-      return infos
-        ..setImplicitInfos();
+      return infos..setImplicitInfos();
     } else {
       return PackageInfosFull(installer: installer);
     }

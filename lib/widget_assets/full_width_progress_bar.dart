@@ -12,7 +12,9 @@ class FullWidthProgressbar extends StatelessWidget {
         return SizedBox(
           height: 0,
           width: constraints.maxWidth,
-          child: const ProgressBar(backgroundColor: Colors.transparent,),
+          child: const ProgressBar(
+            backgroundColor: Colors.transparent,
+          ),
         );
       },
     );

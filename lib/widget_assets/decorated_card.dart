@@ -24,10 +24,9 @@ class DecoratedCard extends StatelessWidget {
         ),
         child: padding == null
             ? child
-            :
-        Padding(
-          padding: EdgeInsets.all(padding!),
-          child: child,
-        ));
+            : Padding(
+                padding: EdgeInsets.all(padding!),
+                child: child,
+              ));
   }
 }

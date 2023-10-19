@@ -1,10 +1,9 @@
 import 'dart:ui';
+
 import 'package:intl/locale.dart' as intl;
-class LocaleParser{
 
-
-
-   static Locale? tryParse(final String rawLocale) {
+class LocaleParser {
+  static Locale? tryParse(final String rawLocale) {
     final intlLocale = intl.Locale.tryParse(rawLocale);
     if (intlLocale != null) {
       return Locale.fromSubtags(
@@ -15,12 +14,11 @@ class LocaleParser{
     return null;
   }
 
-  static Locale parse(String rawLocale){
+  static Locale parse(String rawLocale) {
     Locale? locale = tryParse(rawLocale);
-    if(locale == null){
+    if (locale == null) {
       throw ArgumentError.value(rawLocale, 'rawLocale', 'Invalid locale');
     }
     return locale;
   }
-
 }

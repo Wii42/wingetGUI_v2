@@ -1,6 +1,6 @@
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
 
-extension PackageScreenshotIdentifiers on PackageInfos{
+extension PackageScreenshotIdentifiers on PackageInfos {
   String? get nameWithoutVersion {
     if (name == null) {
       return null;

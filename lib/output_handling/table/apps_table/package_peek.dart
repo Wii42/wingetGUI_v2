@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_fadein/flutter_fadein.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../routes.dart';
 import '../../../widget_assets/decorated_card.dart';
@@ -100,8 +100,7 @@ class PackagePeek extends StatelessWidget {
         if (infos.source != null && infos.source!.value.isNotEmpty)
           Text(
             locale.fromSource(infos.source!.value),
-            style: withoutColor(
-                FluentTheme.of(context).typography.caption),
+            style: withoutColor(FluentTheme.of(context).typography.caption),
             //style: TextStyle(
             // color: FluentTheme.of(context).inactiveColor,
             //),
@@ -114,7 +113,7 @@ class PackagePeek extends StatelessWidget {
 
   TextStyle? _titleStyle(BuildContext context) {
     TextStyle? blueprint = FluentTheme.of(context).typography.title;
-   return withoutColor(blueprint);
+    return withoutColor(blueprint);
   }
 
   TextStyle? correctColor(TextStyle? style, BuildContext context) {

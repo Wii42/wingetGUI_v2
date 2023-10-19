@@ -1,10 +1,10 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/table_parser.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_parser.dart';
-import '../responsibility.dart';
 import '../output_scanner.dart';
+import '../responsibility.dart';
 
 class TableScanner extends OutputScanner {
   final List<String> command;

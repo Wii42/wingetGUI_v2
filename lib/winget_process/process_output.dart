@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 
 import '../output_handling/output_builder.dart';
 import '../output_handling/output_handler.dart';
@@ -90,8 +90,7 @@ abstract class ProcessOutput extends StatelessWidget {
 
   Future<List<OutputBuilder>> _displayOutput(
       List<String> output, BuildContext context) async {
-    OutputHandler handler =
-        OutputHandler(output, command: process.command);
+    OutputHandler handler = OutputHandler(output, command: process.command);
     handler.determineResponsibility(context);
     return handler.getRepresentation(context);
   }

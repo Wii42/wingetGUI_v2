@@ -1,10 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/navigation_pages/advanced_options_page.dart';
 import 'package:winget_gui/navigation_pages/command_prompt_page.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
-import 'package:winget_gui/navigation_pages/advanced_options_page.dart';
 import 'package:winget_gui/navigation_pages/settings_page.dart';
 import 'package:winget_gui/winget_commands.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'helpers/route_parameter.dart';
 

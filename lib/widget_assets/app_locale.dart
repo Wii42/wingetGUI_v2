@@ -147,12 +147,13 @@ class AppLocale extends StatefulWidget {
           'onChangeGuiLocale',
           onChangeGuiLocale,
         ),
-      )..add(
-      ObjectFlagProperty<OnChangeLocale>.has(
-        'onChangeWingetLocale',
-        onChangeWingetLocale,
-      ),
-    );
+      )
+      ..add(
+        ObjectFlagProperty<OnChangeLocale>.has(
+          'onChangeWingetLocale',
+          onChangeWingetLocale,
+        ),
+      );
   }
 
   static Locale determineClosestSupportedLocale(Locale locale) {

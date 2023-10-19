@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+
 import './process_output.dart';
 
 class SimpleOutput extends ProcessOutput {

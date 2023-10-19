@@ -1,13 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/agreement_infos.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../package_infos/package_attribute.dart';
 import '../../package_infos/info.dart';
+import '../../package_infos/package_attribute.dart';
 
 class AgreementWidget extends Compartment {
-
   final AgreementInfos infos;
 
   const AgreementWidget({super.key, required this.infos});
