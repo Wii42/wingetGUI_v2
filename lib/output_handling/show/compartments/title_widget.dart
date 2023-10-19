@@ -98,8 +98,7 @@ class TitleWidget extends Compartment {
         if (infos.website != null) _website(locale),
         if (infos.category != null) ...[
           LinkText(line: infos.category!.value),
-          if (infos.installer?.type?.value.trim() == 'msstore' &&
-              infos.installer?.storeProductID != null)
+          if (infos.isMicrosoftStore())
             _showInStore(locale),
         ]
       ].withSpaceBetween(width: 5),

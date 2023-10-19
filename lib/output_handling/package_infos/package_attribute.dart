@@ -41,6 +41,7 @@ enum PackageAttribute {
   installerLocale,
   releaseDate,
   match,
+  manifest,
   ;
 
   const PackageAttribute();

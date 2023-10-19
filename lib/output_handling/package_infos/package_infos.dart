@@ -1,11 +1,15 @@
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
+import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
+
 import '../../helpers/package_screenshots.dart';
+import '../../helpers/package_screenshots_list.dart';
 import 'info.dart';
 
 abstract class PackageInfos {
   final Info<String>? name, id, version;
 
   final Map<String, String>? otherInfos;
-  PackageScreenshots? screenshots;
+  late final PackageScreenshots? screenshots;
 
   PackageInfos({
     this.name,
@@ -19,57 +23,20 @@ abstract class PackageInfos {
       version?.value != 'Unknown' &&
       !version!.value.contains('<'));
 
-  String? get nameWithoutVersion {
-    if (name == null) {
-      return null;
-    }
-    String nameWithoutVersion = name!.value;
-    if (hasVersion()) {
-      nameWithoutVersion =  name!.value.replaceFirst(' ${version!.value}', '');
-    }
-    String string = nameWithoutVersion.replaceAll(' ', '').toLowerCase();
-    return string;
+  void setImplicitInfos() {
+    screenshots = PackageScreenshotsList.instance.getPackage(this);
   }
 
-  String? get publisherID {
-    if (id == null) {
-      return null;
-    }
-    return id!.value.split('.').firstOrNull;
-  }
+  bool isWinget();
+  bool isMicrosoftStore();
 
-  String? get nameWithoutPublisherIDAndVersion{
-    if (name == null) {
+  Info<Uri>? get manifest {
+    if (id == null && isWinget()) {
       return null;
     }
-    String nameWithoutVersion = name!.value;
-    if (hasVersion()) {
-      nameWithoutVersion =  name!.value.replaceFirst(' ${version!.value}', '');
-    }
-    if (publisherID != null) {
-      nameWithoutVersion = nameWithoutVersion.replaceFirst('$publisherID', '');
-    }
-    String string = nameWithoutVersion.replaceAll(' ', '').toLowerCase();
-    return string;
-  }
-
-  String? get idWithHyphen {
-    if (id == null) {
-      return null;
-    }
-    return id!.value.replaceAll('.', '-').toLowerCase();
-  }
-
-  String? get idWithoutPublisherID {
-    if (id == null) {
-      return null;
-    }
-    return id!.value.replaceFirst('$publisherID.', '').replaceAll('.', '').toLowerCase();
-  }
-  String? get idWithoutPublisherIDAndHyphen {
-    if (id == null) {
-      return null;
-    }
-    return id!.value.replaceFirst('$publisherID.', '').replaceAll('.', '-').toLowerCase();
+    return Info<Uri>(
+        title: (locale) => locale.infoTitle(PackageAttribute.manifest.name),
+        value: Uri.parse(
+            'https://github.com/microsoft/winget-pkgs/tree/master/manifests/${id!.value.firstChar().toLowerCase()}/${id!.value.replaceAll('.', '/')}'));
   }
 }

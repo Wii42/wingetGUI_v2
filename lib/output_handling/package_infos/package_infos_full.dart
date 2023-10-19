@@ -57,7 +57,7 @@ class PackageInfosFull extends PackageInfos {
     if (details != null) {
       InfoMapParser parser = InfoMapParser(map: details, locale: locale);
 
-      PackageInfosFull infos =  PackageInfosFull(
+      PackageInfosFull infos = PackageInfosFull(
         name: parser.maybeDetailFromMap(PackageAttribute.name),
         id: parser.maybeDetailFromMap(PackageAttribute.id),
         description: parser.maybeDetailFromMap(PackageAttribute.description),
@@ -81,7 +81,8 @@ class PackageInfosFull extends PackageInfos {
         installer: installer,
         otherInfos: details.isNotEmpty ? details : null,
       );
-      return infos..screenshots = PackageScreenshotsList.instance.getPackage(infos);
+      return infos
+        ..setImplicitInfos();
     } else {
       return PackageInfosFull(installer: installer);
     }
@@ -94,4 +95,10 @@ class PackageInfosFull extends PackageInfos {
   bool hasDescription() => description != null;
 
   bool hasReleaseNotes() => releaseNotes?.text != null;
+
+  bool isMicrosoftStore() => (installer?.type?.value.trim() == 'msstore' &&
+      installer?.storeProductID != null);
+
+  bool isWinget() =>
+      !isMicrosoftStore() && id != null && id!.value.contains('.');
 }

@@ -36,7 +36,7 @@ class PackageInfosPeek extends PackageInfos {
       otherInfos: details.isNotEmpty ? details : null,
     );
     return infos;
-      //..screenshots = PackageScreenshotsList.instance.getPackage(infos);
+      //..setImplicitInfos();
   }
 
   bool hasInfosFull() {
@@ -45,4 +45,10 @@ class PackageInfosPeek extends PackageInfos {
         id != null &&
         !id!.value.endsWith('…');
   }
+
+  @override
+  bool isMicrosoftStore() => source?.value == 'msstore';
+
+  @override
+  bool isWinget() => source?.value == 'winget';
 }

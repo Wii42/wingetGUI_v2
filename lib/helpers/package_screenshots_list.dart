@@ -4,6 +4,7 @@ import 'package:ribs_json/ribs_json.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
+import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
 
 class PackageScreenshotsList {
   static const String _packageScreenshotsKey = 'packagePictures';

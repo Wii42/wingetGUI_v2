@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
+import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -28,7 +30,10 @@ class DetailsWidget extends Compartment {
           ], context),
           ..._displayRest(context)
         ],
-        buttonRow: buttonRow([infos.supportUrl], context),
+        buttonRow: buttonRow([
+          infos.supportUrl,
+          infos.manifest,
+        ], context),
         context: context);
   }
 
