@@ -1,4 +1,6 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/info_yaml_map_parser.dart';
+import 'package:yaml/yaml.dart';
 
 import './package_infos.dart';
 import 'agreement_infos.dart';
@@ -9,7 +11,7 @@ import 'installer_infos.dart';
 import 'package_attribute.dart';
 
 class PackageInfosFull extends PackageInfos {
-  final Info<String>? description,
+  final Info<String>? description, shortDescription,
       author,
       moniker,
       documentation,
@@ -27,6 +29,7 @@ class PackageInfosFull extends PackageInfos {
     super.name,
     super.id,
     this.description,
+    this.shortDescription,
     this.supportUrl,
     super.version,
     this.website,
@@ -79,6 +82,43 @@ class PackageInfosFull extends PackageInfos {
         tags: parser.maybeTagsFromMap(),
         installer: installer,
         otherInfos: details.isNotEmpty ? details : null,
+      );
+      return infos..setImplicitInfos();
+    } else {
+      return PackageInfosFull(installer: installer);
+    }
+  }
+
+  factory PackageInfosFull.fromYamlMap(
+      {required Map<dynamic, dynamic>? details, required Map<dynamic, dynamic>? installerDetails}) {
+    if (details == null && installerDetails == null) {
+      return PackageInfosFull();
+    }
+    InstallerInfos? installer =
+        InstallerInfos.maybeFromYamlMap(installerDetails: installerDetails);
+
+    if (details != null) {InfoYamlMapParser parser = InfoYamlMapParser(map: details);
+      PackageInfosFull infos = PackageInfosFull(
+        name: parser.maybeDetailFromMap(PackageAttribute.name, key: 'PackageName'),
+        id: parser.maybeDetailFromMap(PackageAttribute.id, key: 'PackageIdentifier'),
+        description: parser.maybeDetailFromMap(PackageAttribute.description, key: 'Description'),
+        shortDescription: parser.maybeDetailFromMap(PackageAttribute.description, key: 'ShortDescription'),
+        supportUrl:
+        parser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl, key: 'PublisherSupportUrl'),
+        version: parser.maybeDetailFromMap(PackageAttribute.version, key: 'PackageVersion'),
+        website: parser.maybeLinkFromMap(PackageAttribute.website, key: 'PackageUrl'),
+        author: parser.maybeDetailFromMap(PackageAttribute.author, key: 'Author'),
+        moniker: parser.maybeDetailFromMap(PackageAttribute.moniker, key: 'Moniker'),
+        documentation:
+        parser.maybeDetailFromMap(PackageAttribute.documentation, key: 'Documentation'),
+        releaseNotes: parser.maybeInfoWithLinkFromMap(
+            textInfo: PackageAttribute.releaseNotes,
+        textKey: 'ReleaseNotes',
+        urlKey: 'ReleaseNotesUrl'),
+        agreement: parser.maybeAgreementFromMap(),
+        tags: parser.maybeTagsFromMap(),
+        installer: installer,
+        otherInfos: details.isNotEmpty ? details.map<String, String>((key, value) => MapEntry(key.toString(), value.toString())) : null,
       );
       return infos..setImplicitInfos();
     } else {

@@ -50,14 +50,14 @@ abstract class PackageInfos {
             'https://api.github.com/repos/microsoft/winget-pkgs/contents/manifests/$idInitialLetter/$idAsPath'));
   }
 
-  Info<Uri>? get versionManifest {
+  Info<Uri>? get versionManifestPath {
     if (id == null && isWinget() && hasSpecificVersion()) {
       return null;
     }
     return Info<Uri>(
         title: (locale) => locale.infoTitle(PackageAttribute.manifest.name),
         value: Uri.parse(
-            'https://raw.githubusercontent.com/microsoft/winget-pkgs/master/manifests/$idInitialLetter/$idAsPath/${version!.value}/${id!.value}.yaml'));
+            'https://raw.githubusercontent.com/microsoft/winget-pkgs/master/manifests/$idInitialLetter/$idAsPath/${version!.value}/${id!.value}'));
   }
 
   String? get idInitialLetter {

@@ -1,7 +1,9 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yaml/yaml.dart';
 
 import 'info.dart';
 import 'info_map_parser.dart';
+import 'info_yaml_map_parser.dart';
 import 'info_with_link.dart';
 import 'package_attribute.dart';
 
@@ -49,6 +51,29 @@ class AgreementInfos {
           parser.maybeDetailFromMap(PackageAttribute.seizureWarning),
       storeLicenseTerms:
           parser.maybeDetailFromMap(PackageAttribute.storeLicenseTerms),
+    );
+    return agreement.isNotEmpty() ? agreement : null;
+  }
+
+  static AgreementInfos? maybeFromYamlMap(
+      {required Map<dynamic, dynamic>? map}) {
+    if (map == null) {
+      return null;
+    }
+    InfoYamlMapParser parser = InfoYamlMapParser(map: map);
+
+    AgreementInfos agreement = AgreementInfos(
+      title: PackageAttribute.agreement.title,
+      publisher: parser.maybeInfoWithLinkFromMap(
+          textInfo: PackageAttribute.publisher,
+          textKey: 'Publisher',
+      urlKey: 'PublisherUrl'),
+      license: parser.maybeInfoWithLinkFromMap(
+          textInfo: PackageAttribute.license,
+          textKey: 'License',
+          urlKey: 'LicenseUrl'),
+      privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl, key:'PrivacyUrl'),
+      buyUrl: parser.maybeLinkFromMap(PackageAttribute.buyUrl, key:'PurchaseUrl'),
     );
     return agreement.isNotEmpty() ? agreement : null;
   }

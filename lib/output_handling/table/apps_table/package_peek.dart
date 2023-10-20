@@ -38,11 +38,11 @@ class PackagePeek extends StatelessWidget {
   Future<void> pushPackageDetails(BuildContext context) async {
     NavigatorState router = Navigator.of(context);
     router.pushNamed(Routes.show.route,
-        arguments: RouteParameter(commandParameter: [
+        arguments: PackageRouteParameter(commandParameter: [
           '--id',
           infos.id!.value,
           //if (infos.hasVersion()) ...['-v', infos.version!.value]
-        ], titleAddon: infos.name?.value));
+        ], titleAddon: infos.name?.value, package: infos));
   }
 
   Widget _shortInfo(BuildContext context) {

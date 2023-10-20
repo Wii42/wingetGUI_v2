@@ -4,6 +4,9 @@ import 'package:winget_gui/navigation_pages/advanced_options_page.dart';
 import 'package:winget_gui/navigation_pages/command_prompt_page.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/navigation_pages/settings_page.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/widget_assets/package_details_from_web.dart';
 import 'package:winget_gui/winget_commands.dart';
 
 import 'helpers/route_parameter.dart';
@@ -34,7 +37,7 @@ enum Routes {
       winget: Winget.upgrade),
   uninstall(
       icon: FluentIcons.delete, route: '/uninstall', winget: Winget.uninstall),
-  show(route: '/show', winget: Winget.show),
+  show(route: 'show', body: packageDetailsPage),
   upgradeAll(route: '/upgradeAll', winget: Winget.upgradeAll),
 
   searchPage(
@@ -85,4 +88,18 @@ enum Routes {
     }
     return "$prefix $input";
   }
+
+  static Widget packageDetailsPage(RouteParameter? parameters) {
+    if (parameters is PackageRouteParameter) {
+      PackageInfosPeek package = parameters.package;
+      if (package.isWinget()) {
+        if (package.versionManifestPath != null) {
+          return PackageDetailsFromWeb(
+              package: package, titleInput: parameters.titleAddon);
+        }
+      }
+    }
+    return Winget.show.processPage(parameters);
+  }
 }
+

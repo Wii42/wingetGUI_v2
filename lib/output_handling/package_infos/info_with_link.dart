@@ -1,4 +1,5 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:yaml/src/yaml_node.dart';
 
 import '../../helpers/extensions/string_extension.dart';
 import 'info.dart';
@@ -22,24 +23,7 @@ class InfoWithLink {
     }
     String textKey = textInfo.key(locale);
     String urlKey = urlInfo.key(locale);
-    String? text = map[textKey];
-    String? urlString = map[urlKey];
-    if (text == null && urlString == null) {
-      return null;
-    }
-    if (text != null && urlString == null) {
-      if (isLink(text)) {
-        urlString = text;
-        text = null;
-      }
-    }
-    Uri? url = (urlString != null)
-        ? Uri.tryParse(checkUrlContainsHttp(urlString))
-        : null;
-
-    map.remove(textKey);
-    map.remove(urlKey);
-    return InfoWithLink(title: textInfo.title, text: text, url: url);
+    return maybeFrom(map, textInfo, textKey, urlKey);
   }
 
   static String checkUrlContainsHttp(String url) {
@@ -61,4 +45,36 @@ class InfoWithLink {
   Info<String> toInfoString() => tryToInfoString()!;
   Info<String>? tryToInfoString() =>
       (text != null) ? Info<String>(title: title, value: text!) : null;
+
+  static InfoWithLink? maybeFromYamlMap(
+      {required Map<dynamic, dynamic>? map,
+      required PackageAttribute textInfo,
+      required String textKey,
+      required String urlKey}) {
+    if (map == null) {
+      return null;
+    }
+    return maybeFrom(map, textInfo, textKey, urlKey);
+  }
+
+  static InfoWithLink? maybeFrom(
+      Map map, PackageAttribute textInfo, String textKey, String urlKey) {
+    String? text = map[textKey];
+    String? urlString = map[urlKey];
+    if (text == null && urlString == null) {
+      return null;
+    }
+    if (text != null && urlString == null) {
+      if (isLink(text)) {
+        urlString = text;
+        text = null;
+      }
+    }
+    Uri? url = (urlString != null)
+        ? Uri.tryParse(checkUrlContainsHttp(urlString))
+        : null;
+    map.remove(textKey);
+    map.remove(urlKey);
+    return InfoWithLink(title: textInfo.title, text: text, url: url);
+  }
 }
