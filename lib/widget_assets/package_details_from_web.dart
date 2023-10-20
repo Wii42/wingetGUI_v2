@@ -63,7 +63,8 @@ class PackageDetailsFromWeb extends StatelessWidget {
           );
         }
         if (snapshot.hasError) {
-          return Text(snapshot.error.toString()+snapshot.stackTrace.toString());
+          return Text(
+              snapshot.error.toString() + snapshot.stackTrace.toString());
         }
         return const Center(child: ProgressRing());
       },
@@ -99,14 +100,23 @@ class PackageDetailsFromWeb extends StatelessWidget {
     Locale locale = await chooseLocale(guiLocale, manifest);
     details = manifest.localizedFiles
         .firstWhere((element) => getLocaleFromName(element) == locale);
-    YamlMap? detailsMap = await getYaml(details.downloadUrl!);
-    print(detailsMap);
+    YamlMap? detailsYaml = await getYaml(details.downloadUrl!);
 
-    YamlMap? installer = await getYaml(manifest.installer.downloadUrl!);
-    print(installer);
+    Map<dynamic, dynamic>? detailsMap = detailsYaml
+        ?.map<dynamic, dynamic>((key, value) => MapEntry(key, value));
+    detailsMap?.remove('ManifestVersion');
+    detailsMap?.remove('ManifestType');
+
+    YamlMap? installerYaml = await getYaml(manifest.installer.downloadUrl!);
+    Map<dynamic,dynamic>? installerMap = installerYaml?.map<dynamic, dynamic>((key, value) => MapEntry(key, value));
+    installerMap?.remove('ManifestVersion');
+    installerMap?.remove('ManifestType');
+    installerMap?.remove('PackageIdentifier');
+    installerMap?.remove('PackageVersion');
 
     return PackageInfosFull.fromYamlMap(
-        details: detailsMap?.map<dynamic,dynamic>((key, value) => MapEntry(key, value)), installerDetails: installer?.map<dynamic,dynamic>((key, value) => MapEntry(key, value)));
+        details: detailsMap,
+        installerDetails: installerMap);
   }
 
   Future<Locale> chooseLocale(

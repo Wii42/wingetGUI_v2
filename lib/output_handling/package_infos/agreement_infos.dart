@@ -67,13 +67,18 @@ class AgreementInfos {
       publisher: parser.maybeInfoWithLinkFromMap(
           textInfo: PackageAttribute.publisher,
           textKey: 'Publisher',
-      urlKey: 'PublisherUrl'),
+          urlKey: 'PublisherUrl'),
       license: parser.maybeInfoWithLinkFromMap(
           textInfo: PackageAttribute.license,
           textKey: 'License',
           urlKey: 'LicenseUrl'),
-      privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl, key:'PrivacyUrl'),
-      buyUrl: parser.maybeLinkFromMap(PackageAttribute.buyUrl, key:'PurchaseUrl'),
+      copyright: parser.maybeInfoWithLinkFromMap(
+          textInfo: PackageAttribute.copyright,
+          textKey: 'Copyright', urlKey: 'CopyrightUrl'),
+      privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl,
+          key: 'PrivacyUrl'),
+      buyUrl:
+          parser.maybeLinkFromMap(PackageAttribute.buyUrl, key: 'PurchaseUrl'),
     );
     return agreement.isNotEmpty() ? agreement : null;
   }

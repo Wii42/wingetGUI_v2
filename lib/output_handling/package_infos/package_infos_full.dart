@@ -110,7 +110,7 @@ class PackageInfosFull extends PackageInfos {
         author: parser.maybeDetailFromMap(PackageAttribute.author, key: 'Author'),
         moniker: parser.maybeDetailFromMap(PackageAttribute.moniker, key: 'Moniker'),
         documentation:
-        parser.maybeDetailFromMap(PackageAttribute.documentation, key: 'Documentation'),
+        parser.maybeDetailFromMap(PackageAttribute.documentation, key: 'Documentations'),
         releaseNotes: parser.maybeInfoWithLinkFromMap(
             textInfo: PackageAttribute.releaseNotes,
         textKey: 'ReleaseNotes',
@@ -130,7 +130,7 @@ class PackageInfosFull extends PackageInfos {
 
   bool hasTags() => tags != null;
 
-  bool hasDescription() => description != null;
+  bool hasDescription() => description != null || shortDescription != null;
 
   bool hasReleaseNotes() => releaseNotes?.text != null;
 
