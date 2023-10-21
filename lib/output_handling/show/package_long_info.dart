@@ -9,6 +9,7 @@ import 'package:winget_gui/output_handling/show/compartments/screenshots_widget.
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/widget_assets/search_button.dart';
 
+import '../package_infos/info.dart';
 import '../package_infos/package_infos_full.dart';
 import 'compartments/agreement_widget.dart';
 
@@ -30,7 +31,9 @@ class PackageLongInfo extends StatelessWidget {
           ScreenshotsWidget(infos.screenshots!),
         if (infos.hasDescription())
           ExpandableCompartment(
-            text: infos.description ?? infos.shortDescription!,
+            text: infos.additionalDescription ??
+                infos.shortDescription!,
+            title: (infos.description != null)? infos.shortDescription : null,
           ),
         if (infos.hasReleaseNotes())
           ExpandableCompartment(

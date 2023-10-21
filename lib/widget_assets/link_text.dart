@@ -6,11 +6,12 @@ import 'package:url_launcher/url_launcher.dart';
 class LinkText extends StatelessWidget {
   static const int maxValue = -1 >>> 1;
   final String line;
+  final String? title;
   final int maxLines;
   final TextStyle? style;
 
   const LinkText(
-      {required this.line, this.maxLines = maxValue, super.key, this.style});
+      {required this.line, this.maxLines = maxValue, super.key, this.style, this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,8 @@ class LinkText extends StatelessWidget {
     return ExpandableText(
       line,
       style: style,
+      prefixText: title,
+      prefixStyle: const TextStyle(fontWeight: FontWeight.bold),
       linkEllipsis: false,
       expandText: locale.showMore,
       collapseText: locale.showLess,

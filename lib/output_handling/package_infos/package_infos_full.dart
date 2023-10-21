@@ -11,10 +11,10 @@ import 'installer_infos.dart';
 import 'package_attribute.dart';
 
 class PackageInfosFull extends PackageInfos {
-  final Info<String>? description, shortDescription,
+  final Info<String>? description,
+      shortDescription,
       author,
       moniker,
-
       category,
       pricing,
       freeTrial,
@@ -91,35 +91,51 @@ class PackageInfosFull extends PackageInfos {
   }
 
   factory PackageInfosFull.fromYamlMap(
-      {required Map<dynamic, dynamic>? details, required Map<dynamic, dynamic>? installerDetails}) {
+      {required Map<dynamic, dynamic>? details,
+      required Map<dynamic, dynamic>? installerDetails}) {
     if (details == null && installerDetails == null) {
       return PackageInfosFull();
     }
     InstallerInfos? installer =
         InstallerInfos.maybeFromYamlMap(installerDetails: installerDetails);
 
-    if (details != null) {InfoYamlMapParser parser = InfoYamlMapParser(map: details);
+    if (details != null) {
+      InfoYamlMapParser parser = InfoYamlMapParser(map: details);
       PackageInfosFull infos = PackageInfosFull(
-        name: parser.maybeDetailFromMap(PackageAttribute.name, key: 'PackageName'),
-        id: parser.maybeDetailFromMap(PackageAttribute.id, key: 'PackageIdentifier'),
-        description: parser.maybeDetailFromMap(PackageAttribute.description, key: 'Description'),
-        shortDescription: parser.maybeDetailFromMap(PackageAttribute.description, key: 'ShortDescription'),
-        supportUrl:
-        parser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl, key: 'PublisherSupportUrl'),
-        version: parser.maybeDetailFromMap(PackageAttribute.version, key: 'PackageVersion'),
-        website: parser.maybeLinkFromMap(PackageAttribute.website, key: 'PackageUrl'),
-        author: parser.maybeDetailFromMap(PackageAttribute.author, key: 'Author'),
-        moniker: parser.maybeDetailFromMap(PackageAttribute.moniker, key: 'Moniker'),
-        documentation:
-        parser.maybeDocumentationsFromMap(PackageAttribute.documentation, key: 'Documentations'),
+        name: parser.maybeDetailFromMap(PackageAttribute.name,
+            key: 'PackageName'),
+        id: parser.maybeDetailFromMap(PackageAttribute.id,
+            key: 'PackageIdentifier'),
+        description: parser.maybeDetailFromMap(PackageAttribute.description,
+            key: 'Description'),
+        shortDescription: parser.maybeDetailFromMap(
+            PackageAttribute.description,
+            key: 'ShortDescription'),
+        supportUrl: parser.maybeLinkFromMap(
+            PackageAttribute.publisherSupportUrl,
+            key: 'PublisherSupportUrl'),
+        version: parser.maybeDetailFromMap(PackageAttribute.version,
+            key: 'PackageVersion'),
+        website: parser.maybeLinkFromMap(PackageAttribute.website,
+            key: 'PackageUrl'),
+        author:
+            parser.maybeDetailFromMap(PackageAttribute.author, key: 'Author'),
+        moniker:
+            parser.maybeDetailFromMap(PackageAttribute.moniker, key: 'Moniker'),
+        documentation: parser.maybeDocumentationsFromMap(
+            PackageAttribute.documentation,
+            key: 'Documentations'),
         releaseNotes: parser.maybeInfoWithLinkFromMap(
             textInfo: PackageAttribute.releaseNotes,
-        textKey: 'ReleaseNotes',
-        urlKey: 'ReleaseNotesUrl'),
+            textKey: 'ReleaseNotes',
+            urlKey: 'ReleaseNotesUrl'),
         agreement: parser.maybeAgreementFromMap(),
         tags: parser.maybeTagsFromMap(),
         installer: installer,
-        otherInfos: details.isNotEmpty ? details.map<String, String>((key, value) => MapEntry(key.toString(), value.toString())) : null,
+        otherInfos: details.isNotEmpty
+            ? details.map<String, String>(
+                (key, value) => MapEntry(key.toString(), value.toString()))
+            : null,
       );
       return infos..setImplicitInfos();
     } else {
@@ -142,4 +158,22 @@ class PackageInfosFull extends PackageInfos {
   @override
   bool isWinget() =>
       !isMicrosoftStore() && id != null && id!.value.contains('.');
+
+  Info<String>? get additionalDescription {
+    if (!hasDescription()) {
+      return null;
+    }
+    if (shortDescription == null) {
+      return description;
+    }
+    if(description == null){
+      return null;
+    }
+    if (!description!.value.startsWith(shortDescription!.value)) {
+      return description;
+    }
+    return Info<String>(
+        title: description!.title,
+        value: description!.value.substring(shortDescription!.value.length));
+  }
 }

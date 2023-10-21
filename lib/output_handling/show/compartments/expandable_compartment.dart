@@ -1,16 +1,19 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../widget_assets/link_text.dart';
 import '../../package_infos/info.dart';
 import 'compartment.dart';
 
 class ExpandableCompartment extends Compartment {
   final Info<String> text;
+  final Info<String>? title;
   final List<Info<Uri>?>? buttonInfos;
 
   const ExpandableCompartment({
     super.key,
     required this.text,
+    this.title,
     this.buttonInfos,
   });
 
@@ -20,9 +23,9 @@ class ExpandableCompartment extends Compartment {
     return fullCompartment(
         title: compartmentTitle(locale),
         mainColumn: ([
-          textWithLinks(
-            text: text.value,
-            context: context,
+          LinkText(
+            line: text.value,
+            title: title?.value,
             maxLines: 5,
           )
         ]),
