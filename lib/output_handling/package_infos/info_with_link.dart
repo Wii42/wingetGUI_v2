@@ -77,4 +77,9 @@ class InfoWithLink {
     map.remove(urlKey);
     return InfoWithLink(title: textInfo.title, text: text, url: url);
   }
+
+  @override
+  String toString() {
+    return 'InfoWithLink{title: $title, text: $text, url: $url}';
+  }
 }

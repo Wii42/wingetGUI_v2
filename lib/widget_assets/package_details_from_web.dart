@@ -44,7 +44,7 @@ class PackageDetailsFromWeb extends StatelessWidget {
     if (!package.isWinget()) {
       return putInfo('package is not from Winget');
     }
-    if (!package.hasSpecificVersion() && package.availableVersion == null) {
+    if (!package.hasSpecificVersion() && !package.hasAvailableVersion()) {
       return putInfo('package has no specific version');
     }
     Locale? locale = AppLocale.of(context).guiLocale;
@@ -63,8 +63,7 @@ class PackageDetailsFromWeb extends StatelessWidget {
           );
         }
         if (snapshot.hasError) {
-          return Text(
-              snapshot.error.toString() + snapshot.stackTrace.toString());
+          return Text('${snapshot.error}\n${snapshot.stackTrace}');
         }
         return const Center(child: ProgressRing());
       },
@@ -74,7 +73,9 @@ class PackageDetailsFromWeb extends StatelessWidget {
   Future<PackageInfosFull> extractOnlineFullInfos(Locale? guiLocale) async {
     GithubApi manifestApi = GithubApi.wingetManifest(
         packageID: package.id!.value,
-        version: package.availableVersion?.value ??
+        version: (package.hasAvailableVersion()
+                ? package.availableVersion?.value
+                : null) ??
             (package.hasSpecificVersion()
                 ? package.version?.value
                 : throw Exception('package has no specific version'))!);
@@ -108,15 +109,15 @@ class PackageDetailsFromWeb extends StatelessWidget {
     detailsMap?.remove('ManifestType');
 
     YamlMap? installerYaml = await getYaml(manifest.installer.downloadUrl!);
-    Map<dynamic,dynamic>? installerMap = installerYaml?.map<dynamic, dynamic>((key, value) => MapEntry(key, value));
+    Map<dynamic, dynamic>? installerMap = installerYaml
+        ?.map<dynamic, dynamic>((key, value) => MapEntry(key, value));
     installerMap?.remove('ManifestVersion');
     installerMap?.remove('ManifestType');
     installerMap?.remove('PackageIdentifier');
     installerMap?.remove('PackageVersion');
 
     return PackageInfosFull.fromYamlMap(
-        details: detailsMap,
-        installerDetails: installerMap);
+        details: detailsMap, installerDetails: installerMap);
   }
 
   Future<Locale> chooseLocale(
@@ -135,24 +136,15 @@ class PackageDetailsFromWeb extends StatelessWidget {
           .where((element) => element.languageCode == guiLocale.languageCode)
           .toList();
       if (matchingLocales.isNotEmpty) {
-        if (kDebugMode) {
-          print('locale(s) found: $matchingLocales');
-        }
         if (matchingLocales.length == 1) {
           return matchingLocales.single;
         }
         return matchingLocales.first;
         //TODO: check for country code
-      } else {
-        if (kDebugMode) {
-          print('locale not found');
-        }
+
       }
     }
     Locale? defaultLocale = await getDefaultLocale(manifest);
-    if (kDebugMode) {
-      print('default locale: $defaultLocale');
-    }
     return defaultLocale ?? availableLocales.first;
   }
 
@@ -168,9 +160,6 @@ class PackageDetailsFromWeb extends StatelessWidget {
       WingetPackageVersionManifest manifest) async {
     Map? map = await getYaml(manifest.manifest.downloadUrl!);
     if (map != null) {
-      if (kDebugMode) {
-        print(map);
-      }
       return LocaleParser.tryParse(map['DefaultLocale']);
     }
     return null;
@@ -179,9 +168,6 @@ class PackageDetailsFromWeb extends StatelessWidget {
   Future<YamlMap?> getYaml(Uri url) async {
     Response response = await get(url);
     if (response.statusCode == 200) {
-      if (kDebugMode) {
-        print('file downloaded');
-      }
       return loadYaml(response.body) as YamlMap;
     }
     if (kDebugMode) {

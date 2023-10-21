@@ -46,6 +46,10 @@ class PackageInfosPeek extends PackageInfos {
         !id!.value.endsWith('…');
   }
 
+  bool hasAvailableVersion() {
+    return availableVersion != null && availableVersion!.value.isNotEmpty;
+  }
+
   @override
   bool isMicrosoftStore() => source?.value == 'msstore';
 

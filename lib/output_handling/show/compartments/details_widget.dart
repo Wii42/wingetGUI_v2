@@ -1,8 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
+import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
+import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 
+import '../../../helpers/extensions/string_extension.dart';
+import '../../../widget_assets/link_text.dart';
 import '../../package_infos/info.dart';
 import 'compartment.dart';
 
@@ -24,8 +28,19 @@ class DetailsWidget extends Compartment {
             infos.freeTrial,
             infos.ageRating,
             infos.id,
-            infos.documentation,
           ], context),
+          if (infos.documentation != null)
+            wrapInWrap(
+              title: infos.documentation!.title(locale),
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (InfoWithLink doc in infos.documentation!.value)
+                    textOrIconLink(
+                        context: context, text: doc.text, url: doc.url),
+                ],
+              ),
+            ),
           ..._displayRest(context)
         ],
         buttonRow: buttonRow([
@@ -43,11 +58,17 @@ class DetailsWidget extends Compartment {
   List<Widget> _detailsList(List<Info<String>?> details, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return [
-      for (Info<String>? string in details)
-        if (string != null)
+      for (Info<String>? info in details)
+        if (info != null)
           wrapInWrap(
-              title: string.title(locale),
-              body: textOrLinkButton(context: context, text: string)),
+              title: info.title(locale),
+
+              body: (info.title(locale) == PackageAttribute.id.title(locale))?copyableInfo(info: info, context: context):textOrIconLink(
+                  context: context,
+                  text: info.value,
+                  url: isLink(info.value)
+                      ? Uri.tryParse(info.value)
+                      : null)),
     ];
   }
 

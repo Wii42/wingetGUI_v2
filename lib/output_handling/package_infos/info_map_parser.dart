@@ -27,6 +27,14 @@ class InfoMapParser {
     return Info<Uri>(title: link.title, value: Uri.parse(link.value));
   }
 
+  Info<List<InfoWithLink>>? maybeListWithLinksFromMap(PackageAttribute attribute) {
+    Info<String>? list = maybeDetailFromMap(attribute);
+    if (list == null) {
+      return null;
+    }
+    return Info<List<InfoWithLink>>(title: list.title, value: list.value.split('\n').map((e) => InfoWithLink(title: attribute.title, text: e)).toList());
+  }
+
   AgreementInfos? maybeAgreementFromMap() {
     return AgreementInfos.maybeFromMap(
       map: map,

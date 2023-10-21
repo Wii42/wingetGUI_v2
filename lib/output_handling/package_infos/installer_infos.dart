@@ -54,6 +54,6 @@ class InstallerInfos {
       //locale: parser.maybeDetailFromMap(PackageAttribute.installerLocale),
       //storeProductID:
       //parser.maybeDetailFromMap(PackageAttribute.storeProductID),
-      //releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate),
+      releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate, key: 'ReleaseDate'),
       otherInfos: installerDetails.map<String, String>((key, value) => MapEntry(key.toString(), value.toString())));}
 }

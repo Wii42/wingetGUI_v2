@@ -14,11 +14,12 @@ class PackageInfosFull extends PackageInfos {
   final Info<String>? description, shortDescription,
       author,
       moniker,
-      documentation,
+
       category,
       pricing,
       freeTrial,
       ageRating;
+  final Info<List<InfoWithLink>>? documentation;
   final InfoWithLink? releaseNotes;
   final List<String>? tags;
   final AgreementInfos? agreement;
@@ -70,7 +71,7 @@ class PackageInfosFull extends PackageInfos {
         author: parser.maybeDetailFromMap(PackageAttribute.author),
         moniker: parser.maybeDetailFromMap(PackageAttribute.moniker),
         documentation:
-            parser.maybeDetailFromMap(PackageAttribute.documentation),
+            parser.maybeListWithLinksFromMap(PackageAttribute.documentation),
         category: parser.maybeDetailFromMap(PackageAttribute.category),
         pricing: parser.maybeDetailFromMap(PackageAttribute.pricing),
         freeTrial: parser.maybeDetailFromMap(PackageAttribute.freeTrial),
@@ -110,7 +111,7 @@ class PackageInfosFull extends PackageInfos {
         author: parser.maybeDetailFromMap(PackageAttribute.author, key: 'Author'),
         moniker: parser.maybeDetailFromMap(PackageAttribute.moniker, key: 'Moniker'),
         documentation:
-        parser.maybeDetailFromMap(PackageAttribute.documentation, key: 'Documentations'),
+        parser.maybeDocumentationsFromMap(PackageAttribute.documentation, key: 'Documentations'),
         releaseNotes: parser.maybeInfoWithLinkFromMap(
             textInfo: PackageAttribute.releaseNotes,
         textKey: 'ReleaseNotes',

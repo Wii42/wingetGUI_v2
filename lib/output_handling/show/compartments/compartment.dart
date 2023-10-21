@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/icon_link_button.dart';
@@ -141,6 +142,22 @@ abstract class Compartment extends StatelessWidget {
               link: link,
             )
       ],
+    );
+  }
+
+  Widget copyableInfo(
+      {required Info<String> info, required BuildContext context}) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(info.value),
+        IconButton(
+          icon: const Icon(FluentIcons.copy),
+          onPressed: () {
+            Clipboard.setData(ClipboardData(text: info.value));
+          },
+        ),
+      ].withSpaceBetween(width: 5),
     );
   }
 }
