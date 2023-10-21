@@ -11,6 +11,9 @@ class InstallerInfos {
   final Info<String>? type, sha256Hash, locale, storeProductID;
   final Info<Uri>? url;
   final Info<DateTime>? releaseDate;
+  final Info<List<String>>? installers;
+  final Info<String>? upgradeBehavior;
+  final Info<List<String>>? fileExtensions;
   final Map<String, String>? otherInfos;
 
   InstallerInfos({
@@ -22,6 +25,9 @@ class InstallerInfos {
     this.storeProductID,
     this.releaseDate,
     this.otherInfos,
+    this.installers,
+    this.upgradeBehavior,
+    this.fileExtensions,
   });
 
   static maybeFromMap(
@@ -51,9 +57,9 @@ class InstallerInfos {
       type: parser.maybeDetailFromMap(PackageAttribute.installerType, key: 'InstallerType'),
       //url: parser.maybeLinkFromMap(PackageAttribute.installerURL),
       //sha256Hash: parser.maybeDetailFromMap(PackageAttribute.sha256Installer),
-      //locale: parser.maybeDetailFromMap(PackageAttribute.installerLocale),
-      //storeProductID:
-      //parser.maybeDetailFromMap(PackageAttribute.storeProductID),
       releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate, key: 'ReleaseDate'),
+      installers: parser.maybeListFromMap(PackageAttribute.installers, key: 'Installers'),
+      upgradeBehavior: parser.maybeDetailFromMap(PackageAttribute.upgradeBehavior, key: 'UpgradeBehavior'),
+      fileExtensions: parser.maybeListFromMap(PackageAttribute.fileExtensions, key: 'FileExtensions'),
       otherInfos: installerDetails.map<String, String>((key, value) => MapEntry(key.toString(), value.toString())));}
 }

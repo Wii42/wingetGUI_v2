@@ -42,6 +42,9 @@ enum PackageAttribute {
   releaseDate,
   match,
   manifest,
+  installers,
+  upgradeBehavior,
+  fileExtensions,
   ;
 
   const PackageAttribute();

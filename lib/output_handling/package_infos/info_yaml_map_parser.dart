@@ -35,15 +35,16 @@ class InfoYamlMapParser {
     if (node == null || node.value.isEmpty) {
       return null;
     }
-    print(node.value.runtimeType);
     if (node.value is YamlList) {
       List<Map> entries = node.value.map<Map>((e) => e as Map).toList();
       if (entries.every((element) =>
           element.containsKey('DocumentLabel') &&
           element.containsKey('DocumentUrl'))) {
         List<InfoWithLink> linkList = entries
-            .map<InfoWithLink>((e) =>
-                InfoWithLink(title:(_) =>  e['DocumentLabel'], text:  e['DocumentLabel'],url: Uri.parse(e['DocumentUrl'])))
+            .map<InfoWithLink>((e) => InfoWithLink(
+                title: (_) => e['DocumentLabel'],
+                text: e['DocumentLabel'],
+                url: Uri.parse(e['DocumentUrl'])))
             .toList();
         print(linkList);
         map.remove(key);
@@ -57,6 +58,18 @@ class InfoYamlMapParser {
         .toList();
     map.remove(key);
     return Info<List<InfoWithLink>>(title: attribute.title, value: list);
+  }
+
+  Info<List<String>>? maybeListFromMap(PackageAttribute attribute,
+      {required String key}) {
+    YamlList? node = map[key];
+    if (node == null || node.value.isEmpty) {
+      return null;
+    }
+    map.remove(key);
+    return Info<List<String>>(
+        title: attribute.title,
+        value: node.value.map<String>((e) => e.toString()).toList());
   }
 
   AgreementInfos? maybeAgreementFromMap() {

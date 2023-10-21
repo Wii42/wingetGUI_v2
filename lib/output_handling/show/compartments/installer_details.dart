@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
+import 'package:winget_gui/widget_assets/link_text.dart';
 
 import '../../../widget_assets/app_locale.dart';
 import '../../package_infos/info.dart';
@@ -27,7 +28,20 @@ class InstallerDetails extends Compartment {
             infos.locale,
             infos.sha256Hash,
             tryFromDateTimeInfo(infos.releaseDate, locale),
+            infos.upgradeBehavior,
           ], context),
+          if(infos.fileExtensions != null)
+            wrapInWrap(
+              title: infos.fileExtensions!.title(localization),
+              body: Text(infos.fileExtensions!.value.join(', ')),
+
+              ),
+          if(infos.installers != null)
+            wrapInWrap(
+              title: infos.installers!.title(localization),
+              body: textWithLinks(text: infos.installers!.value.join('\n\n'), context: context),
+              ),
+
           ..._displayRest(context),
         ],
         buttonRow: buttonRow([infos.url], context),
