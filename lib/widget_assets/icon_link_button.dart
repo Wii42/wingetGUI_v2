@@ -12,8 +12,13 @@ class IconLinkButton extends AbstractLinkButton {
   @override
   BaseButton button(BuildContext context, Future<void> Function()? open) {
     return IconButton(
-      icon: Icon(icon),
-      onPressed: open,
-    );
+        icon: Icon(
+          icon,
+        ),
+        onPressed: open,
+        style: ButtonStyle(
+          padding: ButtonState.all(
+              const EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
+        ));
   }
 }

@@ -62,11 +62,6 @@ class TitleWidget extends Compartment {
 
   Widget buildRightSide() => RightSideButtons(infos: infos);
 
-  @override
-  String compartmentTitle(AppLocalizations locale) {
-    return PackageAttribute.name.title(locale);
-  }
-
   Widget nameAndVersion(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
     return RichText(

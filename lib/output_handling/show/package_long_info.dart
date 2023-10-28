@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/compartments/details_widget.dart';
-import 'package:winget_gui/output_handling/show/compartments/expandable_compartment.dart';
+import 'package:winget_gui/output_handling/show/compartments/expandable_text_compartment.dart';
 import 'package:winget_gui/output_handling/show/compartments/installer_details.dart';
 import 'package:winget_gui/output_handling/show/compartments/screenshots_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
@@ -29,13 +29,13 @@ class PackageLongInfo extends StatelessWidget {
             infos.screenshots!.screenshots!.isNotEmpty)
           ScreenshotsWidget(infos.screenshots!),
         if (infos.hasDescription())
-          ExpandableCompartment(
+          ExpandableTextCompartment(
             text: infos.additionalDescription ??
                 infos.shortDescription!,
             title: (infos.description != null)? infos.shortDescription : null,
           ),
         if (infos.hasReleaseNotes())
-          ExpandableCompartment(
+          ExpandableTextCompartment(
             text: infos.releaseNotes!.toInfoString(),
             buttonInfos: [infos.releaseNotes?.tryToInfoUri()],
           ),

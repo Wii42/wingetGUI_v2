@@ -3,14 +3,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../widget_assets/link_text.dart';
 import '../../package_infos/info.dart';
-import 'compartment.dart';
+import 'expander_compartment.dart';
 
-class ExpandableCompartment extends Compartment {
+class ExpandableTextCompartment extends ExpanderCompartment {
   final Info<String> text;
   final Info<String>? title;
   final List<Info<Uri>?>? buttonInfos;
 
-  const ExpandableCompartment({
+  const ExpandableTextCompartment({
     super.key,
     required this.text,
     this.title,

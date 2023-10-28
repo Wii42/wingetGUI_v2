@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../helpers/locale_parser.dart';
 import 'info.dart';
 import 'info_map_parser.dart';
 import 'info_yaml_map_parser.dart';

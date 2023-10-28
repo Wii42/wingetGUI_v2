@@ -2,9 +2,10 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
-import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 
-class ScreenshotsWidget extends Compartment {
+import 'expander_compartment.dart';
+
+class ScreenshotsWidget extends ExpanderCompartment {
   final PackageScreenshots screenshots;
   const ScreenshotsWidget(this.screenshots, {super.key});
 
@@ -38,4 +39,7 @@ class ScreenshotsWidget extends Compartment {
   String compartmentTitle(AppLocalizations locale) {
     return "Screenshots";
   }
+
+  @override
+  EdgeInsetsGeometry get bodyPadding => const EdgeInsets.symmetric(horizontal:0);
 }

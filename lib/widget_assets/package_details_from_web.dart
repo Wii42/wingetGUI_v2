@@ -6,6 +6,7 @@ import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
+import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 import 'package:yaml/yaml.dart';
 
 import '../github_api/github_api.dart';
@@ -57,15 +58,14 @@ class PackageDetailsFromWeb extends StatelessWidget {
       builder:
           (BuildContext context, AsyncSnapshot<PackageInfosFull> snapshot) {
         if (snapshot.hasData) {
-          return ListView(
-            physics: const BouncingScrollPhysics(),
-            children: [PackageLongInfo(snapshot.data!)],
+          return ScrollListWidget(
+            listElements: [PackageLongInfo(snapshot.data!)],
           );
         }
         if (snapshot.hasError) {
           return Text('${snapshot.error}\n${snapshot.stackTrace}');
         }
-        return const Center(child: ProgressRing());
+        return const Center(child: ProgressRing(backgroundColor: Colors.transparent,));
       },
     );
   }

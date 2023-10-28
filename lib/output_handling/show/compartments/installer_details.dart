@@ -2,17 +2,15 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
-import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
-import 'package:winget_gui/widget_assets/decorated_card.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets/app_locale.dart';
 import '../../package_infos/info.dart';
 import '../../package_infos/package_attribute.dart';
-import 'compartment.dart';
+import 'expander_compartment.dart';
 
-class InstallerDetails extends Compartment {
+class InstallerDetails extends ExpanderCompartment {
   final InstallerInfos infos;
 
   const InstallerDetails({super.key, required this.infos});
@@ -38,26 +36,29 @@ class InstallerDetails extends Compartment {
             infos.installModes,
             infos.installerSwitches,
           ], context),
-          if (infos.installers != null)
-            _displayInstallers(infos.installers!, context),
           ..._displayRest(context),
         ],
-        buttonRow: buttonRow([infos.url], context),
+        buttonRow: infos.url != null
+            ? buttonRow([infos.url], context)
+            : (infos.installers != null)
+                ? _displayInstallers(infos.installers!, context)
+                : null,
         context: context);
   }
 
-  Widget _displayInstallers(
+  @override
+  bool get initiallyExpanded => false;
+
+  Wrap _displayInstallers(
       Info<List<Installer>> installers, BuildContext context) {
-    AppLocalizations localization = AppLocalizations.of(context)!;
-    return wrapInWrap(
-      title: installers.title(localization),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Wrap(
+        spacing: 5,
+        runSpacing: 5,
         children: [
           for (Installer installer in installers.value)
             installerWidget(installer, installers.value, context),
-        ].withSpaceBetween(height: 10),
-      ),
+        ],
+
     );
   }
 
@@ -95,21 +96,6 @@ class InstallerDetails extends Compartment {
     ];
   }
 
-  List<Widget> _installerDetailsList(
-      List<Info<String>?> details, BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    return [
-      for (Info<String>? info in details)
-        if (info != null)
-          wrapInWrap(
-              title: info.title(locale),
-              body: textOrIconLink(
-                  context: context,
-                  text: info.value,
-                  url: isLink(info.value) ? Uri.tryParse(info.value) : null)),
-    ];
-  }
-
   Info<String>? tryFromDateTimeInfo(Info<DateTime>? info, [Locale? locale]) {
     if (info == null) return null;
 
@@ -120,7 +106,10 @@ class InstallerDetails extends Compartment {
   Widget installerWidget(Installer installer, List<Installer> installerList,
       BuildContext context) {
     return Expander(
-      header: Text(installerPreview(installer, installerList), style: const TextStyle(fontWeight: FontWeight.bold),),
+      header: Text(
+        installerPreview(installer, installerList),
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: fullCompartment(
@@ -162,7 +151,7 @@ class InstallerDetails extends Compartment {
           preview.add(installer.locale!.value.toLanguageTag());
         }
       }
-      if(!installerList.isFeatureEverywhereTheSame((e) => e.scope)) {
+      if (!installerList.isFeatureEverywhereTheSame((e) => e.scope)) {
         if (installer.scope != null) {
           preview.add(installer.scope!.value);
         }
