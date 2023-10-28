@@ -35,7 +35,7 @@ class ExpandableCompartment extends Compartment {
   }
 
   @override
-  String? compartmentTitle(AppLocalizations locale) {
+  String compartmentTitle(AppLocalizations locale) {
     return text.title(locale);
   }
 }

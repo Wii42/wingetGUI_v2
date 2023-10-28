@@ -16,16 +16,19 @@ abstract class Compartment extends StatelessWidget {
 
   List<Widget> buildCompartment(BuildContext context);
 
-  String? compartmentTitle(AppLocalizations locale);
+  String compartmentTitle(AppLocalizations locale);
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedCard(
-      padding: 20,
-      child: Column(
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    return Expander(
+      header: Text(compartmentTitle(locale),
+          style: compartmentTitleStyle(FluentTheme.of(context).typography)),
+      content: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: buildCompartment(context),
       ),
+      initiallyExpanded: true,
     );
   }
 
@@ -53,12 +56,7 @@ abstract class Compartment extends StatelessWidget {
       Wrap? buttonRow,
       required BuildContext context}) {
     return [
-      if (title != null)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 5),
-          child: Text(title,
-              style: compartmentTitleStyle(FluentTheme.of(context).typography)),
-        ),
+
       ...?mainColumn,
       if (mainColumn != null &&
           mainColumn.isNotEmpty &&
@@ -161,8 +159,8 @@ abstract class Compartment extends StatelessWidget {
     );
   }
 
-  Info<String>? tryFromLocaleInfo(Info<Locale>? info){
-    if(info == null){
+  Info<String>? tryFromLocaleInfo(Info<Locale>? info) {
+    if (info == null) {
       return null;
     }
     return Info<String>(title: info.title, value: info.value.toString());
@@ -175,12 +173,14 @@ abstract class Compartment extends StatelessWidget {
         if (info != null)
           wrapInWrap(
               title: info.title(locale),
-              body: info.copyable?copyableInfo(info: info, context: context):textOrIconLink(
-                  context: context,
-                  text: info.value,
-                  url: isLink(info.value)
-                      ? Uri.tryParse(info.value)
-                      : null)),
+              body: info.copyable
+                  ? copyableInfo(info: info, context: context)
+                  : textOrIconLink(
+                      context: context,
+                      text: info.value,
+                      url: isLink(info.value)
+                          ? Uri.tryParse(info.value)
+                          : null)),
     ];
   }
 }

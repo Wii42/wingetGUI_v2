@@ -20,6 +20,18 @@ class TitleWidget extends Compartment {
   const TitleWidget({required this.infos, super.key});
 
   @override
+  Widget build(BuildContext context) {
+    return DecoratedCard(
+      padding: 20,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: buildCompartment(context),
+      ),
+    );
+
+  }
+
+  @override
   List<Widget> buildCompartment(BuildContext context) {
     return <Widget>[
       AnimatedSize(

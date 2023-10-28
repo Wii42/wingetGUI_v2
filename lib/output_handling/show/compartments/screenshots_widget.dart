@@ -35,7 +35,7 @@ class ScreenshotsWidget extends Compartment {
   }
 
   @override
-  String? compartmentTitle(AppLocalizations locale) {
+  String compartmentTitle(AppLocalizations locale) {
     return "Screenshots";
   }
 }
