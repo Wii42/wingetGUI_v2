@@ -62,7 +62,6 @@ class DetailsWidget extends Compartment {
         if (info != null)
           wrapInWrap(
               title: info.title(locale),
-
               body: (info.title(locale) == PackageAttribute.id.title(locale))?copyableInfo(info: info, context: context):textOrIconLink(
                   context: context,
                   text: info.value,

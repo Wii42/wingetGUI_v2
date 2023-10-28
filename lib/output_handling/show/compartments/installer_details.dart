@@ -31,33 +31,39 @@ class InstallerDetails extends Compartment {
             infos.sha256Hash,
             tryFromDateTimeInfo(infos.releaseDate, locale),
             infos.upgradeBehavior,
+            tryFromListInfo(infos.fileExtensions),
+            tryFromListInfo(infos.platform, toString: (e) => e.title),
           ], context),
-          if (infos.fileExtensions != null)
-            wrapInWrap(
-              title: infos.fileExtensions!.title(localization),
-              body: Text(infos.fileExtensions!.value.join(', ')),
-            ),
           if (infos.installers != null)
-            wrapInWrap(
-              title: infos.installers!.title(localization),
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (Installer installer in infos.installers!.value)
-                    installerWidget(installer, context),
-                ].withSpaceBetween(height: 10),
-              ),
-            ),
-          if (infos.platform != null)
-            wrapInWrap(
-              title: infos.platform!.title(localization),
-              body: Text(
-                  infos.platform!.value.map<String>((e) => e.title).join(', ')),
-            ),
+            _displayInstallers(infos.installers!, context),
           ..._displayRest(context),
         ],
         buttonRow: buttonRow([infos.url], context),
         context: context);
+  }
+
+  Widget _displayInstallers(Info<List<Installer>> installers, BuildContext context) {
+    AppLocalizations localization = AppLocalizations.of(context)!;
+    return wrapInWrap(
+            title: installers.title(localization),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (Installer installer in installers.value)
+                  installerWidget(installer, context),
+              ].withSpaceBetween(height: 10),
+            ),
+          );
+  }
+
+  Info<String>? tryFromListInfo<T>(Info<List<T>>? info, {String Function(T)? toString}) {
+    if (info == null) return null;
+    List<dynamic> list = info.value;
+    if(toString != null){
+      list = info.value.map((e) => toString(e)).toList();
+    }
+    String string = list.join(', ');
+    return Info<String>(title: info.title, value: string);
   }
 
   @override
@@ -110,28 +116,31 @@ class InstallerDetails extends Compartment {
       padding: 10,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children:
-          fullCompartment(context: context, mainColumn:[
-          wrapInWrap(title: 'Architecture', body: Text(installer.architecture)),
-          wrapInWrap(title: 'SHA256', body: copyableInfo(info: Info<String>(title: (_) => installer.sha256Hash, value: installer.sha256Hash), context: context)),
-          if (installer.hashSignature != null) Text(installer.hashSignature!),
-          if (installer.locale != null) Text(installer.locale!.toLanguageTag()),
-          if (installer.platform != null) Text(installer.platform!.join(', ')),
-          if (installer.minimumOSVersion != null)
-            Text(installer.minimumOSVersion!),
-          if (installer.type != null) Text(installer.type!),
-          if (installer.scope != null) Text(installer.scope!),
-          if (installer.elevationRequirement != null)
-            Text(installer.elevationRequirement!),
-          if (installer.productCode != null) Text(installer.productCode!),
-          if (installer.appsAndFeaturesEntries != null)
-            Text(installer.appsAndFeaturesEntries!),
-          if (installer.switches != null) Text(installer.switches!),
-          if (installer.modes != null) Text(installer.modes!),
-          if (installer.other.isNotEmpty) Text(installer.other.toString()),
-        ],
-            buttonRow: buttonRow([Info<Uri>(title: PackageAttribute.installerURL.title, value: installer.url)], context)
-          ),
+        children: fullCompartment(
+            context: context,
+            mainColumn: [
+              ..._installerDetailsList([
+                installer.architecture,
+                installer.sha256Hash,
+                installer.signatureSha256,
+                tryFromLocaleInfo(installer.locale),
+                tryFromListInfo(installer.platform, toString: (e) => e.title),
+                installer.minimumOSVersion,
+                installer.type,
+                installer.scope,
+                installer.elevationRequirement,
+                installer.productCode,
+                installer.appsAndFeaturesEntries,
+                installer.switches,
+                installer.modes,
+
+
+              ], context),
+              if (installer.other.isNotEmpty) Text(installer.other.toString()),
+            ],
+            buttonRow: buttonRow([
+              installer.url
+            ], context)),
       ),
     );
   }

@@ -106,26 +106,26 @@ class PackageInfosFull extends PackageInfos {
       details.removeWhere((key, value) => value == null);
       InfoYamlMapParser parser = InfoYamlMapParser(map: details);
       PackageInfosFull infos = PackageInfosFull(
-        name: parser.maybeDetailFromMap(PackageAttribute.name,
+        name: parser.maybeStringFromMap(PackageAttribute.name,
             key: 'PackageName'),
-        id: parser.maybeDetailFromMap(PackageAttribute.id,
+        id: parser.maybeStringFromMap(PackageAttribute.id,
             key: 'PackageIdentifier'),
-        description: parser.maybeDetailFromMap(PackageAttribute.description,
+        description: parser.maybeStringFromMap(PackageAttribute.description,
             key: 'Description'),
-        shortDescription: parser.maybeDetailFromMap(
+        shortDescription: parser.maybeStringFromMap(
             PackageAttribute.description,
             key: 'ShortDescription'),
         supportUrl: parser.maybeLinkFromMap(
             PackageAttribute.publisherSupportUrl,
             key: 'PublisherSupportUrl'),
-        version: parser.maybeDetailFromMap(PackageAttribute.version,
+        version: parser.maybeStringFromMap(PackageAttribute.version,
             key: 'PackageVersion'),
         website: parser.maybeLinkFromMap(PackageAttribute.website,
             key: 'PackageUrl'),
         author:
-            parser.maybeDetailFromMap(PackageAttribute.author, key: 'Author'),
+            parser.maybeStringFromMap(PackageAttribute.author, key: 'Author'),
         moniker:
-            parser.maybeDetailFromMap(PackageAttribute.moniker, key: 'Moniker'),
+            parser.maybeStringFromMap(PackageAttribute.moniker, key: 'Moniker'),
         documentation: parser.maybeDocumentationsFromMap(
             PackageAttribute.documentation,
             key: 'Documentations'),

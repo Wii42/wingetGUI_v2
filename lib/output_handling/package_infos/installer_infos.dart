@@ -63,7 +63,7 @@ class InstallerInfos {
     InfoYamlMapParser parser = InfoYamlMapParser(map: installerDetails);
     return InstallerInfos(
         title: PackageAttribute.installer.title,
-        type: parser.maybeDetailFromMap(PackageAttribute.installerType,
+        type: parser.maybeStringFromMap(PackageAttribute.installerType,
             key: 'InstallerType'),
         locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale,
             key: 'InstallerLocale'),
@@ -76,7 +76,7 @@ class InstallerInfos {
             key: 'Installers', parser: (map) {
           return Installer.fromYaml(map);
         }),
-        upgradeBehavior: parser.maybeDetailFromMap(
+        upgradeBehavior: parser.maybeStringFromMap(
             PackageAttribute.upgradeBehavior,
             key: 'UpgradeBehavior'),
         fileExtensions: parser.maybeStringListFromMap(
@@ -110,20 +110,21 @@ enum WindowsPlatform {
 }
 
 class Installer {
-  final String architecture;
-  final Uri url;
-  final String sha256Hash;
-  final Locale? locale;
-  final List<WindowsPlatform>? platform;
-  final String? minimumOSVersion;
-  final String? type;
-  final String? scope;
-  final String? hashSignature;
-  final String? elevationRequirement;
-  final String? productCode;
-  final String? appsAndFeaturesEntries;
-  final String? switches;
-  final String? modes;
+  final Info<String> architecture;
+  final Info<Uri> url;
+  final Info<String> sha256Hash;
+  final Info<Locale>? locale;
+  final Info<List<WindowsPlatform>>? platform;
+  final Info<String>? minimumOSVersion;
+  final Info<String>? type;
+  final Info<String>? scope;
+  final Info<String>? signatureSha256;
+  final Info<String>? elevationRequirement;
+  final Info<String>? productCode;
+  final Info<String>? appsAndFeaturesEntries;
+  final Info<String>? switches;
+  final Info<String>? modes;
+
   final Map<String, String> other;
 
   const Installer({
@@ -135,7 +136,7 @@ class Installer {
     this.minimumOSVersion,
     this.type,
     this.scope,
-    this.hashSignature,
+    this.signatureSha256,
     this.elevationRequirement,
     this.productCode,
     this.appsAndFeaturesEntries,
@@ -147,23 +148,39 @@ class Installer {
   static Installer fromYaml(Map installerMap) {
     Map<dynamic, dynamic> map =
         installerMap.map((key, value) => MapEntry(key, value));
+    InfoYamlMapParser parser = InfoYamlMapParser(map: map);
     return Installer(
-      architecture: get(map, 'Architecture'),
-      url: Uri.parse(get(map, 'InstallerUrl')),
-      sha256Hash: get(map, 'InstallerSha256'),
-      locale: getLocale(map, 'InstallerLocale'),
-      platform: get(map, 'Platform')
-          ?.map<WindowsPlatform>((e) => WindowsPlatform.fromYaml(e))
-          .toList(),
-      minimumOSVersion: get(map, 'MinimumOSVersion'),
-      type: get(map, 'InstallerType'),
-      scope: get(map, 'Scope'),
-      hashSignature: get(map, 'SignatureSha256'),
-      elevationRequirement: get(map, 'ElevationRequirement'),
-      productCode: get(map, 'ProductCode'),
-      appsAndFeaturesEntries: getToString(map, 'AppsAndFeaturesEntries'),
-      switches: getToString(map, 'InstallerSwitches'),
-      modes: getToString(map, 'InstallModes'),
+      architecture: parser.maybeStringFromMap(PackageAttribute.architecture,
+          key: 'Architecture')!,
+      url: parser.maybeLinkFromMap(PackageAttribute.installerURL,
+          key: 'InstallerUrl')!,
+      sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer,
+          key: 'InstallerSha256')!,
+      locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale,
+          key: 'InstallerLocale'),
+      platform: parser.maybePlatformFromMap(PackageAttribute.platform,
+          key: 'Platform'),
+      minimumOSVersion: parser.maybeStringFromMap(
+          PackageAttribute.minimumOSVersion,
+          key: 'MinimumOSVersion'),
+      type: parser.maybeStringFromMap(PackageAttribute.installerType,
+          key: 'InstallerType'),
+      scope: parser.maybeStringFromMap(PackageAttribute.installScope,
+          key: 'Scope'),
+      signatureSha256: parser.maybeStringFromMap(
+          PackageAttribute.signatureSha256,
+          key: 'SignatureSha256'),
+      elevationRequirement: parser.maybeStringFromMap(
+          PackageAttribute.elevationRequirement,
+          key: 'ElevationRequirement'),
+      productCode: parser.maybeStringFromMap(PackageAttribute.productCode,
+          key: 'ProductCode'),
+      appsAndFeaturesEntries: parser.maybeStringFromMap(
+          PackageAttribute.appsAndFeaturesEntries,
+          key: 'AppsAndFeaturesEntries'),
+      switches: parser.maybeStringFromMap(PackageAttribute.installerSwitches,
+          key: 'InstallerSwitches'),
+      modes: parser.maybeStringFromMap(PackageAttribute.installModes, key: 'InstallModes'),
       other: map.map<String, String>(
           (key, value) => MapEntry(key.toString(), value.toString())),
     );
@@ -182,7 +199,7 @@ class Installer {
   }
 
   static String? getToString(Map map, String key) {
-   dynamic value = get(map, key);
+    dynamic value = get(map, key);
     if (value == null) return null;
     return value.toString();
   }

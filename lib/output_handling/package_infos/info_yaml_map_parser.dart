@@ -13,7 +13,7 @@ class InfoYamlMapParser {
   Map<dynamic, dynamic> map;
   InfoYamlMapParser({required this.map});
 
-  Info<String>? maybeDetailFromMap(PackageAttribute attribute,
+  Info<String>? maybeStringFromMap(PackageAttribute attribute,
       {required String key}) {
     dynamic node = map[key];
     String? detail = (node != null) ? node.toString() : null;
@@ -24,7 +24,7 @@ class InfoYamlMapParser {
   }
 
   Info<Uri>? maybeLinkFromMap(PackageAttribute infoKey, {required String key}) {
-    Info<String>? link = maybeDetailFromMap(infoKey, key: key);
+    Info<String>? link = maybeStringFromMap(infoKey, key: key);
     if (link == null) {
       return null;
     }
@@ -98,7 +98,7 @@ class InfoYamlMapParser {
 
   Info<DateTime>? maybeDateTimeFromMap(PackageAttribute attribute,
       {required String key}) {
-    Info<String>? dateInfo = maybeDetailFromMap(attribute, key: key);
+    Info<String>? dateInfo = maybeStringFromMap(attribute, key: key);
     if (dateInfo == null) {
       return null;
     }
@@ -119,7 +119,7 @@ class InfoYamlMapParser {
 
   Info<Locale>? maybeLocaleFromMap(PackageAttribute packageLocale,
       {required String key}) {
-    Info<String>? localeInfo = maybeDetailFromMap(packageLocale, key: key);
+    Info<String>? localeInfo = maybeStringFromMap(packageLocale, key: key);
     if (localeInfo == null) {
       return null;
     }

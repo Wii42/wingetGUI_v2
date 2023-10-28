@@ -47,6 +47,13 @@ enum PackageAttribute {
   upgradeBehavior,
   fileExtensions,
   platform,
+  architecture,
+  minimumOSVersion,
+  installScope,
+  signatureSha256,
+  elevationRequirement,
+  productCode,
+  appsAndFeaturesEntries, installerSwitches, installModes,
   ;
 
   const PackageAttribute();
