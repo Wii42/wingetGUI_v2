@@ -25,7 +25,7 @@ class DetailsWidget extends ExpanderCompartment {
             infos.freeTrial,
             infos.ageRating,
             infos.id,
-            tryFromLocaleInfo(infos.packageLocale),
+            tryFromLocaleInfo(infos.packageLocale, context),
           ], context),
           if (infos.documentation != null)
             wrapInWrap(

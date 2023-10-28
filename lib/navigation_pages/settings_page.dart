@@ -1,6 +1,7 @@
 import 'package:app_theme_mode/app_theme_mode.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
@@ -84,6 +85,7 @@ class _SettingsPageSate extends State<SettingsPage> {
   }
 
   Widget guiLocaleOption(AppLocalizations localizations, BuildContext context) {
+    LocaleNames localeNames = LocaleNames.of(context)!;
     return settingsItem(
       localizations.chooseLanguage,
       ComboBox<Locale>(
@@ -99,7 +101,8 @@ class _SettingsPageSate extends State<SettingsPage> {
           for (Locale locale in AppLocalizations.supportedLocales)
             ComboBoxItem<Locale>(
               value: locale,
-              child: Text(locale.toLanguageTag()),
+              child: Text(localeNames.nameOf(locale.toLanguageTag()) ??
+                  locale.toString()),
             ),
         ],
       ),
@@ -108,6 +111,7 @@ class _SettingsPageSate extends State<SettingsPage> {
 
   Widget wingetLocaleOption(
       AppLocalizations localizations, BuildContext context) {
+    LocaleNames localeNames = LocaleNames.of(context)!;
     return settingsItem(
       localizations.chooseWingetLanguage,
       ComboBox<Locale>(
@@ -123,7 +127,8 @@ class _SettingsPageSate extends State<SettingsPage> {
           for (Locale language in AppLocalizations.supportedLocales)
             ComboBoxItem<Locale>(
               value: language,
-              child: Text(language.toLanguageTag()),
+              child: Text(localeNames.nameOf(language.toLanguageTag()) ??
+                  language.toString()),
             ),
         ],
       ),

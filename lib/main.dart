@@ -6,6 +6,7 @@ import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/main_navigation.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 
 import 'global_app_data.dart';
 import 'helpers/package_screenshots_list.dart';
@@ -54,7 +55,10 @@ class WingetGui extends StatelessWidget {
           darkTheme: theme(Brightness.dark, systemAccentColor.light),
           themeMode: themeMode,
           locale: guiLocale,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          localizationsDelegates: const [
+            ...AppLocalizations.localizationsDelegates,
+            LocaleNamesLocalizationsDelegate()
+          ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: WindowBrightnessSetter(child: MainNavigation(title: appTitle)),
         );

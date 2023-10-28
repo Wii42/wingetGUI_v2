@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/icon_link_button.dart';
 
@@ -143,11 +144,16 @@ abstract class ExpanderCompartment extends Compartment {
     ]));
   }
 
-  Info<String>? tryFromLocaleInfo(Info<Locale>? info) {
+  Info<String>? tryFromLocaleInfo(Info<Locale>? info, BuildContext context) {
+    LocaleNames localeNames = LocaleNames.of(context)!;
     if (info == null) {
       return null;
     }
-    return Info<String>(title: info.title, value: info.value.toString());
+    Locale locale = info.value;
+    return Info<String>(
+        title: info.title,
+        value: localeNames.nameOf(locale.toString()) ??
+            locale.toLanguageTag());
   }
 
   List<Widget> detailsList(List<Info<String>?> details, BuildContext context) {

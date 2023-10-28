@@ -25,7 +25,7 @@ class InstallerDetails extends ExpanderCompartment {
           ...detailsList([
             infos.type,
             infos.storeProductID,
-            tryFromLocaleInfo(infos.locale),
+            tryFromLocaleInfo(infos.locale, context),
             infos.sha256Hash,
             tryFromDateTimeInfo(infos.releaseDate, locale),
             infos.upgradeBehavior,
@@ -119,7 +119,7 @@ class InstallerDetails extends ExpanderCompartment {
                 installer.architecture,
                 installer.sha256Hash,
                 installer.signatureSha256,
-                tryFromLocaleInfo(installer.locale),
+                tryFromLocaleInfo(installer.locale, context),
                 tryFromListInfo(installer.platform, toString: (e) => e.title),
                 installer.minimumOSVersion,
                 installer.type,
