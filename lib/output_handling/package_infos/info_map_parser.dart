@@ -6,6 +6,7 @@ import '../../helpers/locale_parser.dart';
 import 'agreement_infos.dart';
 import 'info.dart';
 import 'info_with_link.dart';
+import 'installer_objects/installer_type.dart';
 import 'package_attribute.dart';
 
 class InfoMapParser {
@@ -18,7 +19,8 @@ class InfoMapParser {
     String? detail = map[key];
     map.remove(key);
     return (detail != null)
-        ? Info<String>(title: attribute.title, value: detail, copyable: attribute.copyable)
+        ? Info<String>(
+            title: attribute.title, value: detail, copyable: attribute.copyable)
         : null;
   }
 
@@ -96,5 +98,16 @@ class InfoMapParser {
     }
     return Info<Locale>(
         title: localeInfo.title, value: LocaleParser.parse(localeInfo.value));
+  }
+
+  Info<InstallerType>? maybeInstallerTypeFromMap(
+      PackageAttribute installerType) {
+    Info<String>? typeInfo = maybeStringFromMap(installerType);
+    if (typeInfo == null) {
+      return null;
+    }
+    return Info<InstallerType>(
+        title: typeInfo.title,
+        value: InstallerType.maybeParse(typeInfo.value)!);
   }
 }

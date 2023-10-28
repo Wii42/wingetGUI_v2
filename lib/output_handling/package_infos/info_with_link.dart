@@ -48,12 +48,11 @@ class InfoWithLink {
   static InfoWithLink? maybeFromYamlMap(
       {required Map<dynamic, dynamic>? map,
       required PackageAttribute textInfo,
-      required String textKey,
-      required String urlKey}) {
+      required PackageAttribute urlInfo}) {
     if (map == null) {
       return null;
     }
-    return maybeFrom(map, textInfo, textKey, urlKey);
+    return maybeFrom(map, textInfo, textInfo.yamlKey!, urlInfo.yamlKey!);
   }
 
   static InfoWithLink? maybeFrom(

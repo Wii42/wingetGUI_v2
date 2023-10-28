@@ -1,15 +1,21 @@
 import 'dart:ui';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/install_mode.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/install_scope.dart';
 
 import 'info.dart';
 import 'info_map_parser.dart';
 import 'info_yaml_map_parser.dart';
+import 'installer_objects/installer.dart';
+import 'installer_objects/installer_type.dart';
+import 'installer_objects/windows_platform.dart';
 import 'package_attribute.dart';
 
 class InstallerInfos {
   final String Function(AppLocalizations) title;
-  final Info<String>? type, sha256Hash, storeProductID;
+  final Info<InstallerType>? type;
+  final Info<String>? sha256Hash, storeProductID;
   final Info<Uri>? url;
   final Info<DateTime>? releaseDate;
   final Info<List<Installer>>? installers;
@@ -18,9 +24,12 @@ class InstallerInfos {
   final Info<Locale>? locale;
   final Info<List<WindowsPlatform>>? platform;
   final Info<String>? minimumOSVersion;
-  final Info<String>? scope;
-  final Info<String>? installModes;
+  final Info<InstallScope>? scope;
+  final Info<List<InstallMode>>? installModes;
   final Info<String>? installerSwitches;
+  final Info<String>? elevationRequirement;
+  final Info<String>? productCode;
+  final Info<String>? appsAndFeaturesEntries;
 
   final Map<String, String>? otherInfos;
 
@@ -40,6 +49,9 @@ class InstallerInfos {
     this.scope,
     this.installModes,
     this.installerSwitches,
+    this.elevationRequirement,
+    this.productCode,
+    this.appsAndFeaturesEntries,
     this.otherInfos,
   });
 
@@ -52,7 +64,7 @@ class InstallerInfos {
     InfoMapParser parser = InfoMapParser(map: installerDetails, locale: locale);
     return InstallerInfos(
         title: PackageAttribute.installer.title,
-        type: parser.maybeStringFromMap(PackageAttribute.installerType),
+        type: parser.maybeInstallerTypeFromMap(PackageAttribute.installerType),
         url: parser.maybeLinkFromMap(PackageAttribute.installerURL),
         sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer),
         locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale),
@@ -70,170 +82,30 @@ class InstallerInfos {
     InfoYamlMapParser parser = InfoYamlMapParser(map: installerDetails);
     return InstallerInfos(
         title: PackageAttribute.installer.title,
-        type: parser.maybeStringFromMap(PackageAttribute.installerType,
-            key: 'InstallerType'),
-        locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale,
-            key: 'InstallerLocale'),
-        //url: parser.maybeLinkFromMap(PackageAttribute.installerURL),
-        //sha256Hash: parser.maybeDetailFromMap(PackageAttribute.sha256Installer),
-        releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate,
-            key: 'ReleaseDate'),
-        installers: parser.maybeListFromMap<Installer>(PackageAttribute.installers,
-            key: 'Installers', parser: (map) {
+        type: parser.maybeInstallerTypeFromMap(PackageAttribute.installerType),
+        locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale),
+        releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate),
+        installers: parser.maybeListFromMap<Installer>(
+            PackageAttribute.installers, parser: (map) {
           return Installer.fromYaml(map);
         }),
-        upgradeBehavior: parser.maybeStringFromMap(PackageAttribute.upgradeBehavior,
-            key: 'UpgradeBehavior'),
-        fileExtensions: parser.maybeStringListFromMap(PackageAttribute.fileExtensions,
-            key: 'FileExtensions'),
-        platform: parser.maybePlatformFromMap(PackageAttribute.platform,
-            key: 'Platform'),
-        minimumOSVersion: parser.maybeStringFromMap(PackageAttribute.minimumOSVersion,
-            key: 'MinimumOSVersion'),
-        scope: parser.maybeStringFromMap(PackageAttribute.installScope,
-            key: 'Scope'),
-        installerSwitches: parser.maybeStringFromMap(PackageAttribute.installerSwitches,
-            key: 'InstallerSwitches'),
-        installModes: parser.maybeStringFromMap(PackageAttribute.installModes, key: 'InstallModes'),
-        otherInfos: installerDetails.map<String, String>((key, value) => MapEntry(key.toString(), value.toString())));
+        upgradeBehavior:
+            parser.maybeStringFromMap(PackageAttribute.upgradeBehavior),
+        fileExtensions:
+            parser.maybeStringListFromMap(PackageAttribute.fileExtensions),
+        platform: parser.maybePlatformFromMap(PackageAttribute.platform),
+        minimumOSVersion:
+            parser.maybeStringFromMap(PackageAttribute.minimumOSVersion),
+        scope: parser.maybeScopeFromMap(PackageAttribute.installScope),
+        installerSwitches:
+            parser.maybeStringFromMap(PackageAttribute.installerSwitches),
+        installModes: parser.maybeInstallModesFromMap(PackageAttribute.installModes),
+        elevationRequirement:
+            parser.maybeStringFromMap(PackageAttribute.elevationRequirement),
+        productCode: parser.maybeStringFromMap(PackageAttribute.productCode),
+        appsAndFeaturesEntries: parser.maybeStringFromMap(
+            PackageAttribute.appsAndFeaturesEntries),
+        otherInfos: installerDetails.map<String, String>(
+            (key, value) => MapEntry(key.toString(), value.toString())));
   }
-}
-
-enum WindowsPlatform {
-  universal('Windows Universal'),
-  desktop('Windows Desktop'),
-  ;
-
-  final String title;
-  const WindowsPlatform(this.title);
-
-  static WindowsPlatform fromYaml(dynamic platform) {
-    switch (platform) {
-      case 'Windows.Universal':
-        return WindowsPlatform.universal;
-      case 'Windows.Desktop':
-        return WindowsPlatform.desktop;
-      default:
-        throw ArgumentError('Unknown Windows platform: $platform');
-    }
-  }
-}
-
-class Installer {
-  final Info<String> architecture;
-  final Info<Uri> url;
-  final Info<String> sha256Hash;
-  final Info<Locale>? locale;
-  final Info<List<WindowsPlatform>>? platform;
-  final Info<String>? minimumOSVersion;
-  final Info<String>? type;
-  final Info<String>? scope;
-  final Info<String>? signatureSha256;
-  final Info<String>? elevationRequirement;
-  final Info<String>? productCode;
-  final Info<String>? appsAndFeaturesEntries;
-  final Info<String>? switches;
-  final Info<String>? modes;
-
-  final Map<String, String> other;
-
-  const Installer({
-    required this.architecture,
-    required this.url,
-    required this.sha256Hash,
-    this.locale,
-    this.platform,
-    this.minimumOSVersion,
-    this.type,
-    this.scope,
-    this.signatureSha256,
-    this.elevationRequirement,
-    this.productCode,
-    this.appsAndFeaturesEntries,
-    this.switches,
-    this.modes,
-    this.other = const {},
-  });
-
-  static Installer fromYaml(Map installerMap) {
-    Map<dynamic, dynamic> map =
-        installerMap.map((key, value) => MapEntry(key, value));
-    InfoYamlMapParser parser = InfoYamlMapParser(map: map);
-    return Installer(
-      architecture: parser.maybeStringFromMap(PackageAttribute.architecture,
-          key: 'Architecture')!,
-      url: parser.maybeLinkFromMap(PackageAttribute.installerURL,
-          key: 'InstallerUrl')!,
-      sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer,
-          key: 'InstallerSha256')!,
-      locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale,
-          key: 'InstallerLocale'),
-      platform: parser.maybePlatformFromMap(PackageAttribute.platform,
-          key: 'Platform'),
-      minimumOSVersion: parser.maybeStringFromMap(
-          PackageAttribute.minimumOSVersion,
-          key: 'MinimumOSVersion'),
-      type: parser.maybeStringFromMap(PackageAttribute.installerType,
-          key: 'InstallerType'),
-      scope: parser.maybeStringFromMap(PackageAttribute.installScope,
-          key: 'Scope'),
-      signatureSha256: parser.maybeStringFromMap(
-          PackageAttribute.signatureSha256,
-          key: 'SignatureSha256'),
-      elevationRequirement: parser.maybeStringFromMap(
-          PackageAttribute.elevationRequirement,
-          key: 'ElevationRequirement'),
-      productCode: parser.maybeStringFromMap(PackageAttribute.productCode,
-          key: 'ProductCode'),
-      appsAndFeaturesEntries: parser.maybeStringFromMap(
-          PackageAttribute.appsAndFeaturesEntries,
-          key: 'AppsAndFeaturesEntries'),
-      switches: parser.maybeStringFromMap(PackageAttribute.installerSwitches,
-          key: 'InstallerSwitches'),
-      modes: parser.maybeStringFromMap(PackageAttribute.installModes,
-          key: 'InstallModes'),
-      other: map.map<String, String>(
-          (key, value) => MapEntry(key.toString(), value.toString())),
-    );
-  }
-}
-
-typedef Feature = Info? Function(Installer);
-
-extension InstallerList on List<Installer> {
-  List<Feature> minimalUniqueIdentifiers() {
-
-    List<Feature> uniqueFeatures = [];
-    for (Info? Function(Installer) feature in definingFeatures) {
-      if (isFeatureEverywhereTheSame(feature)) continue;
-      if (isFeatureUniqueIdentifier(feature)) {
-        return [feature];
-      }
-    }
-    return uniqueFeatures;
-  }
-
-
-
-  bool isFeatureUniqueIdentifier(Info? Function(Installer) feature) {
-    List<dynamic> values = map<Info?>(feature).map((e) => e?.value).toList();
-    return values.toSet().length == length;
-  }
-
-  bool isFeatureEverywhereTheSame(Info? Function(Installer) feature) {
-    List<dynamic> values = map<Info?>(feature).map((e) => e?.value).toList();
-    return values.toSet().length == 1;
-  }
-}
-
-List<Feature> get definingFeatures {
-  return [
-    (installer) => installer.architecture,
-    (installer) => installer.type,
-    (installer) => installer.locale,
-    (installer) => installer.platform,
-    (installer) => installer.minimumOSVersion,
-    (installer) => installer.scope,
-    (installer) => installer.elevationRequirement,
-  ];
 }

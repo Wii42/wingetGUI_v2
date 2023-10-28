@@ -3,10 +3,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets/app_locale.dart';
 import '../../package_infos/info.dart';
+import '../../package_infos/installer_objects/computer_architecture.dart';
+import '../../package_infos/installer_objects/install_mode.dart';
+import '../../package_infos/installer_objects/install_scope.dart';
+import '../../package_infos/installer_objects/installer.dart';
+import '../../package_infos/installer_objects/installer_type.dart';
 import '../../package_infos/package_attribute.dart';
 import 'expander_compartment.dart';
 
@@ -23,7 +29,7 @@ class InstallerDetails extends ExpanderCompartment {
         title: compartmentTitle(localization),
         mainColumn: [
           ...detailsList([
-            infos.type,
+            tryFromInstallerType(infos.type),
             infos.storeProductID,
             tryFromLocaleInfo(infos.locale, context),
             infos.sha256Hash,
@@ -32,9 +38,11 @@ class InstallerDetails extends ExpanderCompartment {
             tryFromListInfo(infos.fileExtensions),
             tryFromListInfo(infos.platform, toString: (e) => e.title),
             infos.minimumOSVersion,
-            infos.scope,
-            infos.installModes,
+            tryFromScopeInfo(infos.scope, context),
+            tryFromListModeInfo(infos.installModes, localization),
             infos.installerSwitches,
+            infos.elevationRequirement,
+            infos.productCode,
           ], context),
           ..._displayRest(context),
         ],
@@ -52,13 +60,12 @@ class InstallerDetails extends ExpanderCompartment {
   Wrap _displayInstallers(
       Info<List<Installer>> installers, BuildContext context) {
     return Wrap(
-        spacing: 5,
-        runSpacing: 5,
-        children: [
-          for (Installer installer in installers.value)
-            installerWidget(installer, installers.value, context),
-        ],
-
+      spacing: 5,
+      runSpacing: 5,
+      children: [
+        for (Installer installer in installers.value)
+          installerWidget(installer, installers.value, context),
+      ],
     );
   }
 
@@ -71,6 +78,23 @@ class InstallerDetails extends ExpanderCompartment {
     }
     String string = list.join(', ');
     return Info<String>(title: info.title, value: string);
+  }
+
+  Info<String>? tryFromInstallerType(Info<InstallerType>? info) {
+    if (info == null) return null;
+    return Info<String>(title: info.title, value: info.value.fullTitle);
+  }
+
+  Info<String>? tryFromArchitectureInfo(Info<ComputerArchitecture>? info) {
+    if (info == null) return null;
+    return Info<String>(title: info.title, value: info.value.title);
+  }
+
+  Info<String>? tryFromScopeInfo(
+      Info<InstallScope>? info, BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    if (info == null) return null;
+    return Info<String>(title: info.title, value: info.value.title(locale));
   }
 
   @override
@@ -105,9 +129,10 @@ class InstallerDetails extends ExpanderCompartment {
 
   Widget installerWidget(Installer installer, List<Installer> installerList,
       BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return Expander(
       header: Text(
-        installerPreview(installer, installerList),
+        installerPreview(installer, installerList, context),
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       content: Column(
@@ -116,19 +141,19 @@ class InstallerDetails extends ExpanderCompartment {
             context: context,
             mainColumn: [
               ...detailsList([
-                installer.architecture,
+                tryFromArchitectureInfo(installer.architecture),
                 installer.sha256Hash,
                 installer.signatureSha256,
                 tryFromLocaleInfo(installer.locale, context),
                 tryFromListInfo(installer.platform, toString: (e) => e.title),
                 installer.minimumOSVersion,
-                installer.type,
-                installer.scope,
+                tryFromInstallerType(installer.type),
+                tryFromScopeInfo(installer.scope, context),
                 installer.elevationRequirement,
                 installer.productCode,
                 //installer.appsAndFeaturesEntries,
                 installer.switches,
-                installer.modes,
+                tryFromListModeInfo(installer.modes, locale),
               ], context),
               if (installer.other.isNotEmpty) Text(installer.other.toString()),
             ],
@@ -137,13 +162,19 @@ class InstallerDetails extends ExpanderCompartment {
     );
   }
 
-  String installerPreview(Installer installer, List<Installer> installerList) {
-    String base = installer.architecture.value;
+  Info<String>? tryFromListModeInfo(
+          Info<List<InstallMode>>? modes, AppLocalizations locale) =>
+      tryFromListInfo(modes, toString: (e) => e.title(locale));
+
+  String installerPreview(Installer installer, List<Installer> installerList,
+      BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    String base = installer.architecture.value.title;
     List<String> preview = [base];
     if (installerList.length >= 2) {
       if (!installerList.isFeatureEverywhereTheSame((e) => e.type)) {
         if (installer.type != null) {
-          preview.add(installer.type!.value);
+          preview.add(installer.type!.value.shortTitle);
         }
       }
       if (!installerList.isFeatureEverywhereTheSame((e) => e.locale)) {
@@ -153,7 +184,7 @@ class InstallerDetails extends ExpanderCompartment {
       }
       if (!installerList.isFeatureEverywhereTheSame((e) => e.scope)) {
         if (installer.scope != null) {
-          preview.add(installer.scope!.value);
+          preview.add(installer.scope!.value.title(locale));
         }
       }
     }

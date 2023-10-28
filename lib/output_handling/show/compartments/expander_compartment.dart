@@ -146,14 +146,16 @@ abstract class ExpanderCompartment extends Compartment {
 
   Info<String>? tryFromLocaleInfo(Info<Locale>? info, BuildContext context) {
     LocaleNames localeNames = LocaleNames.of(context)!;
+    return tryFrom(info, (locale) => localeNames.nameOf(locale.toString()) ??
+        locale.toLanguageTag());
+  }
+
+  Info<String>? tryFrom<T extends Object>(Info<T>? info, String Function(T) toString) {
     if (info == null) {
       return null;
     }
-    Locale locale = info.value;
     return Info<String>(
-        title: info.title,
-        value: localeNames.nameOf(locale.toString()) ??
-            locale.toLanguageTag());
+        title: info.title, value: toString(info.value));
   }
 
   List<Widget> detailsList(List<Info<String>?> details, BuildContext context) {

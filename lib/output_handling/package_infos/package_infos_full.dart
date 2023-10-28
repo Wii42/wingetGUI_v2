@@ -9,6 +9,7 @@ import 'info.dart';
 import 'info_map_parser.dart';
 import 'info_with_link.dart';
 import 'installer_infos.dart';
+import 'installer_objects/installer_type.dart';
 import 'package_attribute.dart';
 
 class PackageInfosFull extends PackageInfos {
@@ -106,37 +107,27 @@ class PackageInfosFull extends PackageInfos {
       details.removeWhere((key, value) => value == null);
       InfoYamlMapParser parser = InfoYamlMapParser(map: details);
       PackageInfosFull infos = PackageInfosFull(
-        name: parser.maybeStringFromMap(PackageAttribute.name,
-            key: 'PackageName'),
-        id: parser.maybeStringFromMap(PackageAttribute.id,
-            key: 'PackageIdentifier'),
-        description: parser.maybeStringFromMap(PackageAttribute.description,
-            key: 'Description'),
+        name: parser.maybeStringFromMap(PackageAttribute.name),
+        id: parser.maybeStringFromMap(PackageAttribute.id),
+        description: parser.maybeStringFromMap(PackageAttribute.description),
         shortDescription: parser.maybeStringFromMap(
-            PackageAttribute.description,
-            key: 'ShortDescription'),
+            PackageAttribute.shortDescription),
         supportUrl: parser.maybeLinkFromMap(
-            PackageAttribute.publisherSupportUrl,
-            key: 'PublisherSupportUrl'),
-        version: parser.maybeStringFromMap(PackageAttribute.version,
-            key: 'PackageVersion'),
-        website: parser.maybeLinkFromMap(PackageAttribute.website,
-            key: 'PackageUrl'),
+            PackageAttribute.publisherSupportUrl),
+        version: parser.maybeStringFromMap(PackageAttribute.version),
+        website: parser.maybeLinkFromMap(PackageAttribute.website),
         author:
-            parser.maybeStringFromMap(PackageAttribute.author, key: 'Author'),
+            parser.maybeStringFromMap(PackageAttribute.author),
         moniker:
-            parser.maybeStringFromMap(PackageAttribute.moniker, key: 'Moniker'),
+            parser.maybeStringFromMap(PackageAttribute.moniker),
         documentation: parser.maybeDocumentationsFromMap(
-            PackageAttribute.documentation,
-            key: 'Documentations'),
+            PackageAttribute.documentation),
         releaseNotes: parser.maybeInfoWithLinkFromMap(
             textInfo: PackageAttribute.releaseNotes,
-            textKey: 'ReleaseNotes',
-            urlKey: 'ReleaseNotesUrl'),
+            urlInfo: PackageAttribute.releaseNotesUrl),
         agreement: parser.maybeAgreementFromMap(),
         tags: parser.maybeTagsFromMap(),
-        packageLocale: parser.maybeLocaleFromMap(PackageAttribute.packageLocale,
-            key: 'PackageLocale'),
+        packageLocale: parser.maybeLocaleFromMap(PackageAttribute.packageLocale),
         installer: installer,
         otherInfos: details.isNotEmpty
             ? details.map<String, String>(
@@ -158,7 +149,7 @@ class PackageInfosFull extends PackageInfos {
   bool hasReleaseNotes() => releaseNotes?.text != null;
 
   @override
-  bool isMicrosoftStore() => (installer?.type?.value.trim() == 'msstore' &&
+  bool isMicrosoftStore() => (installer?.type?.value == InstallerType.msstore &&
       installer?.storeProductID != null);
 
   @override
