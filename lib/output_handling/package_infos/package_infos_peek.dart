@@ -50,6 +50,13 @@ class PackageInfosPeek extends PackageInfos {
     return availableVersion != null && availableVersion!.value.isNotEmpty;
   }
 
+  bool hasSpecificAvailableVersion() =>
+      (availableVersion != null && availableVersion!.value.isNotEmpty &&
+          availableVersion?.value != 'Unknown' &&
+          !availableVersion!.value.contains('<')) &&
+      !availableVersion!.value.contains('>') &&
+      !availableVersion!.value.contains('…');
+
   @override
   bool isMicrosoftStore() => source?.value == 'msstore';
 

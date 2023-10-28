@@ -44,7 +44,7 @@ class InstallerDetails extends ExpanderCompartment {
             infos.elevationRequirement,
             infos.productCode,
           ], context),
-          ..._displayRest(context),
+          ..._displayRest(infos.otherInfos, context),
         ],
         buttonRow: infos.url != null
             ? buttonRow([infos.url], context)
@@ -102,15 +102,15 @@ class InstallerDetails extends ExpanderCompartment {
     return PackageAttribute.installer.title(locale);
   }
 
-  List<Widget> _displayRest(BuildContext context) {
-    if (infos.otherInfos == null) {
+  List<Widget> _displayRest(Map<String, String>? otherInfos, BuildContext context) {
+    if (otherInfos == null) {
       return [];
     }
-    Iterable<String> restKeys = infos.otherInfos!.keys;
-    String value(String key) => infos.otherInfos![key]!;
+    Iterable<String> restKeys = otherInfos.keys;
+    String value(String key) => otherInfos[key]!;
     return [
       for (String key in restKeys)
-        if (infos.otherInfos!.hasEntry(key))
+        if (otherInfos.hasEntry(key))
           wrapInWrap(
               title: key,
               body: textOrIconLink(
@@ -155,7 +155,8 @@ class InstallerDetails extends ExpanderCompartment {
                 installer.switches,
                 tryFromListModeInfo(installer.modes, locale),
               ], context),
-              if (installer.other.isNotEmpty) Text(installer.other.toString()),
+              //if (installer.other.isNotEmpty) Text(installer.other.toString()),
+              ..._displayRest(installer.other, context)
             ],
             buttonRow: buttonRow([installer.url], context)),
       ),

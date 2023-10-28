@@ -12,6 +12,7 @@ enum InstallerType {
   burn(key: 'burn', shortTitle: 'Burn'),
   pwa(key: 'pwa', shortTitle: 'Progressive Web App (PWA)'),
   portable(key: 'portable', shortTitle: 'Portable'),
+  zip(key: 'zip', shortTitle: 'ZIP'),
   msstore(key: 'msstore', shortTitle: 'Microsoft Store'),
   ;
 

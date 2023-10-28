@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart';
+import 'package:pub_semver/pub_semver.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
@@ -45,9 +46,9 @@ class PackageDetailsFromWeb extends StatelessWidget {
     if (!package.isWinget()) {
       return putInfo('package is not from Winget');
     }
-    if (!package.hasSpecificVersion() && !package.hasAvailableVersion()) {
-      return putInfo('package has no specific version');
-    }
+    //if (!package.hasSpecificVersion() && !package.hasAvailableVersion()) {
+    // return putInfo('package has no specific version');
+    //}
     Locale? locale = AppLocale.of(context).guiLocale;
     return _buildFromWeb(locale);
   }
@@ -65,29 +66,45 @@ class PackageDetailsFromWeb extends StatelessWidget {
         if (snapshot.hasError) {
           return Text('${snapshot.error}\n${snapshot.stackTrace}');
         }
-        return const Center(child: ProgressRing(backgroundColor: Colors.transparent,));
+        return const Center(
+            child: ProgressRing(
+          backgroundColor: Colors.transparent,
+        ));
       },
     );
   }
 
   Future<PackageInfosFull> extractOnlineFullInfos(Locale? guiLocale) async {
-    GithubApi manifestApi = GithubApi.wingetManifest(
-        packageID: package.id!.value,
-        version: (package.hasAvailableVersion()
-                ? package.availableVersion?.value
-                : null) ??
-            (package.hasSpecificVersion()
-                ? package.version?.value
-                : throw Exception('package has no specific version'))!);
+    bool hasAnyVersion =
+        package.hasSpecificVersion() || package.hasSpecificAvailableVersion();
+    List<GithubApiFileInfo> files;
+    if (hasAnyVersion) {
+      GithubApi manifestApi = GithubApi.wingetVersionManifest(
+          packageID: package.id!.value,
+          version: (package.hasSpecificAvailableVersion()
+                  ? package.availableVersion?.value
+                  : null) ??
+              (package.hasSpecificVersion()
+                  ? package.version?.value
+                  : throw Exception('package has no specific version'))!);
 
-    List<GithubApiFileInfo> files = await manifestApi.getFiles();
+      files = await manifestApi.getFiles(
+          onError: () => GithubApi.wingetManifest(packageID: package.id!.value)
+              .getFiles());
+    }else{
+      GithubApi manifestApi = GithubApi.wingetManifest(
+          packageID: package.id!.value);
+
+      files = await manifestApi.getFiles();
+    }
 
     if (files.isEmpty) {
-      throw Exception('no files found');
+      throw Exception('No files found');
     }
     if (!WingetPackageVersionManifest.isVersionManifest(files,
         packageId: package.id!.value)) {
-      throw Exception('files are not a version manifest');
+      files = await tryGetNewestVersionManifest(files);
+      //throw Exception('Files are not a version manifest');
     }
 
     WingetPackageVersionManifest manifest =
@@ -141,7 +158,6 @@ class PackageDetailsFromWeb extends StatelessWidget {
         }
         return matchingLocales.first;
         //TODO: check for country code
-
       }
     }
     Locale? defaultLocale = await getDefaultLocale(manifest);
@@ -172,8 +188,44 @@ class PackageDetailsFromWeb extends StatelessWidget {
     }
     if (kDebugMode) {
       print(
-          'Failed to load file from Github API: ${response.statusCode} ${response.reasonPhrase} ${response.body}');
+          'Failed to load file from Github API: ${response.statusCode}\n${response.reasonPhrase}\n${response.body}');
     }
     return null;
+  }
+
+  Future<List<GithubApiFileInfo>> tryGetNewestVersionManifest(
+      List<GithubApiFileInfo> files) {
+    List<GithubApiFileInfo> versionManifests =
+        files.where((element) => isBuiltInVersion(element.name)).toList();
+    if (versionManifests.isNotEmpty) {
+      List<Version> versions =
+          versionManifests.map<Version>((e) => Version.parse(e.name)).toList();
+      Version newestVersion = Version.primary(versions);
+      GithubApiFileInfo newestVersionManifest = versionManifests.firstWhere(
+          (element) => Version.parse(element.name) == newestVersion);
+
+      return GithubApi.wingetRepo(newestVersionManifest.path).getFiles();
+    } else {
+      versionManifests =
+          files.where((element) => isFourPartVersion(element.name)).toList();
+      if (versionManifests.isNotEmpty) {
+        return GithubApi.wingetRepo(versionManifests.last.path).getFiles();
+      }
+    }
+    throw Exception('No version manifest found');
+  }
+
+  bool isBuiltInVersion(String string) {
+    try {
+      Version.parse(string);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool isFourPartVersion(String string) {
+    RegExp versionRegex = RegExp(r'^\d+\.\d+\.\d+\.\d+$');
+    return versionRegex.hasMatch(string);
   }
 }
