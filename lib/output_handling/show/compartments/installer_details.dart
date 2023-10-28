@@ -33,6 +33,10 @@ class InstallerDetails extends Compartment {
             infos.upgradeBehavior,
             tryFromListInfo(infos.fileExtensions),
             tryFromListInfo(infos.platform, toString: (e) => e.title),
+            infos.minimumOSVersion,
+            infos.scope,
+            infos.installModes,
+            infos.installerSwitches,
           ], context),
           if (infos.installers != null)
             _displayInstallers(infos.installers!, context),

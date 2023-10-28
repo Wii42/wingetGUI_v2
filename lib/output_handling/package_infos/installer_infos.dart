@@ -18,6 +18,10 @@ class InstallerInfos {
   final Info<List<String>>? fileExtensions;
   final Info<Locale>? locale;
   final Info<List<WindowsPlatform>>? platform;
+  final Info<String>? minimumOSVersion;
+  final Info<String>? scope;
+  final Info<String>? installModes;
+  final Info<String>? installerSwitches;
 
   final Map<String, String>? otherInfos;
 
@@ -29,11 +33,15 @@ class InstallerInfos {
     this.locale,
     this.storeProductID,
     this.releaseDate,
-    this.otherInfos,
     this.installers,
     this.upgradeBehavior,
     this.fileExtensions,
     this.platform,
+    this.minimumOSVersion,
+    this.scope,
+    this.installModes,
+    this.installerSwitches,
+    this.otherInfos,
   });
 
   static maybeFromMap(
@@ -71,21 +79,24 @@ class InstallerInfos {
         //sha256Hash: parser.maybeDetailFromMap(PackageAttribute.sha256Installer),
         releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate,
             key: 'ReleaseDate'),
-        installers: parser.maybeListFromMap<Installer>(
-            PackageAttribute.installers,
+        installers: parser.maybeListFromMap<Installer>(PackageAttribute.installers,
             key: 'Installers', parser: (map) {
           return Installer.fromYaml(map);
         }),
-        upgradeBehavior: parser.maybeStringFromMap(
-            PackageAttribute.upgradeBehavior,
+        upgradeBehavior: parser.maybeStringFromMap(PackageAttribute.upgradeBehavior,
             key: 'UpgradeBehavior'),
-        fileExtensions: parser.maybeStringListFromMap(
-            PackageAttribute.fileExtensions,
+        fileExtensions: parser.maybeStringListFromMap(PackageAttribute.fileExtensions,
             key: 'FileExtensions'),
         platform: parser.maybePlatformFromMap(PackageAttribute.platform,
             key: 'Platform'),
-        otherInfos: installerDetails.map<String, String>(
-            (key, value) => MapEntry(key.toString(), value.toString())));
+        minimumOSVersion: parser.maybeStringFromMap(PackageAttribute.minimumOSVersion,
+            key: 'MinimumOSVersion'),
+        scope: parser.maybeStringFromMap(PackageAttribute.installScope,
+            key: 'Scope'),
+        installerSwitches: parser.maybeStringFromMap(PackageAttribute.installerSwitches,
+            key: 'InstallerSwitches'),
+        installModes: parser.maybeStringFromMap(PackageAttribute.installModes, key: 'InstallModes'),
+        otherInfos: installerDetails.map<String, String>((key, value) => MapEntry(key.toString(), value.toString())));
   }
 }
 
@@ -180,7 +191,8 @@ class Installer {
           key: 'AppsAndFeaturesEntries'),
       switches: parser.maybeStringFromMap(PackageAttribute.installerSwitches,
           key: 'InstallerSwitches'),
-      modes: parser.maybeStringFromMap(PackageAttribute.installModes, key: 'InstallModes'),
+      modes: parser.maybeStringFromMap(PackageAttribute.installModes,
+          key: 'InstallModes'),
       other: map.map<String, String>(
           (key, value) => MapEntry(key.toString(), value.toString())),
     );
