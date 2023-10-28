@@ -4,7 +4,6 @@ import 'package:winget_gui/navigation_pages/advanced_options_page.dart';
 import 'package:winget_gui/navigation_pages/command_prompt_page.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/navigation_pages/settings_page.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/widget_assets/package_details_from_web.dart';
 import 'package:winget_gui/winget_commands.dart';

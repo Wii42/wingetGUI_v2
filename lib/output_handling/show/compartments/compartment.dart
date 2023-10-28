@@ -160,4 +160,11 @@ abstract class Compartment extends StatelessWidget {
       ].withSpaceBetween(width: 5),
     );
   }
+
+  Info<String>? tryFromLocaleInfo(Info<Locale>? info){
+    if(info == null){
+      return null;
+    }
+    return Info<String>(title: info.title, value: info.value.toString());
+  }
 }

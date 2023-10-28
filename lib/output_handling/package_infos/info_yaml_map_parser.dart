@@ -1,6 +1,9 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:ui';
+
+import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:yaml/yaml.dart';
 
+import '../../helpers/locale_parser.dart';
 import 'agreement_infos.dart';
 import 'info.dart';
 import 'info_with_link.dart';
@@ -46,7 +49,6 @@ class InfoYamlMapParser {
                 text: e['DocumentLabel'],
                 url: Uri.parse(e['DocumentUrl'])))
             .toList();
-        print(linkList);
         map.remove(key);
         return Info<List<InfoWithLink>>(
             title: attribute.title, value: linkList);
@@ -60,16 +62,20 @@ class InfoYamlMapParser {
     return Info<List<InfoWithLink>>(title: attribute.title, value: list);
   }
 
-  Info<List<String>>? maybeListFromMap(PackageAttribute attribute,
-      {required String key}) {
+  Info<List<T>>? maybeListFromMap<T>(PackageAttribute attribute,
+      {required String key, required T Function(dynamic) parser}) {
     YamlList? node = map[key];
     if (node == null || node.value.isEmpty) {
       return null;
     }
     map.remove(key);
-    return Info<List<String>>(
-        title: attribute.title,
-        value: node.value.map<String>((e) => e.toString()).toList());
+    return Info<List<T>>(
+        title: attribute.title, value: node.value.map<T>(parser).toList());
+  }
+
+  Info<List<String>>? maybeStringListFromMap(PackageAttribute attribute,
+      {required String key}) {
+    return maybeListFromMap(attribute, key: key, parser: (e) => e.toString());
   }
 
   AgreementInfos? maybeAgreementFromMap() {
@@ -109,5 +115,21 @@ class InfoYamlMapParser {
       return tags;
     }
     return null;
+  }
+
+  Info<Locale>? maybeLocaleFromMap(PackageAttribute packageLocale,
+      {required String key}) {
+    Info<String>? localeInfo = maybeDetailFromMap(packageLocale, key: key);
+    if (localeInfo == null) {
+      return null;
+    }
+    return Info<Locale>(
+        title: localeInfo.title, value: LocaleParser.parse(localeInfo.value));
+  }
+
+  Info<List<WindowsPlatform>>? maybePlatformFromMap(PackageAttribute platform,
+      {required String key}) {
+    return maybeListFromMap(platform,
+        key: key, parser: (e) => WindowsPlatform.fromYaml(e));
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:yaml/src/yaml_node.dart';
 
 import '../../helpers/extensions/string_extension.dart';
 import 'info.dart';

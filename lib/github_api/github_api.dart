@@ -47,7 +47,7 @@ class GithubApi {
       return files;
     }
     throw Exception(
-        'Failed to load files from Github API: ${response.statusCode} ${response.reasonPhrase} ${response.body}');
+        'Failed to load files from Github API: $apiUri ${response.statusCode} ${response.reasonPhrase} ${response.body}');
   }
 
   static String? idInitialLetter(String id) {

@@ -39,12 +39,14 @@ enum PackageAttribute {
   installerURL,
   sha256Installer,
   installerLocale,
+  packageLocale,
   releaseDate,
   match,
   manifest,
   installers,
   upgradeBehavior,
   fileExtensions,
+  platform,
   ;
 
   const PackageAttribute();

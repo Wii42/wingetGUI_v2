@@ -23,7 +23,7 @@ dependencies:
   system_theme: ^2.3.1
   window_manager: ^0.3.7
   flutter_acrylic: ^1.1.3
-  url_launcher: ^6.1.14
+  url_launcher: ^6.2.1
   expandable_text: ^2.3.0
   string_validator: ^1.0.2
   intl: ^0.18.1
@@ -31,7 +31,7 @@ dependencies:
   expandable: ^5.0.1
   linkable: ^3.0.2
   favicon: ^1.1.1
-  flutter_svg: ^2.0.7
+  flutter_svg: ^2.0.8
   flutter_fadein: ^2.0.0
   app_theme_mode: ^1.0.0
   shared_preferences: ^2.2.2
@@ -50,7 +50,7 @@ dev_dependencies:
 
 
 
-  flutter_lints: ^2.0.3
+  flutter_lints: ^3.0.0
   msix: ^3.16.4
 
 

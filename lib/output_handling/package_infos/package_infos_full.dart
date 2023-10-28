@@ -1,6 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/info_yaml_map_parser.dart';
-import 'package:yaml/yaml.dart';
 
 import './package_infos.dart';
 import 'agreement_infos.dart';
@@ -24,6 +25,7 @@ class PackageInfosFull extends PackageInfos {
   final List<String>? tags;
   final AgreementInfos? agreement;
   final Info<Uri>? website, supportUrl;
+  final Info<Locale>? packageLocale;
   final InstallerInfos? installer;
 
   PackageInfosFull({
@@ -44,6 +46,7 @@ class PackageInfosFull extends PackageInfos {
     this.releaseNotes,
     this.agreement,
     this.tags,
+    this.packageLocale,
     this.installer,
     super.otherInfos,
   });
@@ -100,6 +103,7 @@ class PackageInfosFull extends PackageInfos {
         InstallerInfos.maybeFromYamlMap(installerDetails: installerDetails);
 
     if (details != null) {
+      details.removeWhere((key, value) => value == null);
       InfoYamlMapParser parser = InfoYamlMapParser(map: details);
       PackageInfosFull infos = PackageInfosFull(
         name: parser.maybeDetailFromMap(PackageAttribute.name,
@@ -131,6 +135,8 @@ class PackageInfosFull extends PackageInfos {
             urlKey: 'ReleaseNotesUrl'),
         agreement: parser.maybeAgreementFromMap(),
         tags: parser.maybeTagsFromMap(),
+        packageLocale: parser.maybeLocaleFromMap(PackageAttribute.packageLocale,
+            key: 'PackageLocale'),
         installer: installer,
         otherInfos: details.isNotEmpty
             ? details.map<String, String>(
@@ -166,7 +172,7 @@ class PackageInfosFull extends PackageInfos {
     if (shortDescription == null) {
       return description;
     }
-    if(description == null){
+    if (description == null) {
       return null;
     }
     if (!description!.value.startsWith(shortDescription!.value)) {

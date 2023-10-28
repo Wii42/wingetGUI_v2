@@ -6,7 +6,6 @@ import 'package:winget_gui/output_handling/package_infos/package_attribute.dart'
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
-import '../../../widget_assets/link_text.dart';
 import '../../package_infos/info.dart';
 import 'compartment.dart';
 
@@ -28,6 +27,7 @@ class DetailsWidget extends Compartment {
             infos.freeTrial,
             infos.ageRating,
             infos.id,
+            tryFromLocaleInfo(infos.packageLocale),
           ], context),
           if (infos.documentation != null)
             wrapInWrap(

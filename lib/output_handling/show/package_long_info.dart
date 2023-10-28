@@ -9,7 +9,6 @@ import 'package:winget_gui/output_handling/show/compartments/screenshots_widget.
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/widget_assets/search_button.dart';
 
-import '../package_infos/info.dart';
 import '../package_infos/package_infos_full.dart';
 import 'compartments/agreement_widget.dart';
 
