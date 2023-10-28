@@ -64,21 +64,21 @@ class PackageInfosFull extends PackageInfos {
       InfoMapParser parser = InfoMapParser(map: details, locale: locale);
 
       PackageInfosFull infos = PackageInfosFull(
-        name: parser.maybeDetailFromMap(PackageAttribute.name),
-        id: parser.maybeDetailFromMap(PackageAttribute.id),
-        description: parser.maybeDetailFromMap(PackageAttribute.description),
+        name: parser.maybeStringFromMap(PackageAttribute.name),
+        id: parser.maybeStringFromMap(PackageAttribute.id),
+        description: parser.maybeStringFromMap(PackageAttribute.description),
         supportUrl:
             parser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
-        version: parser.maybeDetailFromMap(PackageAttribute.version),
+        version: parser.maybeStringFromMap(PackageAttribute.version),
         website: parser.maybeLinkFromMap(PackageAttribute.website),
-        author: parser.maybeDetailFromMap(PackageAttribute.author),
-        moniker: parser.maybeDetailFromMap(PackageAttribute.moniker),
+        author: parser.maybeStringFromMap(PackageAttribute.author),
+        moniker: parser.maybeStringFromMap(PackageAttribute.moniker),
         documentation:
             parser.maybeListWithLinksFromMap(PackageAttribute.documentation),
-        category: parser.maybeDetailFromMap(PackageAttribute.category),
-        pricing: parser.maybeDetailFromMap(PackageAttribute.pricing),
-        freeTrial: parser.maybeDetailFromMap(PackageAttribute.freeTrial),
-        ageRating: parser.maybeDetailFromMap(PackageAttribute.ageRating),
+        category: parser.maybeStringFromMap(PackageAttribute.category),
+        pricing: parser.maybeStringFromMap(PackageAttribute.pricing),
+        freeTrial: parser.maybeStringFromMap(PackageAttribute.freeTrial),
+        ageRating: parser.maybeStringFromMap(PackageAttribute.ageRating),
         releaseNotes: parser.maybeInfoWithLinkFromMap(
             textInfo: PackageAttribute.releaseNotes,
             urlInfo: PackageAttribute.releaseNotesUrl),

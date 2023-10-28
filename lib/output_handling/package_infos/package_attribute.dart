@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../winget_commands.dart';
 
 enum PackageAttribute {
-  id,
+  id(copyable: true),
   description,
   name,
   publisher,
@@ -35,9 +35,9 @@ enum PackageAttribute {
   freeTrial,
   ageRating,
   installerType,
-  storeProductID,
+  storeProductID(copyable: true),
   installerURL,
-  sha256Installer,
+  sha256Installer(copyable: true),
   installerLocale,
   packageLocale,
   releaseDate,
@@ -50,13 +50,16 @@ enum PackageAttribute {
   architecture,
   minimumOSVersion,
   installScope,
-  signatureSha256,
+  signatureSha256(copyable: true),
   elevationRequirement,
-  productCode,
-  appsAndFeaturesEntries, installerSwitches, installModes,
+  productCode(copyable: true),
+  appsAndFeaturesEntries,
+  installerSwitches,
+  installModes,
   ;
 
-  const PackageAttribute();
+  final bool copyable;
+  const PackageAttribute({this.copyable = false});
 
   String key(AppLocalizations local) {
     String key = local.infoKey(this.name);

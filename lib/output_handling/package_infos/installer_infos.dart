@@ -53,12 +53,12 @@ class InstallerInfos {
     InfoMapParser parser = InfoMapParser(map: installerDetails, locale: locale);
     return InstallerInfos(
         title: PackageAttribute.installer.title,
-        type: parser.maybeDetailFromMap(PackageAttribute.installerType),
+        type: parser.maybeStringFromMap(PackageAttribute.installerType),
         url: parser.maybeLinkFromMap(PackageAttribute.installerURL),
-        sha256Hash: parser.maybeDetailFromMap(PackageAttribute.sha256Installer),
+        sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer),
         locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale),
         storeProductID:
-            parser.maybeDetailFromMap(PackageAttribute.storeProductID),
+            parser.maybeStringFromMap(PackageAttribute.storeProductID),
         releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate),
         otherInfos: installerDetails);
   }
@@ -197,22 +197,44 @@ class Installer {
           (key, value) => MapEntry(key.toString(), value.toString())),
     );
   }
+}
 
-  static dynamic get(Map map, String key) {
-    dynamic value = map[key];
-    map.remove(key);
-    return value;
+typedef Feature = Info? Function(Installer);
+
+extension InstallerList on List<Installer> {
+  List<Feature> minimalUniqueIdentifiers() {
+
+    List<Feature> uniqueFeatures = [];
+    for (Info? Function(Installer) feature in definingFeatures) {
+      if (isFeatureEverywhereTheSame(feature)) continue;
+      if (isFeatureUniqueIdentifier(feature)) {
+        return [feature];
+      }
+    }
+    return uniqueFeatures;
   }
 
-  static Locale? getLocale(Map map, String key) {
-    String? localeString = get(map, key);
-    if (localeString == null) return null;
-    return LocaleParser.parse(localeString);
+
+
+  bool isFeatureUniqueIdentifier(Info? Function(Installer) feature) {
+    List<dynamic> values = map<Info?>(feature).map((e) => e?.value).toList();
+    return values.toSet().length == length;
   }
 
-  static String? getToString(Map map, String key) {
-    dynamic value = get(map, key);
-    if (value == null) return null;
-    return value.toString();
+  bool isFeatureEverywhereTheSame(Info? Function(Installer) feature) {
+    List<dynamic> values = map<Info?>(feature).map((e) => e?.value).toList();
+    return values.toSet().length == 1;
   }
+}
+
+List<Feature> get definingFeatures {
+  return [
+    (installer) => installer.architecture,
+    (installer) => installer.type,
+    (installer) => installer.locale,
+    (installer) => installer.platform,
+    (installer) => installer.minimumOSVersion,
+    (installer) => installer.scope,
+    (installer) => installer.elevationRequirement,
+  ];
 }

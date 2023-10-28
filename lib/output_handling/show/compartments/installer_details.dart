@@ -24,7 +24,7 @@ class InstallerDetails extends Compartment {
     return fullCompartment(
         title: compartmentTitle(localization),
         mainColumn: [
-          ..._installerDetailsList([
+          ...detailsList([
             infos.type,
             infos.storeProductID,
             tryFromLocaleInfo(infos.locale),
@@ -46,24 +46,26 @@ class InstallerDetails extends Compartment {
         context: context);
   }
 
-  Widget _displayInstallers(Info<List<Installer>> installers, BuildContext context) {
+  Widget _displayInstallers(
+      Info<List<Installer>> installers, BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
     return wrapInWrap(
-            title: installers.title(localization),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (Installer installer in installers.value)
-                  installerWidget(installer, context),
-              ].withSpaceBetween(height: 10),
-            ),
-          );
+      title: installers.title(localization),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (Installer installer in installers.value)
+            installerWidget(installer, installers.value, context),
+        ].withSpaceBetween(height: 10),
+      ),
+    );
   }
 
-  Info<String>? tryFromListInfo<T>(Info<List<T>>? info, {String Function(T)? toString}) {
+  Info<String>? tryFromListInfo<T>(Info<List<T>>? info,
+      {String Function(T)? toString}) {
     if (info == null) return null;
     List<dynamic> list = info.value;
-    if(toString != null){
+    if (toString != null) {
       list = info.value.map((e) => toString(e)).toList();
     }
     String string = list.join(', ');
@@ -115,15 +117,16 @@ class InstallerDetails extends Compartment {
     return Info<String>(title: info.title, value: string);
   }
 
-  Widget installerWidget(Installer installer, BuildContext context) {
-    return DecoratedCard(
-      padding: 10,
-      child: Column(
+  Widget installerWidget(Installer installer, List<Installer> installerList,
+      BuildContext context) {
+    return Expander(
+      header: Text(installerPreview(installer, installerList), style: const TextStyle(fontWeight: FontWeight.bold),),
+      content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: fullCompartment(
             context: context,
             mainColumn: [
-              ..._installerDetailsList([
+              ...detailsList([
                 installer.architecture,
                 installer.sha256Hash,
                 installer.signatureSha256,
@@ -134,18 +137,38 @@ class InstallerDetails extends Compartment {
                 installer.scope,
                 installer.elevationRequirement,
                 installer.productCode,
-                installer.appsAndFeaturesEntries,
+                //installer.appsAndFeaturesEntries,
                 installer.switches,
                 installer.modes,
-
-
               ], context),
               if (installer.other.isNotEmpty) Text(installer.other.toString()),
             ],
-            buttonRow: buttonRow([
-              installer.url
-            ], context)),
+            buttonRow: buttonRow([installer.url], context)),
       ),
     );
+  }
+
+  String installerPreview(Installer installer, List<Installer> installerList) {
+    String base = installer.architecture.value;
+    List<String> preview = [base];
+    if (installerList.length >= 2) {
+      if (!installerList.isFeatureEverywhereTheSame((e) => e.type)) {
+        if (installer.type != null) {
+          preview.add(installer.type!.value);
+        }
+      }
+      if (!installerList.isFeatureEverywhereTheSame((e) => e.locale)) {
+        if (installer.locale != null) {
+          preview.add(installer.locale!.value.toLanguageTag());
+        }
+      }
+      if(!installerList.isFeatureEverywhereTheSame((e) => e.scope)) {
+        if (installer.scope != null) {
+          preview.add(installer.scope!.value);
+        }
+      }
+    }
+    preview.add('Installer');
+    return preview.join(' ');
   }
 }

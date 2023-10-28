@@ -20,7 +20,7 @@ class DetailsWidget extends Compartment {
     return fullCompartment(
         title: compartmentTitle(locale),
         mainColumn: [
-          ..._detailsList([
+          ...detailsList([
             if (infos.author != null)
               infos.agreement?.publisher?.tryToInfoString(),
             infos.pricing,
@@ -53,22 +53,6 @@ class DetailsWidget extends Compartment {
   @override
   String compartmentTitle(AppLocalizations locale) {
     return locale.details;
-  }
-
-  List<Widget> _detailsList(List<Info<String>?> details, BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    return [
-      for (Info<String>? info in details)
-        if (info != null)
-          wrapInWrap(
-              title: info.title(locale),
-              body: (info.title(locale) == PackageAttribute.id.title(locale))?copyableInfo(info: info, context: context):textOrIconLink(
-                  context: context,
-                  text: info.value,
-                  url: isLink(info.value)
-                      ? Uri.tryParse(info.value)
-                      : null)),
-    ];
   }
 
   List<Widget> _displayRest(BuildContext context) {

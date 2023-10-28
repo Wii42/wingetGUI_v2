@@ -45,11 +45,11 @@ class AgreementInfos {
       privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl),
       buyUrl: parser.maybeLinkFromMap(PackageAttribute.buyUrl),
       termsOfTransaction:
-          parser.maybeDetailFromMap(PackageAttribute.termsOfTransaction),
+          parser.maybeStringFromMap(PackageAttribute.termsOfTransaction),
       seizureWarning:
-          parser.maybeDetailFromMap(PackageAttribute.seizureWarning),
+          parser.maybeStringFromMap(PackageAttribute.seizureWarning),
       storeLicenseTerms:
-          parser.maybeDetailFromMap(PackageAttribute.storeLicenseTerms),
+          parser.maybeStringFromMap(PackageAttribute.storeLicenseTerms),
     );
     return agreement.isNotEmpty() ? agreement : null;
   }

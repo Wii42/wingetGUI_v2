@@ -167,4 +167,20 @@ abstract class Compartment extends StatelessWidget {
     }
     return Info<String>(title: info.title, value: info.value.toString());
   }
+
+  List<Widget> detailsList(List<Info<String>?> details, BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    return [
+      for (Info<String>? info in details)
+        if (info != null)
+          wrapInWrap(
+              title: info.title(locale),
+              body: info.copyable?copyableInfo(info: info, context: context):textOrIconLink(
+                  context: context,
+                  text: info.value,
+                  url: isLink(info.value)
+                      ? Uri.tryParse(info.value)
+                      : null)),
+    ];
+  }
 }

@@ -19,7 +19,7 @@ class InfoYamlMapParser {
     String? detail = (node != null) ? node.toString() : null;
     map.remove(key);
     return (detail != null)
-        ? Info<String>(title: attribute.title, value: detail)
+        ? Info<String>(title: attribute.title, value: detail, copyable: attribute.copyable)
         : null;
   }
 

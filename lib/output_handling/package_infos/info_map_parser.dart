@@ -13,17 +13,17 @@ class InfoMapParser {
   Map<String, String> map;
   InfoMapParser({required this.map, required this.locale});
 
-  Info<String>? maybeDetailFromMap(PackageAttribute attribute) {
+  Info<String>? maybeStringFromMap(PackageAttribute attribute) {
     String key = attribute.key(locale);
     String? detail = map[key];
     map.remove(key);
     return (detail != null)
-        ? Info<String>(title: attribute.title, value: detail)
+        ? Info<String>(title: attribute.title, value: detail, copyable: attribute.copyable)
         : null;
   }
 
   Info<Uri>? maybeLinkFromMap(PackageAttribute infoKey) {
-    Info<String>? link = maybeDetailFromMap(infoKey);
+    Info<String>? link = maybeStringFromMap(infoKey);
     if (link == null) {
       return null;
     }
@@ -32,7 +32,7 @@ class InfoMapParser {
 
   Info<List<InfoWithLink>>? maybeListWithLinksFromMap(
       PackageAttribute attribute) {
-    Info<String>? list = maybeDetailFromMap(attribute);
+    Info<String>? list = maybeStringFromMap(attribute);
     if (list == null) {
       return null;
     }
@@ -62,7 +62,7 @@ class InfoMapParser {
   }
 
   Info<DateTime>? maybeDateTimeFromMap(PackageAttribute attribute) {
-    Info<String>? dateInfo = maybeDetailFromMap(PackageAttribute.releaseDate);
+    Info<String>? dateInfo = maybeStringFromMap(PackageAttribute.releaseDate);
     if (dateInfo == null) {
       return null;
     }
@@ -90,7 +90,7 @@ class InfoMapParser {
   }
 
   Info<Locale>? maybeLocaleFromMap(PackageAttribute installerLocale) {
-    Info<String>? localeInfo = maybeDetailFromMap(installerLocale);
+    Info<String>? localeInfo = maybeStringFromMap(installerLocale);
     if (localeInfo == null) {
       return null;
     }
