@@ -167,12 +167,12 @@ abstract class ExpanderCompartment extends Compartment {
               title: info.title(locale),
               body: info.copyable
                   ? copyableInfo(info: info, context: context)
-                  : textOrIconLink(
+                  : info.couldBeLink? textOrIconLink(
                       context: context,
                       text: info.value,
                       url: isLink(info.value)
                           ? Uri.tryParse(info.value)
-                          : null)),
+                          : null): Text(info.value)),
     ];
   }
 }

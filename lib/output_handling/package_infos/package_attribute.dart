@@ -3,15 +3,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../winget_commands.dart';
 
 enum PackageAttribute {
-  id(copyable: true, yamlKey: 'PackageIdentifier'),
+  id(copyable: true, couldBeLink: false, yamlKey: 'PackageIdentifier'),
   description(yamlKey: 'Description'),
   shortDescription(yamlKey: 'ShortDescription'),
   name(yamlKey: 'PackageName'),
   publisher(yamlKey: 'Publisher'),
   publisherUrl(yamlKey: 'PublisherUrl'),
   publisherSupportUrl(yamlKey: 'PublisherSupportUrl'),
-  version(yamlKey: 'PackageVersion'),
-  availableVersion,
+  version(couldBeLink: false,yamlKey: 'PackageVersion'),
+  availableVersion(couldBeLink: false),
   tags(yamlKey: 'Tags'),
   releaseNotes(yamlKey: 'ReleaseNotes'),
   releaseNotesUrl(yamlKey: 'ReleaseNotesUrl'),
@@ -49,7 +49,7 @@ enum PackageAttribute {
   fileExtensions(yamlKey: 'FileExtensions'),
   platform(yamlKey: 'Platform'),
   architecture(yamlKey: 'Architecture'),
-  minimumOSVersion(yamlKey: 'MinimumOSVersion'),
+  minimumOSVersion(couldBeLink: false, yamlKey: 'MinimumOSVersion'),
   installScope(yamlKey: 'Scope'),
   signatureSha256(copyable: true, yamlKey: 'SignatureSha256'),
   elevationRequirement(yamlKey: 'ElevationRequirement'),
@@ -57,11 +57,14 @@ enum PackageAttribute {
   appsAndFeaturesEntries(yamlKey: 'AppsAndFeaturesEntries'),
   installerSwitches(yamlKey: 'InstallerSwitches'),
   installModes(yamlKey: 'InstallModes'),
+  nestedInstallerType(yamlKey: 'NestedInstallerType'),
+  availableCommands(yamlKey: 'Commands'),
   ;
 
   final bool copyable;
   final String? yamlKey;
-  const PackageAttribute({this.copyable = false, this.yamlKey});
+  final bool couldBeLink;
+  const PackageAttribute({this.copyable = false, this.couldBeLink = true, this.yamlKey});
 
   String key(AppLocalizations local) {
     String key = local.infoKey(this.name);

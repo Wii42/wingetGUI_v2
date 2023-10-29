@@ -68,6 +68,11 @@ class InfoWithLink {
         text = null;
       }
     }
+    if(text != null){
+      if(isLink(text)){
+        text = null;
+      }
+    }
     Uri? url = (urlString != null)
         ? Uri.tryParse(checkUrlContainsHttp(urlString))
         : null;

@@ -28,7 +28,6 @@ class TitleWidget extends Compartment {
         children: buildCompartment(context),
       ),
     );
-
   }
 
   @override
@@ -130,22 +129,43 @@ class TitleWidget extends Compartment {
     );
   }
 
+  Widget favicon(double faviconSize) {
+    return FaviconWidget(infos: infos, faviconSize: faviconSize);
+  }
+
+  double faviconSize() => 70;
+}
+
+class FaviconWidget extends StatefulWidget {
+  final PackageInfosFull infos;
+  final double faviconSize;
+
+  const FaviconWidget(
+      {super.key, required this.infos, required this.faviconSize});
+
+  @override
+  State<FaviconWidget> createState() => _FaviconWidgetState();
+
   Uri? get faviconUrl =>
       infos.website?.value ?? infos.agreement?.publisher?.url;
+}
 
-  Widget favicon(double faviconSize) {
+class _FaviconWidgetState extends State<FaviconWidget> {
+  @override
+  Widget build(BuildContext context) {
     return AnimatedSize(
       duration: const Duration(milliseconds: 100),
-      child: infos.screenshots?.icon != null &&
-              infos.screenshots!.icon.toString().isNotEmpty
-          ? loadFavicon(faviconSize, infos.screenshots!.icon.toString())
+      child: widget.infos.screenshots?.icon != null &&
+              widget.infos.screenshots!.icon.toString().isNotEmpty
+          ? loadFavicon(
+              widget.faviconSize, widget.infos.screenshots!.icon.toString())
           : FutureBuilder<Favicon?>(
-              future: FaviconFinder.getBest(faviconUrl.toString()),
+              future: FaviconFinder.getBest(widget.faviconUrl.toString()),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   Favicon? favicon = snapshot.data;
                   if (favicon != null) {
-                    return loadFavicon(faviconSize, favicon.url);
+                    return loadFavicon(widget.faviconSize, favicon.url);
                   }
                 }
                 return const SizedBox();
@@ -153,8 +173,6 @@ class TitleWidget extends Compartment {
             ),
     );
   }
-
-  double faviconSize() => 70;
 
   Widget loadFavicon(double faviconSize, String url) {
     Widget image;

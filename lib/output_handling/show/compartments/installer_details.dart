@@ -13,6 +13,7 @@ import '../../package_infos/installer_objects/install_mode.dart';
 import '../../package_infos/installer_objects/install_scope.dart';
 import '../../package_infos/installer_objects/installer.dart';
 import '../../package_infos/installer_objects/installer_type.dart';
+import '../../package_infos/installer_objects/upgrade_behavior.dart';
 import '../../package_infos/package_attribute.dart';
 import 'expander_compartment.dart';
 
@@ -30,17 +31,19 @@ class InstallerDetails extends ExpanderCompartment {
         mainColumn: [
           ...detailsList([
             tryFromInstallerType(infos.type),
-            infos.storeProductID,
             tryFromLocaleInfo(infos.locale, context),
-            infos.sha256Hash,
             tryFromDateTimeInfo(infos.releaseDate, locale),
-            infos.upgradeBehavior,
-            tryFromListInfo(infos.fileExtensions),
-            tryFromListInfo(infos.platform, toString: (e) => e.title),
-            infos.minimumOSVersion,
             tryFromScopeInfo(infos.scope, context),
+            infos.minimumOSVersion,
+            tryFromListInfo(infos.fileExtensions),
+            tryFromListInfo(infos.availableCommands),
+            tryFromListInfo(infos.platform, toString: (e) => e.title),
+            tryFromInstallerType(infos.nestedInstallerType),
+            tryFromUpgradeBehaviorInfo(infos.upgradeBehavior, context),
             tryFromListModeInfo(infos.installModes, localization),
-            infos.installerSwitches,
+            infos.storeProductID,
+            infos.sha256Hash,
+            //infos.installerSwitches,
             infos.elevationRequirement,
             infos.productCode,
           ], context),
@@ -97,12 +100,19 @@ class InstallerDetails extends ExpanderCompartment {
     return Info<String>(title: info.title, value: info.value.title(locale));
   }
 
+  Info<String>? tryFromUpgradeBehaviorInfo(
+      Info<UpgradeBehavior>? info, BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    return tryFrom(info, (e) => e.title(locale));
+  }
+
   @override
   String compartmentTitle(AppLocalizations locale) {
     return PackageAttribute.installer.title(locale);
   }
 
-  List<Widget> _displayRest(Map<String, String>? otherInfos, BuildContext context) {
+  List<Widget> _displayRest(
+      Map<String, String>? otherInfos, BuildContext context) {
     if (otherInfos == null) {
       return [];
     }
@@ -123,7 +133,7 @@ class InstallerDetails extends ExpanderCompartment {
   Info<String>? tryFromDateTimeInfo(Info<DateTime>? info, [Locale? locale]) {
     if (info == null) return null;
 
-    String string = DateFormat.yMd(locale.toString()).format(info.value);
+    String string = DateFormat.yMMMMd(locale.toString()).format(info.value);
     return Info<String>(title: info.title, value: string);
   }
 
@@ -142,20 +152,20 @@ class InstallerDetails extends ExpanderCompartment {
             mainColumn: [
               ...detailsList([
                 tryFromArchitectureInfo(installer.architecture),
-                installer.sha256Hash,
-                installer.signatureSha256,
-                tryFromLocaleInfo(installer.locale, context),
-                tryFromListInfo(installer.platform, toString: (e) => e.title),
-                installer.minimumOSVersion,
                 tryFromInstallerType(installer.type),
+                tryFromLocaleInfo(installer.locale, context),
                 tryFromScopeInfo(installer.scope, context),
+                installer.minimumOSVersion,
+                tryFromListInfo(installer.availableCommands),
+                tryFromListInfo(installer.platform, toString: (e) => e.title),
+                tryFromInstallerType(installer.nestedInstallerType),
+                tryFromUpgradeBehaviorInfo(installer.upgradeBehavior, context),
+                tryFromListModeInfo(installer.modes, locale),
                 installer.elevationRequirement,
                 installer.productCode,
-                //installer.appsAndFeaturesEntries,
-                installer.switches,
-                tryFromListModeInfo(installer.modes, locale),
+                installer.sha256Hash,
+                installer.signatureSha256,
               ], context),
-              //if (installer.other.isNotEmpty) Text(installer.other.toString()),
               ..._displayRest(installer.other, context)
             ],
             buttonRow: buttonRow([installer.url], context)),

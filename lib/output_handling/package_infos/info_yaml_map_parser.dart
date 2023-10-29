@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/computer_architecture.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_scope.dart';
 import 'package:yaml/yaml.dart';
@@ -11,6 +10,7 @@ import 'info.dart';
 import 'info_with_link.dart';
 import 'installer_objects/install_mode.dart';
 import 'installer_objects/installer_type.dart';
+import 'installer_objects/upgrade_behavior.dart';
 import 'installer_objects/windows_platform.dart';
 import 'package_attribute.dart';
 
@@ -24,7 +24,7 @@ class InfoYamlMapParser {
     map.remove(attribute.yamlKey!);
     return (detail != null)
         ? Info<String>(
-            title: attribute.title, value: detail, copyable: attribute.copyable)
+            title: attribute.title, value: detail, copyable: attribute.copyable, couldBeLink: attribute.couldBeLink)
         : null;
   }
 
@@ -167,4 +167,10 @@ class InfoYamlMapParser {
         title: modeInfo.title,
         value: InstallMode.maybeParse(modeInfo.value)!);
   }
+
+  Info<UpgradeBehavior>? maybeUpgradeBehaviorFromMap(PackageAttribute upgradeBehavior) {
+    return maybeValueFromMap(upgradeBehavior, UpgradeBehavior.parse);
+  }
 }
+
+

@@ -20,7 +20,7 @@ class InfoMapParser {
     map.remove(key);
     return (detail != null)
         ? Info<String>(
-            title: attribute.title, value: detail, copyable: attribute.copyable)
+            title: attribute.title, value: detail, copyable: attribute.copyable, couldBeLink: attribute.couldBeLink)
         : null;
   }
 

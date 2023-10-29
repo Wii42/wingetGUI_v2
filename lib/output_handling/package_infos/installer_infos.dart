@@ -9,6 +9,7 @@ import 'info_map_parser.dart';
 import 'info_yaml_map_parser.dart';
 import 'installer_objects/installer.dart';
 import 'installer_objects/installer_type.dart';
+import 'installer_objects/upgrade_behavior.dart';
 import 'installer_objects/windows_platform.dart';
 import 'package_attribute.dart';
 
@@ -19,7 +20,7 @@ class InstallerInfos {
   final Info<Uri>? url;
   final Info<DateTime>? releaseDate;
   final Info<List<Installer>>? installers;
-  final Info<String>? upgradeBehavior;
+  final Info<UpgradeBehavior>? upgradeBehavior;
   final Info<List<String>>? fileExtensions;
   final Info<Locale>? locale;
   final Info<List<WindowsPlatform>>? platform;
@@ -30,6 +31,8 @@ class InstallerInfos {
   final Info<String>? elevationRequirement;
   final Info<String>? productCode;
   final Info<String>? appsAndFeaturesEntries;
+  final Info<InstallerType>? nestedInstallerType;
+  final Info<List<String>>? availableCommands;
 
   final Map<String, String>? otherInfos;
 
@@ -52,7 +55,9 @@ class InstallerInfos {
     this.elevationRequirement,
     this.productCode,
     this.appsAndFeaturesEntries,
+    this.nestedInstallerType,
     this.otherInfos,
+    this.availableCommands,
   });
 
   static maybeFromMap(
@@ -89,8 +94,8 @@ class InstallerInfos {
             PackageAttribute.installers, parser: (map) {
           return Installer.fromYaml(map);
         }),
-        upgradeBehavior:
-            parser.maybeStringFromMap(PackageAttribute.upgradeBehavior),
+        upgradeBehavior: parser
+            .maybeUpgradeBehaviorFromMap(PackageAttribute.upgradeBehavior),
         fileExtensions:
             parser.maybeStringListFromMap(PackageAttribute.fileExtensions),
         platform: parser.maybePlatformFromMap(PackageAttribute.platform),
@@ -99,12 +104,17 @@ class InstallerInfos {
         scope: parser.maybeScopeFromMap(PackageAttribute.installScope),
         installerSwitches:
             parser.maybeStringFromMap(PackageAttribute.installerSwitches),
-        installModes: parser.maybeInstallModesFromMap(PackageAttribute.installModes),
+        installModes:
+            parser.maybeInstallModesFromMap(PackageAttribute.installModes),
         elevationRequirement:
             parser.maybeStringFromMap(PackageAttribute.elevationRequirement),
         productCode: parser.maybeStringFromMap(PackageAttribute.productCode),
-        appsAndFeaturesEntries: parser.maybeStringFromMap(
-            PackageAttribute.appsAndFeaturesEntries),
+        appsAndFeaturesEntries:
+            parser.maybeStringFromMap(PackageAttribute.appsAndFeaturesEntries),
+        nestedInstallerType: parser
+            .maybeInstallerTypeFromMap(PackageAttribute.nestedInstallerType),
+        availableCommands:
+            parser.maybeStringListFromMap(PackageAttribute.availableCommands),
         otherInfos: installerDetails.map<String, String>(
             (key, value) => MapEntry(key.toString(), value.toString())));
   }
