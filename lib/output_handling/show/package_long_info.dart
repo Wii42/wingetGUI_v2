@@ -30,14 +30,16 @@ class PackageLongInfo extends StatelessWidget {
           ScreenshotsWidget(infos.screenshots!),
         if (infos.hasDescription())
           ExpandableTextCompartment(
-            text: infos.additionalDescription ??
+            text: infos.additionalDescription ?? infos.description??
                 infos.shortDescription!,
-            title: (infos.description != null)? infos.shortDescription : null,
+            title: (infos.description != null && infos.additionalDescription != null)? infos.shortDescription : null,
+            titleIcon: FluentIcons.text_document,
           ),
         if (infos.hasReleaseNotes())
           ExpandableTextCompartment(
             text: infos.releaseNotes!.toInfoString(),
             buttonInfos: [infos.releaseNotes?.tryToInfoUri()],
+            titleIcon: FluentIcons.product_release,
           ),
         DetailsWidget(infos: infos),
         if (infos.agreement != null) AgreementWidget(infos: infos.agreement!),

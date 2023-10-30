@@ -64,10 +64,14 @@ class PackageInfosFull extends PackageInfos {
     if (details != null) {
       InfoMapParser parser = InfoMapParser(map: details, locale: locale);
 
+
+
+      Info<String>? description = parser.maybeStringFromMap(PackageAttribute.description);
       PackageInfosFull infos = PackageInfosFull(
         name: parser.maybeStringFromMap(PackageAttribute.name),
         id: parser.maybeStringFromMap(PackageAttribute.id),
-        description: parser.maybeStringFromMap(PackageAttribute.description),
+        description: description,
+        shortDescription:parser.maybeFirstLineStringFromInfo(description, destination: PackageAttribute.shortDescription),
         supportUrl:
             parser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
         version: parser.maybeStringFromMap(PackageAttribute.version),
@@ -167,10 +171,22 @@ class PackageInfosFull extends PackageInfos {
       return null;
     }
     if (!description!.value.startsWith(shortDescription!.value)) {
-      return description;
+      return Info<String>(
+          title: description!.title,
+          value: '\n${description!.value}');
     }
+    if(description!.value == shortDescription!.value){
+      return null;
+    }
+
+    String additionalDescription = description!.value.substring(shortDescription!.value.length);
+
+    if(additionalDescription.trim() == '.'){
+      return null;
+    }
+
     return Info<String>(
         title: description!.title,
-        value: description!.value.substring(shortDescription!.value.length));
+        value: additionalDescription);
   }
 }

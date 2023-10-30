@@ -10,11 +10,15 @@ class ExpandableTextCompartment extends ExpanderCompartment {
   final Info<String>? title;
   final List<Info<Uri>?>? buttonInfos;
 
+  @override
+  final IconData titleIcon;
+
   const ExpandableTextCompartment({
     super.key,
     required this.text,
     this.title,
     this.buttonInfos,
+    required this.titleIcon,
   });
 
   @override
@@ -26,7 +30,7 @@ class ExpandableTextCompartment extends ExpanderCompartment {
           LinkText(
             line: text.value,
             title: title?.value,
-            maxLines: 5,
+            maxLines: 10,
           )
         ]),
         buttonRow:

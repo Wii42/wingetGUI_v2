@@ -20,6 +20,9 @@ import 'expander_compartment.dart';
 class InstallerDetails extends ExpanderCompartment {
   final InstallerInfos infos;
 
+  @override
+  final IconData titleIcon = FluentIcons.install_to_drive;
+
   const InstallerDetails({super.key, required this.infos});
 
   @override

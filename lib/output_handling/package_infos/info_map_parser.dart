@@ -20,8 +20,28 @@ class InfoMapParser {
     map.remove(key);
     return (detail != null)
         ? Info<String>(
-            title: attribute.title, value: detail, copyable: attribute.copyable, couldBeLink: attribute.couldBeLink)
+            title: attribute.title,
+            value: detail,
+            copyable: attribute.copyable,
+            couldBeLink: attribute.couldBeLink)
         : null;
+  }
+
+  Info<String>? maybeFirstLineStringFromInfo(Info<String>? source,
+      {required PackageAttribute destination}) {
+    if (source == null) {
+      return null;
+    }
+
+    String firstLine = source.value.split('\n').first;
+    if(firstLine.contains('. ')) {
+      firstLine = '${firstLine.split('. ').first}.';
+    }
+    return Info<String>(
+        title: destination.title,
+        value: firstLine,
+        copyable: destination.copyable,
+        couldBeLink: destination.couldBeLink);
   }
 
   Info<Uri>? maybeLinkFromMap(PackageAttribute infoKey) {

@@ -9,6 +9,9 @@ import 'expander_compartment.dart';
 class AgreementWidget extends ExpanderCompartment {
   final AgreementInfos infos;
 
+  @override
+  final IconData titleIcon = FluentIcons.entitlement_policy;
+
   const AgreementWidget({super.key, required this.infos});
 
   @override

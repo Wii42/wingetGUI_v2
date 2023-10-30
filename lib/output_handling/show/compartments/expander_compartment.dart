@@ -15,6 +15,8 @@ abstract class ExpanderCompartment extends Compartment {
 
   String compartmentTitle(AppLocalizations locale);
 
+  IconData get titleIcon;
+
   bool get initiallyExpanded => true;
 
   EdgeInsetsGeometry get bodyPadding => const EdgeInsets.all(16);
@@ -23,8 +25,22 @@ abstract class ExpanderCompartment extends Compartment {
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Expander(
-      header: Text(compartmentTitle(locale),
-          style: compartmentTitleStyle(FluentTheme.of(context).typography)),
+      header: Row(
+        children: [
+          Icon(
+            titleIcon,
+            size: 16,
+            color: FluentTheme.of(context)
+                .accentColor
+                .defaultBrushFor(FluentTheme.of(context).brightness),
+          ),
+          Expanded(
+            child: Text(compartmentTitle(locale),
+                style:
+                    compartmentTitleStyle(FluentTheme.of(context).typography)),
+          ),
+        ].withSpaceBetween(width: 10),
+      ),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: buildCompartment(context),
@@ -79,13 +95,16 @@ abstract class ExpanderCompartment extends Compartment {
       required Uri? url}) {
     if (url != null) {
       return RichText(
-          text: TextSpan(text: text ?? url.toString(), children: [
-        WidgetSpan(
-            child: ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 19),
-                child: IconLinkButton(url: url)),
-            alignment: PlaceholderAlignment.middle)
-      ]));
+          text: TextSpan(
+              text: text ?? url.toString(),
+              style: FluentTheme.of(context).typography.body,
+              children: [
+            WidgetSpan(
+                child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 19),
+                    child: IconLinkButton(url: url)),
+                alignment: PlaceholderAlignment.middle)
+          ]));
     }
     return textWithLinks(text: text!, context: context);
   }
@@ -125,41 +144,64 @@ abstract class ExpanderCompartment extends Compartment {
   Widget copyableInfo(
       {required Info<String> info, required BuildContext context}) {
     return RichText(
-        text: TextSpan(text: info.value, children: [
-      WidgetSpan(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 19),
-            child: IconButton(
-              icon: const Icon(FluentIcons.copy),
-              onPressed: () {
-                Clipboard.setData(ClipboardData(text: info.value));
-              },
-              style: ButtonStyle(
-                padding: ButtonState.all(
-                    const EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
+        text: TextSpan(
+            text: info.value,
+            style: FluentTheme.of(context).typography.body,
+            children: [
+          WidgetSpan(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 19),
+                child: IconButton(
+                  icon: const Icon(FluentIcons.copy),
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: info.value));
+                  },
+                  style: ButtonStyle(
+                    padding: ButtonState.all(const EdgeInsets.symmetric(
+                        vertical: 0, horizontal: 10)),
+                  ),
+                ),
               ),
-            ),
-          ),
-          alignment: PlaceholderAlignment.middle)
-    ]));
+              alignment: PlaceholderAlignment.middle)
+        ]));
   }
 
   Info<String>? tryFromLocaleInfo(Info<Locale>? info, BuildContext context) {
     LocaleNames localeNames = LocaleNames.of(context)!;
-    return tryFrom(info, (locale) => localeNames.nameOf(locale.toString()) ??
-        locale.toLanguageTag());
+    return tryFrom(
+        info,
+        (locale) =>
+            localeNames.nameOf(locale.toString()) ?? locale.toLanguageTag());
   }
 
-  Info<String>? tryFrom<T extends Object>(Info<T>? info, String Function(T) toString) {
+  Info<String>? tryFrom<T extends Object>(
+      Info<T>? info, String Function(T) toString) {
     if (info == null) {
       return null;
     }
-    return Info<String>(
-        title: info.title, value: toString(info.value));
+    return Info<String>(title: info.title, value: toString(info.value));
   }
 
   List<Widget> detailsList(List<Info<String>?> details, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
+    //return [
+    //  table(details
+    //      .where((e) => e != null)
+    //      .map<(String, Widget)>((info) => (
+    //            info!.title(locale),
+    //            info.copyable
+    //                ? copyableInfo(info: info, context: context)
+    //                : info.couldBeLink
+    //                    ? textOrIconLink(
+    //                        context: context,
+    //                        text: info.value,
+    //                        url: isLink(info.value)
+    //                            ? Uri.tryParse(info.value)
+    //                            : null)
+    //                    : Text(info.value)
+    //          ))
+    //      .toList())
+    //];
     return [
       for (Info<String>? info in details)
         if (info != null)
@@ -167,12 +209,42 @@ abstract class ExpanderCompartment extends Compartment {
               title: info.title(locale),
               body: info.copyable
                   ? copyableInfo(info: info, context: context)
-                  : info.couldBeLink? textOrIconLink(
-                      context: context,
-                      text: info.value,
-                      url: isLink(info.value)
-                          ? Uri.tryParse(info.value)
-                          : null): Text(info.value)),
+                  : info.couldBeLink
+                      ? textOrIconLink(
+                          context: context,
+                          text: info.value,
+                          url: isLink(info.value)
+                              ? Uri.tryParse(info.value)
+                              : null)
+                      : Text(info.value)),
     ];
+  }
+
+  Widget table(List<(String, Widget)> list) {
+    return Table(
+      columnWidths: const {0: FixedColumnWidth(170)},
+      children: [
+        for (var (title, widget) in list)
+          TableRow(
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              widget
+            ],
+          ),
+      ],
+    );
+  }
+
+  Widget displayDetails(List<(String, Widget)> list) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (var (title, widget) in list)
+          wrapInWrap(title: title, body: widget),
+      ].withSpaceBetween(height: 10),
+    );
   }
 }

@@ -10,6 +10,9 @@ class ScreenshotsWidget extends ExpanderCompartment {
   const ScreenshotsWidget(this.screenshots, {super.key});
 
   @override
+  final IconData titleIcon = FluentIcons.desktop_screenshot;
+
+  @override
   List<Widget> buildCompartment(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
 

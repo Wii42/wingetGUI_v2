@@ -10,6 +10,9 @@ import 'expander_compartment.dart';
 class DetailsWidget extends ExpanderCompartment {
   final PackageInfosFull infos;
 
+  @override
+  final IconData titleIcon = FluentIcons.info;
+
   const DetailsWidget({super.key, required this.infos});
 
   @override
