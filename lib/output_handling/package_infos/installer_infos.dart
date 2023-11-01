@@ -7,6 +7,7 @@ import 'package:winget_gui/output_handling/package_infos/installer_objects/insta
 import 'info.dart';
 import 'info_map_parser.dart';
 import 'info_yaml_map_parser.dart';
+import 'installer_objects/dependencies.dart';
 import 'installer_objects/installer.dart';
 import 'installer_objects/installer_type.dart';
 import 'installer_objects/upgrade_behavior.dart';
@@ -33,6 +34,7 @@ class InstallerInfos {
   final Info<String>? appsAndFeaturesEntries;
   final Info<InstallerType>? nestedInstallerType;
   final Info<List<String>>? availableCommands;
+  final Info<Dependencies>? dependencies;
 
   final Map<String, String>? otherInfos;
 
@@ -56,8 +58,9 @@ class InstallerInfos {
     this.productCode,
     this.appsAndFeaturesEntries,
     this.nestedInstallerType,
-    this.otherInfos,
     this.availableCommands,
+    this.dependencies,
+    this.otherInfos,
   });
 
   static maybeFromMap(
@@ -115,6 +118,7 @@ class InstallerInfos {
             .maybeInstallerTypeFromMap(PackageAttribute.nestedInstallerType),
         availableCommands:
             parser.maybeStringListFromMap(PackageAttribute.availableCommands),
+        dependencies: parser.maybeDependenciesFromMap(PackageAttribute.dependencies),
         otherInfos: installerDetails.map<String, String>(
             (key, value) => MapEntry(key.toString(), value.toString())));
   }

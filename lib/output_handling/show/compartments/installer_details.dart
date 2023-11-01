@@ -49,6 +49,26 @@ class InstallerDetails extends ExpanderCompartment {
             //infos.installerSwitches,
             infos.elevationRequirement,
             infos.productCode,
+            tryFrom(infos.dependencies, (dependencies) {
+              List<String> stringList = [];
+              if (dependencies.windowsFeatures != null) {
+                stringList.add(
+                    'Windows Features: ${dependencies.windowsFeatures!.join(', ')}');
+              }
+              if (dependencies.windowsLibraries != null) {
+                stringList.add(
+                    'Windows Libraries: ${dependencies.windowsLibraries!.join(', ')}');
+              }
+              if (dependencies.packageDependencies != null) {
+                stringList.add(
+                    'Package Dependencies: ${dependencies.packageDependencies!.map<String>((e) => '${e.packageID}${e.minimumVersion != null?' >=${e.minimumVersion}':''}').join(', ')}');
+              }
+              if (dependencies.externalDependencies != null) {
+                stringList.add(
+                    'External Dependencies: ${dependencies.externalDependencies!.join(', ')}');
+              }
+              return stringList.join('\n');
+            }),
           ], context),
           ..._displayRest(infos.otherInfos, context),
         ],

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:winget_gui/output_handling/package_infos/installer_objects/computer_architecture.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/dependencies.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_scope.dart';
 import 'package:yaml/yaml.dart';
 
@@ -77,6 +78,17 @@ class InfoYamlMapParser {
     map.remove(attribute.yamlKey!);
     return Info<List<T>>(
         title: attribute.title, value: node.value.map<T>(parser).toList());
+  }
+
+  Info<T>? maybeFromMap<T extends Object>(PackageAttribute attribute,
+      {required T Function(dynamic) parser}) {
+    Object? node = map[attribute.yamlKey!];
+    if (node == null) {
+      return null;
+    }
+    map.remove(attribute.yamlKey!);
+    return Info<T>(
+        title: attribute.title, value: parser(node));
   }
 
   Info<List<String>>? maybeStringListFromMap(PackageAttribute attribute) {
@@ -171,6 +183,10 @@ class InfoYamlMapParser {
   Info<UpgradeBehavior>? maybeUpgradeBehaviorFromMap(PackageAttribute upgradeBehavior) {
     return maybeValueFromMap(upgradeBehavior, UpgradeBehavior.parse);
   }
+
+ Info<Dependencies>? maybeDependenciesFromMap(PackageAttribute dependencies) {
+    return maybeFromMap<Dependencies>(dependencies, parser: (e) => Dependencies.fromYamlMap(e));
+ }
 }
 
 
