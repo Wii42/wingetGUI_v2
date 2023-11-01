@@ -24,6 +24,7 @@ class WebImage extends StatelessWidget {
         url,
         width: imageWidth,
         height: imageHeight,
+        placeholderBuilder: imageConfig.loadingBuilder,
       );
     } else {
       return Image.network(
@@ -33,6 +34,7 @@ class WebImage extends StatelessWidget {
         filterQuality: imageConfig.filterQuality,
         isAntiAlias: imageConfig.isAntiAlias,
         errorBuilder: imageConfig.errorBuilder,
+        frameBuilder: imageConfig.loadingBuilder != null?(context, _, __, ___) => imageConfig.loadingBuilder!(context) :null,
       );
     }
   }
@@ -46,10 +48,12 @@ class ImageConfig {
     Object error,
     StackTrace? stackTrace,
   )? errorBuilder;
+  final Widget Function(BuildContext)? loadingBuilder;
 
   const ImageConfig({
     this.filterQuality = FilterQuality.high,
     this.isAntiAlias = true,
     this.errorBuilder,
+    this.loadingBuilder,
   });
 }

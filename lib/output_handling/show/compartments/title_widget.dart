@@ -153,28 +153,53 @@ class FaviconWidget extends StatefulWidget {
 class _FaviconWidgetState extends State<FaviconWidget> {
   @override
   Widget build(BuildContext context) {
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 100),
-      child: widget.infos.screenshots?.icon != null &&
-              widget.infos.screenshots!.icon.toString().isNotEmpty
-          ? loadFavicon(
-              widget.faviconSize, widget.infos.screenshots!.icon.toString())
-          : FutureBuilder<Favicon?>(
-              future: FaviconFinder.getBest(widget.faviconUrl.toString()),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  Favicon? favicon = snapshot.data;
-                  if (favicon != null) {
-                    return loadFavicon(widget.faviconSize, favicon.url);
-                  }
-                }
-                return const SizedBox();
-              },
-            ),
+    return Padding(
+      padding: const EdgeInsets.only(right: 25),
+      child: DecoratedCard(
+        padding: 10,
+        child: SizedBox(
+          width: widget.faviconSize,
+          height: widget.faviconSize,
+          child: Center(child: favicon()),
+        ),
+      ),
     );
   }
 
-  Widget loadFavicon(double faviconSize, String url) {
+  Widget favicon() {
+    if (widget.infos.screenshots?.icon != null &&
+        (widget.infos.screenshots!.icon.toString().isNotEmpty)) {
+      return loadFavicon(widget.faviconSize,
+          widget.infos.screenshots!.icon.toString(), () => findFavicon());
+    }
+    return findFavicon();
+  }
+
+  Widget findFavicon() {
+    return FutureBuilder<Favicon?>(
+      future: FaviconFinder.getBest(widget.faviconUrl.toString()),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          Favicon? favicon = snapshot.data;
+          if (favicon != null) {
+            return loadFavicon(
+                widget.faviconSize, favicon.url, () => defaultFavicon());
+          }
+        }
+        return defaultFavicon();
+      },
+    );
+  }
+
+  Icon defaultFavicon() {
+    return Icon(
+      FluentIcons.app_icon_default,
+      size: widget.faviconSize * 0.8,
+    );
+  }
+
+  Widget loadFavicon(
+      double faviconSize, String url, Widget Function() onError) {
     Widget image;
 
     image = WebImage(
@@ -185,15 +210,14 @@ class _FaviconWidgetState extends State<FaviconWidget> {
         filterQuality: FilterQuality.high,
         isAntiAlias: true,
         errorBuilder: (context, error, stackTrace) {
-          return SizedBox(
-            width: faviconSize,
-            height: faviconSize,
-            child: const Icon(FluentIcons.error),
-          );
+          return onError();
         },
+        //loadingBuilder: (context) {
+        //  return defaultFavicon();
+        //},
       ),
     );
-
+    return image;
     return FadeIn(
       duration: const Duration(milliseconds: 500),
       // The green box must be a child of the AnimatedOpacity widget.
