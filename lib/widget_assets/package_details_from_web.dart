@@ -49,11 +49,21 @@ class PackageDetailsFromWeb extends StatelessWidget {
     //if (!package.hasSpecificVersion() && !package.hasAvailableVersion()) {
     // return putInfo('package has no specific version');
     //}
-    Locale? locale = AppLocale.of(context).guiLocale;
-    return _buildFromWeb(locale);
+    return _buildFromWeb(context);
   }
 
-  Widget _buildFromWeb(Locale? locale) {
+  Widget putInfo(String title, {String? content, bool isLong = false}) =>
+      Center(
+        child: InfoBar(
+            title: Text(title),
+            content: content != null ? Text(content) : null,
+            severity: InfoBarSeverity.error,
+            isLong: isLong),
+      );
+
+  Widget _buildFromWeb(BuildContext context) {
+    Locale? locale = AppLocale.of(context).guiLocale;
+    AppLocalizations localization = AppLocalizations.of(context)!;
     return FutureBuilder<PackageInfosFull>(
       future: extractOnlineFullInfos(locale),
       builder:
@@ -64,7 +74,15 @@ class PackageDetailsFromWeb extends StatelessWidget {
           );
         }
         if (snapshot.hasError) {
-          return Text('${snapshot.error}\n${snapshot.stackTrace}');
+          Object? error = snapshot.error;
+          if (error.toString().startsWith('Failed host lookup: ')) {
+            return Center(
+              child: putInfo(localization.cantLoadDetails,
+                  content: '${localization.reason}: ${localization.noInternetConnection}', isLong: true),
+            );
+          }
+
+          return Text('${error.runtimeType}: $error\n${snapshot.stackTrace}');
         }
         return const Center(
             child: ProgressRing(
@@ -91,9 +109,9 @@ class PackageDetailsFromWeb extends StatelessWidget {
       files = await manifestApi.getFiles(
           onError: () => GithubApi.wingetManifest(packageID: package.id!.value)
               .getFiles());
-    }else{
-      GithubApi manifestApi = GithubApi.wingetManifest(
-          packageID: package.id!.value);
+    } else {
+      GithubApi manifestApi =
+          GithubApi.wingetManifest(packageID: package.id!.value);
 
       files = await manifestApi.getFiles();
     }
