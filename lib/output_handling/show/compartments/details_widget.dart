@@ -42,6 +42,10 @@ class DetailsWidget extends ExpanderCompartment {
                 ],
               ),
             ),
+          ...detailsList([
+            tryFromListInfo(infos.installer?.fileExtensions),
+            tryFromListInfo(infos.installer?.availableCommands),
+          ], context),
           ..._displayRest(context)
         ],
         buttonRow: buttonRow([

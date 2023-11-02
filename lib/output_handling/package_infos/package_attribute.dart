@@ -46,7 +46,7 @@ enum PackageAttribute {
   manifest,
   installers(yamlKey: 'Installers'),
   upgradeBehavior(yamlKey: 'UpgradeBehavior'),
-  fileExtensions(yamlKey: 'FileExtensions'),
+  fileExtensions(yamlKey: 'FileExtensions', couldBeLink: false),
   platform(yamlKey: 'Platform'),
   architecture(yamlKey: 'Architecture'),
   minimumOSVersion(couldBeLink: false, yamlKey: 'MinimumOSVersion'),
@@ -58,7 +58,7 @@ enum PackageAttribute {
   installerSwitches(yamlKey: 'InstallerSwitches'),
   installModes(yamlKey: 'InstallModes'),
   nestedInstallerType(yamlKey: 'NestedInstallerType'),
-  availableCommands(yamlKey: 'Commands'),
+  availableCommands(yamlKey: 'Commands', couldBeLink: false),
   dependencies(yamlKey: 'Dependencies'),
   ;
 

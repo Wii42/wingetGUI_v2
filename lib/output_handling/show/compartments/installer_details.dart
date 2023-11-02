@@ -38,8 +38,6 @@ class InstallerDetails extends ExpanderCompartment {
             tryFromDateTimeInfo(infos.releaseDate, locale),
             tryFromScopeInfo(infos.scope, context),
             infos.minimumOSVersion,
-            tryFromListInfo(infos.fileExtensions),
-            tryFromListInfo(infos.availableCommands),
             tryFromListInfo(infos.platform, toString: (e) => e.title),
             tryFromInstallerType(infos.nestedInstallerType),
             tryFromUpgradeBehaviorInfo(infos.upgradeBehavior, context),
@@ -95,32 +93,21 @@ class InstallerDetails extends ExpanderCompartment {
     );
   }
 
-  Info<String>? tryFromListInfo<T>(Info<List<T>>? info,
-      {String Function(T)? toString}) {
-    if (info == null) return null;
-    List<dynamic> list = info.value;
-    if (toString != null) {
-      list = info.value.map((e) => toString(e)).toList();
-    }
-    String string = list.join(', ');
-    return Info<String>(title: info.title, value: string);
-  }
-
   Info<String>? tryFromInstallerType(Info<InstallerType>? info) {
     if (info == null) return null;
-    return Info<String>(title: info.title, value: info.value.fullTitle);
+    return Info<String>(title: info.title, value: info.value.fullTitle, couldBeLink: info.couldBeLink);
   }
 
   Info<String>? tryFromArchitectureInfo(Info<ComputerArchitecture>? info) {
     if (info == null) return null;
-    return Info<String>(title: info.title, value: info.value.title);
+    return Info<String>(title: info.title, value: info.value.title, couldBeLink: info.couldBeLink);
   }
 
   Info<String>? tryFromScopeInfo(
       Info<InstallScope>? info, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     if (info == null) return null;
-    return Info<String>(title: info.title, value: info.value.title(locale));
+    return Info<String>(title: info.title, value: info.value.title(locale), couldBeLink: info.couldBeLink);
   }
 
   Info<String>? tryFromUpgradeBehaviorInfo(
