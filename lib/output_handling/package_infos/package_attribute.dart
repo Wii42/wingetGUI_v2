@@ -60,6 +60,7 @@ enum PackageAttribute {
   nestedInstallerType(yamlKey: 'NestedInstallerType'),
   availableCommands(yamlKey: 'Commands', couldBeLink: false),
   dependencies(yamlKey: 'Dependencies'),
+  protocols(yamlKey: 'Protocols', couldBeLink: false),
   ;
 
   final bool copyable;

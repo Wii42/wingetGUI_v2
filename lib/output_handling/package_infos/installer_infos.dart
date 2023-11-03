@@ -35,6 +35,7 @@ class InstallerInfos {
   final Info<InstallerType>? nestedInstallerType;
   final Info<List<String>>? availableCommands;
   final Info<Dependencies>? dependencies;
+  final Info<List<String>>? protocols;
 
   final Map<String, String>? otherInfos;
 
@@ -59,7 +60,9 @@ class InstallerInfos {
     this.appsAndFeaturesEntries,
     this.nestedInstallerType,
     this.availableCommands,
+    this.protocols,
     this.dependencies,
+
     this.otherInfos,
   });
 
@@ -119,6 +122,7 @@ class InstallerInfos {
         availableCommands:
             parser.maybeStringListFromMap(PackageAttribute.availableCommands),
         dependencies: parser.maybeDependenciesFromMap(PackageAttribute.dependencies),
+        protocols: parser.maybeStringListFromMap(PackageAttribute.protocols),
         otherInfos: installerDetails.map<String, String>(
             (key, value) => MapEntry(key.toString(), value.toString())));
   }

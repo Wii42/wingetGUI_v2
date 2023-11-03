@@ -45,6 +45,7 @@ class DetailsWidget extends ExpanderCompartment {
           ...detailsList([
             tryFromListInfo(infos.installer?.fileExtensions),
             tryFromListInfo(infos.installer?.availableCommands),
+            tryFromListInfo(infos.installer?.protocols),
           ], context),
           ..._displayRest(context)
         ],
