@@ -17,8 +17,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-
-
   fluent_ui: ^4.7.6
   system_theme: ^2.3.1
   window_manager: ^0.3.7
@@ -28,38 +26,24 @@ dependencies:
   string_validator: ^1.0.2
   intl: ^0.18.1
   open_store: ^0.5.0
-  expandable: ^5.0.1
-  linkable: ^3.0.2
   favicon: ^1.1.1
-  flutter_svg: ^2.0.8
-  flutter_fadein: ^2.0.0
+  flutter_svg: ^2.0.9
   app_theme_mode: ^1.0.0
   shared_preferences: ^2.2.2
-  ribs_core: ^1.0.0-dev.4
-  stream_transform: ^2.1.0
   ribs_json: ^1.0.0-dev.5
   http: ^0.13.5
   gallery_image_viewer: ^1.2.0
   yaml: ^3.1.2
-  pub_semver: ^2.1.4
   flutter_localized_locales: ^2.0.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: ^5.4.2
-
-
-
-  flutter_lints: ^3.0.0
-  msix: ^3.16.4
-
-
+  dependency_validator: ^3.2.3
+  flutter_lints: ^3.0.1
 
 flutter:
   generate: true
-
-
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
