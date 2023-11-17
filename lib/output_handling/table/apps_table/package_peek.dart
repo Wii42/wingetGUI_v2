@@ -1,12 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
+import 'package:winget_gui/widget_assets/favicon_widget.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 
 import '../../../routes.dart';
-import '../../../widget_assets/decorated_card.dart';
-import '../../../widget_assets/web_image.dart';
 import '../../package_infos/package_infos_peek.dart';
 
 class PackagePeek extends StatelessWidget {
@@ -22,7 +20,6 @@ class PackagePeek extends StatelessWidget {
     return Button(
       onPressed: (isClickable())
           ? () {
-              //SnackBar.of(context)!.showSnackBar(const Text('Hi'), duration: const Duration(seconds: 1));
               if (infos.id != null) {
                 pushPackageDetails(context);
               }
@@ -167,43 +164,8 @@ class PackagePeek extends StatelessWidget {
   String? id() => infos.id?.value;
 
   Widget favicon(double faviconSize) {
-    return AnimatedSize(
-        duration: const Duration(milliseconds: 100),
-        child: loadFavicon(faviconSize, infos.screenshots!.icon.toString()));
+    return FaviconWidget(infos: infos, faviconSize: faviconSize);
   }
 
   double faviconSize() => 40;
-
-  Widget loadFavicon(double faviconSize, String url) {
-    Widget image;
-
-    image = WebImage(
-      url: url,
-      imageHeight: faviconSize,
-      imageWidth: faviconSize,
-      imageConfig: ImageConfig(
-        filterQuality: FilterQuality.high,
-        isAntiAlias: true,
-        errorBuilder: (context, error, stackTrace) {
-          return SizedBox(
-            width: faviconSize,
-            height: faviconSize,
-            child: const Icon(FluentIcons.error),
-          );
-        },
-      ),
-    );
-
-    return FadeIn(
-      duration: const Duration(milliseconds: 500),
-      // The green box must be a child of the AnimatedOpacity widget.
-      child: Padding(
-        padding: const EdgeInsets.only(right: 25),
-        child: DecoratedCard(
-          padding: 10,
-          child: image,
-        ),
-      ),
-    );
-  }
 }

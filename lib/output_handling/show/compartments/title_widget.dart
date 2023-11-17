@@ -1,6 +1,4 @@
-import 'package:favicon/favicon.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_fadein/flutter_fadein.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
@@ -8,9 +6,9 @@ import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:winget_gui/widget_assets/store_button.dart';
-import 'package:winget_gui/widget_assets/web_image.dart';
 
 import '../../../widget_assets/decorated_card.dart';
+import '../../../widget_assets/favicon_widget.dart';
 import '../../../widget_assets/link_button.dart';
 import '../../package_infos/package_attribute.dart';
 
@@ -134,100 +132,4 @@ class TitleWidget extends Compartment {
   }
 
   double faviconSize() => 70;
-}
-
-class FaviconWidget extends StatefulWidget {
-  final PackageInfosFull infos;
-  final double faviconSize;
-
-  const FaviconWidget(
-      {super.key, required this.infos, required this.faviconSize});
-
-  @override
-  State<FaviconWidget> createState() => _FaviconWidgetState();
-
-  Uri? get faviconUrl =>
-      infos.website?.value ?? infos.agreement?.publisher?.url;
-}
-
-class _FaviconWidgetState extends State<FaviconWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 25),
-      child: DecoratedCard(
-        padding: 10,
-        child: SizedBox(
-          width: widget.faviconSize,
-          height: widget.faviconSize,
-          child: Center(child: favicon()),
-        ),
-      ),
-    );
-  }
-
-  Widget favicon() {
-    if (widget.infos.screenshots?.icon != null &&
-        (widget.infos.screenshots!.icon.toString().isNotEmpty)) {
-      return loadFavicon(widget.faviconSize,
-          widget.infos.screenshots!.icon.toString(), () => findFavicon());
-    }
-    return findFavicon();
-  }
-
-  Widget findFavicon() {
-    return FutureBuilder<Favicon?>(
-      future: FaviconFinder.getBest(widget.faviconUrl.toString()),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          Favicon? favicon = snapshot.data;
-          if (favicon != null) {
-            return loadFavicon(
-                widget.faviconSize, favicon.url, () => defaultFavicon());
-          }
-        }
-        return defaultFavicon();
-      },
-    );
-  }
-
-  Icon defaultFavicon() {
-    return Icon(
-      FluentIcons.app_icon_default,
-      size: widget.faviconSize * 0.8,
-    );
-  }
-
-  Widget loadFavicon(
-      double faviconSize, String url, Widget Function() onError) {
-    Widget image;
-
-    image = WebImage(
-      url: url,
-      imageHeight: faviconSize,
-      imageWidth: faviconSize,
-      imageConfig: ImageConfig(
-        filterQuality: FilterQuality.high,
-        isAntiAlias: true,
-        errorBuilder: (context, error, stackTrace) {
-          return onError();
-        },
-        //loadingBuilder: (context) {
-        //  return defaultFavicon();
-        //},
-      ),
-    );
-    return image;
-    return FadeIn(
-      duration: const Duration(milliseconds: 500),
-      // The green box must be a child of the AnimatedOpacity widget.
-      child: Padding(
-        padding: const EdgeInsets.only(right: 25),
-        child: DecoratedCard(
-          padding: 10,
-          child: image,
-        ),
-      ),
-    );
-  }
 }
