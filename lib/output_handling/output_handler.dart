@@ -45,11 +45,11 @@ class OutputHandler {
   Future<List<OutputBuilder>> getRepresentation(BuildContext context) async {
     Set<OutputParser> parts =
         responsibilityList.map<OutputParser>((Responsibility resp) {
-      if (resp.respPart == null) {
+      if (resp.respParser == null) {
         throw Exception("Not all lines are assigned to a part.\n"
             "Unassigned line: ${resp.line}");
       }
-      return resp.respPart!;
+      return resp.respParser!;
     }).toSet();
 
     AppLocalizations wingetLocale = getWingetLocale(context);

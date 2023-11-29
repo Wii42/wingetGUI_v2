@@ -33,7 +33,7 @@ class PackageLongInfo extends StatelessWidget {
             text: infos.additionalDescription ?? infos.description??
                 infos.shortDescription!,
             title: (infos.description != null && infos.additionalDescription != null)? infos.shortDescription : null,
-            titleIcon: FluentIcons.text_document,
+            titleIcon: FluentIcons.edit,
           ),
         if (infos.hasReleaseNotes())
           ExpandableTextCompartment(

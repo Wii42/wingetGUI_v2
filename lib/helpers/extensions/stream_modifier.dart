@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 
 extension StringStreamModifier on Stream<String> {
@@ -75,6 +76,25 @@ extension RememberingStream<T> on Stream<T> {
     listen((newData) {
       previousData.add(newData);
       controller.add(previousData);
+    }, onDone: () {
+      controller.close();
+    });
+
+    return controller.stream;
+  }
+}
+
+extension RemoveDuplicatesFromList<T extends List> on Stream <T>{
+  Stream<T> removeDuplicates() {
+    final controller = StreamController<T>();
+    const ListEquality equality = ListEquality();
+    T? previousData;
+
+    listen((newData) {
+      if(equality.equals(previousData, newData) == false){
+        previousData = newData;
+        controller.add(newData);
+      }
     }, onDone: () {
       controller.close();
     });

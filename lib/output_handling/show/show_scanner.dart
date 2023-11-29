@@ -44,7 +44,7 @@ class ShowScanner extends OutputScanner {
         }
 
         showPart.addLine(line);
-        resp.respPart = showPart;
+        resp.respParser = showPart;
       }
       markResponsibleLines(wingetLocale);
     }

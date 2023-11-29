@@ -10,7 +10,7 @@ class AgreementWidget extends ExpanderCompartment {
   final AgreementInfos infos;
 
   @override
-  final IconData titleIcon = FluentIcons.entitlement_policy;
+  final IconData titleIcon = FluentIcons.commitments;
 
   const AgreementWidget({super.key, required this.infos});
 

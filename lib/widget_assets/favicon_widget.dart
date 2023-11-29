@@ -1,5 +1,6 @@
 import 'package:favicon/favicon.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/widget_assets/web_image.dart';
 
 import '../output_handling/package_infos/package_infos.dart';
@@ -13,14 +14,14 @@ class FaviconWidget extends StatefulWidget {
 
   FaviconWidget(
       {super.key,
-        required this.infos,
-        required this.faviconSize,
-        Uri? faviconUrl}){
+      required this.infos,
+      required this.faviconSize,
+      Uri? faviconUrl}) {
     if (infos is PackageInfosFull && faviconUrl == null) {
       PackageInfosFull infosFull = infos as PackageInfosFull;
       this.faviconUrl =
           infosFull.website?.value ?? infosFull.agreement?.publisher?.url;
-    }else{
+    } else {
       this.faviconUrl = faviconUrl;
     }
   }
@@ -81,9 +82,9 @@ class _FaviconWidgetState extends State<FaviconWidget> {
 
   Widget defaultFavicon() {
     return Icon(
-      FluentIcons.app_icon_default,
-      size: widget.faviconSize * 0.8,
-      color: FluentTheme.of(context).inactiveColor.withAlpha(125),
+      FluentIcons.product,
+      size: widget.faviconSize,
+      color: FluentTheme.of(context).inactiveColor.withAlpha(100),
     );
   }
 
@@ -108,4 +109,11 @@ class _FaviconWidgetState extends State<FaviconWidget> {
     );
     return image;
   }
+}
+
+class DefaultFavicon extends FaviconWidget{
+  DefaultFavicon({super.key, required super.faviconSize})
+      : super(
+            infos: PackageInfosPeek()..screenshots = null,
+            faviconUrl: null);
 }

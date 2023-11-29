@@ -55,7 +55,7 @@ class ListScanner extends OutputScanner {
 
   _setPartForLines(int listStart, int listEnd, OutputParser part) {
     for (int i = listStart; i <= listEnd; i++) {
-      respList[i].respPart = part;
+      respList[i].respParser = part;
     }
   }
 

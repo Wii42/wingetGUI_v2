@@ -15,10 +15,10 @@ class PlainTextScanner extends OutputScanner {
       if (!resp.isHandled()) {
         if (isSamePart) {
           prevPart!.addLine(resp.line);
-          resp.respPart = prevPart;
+          resp.respParser = prevPart;
         } else {
           PlainTextParser rest = PlainTextParser([resp.line]);
-          resp.respPart = rest;
+          resp.respParser = rest;
           prevPart = rest;
           isSamePart = true;
         }

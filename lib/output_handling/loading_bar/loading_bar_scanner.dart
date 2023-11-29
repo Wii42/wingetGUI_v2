@@ -10,17 +10,22 @@ class LoadingBarScanner extends OutputScanner {
 
   @override
   void markResponsibleLines(AppLocalizations wingetLocale) {
-    LoadingBarParser loadingBarPart = LoadingBarParser([]);
+    LoadingBarParser loadingBarParser = LoadingBarParser([]);
+    bool isNewLoadingBar = true;
     for (Responsibility resp in respList) {
-      if (!resp.isHandled()) {
-        if (resp.line.isProgressBar()) {
-          resp.respPart = loadingBarPart;
-          loadingBarPart.addLine(resp.line);
+      if (!resp.isHandled() && resp.line.isProgressBar()) {
+        if (isNewLoadingBar) {
+          loadingBarParser = LoadingBarParser([]);
+          isNewLoadingBar = false;
         }
+        resp.respParser = loadingBarParser;
+        loadingBarParser.addLine(resp.line);
+      }else{
+        isNewLoadingBar = true;
       }
     }
-    //if (respList.last.respPart == loadingBarPart) {
-    //  loadingBarPart.addLine(respList.last.line);
+    //if (respList.last.respPart == loadingBarParser) {
+    //  loadingBarParser.addLine(respList.last.line);
     //}
   }
 }

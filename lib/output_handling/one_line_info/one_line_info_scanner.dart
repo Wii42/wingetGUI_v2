@@ -21,10 +21,10 @@ class OneLineInfoScanner extends OutputScanner {
           resp.line.trim().indexOf(identifierColon) <= maxIdentifierLength) {
         if (isSamePart) {
           prevPart!.addLine(resp.line);
-          resp.respPart = prevPart;
+          resp.respParser = prevPart;
         } else {
           OutputParser rest = OneLineInfoParser([resp.line]);
-          resp.respPart = rest;
+          resp.respParser = rest;
           prevPart = rest;
           isSamePart = true;
         }

@@ -78,7 +78,7 @@ class TableScanner extends OutputScanner {
       Responsibility resp;
       for (int i = tableStart + 2; i < respList.length; i++) {
         resp = respList[i];
-        if (resp.respPart != null || resp.line.isEmpty) {
+        if (resp.respParser != null || resp.line.isEmpty) {
           return i - 1;
         }
       }
@@ -125,7 +125,7 @@ class TableScanner extends OutputScanner {
 
   _markLines(int tableStart, int tableEnd, OutputParser part) {
     for (int i = tableStart; i <= tableEnd; i++) {
-      respList[i].respPart = part;
+      respList[i].respParser = part;
     }
   }
 }

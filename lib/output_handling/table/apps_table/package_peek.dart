@@ -50,7 +50,7 @@ class PackagePeek extends StatelessWidget {
       children: [
         //if (infos.screenshots?.icon != null &&
         //    infos.screenshots!.icon.toString().isNotEmpty)
-        // favicon(faviconSize()),
+        favicon(faviconSize()),
         Expanded(
           child: nameAndSource(context),
         ),
@@ -164,8 +164,9 @@ class PackagePeek extends StatelessWidget {
   String? id() => infos.id?.value;
 
   Widget favicon(double faviconSize) {
-    return FaviconWidget(infos: infos, faviconSize: faviconSize);
+    return DefaultFavicon(faviconSize: faviconSize);
+    //return FaviconWidget(infos: infos, faviconSize: faviconSize);
   }
 
-  double faviconSize() => 40;
+  double faviconSize() => 60;
 }

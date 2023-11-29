@@ -9,7 +9,7 @@ abstract class PackageInfos {
   final Info<String>? name, id, version;
 
   final Map<String, String>? otherInfos;
-  late final PackageScreenshots? screenshots;
+  late PackageScreenshots? screenshots;
 
   PackageInfos({
     this.name,

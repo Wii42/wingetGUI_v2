@@ -2,9 +2,9 @@ import 'output_parser.dart';
 
 class Responsibility {
   final String line;
-  OutputParser? respPart;
+  OutputParser? respParser;
 
-  Responsibility(this.line, {this.respPart});
+  Responsibility(this.line, {this.respParser});
 
-  bool isHandled() => respPart != null;
+  bool isHandled() => respParser != null;
 }
