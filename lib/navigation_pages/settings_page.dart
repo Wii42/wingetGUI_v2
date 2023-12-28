@@ -85,7 +85,6 @@ class _SettingsPageSate extends State<SettingsPage> {
   }
 
   Widget guiLocaleOption(AppLocalizations localizations, BuildContext context) {
-    LocaleNames localeNames = LocaleNames.of(context)!;
     return settingsItem(
       localizations.chooseLanguage,
       ComboBox<Locale>(
@@ -99,19 +98,23 @@ class _SettingsPageSate extends State<SettingsPage> {
         },
         items: [
           for (Locale locale in AppLocalizations.supportedLocales)
-            ComboBoxItem<Locale>(
-              value: locale,
-              child: Text(localeNames.nameOf(locale.toLanguageTag()) ??
-                  locale.toString()),
-            ),
+            languageItem(locale),
         ],
       ),
     );
   }
 
+  ComboBoxItem<Locale> languageItem(Locale locale) {
+    LocaleNames localeNames = LocaleNames.of(context)!;
+    return ComboBoxItem<Locale>(
+      value: locale,
+      child: Text(
+          "${localeNames.nameOf(locale.toLanguageTag())} (${locale.toString()})"),
+    );
+  }
+
   Widget wingetLocaleOption(
       AppLocalizations localizations, BuildContext context) {
-    LocaleNames localeNames = LocaleNames.of(context)!;
     return settingsItem(
       localizations.chooseWingetLanguage,
       ComboBox<Locale>(
@@ -125,11 +128,7 @@ class _SettingsPageSate extends State<SettingsPage> {
         },
         items: [
           for (Locale language in AppLocalizations.supportedLocales)
-            ComboBoxItem<Locale>(
-              value: language,
-              child: Text(localeNames.nameOf(language.toLanguageTag()) ??
-                  language.toString()),
-            ),
+            languageItem(language),
         ],
       ),
     );

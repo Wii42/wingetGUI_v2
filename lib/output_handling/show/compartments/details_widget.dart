@@ -22,8 +22,8 @@ class DetailsWidget extends ExpanderCompartment {
         title: compartmentTitle(locale),
         mainColumn: [
           ...detailsList([
-            if (infos.author != null)
-              infos.agreement?.publisher?.tryToInfoString(),
+            infos.author,
+            infos.agreement?.publisher?.tryToInfoString(),
             infos.pricing,
             infos.freeTrial,
             infos.ageRating,

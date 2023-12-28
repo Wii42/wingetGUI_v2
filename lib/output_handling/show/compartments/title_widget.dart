@@ -91,14 +91,7 @@ class TitleWidget extends Compartment {
       spacing: 5,
       runSpacing: 5,
       children: [
-        infos.author != null
-            ? textOrInlineLink(
-                context: context,
-                text: infos.author?.value,
-                url: infos.agreement?.publisher?.url)
-            : infos.agreement?.publisher != null
-                ? publisher(context)
-                : Text(infos.id?.value ?? '<unknown>'),
+        from(context),
         if (infos.website != null) _website(locale),
         if (infos.category != null) ...[
           LinkText(line: infos.category!.value),
@@ -132,4 +125,20 @@ class TitleWidget extends Compartment {
   }
 
   double faviconSize() => 70;
+
+  Widget from(BuildContext context) {
+    String? author = infos.author?.value;
+    String? publisher = infos.agreement?.publisher?.text;
+    String? authorOrPublisher = chooseShorterString(author, publisher);
+    String text = authorOrPublisher ??
+        infos.id?.value.split('.').firstOrNull ??
+        '<unknown>';
+    return textOrInlineLink(
+        context: context, text: text, url: infos.agreement?.publisher?.url);
+  }
+
+  String? chooseShorterString(String? a, String? b) {
+    if (a == null || b == null) return a ?? b;
+    return a.length < b.length ? a : b;
+  }
 }
