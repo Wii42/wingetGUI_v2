@@ -6,6 +6,7 @@ import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.d
 import 'package:winget_gui/output_handling/output_builder.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
 
+import '../parsed_output.dart';
 import 'one_line_info_scanner.dart';
 
 //typedef OneLineInfo = ({String title, String details, InfoBarSeverity? severity});
@@ -14,8 +15,8 @@ class OneLineInfoParser extends OutputParser {
   OneLineInfoParser(super.lines);
 
   @override
-  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) =>
-      OneLineInfoBuilder(infos: extractInfos(wingetLocale));
+  ParsedOneLineInfos parse(AppLocalizations wingetLocale) =>
+  ParsedOneLineInfos(extractInfos(wingetLocale));
 
   List<OneLineInfo> extractInfos(AppLocalizations wingetLocale) {
     List<OneLineInfo> infos = [];
@@ -47,6 +48,18 @@ class OneLineInfoParser extends OutputParser {
     }
     return InfoBarSeverity.info;
   }
+}
+
+class ParsedOneLineInfos extends ParsedOutput{
+  List<OneLineInfo> infos;
+
+  ParsedOneLineInfos(this.infos);
+
+  @override
+  OneLineInfoBuilder widgetRepresentation() {
+    return OneLineInfoBuilder(infos: infos);
+  }
+
 }
 
 class OneLineInfo {

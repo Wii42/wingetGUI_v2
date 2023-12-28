@@ -10,6 +10,7 @@ import 'package:winget_gui/output_handling/table/table_builder.dart';
 import '../output_parser.dart';
 import '../package_infos/package_attribute.dart';
 import '../package_infos/package_infos_peek.dart';
+import '../parsed_output.dart';
 import 'apps_table/package_list.dart';
 
 typedef TableData = List<Map<String, String>>;
@@ -19,20 +20,18 @@ class TableParser extends OutputParser {
   TableParser(super.lines, {required this.command});
 
   @override
-  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) async {
+  Future<ParsedTable> parse(AppLocalizations wingetLocale) async {
     TableData table = await Isolate.run<TableData>(_makeTable);
     if (isAppTable(table, wingetLocale)) {
-      return QuickOutputBuilder((context) {
-        List<PackageInfosPeek> packages = [
-          for (Map<String, String> tableRow in table)
-            PackageInfosPeek.fromMap(details: tableRow, locale: wingetLocale),
-        ];
+      List<PackageInfosPeek> packages = [
+        for (Map<String, String> tableRow in table)
+          PackageInfosPeek.fromMap(details: tableRow, locale: wingetLocale),
+      ];
 
-        return PackageList(packages, command: command);
-      });
+      return ParsedAppTable(table, packages: packages, command: command);
     }
 
-    return TableBuilder(table);
+    return ParsedTable(table);
   }
 
   TableData _makeTable() {
@@ -182,4 +181,32 @@ class TableParser extends OutputParser {
     return columnTitles.contains(PackageAttribute.name.key(wingetLocale)) &&
         columnTitles.contains(PackageAttribute.id.key(wingetLocale));
   }
+}
+
+class ParsedTable extends ParsedOutput {
+  TableData table;
+  ParsedTable(this.table);
+
+  @override
+  OutputBuilder widgetRepresentation() {
+    return TableBuilder(table);
+  }
+
+  bool isAppTable() => false;
+}
+
+class ParsedAppTable extends ParsedTable {
+  List<PackageInfosPeek> packages;
+  List<String> command;
+
+  ParsedAppTable(super.table, {required this.packages, required this.command});
+
+  @override
+  OutputBuilder widgetRepresentation() {
+    return QuickOutputBuilder(
+        (context) => PackageList(packages, command: command));
+  }
+
+  @override
+  bool isAppTable() => true;
 }

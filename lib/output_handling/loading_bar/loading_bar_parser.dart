@@ -5,8 +5,7 @@ import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/loading_bar/loading_bar_builder.dart';
 import 'package:winget_gui/output_handling/output_builder.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
-
-typedef LoadingBar = ({double value, String? text});
+import 'package:winget_gui/output_handling/parsed_output.dart';
 
 class LoadingBarParser extends OutputParser {
   static const String progressBarKey = 'progressBar', restKey = 'rest';
@@ -14,12 +13,12 @@ class LoadingBarParser extends OutputParser {
   LoadingBarParser(super.lines);
 
   @override
-  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) {
+  ParsedLoadingBars parse(AppLocalizations wingetLocale) {
     if (lines.isEmpty) {
-      return null;
+      return ParsedLoadingBars([]);
     }
-    return LoadingBarBuilder(
-        progressBar(isLastCutOff() ? lines[lines.length - 2] : lines.last));
+    return ParsedLoadingBars(lines.map(progressBar).toList(),
+        isLastCutOff: isLastCutOff());
   }
 
   Map<String, String> separateLoadingBar(String line) {
@@ -59,10 +58,8 @@ class LoadingBarParser extends OutputParser {
 
   LoadingBar progressBar(String line) {
     Map<String, String> parts = separateLoadingBar(line);
-    return (
-      text: parts[restKey],
-      value: loadingBarValue(parts[progressBarKey]!)
-    );
+    return LoadingBar(
+        text: parts[restKey], value: loadingBarValue(parts[progressBarKey]!));
   }
 
   bool isLastCutOff() {
@@ -81,4 +78,27 @@ class LoadingBarParser extends OutputParser {
     return lastProgressBar.length < secondLastProgressBar.length ||
         (lastRest == null) != (secondLastRest == null);
   }
+}
+
+class ParsedLoadingBars extends ParsedOutput {
+  List<LoadingBar> loadingBars;
+  bool isLastCutOff;
+
+  ParsedLoadingBars(this.loadingBars, {this.isLastCutOff = false});
+
+  @override
+  LoadingBarBuilder? widgetRepresentation() {
+    if (loadingBars.isEmpty) {
+      return null;
+    }
+    return LoadingBarBuilder(
+        isLastCutOff ? loadingBars[loadingBars.length - 2] : loadingBars.last);
+  }
+}
+
+class LoadingBar {
+  double value;
+  String? text;
+
+  LoadingBar({required this.value, this.text});
 }

@@ -4,32 +4,30 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/list/list_builder.dart';
 import 'package:winget_gui/output_handling/output_builder.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
+import 'package:winget_gui/output_handling/parsed_output.dart';
 
 class ListParser extends OutputParser {
   ListParser(super.lines);
 
-  late String title;
-  late Map<String, String> listEntries;
-
   @override
-  FutureOr<OutputBuilder> parse(AppLocalizations wingetLocale) {
-    _retrieveTitle();
-    _retrieveListEntries();
-    return ListBuilder(title: title, list: listEntries);
+  ParsedList parse(AppLocalizations wingetLocale) {
+    String title = _retrieveTitle();
+    Map<String, String> listEntries = _retrieveListEntries();
+    return ParsedList(title: title, listEntries: listEntries);
   }
 
-  _retrieveTitle() {
+  String _retrieveTitle() {
     String title = lines[0];
     if (title.endsWith(':')) {
       title = title.substring(0, title.length - 1);
     }
-    this.title = title.trim();
+    return title.trim();
   }
 
-  _retrieveListEntries() {
+  Map<String, String> _retrieveListEntries() {
     List<String> listLines = lines.sublist(1).map((e) => e.trim()).toList();
     int splitPos = _findSplitInEntry(listLines);
-    _getListEntries(listLines, splitPos);
+    return _getListEntries(listLines, splitPos);
   }
 
   int _findSplitInEntry(List<String> lines) {
@@ -57,8 +55,8 @@ class ListParser extends OutputParser {
     return true;
   }
 
-  _getListEntries(List<String> lines, int splitPos) {
-    listEntries = {
+  Map<String, String>_getListEntries(List<String> lines, int splitPos) {
+    return {
       for (String line in lines)
         if (splitPos < 0)
           line.trim(): ''
@@ -66,4 +64,19 @@ class ListParser extends OutputParser {
           line.substring(0, splitPos).trim(): line.substring(splitPos).trim()
     };
   }
+}
+
+class ParsedList extends ParsedOutput{
+  String title;
+  Map<String, String> listEntries;
+
+  ParsedList({required this.title, required this.listEntries});
+
+  @override
+  ListBuilder widgetRepresentation() {
+    return ListBuilder(title: title, list: listEntries);
+  }
+
+
+
 }

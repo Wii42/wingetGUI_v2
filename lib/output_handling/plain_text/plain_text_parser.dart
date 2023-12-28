@@ -8,13 +8,35 @@ import 'package:winget_gui/output_handling/output_builder.dart';
 
 import '../../widget_assets/link_text.dart';
 import '../output_parser.dart';
+import '../parsed_output.dart';
 
 class PlainTextParser extends OutputParser {
   PlainTextParser(super.lines);
 
   @override
-  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) {
+  ParsedPlainText parse(AppLocalizations wingetLocale) {
     lines.trim();
+    if(lines.isEmpty){
+      return ParsedPlainText([]);
+    }
+    return ParsedPlainText(lines.trim(),
+        lastIsSuccessMessage: isSuccessMessage(lines.last, wingetLocale));
+  }
+
+  bool isSuccessMessage(String line, AppLocalizations locale) {
+    return (line == locale.installSuccessful ||
+        line == locale.uninstallSuccessful);
+  }
+}
+
+class ParsedPlainText extends ParsedOutput {
+  List<String> lines;
+  bool lastIsSuccessMessage;
+
+  ParsedPlainText(this.lines, {this.lastIsSuccessMessage = false});
+
+  @override
+  OutputBuilder? widgetRepresentation() {
     if (lines.isEmpty) {
       return null;
     }
@@ -25,7 +47,7 @@ class PlainTextParser extends OutputParser {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             for ((int, String) line in lines.indexed)
-              isSuccessMessage(line, wingetLocale)
+              (line.$1 == lines.length - 1 && lastIsSuccessMessage)
                   ? InfoBar(
                       title: Text(line.$2),
                       severity: InfoBarSeverity.success,
@@ -35,11 +57,5 @@ class PlainTextParser extends OutputParser {
         ),
       );
     });
-  }
-
-  bool isSuccessMessage((int, String) line, AppLocalizations locale) {
-    return line.$1 == lines.length - 1 &&
-        (line.$2 == locale.installSuccessful ||
-            line.$2 == locale.uninstallSuccessful);
   }
 }

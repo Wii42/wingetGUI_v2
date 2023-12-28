@@ -1,5 +1,5 @@
 extension StringListExtension on List<String> {
-  trimLeading() {
+  List<String> trimLeading() {
     bool foundNotEmpty = false;
     while (!foundNotEmpty && isNotEmpty) {
       String line = first;
@@ -9,9 +9,10 @@ extension StringListExtension on List<String> {
         foundNotEmpty = true;
       }
     }
+    return this;
   }
 
-  trimTrailing() {
+  List<String> trimTrailing() {
     bool foundNotEmpty = false;
     while (!foundNotEmpty && isNotEmpty) {
       String line = last;
@@ -21,10 +22,12 @@ extension StringListExtension on List<String> {
         foundNotEmpty = true;
       }
     }
+    return this;
   }
 
-  trim() {
+  List<String> trim() {
     trimLeading();
     trimTrailing();
+    return this;
   }
 }

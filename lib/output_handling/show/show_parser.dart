@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/output_builder.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
+import 'package:winget_gui/output_handling/parsed_output.dart';
 import 'package:winget_gui/output_handling/show/show_builder.dart';
 
 import '../package_infos/package_attribute.dart';
@@ -16,8 +17,8 @@ class ShowParser extends OutputParser {
   ShowParser(super.lines, {required this.command});
 
   @override
-  FutureOr<OutputBuilder>? parse(AppLocalizations wingetLocale) {
-    return ShowBuilder(infos: _extractInfos(wingetLocale), command: command);
+  ParsedShow parse(AppLocalizations wingetLocale) {
+    return ParsedShow(infos: _extractInfos(wingetLocale), command: command);
   }
 
   PackageInfosFull _extractInfos(AppLocalizations locale) {
@@ -96,4 +97,16 @@ class ShowParser extends OutputParser {
     }
     return infos;
   }
+}
+
+class ParsedShow extends ParsedOutput{
+  final PackageInfosFull infos;
+  final List<String> command;
+  ParsedShow({required this.infos, required this.command});
+
+  @override
+  ShowBuilder widgetRepresentation() {
+    return ShowBuilder(infos: infos, command: command);
+  }
+
 }

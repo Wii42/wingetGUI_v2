@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
+import 'package:winget_gui/output_handling/parsed_output.dart';
 import 'package:winget_gui/output_handling/table/table_scanner.dart';
 
 import './list/list_scanner.dart';
@@ -36,30 +37,41 @@ class OutputHandler {
     ];
   }
 
-  determineResponsibility(BuildContext context) {
+  void determineResponsibility(AppLocalizations wingetLocale) {
     for (OutputScanner scanner in outputScanners) {
-      scanner.markResponsibleLines(getWingetLocale(context));
+      scanner.markResponsibleLines(wingetLocale);
     }
   }
 
-  Future<List<OutputBuilder>> getRepresentation(BuildContext context) async {
-    Set<OutputParser> parts =
-        responsibilityList.map<OutputParser>((Responsibility resp) {
+  Set<OutputParser> get outputParsers {
+    return responsibilityList.map<OutputParser>((Responsibility resp) {
       if (resp.respParser == null) {
         throw Exception("Not all lines are assigned to a part.\n"
             "Unassigned line: ${resp.line}");
       }
       return resp.respParser!;
     }).toSet();
+  }
 
+  Future<List<ParsedOutput>> getParsedOutputList(AppLocalizations wingetLocale) async {
+
+    Iterable<Future<ParsedOutput>> parsedOutputFutures = outputParsers
+        .map<Future<ParsedOutput>>((part) async => part.parse(wingetLocale));
+
+    List<ParsedOutput> parsedOutput =
+        await Future.wait<ParsedOutput>(parsedOutputFutures);
+
+    return parsedOutput;
+
+  }
+
+  Future<List<OutputBuilder>> getRepresentation(BuildContext context) async {
     AppLocalizations wingetLocale = getWingetLocale(context);
 
-    List<Future<OutputBuilder?>> builderFutures = parts
-        .map<Future<OutputBuilder?>>((part) async => part.parse(wingetLocale))
-        .toList();
+    List<ParsedOutput> parsedOutput = await getParsedOutputList(wingetLocale);
 
-    List<OutputBuilder?> builders =
-        await Future.wait<OutputBuilder?>(builderFutures);
+    Iterable<OutputBuilder?> builders =
+        parsedOutput.map((e) => e.widgetRepresentation());
 
     List<OutputBuilder> finalBuilders = builders
         .where((builder) => builder != null)
@@ -69,7 +81,7 @@ class OutputHandler {
     return finalBuilders;
   }
 
-  AppLocalizations getWingetLocale(BuildContext context) {
+  static AppLocalizations getWingetLocale(BuildContext context) {
     AppLocalizations wingetLocale =
         AppLocale.of(context).getWingetAppLocalization() ??
             AppLocalizations.of(context)!;
