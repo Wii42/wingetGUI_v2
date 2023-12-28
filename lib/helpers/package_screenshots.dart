@@ -11,13 +11,13 @@ class PackageScreenshots {
     return PackageScreenshots(
         packageKey: packageName,
         icon:
-            maybeParse(json.apply('icon').toNullable()?.asString.toNullable()),
+            maybeParse(json.get('icon').toNullable()?.asString().toNullable()),
         screenshots: json
-            .apply('images')
+            .get('images')
             .toNullable()
-            ?.asArray
+            ?.asArray()
             .toNullable()
-            ?.map((e) => maybeParse(e.asString.toNullable()))
+            ?.map((e) => maybeParse(e.asString().toNullable()))
             .toList()
             .nonNulls
             .toList());

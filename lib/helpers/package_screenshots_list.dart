@@ -42,7 +42,7 @@ class PackageScreenshotsList {
         throw Exception('Error parsing JSON');
       },
     );
-    JsonObject? object = json.asObject.toNullable();
+    JsonObject? object = json.asObject().toNullable();
     if (object == null) {
       if (kDebugMode) {
         print('Json is not an object');
@@ -56,7 +56,7 @@ class PackageScreenshotsList {
       return;
     }
     JsonObject? packageScreenshotsMap =
-        object.applyUnsafe("icons_and_screenshots").asObject.toNullable();
+        object.getUnsafe("icons_and_screenshots").asObject().toNullable();
     if (packageScreenshotsMap == null) {
       if (kDebugMode) {
         print('"icons_and_screenshots" not an object');
@@ -67,8 +67,8 @@ class PackageScreenshotsList {
     screenshotList = packageScreenshotsMap.keys
         .map<PackageScreenshots?>((packageName) {
           JsonObject? packageObject = packageScreenshotsMap
-              .applyUnsafe(packageName)
-              .asObject
+              .getUnsafe(packageName)
+              .asObject()
               .toNullable();
           if (packageObject == null) {
             if (kDebugMode) {
