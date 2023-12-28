@@ -99,9 +99,9 @@ class AppAccentColor extends StatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(
-        EnumProperty('defaultThemeMode', initialAccentColor),
-      )
+      //..add(
+      //  EnumProperty<SystemAccentColor>('defaultThemeMode', initialAccentColor),
+      //)
       ..add(
         ObjectFlagProperty<AccentColorBuilder>.has('builder', builder),
       )
@@ -144,7 +144,7 @@ class _AppAccentColorState extends State<AppAccentColor> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(EnumProperty('themeMode', _currentAccentColor));
+    //properties.add(EnumProperty('themeMode', _currentAccentColor));
   }
 }
 

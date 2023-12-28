@@ -133,12 +133,12 @@ class AppLocale extends StatefulWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(
-        EnumProperty('defaultGuiLocale', initialGuiLocale),
-      )
-      ..add(
-        EnumProperty('defaultWingetLocale', initialWingetLocale),
-      )
+      //..add(
+      //  EnumProperty('defaultGuiLocale', initialGuiLocale),
+      //)
+      //..add(
+      //  EnumProperty('defaultWingetLocale', initialWingetLocale),
+      //)
       ..add(
         ObjectFlagProperty<LocaleBuilder>.has('builder', builder),
       )
@@ -223,8 +223,8 @@ class _AppLocaleState extends State<AppLocale> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(EnumProperty('guiLocale', _currentGuiLocale));
-    properties.add(EnumProperty('wingetLocale', _currentWingetLocale));
+    //properties.add(EnumProperty('guiLocale', _currentGuiLocale));
+    //properties.add(EnumProperty('wingetLocale', _currentWingetLocale));
   }
 }
 

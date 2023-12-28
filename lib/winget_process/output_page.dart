@@ -17,8 +17,12 @@ class OutputPage extends ProcessOutput {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (streamSnapshot.connectionState != ConnectionState.done)
-          const FullWidthProgressbar(),
+        SizedBox(
+          height: 3,
+          child: streamSnapshot.connectionState != ConnectionState.done
+              ? const FullWidthProgressbar()
+              : null,
+        ),
         Expanded(
           child: PaneItemBody(
             title: title,
