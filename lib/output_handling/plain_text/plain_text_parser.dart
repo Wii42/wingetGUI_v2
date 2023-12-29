@@ -58,4 +58,9 @@ class ParsedPlainText extends ParsedOutput {
       );
     });
   }
+
+  @override
+  String toString() {
+    return "ParsedPlainText{$lines}";
+  }
 }

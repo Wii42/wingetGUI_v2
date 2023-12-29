@@ -209,4 +209,9 @@ class ParsedAppTable extends ParsedTable {
 
   @override
   bool isAppTable() => true;
+
+  @override
+  String toString() {
+    return "ParsedAppTable{command: $command, ${packages.length} entries}";
+  }
 }

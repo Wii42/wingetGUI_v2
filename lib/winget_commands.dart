@@ -12,6 +12,7 @@ enum Winget {
   about('--info'),
   help('--help', aliases: ['-?']),
   search('search', options: ["-n", '200'], aliases: ['find']),
+  availablePackages('search', options: [''], aliases: ['find']),
   settings('settings', aliases: ['config']),
   sources('source', options: ['list']),
   install(

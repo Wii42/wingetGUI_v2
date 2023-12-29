@@ -62,4 +62,18 @@ class PackageInfosPeek extends PackageInfos {
 
   @override
   bool isWinget() => source?.value == 'winget';
+
+  @override
+  String toString() {
+    return "PackageInfosPeek{"
+        "name: ${name?.value}, "
+        "id: ${id?.value}, "
+        "version: ${version?.value}, "
+        "availableVersion: ${availableVersion?.value}, "
+        "source: ${source?.value}, "
+        "match: ${match?.value}, "
+        "otherInfos: $otherInfos"
+        "}";
+
+  }
 }
