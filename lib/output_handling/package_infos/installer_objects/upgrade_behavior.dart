@@ -9,8 +9,8 @@ enum UpgradeBehavior {
   const UpgradeBehavior({required this.key});
 
   factory UpgradeBehavior.parse(String behavior) {
-    for(UpgradeBehavior b in UpgradeBehavior.values) {
-      if(b.key == behavior) {
+    for (UpgradeBehavior b in UpgradeBehavior.values) {
+      if (b.key == behavior) {
         return b;
       }
     }

@@ -22,7 +22,6 @@ enum InstallerType {
   const InstallerType(
       {required this.key, required this.shortTitle, this.longTitle});
 
-
   static InstallerType parse(String string) {
     return maybeParse(string)!;
   }

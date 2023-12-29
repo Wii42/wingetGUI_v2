@@ -7,9 +7,9 @@ typedef OnChangeAccentColor = void Function(SystemAccentColor accentColor);
 
 /// Builders the widget with the base in the [ThemeMode].
 typedef AccentColorBuilder = Widget Function(
-    BuildContext context,
-    SystemAccentColor accentColor,
-    );
+  BuildContext context,
+  SystemAccentColor accentColor,
+);
 
 /// {@template theme_mode_data}
 /// Class with actions to manipulate [ThemeMode].
@@ -64,7 +64,8 @@ class AppAccentColor extends StatefulWidget {
     this.onChangeAccentColor,
     SystemAccentColor? accentColor,
     super.key,
-  }) : initialAccentColor = accentColor?? SystemAccentColor(SystemTheme.fallbackColor);
+  }) : initialAccentColor =
+            accentColor ?? SystemAccentColor(SystemTheme.fallbackColor);
 
   /// [ThemeMode] initial, changing it later does not
   /// change the current [ThemeMode].
@@ -82,7 +83,7 @@ class AppAccentColor extends StatefulWidget {
   /// Gets the [AccentColorData].
   static AccentColorData of(BuildContext context) {
     final inheritedAccentColor =
-    context.dependOnInheritedWidgetOfExactType<_InheritedAccentColorData>();
+        context.dependOnInheritedWidgetOfExactType<_InheritedAccentColorData>();
     if (inheritedAccentColor != null) {
       return inheritedAccentColor.accentColorData;
     }
@@ -134,7 +135,7 @@ class _AppAccentColorState extends State<AppAccentColor> {
     if (_currentAccentColor != accentColor) {
       widget.onChangeAccentColor?.call(accentColor);
       setState(
-            () => _accentColorData = _accentColorData.copyWith(
+        () => _accentColorData = _accentColorData.copyWith(
           accentColor: accentColor,
         ),
       );

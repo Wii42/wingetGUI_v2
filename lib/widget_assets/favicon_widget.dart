@@ -111,9 +111,7 @@ class _FaviconWidgetState extends State<FaviconWidget> {
   }
 }
 
-class DefaultFavicon extends FaviconWidget{
+class DefaultFavicon extends FaviconWidget {
   DefaultFavicon({super.key, required super.faviconSize})
-      : super(
-            infos: PackageInfosPeek()..screenshots = null,
-            faviconUrl: null);
+      : super(infos: PackageInfosPeek()..screenshots = null, faviconUrl: null);
 }

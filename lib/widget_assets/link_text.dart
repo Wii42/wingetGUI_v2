@@ -11,7 +11,11 @@ class LinkText extends StatelessWidget {
   final TextStyle? style;
 
   const LinkText(
-      {required this.line, this.maxLines = maxValue, super.key, this.style, this.title});
+      {required this.line,
+      this.maxLines = maxValue,
+      super.key,
+      this.style,
+      this.title});
 
   @override
   Widget build(BuildContext context) {

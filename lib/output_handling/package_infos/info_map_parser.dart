@@ -34,7 +34,7 @@ class InfoMapParser {
     }
 
     String firstLine = source.value.split('\n').first;
-    if(firstLine.contains('. ')) {
+    if (firstLine.contains('. ')) {
       firstLine = '${firstLine.split('. ').first}.';
     }
     return Info<String>(

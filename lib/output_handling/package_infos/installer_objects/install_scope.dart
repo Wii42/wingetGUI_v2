@@ -1,12 +1,14 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-enum InstallScope{
-  user(key: 'user'),machine(key: 'machine');
+
+enum InstallScope {
+  user(key: 'user'),
+  machine(key: 'machine');
 
   final String key;
   const InstallScope({required this.key});
 
-  String title(AppLocalizations locale){
-    switch(this){
+  String title(AppLocalizations locale) {
+    switch (this) {
       case InstallScope.user:
         return locale.userScope;
       case InstallScope.machine:
@@ -22,12 +24,12 @@ enum InstallScope{
     return maybeParse(string)!;
   }
 
-  static InstallScope? maybeParse(String? scope){
-    if(scope == null){
+  static InstallScope? maybeParse(String? scope) {
+    if (scope == null) {
       return null;
     }
-    for(InstallScope s in InstallScope.values){
-      if(s.key == scope){
+    for (InstallScope s in InstallScope.values) {
+      if (s.key == scope) {
         return s;
       }
     }

@@ -179,7 +179,10 @@ abstract class ExpanderCompartment extends Compartment {
     if (info == null) {
       return null;
     }
-    return Info<String>(title: info.title, value: toString(info.value), couldBeLink: info.couldBeLink);
+    return Info<String>(
+        title: info.title,
+        value: toString(info.value),
+        couldBeLink: info.couldBeLink);
   }
 
   List<Widget> detailsList(List<Info<String>?> details, BuildContext context) {
@@ -249,13 +252,14 @@ abstract class ExpanderCompartment extends Compartment {
   }
 
   Info<String>? tryFromListInfo<T>(Info<List<T>>? info,
-  {String Function(T)? toString}) {
-  if (info == null) return null;
-  List<dynamic> list = info.value;
-  if (toString != null) {
-  list = info.value.map((e) => toString(e)).toList();
-  }
-  String string = list.join(', ');
-  return Info<String>(title: info.title, value: string, couldBeLink: info.couldBeLink);
+      {String Function(T)? toString}) {
+    if (info == null) return null;
+    List<dynamic> list = info.value;
+    if (toString != null) {
+      list = info.value.map((e) => toString(e)).toList();
+    }
+    String string = list.join(', ');
+    return Info<String>(
+        title: info.title, value: string, couldBeLink: info.couldBeLink);
   }
 }

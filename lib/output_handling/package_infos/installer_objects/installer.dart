@@ -4,14 +4,12 @@ import 'package:winget_gui/output_handling/package_infos/installer_objects/insta
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_scope.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/upgrade_behavior.dart';
 
-import 'computer_architecture.dart';
-
-import 'installer_type.dart';
-import 'windows_platform.dart';
-
 import '../info.dart';
 import '../info_yaml_map_parser.dart';
 import '../package_attribute.dart';
+import 'computer_architecture.dart';
+import 'installer_type.dart';
+import 'windows_platform.dart';
 
 class Installer {
   final Info<ComputerArchitecture> architecture;

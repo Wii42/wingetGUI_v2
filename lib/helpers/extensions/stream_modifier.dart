@@ -84,14 +84,14 @@ extension RememberingStream<T> on Stream<T> {
   }
 }
 
-extension RemoveDuplicatesFromList<T extends List> on Stream <T>{
+extension RemoveDuplicatesFromList<T extends List> on Stream<T> {
   Stream<T> removeDuplicates() {
     final controller = StreamController<T>();
     const ListEquality equality = ListEquality();
     T? previousData;
 
     listen((newData) {
-      if(equality.equals(previousData, newData) == false){
+      if (equality.equals(previousData, newData) == false) {
         previousData = newData;
         controller.add(newData);
       }

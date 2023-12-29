@@ -34,7 +34,9 @@ class WebImage extends StatelessWidget {
         filterQuality: imageConfig.filterQuality,
         isAntiAlias: imageConfig.isAntiAlias,
         errorBuilder: imageConfig.errorBuilder,
-        frameBuilder: imageConfig.loadingBuilder != null?(context, _, __, ___) => imageConfig.loadingBuilder!(context) :null,
+        frameBuilder: imageConfig.loadingBuilder != null
+            ? (context, _, __, ___) => imageConfig.loadingBuilder!(context)
+            : null,
       );
     }
   }

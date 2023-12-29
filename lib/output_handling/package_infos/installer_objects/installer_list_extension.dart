@@ -27,13 +27,13 @@ extension InstallerList on List<Installer> {
 
   List<Feature> get definingFeatures {
     return [
-          (installer) => installer.architecture,
-          (installer) => installer.type,
-          (installer) => installer.locale,
-          (installer) => installer.platform,
-          (installer) => installer.minimumOSVersion,
-          (installer) => installer.scope,
-          (installer) => installer.elevationRequirement,
+      (installer) => installer.architecture,
+      (installer) => installer.type,
+      (installer) => installer.locale,
+      (installer) => installer.platform,
+      (installer) => installer.minimumOSVersion,
+      (installer) => installer.scope,
+      (installer) => installer.elevationRequirement,
     ];
   }
 }

@@ -30,9 +30,13 @@ class PackageLongInfo extends StatelessWidget {
           ScreenshotsWidget(infos.screenshots!),
         if (infos.hasDescription())
           ExpandableTextCompartment(
-            text: infos.additionalDescription ?? infos.description??
+            text: infos.additionalDescription ??
+                infos.description ??
                 infos.shortDescription!,
-            title: (infos.description != null && infos.additionalDescription != null)? infos.shortDescription : null,
+            title: (infos.description != null &&
+                    infos.additionalDescription != null)
+                ? infos.shortDescription
+                : null,
             titleIcon: FluentIcons.edit,
           ),
         if (infos.hasReleaseNotes())

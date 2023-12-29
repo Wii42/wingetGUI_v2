@@ -18,7 +18,7 @@ class GithubApi {
   });
 
   factory GithubApi.wingetVersionManifest(
-      {required String packageID, required String version}) =>
+          {required String packageID, required String version}) =>
       GithubApi(
         repository: 'winget-pkgs',
         owner: 'microsoft',
@@ -26,9 +26,7 @@ class GithubApi {
             'manifests/${idInitialLetter(packageID)}/${idAsPath(packageID)}/$version'),
       );
 
-  factory GithubApi.wingetManifest(
-      {required String packageID}) =>
-      GithubApi(
+  factory GithubApi.wingetManifest({required String packageID}) => GithubApi(
         repository: 'winget-pkgs',
         owner: 'microsoft',
         path: Uri.parse(
@@ -36,15 +34,16 @@ class GithubApi {
       );
 
   factory GithubApi.wingetRepo(Uri path) => GithubApi(
-    repository: 'winget-pkgs',
-    owner: 'microsoft',
-    path: path,
-  );
+        repository: 'winget-pkgs',
+        owner: 'microsoft',
+        path: path,
+      );
 
   Uri get apiUri => Uri.parse(
       'https://api.github.com/repos/$owner/$repository/contents/${path?.path ?? ''}');
 
-  Future<List<GithubApiFileInfo>> getFiles({Future<List<GithubApiFileInfo>> Function()? onError}) async {
+  Future<List<GithubApiFileInfo>> getFiles(
+      {Future<List<GithubApiFileInfo>> Function()? onError}) async {
     if (kDebugMode) {
       print(apiUri);
     }

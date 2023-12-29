@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/list/list_builder.dart';
-import 'package:winget_gui/output_handling/output_builder.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
 import 'package:winget_gui/output_handling/parsed_output.dart';
 
@@ -55,7 +52,7 @@ class ListParser extends OutputParser {
     return true;
   }
 
-  Map<String, String>_getListEntries(List<String> lines, int splitPos) {
+  Map<String, String> _getListEntries(List<String> lines, int splitPos) {
     return {
       for (String line in lines)
         if (splitPos < 0)
@@ -66,7 +63,7 @@ class ListParser extends OutputParser {
   }
 }
 
-class ParsedList extends ParsedOutput{
+class ParsedList extends ParsedOutput {
   String title;
   Map<String, String> listEntries;
 
@@ -76,7 +73,4 @@ class ParsedList extends ParsedOutput{
   ListBuilder widgetRepresentation() {
     return ListBuilder(title: title, list: listEntries);
   }
-
-
-
 }

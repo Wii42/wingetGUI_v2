@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import './process_output.dart';
 import '../widget_assets/full_width_progress_bar.dart';
 import '../widget_assets/pane_item_body.dart';
+import './process_output.dart';
 
 class OutputPage extends ProcessOutput {
   final String? title;

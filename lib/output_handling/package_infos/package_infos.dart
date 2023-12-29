@@ -19,9 +19,12 @@ abstract class PackageInfos {
   });
 
   bool hasVersion() => (version != null && version?.value != 'Unknown');
-  bool hasSpecificVersion() => (version != null &&
-      version?.value != 'Unknown' &&
-      !version!.value.contains('<')) && !version!.value.contains('>') && !version!.value.contains('…') ;
+  bool hasSpecificVersion() =>
+      (version != null &&
+          version?.value != 'Unknown' &&
+          !version!.value.contains('<')) &&
+      !version!.value.contains('>') &&
+      !version!.value.contains('…');
 
   void setImplicitInfos() {
     screenshots = PackageScreenshotsList.instance.getPackage(this);

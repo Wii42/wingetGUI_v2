@@ -68,8 +68,8 @@ class InfoWithLink {
         text = null;
       }
     }
-    if(text != null){
-      if(isLink(text)){
+    if (text != null) {
+      if (isLink(text)) {
         text = null;
       }
     }

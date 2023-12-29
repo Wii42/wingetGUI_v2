@@ -1,13 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/main_navigation.dart';
-import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/winget_db.dart';
 
 import 'global_app_data.dart';
@@ -67,18 +66,20 @@ class WingetGui extends StatelessWidget {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: WindowBrightnessSetter(
-              child: isInitialized? MainNavigation(title: appTitle) : StreamBuilder<String>(
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                if(snapshot.hasData){
-                  return Center(child: Text(snapshot.data!));
-                }
-                return const Center(child: Text('...'));
-              }
-              return MainNavigation(title: appTitle);
-            },
-            stream: wingetDB.init(context),
-          )),
+              child: isInitialized
+                  ? MainNavigation(title: appTitle)
+                  : StreamBuilder<String>(
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState != ConnectionState.done) {
+                          if (snapshot.hasData) {
+                            return Center(child: Text(snapshot.data!));
+                          }
+                          return const Center(child: Text('...'));
+                        }
+                        return MainNavigation(title: appTitle);
+                      },
+                      stream: wingetDB.init(context),
+                    )),
         );
       },
     );

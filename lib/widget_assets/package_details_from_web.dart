@@ -78,7 +78,9 @@ class PackageDetailsFromWeb extends StatelessWidget {
           if (error.toString().startsWith('Failed host lookup: ')) {
             return Center(
               child: putInfo(localization.cantLoadDetails,
-                  content: '${localization.reason}: ${localization.noInternetConnection}', isLong: true),
+                  content:
+                      '${localization.reason}: ${localization.noInternetConnection}',
+                  isLong: true),
             );
           }
 

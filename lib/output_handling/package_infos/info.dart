@@ -6,5 +6,9 @@ class Info<T extends Object> {
   final bool copyable;
   final bool couldBeLink;
 
-  Info({required this.title, required this.value, this.copyable = false, this.couldBeLink = true});
+  Info(
+      {required this.title,
+      required this.value,
+      this.copyable = false,
+      this.couldBeLink = true});
 }

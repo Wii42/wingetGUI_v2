@@ -4,6 +4,7 @@ import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
 import 'package:winget_gui/output_handling/parsed_output.dart';
 import 'package:winget_gui/output_handling/table/table_scanner.dart';
 
+import '../widget_assets/app_locale.dart';
 import './list/list_scanner.dart';
 import './loading_bar/loading_bar_scanner.dart';
 import './one_line_info/one_line_info_scanner.dart';
@@ -12,7 +13,6 @@ import './output_scanner.dart';
 import './plain_text/plain_text_scanner.dart';
 import './responsibility.dart';
 import './show/show_scanner.dart';
-import '../widget_assets/app_locale.dart';
 import 'output_parser.dart';
 
 class OutputHandler {
@@ -53,8 +53,8 @@ class OutputHandler {
     }).toSet();
   }
 
-  Future<List<ParsedOutput>> getParsedOutputList(AppLocalizations wingetLocale) async {
-
+  Future<List<ParsedOutput>> getParsedOutputList(
+      AppLocalizations wingetLocale) async {
     Iterable<Future<ParsedOutput>> parsedOutputFutures = outputParsers
         .map<Future<ParsedOutput>>((part) async => part.parse(wingetLocale));
 
@@ -62,7 +62,6 @@ class OutputHandler {
         await Future.wait<ParsedOutput>(parsedOutputFutures);
 
     return parsedOutput;
-
   }
 
   Future<List<OutputBuilder>> getRepresentation(BuildContext context) async {

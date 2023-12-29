@@ -25,7 +25,10 @@ class InfoYamlMapParser {
     map.remove(attribute.yamlKey!);
     return (detail != null)
         ? Info<String>(
-            title: attribute.title, value: detail, copyable: attribute.copyable, couldBeLink: attribute.couldBeLink)
+            title: attribute.title,
+            value: detail,
+            copyable: attribute.copyable,
+            couldBeLink: attribute.couldBeLink)
         : null;
   }
 
@@ -34,7 +37,10 @@ class InfoYamlMapParser {
     if (link == null) {
       return null;
     }
-    return Info<Uri>(title: link.title, value: Uri.parse(link.value), couldBeLink: link.couldBeLink);
+    return Info<Uri>(
+        title: link.title,
+        value: Uri.parse(link.value),
+        couldBeLink: link.couldBeLink);
   }
 
   Info<List<InfoWithLink>>? maybeDocumentationsFromMap(
@@ -58,7 +64,9 @@ class InfoYamlMapParser {
             .toList();
         map.remove(attribute.yamlKey!);
         return Info<List<InfoWithLink>>(
-            title: attribute.title, value: linkList, couldBeLink: attribute.couldBeLink);
+            title: attribute.title,
+            value: linkList,
+            couldBeLink: attribute.couldBeLink);
       }
     }
 
@@ -66,7 +74,10 @@ class InfoYamlMapParser {
         .map((element) => InfoWithLink(title: (_) => element.toString()))
         .toList();
     map.remove(attribute.yamlKey!);
-    return Info<List<InfoWithLink>>(title: attribute.title, value: list, couldBeLink: attribute.couldBeLink);
+    return Info<List<InfoWithLink>>(
+        title: attribute.title,
+        value: list,
+        couldBeLink: attribute.couldBeLink);
   }
 
   Info<List<T>>? maybeListFromMap<T>(PackageAttribute attribute,
@@ -77,7 +88,9 @@ class InfoYamlMapParser {
     }
     map.remove(attribute.yamlKey!);
     return Info<List<T>>(
-        title: attribute.title, value: node.value.map<T>(parser).toList(), couldBeLink: attribute.couldBeLink);
+        title: attribute.title,
+        value: node.value.map<T>(parser).toList(),
+        couldBeLink: attribute.couldBeLink);
   }
 
   Info<T>? maybeFromMap<T extends Object>(PackageAttribute attribute,
@@ -88,7 +101,9 @@ class InfoYamlMapParser {
     }
     map.remove(attribute.yamlKey!);
     return Info<T>(
-        title: attribute.title, value: parser(node), couldBeLink: attribute.couldBeLink);
+        title: attribute.title,
+        value: parser(node),
+        couldBeLink: attribute.couldBeLink);
   }
 
   Info<List<String>>? maybeStringListFromMap(PackageAttribute attribute) {
@@ -146,7 +161,7 @@ class InfoYamlMapParser {
 
   Info<InstallerType>? maybeInstallerTypeFromMap(
       PackageAttribute installerType) {
-   return maybeValueFromMap(installerType, InstallerType.parse);
+    return maybeValueFromMap(installerType, InstallerType.parse);
   }
 
   Info<ComputerArchitecture>? maybeArchitectureFromMap(
@@ -158,16 +173,21 @@ class InfoYamlMapParser {
     return maybeValueFromMap(installScope, InstallScope.parse);
   }
 
-  Info<List<InstallMode>>? maybeInstallModesFromMap(PackageAttribute installModes) {
+  Info<List<InstallMode>>? maybeInstallModesFromMap(
+      PackageAttribute installModes) {
     return maybeListFromMap(installModes, parser: InstallMode.fromYaml);
   }
 
-  Info<T>? maybeValueFromMap<T extends Object>(PackageAttribute attribute, T Function(String) parser) {
+  Info<T>? maybeValueFromMap<T extends Object>(
+      PackageAttribute attribute, T Function(String) parser) {
     Info<String>? info = maybeStringFromMap(attribute);
     if (info == null) {
       return null;
     }
-    return Info<T>(title: info.title, value: parser(info.value), couldBeLink: info.couldBeLink);
+    return Info<T>(
+        title: info.title,
+        value: parser(info.value),
+        couldBeLink: info.couldBeLink);
   }
 
   Info<InstallMode>? maybeInstallModeFromMap(PackageAttribute installMode) {
@@ -177,16 +197,17 @@ class InfoYamlMapParser {
     }
     return Info<InstallMode>(
         title: modeInfo.title,
-        value: InstallMode.maybeParse(modeInfo.value)!, couldBeLink: modeInfo.couldBeLink);
+        value: InstallMode.maybeParse(modeInfo.value)!,
+        couldBeLink: modeInfo.couldBeLink);
   }
 
-  Info<UpgradeBehavior>? maybeUpgradeBehaviorFromMap(PackageAttribute upgradeBehavior) {
+  Info<UpgradeBehavior>? maybeUpgradeBehaviorFromMap(
+      PackageAttribute upgradeBehavior) {
     return maybeValueFromMap(upgradeBehavior, UpgradeBehavior.parse);
   }
 
- Info<Dependencies>? maybeDependenciesFromMap(PackageAttribute dependencies) {
-    return maybeFromMap<Dependencies>(dependencies, parser: (e) => Dependencies.fromYamlMap(e));
- }
+  Info<Dependencies>? maybeDependenciesFromMap(PackageAttribute dependencies) {
+    return maybeFromMap<Dependencies>(dependencies,
+        parser: (e) => Dependencies.fromYamlMap(e));
+  }
 }
-
-

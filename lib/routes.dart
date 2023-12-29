@@ -101,4 +101,3 @@ enum Routes {
     return Winget.show.processPage(parameters);
   }
 }
-

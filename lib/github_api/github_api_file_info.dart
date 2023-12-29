@@ -36,7 +36,7 @@ class GithubApiFileInfo {
       htmlUrl: Uri.parse(json['html_url']),
       gitUrl: Uri.parse(json['git_url']),
       downloadUrl:
-      json['download_url'] != null ? Uri.parse(json['download_url']) : null,
+          json['download_url'] != null ? Uri.parse(json['download_url']) : null,
       type: GithubApiFileType.fromJson(json['type']),
       links: GithubApiLinks.fromJson(json['_links']),
     );

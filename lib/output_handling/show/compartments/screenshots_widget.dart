@@ -44,5 +44,6 @@ class ScreenshotsWidget extends ExpanderCompartment {
   }
 
   @override
-  EdgeInsetsGeometry get bodyPadding => const EdgeInsets.symmetric(horizontal:0);
+  EdgeInsetsGeometry get bodyPadding =>
+      const EdgeInsets.symmetric(horizontal: 0);
 }

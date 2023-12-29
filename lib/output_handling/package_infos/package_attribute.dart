@@ -10,7 +10,7 @@ enum PackageAttribute {
   publisher(yamlKey: 'Publisher'),
   publisherUrl(yamlKey: 'PublisherUrl'),
   publisherSupportUrl(yamlKey: 'PublisherSupportUrl'),
-  version(couldBeLink: false,yamlKey: 'PackageVersion'),
+  version(couldBeLink: false, yamlKey: 'PackageVersion'),
   availableVersion(couldBeLink: false),
   tags(yamlKey: 'Tags'),
   releaseNotes(yamlKey: 'ReleaseNotes'),
@@ -66,7 +66,8 @@ enum PackageAttribute {
   final bool copyable;
   final String? yamlKey;
   final bool couldBeLink;
-  const PackageAttribute({this.copyable = false, this.couldBeLink = true, this.yamlKey});
+  const PackageAttribute(
+      {this.copyable = false, this.couldBeLink = true, this.yamlKey});
 
   String key(AppLocalizations local) {
     String key = local.infoKey(this.name);

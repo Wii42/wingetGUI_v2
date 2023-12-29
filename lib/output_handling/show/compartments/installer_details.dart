@@ -59,7 +59,7 @@ class InstallerDetails extends ExpanderCompartment {
               }
               if (dependencies.packageDependencies != null) {
                 stringList.add(
-                    'Package Dependencies: ${dependencies.packageDependencies!.map<String>((e) => '${e.packageID}${e.minimumVersion != null?' >=${e.minimumVersion}':''}').join(', ')}');
+                    'Package Dependencies: ${dependencies.packageDependencies!.map<String>((e) => '${e.packageID}${e.minimumVersion != null ? ' >=${e.minimumVersion}' : ''}').join(', ')}');
               }
               if (dependencies.externalDependencies != null) {
                 stringList.add(
@@ -95,19 +95,28 @@ class InstallerDetails extends ExpanderCompartment {
 
   Info<String>? tryFromInstallerType(Info<InstallerType>? info) {
     if (info == null) return null;
-    return Info<String>(title: info.title, value: info.value.fullTitle, couldBeLink: info.couldBeLink);
+    return Info<String>(
+        title: info.title,
+        value: info.value.fullTitle,
+        couldBeLink: info.couldBeLink);
   }
 
   Info<String>? tryFromArchitectureInfo(Info<ComputerArchitecture>? info) {
     if (info == null) return null;
-    return Info<String>(title: info.title, value: info.value.title, couldBeLink: info.couldBeLink);
+    return Info<String>(
+        title: info.title,
+        value: info.value.title,
+        couldBeLink: info.couldBeLink);
   }
 
   Info<String>? tryFromScopeInfo(
       Info<InstallScope>? info, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     if (info == null) return null;
-    return Info<String>(title: info.title, value: info.value.title(locale), couldBeLink: info.couldBeLink);
+    return Info<String>(
+        title: info.title,
+        value: info.value.title(locale),
+        couldBeLink: info.couldBeLink);
   }
 
   Info<String>? tryFromUpgradeBehaviorInfo(

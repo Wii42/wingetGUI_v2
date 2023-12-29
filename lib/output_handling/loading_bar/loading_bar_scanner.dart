@@ -20,7 +20,7 @@ class LoadingBarScanner extends OutputScanner {
         }
         resp.respParser = loadingBarParser;
         loadingBarParser.addLine(resp.line);
-      }else{
+      } else {
         isNewLoadingBar = true;
       }
     }

@@ -14,16 +14,14 @@ enum ComputerArchitecture {
   }
 
   static ComputerArchitecture? maybeParse(String? architecture) {
-    if(architecture == null) {
+    if (architecture == null) {
       return null;
     }
-    for(ComputerArchitecture arch in ComputerArchitecture.values) {
-      if(arch.key == architecture) {
+    for (ComputerArchitecture arch in ComputerArchitecture.values) {
+      if (arch.key == architecture) {
         return arch;
       }
     }
     throw ArgumentError('Unknown architecture: $architecture');
   }
 }
-
-

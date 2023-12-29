@@ -2,8 +2,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'info.dart';
 import 'info_map_parser.dart';
-import 'info_yaml_map_parser.dart';
 import 'info_with_link.dart';
+import 'info_yaml_map_parser.dart';
 import 'package_attribute.dart';
 
 class AgreementInfos {

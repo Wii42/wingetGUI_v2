@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
-import 'package:winget_gui/output_handling/output_builder.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
 
 import '../parsed_output.dart';
@@ -16,7 +13,7 @@ class OneLineInfoParser extends OutputParser {
 
   @override
   ParsedOneLineInfos parse(AppLocalizations wingetLocale) =>
-  ParsedOneLineInfos(extractInfos(wingetLocale));
+      ParsedOneLineInfos(extractInfos(wingetLocale));
 
   List<OneLineInfo> extractInfos(AppLocalizations wingetLocale) {
     List<OneLineInfo> infos = [];
@@ -50,7 +47,7 @@ class OneLineInfoParser extends OutputParser {
   }
 }
 
-class ParsedOneLineInfos extends ParsedOutput{
+class ParsedOneLineInfos extends ParsedOutput {
   List<OneLineInfo> infos;
 
   ParsedOneLineInfos(this.infos);
@@ -59,7 +56,6 @@ class ParsedOneLineInfos extends ParsedOutput{
   OneLineInfoBuilder widgetRepresentation() {
     return OneLineInfoBuilder(infos: infos);
   }
-
 }
 
 class OneLineInfo {

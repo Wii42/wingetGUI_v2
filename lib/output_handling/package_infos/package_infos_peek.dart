@@ -51,7 +51,8 @@ class PackageInfosPeek extends PackageInfos {
   }
 
   bool hasSpecificAvailableVersion() =>
-      (availableVersion != null && availableVersion!.value.isNotEmpty &&
+      (availableVersion != null &&
+          availableVersion!.value.isNotEmpty &&
           availableVersion?.value != 'Unknown' &&
           !availableVersion!.value.contains('<')) &&
       !availableVersion!.value.contains('>') &&
@@ -74,6 +75,5 @@ class PackageInfosPeek extends PackageInfos {
         "match: ${match?.value}, "
         "otherInfos: $otherInfos"
         "}";
-
   }
 }

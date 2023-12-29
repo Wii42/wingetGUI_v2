@@ -64,14 +64,14 @@ class PackageInfosFull extends PackageInfos {
     if (details != null) {
       InfoMapParser parser = InfoMapParser(map: details, locale: locale);
 
-
-
-      Info<String>? description = parser.maybeStringFromMap(PackageAttribute.description);
+      Info<String>? description =
+          parser.maybeStringFromMap(PackageAttribute.description);
       PackageInfosFull infos = PackageInfosFull(
         name: parser.maybeStringFromMap(PackageAttribute.name),
         id: parser.maybeStringFromMap(PackageAttribute.id),
         description: description,
-        shortDescription:parser.maybeFirstLineStringFromInfo(description, destination: PackageAttribute.shortDescription),
+        shortDescription: parser.maybeFirstLineStringFromInfo(description,
+            destination: PackageAttribute.shortDescription),
         supportUrl:
             parser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
         version: parser.maybeStringFromMap(PackageAttribute.version),
@@ -114,24 +114,23 @@ class PackageInfosFull extends PackageInfos {
         name: parser.maybeStringFromMap(PackageAttribute.name),
         id: parser.maybeStringFromMap(PackageAttribute.id),
         description: parser.maybeStringFromMap(PackageAttribute.description),
-        shortDescription: parser.maybeStringFromMap(
-            PackageAttribute.shortDescription),
-        supportUrl: parser.maybeLinkFromMap(
-            PackageAttribute.publisherSupportUrl),
+        shortDescription:
+            parser.maybeStringFromMap(PackageAttribute.shortDescription),
+        supportUrl:
+            parser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
         version: parser.maybeStringFromMap(PackageAttribute.version),
         website: parser.maybeLinkFromMap(PackageAttribute.website),
-        author:
-            parser.maybeStringFromMap(PackageAttribute.author),
-        moniker:
-            parser.maybeStringFromMap(PackageAttribute.moniker),
-        documentation: parser.maybeDocumentationsFromMap(
-            PackageAttribute.documentation),
+        author: parser.maybeStringFromMap(PackageAttribute.author),
+        moniker: parser.maybeStringFromMap(PackageAttribute.moniker),
+        documentation:
+            parser.maybeDocumentationsFromMap(PackageAttribute.documentation),
         releaseNotes: parser.maybeInfoWithLinkFromMap(
             textInfo: PackageAttribute.releaseNotes,
             urlInfo: PackageAttribute.releaseNotesUrl),
         agreement: parser.maybeAgreementFromMap(),
         tags: parser.maybeTagsFromMap(),
-        packageLocale: parser.maybeLocaleFromMap(PackageAttribute.packageLocale),
+        packageLocale:
+            parser.maybeLocaleFromMap(PackageAttribute.packageLocale),
         installer: installer,
         otherInfos: details.isNotEmpty
             ? details.map<String, String>(
@@ -172,21 +171,20 @@ class PackageInfosFull extends PackageInfos {
     }
     if (!description!.value.startsWith(shortDescription!.value)) {
       return Info<String>(
-          title: description!.title,
-          value: '\n${description!.value}');
+          title: description!.title, value: '\n${description!.value}');
     }
-    if(description!.value == shortDescription!.value){
+    if (description!.value == shortDescription!.value) {
       return null;
     }
 
-    String additionalDescription = description!.value.substring(shortDescription!.value.length);
+    String additionalDescription =
+        description!.value.substring(shortDescription!.value.length);
 
-    if(additionalDescription.trim() == '.'){
+    if (additionalDescription.trim() == '.') {
       return null;
     }
 
     return Info<String>(
-        title: description!.title,
-        value: additionalDescription);
+        title: description!.title, value: additionalDescription);
   }
 }
