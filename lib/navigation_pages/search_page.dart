@@ -4,6 +4,9 @@ import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
+import '../main.dart';
+import '../widget_assets/package_peek_list_view.dart';
+
 class SearchPage extends StatelessWidget {
   SearchPage({super.key});
 
@@ -15,27 +18,40 @@ class SearchPage extends StatelessWidget {
     String title = Routes.searchPage.title(locale);
     return PaneItemBody(
       title: title,
-      child: Center(
-        child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 400),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormBox(
-                    controller: controller, onFieldSubmitted: search(context)),
-                const SizedBox(
-                  height: 20,
-                ),
-                FilledButton(
-                    onPressed: () => {search(context)(controller.text)},
-                    child: Text(Routes.search.title(locale)))
-              ],
-            )),
+      child: Column(
+        children: [
+          Center(
+            child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormBox(
+                        controller: controller,
+                        onFieldSubmitted: search(context)),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    FilledButton(
+                        onPressed: () => {search(context)(controller.text)},
+                        child: Text(Routes.search.title(locale)))
+                  ],
+                )),
+          ),
+          Expanded(
+            child: PackagePeekListView(
+              dbTable: wingetDB.available,
+              isInstalled: (package, _) =>
+                  wingetDB.installed.idMap.containsKey(package.id!.value),
+              isUpgradable: (package, _) => package.availableVersion != null,
+            ),
+          ),
+        ],
       ),
     );
   }

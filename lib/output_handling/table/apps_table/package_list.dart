@@ -63,7 +63,7 @@ class _PackageListState extends State<PackageList> {
         children: [
           settings(),
           ...listWithNrOfPackagesInfo(filteredPackages()
-              .map((e) => PackagePeek(e, command: widget.command))
+              .map((e) => PackagePeek.fromCommand(e, command: widget.command))
               .toList()),
         ].withSpaceBetween(height: 10));
   }

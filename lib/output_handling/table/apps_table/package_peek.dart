@@ -9,11 +9,25 @@ import '../../package_infos/package_infos_peek.dart';
 
 class PackagePeek extends StatelessWidget {
   final PackageInfosPeek infos;
-  final List<String> command;
+  final bool installButton;
+  final bool upgradeButton;
+  final bool uninstallButton;
 
   final MainAxisAlignment columnAlign = MainAxisAlignment.center;
 
-  const PackagePeek(this.infos, {super.key, required this.command});
+  const PackagePeek(this.infos,
+      {super.key,
+      this.installButton = true,
+      this.upgradeButton = true,
+      this.uninstallButton = true});
+
+  factory PackagePeek.fromCommand(PackageInfosPeek infos,
+      {required List<String> command}) {
+    return PackagePeek(infos,
+        installButton: !(command[0] == 'upgrade' || command[0] == 'list'),
+        upgradeButton: infos.availableVersion != null &&
+            infos.availableVersion!.value.isNotEmpty);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +81,8 @@ class PackagePeek extends StatelessWidget {
           RightSideButtons(
             infos: infos,
             mainAlignment: MainAxisAlignment.spaceEvenly,
-            upgrade: infos.availableVersion != null &&
-                infos.availableVersion!.value.isNotEmpty,
-            install: !(command[0] == 'upgrade' || command[0] == 'list'),
+            upgrade: upgradeButton,
+            install: installButton,
             iconsOnly: true,
           )
         ],
@@ -169,4 +182,14 @@ class PackagePeek extends StatelessWidget {
   }
 
   double faviconSize() => 60;
+
+  static Widget get prototypeWidget {
+    return Button(
+      onPressed: () {},
+      child: const Padding(
+        padding: EdgeInsets.all(10),
+        child: SizedBox(height: 90),
+      ),
+    );
+  }
 }

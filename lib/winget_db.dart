@@ -6,6 +6,7 @@ import 'package:winget_gui/winget_process/winget_process.dart';
 
 import 'main.dart';
 import 'output_handling/output_handler.dart';
+import 'output_handling/package_infos/info.dart';
 import 'output_handling/package_infos/package_infos_peek.dart';
 import 'output_handling/parsed_output.dart';
 
@@ -40,8 +41,22 @@ class WingetDB {
 
 class DBTable {
   List<PackageInfosPeek> infos;
+  Map<String, PackageInfosPeek>? _idMap;
 
   DBTable(this.infos);
+
+  Map<String, PackageInfosPeek> get idMap {
+    if (_idMap == null) {
+      _idMap = {};
+      for (PackageInfosPeek info in infos) {
+        Info<String>? id = info.id;
+        if (id != null) {
+          _idMap![info.id!.value] = info;
+        }
+      }
+    }
+    return _idMap!;
+  }
 }
 
 class DBTableCreator {

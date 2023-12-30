@@ -1,11 +1,15 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/main.dart';
 import 'package:winget_gui/navigation_pages/advanced_options_page.dart';
 import 'package:winget_gui/navigation_pages/command_prompt_page.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/navigation_pages/settings_page.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/output_handling/table/apps_table/package_peek.dart';
 import 'package:winget_gui/widget_assets/package_details_from_web.dart';
+import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
+import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/winget_commands.dart';
 
 import 'helpers/route_parameter.dart';
@@ -53,6 +57,10 @@ enum Routes {
       icon: FluentIcons.settings,
       route: '/settingsPage',
       body: SettingsPage.inRoute),
+  updatesPage(
+      icon: FluentIcons.substitutions_in,
+      route: '/updatesPage',
+      body: UpdatesPage.inRoute),
   ;
 
   final String route;
@@ -99,5 +107,25 @@ enum Routes {
       }
     }
     return Winget.show.processPage(parameters);
+  }
+}
+
+class UpdatesPage extends StatelessWidget {
+  const UpdatesPage({super.key});
+
+  static Widget inRoute([dynamic parameters]) {
+    return const UpdatesPage();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    return PaneItemBody(
+      title: Winget.updates.title(locale),
+      child: PackagePeekListView(
+          dbTable: wingetDB.updates,
+          isInstalled: (_, __) => true,
+          isUpgradable: (_, __) => true),
+    );
   }
 }

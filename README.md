@@ -25,3 +25,5 @@ samples, guidance on mobile development, and a full API reference.
 
 - FIX Python 3.11 page because they are stupid
 
+- Undeluxe, SanityCheck and MultiMon dont load -> needs fixing
+
