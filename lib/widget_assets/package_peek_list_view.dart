@@ -1,4 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
+import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 
 import '../main.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
@@ -17,17 +19,38 @@ class PackagePeekListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemBuilder: (context, index) {
-          PackageInfosPeek package = dbTable.infos[index];
-          bool installed = isInstalled(package, dbTable);
-          bool upgradable = isUpgradable(package, dbTable);
-          return wrapInPadding(buildPackagePeek(package, installed, upgradable));
-        },
-        itemCount: dbTable.infos.length,
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        prototypeItem: wrapInPadding(PackagePeek.prototypeWidget));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (dbTable.hints.isNotEmpty)
+          Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            children: [
+              for (OneLineInfo hint in dbTable.hints)
+                OneLineInfoBuilder.oneLineInfo(hint, context, onClose: () {}),
+            ],
+          ),
+        Expanded(
+          child: ListView.builder(
+              itemBuilder: (context, index) {
+                PackageInfosPeek package = dbTable.infos[index];
+                if (!package.checkedForScreenshots) {
+                  package.setImplicitInfos();
+                }
+                bool installed = isInstalled(package, dbTable);
+                bool upgradable = isUpgradable(package, dbTable);
+                return wrapInPadding(
+                    buildPackagePeek(package, installed, upgradable));
+              },
+              itemCount: dbTable.infos.length,
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              prototypeItem: wrapInPadding(PackagePeek.prototypeWidget)),
+        ),
+        Text("${dbTable.infos.length} Apps"),
+      ],
+    );
   }
 
   Widget wrapInPadding(Widget child) {

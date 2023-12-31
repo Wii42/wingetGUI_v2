@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:ribs_json/ribs_json.dart';
@@ -140,8 +141,10 @@ class PackageScreenshotsList {
       (element) => element.packageKey == packageInfos.id?.value,
     ];
     for (bool Function(PackageScreenshots) condition in conditions) {
-      if (screenshotList.any(condition)) {
-        return screenshotList.firstWhere(condition);
+
+        PackageScreenshots? screenshots =  screenshotList.firstWhereOrNull(condition);
+        if (screenshots != null) {
+          return screenshots;
       }
     }
     return null;

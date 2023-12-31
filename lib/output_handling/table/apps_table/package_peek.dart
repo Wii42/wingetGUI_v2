@@ -12,6 +12,7 @@ class PackagePeek extends StatelessWidget {
   final bool installButton;
   final bool upgradeButton;
   final bool uninstallButton;
+  final bool checkFavicon;
 
   final MainAxisAlignment columnAlign = MainAxisAlignment.center;
 
@@ -19,7 +20,8 @@ class PackagePeek extends StatelessWidget {
       {super.key,
       this.installButton = true,
       this.upgradeButton = true,
-      this.uninstallButton = true});
+      this.uninstallButton = true,
+      this.checkFavicon = false});
 
   factory PackagePeek.fromCommand(PackageInfosPeek infos,
       {required List<String> command}) {
@@ -177,8 +179,13 @@ class PackagePeek extends StatelessWidget {
   String? id() => infos.id?.value;
 
   Widget favicon(double faviconSize) {
-    return DefaultFavicon(faviconSize: faviconSize);
-    //return FaviconWidget(infos: infos, faviconSize: faviconSize);
+    //if (checkFavicon && !infos.checkedForScreenshots && infos.screenshots == null){
+
+    //}
+    if(infos.screenshots == null) {
+      return DefaultFavicon(faviconSize: faviconSize);
+    }
+    return FaviconWidget(infos: infos, faviconSize: faviconSize);
   }
 
   double faviconSize() => 60;

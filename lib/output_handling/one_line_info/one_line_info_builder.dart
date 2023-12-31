@@ -28,7 +28,7 @@ class OneLineInfoBuilder extends OutputBuilder {
     );
   }
 
-  Widget oneLineInfo(OneLineInfo info, BuildContext context) {
+  static Widget oneLineInfo(OneLineInfo info, BuildContext context,{void Function()? onClose}) {
     String details = stripOfQuotationMarks(info.details);
     if (isLink(details)) {
       return LinkButton(url: Uri.parse(details), text: Text(info.title));
@@ -37,10 +37,11 @@ class OneLineInfoBuilder extends OutputBuilder {
       title: Text('${info.title}:'),
       content: details.isNotEmpty ? LinkText(line: details) : null,
       severity: info.severity,
+      onClose: onClose,
     );
   }
 
-  String stripOfQuotationMarks(String string) {
+  static String stripOfQuotationMarks(String string) {
     string = string.trim();
     if (string.startsWith(quotationMarksRegExp()) &&
         string[string.length - 1].contains(quotationMarksRegExp()) &&
@@ -55,7 +56,7 @@ class OneLineInfoBuilder extends OutputBuilder {
     return string;
   }
 
-  RegExp quotationMarksRegExp() => RegExp(quotationMarks.join());
+  static RegExp quotationMarksRegExp() => RegExp(quotationMarks.join());
 
   bool isQuotationMark(String char) {
     return quotationMarks.contains(char);

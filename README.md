@@ -27,3 +27,5 @@ samples, guidance on mobile development, and a full API reference.
 
 - Undeluxe, SanityCheck and MultiMon dont load -> needs fixing
 
+- WezTerm dose not load -> needs fixing
+

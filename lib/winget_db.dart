@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/output_handling/table/table_parser.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
@@ -20,19 +22,42 @@ class WingetDB {
         DBTableCreator(wingetLocale, content: 'updates');
     yield* updatesCreator.init(Winget.updates);
     updates = updatesCreator.returnTable();
-    print(updates.infos);
+    if (kDebugMode) {
+      //print(updates.infos);
+    }
 
     DBTableCreator installedCreator =
         DBTableCreator(wingetLocale, content: 'installed');
     yield* installedCreator.init(Winget.installed);
     installed = installedCreator.returnTable();
-    print(installed.infos);
+    if (kDebugMode) {
+      //print(installed.infos);
+    }
 
     DBTableCreator availableCreator =
         DBTableCreator(wingetLocale, content: 'available');
     yield* availableCreator.init(Winget.availablePackages);
     available = availableCreator.returnTable();
-    print(available.infos);
+    if (kDebugMode) {
+      //print(available.infos);
+    }
+
+    print(installed.idMap["Microsoft.DotNet.DesktopRuntime.7"]?.length);
+    List<PackageInfosPeek> toRemoveFromUpdates = [];
+    for (PackageInfosPeek package in updates.infos) {
+      String id = package.id!.value;
+      if (installed.idMap.containsKey(id)) {
+        List<PackageInfosPeek> installedPackages = installed.idMap[id]!;
+        List<String?> installedVersions =
+            installedPackages.map((e) => e.version?.value).toList();
+        if (installedVersions.contains(package.availableVersion?.value) || installedVersions.contains("> ${package.availableVersion?.value}")) {
+          toRemoveFromUpdates.add(package);
+        }
+      }
+    }
+    toRemoveFromUpdates.forEach(updates.infos.remove);
+
+    updates.updateIDMap();
 
     isInitialized = true;
     return;
@@ -41,21 +66,36 @@ class WingetDB {
 
 class DBTable {
   List<PackageInfosPeek> infos;
-  Map<String, PackageInfosPeek>? _idMap;
+  Map<String, List<PackageInfosPeek>>? _idMap;
+  List<OneLineInfo> hints;
 
-  DBTable(this.infos);
+  DBTable(this.infos, {this.hints = const[]});
 
-  Map<String, PackageInfosPeek> get idMap {
+  Map<String, List<PackageInfosPeek>> get idMap {
     if (_idMap == null) {
-      _idMap = {};
-      for (PackageInfosPeek info in infos) {
-        Info<String>? id = info.id;
-        if (id != null) {
-          _idMap![info.id!.value] = info;
+      _generateIdMap();
+    }
+    return _idMap!;
+  }
+
+  void _generateIdMap() {
+    _idMap = {};
+    for (PackageInfosPeek info in infos) {
+      Info<String>? id = info.id;
+      if (id != null) {
+        if (_idMap!.containsKey(id.value)) {
+          _idMap![id.value]!.add(info);
+        } else {
+          _idMap![id.value] = [info];
         }
       }
     }
-    return _idMap!;
+  }
+
+  updateIDMap() {
+    if (_idMap != null) {
+      _generateIdMap();
+    }
   }
 }
 
@@ -105,6 +145,8 @@ class DBTableCreator {
     return output;
   }
 
+
+
   List<PackageInfosPeek> extractInfos() {
     if (parsed == null) {
       throw Exception("$content has not been parsed");
@@ -121,7 +163,20 @@ class DBTableCreator {
     return infos;
   }
 
+  List<OneLineInfo> extractHints() {
+    if (parsed == null) {
+      throw Exception("$content has not been parsed");
+    }
+    Iterable<ParsedOneLineInfos> appTables = parsed!.whereType<ParsedOneLineInfos>();
+    List<OneLineInfo> infos = [];
+    for (ParsedOneLineInfos table in appTables) {
+      infos.addAll(table.infos);
+    }
+
+    return infos;
+  }
+
   DBTable returnTable() {
-    return DBTable(extractInfos());
+    return DBTable(extractInfos(), hints: extractHints());
   }
 }

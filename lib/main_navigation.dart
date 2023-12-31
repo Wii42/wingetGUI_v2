@@ -11,6 +11,7 @@ class MainNavigation extends StatefulWidget {
     Routes.installed,
     Routes.searchPage,
     Routes.updatesPage,
+    Routes.installedPage
   ];
 
   static const List<Routes> advancedFooterItems = [

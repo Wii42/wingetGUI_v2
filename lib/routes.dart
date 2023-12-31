@@ -61,6 +61,10 @@ enum Routes {
       icon: FluentIcons.substitutions_in,
       route: '/updatesPage',
       body: UpdatesPage.inRoute),
+  installedPage(
+      icon: FluentIcons.library,
+      route: '/installedPage',
+      body: InstalledPage.inRoute),
   ;
 
   final String route;
@@ -107,6 +111,26 @@ enum Routes {
       }
     }
     return Winget.show.processPage(parameters);
+  }
+}
+
+class InstalledPage extends StatelessWidget{
+  const InstalledPage({super.key});
+
+  static Widget inRoute([dynamic parameters]) {
+    return const InstalledPage();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    return PaneItemBody(
+      title: Winget.installed.title(locale),
+      child: PackagePeekListView(
+          dbTable: wingetDB.installed,
+          isInstalled: (_, __) => true,
+          isUpgradable: (package, __) => package.hasAvailableVersion()),
+    );
   }
 }
 

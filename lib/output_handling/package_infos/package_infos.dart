@@ -9,7 +9,8 @@ abstract class PackageInfos {
   final Info<String>? name, id, version;
 
   final Map<String, String>? otherInfos;
-  late PackageScreenshots? screenshots;
+  PackageScreenshots? screenshots;
+  bool checkedForScreenshots = false;
 
   PackageInfos({
     this.name,
@@ -28,6 +29,7 @@ abstract class PackageInfos {
 
   void setImplicitInfos() {
     screenshots = PackageScreenshotsList.instance.getPackage(this);
+    checkedForScreenshots = true;
   }
 
   bool isWinget();
