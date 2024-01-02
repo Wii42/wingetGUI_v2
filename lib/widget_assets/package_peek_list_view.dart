@@ -14,8 +14,8 @@ class PackagePeekListView extends StatelessWidget {
   const PackagePeekListView(
       {super.key,
       required this.dbTable,
-      required this.isInstalled,
-      required this.isUpgradable});
+      this.isInstalled = defaultFalse,
+      this.isUpgradable = defaultFalse});
 
   @override
   Widget build(BuildContext context) {
@@ -69,4 +69,7 @@ class PackagePeekListView extends StatelessWidget {
       upgradeButton: upgradable,
     );
   }
+
+  static bool defaultFalse(PackageInfosPeek _, DBTable __) => false;
+
 }

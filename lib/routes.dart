@@ -13,6 +13,7 @@ import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/winget_commands.dart';
 
 import 'helpers/route_parameter.dart';
+import 'navigation_pages/publisher_page.dart';
 
 enum Routes {
   updates(
@@ -65,6 +66,9 @@ enum Routes {
       icon: FluentIcons.library,
       route: '/installedPage',
       body: InstalledPage.inRoute),
+  publisherPage(
+      route: '/publisherPage',
+      body: PublisherPage.inRoute),
   ;
 
   final String route;

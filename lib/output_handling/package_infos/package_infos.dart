@@ -78,4 +78,14 @@ abstract class PackageInfos {
     }
     return id!.value.replaceAll('.', '/');
   }
+
+  String? get publisherID {
+    if (id == null || !isWinget()) {
+      return null;
+    }
+    if(!id!.value.contains('.')){
+      return null;
+    }
+    return id!.value.split('.').first;
+  }
 }

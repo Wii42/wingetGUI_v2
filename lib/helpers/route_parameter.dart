@@ -13,3 +13,9 @@ class PackageRouteParameter extends RouteParameter {
   const PackageRouteParameter(
       {required this.package, super.commandParameter, super.titleAddon});
 }
+
+class StringRouteParameter extends RouteParameter {
+  final String string;
+
+  const StringRouteParameter({required this.string, super.commandParameter, super.titleAddon});
+}

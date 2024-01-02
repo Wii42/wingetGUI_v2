@@ -85,6 +85,7 @@ class PackagePeek extends StatelessWidget {
             mainAlignment: MainAxisAlignment.spaceEvenly,
             upgrade: upgradeButton,
             install: installButton,
+            uninstall: uninstallButton,
             iconsOnly: true,
           )
         ],
@@ -99,29 +100,48 @@ class PackagePeek extends StatelessWidget {
       mainAxisAlignment: columnAlign,
       children: [
         Text(
-          infos.name!.value,
+          infos.name?.value ?? '<Name>',
           style: _titleStyle(context),
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
         ),
         Text(
-          infos.id!.value,
+          infos.publisherID ?? infos.id?.value ?? '<ID>',
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
         ),
-        if (infos.source != null && infos.source!.value.isNotEmpty)
-          Text(
-            locale.fromSource(infos.source!.value),
-            style: withoutColor(FluentTheme.of(context).typography.caption),
-            //style: TextStyle(
-            // color: FluentTheme.of(context).inactiveColor,
-            //),
-            textAlign: TextAlign.start,
-            overflow: TextOverflow.ellipsis,
-          ),
+        sourceAndID(locale, context)
       ],
     );
   }
+
+  Widget sourceAndID(AppLocalizations locale, BuildContext context) {
+    bool showSource = infos.source != null && infos.source!.value.isNotEmpty;
+    bool showId = infos.id != null && infos.id!.value.isNotEmpty && infos.publisherID != null;
+    return Row(
+        children: [
+          if (showSource)
+            smallText(locale.fromSource(infos.source!.value), context),
+          if (showSource && showId) SizedBox(width: 15, child: Center(child: smallText('·', context)),),
+          if (showId)
+            Expanded(child: smallText(infos.id!.value, context)),
+        ],
+      );
+  }
+
+  Widget smallText(String text, BuildContext context) {
+    return Text(
+      text,
+      style: withoutColor(FluentTheme.of(context).typography.caption),
+      //style: TextStyle(
+      // color: FluentTheme.of(context).inactiveColor,
+      //),
+      textAlign: TextAlign.start,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+
 
   TextStyle? _titleStyle(BuildContext context) {
     TextStyle? blueprint = FluentTheme.of(context).typography.title;
@@ -182,7 +202,7 @@ class PackagePeek extends StatelessWidget {
     //if (checkFavicon && !infos.checkedForScreenshots && infos.screenshots == null){
 
     //}
-    if(infos.screenshots == null) {
+    if (infos.screenshots == null) {
       return DefaultFavicon(faviconSize: faviconSize);
     }
     return FaviconWidget(infos: infos, faviconSize: faviconSize);
