@@ -14,6 +14,8 @@ class PackageScreenshotsList {
   static final PackageScreenshotsList instance = PackageScreenshotsList._();
 
   List<PackageScreenshots> screenshotList = [];
+  Map<String, PackageScreenshots>? _keyMap;
+  Map<String, String> idToPackageKeyMap = {};
 
   PackageScreenshotsList._() {
     source = Uri.parse(
@@ -126,27 +128,59 @@ class PackageScreenshotsList {
     if (screenshotList.isEmpty) {
       return null;
     }
+
+    String? packageKey = idToPackageKeyMap[packageInfos.id?.value];
+    if (packageKey != null) {
+      if (kDebugMode) {
+        print(
+            'found packageKey $packageKey for ${packageInfos.id?.value} in idToPackageKeyMap');
+      }
+      return keyMap[packageKey];
+    }
+
+    return _guessPackageKey(packageInfos);
+  }
+
+  PackageScreenshots? _guessPackageKey(PackageInfos packageInfos) {
     if (kDebugMode) {
       print(
           'looking for: ${packageInfos.nameWithoutVersion}, ${packageInfos.nameWithoutPublisherIDAndVersion}, ${packageInfos.idWithHyphen}, ${packageInfos.idWithoutPublisherID}, ${packageInfos.idWithoutPublisherIDAndHyphen}, ${packageInfos.id?.value}');
     }
-    List<bool Function(PackageScreenshots)> conditions = [
-      (element) => element.packageKey == packageInfos.nameWithoutVersion,
-      (element) =>
-          element.packageKey == packageInfos.nameWithoutPublisherIDAndVersion,
-      (element) => element.packageKey == packageInfos.idWithHyphen,
-      (element) => element.packageKey == packageInfos.idWithoutPublisherID,
-      (element) =>
-          element.packageKey == packageInfos.idWithoutPublisherIDAndHyphen,
-      (element) => element.packageKey == packageInfos.id?.value,
+    List<String?> possibleKeys = [
+      packageInfos.nameWithoutVersion,
+      packageInfos.nameWithoutPublisherIDAndVersion,
+      packageInfos.idWithHyphen,
+      packageInfos.idWithoutPublisherID,
+      packageInfos.idWithoutPublisherIDAndHyphen,
+      packageInfos.id?.value,
     ];
-    for (bool Function(PackageScreenshots) condition in conditions) {
-
-        PackageScreenshots? screenshots =  screenshotList.firstWhereOrNull(condition);
-        if (screenshots != null) {
-          return screenshots;
+    for (String possibleKey in possibleKeys.nonNulls) {
+      PackageScreenshots? screenshots = keyMap[possibleKey];
+      if (screenshots != null) {
+        if (packageInfos.id != null) {
+          idToPackageKeyMap[packageInfos.id!.value] = possibleKey;
+        }
+        return screenshots;
       }
     }
     return null;
+  }
+
+  Map<String, PackageScreenshots> get keyMap {
+    if (_keyMap == null) {
+      _updateKeyMap();
+    }
+    return _keyMap!;
+  }
+
+  void _updateKeyMap() {
+    _keyMap = {};
+    for (PackageScreenshots screenshots in screenshotList) {
+      if (_keyMap!.containsKey(screenshots.packageKey)) {
+        throw Exception(
+            'Duplicate package key: ${screenshots.packageKey} in PackageScreenshotsList.keyMap');
+      }
+      _keyMap![screenshots.packageKey] = screenshots;
+    }
   }
 }
