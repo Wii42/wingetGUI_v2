@@ -42,7 +42,6 @@ class WingetDB {
       //print(available.infos);
     }
 
-    print(installed.idMap["Microsoft.DotNet.DesktopRuntime.7"]?.length);
     List<PackageInfosPeek> toRemoveFromUpdates = [];
     for (PackageInfosPeek package in updates.infos) {
       String id = package.id!.value;

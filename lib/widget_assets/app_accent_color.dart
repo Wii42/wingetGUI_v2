@@ -141,12 +141,6 @@ class _AppAccentColorState extends State<AppAccentColor> {
       );
     }
   }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    //properties.add(EnumProperty('themeMode', _currentAccentColor));
-  }
 }
 
 class _InheritedAccentColorData extends InheritedWidget {

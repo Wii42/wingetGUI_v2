@@ -2,7 +2,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 
-import '../main.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../output_handling/table/apps_table/package_peek.dart';
 import '../winget_db.dart';

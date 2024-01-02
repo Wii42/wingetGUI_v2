@@ -219,13 +219,6 @@ class _AppLocaleState extends State<AppLocale> {
       );
     }
   }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    //properties.add(EnumProperty('guiLocale', _currentGuiLocale));
-    //properties.add(EnumProperty('wingetLocale', _currentWingetLocale));
-  }
 }
 
 class _InheritedLocaleData extends InheritedWidget {

@@ -1,5 +1,4 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
 
 import './package_infos.dart';
 import 'info.dart';

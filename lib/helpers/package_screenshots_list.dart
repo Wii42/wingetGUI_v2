@@ -1,4 +1,4 @@
-import 'package:collection/collection.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:ribs_json/ribs_json.dart';

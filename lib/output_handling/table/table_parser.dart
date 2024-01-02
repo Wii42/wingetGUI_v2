@@ -63,33 +63,6 @@ class TableParser extends OutputParser {
     return columnsPos;
   }
 
-  void _correctLinesWithNonWesternGlyphs(List<int> columnsPos) {
-    String line;
-    for (int i = 2; i < lines.length; i++) {
-      line = lines[i];
-      bool test = line.containsNonWesternGlyphs();
-      if (test) {
-        Pattern pattern = RegExp(r"\s{2}[A-ZÄÖÜa-zäöü0-9]");
-        Iterable<Match> matches = pattern.allMatches(line);
-        if (matches.isEmpty) {
-          return;
-        }
-        Match match = matches.first;
-        if (match.start + 2 < columnsPos[1]) {
-          int diff = columnsPos[1] - (match.start + 2);
-          String str = " " * diff + line;
-
-          Pattern p = RegExp(" FLVCD.Bigrats ");
-
-          if (p.allMatches(str).isNotEmpty) {
-            str = " " * 2 + str;
-          }
-          lines[i] = str;
-        }
-      }
-    }
-  }
-
   void _correctLinesWithCjKIdeographs() {
     for (int i = 2; i < lines.length; i++) {
       String line = lines[i];
