@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
@@ -5,7 +6,10 @@ import 'package:ribs_json/ribs_json.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
+
+import '../output_handling/package_infos/info.dart';
 
 class PackageScreenshotsList {
   static const String _packageScreenshotsKey = 'packagePictures';
@@ -15,7 +19,9 @@ class PackageScreenshotsList {
 
   List<PackageScreenshots> screenshotList = [];
   Map<String, PackageScreenshots>? _keyMap;
-  Map<String, String> idToPackageKeyMap = {};
+  final Map<String, String> _idToPackageKeyMap = {};
+
+  Map<String, Uri> publisherIcons = {};
 
   PackageScreenshotsList._() {
     source = Uri.parse(
@@ -122,6 +128,7 @@ class PackageScreenshotsList {
     await ensureInitialized();
     loadScreenshots();
     await fetchWebScreenshots();
+    await loadCustomIcons();
   }
 
   PackageScreenshots? getPackage(PackageInfos packageInfos) {
@@ -129,7 +136,7 @@ class PackageScreenshotsList {
       return null;
     }
 
-    String? packageKey = idToPackageKeyMap[packageInfos.id?.value];
+    String? packageKey = _idToPackageKeyMap[packageInfos.id?.value];
     if (packageKey != null) {
       if (kDebugMode) {
         print(
@@ -147,18 +154,18 @@ class PackageScreenshotsList {
           'looking for: ${packageInfos.nameWithoutVersion}, ${packageInfos.nameWithoutPublisherIDAndVersion}, ${packageInfos.idWithHyphen}, ${packageInfos.idWithoutPublisherID}, ${packageInfos.idWithoutPublisherIDAndHyphen}, ${packageInfos.id?.value}');
     }
     List<String?> possibleKeys = [
+      packageInfos.id?.value,
       packageInfos.nameWithoutVersion,
       packageInfos.nameWithoutPublisherIDAndVersion,
       packageInfos.idWithHyphen,
       packageInfos.idWithoutPublisherID,
       packageInfos.idWithoutPublisherIDAndHyphen,
-      packageInfos.id?.value,
     ];
     for (String possibleKey in possibleKeys.nonNulls) {
       PackageScreenshots? screenshots = keyMap[possibleKey];
       if (screenshots != null) {
         if (packageInfos.id != null) {
-          idToPackageKeyMap[packageInfos.id!.value] = possibleKey;
+          _idToPackageKeyMap[packageInfos.id!.value] = possibleKey;
         }
         return screenshots;
       }
@@ -181,6 +188,64 @@ class PackageScreenshotsList {
             'Duplicate package key: ${screenshots.packageKey} in PackageScreenshotsList.keyMap');
       }
       _keyMap![screenshots.packageKey] = screenshots;
+    }
+  }
+
+  Future<void> loadCustomIcons() async {
+    File customIconsFile = File('custom_icons.csv');
+    List<String> lines = await customIconsFile.readAsLines();
+    for (String line in lines) {
+      List<String> parts = line.split(',');
+      if (parts.length < 2) {
+        continue;
+      }
+      String packageKey = parts[0];
+      String iconUrl = parts[1];
+
+      if (iconUrl.trim().isEmpty) {
+        continue;
+      }
+      Uri? url = Uri.tryParse(iconUrl);
+      if (url == null) {
+        continue;
+      }
+      PackageScreenshots? found =
+          getPackage(PackageInfosPeek.onlyId(packageKey));
+      if (found == null) {
+        PackageScreenshots packageIcon =
+            PackageScreenshots(packageKey: packageKey, icon: url);
+        screenshotList.add(packageIcon);
+        _keyMap![packageKey] = packageIcon;
+        _idToPackageKeyMap[packageKey] = packageKey;
+      } else {
+        if (found.icon != null && found.icon.toString().trim().isNotEmpty) {
+          found.backupIcon ??= found.icon;
+        }
+        found.icon = url;
+      }
+    }
+  }
+
+  Future<void> loadPublisherIcons() async {
+    File customIconsFile = File('publisher_icons.csv');
+    List<String> lines = await customIconsFile.readAsLines();
+    for (String line in lines) {
+      List<String> parts = line.split(',');
+      if (parts.length < 2) {
+        continue;
+      }
+      String publisher = parts[0];
+      String iconUrl = parts[1];
+
+      if (iconUrl.trim().isEmpty) {
+        continue;
+      }
+      Uri? url = Uri.tryParse(iconUrl);
+      if (url == null) {
+        continue;
+      }
+
+      publisherIcons[publisher] = url;
     }
   }
 }

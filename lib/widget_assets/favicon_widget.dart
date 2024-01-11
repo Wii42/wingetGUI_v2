@@ -1,5 +1,6 @@
 import 'package:favicon/favicon.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/widget_assets/web_image.dart';
 
@@ -11,11 +12,13 @@ class FaviconWidget extends StatefulWidget {
   final PackageInfos infos;
   final double faviconSize;
   late final Uri? faviconUrl;
+  final bool isClickable;
 
   FaviconWidget(
       {super.key,
       required this.infos,
       required this.faviconSize,
+      this.isClickable = true,
       Uri? faviconUrl}) {
     if (infos is PackageInfosFull && faviconUrl == null) {
       PackageInfosFull infosFull = infos as PackageInfosFull;
@@ -56,10 +59,44 @@ class _FaviconWidgetState extends State<FaviconWidget> {
   }
 
   Widget favicon() {
-    if (widget.infos.screenshots?.icon != null &&
-        (widget.infos.screenshots!.icon.toString().isNotEmpty)) {
+    PackageScreenshots? images = widget.infos.screenshots;
+    if (images != null) {
+      if (images.icon != null && (images.icon.toString().isNotEmpty)) {
+        return loadFavicon(
+          widget.faviconSize,
+          images.icon.toString(),
+          () {
+            if (images.backupIcon != null &&
+                images.backupIcon.toString().isNotEmpty) {
+              return loadFavicon(
+                  widget.faviconSize, images.backupIcon.toString(), () {
+                if (widget.infos.publisherIcon != null &&
+                    widget.infos.publisherIcon.toString().isNotEmpty) {
+                  return loadFavicon(
+                      widget.faviconSize,
+                      widget.infos.publisherIcon.toString(),
+                      () => defaultFavicon(),
+                      color: defaultColor());
+                }
+                return defaultFavicon();
+              });
+            }
+            return findFavicon();
+          },
+        );
+      }
+      if (widget.infos.publisherIcon != null &&
+          widget.infos.publisherIcon.toString().isNotEmpty) {
+        return loadFavicon(widget.faviconSize,
+            widget.infos.publisherIcon.toString(), () => defaultFavicon(),
+            color: defaultColor());
+      }
+    }
+    if (widget.infos.publisherIcon != null &&
+        widget.infos.publisherIcon.toString().isNotEmpty) {
       return loadFavicon(widget.faviconSize,
-          widget.infos.screenshots!.icon.toString(), () => findFavicon());
+          widget.infos.publisherIcon.toString(), () => defaultFavicon(),
+          color: defaultColor());
     }
     return findFavicon();
   }
@@ -84,18 +121,25 @@ class _FaviconWidgetState extends State<FaviconWidget> {
     return Icon(
       FluentIcons.product,
       size: widget.faviconSize,
-      color: FluentTheme.of(context).inactiveColor.withAlpha(100),
+      color: defaultColor(),
     );
   }
 
-  Widget loadFavicon(
-      double faviconSize, String url, Widget Function() onError) {
+  Color defaultColor() {
+    return FluentTheme.of(context)
+        .inactiveColor
+        .withAlpha(widget.isClickable ? 100 : 50);
+  }
+
+  Widget loadFavicon(double faviconSize, String url, Widget Function() onError,
+      {Color? color}) {
     Widget image;
 
     image = WebImage(
       url: url,
       imageHeight: faviconSize,
       imageWidth: faviconSize,
+      isHalfTransparent: !widget.isClickable,
       imageConfig: ImageConfig(
         filterQuality: FilterQuality.high,
         isAntiAlias: true,
@@ -105,6 +149,7 @@ class _FaviconWidgetState extends State<FaviconWidget> {
         //loadingBuilder: (context) {
         //  return defaultFavicon();
         //},
+        solidColor: color,
       ),
     );
     return image;
@@ -112,6 +157,7 @@ class _FaviconWidgetState extends State<FaviconWidget> {
 }
 
 class DefaultFavicon extends FaviconWidget {
-  DefaultFavicon({super.key, required super.faviconSize})
+  DefaultFavicon(
+      {super.key, required super.faviconSize, super.isClickable = true})
       : super(infos: PackageInfosPeek()..screenshots = null, faviconUrl: null);
 }

@@ -202,10 +202,10 @@ class PackagePeek extends StatelessWidget {
     //if (checkFavicon && !infos.checkedForScreenshots && infos.screenshots == null){
 
     //}
-    if (infos.screenshots == null) {
-      return DefaultFavicon(faviconSize: faviconSize);
+    if (infos.screenshots == null && infos.publisherIcon == null) {
+      return DefaultFavicon(faviconSize: faviconSize, isClickable: isClickable(),);
     }
-    return FaviconWidget(infos: infos, faviconSize: faviconSize);
+    return FaviconWidget(infos: infos, faviconSize: faviconSize, isClickable: isClickable());
   }
 
   double faviconSize() => 60;

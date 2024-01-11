@@ -11,6 +11,7 @@ abstract class PackageInfos {
   final Map<String, String>? otherInfos;
   PackageScreenshots? screenshots;
   bool checkedForScreenshots = false;
+  Uri? publisherIcon;
 
   PackageInfos({
     this.name,
@@ -30,6 +31,9 @@ abstract class PackageInfos {
   void setImplicitInfos() {
     screenshots = PackageScreenshotsList.instance.getPackage(this);
     checkedForScreenshots = true;
+    publisherIcon =
+        PackageScreenshotsList.instance.publisherIcons[probablyPublisherID()];
+    print('name: ${name?.value}, publisherIcon: $publisherIcon');
   }
 
   bool isWinget();
@@ -79,13 +83,19 @@ abstract class PackageInfos {
     return id!.value.replaceAll('.', '/');
   }
 
-  String? get publisherID {
-    if (id == null || !isWinget()) {
+  String? get publisherID => isWinget() ? probablyPublisherID() : null;
+
+  String? probablyPublisherID() {
+    String? id = this.id?.value;
+    if (id == null) {
       return null;
     }
-    if(!id!.value.contains('.')){
-      return null;
+    if (id.contains('.')) {
+      return id.split('.').first;
     }
-    return id!.value.split('.').first;
+    if (id.trim().contains(' ')) {
+      return id.trim().split(' ').first;
+    }
+    return null;
   }
 }

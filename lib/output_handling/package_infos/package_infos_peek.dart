@@ -76,4 +76,13 @@ class PackageInfosPeek extends PackageInfos {
         "otherInfos: $otherInfos"
         "}";
   }
+
+  factory PackageInfosPeek.onlyId(String id) {
+    return PackageInfosPeek(
+      id: Info(
+        title: (_) => '',
+        value: id,
+      ),
+    );
+  }
 }

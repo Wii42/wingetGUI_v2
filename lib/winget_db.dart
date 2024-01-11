@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -42,6 +43,23 @@ class WingetDB {
       //print(available.infos);
     }
 
+    Map<String, List<PackageInfosPeek>> map = {};
+    for (PackageInfosPeek package in available.infos) {
+      String publisherId = package.probablyPublisherID()!;
+      if (map.containsKey(publisherId)) {
+        map[publisherId]!.add(package);
+      } else {
+        map[publisherId] = [package];
+      }
+    }
+    //map.forEach((key, value) {print('$key: ${value.length}');});
+
+    map.entries
+        .sorted((a, b) => b.value.length.compareTo(a.value.length))
+        .forEach((element) {
+      print('${element.key}: ${element.value.length}');
+    });
+
     List<PackageInfosPeek> toRemoveFromUpdates = [];
     for (PackageInfosPeek package in updates.infos) {
       String id = package.id!.value;
@@ -49,7 +67,9 @@ class WingetDB {
         List<PackageInfosPeek> installedPackages = installed.idMap[id]!;
         List<String?> installedVersions =
             installedPackages.map((e) => e.version?.value).toList();
-        if (installedVersions.contains(package.availableVersion?.value) || installedVersions.contains("> ${package.availableVersion?.value}")) {
+        if (installedVersions.contains(package.availableVersion?.value) ||
+            installedVersions
+                .contains("> ${package.availableVersion?.value}")) {
           toRemoveFromUpdates.add(package);
         }
       }
@@ -68,7 +88,7 @@ class DBTable {
   Map<String, List<PackageInfosPeek>>? _idMap;
   List<OneLineInfo> hints;
 
-  DBTable(this.infos, {this.hints = const[]});
+  DBTable(this.infos, {this.hints = const []});
 
   Map<String, List<PackageInfosPeek>> get idMap {
     if (_idMap == null) {
@@ -144,8 +164,6 @@ class DBTableCreator {
     return output;
   }
 
-
-
   List<PackageInfosPeek> extractInfos() {
     if (parsed == null) {
       throw Exception("$content has not been parsed");
@@ -166,7 +184,8 @@ class DBTableCreator {
     if (parsed == null) {
       throw Exception("$content has not been parsed");
     }
-    Iterable<ParsedOneLineInfos> appTables = parsed!.whereType<ParsedOneLineInfos>();
+    Iterable<ParsedOneLineInfos> appTables =
+        parsed!.whereType<ParsedOneLineInfos>();
     List<OneLineInfo> infos = [];
     for (ParsedOneLineInfos table in appTables) {
       infos.addAll(table.infos);
