@@ -13,36 +13,36 @@ import 'output_handling/package_infos/info.dart';
 import 'output_handling/package_infos/package_infos_peek.dart';
 import 'output_handling/parsed_output.dart';
 
-class WingetDB {
+class WingetDB extends ChangeNotifier {
   late DBTable updates, installed, available;
 
   Stream<String> init(BuildContext context) async* {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     WidgetsFlutterBinding.ensureInitialized();
-    DBTableCreator updatesCreator =
-        DBTableCreator(wingetLocale, content: 'updates');
-    yield* updatesCreator.init(Winget.updates);
-    updates = updatesCreator.returnTable();
-    if (kDebugMode) {
-      //print(updates.infos);
-    }
 
-    DBTableCreator installedCreator =
-        DBTableCreator(wingetLocale, content: 'installed');
-    yield* installedCreator.init(Winget.installed);
+    DBTableCreator installedCreator = DBTableCreator(wingetLocale,
+        content: 'installed', winget: Winget.installed);
+    yield* installedCreator.init();
     installed = installedCreator.returnTable();
-    if (kDebugMode) {
-      //print(installed.infos);
-    }
 
-    DBTableCreator availableCreator =
-        DBTableCreator(wingetLocale, content: 'available');
-    yield* availableCreator.init(Winget.availablePackages);
+    DBTableCreator updatesCreator = DBTableCreator(wingetLocale,
+        content: 'updates', winget: Winget.updates, filter: _filterUpdates);
+    yield* updatesCreator.init();
+    updates = updatesCreator.returnTable();
+
+    DBTableCreator availableCreator = DBTableCreator(wingetLocale,
+        content: 'available', winget: Winget.availablePackages);
+    yield* availableCreator.init();
     available = availableCreator.returnTable();
-    if (kDebugMode) {
-      //print(available.infos);
-    }
 
+    if (kDebugMode) {
+      printPublishersPackageNrs();
+    }
+    isInitialized = true;
+    return;
+  }
+
+  void printPublishersPackageNrs() {
     Map<String, List<PackageInfosPeek>> map = {};
     for (PackageInfosPeek package in available.infos) {
       String publisherId = package.probablyPublisherID()!;
@@ -52,16 +52,19 @@ class WingetDB {
         map[publisherId] = [package];
       }
     }
-    //map.forEach((key, value) {print('$key: ${value.length}');});
 
     map.entries
         .sorted((a, b) => b.value.length.compareTo(a.value.length))
-        .forEach((element) {
-      print('${element.key}: ${element.value.length}');
-    });
+        .forEach(
+      (element) {
+        print('${element.key}: ${element.value.length}');
+      },
+    );
+  }
 
+  List<PackageInfosPeek> _filterUpdates(infos) {
     List<PackageInfosPeek> toRemoveFromUpdates = [];
-    for (PackageInfosPeek package in updates.infos) {
+    for (PackageInfosPeek package in infos) {
       String id = package.id!.value;
       if (installed.idMap.containsKey(id)) {
         List<PackageInfosPeek> installedPackages = installed.idMap[id]!;
@@ -74,12 +77,8 @@ class WingetDB {
         }
       }
     }
-    toRemoveFromUpdates.forEach(updates.infos.remove);
-
-    updates.updateIDMap();
-
-    isInitialized = true;
-    return;
+    toRemoveFromUpdates.forEach(infos.remove);
+    return infos;
   }
 }
 
@@ -88,7 +87,17 @@ class DBTable {
   Map<String, List<PackageInfosPeek>>? _idMap;
   List<OneLineInfo> hints;
 
-  DBTable(this.infos, {this.hints = const []});
+  final String content;
+  final List<String> wingetCommand;
+  AppLocalizations wingetLocale;
+  final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? creatorFilter;
+
+  DBTable(this.infos,
+      {this.hints = const [],
+      required this.content,
+      required this.wingetCommand,
+      required this.wingetLocale,
+      this.creatorFilter});
 
   Map<String, List<PackageInfosPeek>> get idMap {
     if (_idMap == null) {
@@ -116,33 +125,50 @@ class DBTable {
       _generateIdMap();
     }
   }
+
+  Stream<String> reloadDBTable() async* {
+    DBTableCreator creator = DBTableCreator(
+      wingetLocale,
+      content: content,
+      command: wingetCommand,
+      filter: creatorFilter,
+    );
+    yield* creator.init();
+    infos = creator.extractInfos();
+    hints = creator.extractHints();
+  }
 }
 
 class DBTableCreator {
   List<String>? raw;
   List<ParsedOutput>? parsed;
   AppLocalizations wingetLocale;
+  late List<String> wingetCommand;
+  final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter;
 
   String content;
 
-  DBTableCreator(this.wingetLocale, {this.content = 'output'});
+  DBTableCreator(this.wingetLocale,
+      {this.content = 'output',
+      Winget? winget,
+      List<String>? command,
+      this.filter}) {
+    assert(winget != null || command != null,
+        'winget or command must be provided');
 
-  Stream<String> init(Winget wingetCommand) async* {
-    yield "reading output of winget ${wingetCommand.baseCommand}...";
-    raw = await getRawOutput(wingetCommand);
-
-    yield "parsing $content...";
-    parsed =
-        await parsedOutputList(raw!, wingetCommand.fullCommand, wingetLocale);
-    return;
+    if (winget != null) {
+      wingetCommand = winget.fullCommand;
+    } else {
+      wingetCommand = command!;
+    }
   }
 
-  Stream<String> initCommand(List<String> command) async* {
-    yield "reading output of winget ${command.join(' ')}...";
-    raw = await getRawOutputC(command);
+  Stream<String> init() async* {
+    yield "reading output of winget ${wingetCommand.join(' ')}...";
+    raw = await getRawOutputC(wingetCommand);
 
     yield "parsing $content...";
-    parsed = await parsedOutputList(raw!, command, wingetLocale);
+    parsed = await parsedOutputList(raw!, wingetCommand, wingetLocale);
     return;
   }
 
@@ -176,7 +202,9 @@ class DBTableCreator {
     for (ParsedAppTable table in appTables) {
       infos.addAll(table.packages);
     }
-
+    if (filter != null) {
+      infos = filter!(infos);
+    }
     return infos;
   }
 
@@ -195,6 +223,11 @@ class DBTableCreator {
   }
 
   DBTable returnTable() {
-    return DBTable(extractInfos(), hints: extractHints());
+    return DBTable(extractInfos(),
+        hints: extractHints(),
+        content: content,
+        wingetCommand: wingetCommand,
+        creatorFilter: filter,
+        wingetLocale: wingetLocale);
   }
 }
