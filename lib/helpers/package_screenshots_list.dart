@@ -149,10 +149,6 @@ class PackageScreenshotsList {
   }
 
   PackageScreenshots? _guessPackageKey(PackageInfos packageInfos) {
-    if (kDebugMode) {
-      print(
-          'looking for: ${packageInfos.nameWithoutVersion}, ${packageInfos.nameWithoutPublisherIDAndVersion}, ${packageInfos.idWithHyphen}, ${packageInfos.idWithoutPublisherID}, ${packageInfos.idWithoutPublisherIDAndHyphen}, ${packageInfos.id?.value}');
-    }
     List<String?> possibleKeys = [
       packageInfos.id?.value,
       packageInfos.nameWithoutVersion,
@@ -160,7 +156,11 @@ class PackageScreenshotsList {
       packageInfos.idWithHyphen,
       packageInfos.idWithoutPublisherID,
       packageInfos.idWithoutPublisherIDAndHyphen,
+      if(packageInfos.idWithoutPublisherIDAndHyphen != null && packageInfos.idWithoutPublisherIDAndHyphen!.endsWith('-eap'))
+        ...['${packageInfos.idWithoutPublisherIDAndHyphen!.substring(0, packageInfos.idWithoutPublisherIDAndHyphen!.length - 4)}-earlyaccess','${packageInfos.idWithoutPublisherIDAndHyphen!.substring(0, packageInfos.idWithoutPublisherIDAndHyphen!.length - 4)}-earlypreview',],
     ];
+    print('Looking for ${possibleKeys.join(', ')}');
+
     for (String possibleKey in possibleKeys.nonNulls) {
       PackageScreenshots? screenshots = keyMap[possibleKey];
       if (screenshots != null) {
