@@ -11,6 +11,7 @@ import 'db_table_creator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WingetDB extends ChangeNotifier {
+  bool isInitialized = false;
   late DBTable updates, installed, available;
 
   Stream<String> init(BuildContext context) async* {
@@ -18,17 +19,17 @@ class WingetDB extends ChangeNotifier {
     WidgetsFlutterBinding.ensureInitialized();
 
     DBTableCreator installedCreator = DBTableCreator(wingetLocale,
-        content: 'installed', winget: Winget.installed);
+        content: 'installed', winget: Winget.installed, wingetDB: this);
     yield* installedCreator.init();
     installed = installedCreator.returnTable();
 
     DBTableCreator updatesCreator = DBTableCreator(wingetLocale,
-        content: 'updates', winget: Winget.updates, filter: _filterUpdates);
+        content: 'updates', winget: Winget.updates, filter: _filterUpdates, wingetDB: this);
     yield* updatesCreator.init();
     updates = updatesCreator.returnTable();
 
     DBTableCreator availableCreator = DBTableCreator(wingetLocale,
-        content: 'available', winget: Winget.availablePackages);
+        content: 'available', winget: Winget.availablePackages, wingetDB: this);
     yield* availableCreator.init();
     available = availableCreator.returnTable();
 
@@ -76,5 +77,19 @@ class WingetDB extends ChangeNotifier {
     }
     toRemoveFromUpdates.forEach(infos.remove);
     return infos;
+  }
+
+  notify() {
+    notifyListeners();
+  }
+
+  Stream<String> updateAll() async* {
+    print('starting...');
+    yield* installed.reloadDBTable();
+    print('installed reloaded');
+    yield* updates.reloadDBTable();
+    print('updates reloaded');
+    yield* available.reloadDBTable();
+    print('available reloaded');
   }
 }

@@ -1,11 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 import '../main.dart';
 import '../widget_assets/package_peek_list_view.dart';
+import '../winget_db/winget_db.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({super.key});
@@ -44,11 +46,16 @@ class SearchPage extends StatelessWidget {
                 )),
           ),
           Expanded(
-            child: PackagePeekListView(
-              dbTable: wingetDB.available,
-              isInstalled: (package, _) =>
-                  wingetDB.installed.idMap.containsKey(package.id!.value),
-              isUpgradable: (package, _) => package.availableVersion != null,
+            child: Consumer<WingetDB>(
+              builder: (BuildContext context, WingetDB wingetDB, Widget? _) {
+                return PackagePeekListView(
+                  dbTable: wingetDB.available,
+                  isInstalled: (package, _) =>
+                      wingetDB.installed.idMap.containsKey(package.id!.value),
+                  isUpgradable: (package, _) =>
+                      package.availableVersion != null,
+                );
+              },
             ),
           ),
         ],

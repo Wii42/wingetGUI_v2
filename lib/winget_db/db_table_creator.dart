@@ -1,3 +1,5 @@
+import 'package:winget_gui/winget_db/winget_db.dart';
+
 import '../output_handling/one_line_info/one_line_info_parser.dart';
 import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
@@ -15,16 +17,20 @@ class DBTableCreator {
   AppLocalizations wingetLocale;
   late List<String> wingetCommand;
   final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter;
+  final WingetDB wingetDB;
 
   String content;
 
-  DBTableCreator(this.wingetLocale,
-      {this.content = 'output',
-        Winget? winget,
-        List<String>? command,
-        this.filter}) {
+  DBTableCreator(
+    this.wingetLocale, {
+    this.content = 'output',
+    Winget? winget,
+    List<String>? command,
+    this.filter,
+    required this.wingetDB,
+  }) {
     assert(winget != null || command != null,
-    'winget or command must be provided');
+        'winget or command must be provided');
 
     if (winget != null) {
       wingetCommand = winget.fullCommand;
@@ -83,7 +89,7 @@ class DBTableCreator {
       throw Exception("$content has not been parsed");
     }
     Iterable<ParsedOneLineInfos> appTables =
-    parsed!.whereType<ParsedOneLineInfos>();
+        parsed!.whereType<ParsedOneLineInfos>();
     List<OneLineInfo> infos = [];
     for (ParsedOneLineInfos table in appTables) {
       infos.addAll(table.infos);
@@ -98,6 +104,7 @@ class DBTableCreator {
         content: content,
         wingetCommand: wingetCommand,
         creatorFilter: filter,
-        wingetLocale: wingetLocale);
+        wingetLocale: wingetLocale,
+        wingetDB: wingetDB);
   }
 }

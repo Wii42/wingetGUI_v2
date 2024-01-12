@@ -36,6 +36,7 @@ dependencies:
   collection: any
   pub_semver: ^2.1.4
   csv: ^5.1.1
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:

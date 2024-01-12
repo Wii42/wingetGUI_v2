@@ -7,8 +7,8 @@ class MainNavigation extends StatefulWidget {
   final String title;
 
   final List<Routes> mainItems = [
-    Routes.updates,
-    Routes.installed,
+    //Routes.updates,
+    //Routes.installed,
     Routes.searchPage,
     Routes.updatesPage,
     Routes.installedPage

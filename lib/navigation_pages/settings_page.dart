@@ -2,6 +2,7 @@ import 'package:app_theme_mode/app_theme_mode.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
@@ -11,6 +12,7 @@ import '../widget_assets/app_locale.dart';
 import '../widget_assets/decorated_card.dart';
 import '../widget_assets/pane_item_body.dart';
 import '../winget_commands.dart';
+import '../winget_db/winget_db.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -37,23 +39,35 @@ class _SettingsPageSate extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
+    WingetDB wingetDB = Provider.of<WingetDB>(context);
     return PaneItemBody(
       title: Routes.settingsPage.title(localizations),
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
+        child: ListView(
           children: [
             themeModeOption(localizations, context),
             guiLocaleOption(localizations, context),
             wingetLocaleOption(localizations, context),
             settingsItem(
-                Winget.settings.title(localizations),
+              Winget.settings.title(localizations),
+              Button(
+                onPressed: () {
+                  WingetProcess.runWinget(Winget.settings);
+                },
+                child: Text(localizations.openWingetSettingsFile),
+              ),
+            ),
+            settingsItem(
+                'WingetDB',
                 Button(
-                  onPressed: () {
-                    WingetProcess.runWinget(Winget.settings);
-                  },
-                  child: Text(localizations.openWingetSettingsFile),
-                ))
+                    onPressed: () => wingetDB.updates.reloadDBTable(),
+                    child: const Text('refresh updates'))),
+            settingsItem(
+                'WingetDB2',
+                Button(
+                    onPressed: () => wingetDB.updates.removeAllInfos(),
+                    child: const Text('remove all updates'))),
           ].withSpaceBetween(height: 10),
         ),
       ),

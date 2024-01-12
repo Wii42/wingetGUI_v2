@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
@@ -12,10 +13,6 @@ import 'global_app_data.dart';
 import 'helpers/package_screenshots_list.dart';
 
 const String appTitle = 'WingetGUI';
-
-bool isInitialized = false;
-
-WingetDB wingetDB = WingetDB();
 
 void main() async {
   await initAppPrerequisites();
@@ -64,20 +61,11 @@ class WingetGui extends StatelessWidget {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: WindowBrightnessSetter(
-              child: isInitialized
-                  ? MainNavigation(title: appTitle)
-                  : StreamBuilder<String>(
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          if (snapshot.hasData) {
-                            return Center(child: Text(snapshot.data!));
-                          }
-                          return const Center(child: Text('...'));
-                        }
-                        return MainNavigation(title: appTitle);
-                      },
-                      stream: wingetDB.init(context),
-                    )),
+            child: ChangeNotifierProvider(
+              create: (_) => WingetDB(),
+              child: const DBInitializer(),
+            ),
+          ),
         );
       },
     );
@@ -105,5 +93,28 @@ class WindowBrightnessSetter extends StatelessWidget {
     Brightness brightness = FluentTheme.of(context).brightness;
     WindowManager.instance.setBrightness(brightness);
     return child;
+  }
+}
+
+class DBInitializer extends StatelessWidget {
+  const DBInitializer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    WingetDB wingetDB = Provider.of<WingetDB>(context);
+    return wingetDB.isInitialized
+        ? MainNavigation(title: appTitle)
+        : StreamBuilder<String>(
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                if (snapshot.hasData) {
+                  return Center(child: Text(snapshot.data!));
+                }
+                return const Center(child: Text('...'));
+              }
+              return MainNavigation(title: appTitle);
+            },
+            stream: wingetDB.init(context),
+          );
   }
 }
