@@ -6,8 +6,7 @@ import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/main_navigation.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/winget_db.dart';
+import 'package:winget_gui/winget_db/winget_db.dart';
 
 import 'global_app_data.dart';
 import 'helpers/package_screenshots_list.dart';

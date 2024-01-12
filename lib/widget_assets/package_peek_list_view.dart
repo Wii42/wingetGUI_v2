@@ -4,7 +4,7 @@ import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.da
 
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../output_handling/table/apps_table/package_peek.dart';
-import '../winget_db.dart';
+import '../winget_db/db_table.dart';
 
 class PackagePeekListView extends StatelessWidget {
   final DBTable dbTable;
