@@ -61,21 +61,31 @@ class RightSideButtons extends StatelessWidget {
     String appName = infos.name?.value ?? infos.id!.value;
     if (iconsOnly) {
       assert(winget.icon != null);
-      return CommandIconButton(
-        text: winget.title(locale),
-        command: _createCommand(winget, locale),
-        title: winget.titleWithInput(appName, localization: locale),
-        icon: winget.icon ?? FluentIcons.error,
-        padding: numberOfButtons < 3
-            ? const EdgeInsets.all(5)
-            : const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-      );
+      return iconButton(winget, locale, appName);
     }
+    return textButton(winget, locale, appName);
+  }
+
+  CommandButton textButton(
+      Winget winget, AppLocalizations locale, String appName) {
     return CommandButton(
       text: winget.title(locale),
       command: _createCommand(winget, locale),
       title: winget.titleWithInput(appName, localization: locale),
       icon: showIcons ? winget.icon : null,
+    );
+  }
+
+  CommandIconButton iconButton(
+      Winget winget, AppLocalizations locale, String appName) {
+    return CommandIconButton(
+      text: winget.title(locale),
+      command: _createCommand(winget, locale),
+      title: winget.titleWithInput(appName, localization: locale),
+      icon: winget.icon ?? FluentIcons.error,
+      padding: numberOfButtons < 3
+          ? const EdgeInsets.all(5)
+          : const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
     );
   }
 

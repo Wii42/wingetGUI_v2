@@ -93,6 +93,10 @@ abstract class ProcessOutput extends StatelessWidget {
     OutputHandler handler = OutputHandler(output, command: process.command);
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     handler.determineResponsibility(wingetLocale);
-    return handler.getRepresentation(context);
+    return outputRepresentationHook(handler, context);
   }
+
+  Future<List<OutputBuilder>> outputRepresentationHook(
+          OutputHandler handler, BuildContext context) =>
+      handler.getRepresentation(context);
 }

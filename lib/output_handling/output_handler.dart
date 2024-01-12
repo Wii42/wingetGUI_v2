@@ -66,9 +66,12 @@ class OutputHandler {
 
   Future<List<OutputBuilder>> getRepresentation(BuildContext context) async {
     AppLocalizations wingetLocale = getWingetLocale(context);
-
     List<ParsedOutput> parsedOutput = await getParsedOutputList(wingetLocale);
 
+    return getBuilders(parsedOutput);
+  }
+
+  List<OutputBuilder> getBuilders(List<ParsedOutput> parsedOutput) {
     Iterable<OutputBuilder?> builders =
         parsedOutput.map((e) => e.widgetRepresentation());
 
