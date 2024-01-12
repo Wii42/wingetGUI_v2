@@ -4,6 +4,8 @@ import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 
+import '../../../helpers/route_parameter.dart';
+import '../../../routes.dart';
 import '../../package_infos/info.dart';
 import 'expander_compartment.dart';
 
@@ -49,10 +51,24 @@ class DetailsWidget extends ExpanderCompartment {
           ], context),
           ..._displayRest(context)
         ],
-        buttonRow: buttonRow([
-          infos.supportUrl,
-          infos.manifest,
-        ], context),
+        buttonRow: buttonRow(
+          [
+            infos.supportUrl,
+            infos.manifest,
+          ],
+          context,
+          otherButtons: [
+            if (infos.publisherID != null)
+              Button(
+                child: Text(locale.moreFromPublisher(infos.publisherID!)),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.publisherPage.route,
+                      arguments:
+                          StringRouteParameter(string: infos.publisherID!));
+                },
+              )
+          ],
+        ),
         context: context);
   }
 

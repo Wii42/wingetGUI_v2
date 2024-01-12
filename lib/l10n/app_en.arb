@@ -55,5 +55,7 @@
 
   "cantLoadDetails": "Can't load details",
   "noInternetConnection": "No internet connection",
-  "reason": "Reason"
+  "reason": "Reason",
+
+  "moreFromPublisher": "More from {publisher}"
 }

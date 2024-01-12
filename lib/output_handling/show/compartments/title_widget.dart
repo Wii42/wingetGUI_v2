@@ -99,14 +99,6 @@ class TitleWidget extends Compartment {
           LinkText(line: infos.category!.value),
           if (infos.isMicrosoftStore()) _showInStore(locale),
         ],
-        if (infos.publisherID != null)
-          Button(
-              child: const Text('more from this publisher'),
-              onPressed: () {
-                Navigator.of(context).pushNamed(Routes.publisherPage.route,
-                    arguments:
-                        StringRouteParameter(string: infos.publisherID!));
-              }),
       ].withSpaceBetween(width: 5),
     );
   }

@@ -124,7 +124,8 @@ abstract class ExpanderCompartment extends Compartment {
     return LinkButton(url: link.value, text: Text(link.title(locale)));
   }
 
-  Wrap buttonRow(List<Info<Uri>?> links, BuildContext context) {
+  Wrap buttonRow(List<Info<Uri>?> links, BuildContext context,
+      {List<Widget> otherButtons = const []}) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Wrap(
       spacing: 5,
@@ -136,7 +137,8 @@ abstract class ExpanderCompartment extends Compartment {
             linkButton(
               locale: locale,
               link: link,
-            )
+            ),
+        ...otherButtons
       ],
     );
   }

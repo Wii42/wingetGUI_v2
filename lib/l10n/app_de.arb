@@ -55,5 +55,7 @@
 
   "cantLoadDetails": "Details konnten nicht geladen werden",
   "noInternetConnection": "Keine Internetverbindung",
-  "reason": "Grund"
+  "reason": "Grund",
+
+  "moreFromPublisher": "Mehr von {publisher}"
 }
