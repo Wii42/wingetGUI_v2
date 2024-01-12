@@ -33,7 +33,8 @@ class PublisherPage extends StatelessWidget {
                 .toList(),
             content: 'publisher',
             wingetCommand: [],
-            wingetLocale: AppLocalizations.of(context)!),
+        ),
+        reloadStream: wingetDB.available.stream,
       ),
     );
   }

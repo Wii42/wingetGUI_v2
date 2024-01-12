@@ -10,26 +10,27 @@ import 'db_table.dart';
 import 'db_table_creator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class WingetDB extends ChangeNotifier {
+class WingetDB {
+  bool isInitialized = false;
   late DBTable updates, installed, available;
 
   Stream<String> init(BuildContext context) async* {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     WidgetsFlutterBinding.ensureInitialized();
 
-    DBTableCreator installedCreator = DBTableCreator(wingetLocale,
-        content: 'installed', winget: Winget.installed);
-    yield* installedCreator.init();
+    DBTableCreator installedCreator =
+        DBTableCreator(content: 'installed', winget: Winget.installed);
+    yield* installedCreator.init(wingetLocale);
     installed = installedCreator.returnTable();
 
-    DBTableCreator updatesCreator = DBTableCreator(wingetLocale,
+    DBTableCreator updatesCreator = DBTableCreator(
         content: 'updates', winget: Winget.updates, filter: _filterUpdates);
-    yield* updatesCreator.init();
+    yield* updatesCreator.init(wingetLocale);
     updates = updatesCreator.returnTable();
 
-    DBTableCreator availableCreator = DBTableCreator(wingetLocale,
-        content: 'available', winget: Winget.availablePackages);
-    yield* availableCreator.init();
+    DBTableCreator availableCreator =
+        DBTableCreator(content: 'available', winget: Winget.availablePackages);
+    yield* availableCreator.init(wingetLocale);
     available = availableCreator.returnTable();
 
     if (kDebugMode) {
@@ -53,7 +54,7 @@ class WingetDB extends ChangeNotifier {
     map.entries
         .sorted((a, b) => b.value.length.compareTo(a.value.length))
         .forEach(
-          (element) {
+      (element) {
         print('${element.key}: ${element.value.length}');
       },
     );
@@ -66,7 +67,7 @@ class WingetDB extends ChangeNotifier {
       if (installed.idMap.containsKey(id)) {
         List<PackageInfosPeek> installedPackages = installed.idMap[id]!;
         List<String?> installedVersions =
-        installedPackages.map((e) => e.version?.value).toList();
+            installedPackages.map((e) => e.version?.value).toList();
         if (installedVersions.contains(package.availableVersion?.value) ||
             installedVersions
                 .contains("> ${package.availableVersion?.value}")) {
@@ -76,5 +77,11 @@ class WingetDB extends ChangeNotifier {
     }
     toRemoveFromUpdates.forEach(infos.remove);
     return infos;
+  }
+
+  void notifyListeners() {
+    updates.notifyListeners();
+    installed.notifyListeners();
+    available.notifyListeners();
   }
 }

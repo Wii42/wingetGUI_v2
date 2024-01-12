@@ -10,46 +10,57 @@ class PackagePeekListView extends StatelessWidget {
   final DBTable dbTable;
   final bool Function(PackageInfosPeek package, DBTable table) isInstalled;
   final bool Function(PackageInfosPeek package, DBTable table) isUpgradable;
+  final Stream<String>? reloadStream;
   const PackagePeekListView(
       {super.key,
       required this.dbTable,
       this.isInstalled = defaultFalse,
-      this.isUpgradable = defaultFalse});
+      this.isUpgradable = defaultFalse,
+      this.reloadStream});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (dbTable.hints.isNotEmpty)
-          Wrap(
-            spacing: 5,
-            runSpacing: 5,
+    return StreamBuilder<String>(
+        stream: reloadStream ?? dbTable.stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data != '') {
+            return Center(child: Text(snapshot.data!));
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (OneLineInfo hint in dbTable.hints)
-                OneLineInfoBuilder.oneLineInfo(hint, context, onClose: () {}),
+              if (dbTable.hints.isNotEmpty)
+                Wrap(
+                  spacing: 5,
+                  runSpacing: 5,
+                  children: [
+                    for (OneLineInfo hint in dbTable.hints)
+                      OneLineInfoBuilder.oneLineInfo(hint, context,
+                          onClose: () {}),
+                  ],
+                ),
+              Expanded(
+                child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      PackageInfosPeek package = dbTable.infos[index];
+                      if (!package.checkedForScreenshots) {
+                        package.setImplicitInfos();
+                      }
+                      bool installed = isInstalled(package, dbTable);
+                      bool upgradable = isUpgradable(package, dbTable);
+                      return wrapInPadding(
+                          buildPackagePeek(package, installed, upgradable));
+                    },
+                    itemCount: dbTable.infos.length,
+                    physics: const BouncingScrollPhysics(),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    prototypeItem: wrapInPadding(PackagePeek.prototypeWidget)),
+              ),
+              Text("${dbTable.infos.length} Apps"),
             ],
-          ),
-        Expanded(
-          child: ListView.builder(
-              itemBuilder: (context, index) {
-                PackageInfosPeek package = dbTable.infos[index];
-                if (!package.checkedForScreenshots) {
-                  package.setImplicitInfos();
-                }
-                bool installed = isInstalled(package, dbTable);
-                bool upgradable = isUpgradable(package, dbTable);
-                return wrapInPadding(
-                    buildPackagePeek(package, installed, upgradable));
-              },
-              itemCount: dbTable.infos.length,
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              prototypeItem: wrapInPadding(PackagePeek.prototypeWidget)),
-        ),
-        Text("${dbTable.infos.length} Apps"),
-      ],
-    );
+          );
+        });
   }
 
   Widget wrapInPadding(Widget child) {
@@ -70,5 +81,4 @@ class PackagePeekListView extends StatelessWidget {
   }
 
   static bool defaultFalse(PackageInfosPeek _, DBTable __) => false;
-
 }

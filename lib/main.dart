@@ -13,8 +13,6 @@ import 'helpers/package_screenshots_list.dart';
 
 const String appTitle = 'WingetGUI';
 
-bool isInitialized = false;
-
 WingetDB wingetDB = WingetDB();
 
 void main() async {
@@ -63,21 +61,7 @@ class WingetGui extends StatelessWidget {
             LocaleNamesLocalizationsDelegate()
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: WindowBrightnessSetter(
-              child: isInitialized
-                  ? MainNavigation(title: appTitle)
-                  : StreamBuilder<String>(
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState != ConnectionState.done) {
-                          if (snapshot.hasData) {
-                            return Center(child: Text(snapshot.data!));
-                          }
-                          return const Center(child: Text('...'));
-                        }
-                        return MainNavigation(title: appTitle);
-                      },
-                      stream: wingetDB.init(context),
-                    )),
+          home: const WindowBrightnessSetter(child: DBInitializer()),
         );
       },
     );
@@ -105,5 +89,27 @@ class WindowBrightnessSetter extends StatelessWidget {
     Brightness brightness = FluentTheme.of(context).brightness;
     WindowManager.instance.setBrightness(brightness);
     return child;
+  }
+}
+
+class DBInitializer extends StatelessWidget {
+  const DBInitializer({super.key, required});
+
+  @override
+  Widget build(BuildContext context) {
+    return wingetDB.isInitialized
+        ? MainNavigation(title: appTitle)
+        : StreamBuilder<String>(
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                if (snapshot.hasData) {
+                  return Center(child: Text(snapshot.data!));
+                }
+                return const Center(child: Text('...'));
+              }
+              return MainNavigation(title: appTitle);
+            },
+            stream: wingetDB.init(context),
+          );
   }
 }

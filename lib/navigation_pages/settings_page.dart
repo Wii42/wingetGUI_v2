@@ -6,6 +6,8 @@ import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
 import '../helpers/route_parameter.dart';
+import '../main.dart';
+import '../output_handling/output_handler.dart';
 import '../routes.dart';
 import '../widget_assets/app_locale.dart';
 import '../widget_assets/decorated_card.dart';
@@ -37,25 +39,51 @@ class _SettingsPageSate extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
+    AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     return PaneItemBody(
       title: Routes.settingsPage.title(localizations),
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
+        child: ListView(
           children: [
             themeModeOption(localizations, context),
             guiLocaleOption(localizations, context),
             wingetLocaleOption(localizations, context),
             settingsItem(
-                Winget.settings.title(localizations),
-                Button(
-                  onPressed: () {
-                    WingetProcess.runWinget(Winget.settings);
-                  },
-                  child: Text(localizations.openWingetSettingsFile),
-                ))
+              Winget.settings.title(localizations),
+              Button(
+                onPressed: () {
+                  WingetProcess.runWinget(Winget.settings);
+                },
+                child: Text(localizations.openWingetSettingsFile),
+              ),
+            ),
+            buildDBSettings(wingetLocale),
           ].withSpaceBetween(height: 10),
         ),
+      ),
+    );
+  }
+
+  Widget buildDBSettings(AppLocalizations wingetLocale) {
+    return settingsItem(
+      'WingetDB',
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Button(
+            onPressed: () async {
+              wingetDB.updates.reloadSilent(wingetLocale);
+            },
+            child: const Text('Reload updates'),
+          ),
+          Button(
+            onPressed: () {
+              wingetDB.updates.removeAllInfos();
+            },
+            child: const Text('Remove all updates'),
+          ),
+        ].withSpaceBetween(height: 20),
       ),
     );
   }
