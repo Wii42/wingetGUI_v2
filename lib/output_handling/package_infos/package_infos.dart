@@ -102,11 +102,12 @@ abstract class PackageInfos {
     }
     return null;
   }
+
   bool probablySamePackage(PackageInfos i) {
     bool sameID = id != null && i.id?.value == id?.value;
-    bool sameVersion =
-        version == null || i.version?.value == version?.value;
+    bool sameVersion = version == null || i.version?.value == version?.value;
     return sameID && sameVersion;
   }
 
+  bool hasKnownSource() => isWinget() || isMicrosoftStore();
 }

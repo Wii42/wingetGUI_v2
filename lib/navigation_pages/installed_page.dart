@@ -22,9 +22,10 @@ class InstalledPage extends StatelessWidget {
     return PaneItemBody(
       title: Winget.installed.title(locale),
       child: PackagePeekListView(
-          dbTable: dbTable,
-          isInstalled: (_, __) => true,
-          isUpgradable: (package, __) => package.hasAvailableVersion()),
+        dbTable: dbTable,
+        showIsInstalled: (_, __) => true,
+        showIsUpgradable: (package, __) => package.hasAvailableVersion(),
+      ),
       customReload: () => dbTable.reloadFuture(locale),
     );
   }

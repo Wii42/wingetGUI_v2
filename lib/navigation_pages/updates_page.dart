@@ -24,9 +24,13 @@ class UpdatesPage extends StatelessWidget {
     return PaneItemBody(
       title: Winget.updates.title(locale),
       child: PackagePeekListView(
-          dbTable: dbTable,
-          isInstalled: (_, __) => true,
-          isUpgradable: (_, __) => true),
+        dbTable: dbTable,
+        showIsInstalled: (_, __) => true,
+        showIsUpgradable: (_, __) => true,
+        showOnlyWithSourceButton: false,
+        showOnlyWithExactVersionButton: true,
+        onlyWithExactVersionInitialValue: true,
+      ),
       customReload: () => dbTable.reloadFuture(locale),
     );
   }

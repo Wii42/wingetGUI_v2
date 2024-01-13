@@ -34,6 +34,7 @@ class PublisherPage extends StatelessWidget {
             wingetCommand: [],
         ),
         reloadStream: wingetDB.available.stream,
+        showOnlyWithSourceButton: false,
       ),
     );
   }
