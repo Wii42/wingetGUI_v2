@@ -13,6 +13,7 @@ class PackagePeek extends StatelessWidget {
   final bool upgradeButton;
   final bool uninstallButton;
   final bool checkFavicon;
+  final bool showMatch;
 
   final MainAxisAlignment columnAlign = MainAxisAlignment.center;
 
@@ -21,7 +22,8 @@ class PackagePeek extends StatelessWidget {
       this.installButton = true,
       this.upgradeButton = true,
       this.uninstallButton = true,
-      this.checkFavicon = false});
+      this.checkFavicon = false,
+      this.showMatch = false});
 
   factory PackagePeek.fromCommand(PackageInfosPeek infos,
       {required List<String> command}) {
@@ -189,6 +191,8 @@ class PackagePeek extends StatelessWidget {
           infos.availableVersion!.value.isNotEmpty)
         Text(
             "${infos.availableVersion!.title(locale)}: ${infos.availableVersion!.value}"),
+      if(showMatch && infos.match != null && infos.match!.value.trim().isNotEmpty)
+        Text("${infos.match!.title(locale)}: ${infos.match!.value}")
     ];
   }
 

@@ -27,6 +27,8 @@ class PackagePeekListView extends StatefulWidget {
   final List<SortBy> sortOptions;
   final bool sortDefaultReversed;
   final bool showDeepSearchButton;
+  final bool showFilterField;
+  final bool packageShowMatch;
   const PackagePeekListView(
       {super.key,
       required this.dbTable,
@@ -40,7 +42,9 @@ class PackagePeekListView extends StatefulWidget {
       this.defaultSortBy = SortBy.auto,
       this.sortOptions = SortBy.values,
       this.sortDefaultReversed = false,
-      this.showDeepSearchButton = false});
+      this.showDeepSearchButton = false,
+      this.showFilterField = true,
+      this.packageShowMatch = false});
 
   @override
   State<PackagePeekListView> createState() => _PackagePeekListViewState();
@@ -184,6 +188,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       installButton: !installed,
       uninstallButton: installed,
       upgradeButton: upgradable,
+      showMatch: widget.packageShowMatch,
     );
   }
 
@@ -214,7 +219,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           },
           content: const Text('only with exact version'),
         ),
-      if (widget.dbTable.infos.length >= 5) ...[
+      if (widget.dbTable.infos.length >= 5 && widget.showFilterField) ...[
         filterField(),
         if (widget.showDeepSearchButton) deepSearchButton()
       ],
