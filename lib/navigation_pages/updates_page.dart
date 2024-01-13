@@ -6,11 +6,16 @@ import '../widget_assets/pane_item_body.dart';
 import '../winget_commands.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../winget_db/db_table.dart';
+
+DBTable dbTable = wingetDB.updates;
+
 class UpdatesPage extends StatelessWidget {
-  const UpdatesPage({super.key});
+  final DBTable dbTable = wingetDB.updates;
+  UpdatesPage({super.key});
 
   static Widget inRoute([dynamic parameters]) {
-    return const UpdatesPage();
+    return UpdatesPage();
   }
 
   @override
@@ -19,9 +24,10 @@ class UpdatesPage extends StatelessWidget {
     return PaneItemBody(
       title: Winget.updates.title(locale),
       child: PackagePeekListView(
-          dbTable: wingetDB.updates,
+          dbTable: dbTable,
           isInstalled: (_, __) => true,
           isUpgradable: (_, __) => true),
+      customReload: () => dbTable.reloadFuture(locale),
     );
   }
 }

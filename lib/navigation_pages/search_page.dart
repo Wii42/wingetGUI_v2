@@ -6,11 +6,13 @@ import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 import '../main.dart';
 import '../widget_assets/package_peek_list_view.dart';
+import '../winget_db/db_table.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({super.key});
 
   final TextEditingController controller = TextEditingController();
+  final DBTable dbTable = wingetDB.available;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,7 @@ class SearchPage extends StatelessWidget {
     String title = Routes.searchPage.title(locale);
     return PaneItemBody(
       title: title,
+      customReload: () => dbTable.reloadFuture(locale),
       child: Column(
         children: [
           Center(

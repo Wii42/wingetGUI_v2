@@ -104,11 +104,9 @@ abstract class PackageInfos {
   }
   bool probablySamePackage(PackageInfos i) {
     bool sameID = id != null && i.id?.value == id?.value;
-    bool sameName =
-        name == null || i.name?.value == name?.value;
     bool sameVersion =
         version == null || i.version?.value == version?.value;
-    return sameID && sameName && sameVersion;
+    return sameID && sameVersion;
   }
 
 }

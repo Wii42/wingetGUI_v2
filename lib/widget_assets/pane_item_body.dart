@@ -10,9 +10,14 @@ class PaneItemBody extends StatelessWidget {
   final String? title;
   final Widget child;
   final WingetProcess? process;
+  final void Function()? customReload;
 
   const PaneItemBody(
-      {super.key, required this.title, required this.child, this.process});
+      {super.key,
+      required this.title,
+      required this.child,
+      this.process,
+      this.customReload});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,10 @@ class PaneItemBody extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (title != null || process != null || canGoBack(context))
+        if (title != null ||
+            process != null ||
+            canGoBack(context) ||
+            customReload != null)
           titleRow(context),
         Expanded(child: child),
       ],
@@ -51,19 +59,20 @@ class PaneItemBody extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-          if (process != null)
+          if (process != null || customReload != null)
             SizedBox(
               width: iconSize,
               height: iconSize,
               child: IconButton(
-                onPressed: () async {
-                  WingetProcess newProcess = await process!.clone();
-                  navigator.pushReplacement(FluentPageRoute(
-                      builder: (_) => OutputPage(
-                            process: newProcess,
-                            title: title,
-                          )));
-                },
+                onPressed: customReload ??
+                    () async {
+                      WingetProcess newProcess = await process!.clone();
+                      navigator.pushReplacement(FluentPageRoute(
+                          builder: (_) => OutputPage(
+                                process: newProcess,
+                                title: title,
+                              )));
+                    },
                 icon: const Icon(FluentIcons.update_restore),
               ),
             )
