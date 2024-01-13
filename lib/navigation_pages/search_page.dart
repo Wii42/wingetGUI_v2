@@ -7,6 +7,7 @@ import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 import '../main.dart';
 import '../widget_assets/package_peek_list_view.dart';
+import '../widget_assets/sort_by.dart';
 import '../winget_db/db_table.dart';
 
 class SearchPage extends StatelessWidget {
@@ -22,52 +23,26 @@ class SearchPage extends StatelessWidget {
     return PaneItemBody(
       title: title,
       customReload: () => dbTable.reloadFuture(locale),
-      child: Column(
-        children: [
-          Center(
-            child: //ConstrainedBox(
-                //constraints: const BoxConstraints(maxWidth: 400),
-                //child:
-                Wrap(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 5,
-              runSpacing: 5,
-              children: [
-                //Text(title),
-                const SizedBox(
-                  height: 10,
-                ),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 400),
-                  child: TextFormBox(
-                      controller: controller, onFieldSubmitted: search(context)),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                FilledButton(
-                    onPressed: () => {search(context)(controller.text)},
-                    child: Text(Routes.search.title(locale)))
-              ],
-            ),
-          ),
-          //),
-          Expanded(
-            child: PackagePeekListView(
-              dbTable: wingetDB.available,
-              showIsInstalled: (package, _) =>
-                  wingetDB.installed.idMap.containsKey(package.id!.value),
-              showIsUpgradable: (package, _) => package.availableVersion != null,
-              showOnlyWithSourceButton: false,
-            ),
-          ),
-        ].withSpaceBetween(height: 5),
+      child: PackagePeekListView(
+        dbTable: wingetDB.available,
+        showIsInstalled: (package, _) =>
+            wingetDB.installed.idMap.containsKey(package.id!.value),
+        showIsUpgradable: (package, _) => package.availableVersion != null,
+        showOnlyWithSourceButton: false,
+        sortOptions: const [
+          SortBy.name,
+          SortBy.publisher,
+          SortBy.source,
+          SortBy.id,
+          SortBy.version,
+          SortBy.auto,
+        ],
+        showDeepSearchButton: true,
       ),
     );
   }
 
-  void Function(String) search(BuildContext context) {
+  static void Function(String) search(BuildContext context) {
     NavigatorState navigator = Navigator.of(context);
     return (input) {
       navigator.pushNamed(Routes.search.route,

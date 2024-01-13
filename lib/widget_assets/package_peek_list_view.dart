@@ -1,9 +1,14 @@
+import 'dart:collection';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
+import 'package:winget_gui/widget_assets/sort_by.dart';
 
+import '../output_handling/package_infos/info.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../output_handling/table/apps_table/package_peek.dart';
 import '../winget_db/db_table.dart';
@@ -18,6 +23,10 @@ class PackagePeekListView extends StatefulWidget {
   final bool onlyWithSourceInitialValue;
   final bool showOnlyWithExactVersionButton;
   final bool onlyWithExactVersionInitialValue;
+  final SortBy defaultSortBy;
+  final List<SortBy> sortOptions;
+  final bool sortDefaultReversed;
+  final bool showDeepSearchButton;
   const PackagePeekListView(
       {super.key,
       required this.dbTable,
@@ -27,7 +36,11 @@ class PackagePeekListView extends StatefulWidget {
       this.showOnlyWithSourceButton = true,
       this.onlyWithSourceInitialValue = false,
       this.showOnlyWithExactVersionButton = false,
-      this.onlyWithExactVersionInitialValue = false});
+      this.onlyWithExactVersionInitialValue = false,
+      this.defaultSortBy = SortBy.auto,
+      this.sortOptions = SortBy.values,
+      this.sortDefaultReversed = false,
+      this.showDeepSearchButton = false});
 
   @override
   State<PackagePeekListView> createState() => _PackagePeekListViewState();
@@ -39,12 +52,16 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   TextEditingController filterController = TextEditingController();
   late bool onlyWithSource;
   late bool onlyWithExactVersion;
+  late SortBy sortBy;
+  late bool sortReversed;
 
   @override
   void initState() {
     super.initState();
     onlyWithSource = widget.onlyWithSourceInitialValue;
     onlyWithExactVersion = widget.onlyWithExactVersionInitialValue;
+    sortBy = widget.defaultSortBy;
+    sortReversed = widget.sortDefaultReversed;
   }
 
   @override
@@ -56,7 +73,14 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           if (snapshot.hasData && snapshot.data != '') {
             return Center(child: Text(snapshot.data!));
           }
-          List<PackageInfosPeek> packages = shownPackages();
+          if (widget.dbTable.infos.isEmpty) {
+            return const Center(child: Text('No Apps found'));
+          }
+          List<PackageInfosPeek> packages = filterPackages();
+          packages = sortPackages(packages, sortBy);
+          if (sortReversed) {
+            packages = packages.reversed.toList();
+          }
           return Column(
             children: [
               topRow(context),
@@ -119,13 +143,14 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         prototypeItem: wrapInPadding(PackagePeek.prototypeWidget));
   }
 
-  List<PackageInfosPeek> shownPackages() {
+  List<PackageInfosPeek> filterPackages() {
     List<PackageInfosPeek> packages = widget.dbTable.infos;
     if (onlyWithSource) {
       packages = packages.where((element) => element.hasKnownSource()).toList();
     }
     if (onlyWithExactVersion) {
-      packages = packages.where((element) => element.hasSpecificVersion()).toList();
+      packages =
+          packages.where((element) => element.hasSpecificVersion()).toList();
     }
     if (filter.isNotEmpty) {
       packages = packages
@@ -135,6 +160,14 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           .toList();
     }
     return packages;
+  }
+
+  List<PackageInfosPeek> sortPackages(
+      List<PackageInfosPeek> packages, SortBy sortBy) {
+    if (packages is UnmodifiableListView) {
+      packages = List.of(packages);
+    }
+    return sortBy.sort(packages);
   }
 
   Widget wrapInPadding(Widget child) {
@@ -155,6 +188,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 
   Widget topRow(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     List<Widget> children = [
       if (widget.showOnlyWithSourceButton)
         Checkbox(
@@ -180,13 +214,40 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           },
           content: const Text('only with exact version'),
         ),
-      if (widget.dbTable.infos.length >= 5) filterField(),
+      if (widget.dbTable.infos.length >= 5) ...[
+        filterField(),
+        if (widget.showDeepSearchButton) deepSearchButton()
+      ],
+      Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('Sort by:'),
+          ComboBox<SortBy>(
+            items: [
+              for (SortBy value in widget.sortOptions)
+                ComboBoxItem(value: value, child: Text(value.title(locale))),
+            ],
+            onChanged: (value) {
+              if (value != null) {
+                setState(() {
+                  sortBy = value;
+                });
+              }
+            },
+            placeholder: Text(sortBy.title(locale)),
+          ),
+          IconButton(
+              icon: Icon(
+                  sortReversed ? FluentIcons.sort_up : FluentIcons.sort_down),
+              onPressed: () => setState(() => sortReversed = !sortReversed)),
+        ].withSpaceBetween(width: 5),
+      ),
     ];
 
     return Padding(
       padding: EdgeInsets.all(children.isNotEmpty ? 10 : 0),
       child: Wrap(
-        spacing: 10,
+        spacing: 20,
         runSpacing: 10,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: children,
@@ -210,6 +271,12 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
             setState(() {});
           }),
     );
+  }
+
+  Widget deepSearchButton() {
+    return FilledButton(
+        onPressed: () => SearchPage.search(context)(filter),
+        child: const Text('Deep Search'));
   }
 
   String get filter => filterController.text;

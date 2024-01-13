@@ -4,6 +4,7 @@ import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 import '../helpers/route_parameter.dart';
 import '../main.dart';
+import '../widget_assets/sort_by.dart';
 import '../winget_db/db_table.dart';
 
 class PublisherPage extends StatelessWidget {
@@ -27,14 +28,21 @@ class PublisherPage extends StatelessWidget {
       title: publisherId,
       child: PackagePeekListView(
         dbTable: DBTable(
-            wingetDB.available.infos
-                .where((element) => element.publisherID == publisherId)
-                .toList(),
-            content: 'publisher',
-            wingetCommand: [],
+          wingetDB.available.infos
+              .where((element) => element.publisherID == publisherId)
+              .toList(),
+          content: 'publisher',
+          wingetCommand: [],
         ),
         reloadStream: wingetDB.available.stream,
         showOnlyWithSourceButton: false,
+        sortOptions: const [
+          SortBy.name,
+          SortBy.source,
+          SortBy.id,
+          SortBy.version,
+          SortBy.auto,
+        ],
       ),
     );
   }
