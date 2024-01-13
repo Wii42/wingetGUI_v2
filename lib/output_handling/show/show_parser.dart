@@ -121,4 +121,9 @@ class ParsedShow extends ParsedOutput {
   ShowBuilder widgetRepresentation() {
     return ShowBuilder(infos: infos, command: command);
   }
+
+  @override
+  String toString() {
+    return "ParsedShow{infos: ($infos), command: $command}";
+  }
 }

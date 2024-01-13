@@ -17,13 +17,14 @@ class DBTable {
   final String content;
   final List<String> wingetCommand;
   final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? creatorFilter;
-  final StreamController<String> _streamController = StreamController<String>.broadcast();
+  final StreamController<String> _streamController =
+      StreamController<String>.broadcast();
 
   DBTable(this._infos,
       {this.hints = const [],
-        required this.content,
-        required this.wingetCommand,
-        this.creatorFilter});
+      required this.content,
+      required this.wingetCommand,
+      this.creatorFilter});
 
   Map<String, List<PackageInfosPeek>> get idMap {
     if (_idMap == null) {
@@ -77,7 +78,8 @@ class DBTable {
     print("loading $content");
   }
 
-  UnmodifiableListView<PackageInfosPeek> get infos => UnmodifiableListView(_infos);
+  UnmodifiableListView<PackageInfosPeek> get infos =>
+      UnmodifiableListView(_infos);
 
   void addInfo(PackageInfosPeek info) {
     _infos.add(info);
@@ -89,15 +91,23 @@ class DBTable {
     wingetDB.notifyListeners();
   }
 
+  void removeInfoWhere(bool Function(PackageInfosPeek) test) {
+    _infos.removeWhere(test);
+    wingetDB.notifyListeners();
+  }
+
   void removeAllInfos() {
     _infos.clear();
     wingetDB.notifyListeners();
   }
 
-  void reloadSilent(AppLocalizations wingetLocale){
-    reloadDBTable(wingetLocale).listen((event) {//_streamController.add(event);
-      print(event);});
+  Future<void> reloadFuture(AppLocalizations wingetLocale) {
+    Completer completer = Completer<void>();
+    reloadDBTable(wingetLocale).listen((event) {
+      print(event);
+    }, onDone: () {
+      completer.complete();
+    });
+    return completer.future;
   }
-
-
 }

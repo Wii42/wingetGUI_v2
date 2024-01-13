@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/info_yaml_map_parser.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 
 import './package_infos.dart';
 import 'agreement_infos.dart';
@@ -186,5 +187,47 @@ class PackageInfosFull extends PackageInfos {
 
     return Info<String>(
         title: description!.title, value: additionalDescription);
+  }
+
+  @override
+  String toString() {
+    return [
+      if (name != null) "name: ${name!.value}",
+      if (id != null) "id: ${id!.value}",
+      if (version != null) "version: ${version!.value}",
+      if (description != null) "description: ${description!.value}",
+      if (shortDescription != null)
+        "shortDescription: ${shortDescription!.value}",
+      if (supportUrl != null) "supportUrl: ${supportUrl!.value}",
+      if (website != null) "website: ${website!.value}",
+      if (author != null) "author: ${author!.value}",
+      if (moniker != null) "moniker: ${moniker!.value}",
+      if (documentation != null) "documentation: ${documentation!.value}",
+      if (releaseNotes != null) "releaseNotes: $releaseNotes",
+      if (agreement != null) "agreement: $agreement",
+      if (tags != null) "tags: ${tags!.join(', ')}",
+      if (packageLocale != null) "packageLocale: ${packageLocale!.value}",
+      if (installer != null) "installer: ${installer!}",
+      if (otherInfos != null) "otherInfos: ${otherInfos!.toString()}",
+    ].join(', ');
+  }
+
+  PackageInfosPeek toPeek() {
+    String? source = isWinget()
+        ? 'winget'
+        : isMicrosoftStore()
+            ? 'msstore'
+            : null;
+    return PackageInfosPeek(
+      name: name,
+      id: id,
+      version: version,
+      source: source != null
+          ? Info<String>(value: source, title: PackageAttribute.source.title)
+          : null,
+      otherInfos: otherInfos,
+      screenshots: screenshots,
+      publisherIcon: publisherIcon,
+    );
   }
 }

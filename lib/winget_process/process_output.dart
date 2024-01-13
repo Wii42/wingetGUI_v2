@@ -63,7 +63,7 @@ abstract class ProcessOutput extends StatelessWidget {
   FutureBuilder<List<OutputBuilder>> onData(
       AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
     return FutureBuilder<List<OutputBuilder>>(
-      future: _displayOutput(streamSnapshot.data!, context),
+      future: _displayOutput(streamSnapshot.data!, context, streamSnapshot.connectionState == ConnectionState.done),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Expanded(
@@ -89,14 +89,14 @@ abstract class ProcessOutput extends StatelessWidget {
   }
 
   Future<List<OutputBuilder>> _displayOutput(
-      List<String> output, BuildContext context) async {
+      List<String> output, BuildContext context, bool processIsFinished) async {
     OutputHandler handler = OutputHandler(output, command: process.command);
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     handler.determineResponsibility(wingetLocale);
-    return outputRepresentationHook(handler, context);
+    return outputRepresentationHook(handler, context, processIsFinished);
   }
 
   Future<List<OutputBuilder>> outputRepresentationHook(
-          OutputHandler handler, BuildContext context) =>
+          OutputHandler handler, BuildContext context, bool processIsFinished) =>
       handler.getRepresentation(context);
 }

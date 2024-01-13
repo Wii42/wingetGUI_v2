@@ -18,6 +18,9 @@ abstract class PackageInfos {
     this.name,
     this.id,
     this.version,
+    this.screenshots,
+    this.checkedForScreenshots = false,
+    this.publisherIcon,
     this.otherInfos,
   });
 
@@ -99,4 +102,13 @@ abstract class PackageInfos {
     }
     return null;
   }
+  bool probablySamePackage(PackageInfos i) {
+    bool sameID = id != null && i.id?.value == id?.value;
+    bool sameName =
+        name == null || i.name?.value == name?.value;
+    bool sameVersion =
+        version == null || i.version?.value == version?.value;
+    return sameID && sameName && sameVersion;
+  }
+
 }
