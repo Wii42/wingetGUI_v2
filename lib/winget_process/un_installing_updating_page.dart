@@ -31,10 +31,11 @@ class UnInstallingUpdatingProcess extends WingetProcess {
       {required super.command, required super.process, super.name});
 
   static Future<UnInstallingUpdatingProcess> run(
-      UnInstallingUpdatingType type) async {
-    Process process = await Process.start('winget', type.winget.fullCommand);
+      UnInstallingUpdatingType type, {List<String> args = const []}) async {
+    var command = [...type.winget.fullCommand, ...args];
+    Process process = await Process.start('winget', command);
     return UnInstallingUpdatingProcess._(
-        command: type.winget.fullCommand,
+        command: command,
         process: process,
         name: type.winget.name);
   }

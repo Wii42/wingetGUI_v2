@@ -1,9 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/widget_assets/un_installing_upgrading_button.dart';
 
 import '../output_handling/package_infos/package_infos.dart';
 import '../winget_commands.dart';
+import '../winget_process/un_installing_updating_page.dart';
 import 'command_button.dart';
 
 class RightSideButtons extends StatelessWidget {
@@ -30,13 +32,14 @@ class RightSideButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return buttons([
-      if (install) Winget.install,
-      if (upgrade) Winget.upgrade,
-      if (uninstall) Winget.uninstall
+      if (install) UnInstallingUpdatingType.install,
+      if (upgrade) UnInstallingUpdatingType.update,
+      if (uninstall) UnInstallingUpdatingType.uninstall
     ], context);
   }
 
-  Widget buttons(List<Winget> commands, BuildContext context) {
+  Widget buttons(
+      List<UnInstallingUpdatingType> commands, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return IntrinsicWidth(
       child: Column(
@@ -47,9 +50,11 @@ class RightSideButtons extends StatelessWidget {
     );
   }
 
-  List<Widget> buttonList(List<Winget> commands, AppLocalizations locale) {
+  List<Widget> buttonList(
+      List<UnInstallingUpdatingType> commands, AppLocalizations locale) {
     List<Widget> list = [
-      for (Winget winget in commands) createButton(winget, locale),
+      for (UnInstallingUpdatingType winget in commands)
+        createButton(winget, locale),
     ];
     if (iconsOnly) {
       return list;
@@ -57,35 +62,40 @@ class RightSideButtons extends StatelessWidget {
     return list.withSpaceBetween(height: 5);
   }
 
-  Widget createButton(Winget winget, AppLocalizations locale) {
+  Widget createButton(
+      UnInstallingUpdatingType command, AppLocalizations locale) {
     String appName = infos.name?.value ?? infos.id!.value;
     if (iconsOnly) {
-      assert(winget.icon != null);
-      return iconButton(winget, locale, appName);
+      assert(command.winget.icon != null);
+      return iconButton(command, locale, appName);
     }
-    return textButton(winget, locale, appName);
+    return textButton(command, locale, appName);
   }
 
-  CommandButton textButton(
-      Winget winget, AppLocalizations locale, String appName) {
-    return CommandButton(
-      text: winget.title(locale),
-      command: _createCommand(winget, locale),
-      title: winget.titleWithInput(appName, localization: locale),
-      icon: showIcons ? winget.icon : null,
+  CommandButton textButton(UnInstallingUpdatingType command,
+      AppLocalizations locale, String appName) {
+    return UnInstallingUpdatingButton(
+      text: command.winget.title(locale),
+      command: _createCommand(command.winget, locale),
+      title: command.winget.titleWithInput(appName, localization: locale),
+      icon: showIcons ? command.winget.icon : null,
+      type: command,
+      infos: infos,
     );
   }
 
-  CommandIconButton iconButton(
-      Winget winget, AppLocalizations locale, String appName) {
-    return CommandIconButton(
-      text: winget.title(locale),
-      command: _createCommand(winget, locale),
-      title: winget.titleWithInput(appName, localization: locale),
-      icon: winget.icon ?? FluentIcons.error,
+  CommandIconButton iconButton(UnInstallingUpdatingType command,
+      AppLocalizations locale, String appName) {
+    return UnInstallingUpdatingIconButton(
+      text: command.winget.title(locale),
+      command: _createCommand(command.winget, locale),
+      title: command.winget.titleWithInput(appName, localization: locale),
+      icon: command.winget.icon ?? FluentIcons.error,
       padding: numberOfButtons < 3
           ? const EdgeInsets.all(5)
           : const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      type: command,
+      infos: infos,
     );
   }
 

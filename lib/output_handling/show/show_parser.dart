@@ -4,6 +4,7 @@ import 'package:winget_gui/output_handling/output_parser.dart';
 import 'package:winget_gui/output_handling/parsed_output.dart';
 import 'package:winget_gui/output_handling/show/show_builder.dart';
 
+import '../package_infos/info.dart';
 import '../package_infos/package_attribute.dart';
 import '../package_infos/package_infos_full.dart';
 
@@ -28,9 +29,24 @@ class ShowParser extends OutputParser {
       installerDetails = extractInstallerDetails(infos, locale);
       infos.remove(PackageAttribute.installer.key(locale));
     }
-
-    return PackageInfosFull.fromMap(
+    PackageInfosFull parsedInfos = PackageInfosFull.fromMap(
         details: infos, installerDetails: installerDetails, locale: locale);
+
+    if(!parsedInfos.hasVersion()){
+      extractVersionFromCommand(parsedInfos, '--version');
+    }
+    if(!parsedInfos.hasVersion()){
+      extractVersionFromCommand(parsedInfos, '-v');
+    }
+    return parsedInfos;
+
+
+  }
+
+  void extractVersionFromCommand(PackageInfosFull parsedInfos, String keyword) {
+    if(command.contains(keyword) && command.indexOf(keyword) < command.length - 1){
+      parsedInfos.version = Info(title: PackageAttribute.version.title, value: command[command.indexOf(keyword) + 1]);
+    }
   }
 
   Map<String, String> _extractMainInfos(AppLocalizations wingetLocale) {

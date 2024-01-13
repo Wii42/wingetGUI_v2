@@ -6,7 +6,8 @@ import '../../helpers/package_screenshots_list.dart';
 import 'info.dart';
 
 abstract class PackageInfos {
-  final Info<String>? name, id, version;
+  final Info<String>? name, id;
+  Info<String>? version;
 
   final Map<String, String>? otherInfos;
   PackageScreenshots? screenshots;
