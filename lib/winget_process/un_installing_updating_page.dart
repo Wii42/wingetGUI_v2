@@ -40,7 +40,7 @@ class UnInstallingUpdatingPage extends OutputPage {
       List<OutputBuilder> outputList) {
     Iterable<ParsedPlainText> plainText =
         parsedOutput.whereType<ParsedPlainText>();
-    print(plainText);
+    //print(plainText);
     Iterable<ParsedShow> show = parsedOutput.whereType<ParsedShow>();
     UnInstallingUpdatingProcess p = process as UnInstallingUpdatingProcess;
     if (plainText.isNotEmpty &&
@@ -72,7 +72,7 @@ class UnInstallingUpdatingPage extends OutputPage {
           (context) {
             return Row(
               children: [
-                Button(onPressed: navigator.maybePop, child: Text('close'))
+                Button(onPressed: navigator.maybePop, child: const Text('close'))
               ],
             );
           },

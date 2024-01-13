@@ -70,12 +70,12 @@ class DBTable {
 
   void notifyListeners() {
     _streamController.add('');
-    print("notified listeners of $content");
+    //print("notified listeners of $content");
   }
 
   void notifyLoading() {
     _streamController.add('loading');
-    print("loading $content");
+    //print("loading $content");
   }
 
   UnmodifiableListView<PackageInfosPeek> get infos =>

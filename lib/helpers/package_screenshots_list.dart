@@ -9,8 +9,6 @@ import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
 
-import '../output_handling/package_infos/info.dart';
-
 class PackageScreenshotsList {
   static const String _packageScreenshotsKey = 'packagePictures';
   late final Uri source;
@@ -159,7 +157,7 @@ class PackageScreenshotsList {
       if(packageInfos.idWithoutPublisherIDAndHyphen != null && packageInfos.idWithoutPublisherIDAndHyphen!.endsWith('-eap'))
         ...['${packageInfos.idWithoutPublisherIDAndHyphen!.substring(0, packageInfos.idWithoutPublisherIDAndHyphen!.length - 4)}-earlyaccess','${packageInfos.idWithoutPublisherIDAndHyphen!.substring(0, packageInfos.idWithoutPublisherIDAndHyphen!.length - 4)}-earlypreview',],
     ];
-    print('Looking for ${possibleKeys.join(', ')}');
+    //print('Looking for ${possibleKeys.join(', ')}');
 
     for (String possibleKey in possibleKeys.nonNulls) {
       PackageScreenshots? screenshots = keyMap[possibleKey];

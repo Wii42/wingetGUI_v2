@@ -6,9 +6,6 @@ import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:winget_gui/widget_assets/store_button.dart';
-
-import '../../../helpers/route_parameter.dart';
-import '../../../routes.dart';
 import '../../../widget_assets/decorated_card.dart';
 import '../../../widget_assets/favicon_widget.dart';
 import '../../../widget_assets/link_button.dart';

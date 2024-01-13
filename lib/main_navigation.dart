@@ -7,11 +7,9 @@ class MainNavigation extends StatefulWidget {
   final String title;
 
   final List<Routes> mainItems = [
-    Routes.updates,
-    Routes.installed,
-    Routes.searchPage,
     Routes.updatesPage,
-    Routes.installedPage
+    Routes.installedPage,
+    Routes.searchPage,
   ];
 
   static const List<Routes> advancedFooterItems = [

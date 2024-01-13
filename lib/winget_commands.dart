@@ -25,7 +25,7 @@ enum Winget {
     aliases: ['add'],
     icon: FluentIcons.installation,
   ),
-  upgrade('upgrade', aliases: ['update'], icon: FluentIcons.substitutions_in),
+  upgrade('upgrade', options: ['--include-unknown'], aliases: ['update'], icon: FluentIcons.substitutions_in),
   upgradeAll('upgrade', options: ['--all'], aliases: ['update']),
   uninstall('uninstall', aliases: ['remove', 'rm'], icon: FluentIcons.delete),
   show('show', aliases: ['view']);

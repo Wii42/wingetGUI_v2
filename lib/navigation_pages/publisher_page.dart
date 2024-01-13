@@ -1,7 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../helpers/route_parameter.dart';
 import '../main.dart';
