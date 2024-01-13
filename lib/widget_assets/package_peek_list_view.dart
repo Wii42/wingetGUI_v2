@@ -8,7 +8,6 @@ import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.d
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/widget_assets/sort_by.dart';
 
-import '../output_handling/package_infos/info.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../output_handling/table/apps_table/package_peek.dart';
 import '../winget_db/db_table.dart';
@@ -27,6 +26,8 @@ class PackagePeekListView extends StatefulWidget {
   final List<SortBy> sortOptions;
   final bool sortDefaultReversed;
   final bool showDeepSearchButton;
+  final bool showFilterField;
+  final bool packageShowMatch;
   const PackagePeekListView(
       {super.key,
       required this.dbTable,
@@ -40,7 +41,9 @@ class PackagePeekListView extends StatefulWidget {
       this.defaultSortBy = SortBy.auto,
       this.sortOptions = SortBy.values,
       this.sortDefaultReversed = false,
-      this.showDeepSearchButton = false});
+      this.showDeepSearchButton = false,
+      this.showFilterField = true,
+      this.packageShowMatch = false});
 
   @override
   State<PackagePeekListView> createState() => _PackagePeekListViewState();
@@ -184,6 +187,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       installButton: !installed,
       uninstallButton: installed,
       upgradeButton: upgradable,
+      showMatch: widget.packageShowMatch,
     );
   }
 
@@ -214,7 +218,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           },
           content: const Text('only with exact version'),
         ),
-      if (widget.dbTable.infos.length >= 5) ...[
+      if (widget.dbTable.infos.length >= 5 && widget.showFilterField) ...[
         filterField(),
         if (widget.showDeepSearchButton) deepSearchButton()
       ],

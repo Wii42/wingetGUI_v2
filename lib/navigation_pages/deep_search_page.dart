@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
@@ -35,7 +33,12 @@ class DeepSearchPage extends StatelessWidget {
       stream: creator.init(wingetLocale),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return PackagePeekListView(dbTable: creator.returnTable(), showOnlyWithSourceButton: false,);
+          return PackagePeekListView(
+            dbTable: creator.returnTable(),
+            showOnlyWithSourceButton: false,
+            showFilterField: false,
+            packageShowMatch: true,
+          );
         }
         if (snapshot.hasData) {
           return Center(child: Text(snapshot.data!));
