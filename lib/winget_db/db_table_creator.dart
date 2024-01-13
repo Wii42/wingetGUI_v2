@@ -63,32 +63,14 @@ class DBTableCreator {
     if (parsed == null) {
       throw Exception("$content has not been parsed");
     }
-    Iterable<ParsedAppTable> appTables = parsed!.whereType<ParsedAppTable>();
-    if (appTables.isEmpty) {
-      throw Exception("No AppTables found in $content");
-    }
-    List<PackageInfosPeek> infos = [];
-    for (ParsedAppTable table in appTables) {
-      infos.addAll(table.packages);
-    }
-    if (filter != null) {
-      infos = filter!(infos);
-    }
-    return infos;
+    return extractInfosStatic(parsed!, content, filter: filter);
   }
 
   List<OneLineInfo> extractHints() {
     if (parsed == null) {
       throw Exception("$content has not been parsed");
     }
-    Iterable<ParsedOneLineInfos> appTables =
-        parsed!.whereType<ParsedOneLineInfos>();
-    List<OneLineInfo> infos = [];
-    for (ParsedOneLineInfos table in appTables) {
-      infos.addAll(table.infos);
-    }
-
-    return infos;
+    return extractHintsStatic(parsed!, content);
   }
 
   DBTable returnTable() {
@@ -97,5 +79,33 @@ class DBTableCreator {
         content: content,
         wingetCommand: wingetCommand,
         creatorFilter: filter);
+  }
+
+  static List<PackageInfosPeek> extractInfosStatic(
+      List<ParsedOutput> parsed, String content,
+      {List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter}) {
+    Iterable<ParsedAppTable> appTables = parsed.whereType<ParsedAppTable>();
+    if (appTables.isEmpty) {
+      throw Exception("No AppTables found in $content");
+    }
+    List<PackageInfosPeek> infos = [];
+    for (ParsedAppTable table in appTables) {
+      infos.addAll(table.packages);
+    }
+    if (filter != null) {
+      infos = filter(infos);
+    }
+    return infos;
+  }
+
+  static List<OneLineInfo> extractHintsStatic(
+      List<ParsedOutput> parsed, String content) {
+    Iterable<ParsedOneLineInfos> appTables =
+        parsed.whereType<ParsedOneLineInfos>();
+    List<OneLineInfo> infos = [];
+    for (ParsedOneLineInfos table in appTables) {
+      infos.addAll(table.infos);
+    }
+    return infos;
   }
 }

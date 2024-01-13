@@ -9,6 +9,7 @@ import 'package:winget_gui/widget_assets/package_details_from_web.dart';
 import 'package:winget_gui/winget_commands.dart';
 
 import 'helpers/route_parameter.dart';
+import 'navigation_pages/deep_search_page.dart';
 import 'navigation_pages/installed_page.dart';
 import 'navigation_pages/publisher_page.dart';
 import 'navigation_pages/updates_page.dart';
@@ -64,9 +65,8 @@ enum Routes {
       icon: FluentIcons.library,
       route: '/installedPage',
       body: InstalledPage.inRoute),
-  publisherPage(
-      route: '/publisherPage',
-      body: PublisherPage.inRoute),
+  publisherPage(route: '/publisherPage', body: PublisherPage.inRoute),
+  deepSearchPage(route: '/deepSearchPage', body: DeepSearchPage.inRoute),
   ;
 
   final String route;
