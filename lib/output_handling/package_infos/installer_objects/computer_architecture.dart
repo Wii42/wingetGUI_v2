@@ -4,7 +4,8 @@ enum ComputerArchitecture {
   arm(key: 'arm', title: 'ARM'),
   arm64(key: 'arm64', title: 'ARM64'),
   neutal(key: 'neutral', title: 'Architecture neutral'),
-  ;
+  matchAll(key: '_', title: '<match all>');
+
 
   final String key, title;
   const ComputerArchitecture({required this.key, required this.title});

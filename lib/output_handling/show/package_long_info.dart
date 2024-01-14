@@ -7,6 +7,7 @@ import 'package:winget_gui/output_handling/show/compartments/expandable_text_com
 import 'package:winget_gui/output_handling/show/compartments/installer_details.dart';
 import 'package:winget_gui/output_handling/show/compartments/screenshots_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
+import 'package:winget_gui/output_handling/show/stateful_installer_widget.dart';
 import 'package:winget_gui/widget_assets/search_button.dart';
 
 import '../package_infos/package_infos_full.dart';
@@ -48,6 +49,7 @@ class PackageLongInfo extends StatelessWidget {
         DetailsWidget(infos: infos),
         if (infos.agreement != null) AgreementWidget(infos: infos.agreement!),
         if (infos.installer != null) InstallerDetails(infos: infos.installer!),
+        if (infos.installer != null) StatefulInstallerWidget(infos: infos.installer!),
         if (infos.hasTags()) _tagButtons(context),
       ].withSpaceBetween(height: 10),
     );

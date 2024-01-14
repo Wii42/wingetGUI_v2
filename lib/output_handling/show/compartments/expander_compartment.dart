@@ -23,6 +23,14 @@ abstract class ExpanderCompartment extends Compartment {
 
   @override
   Widget build(BuildContext context) {
+    Widget content = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: buildCompartment(context),
+    );
+    return buildWithoutContent(context, content);
+  }
+
+  Expander buildWithoutContent(BuildContext context, content) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Expander(
       header: Row(
@@ -41,10 +49,7 @@ abstract class ExpanderCompartment extends Compartment {
           ),
         ].withSpaceBetween(width: 10),
       ),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: buildCompartment(context),
-      ),
+      content: content,
       initiallyExpanded: initiallyExpanded,
       contentPadding: bodyPadding,
     );

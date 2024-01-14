@@ -46,8 +46,8 @@
   "installSuccessful": "Erfolgreich installiert",
   "uninstallSuccessful": "Erfolgreich deinstalliert",
 
-  "userScope": "Benutzer",
-  "machineScope": "Computer",
+  "userScope": "User",
+  "machineScope": "Machine-Wide",
 
   "installMode": "{mode, select, interactive{interaktiv} silent{still} silentWithProgress{still mit Fortschritt} other{NotFoundError}}",
 

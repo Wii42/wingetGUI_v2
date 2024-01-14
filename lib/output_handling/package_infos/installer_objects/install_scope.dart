@@ -2,7 +2,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum InstallScope {
   user(key: 'user'),
-  machine(key: 'machine');
+  machine(key: 'machine'),
+  matchAll(key: '_');
 
   final String key;
   const InstallScope({required this.key});
@@ -13,6 +14,8 @@ enum InstallScope {
         return locale.userScope;
       case InstallScope.machine:
         return locale.machineScope;
+      case InstallScope.matchAll:
+        return "<match all>";
     }
   }
 

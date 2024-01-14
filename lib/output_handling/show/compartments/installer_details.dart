@@ -68,12 +68,12 @@ class InstallerDetails extends ExpanderCompartment {
               return stringList.join('\n');
             }),
           ], context),
-          ..._displayRest(infos.otherInfos, context),
+          ...displayRest(infos.otherInfos, context),
         ],
         buttonRow: infos.url != null
             ? buttonRow([infos.url], context)
             : (infos.installers != null)
-                ? _displayInstallers(infos.installers!, context)
+                ? displayInstallers(infos.installers!, context)
                 : null,
         context: context);
   }
@@ -81,7 +81,7 @@ class InstallerDetails extends ExpanderCompartment {
   @override
   bool get initiallyExpanded => false;
 
-  Wrap _displayInstallers(
+  Wrap displayInstallers(
       Info<List<Installer>> installers, BuildContext context) {
     return Wrap(
       spacing: 5,
@@ -130,7 +130,7 @@ class InstallerDetails extends ExpanderCompartment {
     return PackageAttribute.installer.title(locale);
   }
 
-  List<Widget> _displayRest(
+  List<Widget> displayRest(
       Map<String, String>? otherInfos, BuildContext context) {
     if (otherInfos == null) {
       return [];
@@ -185,7 +185,7 @@ class InstallerDetails extends ExpanderCompartment {
                 installer.sha256Hash,
                 installer.signatureSha256,
               ], context),
-              ..._displayRest(installer.other, context)
+              ...displayRest(installer.other, context)
             ],
             buttonRow: buttonRow([installer.url], context)),
       ),
@@ -196,7 +196,7 @@ class InstallerDetails extends ExpanderCompartment {
           Info<List<InstallMode>>? modes, AppLocalizations locale) =>
       tryFromListInfo(modes, toString: (e) => e.title(locale));
 
-  String installerPreview(Installer installer, List<Installer> installerList,
+  static String installerPreview(Installer installer, List<Installer> installerList,
       BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     String base = installer.architecture.value.title;

@@ -14,7 +14,7 @@ enum InstallerType {
   portable(key: 'portable', shortTitle: 'Portable'),
   zip(key: 'zip', shortTitle: 'ZIP'),
   msstore(key: 'msstore', shortTitle: 'Microsoft Store'),
-  ;
+  matchAll(key: '_', shortTitle: '<match all>');
 
   final String key;
   final String shortTitle;

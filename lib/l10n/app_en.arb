@@ -47,7 +47,7 @@
   "uninstallSuccessful": "Uninstall successful",
 
   "userScope": "User",
-  "machineScope": "Machine",
+  "machineScope": "Machine Wide",
 
   "installMode": "{mode, select, interactive{interactive} silent{silent} silentWithProgress{silent with progress} other{NotFoundError}}",
 
