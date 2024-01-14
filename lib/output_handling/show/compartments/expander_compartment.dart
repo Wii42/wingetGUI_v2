@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/icon_link_button.dart';
 
@@ -178,25 +179,6 @@ abstract class ExpanderCompartment extends Compartment {
         ]));
   }
 
-  Info<String>? tryFromLocaleInfo(Info<Locale>? info, BuildContext context) {
-    LocaleNames localeNames = LocaleNames.of(context)!;
-    return tryFrom(
-        info,
-        (locale) =>
-            localeNames.nameOf(locale.toString()) ?? locale.toLanguageTag());
-  }
-
-  Info<String>? tryFrom<T extends Object>(
-      Info<T>? info, String Function(T) toString) {
-    if (info == null) {
-      return null;
-    }
-    return Info<String>(
-        title: info.title,
-        value: toString(info.value),
-        couldBeLink: info.couldBeLink);
-  }
-
   List<Widget> detailsList(List<Info<String>?> details, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     //return [
@@ -263,15 +245,23 @@ abstract class ExpanderCompartment extends Compartment {
     );
   }
 
-  Info<String>? tryFromListInfo<T>(Info<List<T>>? info,
-      {String Function(T)? toString}) {
-    if (info == null) return null;
-    List<dynamic> list = info.value;
-    if (toString != null) {
-      list = info.value.map((e) => toString(e)).toList();
+  List<Widget> displayRest(
+      Map<String, String>? otherInfos, BuildContext context) {
+    if (otherInfos == null) {
+      return [];
     }
-    String string = list.join(', ');
-    return Info<String>(
-        title: info.title, value: string, couldBeLink: info.couldBeLink);
+    Iterable<String> restKeys = otherInfos.keys;
+    String value(String key) => otherInfos[key]!;
+    return [
+      for (String key in restKeys)
+        if (otherInfos.hasEntry(key))
+          wrapInWrap(
+            title: key,
+            body: textOrIconLink(
+                context: context,
+                text: value(key),
+                url: isLink(value(key)) ? Uri.tryParse(value(key)) : null),
+          ),
+    ];
   }
 }

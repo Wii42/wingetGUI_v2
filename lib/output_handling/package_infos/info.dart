@@ -14,13 +14,26 @@ class Info<T extends Object> {
       this.couldBeLink = true,
       this.customTitle});
 
-  Info<T> copyWith({String Function(AppLocalizations)? title, T? value, bool? copyable, bool? couldBe, String? customTitle}){
+  Info<T> copyWith(
+      {String Function(AppLocalizations)? title,
+      T? value,
+      bool? copyable,
+      bool? couldBe,
+      String? customTitle}) {
     return Info<T>(
-      title: title ?? this.title,
-      value: value ?? this.value,
-      copyable: copyable ?? this.copyable,
-      couldBeLink: couldBe ?? this.couldBeLink,
-      customTitle: customTitle ?? this.customTitle
-    );
+        title: title ?? this.title,
+        value: value ?? this.value,
+        copyable: copyable ?? this.copyable,
+        couldBeLink: couldBe ?? this.couldBeLink,
+        customTitle: customTitle ?? this.customTitle);
+  }
+
+  Info<String> toStringInfoFromObject(String Function(T object)? toString) {
+    return Info<String>(
+        title: title,
+        value: toString != null ? toString(value) : value.toString(),
+        copyable: copyable,
+        couldBeLink: couldBeLink,
+        customTitle: customTitle);
   }
 }

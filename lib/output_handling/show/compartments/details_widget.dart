@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
+import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
 
 import '../../../helpers/route_parameter.dart';
 import '../../../routes.dart';
@@ -25,12 +26,12 @@ class DetailsWidget extends ExpanderCompartment {
         mainColumn: [
           ...detailsList([
             infos.author,
-            infos.agreement?.publisher?.tryToInfoString(),
+            infos.agreement?.publisher?.toStringInfo(),
             infos.pricing,
             infos.freeTrial,
             infos.ageRating,
             infos.id,
-            tryFromLocaleInfo(infos.packageLocale, context),
+            infos.packageLocale?.toStringInfo(context),
           ], context),
           if (infos.documentation != null)
             wrapInWrap(
@@ -45,11 +46,11 @@ class DetailsWidget extends ExpanderCompartment {
               ),
             ),
           ...detailsList([
-            tryFromListInfo(infos.installer?.fileExtensions),
-            tryFromListInfo(infos.installer?.availableCommands),
-            tryFromListInfo(infos.installer?.protocols),
+            infos.installer?.fileExtensions?.toStringInfo(),
+            infos.installer?.availableCommands?.toStringInfo(),
+            infos.installer?.protocols?.toStringInfo(),
           ], context),
-          ..._displayRest(context)
+          ...displayRest(infos.otherInfos, context)
         ],
         buttonRow: buttonRow(
           [

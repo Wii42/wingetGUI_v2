@@ -41,8 +41,8 @@ class PackageLongInfo extends StatelessWidget {
           ),
         if (infos.hasReleaseNotes())
           ExpandableTextCompartment(
-            text: infos.releaseNotes!.toInfoString(),
-            buttonInfos: [infos.releaseNotes?.tryToInfoUri()],
+            text: infos.releaseNotes!.toStringInfo(),
+            buttonInfos: [infos.releaseNotes?.toUriInfoIfHasUrl()],
             titleIcon: FluentIcons.product_release,
           ),
         DetailsWidget(infos: infos),

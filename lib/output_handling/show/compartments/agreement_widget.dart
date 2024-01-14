@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/agreement_infos.dart';
+import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
 
 import '../../package_infos/info.dart';
 import '../../package_infos/package_attribute.dart';
@@ -30,13 +31,13 @@ class AgreementWidget extends ExpanderCompartment {
                 body: _copyright(context)),
         ],
         buttonRow: buttonRow([
-          if (infos.license?.text == null) infos.license?.tryToInfoUri(),
-          if (infos.copyright?.text == null) infos.copyright?.tryToInfoUri(),
+          if (infos.license?.text == null) infos.license?.toUriInfoIfHasUrl(),
+          if (infos.copyright?.text == null) infos.copyright?.toUriInfoIfHasUrl(),
           infos.privacyUrl,
           infos.buyUrl,
-          tryFromStringInfo(infos.termsOfTransaction),
-          tryFromStringInfo(infos.seizureWarning),
-          tryFromStringInfo(infos.storeLicenseTerms),
+          infos.termsOfTransaction?.tryToUriInfo(),
+          infos.seizureWarning?.tryToUriInfo(),
+          infos.storeLicenseTerms?.tryToUriInfo(),
         ], context),
         context: context);
   }
@@ -56,13 +57,5 @@ class AgreementWidget extends ExpanderCompartment {
         context: context,
         text: infos.copyright?.text,
         url: infos.copyright?.url);
-  }
-
-  Info<Uri>? tryFromStringInfo(Info<String>? info) {
-    if (info == null) return null;
-
-    Uri? url = Uri.tryParse(info.value);
-    if (url == null) return null;
-    return Info<Uri>(title: info.title, value: url);
   }
 }

@@ -1,19 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
-import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
 
-import '../../../helpers/extensions/string_extension.dart';
 import '../../../widget_assets/app_locale.dart';
 import '../../package_infos/info.dart';
-import '../../package_infos/installer_objects/computer_architecture.dart';
-import '../../package_infos/installer_objects/install_mode.dart';
-import '../../package_infos/installer_objects/install_scope.dart';
+
 import '../../package_infos/installer_objects/installer.dart';
-import '../../package_infos/installer_objects/installer_type.dart';
-import '../../package_infos/installer_objects/upgrade_behavior.dart';
 import '../../package_infos/package_attribute.dart';
 import 'expander_compartment.dart';
 
@@ -47,7 +39,7 @@ class InstallerDetails extends ExpanderCompartment {
             //infos.installerSwitches,
             infos.elevationRequirement,
             infos.productCode,
-            tryFrom(infos.dependencies, (dependencies) {
+            infos.dependencies?.toStringInfoFromObject((dependencies) {
               List<String> stringList = [];
               if (dependencies.windowsFeatures != null) {
                 stringList.add(
@@ -93,67 +85,9 @@ class InstallerDetails extends ExpanderCompartment {
     );
   }
 
-  Info<String>? tryFromInstallerType(Info<InstallerType>? info) {
-    if (info == null) return null;
-    return Info<String>(
-        title: info.title,
-        value: info.value.fullTitle,
-        couldBeLink: info.couldBeLink);
-  }
-
-  Info<String>? tryFromArchitectureInfo(Info<ComputerArchitecture>? info) {
-    if (info == null) return null;
-    return Info<String>(
-        title: info.title,
-        value: info.value.title,
-        couldBeLink: info.couldBeLink);
-  }
-
-  Info<String>? tryFromScopeInfo(
-      Info<InstallScope>? info, BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    if (info == null) return null;
-    return Info<String>(
-        title: info.title,
-        value: info.value.title(locale),
-        couldBeLink: info.couldBeLink);
-  }
-
-  Info<String>? tryFromUpgradeBehaviorInfo(
-      Info<UpgradeBehavior>? info, BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    return tryFrom(info, (e) => e.title(locale));
-  }
-
   @override
   String compartmentTitle(AppLocalizations locale) {
     return PackageAttribute.installer.title(locale);
-  }
-
-  List<Widget> displayRest(
-      Map<String, String>? otherInfos, BuildContext context) {
-    if (otherInfos == null) {
-      return [];
-    }
-    Iterable<String> restKeys = otherInfos.keys;
-    String value(String key) => otherInfos[key]!;
-    return [
-      for (String key in restKeys)
-        if (otherInfos.hasEntry(key))
-          wrapInWrap(
-              title: key,
-              body: textOrIconLink(
-                  context: context,
-                  text: value(key),
-                  url: isLink(value(key)) ? Uri.tryParse(value(key)) : null)),
-    ];
-  }
-
-  Info<String>? tryFromDateTimeInfo(Info<DateTime>? info, [Locale? locale]) {
-    if (info == null) return null;
-
-    String string = DateFormat.yMMMMd(locale.toString()).format(info.value);
-    return Info<String>(title: info.title, value: string);
   }
 
   Widget installerWidget(Installer installer, List<Installer> installerList,
@@ -191,8 +125,4 @@ class InstallerDetails extends ExpanderCompartment {
       ),
     );
   }
-
-  Info<String>? tryFromListModeInfo(
-          Info<List<InstallMode>>? modes, AppLocalizations locale) =>
-      tryFromListInfo(modes, toString: (e) => e.title(locale));
 }

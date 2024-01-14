@@ -4,21 +4,24 @@ import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
 
 import '../../widget_assets/app_locale.dart';
+import '../package_infos/info.dart';
 import '../package_infos/installer_objects/computer_architecture.dart';
 import '../package_infos/installer_objects/install_scope.dart';
 import '../package_infos/installer_objects/installer.dart';
 import '../package_infos/installer_objects/installer_type.dart';
 import '../package_infos/package_attribute.dart';
+import 'compartments/expander_compartment.dart';
 import 'compartments/installer_details.dart';
 import 'installer_differences.dart';
 
 class StatefulInstallerWidget extends StatefulWidget {
-  late final InstallerDetails template;
+  late final _InstallerCompartmentStub _template;
   final InstallerInfos infos;
   StatefulInstallerWidget({required this.infos, super.key})
-      : template = InstallerDetails(infos: infos);
+      : _template = _InstallerCompartmentStub(infos: infos);
 
   @override
   State<StatefulWidget> createState() => _StatefulInstallerWidgetState();
@@ -49,71 +52,41 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
     AppLocalizations localization = AppLocalizations.of(context)!;
     Locale? locale = AppLocale.of(context).guiLocale;
 
+    Installer? installer = selectedInstaller;
+
+    List<Info<String>?> details = [
+      installer?.architecture.toStringInfo(),
+      (installer?.type ?? infos.type)?.toStringInfo(),
+      (installer?.locale ?? infos.locale)?.toStringInfo(context),
+      infos.releaseDate?.toStringInfo(locale),
+      (installer?.scope ?? infos.scope)?.toStringInfo(context),
+      installer?.minimumOSVersion ?? infos.minimumOSVersion,
+      (installer?.platform ?? infos.platform)?.toStringInfo(),
+      selectedInstaller?.availableCommands?.toStringInfo(),
+      (installer?.nestedInstallerType ?? infos.nestedInstallerType)
+          ?.toStringInfo(),
+      (installer?.upgradeBehavior ?? infos.upgradeBehavior)
+          ?.toStringInfo(context),
+      (installer?.modes ?? infos.installModes)?.toStringInfo(localization),
+      infos.storeProductID,
+      installer?.sha256Hash ?? infos.sha256Hash,
+      //infos.installerSwitches,
+      installer?.elevationRequirement ?? infos.elevationRequirement,
+      installer?.productCode ?? infos.productCode,
+      infos.dependencies?.toStringInfo(),
+      installer?.signatureSha256,
+    ];
+
     Widget content = Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: template.fullCompartment(
-            title: compartmentTitle(localization),
+            title: template.compartmentTitle(localization),
             mainColumn: [
               if (infos.installers != null) selectInstallerWidget(context),
               if (infos.installers != null &&
                   infos.installers!.value.length > 1)
                 template.divider(),
-              ...template.detailsList([
-                template
-                    .tryFromArchitectureInfo(selectedInstaller?.architecture),
-                template.tryFromInstallerType(selectedInstaller?.type) ??
-                    template.tryFromInstallerType(infos.type),
-                template.tryFromLocaleInfo(
-                        selectedInstaller?.locale, context) ??
-                    template.tryFromLocaleInfo(infos.locale, context),
-                template.tryFromDateTimeInfo(infos.releaseDate, locale),
-                template.tryFromScopeInfo(selectedInstaller?.scope, context) ??
-                    template.tryFromScopeInfo(infos.scope, context),
-                selectedInstaller?.minimumOSVersion ?? infos.minimumOSVersion,
-                template.tryFromListInfo(selectedInstaller?.platform,
-                        toString: (e) => e.title) ??
-                    template.tryFromListInfo(infos.platform,
-                        toString: (e) => e.title),
-                template.tryFromListInfo(selectedInstaller?.availableCommands),
-                template.tryFromInstallerType(
-                        selectedInstaller?.nestedInstallerType) ??
-                    template.tryFromInstallerType(infos.nestedInstallerType),
-                template.tryFromUpgradeBehaviorInfo(
-                        infos.upgradeBehavior, context) ??
-                    template.tryFromUpgradeBehaviorInfo(
-                        selectedInstaller?.upgradeBehavior, context),
-                template.tryFromListModeInfo(
-                        selectedInstaller?.modes, localization) ??
-                    template.tryFromListModeInfo(
-                        infos.installModes, localization),
-                infos.storeProductID,
-                selectedInstaller?.sha256Hash ?? infos.sha256Hash,
-                //infos.installerSwitches,
-                selectedInstaller?.elevationRequirement ??
-                    infos.elevationRequirement,
-                selectedInstaller?.productCode ?? infos.productCode,
-                template.tryFrom(infos.dependencies, (dependencies) {
-                  List<String> stringList = [];
-                  if (dependencies.windowsFeatures != null) {
-                    stringList.add(
-                        'Windows Features: ${dependencies.windowsFeatures!.join(', ')}');
-                  }
-                  if (dependencies.windowsLibraries != null) {
-                    stringList.add(
-                        'Windows Libraries: ${dependencies.windowsLibraries!.join(', ')}');
-                  }
-                  if (dependencies.packageDependencies != null) {
-                    stringList.add(
-                        'Package Dependencies: ${dependencies.packageDependencies!.map<String>((e) => '${e.packageID}${e.minimumVersion != null ? ' >=${e.minimumVersion}' : ''}').join(', ')}');
-                  }
-                  if (dependencies.externalDependencies != null) {
-                    stringList.add(
-                        'External Dependencies: ${dependencies.externalDependencies!.join(', ')}');
-                  }
-                  return stringList.join('\n');
-                }),
-                selectedInstaller?.signatureSha256,
-              ], context),
+              ...template.detailsList(details, context),
               ...template.displayRest(infos.otherInfos, context),
               ...template.displayRest(selectedInstaller?.other, context)
             ],
@@ -125,15 +98,11 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                           infos.installers!.value, context)))
             ], context),
             context: context));
-    return widget.template.buildWithoutContent(context, content);
-  }
-
-  compartmentTitle(AppLocalizations locale) {
-    return PackageAttribute.installer.title(locale);
+    return widget._template.buildWithoutContent(context, content);
   }
 
   InstallerInfos get infos => widget.infos;
-  InstallerDetails get template => widget.template;
+  ExpanderCompartment get template => widget._template;
 
   Widget selectInstallerWidget(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
@@ -296,4 +265,26 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             .toList() ??
         [];
   }
+}
+
+class _InstallerCompartmentStub extends ExpanderCompartment {
+  final InstallerInfos infos;
+
+  const _InstallerCompartmentStub({required this.infos});
+
+  @override
+  List<Widget> buildCompartment(BuildContext context) {
+    throw UnimplementedError();
+  }
+
+  @override
+  String compartmentTitle(AppLocalizations locale) {
+    return PackageAttribute.installer.title(locale);
+  }
+
+  @override
+  final IconData titleIcon = FluentIcons.install_to_drive;
+
+  @override
+  bool get initiallyExpanded => false;
 }

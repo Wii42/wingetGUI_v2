@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../helpers/extensions/string_extension.dart';
@@ -36,14 +37,20 @@ class InfoWithLink {
     }
   }
 
-  Info<Uri> toInfoUri() => tryToInfoUri()!;
+  Info<Uri> toUriInfo() {
+    if (kDebugMode && url == null) {
+      print('Warning in InfoWithLink.toUriInfo(): url is null!');
+    }
+    return toUriInfoIfHasUrl() ?? Info<Uri>(title: title, value: Uri());
+  }
 
-  Info<Uri>? tryToInfoUri() =>
-      (url != null) ? Info<Uri>(title: title, value: url!) : null;
+  Info<Uri>? toUriInfoIfHasUrl() => (url != null) ? toUriInfo() : null;
 
-  Info<String> toInfoString() => tryToInfoString()!;
-  Info<String>? tryToInfoString() =>
-      (text != null) ? Info<String>(title: title, value: text!) : null;
+  Info<String> toStringInfo() =>
+      Info<String>(title: title, value: text ?? url!.toString());
+
+  Info<String>? toInfoStringIfHasText() =>
+      (text != null) ? toStringInfo() : null;
 
   static InfoWithLink? maybeFromYamlMap(
       {required Map<dynamic, dynamic>? map,
