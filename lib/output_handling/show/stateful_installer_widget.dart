@@ -1,10 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../widget_assets/app_locale.dart';
-import '../package_infos/info.dart';
 import '../package_infos/installer_objects/computer_architecture.dart';
 import '../package_infos/installer_objects/install_scope.dart';
 import '../package_infos/installer_objects/installer.dart';
@@ -31,13 +31,16 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   Locale? installerLocale;
   InstallScope? installerScope;
 
+  Installer? selectedInstaller;
+
   @override
   void initState() {
     super.initState();
-    installerArchitecture = infos.installers?.value.first.architecture.value;
-    installerType = infos.installers?.value.first.type?.value;
-    installerLocale = infos.installers?.value.first.locale?.value;
-    installerScope = infos.installers?.value.first.scope?.value;
+    selectedInstaller = infos.installers?.value.first;
+    installerArchitecture = selectedInstaller?.architecture.value;
+    installerType = selectedInstaller?.type?.value;
+    installerLocale = selectedInstaller?.locale?.value;
+    installerScope = selectedInstaller?.scope?.value;
   }
 
   @override
@@ -50,24 +53,43 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
         children: template.fullCompartment(
             title: compartmentTitle(localization),
             mainColumn: [
-              if (infos.installers != null) selectInstaller(context),
+              if (infos.installers != null) selectInstallerWidget(context),
+              if(infos.installers != null && infos.installers!.value.length > 1)
+                template.divider(),
               ...template.detailsList([
-                template.tryFromInstallerType(infos.type),
-                template.tryFromLocaleInfo(infos.locale, context),
+                template
+                    .tryFromArchitectureInfo(selectedInstaller?.architecture),
+                template.tryFromInstallerType(selectedInstaller?.type) ??
+                    template.tryFromInstallerType(infos.type),
+                template.tryFromLocaleInfo(
+                        selectedInstaller?.locale, context) ??
+                    template.tryFromLocaleInfo(infos.locale, context),
                 template.tryFromDateTimeInfo(infos.releaseDate, locale),
-                template.tryFromScopeInfo(infos.scope, context),
-                infos.minimumOSVersion,
-                template.tryFromListInfo(infos.platform,
-                    toString: (e) => e.title),
-                template.tryFromInstallerType(infos.nestedInstallerType),
+                template.tryFromScopeInfo(selectedInstaller?.scope, context) ??
+                    template.tryFromScopeInfo(infos.scope, context),
+                selectedInstaller?.minimumOSVersion ?? infos.minimumOSVersion,
+                template.tryFromListInfo(selectedInstaller?.platform,
+                        toString: (e) => e.title) ??
+                    template.tryFromListInfo(infos.platform,
+                        toString: (e) => e.title),
+                template.tryFromListInfo(selectedInstaller?.availableCommands),
+                template.tryFromInstallerType(
+                        selectedInstaller?.nestedInstallerType) ??
+                    template.tryFromInstallerType(infos.nestedInstallerType),
                 template.tryFromUpgradeBehaviorInfo(
-                    infos.upgradeBehavior, context),
-                template.tryFromListModeInfo(infos.installModes, localization),
+                        infos.upgradeBehavior, context) ??
+                    template.tryFromUpgradeBehaviorInfo(
+                        selectedInstaller?.upgradeBehavior, context),
+                template.tryFromListModeInfo(
+                        selectedInstaller?.modes, localization) ??
+                    template.tryFromListModeInfo(
+                        infos.installModes, localization),
                 infos.storeProductID,
-                infos.sha256Hash,
+                selectedInstaller?.sha256Hash ?? infos.sha256Hash,
                 //infos.installerSwitches,
-                infos.elevationRequirement,
-                infos.productCode,
+                selectedInstaller?.elevationRequirement ??
+                    infos.elevationRequirement,
+                selectedInstaller?.productCode ?? infos.productCode,
                 template.tryFrom(infos.dependencies, (dependencies) {
                   List<String> stringList = [];
                   if (dependencies.windowsFeatures != null) {
@@ -88,14 +110,13 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                   }
                   return stringList.join('\n');
                 }),
+                selectedInstaller?.signatureSha256,
               ], context),
               ...template.displayRest(infos.otherInfos, context),
+              ...template.displayRest(selectedInstaller?.other, context)
             ],
-            buttonRow: infos.url != null
-                ? template.buttonRow([infos.url], context)
-                : (infos.installers != null)
-                    ? displayInstallers(infos.installers!, context)
-                    : null,
+            buttonRow: template
+                .buttonRow([infos.url, selectedInstaller?.url], context),
             context: context));
     return widget.template.buildWithoutContent(context, content);
   }
@@ -107,7 +128,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   InstallerInfos get infos => widget.infos;
   InstallerDetails get template => widget.template;
 
-  Widget selectInstaller(BuildContext context) {
+  Widget selectInstallerWidget(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
     LocaleNames localeNames = LocaleNames.of(context)!;
     InstallerDifferences differences =
@@ -124,75 +145,107 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
     bool onlyScopeOption = differences.architectures.length <= 1 &&
         differences.types.length <= 1 &&
         differences.locales.length <= 1;
-    return Wrap(
-      spacing: 10,
-      runSpacing: 5,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (differences.architectures.length > 1)
-          boxSelectInstaller<ComputerArchitecture>(
-            categoryName: differences.architectureTitle,
-            options: differences.architectures,
-            title: (item) => item.title,
-            value: installerArchitecture,
-            onChanged: (value) {
-              if (value != null) {
-                setState(() => installerArchitecture = value);
-              }
-            },
-            matchAll:
-                !onlyArchitectureOption ? ComputerArchitecture.matchAll : null,
-          ),
-        if (differences.types.length > 1)
-          boxSelectInstaller<InstallerType?>(
-            categoryName: differences.typeTitle,
-            options: differences.types,
-            title: (item) => item?.fullTitle ?? 'null',
-            value: installerType,
-            onChanged: (value) {
-              setState(() => installerType = value);
-            },
-            matchAll: !onlyTypeOption ? InstallerType.matchAll : null,
-          ),
-        if (differences.locales.length > 1)
-          boxSelectInstaller<Locale?>(
-            categoryName: differences.localeTitle,
-            options: differences.locales,
-            title: (item) =>
-                localeNames.nameOf(item.toString()) ??
-                item?.toLanguageTag() ??
-                'null',
-            value: installerLocale,
-            onChanged: (value) {
-              setState(() => installerLocale = value);
-            },
-            matchAll: !onlyLocaleOption ? matchAllLocale : null,
-          ),
-        if (differences.scopes.length > 1)
-          boxSelectInstaller<InstallScope?>(
-            categoryName: differences.scopeTitle,
-            options: differences.scopes,
-            title: (item) => item?.title(localizations) ?? 'null',
-            value: installerScope,
-            onChanged: (value) {
-              setState(() => installerScope = value);
-            },
-            matchAll: !onlyScopeOption ? InstallScope.matchAll : null,
-          ),
-        if (infos.installers != null && fittingInstallers.length >= 2)
-          boxSelectInstaller<Installer>(
-              categoryName:
-                  '${fittingInstallers.length} installer found for the selected options. Select one:',
-              options: fittingInstallers,
-              title: (item) => InstallerDetails.installerPreview(
-                  item, fittingInstallers, context),
-              value: fittingInstallers.first,
-              onChanged: (value) {}),
-        if (infos.installers != null && fittingInstallers.isEmpty)
+        if (infos.installers != null && infos.installers!.value.length > 1)
           Text(
-            'No installer found for the selected options.',
-            style: TextStyle(color: Colors.red),
+            '${infos.installers?.value.length} installers found for this package. Select the one you want to see:',
           ),
-      ],
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: [
+            if (differences.architectures.length > 1)
+              boxSelectInstaller<ComputerArchitecture>(
+                categoryName: differences.architectureTitle,
+                options: differences.architectures,
+                title: (item) => item.title,
+                value: installerArchitecture,
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(
+                      () {
+                        installerArchitecture = value;
+                        selectedInstaller = fittingInstallers.firstOrNull;
+                      },
+                    );
+                  }
+                },
+                matchAll: !onlyArchitectureOption
+                    ? ComputerArchitecture.matchAll
+                    : null,
+              ),
+            if (differences.types.length > 1)
+              boxSelectInstaller<InstallerType?>(
+                categoryName: differences.typeTitle,
+                options: differences.types,
+                title: (item) => item?.fullTitle ?? 'null',
+                value: installerType,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      installerType = value;
+                      selectedInstaller = fittingInstallers.firstOrNull;
+                    },
+                  );
+                },
+                matchAll: !onlyTypeOption ? InstallerType.matchAll : null,
+              ),
+            if (differences.locales.length > 1)
+              boxSelectInstaller<Locale?>(
+                categoryName: differences.localeTitle,
+                options: differences.locales,
+                title: (item) =>
+                    localeNames.nameOf(item.toString()) ??
+                    item?.toLanguageTag() ??
+                    'null',
+                value: installerLocale,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      installerLocale = value;
+                      selectedInstaller = fittingInstallers.firstOrNull;
+                    },
+                  );
+                },
+                matchAll: !onlyLocaleOption ? matchAllLocale : null,
+              ),
+            if (differences.scopes.length > 1)
+              boxSelectInstaller<InstallScope?>(
+                categoryName: differences.scopeTitle,
+                options: differences.scopes,
+                title: (item) => item?.title(localizations) ?? 'null',
+                value: installerScope,
+                onChanged: (value) {
+                  setState(
+                    () {
+                      installerScope = value;
+                      selectedInstaller = fittingInstallers.firstOrNull;
+                    },
+                  );
+                },
+                matchAll: !onlyScopeOption ? InstallScope.matchAll : null,
+              ),
+            if (infos.installers != null && fittingInstallers.length >= 2)
+              boxSelectInstaller<Installer>(
+                  categoryName:
+                      '${fittingInstallers.length} installer found for the selected options. Select one:',
+                  options: fittingInstallers,
+                  title: (item) => InstallerDetails.installerPreview(
+                      item, fittingInstallers, context),
+                  value: selectedInstaller,
+                  onChanged: (value) {
+                    setState(() => selectedInstaller = value);
+                  }),
+            if (infos.installers != null && fittingInstallers.isEmpty)
+              Text(
+                'No installer found for the selected options.',
+                style: TextStyle(color: Colors.red),
+              ),
+          ],
+        ),
+      ].withSpaceBetween(height: 20),
     );
   }
 
@@ -218,18 +271,6 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
           value: value,
           onChanged: onChanged,
         ),
-      ],
-    );
-  }
-
-  Wrap displayInstallers(
-      Info<List<Installer>> installers, BuildContext context) {
-    return Wrap(
-      spacing: 5,
-      runSpacing: 5,
-      children: [
-        for (Installer installer in fittingInstallers)
-          template.installerWidget(installer, installers.value, context),
       ],
     );
   }

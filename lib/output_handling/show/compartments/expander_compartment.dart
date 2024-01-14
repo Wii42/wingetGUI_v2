@@ -84,14 +84,18 @@ abstract class ExpanderCompartment extends Compartment {
           mainColumn.isNotEmpty &&
           buttonRow != null &&
           buttonRow.children.isNotEmpty)
-        const Padding(
-          padding: EdgeInsetsDirectional.symmetric(vertical: 5),
-          child: Divider(
-            style: DividerThemeData(horizontalMargin: EdgeInsets.zero),
-          ),
-        ),
+        divider(),
       if (buttonRow != null && buttonRow.children.isNotEmpty) buttonRow
     ].withSpaceBetween(height: 10);
+  }
+
+  Padding divider() {
+    return const Padding(
+        padding: EdgeInsetsDirectional.symmetric(vertical: 5),
+        child: Divider(
+          style: DividerThemeData(horizontalMargin: EdgeInsets.zero),
+        ),
+      );
   }
 
   Widget textOrIconLink(
