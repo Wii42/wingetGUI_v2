@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -54,7 +55,8 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             title: compartmentTitle(localization),
             mainColumn: [
               if (infos.installers != null) selectInstallerWidget(context),
-              if(infos.installers != null && infos.installers!.value.length > 1)
+              if (infos.installers != null &&
+                  infos.installers!.value.length > 1)
                 template.divider(),
               ...template.detailsList([
                 template
@@ -115,8 +117,13 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
               ...template.displayRest(infos.otherInfos, context),
               ...template.displayRest(selectedInstaller?.other, context)
             ],
-            buttonRow: template
-                .buttonRow([infos.url, selectedInstaller?.url], context),
+            buttonRow: template.buttonRow([
+              infos.url,
+              selectedInstaller?.url.copyWith(
+                  customTitle: localization.downloadInstallerManually(
+                      selectedInstaller?.uniqueProperties(
+                          infos.installers!.value, context)))
+            ], context),
             context: context));
     return widget.template.buildWithoutContent(context, content);
   }
@@ -232,8 +239,8 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                   categoryName:
                       '${fittingInstallers.length} installer found for the selected options. Select one:',
                   options: fittingInstallers,
-                  title: (item) => InstallerDetails.installerPreview(
-                      item, fittingInstallers, context),
+                  title: (item) =>
+                      item.uniqueProperties(fittingInstallers, context),
                   value: selectedInstaller,
                   onChanged: (value) {
                     setState(() => selectedInstaller = value);

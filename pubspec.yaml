@@ -42,6 +42,7 @@ dev_dependencies:
     sdk: flutter
   dependency_validator: ^3.2.3
   flutter_lints: ^3.0.1
+  msix: ^3.16.7
 
 flutter:
   generate: true

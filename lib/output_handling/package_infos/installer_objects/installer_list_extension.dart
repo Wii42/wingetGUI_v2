@@ -21,7 +21,7 @@ extension InstallerList on List<Installer> {
   }
 
   bool isFeatureEverywhereTheSame(Info? Function(Installer) feature) {
-    List<dynamic> values = map<Info?>(feature).map((e) => e?.value).toList();
+    Iterable<dynamic> values = map<Info?>(feature).map((e) => e?.value);
     return values.toSet().length == 1;
   }
 

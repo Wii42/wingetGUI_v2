@@ -1,8 +1,9 @@
-import 'dart:ui';
-
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_mode.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_scope.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/upgrade_behavior.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../info.dart';
 import '../info_yaml_map_parser.dart';
@@ -86,5 +87,31 @@ class Installer {
       other: map.map<String, String>(
           (key, value) => MapEntry(key.toString(), value.toString())),
     );
+  }
+
+  String uniqueProperties(List<Installer> installerList, BuildContext context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+    List<String> preview = [];
+    if (installerList.length >= 2) {
+      if (!installerList.isFeatureEverywhereTheSame((e) => e.architecture)) {
+        preview.add(architecture.value.title);
+      }
+      if (!installerList.isFeatureEverywhereTheSame((e) => e.type)) {
+        if (type != null) {
+          preview.add(type!.value.shortTitle);
+        }
+      }
+      if (!installerList.isFeatureEverywhereTheSame((e) => e.locale)) {
+        if (locale != null) {
+          preview.add(locale!.value.toLanguageTag());
+        }
+      }
+      if (!installerList.isFeatureEverywhereTheSame((e) => e.scope)) {
+        if (scope != null) {
+          preview.add(scope!.value.title(localizations));
+        }
+      }
+    }
+    return preview.join(' ');
   }
 }

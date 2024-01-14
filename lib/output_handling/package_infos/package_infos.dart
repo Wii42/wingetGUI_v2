@@ -44,7 +44,7 @@ abstract class PackageInfos {
   bool isMicrosoftStore();
 
   Info<Uri>? get manifest {
-    if (id == null && isWinget()) {
+    if (id == null || !isWinget()) {
       return null;
     }
     return Info<Uri>(

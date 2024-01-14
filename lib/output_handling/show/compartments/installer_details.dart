@@ -161,7 +161,7 @@ class InstallerDetails extends ExpanderCompartment {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Expander(
       header: Text(
-        installerPreview(installer, installerList, context),
+        installer.uniqueProperties(installerList, context),
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       content: Column(
@@ -195,30 +195,4 @@ class InstallerDetails extends ExpanderCompartment {
   Info<String>? tryFromListModeInfo(
           Info<List<InstallMode>>? modes, AppLocalizations locale) =>
       tryFromListInfo(modes, toString: (e) => e.title(locale));
-
-  static String installerPreview(Installer installer, List<Installer> installerList,
-      BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    String base = installer.architecture.value.title;
-    List<String> preview = [base];
-    if (installerList.length >= 2) {
-      if (!installerList.isFeatureEverywhereTheSame((e) => e.type)) {
-        if (installer.type != null) {
-          preview.add(installer.type!.value.shortTitle);
-        }
-      }
-      if (!installerList.isFeatureEverywhereTheSame((e) => e.locale)) {
-        if (installer.locale != null) {
-          preview.add(installer.locale!.value.toLanguageTag());
-        }
-      }
-      if (!installerList.isFeatureEverywhereTheSame((e) => e.scope)) {
-        if (installer.scope != null) {
-          preview.add(installer.scope!.value.title(locale));
-        }
-      }
-    }
-    preview.add('Installer');
-    return preview.join(' ');
-  }
 }

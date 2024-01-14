@@ -91,11 +91,11 @@ abstract class ExpanderCompartment extends Compartment {
 
   Padding divider() {
     return const Padding(
-        padding: EdgeInsetsDirectional.symmetric(vertical: 5),
-        child: Divider(
-          style: DividerThemeData(horizontalMargin: EdgeInsets.zero),
-        ),
-      );
+      padding: EdgeInsetsDirectional.symmetric(vertical: 5),
+      child: Divider(
+        style: DividerThemeData(horizontalMargin: EdgeInsets.zero),
+      ),
+    );
   }
 
   Widget textOrIconLink(
@@ -130,7 +130,8 @@ abstract class ExpanderCompartment extends Compartment {
 
   Widget linkButton(
       {required Info<Uri> link, required AppLocalizations locale}) {
-    return LinkButton(url: link.value, text: Text(link.title(locale)));
+    return LinkButton(
+        url: link.value, text: Text(link.customTitle ?? link.title(locale)));
   }
 
   Wrap buttonRow(List<Info<Uri>?> links, BuildContext context,

@@ -57,5 +57,7 @@
   "noInternetConnection": "No internet connection",
   "reason": "Reason",
 
-  "moreFromPublisher": "More from {publisher}"
+  "moreFromPublisher": "More from {publisher}",
+  "downloadManually": "Download {installerDescription} manually",
+  "installer": "{description} installer"
 }

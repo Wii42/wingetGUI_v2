@@ -57,5 +57,7 @@
   "noInternetConnection": "Keine Internetverbindung",
   "reason": "Grund",
 
-  "moreFromPublisher": "Mehr von {publisher}"
+  "moreFromPublisher": "Mehr von {publisher}",
+  "downloadManually": "{installerDescription} manuell herunterladen",
+  "installer": "{description} Installer"
 }
