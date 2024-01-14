@@ -39,12 +39,14 @@ class InfoWithLink {
 
   Info<Uri> toUriInfo() {
     if (kDebugMode && url == null) {
+      // ignore: avoid_print
       print('Warning in InfoWithLink.toUriInfo(): url is null!');
     }
-    return toUriInfoIfHasUrl() ?? Info<Uri>(title: title, value: Uri());
+    return (toUriInfoIfHasUrl()) ?? Info<Uri>(title: title, value: Uri());
   }
 
-  Info<Uri>? toUriInfoIfHasUrl() => (url != null) ? toUriInfo() : null;
+  Info<Uri>? toUriInfoIfHasUrl() =>
+      (url != null) ? Info<Uri>(title: title, value: url!) : null;
 
   Info<String> toStringInfo() =>
       Info<String>(title: title, value: text ?? url!.toString());

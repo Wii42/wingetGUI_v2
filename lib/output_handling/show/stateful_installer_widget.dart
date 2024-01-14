@@ -14,7 +14,6 @@ import '../package_infos/installer_objects/installer.dart';
 import '../package_infos/installer_objects/installer_type.dart';
 import '../package_infos/package_attribute.dart';
 import 'compartments/expander_compartment.dart';
-import 'compartments/installer_details.dart';
 import 'installer_differences.dart';
 
 class StatefulInstallerWidget extends StatefulWidget {

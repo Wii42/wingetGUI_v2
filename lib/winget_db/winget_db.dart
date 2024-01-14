@@ -54,6 +54,7 @@ class WingetDB {
         .sorted((a, b) => b.value.length.compareTo(a.value.length))
         .forEach(
       (element) {
+        // ignore: avoid_print
         print('${element.key}: ${element.value.length}');
       },
     );

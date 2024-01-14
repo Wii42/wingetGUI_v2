@@ -1,13 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
 
 import '../../../helpers/route_parameter.dart';
 import '../../../routes.dart';
-import '../../package_infos/info.dart';
 import 'expander_compartment.dart';
 
 class DetailsWidget extends ExpanderCompartment {
@@ -50,7 +48,7 @@ class DetailsWidget extends ExpanderCompartment {
             infos.installer?.availableCommands?.toStringInfo(),
             infos.installer?.protocols?.toStringInfo(),
           ], context),
-          ...displayRest(infos.otherInfos, context)
+          ...displayRest(infos.otherInfos, context),
         ],
         buttonRow: buttonRow(
           [
@@ -76,29 +74,5 @@ class DetailsWidget extends ExpanderCompartment {
   @override
   String compartmentTitle(AppLocalizations locale) {
     return locale.details;
-  }
-
-  List<Widget> _displayRest(BuildContext context) {
-    if (infos.otherInfos == null) {
-      return [];
-    }
-    Iterable<String> restKeys = infos.otherInfos!.keys;
-
-    return [
-      for (String key in restKeys)
-        if (infos.otherInfos!.hasEntry(key))
-          wrapInWrap(
-            title: key,
-            body: textOrLinkButton(
-              context: context,
-              text: Info<String>(
-                value: infos.otherInfos![key]!,
-                title: (AppLocalizations _) {
-                  return key;
-                },
-              ),
-            ),
-          ),
-    ];
   }
 }
