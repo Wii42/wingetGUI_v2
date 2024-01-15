@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:ribs_json/ribs_json.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -154,8 +155,11 @@ class PackageScreenshotsList {
       packageInfos.idWithHyphen,
       packageInfos.idWithoutPublisherID,
       packageInfos.idWithoutPublisherIDAndHyphen,
-      if(packageInfos.idWithoutPublisherIDAndHyphen != null && packageInfos.idWithoutPublisherIDAndHyphen!.endsWith('-eap'))
-        ...['${packageInfos.idWithoutPublisherIDAndHyphen!.substring(0, packageInfos.idWithoutPublisherIDAndHyphen!.length - 4)}-earlyaccess','${packageInfos.idWithoutPublisherIDAndHyphen!.substring(0, packageInfos.idWithoutPublisherIDAndHyphen!.length - 4)}-earlypreview',],
+      if (packageInfos.idWithoutPublisherIDAndHyphen != null &&
+          packageInfos.idWithoutPublisherIDAndHyphen!.endsWith('-eap')) ...[
+        '${packageInfos.idWithoutPublisherIDAndHyphen!.substring(0, packageInfos.idWithoutPublisherIDAndHyphen!.length - 4)}-earlyaccess',
+        '${packageInfos.idWithoutPublisherIDAndHyphen!.substring(0, packageInfos.idWithoutPublisherIDAndHyphen!.length - 4)}-earlypreview',
+      ],
     ];
     //print('Looking for ${possibleKeys.join(', ')}');
 
@@ -190,8 +194,7 @@ class PackageScreenshotsList {
   }
 
   Future<void> loadCustomIcons() async {
-    File customIconsFile = File('custom_icons.csv');
-    List<String> lines = await customIconsFile.readAsLines();
+    Iterable<String> lines = await loadAsset('custom_icons.csv');
     for (String line in lines) {
       List<String> parts = line.split(',');
       if (parts.length < 2) {
@@ -225,8 +228,7 @@ class PackageScreenshotsList {
   }
 
   Future<void> loadPublisherIcons() async {
-    File customIconsFile = File('publisher_icons.csv');
-    List<String> lines = await customIconsFile.readAsLines();
+    Iterable<String> lines = await loadAsset('custom_icons.csv');
     for (String line in lines) {
       List<String> parts = line.split(',');
       if (parts.length < 2) {
@@ -245,5 +247,11 @@ class PackageScreenshotsList {
 
       publisherIcons[publisher] = url;
     }
+  }
+
+  Future<Iterable<String>> loadAsset(String fileName) async {
+    String string = await rootBundle.loadString('assets/$fileName');
+    Iterable<String> lines = string.split('\n').map<String>((e) => e.trim());
+    return lines;
   }
 }
