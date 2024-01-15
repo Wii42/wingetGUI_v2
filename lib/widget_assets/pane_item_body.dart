@@ -6,6 +6,7 @@ import '../winget_process/winget_process.dart';
 
 class PaneItemBody extends StatelessWidget {
   static const double iconSize = 40;
+  static const double maxWidth = 1200;
 
   final String? title;
   final Widget child;
@@ -21,17 +22,22 @@ class PaneItemBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (title != null ||
-            process != null ||
-            canGoBack(context) ||
-            customReload != null)
-          titleRow(context),
-        Expanded(child: child),
-      ],
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: maxWidth),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (title != null ||
+                process != null ||
+                canGoBack(context) ||
+                customReload != null)
+              titleRow(context),
+            Expanded(child: child),
+          ],
+        ),
+      ),
     );
   }
 
