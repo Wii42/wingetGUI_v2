@@ -61,12 +61,22 @@ class _FaviconWidgetState extends State<FaviconWidget> {
   Widget favicon() {
     PackageScreenshots? images = widget.infos.screenshots;
     if (images != null) {
+      String? icon;
       if (images.icon != null && (images.icon.toString().isNotEmpty)) {
+        icon = images.icon.toString();
+      }
+      if (icon == null &&
+          images.backupIcon != null &&
+          (images.backupIcon.toString().isNotEmpty)) {
+        icon = images.backupIcon.toString();
+      }
+      if (icon != null) {
         return loadFavicon(
           widget.faviconSize,
-          images.icon.toString(),
+          icon,
           () {
-            if (images.backupIcon != null &&
+            if (icon != images.backupIcon.toString() &&
+                images.backupIcon != null &&
                 images.backupIcon.toString().isNotEmpty) {
               return loadFavicon(
                   widget.faviconSize, images.backupIcon.toString(), () {

@@ -1,31 +1,30 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:ribs_core/ribs_core.dart';
 import 'package:ribs_json/ribs_json.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
 
+import '../output_handling/package_infos/package_infos_peek.dart';
+
 class PackageScreenshotsList {
+  static const String wingetUIScreenshotDatabaseUrl =
+      'https://raw.githubusercontent.com/marticliment/WingetUI/main/WebBasedData/screenshot-database-v2.json';
+  static final Uri source = Uri.parse(wingetUIScreenshotDatabaseUrl);
   static const String _packageScreenshotsKey = 'packagePictures';
-  late final Uri source;
   SharedPreferences? _prefs;
   static final PackageScreenshotsList instance = PackageScreenshotsList._();
 
-  List<PackageScreenshots> screenshotList = [];
-  Map<String, PackageScreenshots>? _keyMap;
+  Map<String, PackageScreenshots> screenshotMap = {};
   final Map<String, String> _idToPackageKeyMap = {};
 
   Map<String, Uri> publisherIcons = {};
+  Map<String, PackageScreenshots> customIcons = {};
 
-  PackageScreenshotsList._() {
-    source = Uri.parse(
-        'https://raw.githubusercontent.com/marticliment/WingetUI/main/WebBasedData/screenshot-database-v2.json');
-  }
+  PackageScreenshotsList._();
 
   Future<void> ensureInitialized() async {
     _prefs ??= await SharedPreferences.getInstance();
@@ -71,28 +70,38 @@ class PackageScreenshotsList {
       }
       return;
     }
+    IList<String> screenshotKeys = packageScreenshotsMap.keys;
+    List<MapEntry<String, PackageScreenshots>?> screenshotEntriesList =
+        screenshotKeys
+            .map<MapEntry<String, PackageScreenshots>?>((packageName) =>
+                getEntryFromJson<MapEntry<String, PackageScreenshots>>(
+                    packageName: packageName,
+                    packageScreenshotsMap: packageScreenshotsMap,
+                    fromJson: PackageScreenshots.getEntryFromJson))
+            .toList();
 
-    screenshotList = packageScreenshotsMap.keys
-        .map<PackageScreenshots?>((packageName) {
-          JsonObject? packageObject = packageScreenshotsMap
-              .getUnsafe(packageName)
-              .asObject()
-              .toNullable();
-          if (packageObject == null) {
-            if (kDebugMode) {
-              print('$packageName is not an object');
-            }
-            return null;
-          }
-          return PackageScreenshots.fromJson(packageName, packageObject);
-        })
-        .toList()
-        .nonNulls
-        .toList();
+    screenshotMap = Map<String, PackageScreenshots>.fromEntries(
+        screenshotEntriesList.nonNulls);
 
     if (_prefs != null && _prefs!.getString(_packageScreenshotsKey) != data) {
       _prefs!.setString(_packageScreenshotsKey, data);
     }
+  }
+
+  T? getEntryFromJson<T>(
+      {required String packageName,
+      required JsonObject packageScreenshotsMap,
+      required T Function(String packageName, JsonObject packageObject)
+          fromJson}) {
+    JsonObject? packageObject =
+        packageScreenshotsMap.getUnsafe(packageName).asObject().toNullable();
+    if (packageObject == null) {
+      if (kDebugMode) {
+        print('$packageName is not an object');
+      }
+      return null;
+    }
+    return fromJson(packageName, packageObject);
   }
 
   void loadScreenshots() {
@@ -125,13 +134,14 @@ class PackageScreenshotsList {
 
   Future<void> fetchScreenshots() async {
     await ensureInitialized();
+    loadPublisherIcons();
     loadScreenshots();
     await fetchWebScreenshots();
     await loadCustomIcons();
   }
 
   PackageScreenshots? getPackage(PackageInfos packageInfos) {
-    if (screenshotList.isEmpty) {
+    if (screenshotMap.isEmpty && customIcons.isEmpty) {
       return null;
     }
 
@@ -141,56 +151,33 @@ class PackageScreenshotsList {
         print(
             'found packageKey $packageKey for ${packageInfos.id?.value} in idToPackageKeyMap');
       }
-      return keyMap[packageKey];
+      return screenshotMap[packageKey] ?? customIcons[packageKey];
     }
 
     return _guessPackageKey(packageInfos);
   }
 
   PackageScreenshots? _guessPackageKey(PackageInfos packageInfos) {
-    List<String?> possibleKeys = [
-      packageInfos.id?.value,
-      packageInfos.nameWithoutVersion,
-      packageInfos.nameWithoutPublisherIDAndVersion,
-      packageInfos.idWithHyphen,
-      packageInfos.idWithoutPublisherID,
-      packageInfos.idWithoutPublisherIDAndHyphen,
-      if (packageInfos.idWithoutPublisherIDAndHyphen != null &&
-          packageInfos.idWithoutPublisherIDAndHyphen!.endsWith('-eap')) ...[
-        '${packageInfos.idWithoutPublisherIDAndHyphen!.substring(0, packageInfos.idWithoutPublisherIDAndHyphen!.length - 4)}-earlyaccess',
-        '${packageInfos.idWithoutPublisherIDAndHyphen!.substring(0, packageInfos.idWithoutPublisherIDAndHyphen!.length - 4)}-earlypreview',
-      ],
-    ];
-    //print('Looking for ${possibleKeys.join(', ')}');
-
-    for (String possibleKey in possibleKeys.nonNulls) {
-      PackageScreenshots? screenshots = keyMap[possibleKey];
+    for (String possibleKey in packageInfos.possibleScreenshotKeys) {
+      PackageScreenshots? screenshots = screenshotMap[possibleKey];
       if (screenshots != null) {
         if (packageInfos.id != null) {
           _idToPackageKeyMap[packageInfos.id!.value] = possibleKey;
         }
-        return screenshots;
+        if(screenshots.icon != null || screenshots.backupIcon != null || screenshots.screenshots != null) {
+          return screenshots;
+        }
       }
+    }
+    if (packageInfos.id != null) {
+      String id = packageInfos.id!.value;
+      PackageScreenshots? screenshots = customIcons[id];
+      if (screenshots != null) {
+        _idToPackageKeyMap[id] = id;
+      }
+      return screenshots;
     }
     return null;
-  }
-
-  Map<String, PackageScreenshots> get keyMap {
-    if (_keyMap == null) {
-      _updateKeyMap();
-    }
-    return _keyMap!;
-  }
-
-  void _updateKeyMap() {
-    _keyMap = {};
-    for (PackageScreenshots screenshots in screenshotList) {
-      if (_keyMap!.containsKey(screenshots.packageKey)) {
-        throw Exception(
-            'Duplicate package key: ${screenshots.packageKey} in PackageScreenshotsList.keyMap');
-      }
-      _keyMap![screenshots.packageKey] = screenshots;
-    }
   }
 
   Future<void> loadCustomIcons() async {
@@ -213,10 +200,8 @@ class PackageScreenshotsList {
       PackageScreenshots? found =
           getPackage(PackageInfosPeek.onlyId(packageKey));
       if (found == null) {
-        PackageScreenshots packageIcon =
+        customIcons[packageKey] =
             PackageScreenshots(packageKey: packageKey, icon: url);
-        screenshotList.add(packageIcon);
-        _keyMap![packageKey] = packageIcon;
         _idToPackageKeyMap[packageKey] = packageKey;
       } else {
         if (found.icon != null && found.icon.toString().trim().isNotEmpty) {

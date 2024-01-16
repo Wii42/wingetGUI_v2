@@ -24,8 +24,14 @@ class PackageScreenshots {
             .toList());
   }
 
+  static MapEntry<String, PackageScreenshots> getEntryFromJson(
+      String packageName, JsonObject packageScreenshotsMap) {
+    return MapEntry(packageName,
+        PackageScreenshots.fromJson(packageName, packageScreenshotsMap));
+  }
+
   static Uri? maybeParse(String? url) {
-    if (url == null) {
+    if (url == null || url.trim().isEmpty) {
       return null;
     }
     return Uri.tryParse(url);

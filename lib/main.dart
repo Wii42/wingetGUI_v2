@@ -17,7 +17,6 @@ WingetDB wingetDB = WingetDB();
 
 void main() async {
   await initAppPrerequisites();
-  await PackageScreenshotsList.instance.loadPublisherIcons();
   await PackageScreenshotsList.instance.fetchScreenshots();
   runApp(const WingetGui());
 }

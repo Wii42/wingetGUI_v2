@@ -61,4 +61,33 @@ extension PackageScreenshotIdentifiers on PackageInfos {
         .replaceAll('.', '-')
         .toLowerCase();
   }
+
+  String? get iconIdAsPerWingetUI {
+    if (id == null) {
+      return null;
+    }
+    String iconId = id!.value.toLowerCase();
+    List<String> idList = iconId.split('.');
+    idList.removeAt(0);
+    iconId = idList.join('.');
+    return iconId
+        .replaceAll(" ", "-")
+        .replaceAll("_", "-")
+        .replaceAll(".", "-");
+  }
+
+  List<String> get possibleScreenshotKeys => [
+        id?.value,
+        iconIdAsPerWingetUI,
+        nameWithoutVersion,
+        nameWithoutPublisherIDAndVersion,
+        idWithHyphen,
+        idWithoutPublisherID,
+        idWithoutPublisherIDAndHyphen,
+        if (idWithoutPublisherIDAndHyphen != null &&
+            idWithoutPublisherIDAndHyphen!.endsWith('-eap')) ...[
+          '${idWithoutPublisherIDAndHyphen!.substring(0, idWithoutPublisherIDAndHyphen!.length - 4)}-earlyaccess',
+          '${idWithoutPublisherIDAndHyphen!.substring(0, idWithoutPublisherIDAndHyphen!.length - 4)}-earlypreview',
+        ],
+      ].nonNulls.toList();
 }
