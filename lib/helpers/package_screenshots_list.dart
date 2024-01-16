@@ -134,7 +134,7 @@ class PackageScreenshotsList {
 
   Future<void> fetchScreenshots() async {
     await ensureInitialized();
-    loadPublisherIcons();
+    await loadPublisherIcons();
     loadScreenshots();
     await fetchWebScreenshots();
     await loadCustomIcons();
@@ -213,7 +213,7 @@ class PackageScreenshotsList {
   }
 
   Future<void> loadPublisherIcons() async {
-    Iterable<String> lines = await loadAsset('custom_icons.csv');
+    Iterable<String> lines = await loadAsset('publisher_icons.csv');
     for (String line in lines) {
       List<String> parts = line.split(',');
       if (parts.length < 2) {
