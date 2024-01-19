@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widget_assets/full_width_progress_bar.dart';
+import '../widget_assets/full_width_progress_bar_on_top.dart';
 import '../widget_assets/pane_item_body.dart';
 import './process_output.dart';
 
@@ -11,26 +12,16 @@ class OutputPage extends ProcessOutput {
   const OutputPage({required super.process, super.key, this.title});
 
   @override
-  Column buildPage(
+  Widget buildPage(
       AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 3,
-          child: streamSnapshot.connectionState != ConnectionState.done
-              ? const FullWidthProgressbar()
-              : null,
-        ),
-        Expanded(
-          child: PaneItemBody(
-            title: title,
-            process: process,
-            child: processOutput(streamSnapshot, context),
-          ),
-        ),
-      ],
+    return FullWidthProgressBarOnTop(
+      hasProgressBar:
+      streamSnapshot.connectionState != ConnectionState.done,
+      child: PaneItemBody(
+        title: title,
+        process: process,
+        child: processOutput(streamSnapshot, context),
+      ),
     );
   }
 

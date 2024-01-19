@@ -7,6 +7,7 @@ import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/widget_assets/sort_by.dart';
+import 'package:winget_gui/winget_db/db_message.dart';
 
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../output_handling/table/apps_table/package_peek.dart';
@@ -17,7 +18,7 @@ class PackagePeekListView extends StatefulWidget {
   final DBTable dbTable;
   final bool Function(PackageInfosPeek package, DBTable table) showIsInstalled;
   final bool Function(PackageInfosPeek package, DBTable table) showIsUpgradable;
-  final Stream<String>? reloadStream;
+  late final Stream<DBMessage> reloadStream;
   final bool showOnlyWithSourceButton;
   final bool onlyWithSourceInitialValue;
   final bool showOnlyWithExactVersionButton;
@@ -28,12 +29,12 @@ class PackagePeekListView extends StatefulWidget {
   final bool showDeepSearchButton;
   final bool showFilterField;
   final bool packageShowMatch;
-  const PackagePeekListView(
+  PackagePeekListView(
       {super.key,
       required this.dbTable,
       this.showIsInstalled = defaultFalse,
       this.showIsUpgradable = defaultFalse,
-      this.reloadStream,
+      Stream<DBMessage>? reloadStream,
       this.showOnlyWithSourceButton = true,
       this.onlyWithSourceInitialValue = false,
       this.showOnlyWithExactVersionButton = false,
@@ -43,7 +44,9 @@ class PackagePeekListView extends StatefulWidget {
       this.sortDefaultReversed = false,
       this.showDeepSearchButton = false,
       this.showFilterField = true,
-      this.packageShowMatch = false});
+      this.packageShowMatch = false}) {
+    this.reloadStream = reloadStream ?? dbTable.stream;
+  }
 
   @override
   State<PackagePeekListView> createState() => _PackagePeekListViewState();
@@ -70,11 +73,11 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    return StreamBuilder<String>(
-        stream: widget.reloadStream ?? widget.dbTable.stream,
+    return StreamBuilder<DBMessage>(
+        stream: widget.reloadStream,
         builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data != '') {
-            return Center(child: Text(snapshot.data!));
+          if (snapshot.hasData && snapshot.data?.status != DBStatus.ready && widget.dbTable.infos.isEmpty) {
+            return Center(child: Text(snapshot.data!.message ?? ''));
           }
           if (widget.dbTable.infos.isEmpty) {
             return const Center(child: Text('No Apps found'));
@@ -90,8 +93,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
               Expanded(
                 child: Stack(
                   //crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildListView(packages),
+                  children: [if(packages.isNotEmpty)
+                    buildListView(packages)else const Center(child:Text('No fittig packages found')),
                     if (widget.dbTable.hints.isNotEmpty)
                       hintsAndWarnings(context),
                     numberOfAppsText(packages.length, locale),

@@ -5,6 +5,7 @@ import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 import '../main.dart';
+import '../widget_assets/package_list_page.dart';
 import '../widget_assets/package_peek_list_view.dart';
 import '../widget_assets/sort_by.dart';
 import '../winget_db/db_table.dart';
@@ -19,10 +20,10 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     String title = Routes.searchPage.title(locale);
-    return PaneItemBody(
+    return PackageListPage(
       title: title,
       customReload: () => dbTable.reloadFuture(locale),
-      child: PackagePeekListView(
+      listView: PackagePeekListView(
         dbTable: wingetDB.available,
         showIsInstalled: (package, _) =>
             wingetDB.installed.idMap.containsKey(package.id!.value),

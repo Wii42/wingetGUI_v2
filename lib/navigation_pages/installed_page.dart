@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../main.dart';
+import '../widget_assets/package_list_page.dart';
 import '../widget_assets/package_peek_list_view.dart';
 import '../widget_assets/pane_item_body.dart';
 import '../widget_assets/sort_by.dart';
@@ -20,9 +21,9 @@ class InstalledPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    return PaneItemBody(
+    return PackageListPage(
       title: Winget.installed.title(locale),
-      child: PackagePeekListView(
+      listView: PackagePeekListView(
         dbTable: dbTable,
         showIsInstalled: (_, __) => true,
         showIsUpgradable: (package, __) => package.hasAvailableVersion(),

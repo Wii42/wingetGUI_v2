@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:winget_gui/winget_db/db_message.dart';
+
 import '../main.dart';
 import '../output_handling/one_line_info/one_line_info_parser.dart';
 import '../output_handling/package_infos/info.dart';
@@ -17,8 +19,8 @@ class DBTable {
   final String content;
   final List<String> wingetCommand;
   final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? creatorFilter;
-  final StreamController<String> _streamController =
-      StreamController<String>.broadcast();
+  final StreamController<DBMessage> _streamController =
+      StreamController<DBMessage>.broadcast();
 
   DBTable(this._infos,
       {this.hints = const [],
@@ -66,15 +68,15 @@ class DBTable {
     wingetDB.notifyListeners();
   }
 
-  Stream<String> get stream => _streamController.stream;
+  Stream<DBMessage> get stream => _streamController.stream;
 
   void notifyListeners() {
-    _streamController.add('');
+    _streamController.add(DBMessage(DBStatus.ready));
     //print("notified listeners of $content");
   }
 
   void notifyLoading() {
-    _streamController.add('loading');
+    _streamController.add(DBMessage(DBStatus.loading));
     //print("loading $content");
   }
 
@@ -103,8 +105,9 @@ class DBTable {
 
   Future<void> reloadFuture(AppLocalizations wingetLocale) {
     Completer completer = Completer<void>();
-    reloadDBTable(wingetLocale).listen((event) {
+    reloadDBTable(wingetLocale).listen((String event) {
       print(event);
+      _streamController.add(DBMessage(DBStatus.loading, message: event));
     }, onDone: () {
       completer.complete();
     });

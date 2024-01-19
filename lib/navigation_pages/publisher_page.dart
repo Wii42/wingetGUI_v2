@@ -4,6 +4,7 @@ import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 import '../helpers/route_parameter.dart';
 import '../main.dart';
+import '../widget_assets/package_list_page.dart';
 import '../widget_assets/sort_by.dart';
 import '../winget_db/db_table.dart';
 
@@ -24,9 +25,9 @@ class PublisherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PaneItemBody(
+    return PackageListPage(
       title: publisherId,
-      child: PackagePeekListView(
+      listView: PackagePeekListView(
         dbTable: DBTable(
           wingetDB.available.infos
               .where((element) => element.publisherID == publisherId)

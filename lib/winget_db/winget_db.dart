@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/foundation.dart';
 
 import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
