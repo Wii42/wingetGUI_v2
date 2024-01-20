@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 
 import 'github_api_file_info.dart';
@@ -47,7 +48,21 @@ class GithubApi {
     if (kDebugMode) {
       print(apiUri);
     }
-    Response response = await get(apiUri);
+    Response response;
+    try {
+      response = await get(apiUri);
+    } catch (e) {
+      if (e.runtimeType.toString() == '_ClientSocketException' &&
+          e.toString().startsWith(
+              'ClientException with SocketException: Failed host lookup:')) {
+        bool hasInternet = await InternetConnectionChecker().hasConnection;
+        if (!hasInternet) {
+          throw NoInternetException();
+        }
+        print(e);
+      }
+      rethrow;
+    }
     if (response.statusCode == 200) {
       final List<GithubApiFileInfo> files = jsonDecode(response.body)
           .map<GithubApiFileInfo>((e) => GithubApiFileInfo.fromJson(e))
@@ -57,8 +72,11 @@ class GithubApi {
     if (onError != null) {
       return onError();
     }
-    throw Exception(
-        'Failed to load files from Github API: $apiUri ${response.statusCode} ${response.reasonPhrase} ${response.body}');
+    throw GithubLoadException(
+        url: apiUri,
+        statusCode: response.statusCode,
+        reasonPhrase: response.reasonPhrase,
+        responseBody: response.body);
   }
 
   static String? idInitialLetter(String id) {
@@ -67,5 +85,33 @@ class GithubApi {
 
   static String? idAsPath(String id) {
     return id.replaceAll('.', '/');
+  }
+}
+
+class GithubLoadException implements Exception {
+  Uri url;
+  int statusCode;
+  String? reasonPhrase;
+  String responseBody;
+
+  GithubLoadException(
+      {required this.url,
+      required this.statusCode,
+      this.reasonPhrase,
+      required this.responseBody});
+
+  @override
+  String toString() {
+    return 'Failed to load files from Github API: $url $statusCode $reasonPhrase $responseBody';
+  }
+}
+
+class NoInternetException implements Exception {
+  String? message;
+  NoInternetException([message]);
+  @override
+  String toString() {
+    if (message == null) return "No Internet Connection";
+    return "No Internet Connection: $message";
   }
 }

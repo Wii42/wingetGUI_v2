@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -75,7 +77,7 @@ class PackageDetailsFromWeb extends StatelessWidget {
         }
         if (snapshot.hasError) {
           Object? error = snapshot.error;
-          if (error.toString().startsWith('Failed host lookup: ')) {
+          if (error.runtimeType == NoInternetException) {
             return Center(
               child: putInfo(localization.cantLoadDetails,
                   content:
@@ -83,8 +85,11 @@ class PackageDetailsFromWeb extends StatelessWidget {
                   isLong: true),
             );
           }
-
-          return Text('${error.runtimeType}: $error\n${snapshot.stackTrace}');
+          print(error.runtimeType);
+          return Center(
+            child: putInfo(error.runtimeType.toString(),
+                content: '$error\n${snapshot.stackTrace}', isLong: true),
+          );
         }
         return const Center(
             child: ProgressRing(
