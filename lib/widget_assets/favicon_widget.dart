@@ -1,5 +1,6 @@
 import 'package:favicon/favicon.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/widget_assets/web_image.dart';
@@ -20,7 +21,8 @@ class FaviconWidget extends StatefulWidget {
       required this.infos,
       required this.faviconSize,
       this.isClickable = true,
-      Uri? faviconUrl, this.iconUrl}) {
+      Uri? faviconUrl,
+      this.iconUrl}) {
     if (infos is PackageInfosFull && faviconUrl == null) {
       PackageInfosFull infosFull = infos as PackageInfosFull;
       this.faviconUrl =
@@ -63,25 +65,26 @@ class _FaviconWidgetState extends State<FaviconWidget> {
     PackageScreenshots? images = widget.infos.screenshots;
     if (images != null || widget.iconUrl != null) {
       String? icon;
-      if( widget.iconUrl != null){
+      if (widget.iconUrl != null) {
         icon = widget.iconUrl.toString();
-      }else{
-      if (images!.icon != null && (images!.icon.toString().isNotEmpty)) {
-        icon = images.icon.toString();
+      } else {
+        if (images!.icon != null && (images.icon.toString().isNotEmpty)) {
+          icon = images.icon.toString();
+        }
+        if (icon == null &&
+            images.backupIcon != null &&
+            (images.backupIcon.toString().isNotEmpty)) {
+          icon = images.backupIcon.toString();
+        }
       }
-      if (icon == null &&
-          images.backupIcon != null &&
-          (images.backupIcon.toString().isNotEmpty)) {
-        icon = images.backupIcon.toString();
-      }}
       if (icon != null) {
         return loadFavicon(
           widget.faviconSize,
           icon,
           () {
             if (icon != images?.backupIcon.toString() &&
-                images?.backupIcon != null &&(
-                images?.backupIcon.toString().isNotEmpty?? false)) {
+                images?.backupIcon != null &&
+                (images?.backupIcon.toString().isNotEmpty ?? false)) {
               return loadFavicon(
                   widget.faviconSize, images!.backupIcon.toString(), () {
                 if (widget.infos.publisherIcon != null &&
@@ -122,6 +125,9 @@ class _FaviconWidgetState extends State<FaviconWidget> {
         if (snapshot.hasData) {
           Favicon? favicon = snapshot.data;
           if (favicon != null) {
+            if (kDebugMode) {
+              print(favicon.url);
+            }
             return loadFavicon(
                 widget.faviconSize, favicon.url, () => defaultFavicon());
           }

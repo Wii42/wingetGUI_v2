@@ -151,7 +151,9 @@ class PackageScreenshotsList {
         print(
             'found packageKey $packageKey for ${packageInfos.id?.value} in idToPackageKeyMap');
       }
-      return screenshotMap[packageKey] ?? customIcons[packageKey] ?? customIcons[packageInfos.idFirstTwoParts];
+      return screenshotMap[packageKey] ??
+          customIcons[packageKey] ??
+          customIcons[packageInfos.idFirstTwoParts];
     }
 
     return _guessPackageKey(packageInfos);
@@ -164,7 +166,9 @@ class PackageScreenshotsList {
         if (packageInfos.id != null) {
           _idToPackageKeyMap[packageInfos.id!.value] = possibleKey;
         }
-        if(screenshots.icon != null || screenshots.backupIcon != null || screenshots.screenshots != null) {
+        if (screenshots.icon != null ||
+            screenshots.backupIcon != null ||
+            screenshots.screenshots != null) {
           return screenshots;
         }
       }
@@ -240,12 +244,12 @@ class PackageScreenshotsList {
     return lines;
   }
 
-  Future<void> reloadPublisherIcons() async{
+  Future<void> reloadPublisherIcons() async {
     publisherIcons.clear();
     await loadPublisherIcons();
   }
 
-  Future<void> reloadCustomIcons() async{
+  Future<void> reloadCustomIcons() async {
     customIcons.clear();
     await loadCustomIcons();
   }

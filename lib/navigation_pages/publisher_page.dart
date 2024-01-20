@@ -4,7 +4,6 @@ import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/widget_assets/favicon_widget.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
-import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 import '../helpers/route_parameter.dart';
 import '../main.dart';
