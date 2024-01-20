@@ -151,7 +151,7 @@ class PackageScreenshotsList {
         print(
             'found packageKey $packageKey for ${packageInfos.id?.value} in idToPackageKeyMap');
       }
-      return screenshotMap[packageKey] ?? customIcons[packageKey];
+      return screenshotMap[packageKey] ?? customIcons[packageKey] ?? customIcons[packageInfos.idFirstTwoParts];
     }
 
     return _guessPackageKey(packageInfos);
@@ -238,5 +238,15 @@ class PackageScreenshotsList {
     String string = await rootBundle.loadString('assets/$fileName');
     Iterable<String> lines = string.split('\n').map<String>((e) => e.trim());
     return lines;
+  }
+
+  Future<void> reloadPublisherIcons() async{
+    publisherIcons.clear();
+    await loadPublisherIcons();
+  }
+
+  Future<void> reloadCustomIcons() async{
+    customIcons.clear();
+    await loadCustomIcons();
   }
 }

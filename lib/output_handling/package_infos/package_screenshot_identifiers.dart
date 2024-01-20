@@ -76,7 +76,32 @@ extension PackageScreenshotIdentifiers on PackageInfos {
         .replaceAll(".", "-");
   }
 
-  List<String> get possibleScreenshotKeys => [
+  String? get secondIdPartOnly {
+    if (id == null) {
+      return null;
+    }
+    String iconId = id!.value.toLowerCase();
+    List<String> idList = iconId.split('.');
+    if (idList.length < 2) {
+      return null;
+    }
+    return idList[1];
+  }
+
+  String? get idFirstTwoParts {
+    if (id == null) {
+      return null;
+    }
+    String iconId = id!.value;
+    List<String> idList = iconId.split('.');
+    if (idList.length <= 2) {
+      return null;
+    }
+    print(idList.take(2).join('.'));
+    return idList.take(2).join('.');
+  }
+
+  Set<String> get possibleScreenshotKeys => [
         id?.value,
         iconIdAsPerWingetUI,
         nameWithoutVersion,
@@ -89,5 +114,7 @@ extension PackageScreenshotIdentifiers on PackageInfos {
           '${idWithoutPublisherIDAndHyphen!.substring(0, idWithoutPublisherIDAndHyphen!.length - 4)}-earlyaccess',
           '${idWithoutPublisherIDAndHyphen!.substring(0, idWithoutPublisherIDAndHyphen!.length - 4)}-earlypreview',
         ],
-      ].nonNulls.toList();
+        secondIdPartOnly,
+        idFirstTwoParts,
+      ].nonNulls.toSet();
 }

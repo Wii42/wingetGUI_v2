@@ -123,7 +123,7 @@ class TitleWidget extends Compartment {
     return FaviconWidget(infos: infos, faviconSize: faviconSize);
   }
 
-  double faviconSize() => 70;
+  static double faviconSize() => 70;
 
   Widget from(BuildContext context) {
     String? author = infos.author?.value;

@@ -212,7 +212,7 @@ class PackagePeek extends StatelessWidget {
     return FaviconWidget(infos: infos, faviconSize: faviconSize, isClickable: isClickable());
   }
 
-  double faviconSize() => 60;
+  static double faviconSize() => 60;
 
   static Widget get prototypeWidget {
     return Button(

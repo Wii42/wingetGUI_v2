@@ -13,13 +13,14 @@ class FaviconWidget extends StatefulWidget {
   final double faviconSize;
   late final Uri? faviconUrl;
   final bool isClickable;
+  final Uri? iconUrl;
 
   FaviconWidget(
       {super.key,
       required this.infos,
       required this.faviconSize,
       this.isClickable = true,
-      Uri? faviconUrl}) {
+      Uri? faviconUrl, this.iconUrl}) {
     if (infos is PackageInfosFull && faviconUrl == null) {
       PackageInfosFull infosFull = infos as PackageInfosFull;
       this.faviconUrl =
@@ -60,26 +61,29 @@ class _FaviconWidgetState extends State<FaviconWidget> {
 
   Widget favicon() {
     PackageScreenshots? images = widget.infos.screenshots;
-    if (images != null) {
+    if (images != null || widget.iconUrl != null) {
       String? icon;
-      if (images.icon != null && (images.icon.toString().isNotEmpty)) {
+      if( widget.iconUrl != null){
+        icon = widget.iconUrl.toString();
+      }else{
+      if (images!.icon != null && (images!.icon.toString().isNotEmpty)) {
         icon = images.icon.toString();
       }
       if (icon == null &&
           images.backupIcon != null &&
           (images.backupIcon.toString().isNotEmpty)) {
         icon = images.backupIcon.toString();
-      }
+      }}
       if (icon != null) {
         return loadFavicon(
           widget.faviconSize,
           icon,
           () {
-            if (icon != images.backupIcon.toString() &&
-                images.backupIcon != null &&
-                images.backupIcon.toString().isNotEmpty) {
+            if (icon != images?.backupIcon.toString() &&
+                images?.backupIcon != null &&(
+                images?.backupIcon.toString().isNotEmpty?? false)) {
               return loadFavicon(
-                  widget.faviconSize, images.backupIcon.toString(), () {
+                  widget.faviconSize, images!.backupIcon.toString(), () {
                 if (widget.infos.publisherIcon != null &&
                     widget.infos.publisherIcon.toString().isNotEmpty) {
                   return loadFavicon(

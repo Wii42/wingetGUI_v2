@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/helpers/package_screenshots_list.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
 import '../helpers/route_parameter.dart';
@@ -59,6 +60,7 @@ class _SettingsPageSate extends State<SettingsPage> {
               ),
             ),
             buildDBSettings(wingetLocale),
+            screenshotSettings(),
           ].withSpaceBetween(height: 10),
         ),
       ),
@@ -167,6 +169,29 @@ class _SettingsPageSate extends State<SettingsPage> {
       padding: 20,
       child: Row(
         children: [Expanded(child: Text(title)), options],
+      ),
+    );
+  }
+
+  Widget screenshotSettings() {
+    PackageScreenshotsList screenshots = PackageScreenshotsList.instance;
+    return settingsItem(
+      'Screenshots/Icons',
+      Column(
+        children: [
+          Button(
+            onPressed: () {
+              screenshots.reloadPublisherIcons();
+            },
+            child: const Text('Reload Publisher Icons'),
+          ),
+          Button(
+            onPressed: () {
+              screenshots.reloadCustomIcons();
+            },
+            child: const Text('Reload Custom Icons'),
+          ),
+        ].withSpaceBetween(height: 20),
       ),
     );
   }

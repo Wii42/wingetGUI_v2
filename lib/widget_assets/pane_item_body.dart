@@ -12,13 +12,15 @@ class PaneItemBody extends StatelessWidget {
   final Widget child;
   final WingetProcess? process;
   final void Function()? customReload;
+  final Widget? bodyHeader;
 
   const PaneItemBody(
       {super.key,
       required this.title,
       required this.child,
       this.process,
-      this.customReload});
+      this.customReload,
+      this.bodyHeader});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class PaneItemBody extends StatelessWidget {
                 canGoBack(context) ||
                 customReload != null)
               titleRow(context),
+            if (bodyHeader != null) bodyHeader!,
             Expanded(child: child),
           ],
         ),
