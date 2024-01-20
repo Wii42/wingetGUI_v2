@@ -97,7 +97,6 @@ extension PackageScreenshotIdentifiers on PackageInfos {
     if (idList.length <= 2) {
       return null;
     }
-    print(idList.take(2).join('.'));
     return idList.take(2).join('.');
   }
 

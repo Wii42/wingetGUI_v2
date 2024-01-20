@@ -59,7 +59,6 @@ class GithubApi {
         if (!hasInternet) {
           throw NoInternetException();
         }
-        print(e);
       }
       rethrow;
     }

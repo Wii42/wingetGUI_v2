@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
 import 'package:winget_gui/winget_db/db_message.dart';
 
 import '../main.dart';
@@ -106,7 +107,9 @@ class DBTable {
   Future<void> reloadFuture(AppLocalizations wingetLocale) {
     Completer completer = Completer<void>();
     reloadDBTable(wingetLocale).listen((String event) {
-      print(event);
+      if (kDebugMode) {
+        print(event);
+      }
       _streamController.add(DBMessage(DBStatus.loading, message: event));
     }, onDone: () {
       completer.complete();

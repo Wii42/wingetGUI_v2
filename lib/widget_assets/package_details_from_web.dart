@@ -83,7 +83,6 @@ class PackageDetailsFromWeb extends StatelessWidget {
                   isLong: true),
             );
           }
-          print(error.runtimeType);
           return Center(
             child: putInfo(error.runtimeType.toString(),
                 content: '$error\n${snapshot.stackTrace}', isLong: true),
