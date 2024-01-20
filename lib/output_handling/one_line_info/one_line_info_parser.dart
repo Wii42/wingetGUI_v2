@@ -53,7 +53,7 @@ class ParsedOneLineInfos extends ParsedOutput {
   ParsedOneLineInfos(this.infos);
 
   @override
-  OneLineInfoBuilder widgetRepresentation() {
+  Widget widgetRepresentation() {
     return OneLineInfoBuilder(infos: infos);
   }
 }

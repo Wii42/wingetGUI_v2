@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/list/list_builder.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
@@ -70,7 +71,7 @@ class ParsedList extends ParsedOutput {
   ParsedList({required this.title, required this.listEntries});
 
   @override
-  ListBuilder widgetRepresentation() {
+  Widget widgetRepresentation() {
     return ListBuilder(title: title, list: listEntries);
   }
 }

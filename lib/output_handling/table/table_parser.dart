@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:math';
 
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/output_handling/output_builder.dart';
 import 'package:winget_gui/output_handling/table/table_builder.dart';
 
 import '../output_parser.dart';
@@ -161,7 +161,7 @@ class ParsedTable extends ParsedOutput {
   ParsedTable(this.table);
 
   @override
-  OutputBuilder widgetRepresentation() {
+  Widget widgetRepresentation() {
     return TableBuilder(table);
   }
 
@@ -175,10 +175,9 @@ class ParsedAppTable extends ParsedTable {
   ParsedAppTable(super.table, {required this.packages, required this.command});
 
   @override
-  OutputBuilder widgetRepresentation() {
-    return QuickOutputBuilder(
-        (context) => PackageList(packages, command: command));
-  }
+  Widget widgetRepresentation() =>
+    PackageList(packages, command: command);
+
 
   @override
   bool isAppTable() => true;

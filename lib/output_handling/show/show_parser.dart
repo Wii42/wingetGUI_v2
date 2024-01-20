@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
@@ -118,7 +119,7 @@ class ParsedShow extends ParsedOutput {
   ParsedShow({required this.infos, required this.command});
 
   @override
-  ShowBuilder widgetRepresentation() {
+  Widget widgetRepresentation() {
     return ShowBuilder(infos: infos, command: command);
   }
 

@@ -6,7 +6,6 @@ import 'package:winget_gui/winget_process/winget_process.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../main.dart';
-import '../output_handling/output_builder.dart';
 import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_infos_full.dart';
 import '../output_handling/parsed_output.dart';
@@ -20,13 +19,13 @@ class UnInstallingUpdatingPage extends OutputPage {
       : super(process: process);
 
   @override
-  Future<List<OutputBuilder>> outputRepresentationHook(OutputHandler handler,
+  Future<List<Widget>> outputRepresentationHook(OutputHandler handler,
       BuildContext context, bool processIsFinished) async {
     NavigatorState navigator = Navigator.of(context);
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     List<ParsedOutput> parsedOutput =
         await handler.getParsedOutputList(wingetLocale);
-    List<OutputBuilder> outputList = handler.getBuilders(parsedOutput);
+    List<Widget> outputList = handler.getWidgets(parsedOutput);
     if (processIsFinished) {
       onFinished(parsedOutput, wingetLocale, navigator, outputList);
     }
@@ -37,7 +36,7 @@ class UnInstallingUpdatingPage extends OutputPage {
       List<ParsedOutput> parsedOutput,
       AppLocalizations wingetLocale,
       NavigatorState navigator,
-      List<OutputBuilder> outputList) {
+      List<Widget> outputList) {
     Iterable<ParsedPlainText> plainText =
         parsedOutput.whereType<ParsedPlainText>();
     //print(plainText);
@@ -65,17 +64,13 @@ class UnInstallingUpdatingPage extends OutputPage {
     addBackButton(navigator, outputList);
   }
 
-  void addBackButton(NavigatorState navigator, List<OutputBuilder> outputList) {
+  void addBackButton(NavigatorState navigator, List<Widget> outputList) {
     if (navigator.canPop()) {
       outputList.add(
-        QuickOutputBuilder(
-          (context) {
-            return Row(
-              children: [
-                Button(onPressed: navigator.maybePop, child: const Text('close'))
-              ],
-            );
-          },
+        Row(
+          children: [
+            Button(onPressed: navigator.maybePop, child: const Text('close'))
+          ],
         ),
       );
     }

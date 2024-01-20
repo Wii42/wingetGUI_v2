@@ -1,15 +1,14 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/output_handling/output_builder.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
 
 import '../../winget_commands.dart';
 import '../package_infos/package_infos_full.dart';
 
-class ShowBuilder extends OutputBuilder {
+class ShowBuilder extends StatelessWidget {
   final PackageInfosFull infos;
   final List<String> command;
-  ShowBuilder({required this.infos, required this.command});
+  const ShowBuilder({super.key, required this.infos, required this.command});
 
   @override
   Widget build(BuildContext context) {

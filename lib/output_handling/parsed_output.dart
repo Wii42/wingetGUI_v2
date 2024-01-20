@@ -1,5 +1,5 @@
-import 'output_builder.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 
 abstract class ParsedOutput {
-  OutputBuilder? widgetRepresentation();
+  Widget? widgetRepresentation();
 }

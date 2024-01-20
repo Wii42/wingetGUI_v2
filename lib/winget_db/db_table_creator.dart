@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../output_handling/one_line_info/one_line_info_parser.dart';
 import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
@@ -48,7 +50,11 @@ class DBTableCreator {
 
   Future<List<String>> getRawOutputC(List<String> command) async {
     WingetProcess winget = await WingetProcess.runCommand(command);
-    return await winget.outputStream.last;
+    List<String> output = await winget.outputStream.last;
+    if (kDebugMode) {
+      print(output.join('\n'));
+    }
+    return output;
   }
 
   Future<List<ParsedOutput>> parsedOutputList(List<String> raw,

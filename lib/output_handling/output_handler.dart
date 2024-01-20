@@ -8,7 +8,6 @@ import '../widget_assets/app_locale.dart';
 import './list/list_scanner.dart';
 import './loading_bar/loading_bar_scanner.dart';
 import './one_line_info/one_line_info_scanner.dart';
-import './output_builder.dart';
 import './output_scanner.dart';
 import './plain_text/plain_text_scanner.dart';
 import './responsibility.dart';
@@ -64,21 +63,18 @@ class OutputHandler {
     return parsedOutput;
   }
 
-  Future<List<OutputBuilder>> getRepresentation(BuildContext context) async {
+  Future<List<Widget>> getRepresentation(BuildContext context) async {
     AppLocalizations wingetLocale = getWingetLocale(context);
     List<ParsedOutput> parsedOutput = await getParsedOutputList(wingetLocale);
 
-    return getBuilders(parsedOutput);
+    return getWidgets(parsedOutput);
   }
 
-  List<OutputBuilder> getBuilders(List<ParsedOutput> parsedOutput) {
-    Iterable<OutputBuilder?> builders =
+  List<Widget> getWidgets(List<ParsedOutput> parsedOutput) {
+    Iterable<Widget?> builders =
         parsedOutput.map((e) => e.widgetRepresentation());
 
-    List<OutputBuilder> finalBuilders = builders
-        .where((builder) => builder != null)
-        .map<OutputBuilder>((OutputBuilder? builder) => builder!)
-        .toList();
+    List<Widget> finalBuilders = builders.nonNulls.toList();
 
     return finalBuilders;
   }

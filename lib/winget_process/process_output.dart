@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 
-import '../output_handling/output_builder.dart';
 import '../output_handling/output_handler.dart';
 import 'winget_process.dart';
 
@@ -60,15 +59,15 @@ abstract class ProcessOutput extends StatelessWidget {
   Center onError(AsyncSnapshot<List<String>> streamSnapshot) =>
       Center(child: Text(streamSnapshot.error.toString()));
 
-  FutureBuilder<List<OutputBuilder>> onData(
+  FutureBuilder<List<Widget>> onData(
       AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
-    return FutureBuilder<List<OutputBuilder>>(
+    return FutureBuilder<List<Widget>>(
       future: _displayOutput(streamSnapshot.data!, context, streamSnapshot.connectionState == ConnectionState.done),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Expanded(
             child: ScrollListWidget(
-              outputBuilders: snapshot.data!,
+              listElements: snapshot.data!,
             ),
           );
         }
@@ -88,7 +87,7 @@ abstract class ProcessOutput extends StatelessWidget {
     );
   }
 
-  Future<List<OutputBuilder>> _displayOutput(
+  Future<List<Widget>> _displayOutput(
       List<String> output, BuildContext context, bool processIsFinished) async {
     OutputHandler handler = OutputHandler(output, command: process.command);
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
@@ -96,7 +95,7 @@ abstract class ProcessOutput extends StatelessWidget {
     return outputRepresentationHook(handler, context, processIsFinished);
   }
 
-  Future<List<OutputBuilder>> outputRepresentationHook(
+  Future<List<Widget>> outputRepresentationHook(
           OutputHandler handler, BuildContext context, bool processIsFinished) =>
       handler.getRepresentation(context);
 }

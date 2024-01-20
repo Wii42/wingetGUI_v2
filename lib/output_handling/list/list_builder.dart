@@ -3,13 +3,12 @@ import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
 import '../../widget_assets/decorated_card.dart';
 import '../../widget_assets/link_text.dart';
-import '../output_builder.dart';
 
-class ListBuilder extends OutputBuilder {
+class ListBuilder extends StatelessWidget {
   final String title;
   final Map<String, String> list;
 
-  ListBuilder({required this.title, required this.list});
+  const ListBuilder({super.key, required this.title, required this.list});
 
   @override
   Widget build(BuildContext context) {

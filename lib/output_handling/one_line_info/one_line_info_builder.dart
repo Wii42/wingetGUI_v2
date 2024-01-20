@@ -6,11 +6,10 @@ import 'package:winget_gui/widget_assets/link_button.dart';
 
 import '../../helpers/extensions/string_extension.dart';
 import '../../widget_assets/link_text.dart';
-import '../output_builder.dart';
 
-class OneLineInfoBuilder extends OutputBuilder {
+class OneLineInfoBuilder extends StatelessWidget {
   final List<OneLineInfo> infos;
-  OneLineInfoBuilder({required this.infos});
+  const OneLineInfoBuilder({super.key, required this.infos});
 
   @override
   Widget build(BuildContext context) {
