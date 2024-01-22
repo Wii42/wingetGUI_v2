@@ -9,6 +9,8 @@ import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_full.dart';
 import 'decorated_card.dart';
 
+String githubFaviconUrl ='https://github.githubassets.com/favicons/favicon.svg';
+
 class FaviconWidget extends StatefulWidget {
   final PackageInfos infos;
   final double faviconSize;
@@ -124,7 +126,7 @@ class _FaviconWidgetState extends State<FaviconWidget> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           Favicon? favicon = snapshot.data;
-          if (favicon != null) {
+          if (favicon != null && favicon.url != githubFaviconUrl) {
             if (kDebugMode) {
               print(favicon.url);
             }

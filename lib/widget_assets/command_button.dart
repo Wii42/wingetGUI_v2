@@ -7,7 +7,7 @@ class CommandButton extends RunButton {
       required super.text,
       required super.command,
       super.title,
-      super.icon});
+      super.icon, super.disabled});
 
   @override
   BaseButton buttonType(BuildContext context) =>
@@ -22,7 +22,7 @@ class CommandIconButton extends RunButton {
       required super.command,
       super.title,
       required IconData icon,
-      this.padding = EdgeInsets.zero})
+      this.padding = EdgeInsets.zero, super.disabled})
       : super(icon: icon);
 
   @override

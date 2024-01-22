@@ -15,6 +15,7 @@ class RightSideButtons extends StatelessWidget {
   final bool install, upgrade, uninstall;
   final bool showIcons;
   final bool iconsOnly;
+  final bool showUnselectedOptionsAsDisabled;
 
   RightSideButtons(
       {required this.infos,
@@ -25,55 +26,70 @@ class RightSideButtons extends StatelessWidget {
       this.upgrade = true,
       this.uninstall = true,
       this.showIcons = true,
-      this.iconsOnly = false}) {
+      this.iconsOnly = false,
+      this.showUnselectedOptionsAsDisabled = false}) {
     assert(!iconsOnly || showIcons, 'iconsOnly requires showIcons to be true');
   }
 
   @override
   Widget build(BuildContext context) {
     return buttons([
-      if (install) UnInstallingUpdatingType.install,
-      if (upgrade) UnInstallingUpdatingType.update,
-      if (uninstall) UnInstallingUpdatingType.uninstall
+      ButtonInfo(
+          type: UnInstallingUpdatingType.install,
+          visibility: ButtonVisibility.from(
+              active: install,
+              showIfInactive: showUnselectedOptionsAsDisabled)),
+      ButtonInfo(
+          type: UnInstallingUpdatingType.update,
+          visibility: ButtonVisibility.from(
+              active: upgrade,
+              showIfInactive: showUnselectedOptionsAsDisabled)),
+      ButtonInfo(
+          type: UnInstallingUpdatingType.uninstall,
+          visibility: ButtonVisibility.from(
+              active: uninstall,
+              showIfInactive: showUnselectedOptionsAsDisabled)),
     ], context);
   }
 
-  Widget buttons(
-      List<UnInstallingUpdatingType> commands, BuildContext context) {
+  Widget buttons(List<ButtonInfo> buttonInfos, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return IntrinsicWidth(
       child: Column(
         mainAxisAlignment: mainAlignment,
         crossAxisAlignment: crossAlignment,
-        children: buttonList(commands, locale),
+        children: buttonList(buttonInfos, locale),
       ),
     );
   }
 
   List<Widget> buttonList(
-      List<UnInstallingUpdatingType> commands, AppLocalizations locale) {
-    List<Widget> list = [
-      for (UnInstallingUpdatingType winget in commands)
-        createButton(winget, locale),
-    ];
+      List<ButtonInfo> buttonInfos, AppLocalizations locale) {
+    Iterable<Widget?> list =
+        buttonInfos.map<Widget?>((e) => createButton(e, locale));
+    List<Widget> finalList = list.nonNulls.toList();
     if (iconsOnly) {
-      return list;
+      return finalList;
     }
-    return list.withSpaceBetween(height: 5);
+    return finalList.withSpaceBetween(height: 5);
   }
 
-  Widget createButton(
-      UnInstallingUpdatingType command, AppLocalizations locale) {
+  Widget? createButton(ButtonInfo buttonInfo, AppLocalizations locale) {
+    if (buttonInfo.visibility == ButtonVisibility.invisible) return null;
     String appName = infos.name?.value ?? infos.id!.value;
+    UnInstallingUpdatingType command = buttonInfo.type;
     if (iconsOnly) {
       assert(command.winget.icon != null);
-      return iconButton(command, locale, appName);
+      return iconButton(command, locale, appName,
+          disabled: buttonInfo.visibility == ButtonVisibility.disabled);
     }
-    return textButton(command, locale, appName);
+    return textButton(command, locale, appName,
+        disabled: buttonInfo.visibility == ButtonVisibility.disabled);
   }
 
-  CommandButton textButton(UnInstallingUpdatingType command,
-      AppLocalizations locale, String appName) {
+  CommandButton textButton(
+      UnInstallingUpdatingType command, AppLocalizations locale, String appName,
+      {required bool disabled}) {
     return UnInstallingUpdatingButton(
       text: command.winget.title(locale),
       command: _createCommand(command.winget, locale),
@@ -81,11 +97,13 @@ class RightSideButtons extends StatelessWidget {
       icon: showIcons ? command.winget.icon : null,
       type: command,
       infos: infos,
+      disabled: disabled,
     );
   }
 
-  CommandIconButton iconButton(UnInstallingUpdatingType command,
-      AppLocalizations locale, String appName) {
+  CommandIconButton iconButton(
+      UnInstallingUpdatingType command, AppLocalizations locale, String appName,
+      {required bool disabled}) {
     return UnInstallingUpdatingIconButton(
       text: command.winget.title(locale),
       command: _createCommand(command.winget, locale),
@@ -96,6 +114,7 @@ class RightSideButtons extends StatelessWidget {
           : const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       type: command,
       infos: infos,
+      disabled: disabled,
     );
   }
 
@@ -117,5 +136,31 @@ class RightSideButtons extends StatelessWidget {
     if (upgrade) number++;
     if (uninstall) number++;
     return number;
+  }
+}
+
+class ButtonInfo {
+  final UnInstallingUpdatingType type;
+  final ButtonVisibility visibility;
+  const ButtonInfo({required this.type, required this.visibility});
+}
+
+enum ButtonVisibility {
+  visible,
+  disabled,
+  invisible;
+
+  const ButtonVisibility();
+  factory ButtonVisibility.from(
+      {required bool active, bool showIfInactive = false}) {
+    if (active) {
+      return ButtonVisibility.visible;
+    } else {
+      if (showIfInactive) {
+        return ButtonVisibility.disabled;
+      } else {
+        return ButtonVisibility.invisible;
+      }
+    }
   }
 }

@@ -10,6 +10,7 @@ abstract class RunButton extends StatelessWidget {
   final List<String> command;
   final String? title;
   final IconData? icon;
+  final bool disabled;
 
   const RunButton({
     super.key,
@@ -17,6 +18,7 @@ abstract class RunButton extends StatelessWidget {
     required this.command,
     this.title,
     this.icon,
+    this.disabled = false,
   });
 
   @override
@@ -29,7 +31,7 @@ abstract class RunButton extends StatelessWidget {
 
   BaseButton buttonType(BuildContext context);
 
-  void Function() onPressed(BuildContext context) => () async {
+  void Function()? onPressed(BuildContext context) => disabled? null : () async {
         NavigatorState router = Navigator.of(context);
         WingetProcess process = await WingetProcess.runCommand(command);
         router.push(FluentPageRoute(

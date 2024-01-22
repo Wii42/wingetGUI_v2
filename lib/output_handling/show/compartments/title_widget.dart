@@ -6,9 +6,11 @@ import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:winget_gui/widget_assets/store_button.dart';
+import '../../../main.dart';
 import '../../../widget_assets/decorated_card.dart';
 import '../../../widget_assets/favicon_widget.dart';
 import '../../../widget_assets/link_button.dart';
+import '../../../winget_db/db_message.dart';
 import '../../package_infos/package_attribute.dart';
 
 class TitleWidget extends Compartment {
@@ -56,7 +58,20 @@ class TitleWidget extends Compartment {
     ];
   }
 
-  Widget buildRightSide() => RightSideButtons(infos: infos);
+  Widget buildRightSide() => StreamBuilder<DBMessage>(
+      stream: wingetDB.installed.stream,
+      builder: (context, snapshot) {
+        bool isInstalled =
+            wingetDB.installed.idMap.containsKey(infos.id?.value);
+        bool hasUpdate = wingetDB.updates.idMap.containsKey(infos.id?.value);
+        return RightSideButtons(
+          infos: infos,
+          install: !isInstalled,
+          uninstall: isInstalled,
+          upgrade: hasUpdate,
+          showUnselectedOptionsAsDisabled: true,
+        );
+      });
 
   Widget nameAndVersion(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;

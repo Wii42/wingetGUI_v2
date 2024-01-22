@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 
 import '../output_handling/output_handler.dart';
@@ -67,7 +68,7 @@ abstract class ProcessOutput extends StatelessWidget {
         if (snapshot.hasData) {
           return Expanded(
             child: ScrollListWidget(
-              listElements: snapshot.data!,
+              listElements: snapshot.data!.withSpaceBetween(height: 10),
             ),
           );
         }

@@ -8,25 +8,31 @@ import '../winget_commands.dart';
 class UnInstallingUpdatingButton extends CommandButton {
   final UnInstallingUpdatingType type;
   final PackageInfos infos;
-  const UnInstallingUpdatingButton(
-      {super.key,
-      required super.text,
-      required super.command,
-      super.title,
-      super.icon,
-      required this.type, required this.infos});
+  const UnInstallingUpdatingButton({
+    super.key,
+    required super.text,
+    required super.command,
+    super.title,
+    super.icon,
+    required this.type,
+    required this.infos,
+    super.disabled,
+  });
 
   @override
-  void Function() onPressed(BuildContext context) => () async {
-        NavigatorState router = Navigator.of(context);
-        UnInstallingUpdatingProcess process =
-            await UnInstallingUpdatingProcess.run(type, args: args(infos, type.winget));
-        router.push(FluentPageRoute(
-            builder: (_) => UnInstallingUpdatingPage(
-                  process: process,
-                  title: title ?? "'$text'",
-                )));
-      };
+  void Function()? onPressed(BuildContext context) => disabled
+      ? null
+      : () async {
+          NavigatorState router = Navigator.of(context);
+          UnInstallingUpdatingProcess process =
+              await UnInstallingUpdatingProcess.run(type,
+                  args: args(infos, type.winget));
+          router.push(FluentPageRoute(
+              builder: (_) => UnInstallingUpdatingPage(
+                    process: process,
+                    title: title ?? "'$text'",
+                  )));
+        };
 }
 
 class UnInstallingUpdatingIconButton extends CommandIconButton {
@@ -41,19 +47,23 @@ class UnInstallingUpdatingIconButton extends CommandIconButton {
     this.type = UnInstallingUpdatingType.uninstall,
     super.padding = EdgeInsets.zero,
     required this.infos,
+    super.disabled,
   });
 
   @override
-  void Function() onPressed(BuildContext context) => () async {
-        NavigatorState router = Navigator.of(context);
-        UnInstallingUpdatingProcess process =
-            await UnInstallingUpdatingProcess.run(type, args: args(infos, type.winget));
-        router.push(FluentPageRoute(
-            builder: (_) => UnInstallingUpdatingPage(
-                  process: process,
-                  title: title ?? "'$text'",
-                )));
-      };
+  void Function()? onPressed(BuildContext context) => disabled
+      ? null
+      : () async {
+          NavigatorState router = Navigator.of(context);
+          UnInstallingUpdatingProcess process =
+              await UnInstallingUpdatingProcess.run(type,
+                  args: args(infos, type.winget));
+          router.push(FluentPageRoute(
+              builder: (_) => UnInstallingUpdatingPage(
+                    process: process,
+                    title: title ?? "'$text'",
+                  )));
+        };
 }
 
 List<String> args(PackageInfos infos, Winget winget) {
