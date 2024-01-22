@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/plain_text/plain_text_parser.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -22,12 +23,13 @@ class UnInstallingUpdatingPage extends OutputPage {
   Future<List<Widget>> outputRepresentationHook(OutputHandler handler,
       BuildContext context, bool processIsFinished) async {
     NavigatorState navigator = Navigator.of(context);
+    AppLocalizations guiLocale = AppLocalizations.of(context)!;
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     List<ParsedOutput> parsedOutput =
         await handler.getParsedOutputList(wingetLocale);
     List<Widget> outputList = handler.getWidgets(parsedOutput);
     if (processIsFinished) {
-      onFinished(parsedOutput, wingetLocale, navigator, outputList);
+      onFinished(parsedOutput, wingetLocale, navigator, outputList, guiLocale);
     }
     return outputList;
   }
@@ -36,7 +38,8 @@ class UnInstallingUpdatingPage extends OutputPage {
       List<ParsedOutput> parsedOutput,
       AppLocalizations wingetLocale,
       NavigatorState navigator,
-      List<Widget> outputList) {
+      List<Widget> outputList,
+      AppLocalizations guiLocale) {
     Iterable<ParsedPlainText> plainText =
         parsedOutput.whereType<ParsedPlainText>();
     //print(plainText);
@@ -61,15 +64,26 @@ class UnInstallingUpdatingPage extends OutputPage {
       }
       wingetDB.notifyListeners();
     }
-    addBackButton(navigator, outputList);
+    addBackButton(navigator, outputList, guiLocale);
   }
 
-  void addBackButton(NavigatorState navigator, List<Widget> outputList) {
+  void addBackButton(NavigatorState navigator, List<Widget> outputList,
+      AppLocalizations guiLocale) {
     if (navigator.canPop()) {
       outputList.add(
         Row(
           children: [
-            Button(onPressed: navigator.maybePop, child: const Text('close'))
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Button(
+                  onPressed: navigator.maybePop,
+                  child: Row(
+                    children: [
+                      const Icon(FluentIcons.chrome_close),
+                      Text(guiLocale.close),
+                    ].withSpaceBetween(width: 10),
+                  )),
+            )
           ],
         ),
       );

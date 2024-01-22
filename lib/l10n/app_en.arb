@@ -59,5 +59,9 @@
 
   "moreFromPublisher": "More from {publisher}",
   "downloadManually": "Download {installerDescription} manually",
-  "installer": "{description} installer"
+  "installer": "{description} installer",
+  "multipleInstallersFound": "{nrOfInstallers} installers found for this package. Select the one you want to see:",
+  "multipleFittingInstallersFound": "{nrOfInstallers} installers found for the selected options. Select one:",
+  "noInstallerFound": "No installer found for the selected options",
+  "close": "Close"
 }

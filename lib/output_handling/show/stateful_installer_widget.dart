@@ -124,8 +124,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (infos.installers != null && infos.installers!.value.length > 1)
-          Text(
-            '${infos.installers?.value.length} installers found for this package. Select the one you want to see:',
+          Text(localizations.multipleInstallersFound(infos.installers?.value.length??'<?>'),
           ),
         Wrap(
           spacing: 10,
@@ -204,8 +203,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
               ),
             if (infos.installers != null && fittingInstallers.length >= 2)
               boxSelectInstaller<Installer>(
-                  categoryName:
-                      '${fittingInstallers.length} installer found for the selected options. Select one:',
+                  categoryName:localizations.multipleFittingInstallersFound(fittingInstallers.length),
                   options: fittingInstallers,
                   title: (item) =>
                       item.uniqueProperties(fittingInstallers, context),
@@ -215,7 +213,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                   }),
             if (infos.installers != null && fittingInstallers.isEmpty)
               Text(
-                'No installer found for the selected options.',
+                localizations.noInstallerFound,
                 style: TextStyle(color: Colors.red),
               ),
           ],
