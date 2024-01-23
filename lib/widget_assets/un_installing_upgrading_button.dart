@@ -4,6 +4,7 @@ import 'package:winget_gui/winget_process/un_installing_updating_page.dart';
 
 import '../output_handling/package_infos/package_infos.dart';
 import '../winget_commands.dart';
+import '../winget_process/winget_process.dart';
 
 class UnInstallingUpdatingButton extends CommandButton {
   final UnInstallingUpdatingType type;

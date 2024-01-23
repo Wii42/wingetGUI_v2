@@ -90,29 +90,3 @@ class UnInstallingUpdatingPage extends OutputPage {
     }
   }
 }
-
-class UnInstallingUpdatingProcess extends WingetProcess {
-  final UnInstallingUpdatingType type;
-  UnInstallingUpdatingProcess._(
-      {required super.command,
-      required super.process,
-      super.name,
-      required this.type});
-
-  static Future<UnInstallingUpdatingProcess> run(UnInstallingUpdatingType type,
-      {List<String> args = const []}) async {
-    var command = [...type.winget.fullCommand, ...args];
-    Process process = await Process.start('winget', command);
-    return UnInstallingUpdatingProcess._(
-        command: command, process: process, name: type.winget.name, type: type);
-  }
-}
-
-enum UnInstallingUpdatingType {
-  uninstall(Winget.uninstall),
-  install(Winget.install),
-  update(Winget.upgrade);
-
-  final Winget winget;
-  const UnInstallingUpdatingType(this.winget);
-}
