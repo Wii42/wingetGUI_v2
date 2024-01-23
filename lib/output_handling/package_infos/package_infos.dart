@@ -110,4 +110,14 @@ abstract class PackageInfos {
   }
 
   bool hasKnownSource() => isWinget() || isMicrosoftStore();
+
+  String? versionWithoutEllipsis() {
+    if (version == null) {
+      return null;
+    }
+    if (version!.value.endsWith('…')) {
+      return version?.value.substring(0, version!.value.length - 1);
+    }
+    return version?.value;
+  }
 }

@@ -234,7 +234,20 @@ class PackageDetailsFromWeb extends StatelessWidget {
         return GithubApi.wingetRepo(versionManifests.last.path).getFiles();
       }
     }
-    throw Exception('No version manifest found');
+    if (package.version != null) {
+      List<GithubApiFileInfo> maybeCurrentVersionManifest = files
+          .where((element) =>
+              element.name.startsWith(package.versionWithoutEllipsis()!))
+          .toList();
+      if (maybeCurrentVersionManifest.isNotEmpty) {
+        return GithubApi.wingetRepo(maybeCurrentVersionManifest.last.path)
+            .getFiles();
+      }
+    }
+    if (files.length == 1) {
+      return GithubApi.wingetRepo(files.single.path).getFiles();
+    }
+    throw Exception('No version manifest found: ${files.map((e) => e.name)}');
   }
 
   bool isBuiltInVersion(String string) {
