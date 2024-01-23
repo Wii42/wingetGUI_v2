@@ -37,13 +37,13 @@ class WingetProcess {
   static Future<WingetProcess> runCommand(List<String> command,
       {String? name}) async {
     ProcessWrap process = ProcessWrap('winget', command);
-    process.start();
     printReady(process);
     return WingetProcess._(command: command, process: process, name: name);
   }
 
-  static void printReady(ProcessWrap process){
-    process.waitForReady.then((value) => print('ready'));
+  static void printReady(ProcessWrap process) {
+    process.waitForReady.then((value) => print('${process.name} ready'));
+    process.exitCode.then((value) => print('${process.name} done'));
   }
 
   static Future<WingetProcess> runWinget(Winget winget) async {
@@ -69,7 +69,6 @@ class UnInstallingUpdatingProcess extends WingetProcess {
     var command = [...type.winget.fullCommand, ...args];
     //Process process = await Process.start('winget', command);
     ProcessWrap process = ProcessWrap('winget', command);
-    process.start();
     Future.delayed(Duration(seconds: 1), () async {
       print(process.hasStarted());
       print(await process.exitCode);

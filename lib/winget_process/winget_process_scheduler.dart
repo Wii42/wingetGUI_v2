@@ -5,17 +5,51 @@ import 'dart:io';
 
 class ProcessScheduler {
   final Queue<ProcessWrap> _processQueue = Queue();
+  ProcessWrap? _currentProcess;
+  int _getProcessId = 0;
   static final instance = ProcessScheduler._();
   ProcessScheduler._();
 
   void addProcess(ProcessWrap process) {
     _processQueue.add(process);
-    print(_processQueue.map((e) => e.arguments.join(' ')));
+    if (_currentProcess == null) {
+      _startNextProcess();
+    }
+    print(currentState());
   }
 
   void removeProcess(ProcessWrap process) {
-    _processQueue.remove(process);
-    print(_processQueue.map((e) => e.arguments.join(' ')));
+    if (_currentProcess == process) {
+      process.kill();
+      _currentProcess = null;
+      _startNextProcess();
+    } else {
+      _processQueue.remove(process);
+    }
+    print(currentState());
+  }
+
+  int getProcessId() {
+    return _getProcessId++;
+  }
+
+  void _startNextProcess() {
+    if (_currentProcess == null) {
+      if (_processQueue.isNotEmpty) {
+        _currentProcess = _processQueue.removeFirst();
+        _currentProcess!.start();
+        print(currentState());
+        _currentProcess!.waitOnDone.then((value) {
+          _currentProcess = null;
+          _startNextProcess();
+        });
+      }
+    }
+  }
+
+  String currentState() {
+    String state = _currentProcess?.name ?? 'idle';
+    return "ProcessScheduler: $state with Queue ${_processQueue.map((e) => e.name).toList()}";
   }
 }
 
@@ -28,6 +62,7 @@ class ProcessWrap implements Process {
   final bool includeParentEnvironment;
   final bool runInShell;
   final ProcessStartMode mode;
+  final int id = ProcessScheduler.instance.getProcessId();
   Process? _process;
 
   ProcessWrap(this.executable, this.arguments,
@@ -41,6 +76,7 @@ class ProcessWrap implements Process {
 
   void start() async {
     if (!hasStarted()) {
+      print('started $name');
       _process = await Process.start(
         executable,
         arguments,
@@ -59,6 +95,7 @@ class ProcessWrap implements Process {
   }
 
   Future<void> get waitForReady async => await _processAwaiter.future;
+  Future<void> get waitOnDone async => await exitCode;
 
   @override
   Future<int> get exitCode async {
@@ -74,7 +111,6 @@ class ProcessWrap implements Process {
     if (hasStarted()) {
       return _process!.kill(signal);
     }
-    ProcessScheduler.instance.removeProcess(this);
     return false;
   }
 
@@ -125,4 +161,6 @@ class ProcessWrap implements Process {
   String toString() {
     return 'ProcessWrap{executable: $executable, arguments: $arguments, workingDirectory: $workingDirectory, environment: $environment, includeParentEnvironment: $includeParentEnvironment, runInShell: $runInShell, mode: $mode, _process: $_process}';
   }
+
+  String get name => "$id ${arguments.join(' ')}";
 }
