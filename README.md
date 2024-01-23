@@ -16,16 +16,11 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 ## TO-DO:
-- store if app is installed/upgradeable
 - handle emails properly
 - fix to many links found in expandable text
-- smart decision if details in list or button row
 
 - fix sources page
 
-- FIX Python 3.11 page because they are stupid
 
-- Undeluxe, SanityCheck and MultiMon dont load -> needs fixing
 
-- WezTerm dose not load -> needs fixing
 

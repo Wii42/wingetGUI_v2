@@ -55,7 +55,8 @@ abstract class ProcessOutput extends StatelessWidget {
   FutureBuilder<List<Widget>> onData(
       AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
     return FutureBuilder<List<Widget>>(
-      future: _displayOutput(streamSnapshot.data!, context, streamSnapshot.connectionState == ConnectionState.done),
+      future: _displayOutput(streamSnapshot.data!, context,
+          streamSnapshot.connectionState == ConnectionState.done),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Expanded(
@@ -88,7 +89,7 @@ abstract class ProcessOutput extends StatelessWidget {
     return outputRepresentationHook(handler, context, processIsFinished);
   }
 
-  Future<List<Widget>> outputRepresentationHook(
-          OutputHandler handler, BuildContext context, bool processIsFinished) =>
+  Future<List<Widget>> outputRepresentationHook(OutputHandler handler,
+          BuildContext context, bool processIsFinished) =>
       handler.getRepresentation(context);
 }
