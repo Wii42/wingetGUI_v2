@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/main_navigation.dart';
 import 'package:winget_gui/winget_db/winget_db.dart';
@@ -102,7 +103,14 @@ class DBInitializer extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 if (snapshot.hasData) {
-                  return Center(child: Text(snapshot.data!));
+                  return Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const ProgressRing(backgroundColor: Colors.transparent,),
+                      Text(snapshot.data!),
+                    ].withSpaceBetween(height: 20),
+                  ));
                 }
                 return const Center(child: Text('...'));
               }
