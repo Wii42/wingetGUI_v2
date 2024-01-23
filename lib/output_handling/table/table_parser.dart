@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'dart:math';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/table_builder.dart';
@@ -22,6 +23,9 @@ class TableParser extends OutputParser {
   @override
   Future<ParsedTable> parse(AppLocalizations wingetLocale) async {
     TableData table = await Isolate.run<TableData>(_makeTable);
+    if (kDebugMode) {
+      //print(table.join('\n'));
+    }
     if (isAppTable(table, wingetLocale)) {
       List<PackageInfosPeek> packages = [
         for (Map<String, String> tableRow in table)
@@ -37,7 +41,10 @@ class TableParser extends OutputParser {
   TableData _makeTable() {
     List<int> columnsPos = _getColumnsPos();
     //_correctLinesWithNonWesternGlyphs(columnsPos);
-    _correctLinesWithCjKIdeographs();
+    _correctLinesWithCjKIdeographs(columnsPos);
+    if (kDebugMode) {
+      print('\n' + lines.join('\n'));
+    }
     return _extractTableData(columnsPos);
   }
 
@@ -63,20 +70,37 @@ class TableParser extends OutputParser {
     return columnsPos;
   }
 
-  void _correctLinesWithCjKIdeographs() {
+  void _correctLinesWithCjKIdeographs([List<int>? columnsPos]) {
     for (int i = 2; i < lines.length; i++) {
       String line = lines[i];
       bool test = line.containsCjkIdeograph();
       if (test) {
-        List<String> words = line.split(' ');
-        for (int i = 0; i < words.length; i++) {
-          String word = words[i];
-          if (word.containsCjkIdeograph()) {
-            word = word + (' ' * word.countCjkIdeographs());
+        if (line.startsWith('CeVIO')) {
+          //bodge because only packages starting with cevio seem to not be parsed correctly due to cjk chars
+          List<String> words = line.split('  ');
+          for (int j = 0; j < words.length; j++) {
+            String word = words[j];
+            if (word.containsCjkIdeograph()) {
+              if (line.startsWith('CeVIO Voice Package - 東北きりたん')) {
+                word = (word) + ('  ' * (word.countCjkIdeographs() + 2));
+              } else {
+                word = (word) + ('  ' * word.countCjkIdeographs());
+              }
+            }
+            words[j] = word;
           }
-          words[i] = word;
+          line = words.join('  ');
+        } else {
+          List<String> words = line.split(' ');
+          for (int j = 0; j < words.length; j++) {
+            String word = words[j];
+            if (word.containsCjkIdeograph()) {
+              word = (word) + (' ' * word.countCjkIdeographs());
+            }
+            words[j] = word;
+          }
+          line = words.join(' ');
         }
-        line = words.join(' ');
       }
       lines[i] = line;
     }
@@ -175,9 +199,7 @@ class ParsedAppTable extends ParsedTable {
   ParsedAppTable(super.table, {required this.packages, required this.command});
 
   @override
-  Widget widgetRepresentation() =>
-    PackageList(packages, command: command);
-
+  Widget widgetRepresentation() => PackageList(packages, command: command);
 
   @override
   bool isAppTable() => true;

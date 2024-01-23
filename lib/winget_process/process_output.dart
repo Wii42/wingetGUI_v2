@@ -18,13 +18,6 @@ abstract class ProcessOutput extends StatelessWidget {
       stream: process.outputStream,
       builder:
           (BuildContext context, AsyncSnapshot<List<String>> streamSnapshot) {
-        if (streamSnapshot.hasData) {
-          if (kDebugMode) {
-            if (streamSnapshot.hasData) {
-              print('\n${streamSnapshot.data!.join('\n')}\n\n\n\n');
-            }
-          }
-        }
         return buildPage(streamSnapshot, context);
       },
     );
