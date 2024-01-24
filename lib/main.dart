@@ -7,10 +7,13 @@ import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/main_navigation.dart';
+import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/winget_db/winget_db.dart';
+import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
 import 'global_app_data.dart';
 import 'helpers/package_screenshots_list.dart';
+import 'output_handling/one_line_info/one_line_info_builder.dart';
 
 const String appTitle = 'WingetGUI';
 
@@ -61,7 +64,13 @@ class WingetGui extends StatelessWidget {
             LocaleNamesLocalizationsDelegate()
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const WindowBrightnessSetter(child: DBInitializer()),
+          home: const WindowBrightnessSetter(
+              child: Stack(
+            children: [
+              DBInitializer(),
+              ProcessSchedulerWarnings(),
+            ],
+          )),
         );
       },
     );
@@ -107,7 +116,9 @@ class DBInitializer extends StatelessWidget {
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const ProgressRing(backgroundColor: Colors.transparent,),
+                      const ProgressRing(
+                        backgroundColor: Colors.transparent,
+                      ),
                       Text(snapshot.data!),
                     ].withSpaceBetween(height: 20),
                   ));
@@ -118,5 +129,26 @@ class DBInitializer extends StatelessWidget {
             },
             stream: wingetDB.init(context),
           );
+  }
+}
+
+class ProcessSchedulerWarnings extends StatelessWidget {
+  const ProcessSchedulerWarnings({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<int>(
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data! > 0) {
+            return Positioned(
+              child: OneLineInfoBuilder.oneLineInfo(OneLineInfo(title: 'Warning', details: '${snapshot.data} processes are in queue for execution', severity: InfoBarSeverity.warning), context),
+            );
+          }
+        }
+        return const SizedBox();
+      },
+      stream: ProcessScheduler.instance.queueLengthStream,
+    );
   }
 }

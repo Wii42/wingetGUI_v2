@@ -7,6 +7,8 @@ class ProcessScheduler {
   final Queue<ProcessWrap> _processQueue = Queue();
   ProcessWrap? _currentProcess;
   int _getProcessId = 0;
+  final StreamController<int> _streamController =
+      StreamController<int>.broadcast();
   static final instance = ProcessScheduler._();
   ProcessScheduler._();
 
@@ -16,6 +18,7 @@ class ProcessScheduler {
       _startNextProcess();
     }
     print(currentState());
+    _streamController.add(_processQueue.length);
   }
 
   void removeProcess(ProcessWrap process) {
@@ -27,6 +30,7 @@ class ProcessScheduler {
       _processQueue.remove(process);
     }
     print(currentState());
+    _streamController.add(_processQueue.length);
   }
 
   int getProcessId() {
@@ -39,6 +43,7 @@ class ProcessScheduler {
         _currentProcess = _processQueue.removeFirst();
         _currentProcess!.start();
         print(currentState());
+        _streamController.add(_processQueue.length);
         _currentProcess!.waitOnDone.then((value) {
           _currentProcess = null;
           _startNextProcess();
@@ -51,6 +56,8 @@ class ProcessScheduler {
     String state = _currentProcess?.name ?? 'idle';
     return "ProcessScheduler: $state with Queue ${_processQueue.map((e) => e.name).toList()}";
   }
+
+  Stream<int> get queueLengthStream => _streamController.stream;
 }
 
 class ProcessWrap implements Process {
