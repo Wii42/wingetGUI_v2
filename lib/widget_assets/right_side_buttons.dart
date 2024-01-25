@@ -5,7 +5,6 @@ import 'package:winget_gui/widget_assets/un_installing_upgrading_button.dart';
 
 import '../output_handling/package_infos/package_infos.dart';
 import '../winget_commands.dart';
-import '../winget_process/un_installing_updating_page.dart';
 import '../winget_process/winget_process.dart';
 import 'command_button.dart';
 

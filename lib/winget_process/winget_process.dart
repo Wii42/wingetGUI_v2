@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:winget_gui/helpers/extensions/stream_modifier.dart';
 import 'package:winget_gui/winget_commands.dart';
@@ -42,7 +41,9 @@ class WingetProcess {
   }
 
   static void printReady(ProcessWrap process) {
+    // ignore: avoid_print
     process.waitForReady.then((value) => print('${process.name} ready'));
+    // ignore: avoid_print
     process.exitCode.then((value) => print('${process.name} done'));
   }
 
@@ -67,12 +68,7 @@ class UnInstallingUpdatingProcess extends WingetProcess {
   static Future<UnInstallingUpdatingProcess> run(UnInstallingUpdatingType type,
       {List<String> args = const []}) async {
     var command = [...type.winget.fullCommand, ...args];
-    //Process process = await Process.start('winget', command);
     ProcessWrap process = ProcessWrap('winget', command);
-    Future.delayed(Duration(seconds: 1), () async {
-      print(process.hasStarted());
-      print(await process.exitCode);
-    });
     return UnInstallingUpdatingProcess._(
         command: command, process: process, name: type.winget.name, type: type);
   }

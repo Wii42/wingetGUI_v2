@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';

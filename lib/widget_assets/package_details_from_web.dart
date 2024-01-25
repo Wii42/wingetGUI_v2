@@ -206,10 +206,9 @@ class PackageDetailsFromWeb extends StatelessWidget {
   Future<YamlMap?> getYaml(Uri url) async {
     Response response = await get(url);
     if (response.statusCode == 200) {
-
       try {
         return loadYaml(response.body) as YamlMap;
-      } on FormatException catch (e) {
+      } on FormatException {
         String body = String.fromCharCodes(response.bodyBytes);
         return loadYaml(body) as YamlMap;
       }

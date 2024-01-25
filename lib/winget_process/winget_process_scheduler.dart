@@ -3,6 +3,8 @@ import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 class ProcessScheduler {
   final Queue<ProcessWrap> _processQueue = Queue();
   ProcessWrap? _currentProcess;
@@ -17,7 +19,9 @@ class ProcessScheduler {
     if (_currentProcess == null) {
       _startNextProcess();
     }
-    print(currentState());
+    if (kDebugMode) {
+      print(currentState());
+    }
     _streamController.add(_processQueue.length);
   }
 
@@ -29,7 +33,9 @@ class ProcessScheduler {
     } else {
       _processQueue.remove(process);
     }
-    print(currentState());
+    if (kDebugMode) {
+      print(currentState());
+    }
     _streamController.add(_processQueue.length);
   }
 
@@ -42,7 +48,9 @@ class ProcessScheduler {
       if (_processQueue.isNotEmpty) {
         _currentProcess = _processQueue.removeFirst();
         _currentProcess!.start();
-        print(currentState());
+        if (kDebugMode) {
+          print(currentState());
+        }
         _streamController.add(_processQueue.length);
         _currentProcess!.waitOnDone.then((value) {
           _currentProcess = null;
@@ -83,7 +91,9 @@ class ProcessWrap implements Process {
 
   void start() async {
     if (!hasStarted()) {
-      print('started $name');
+      if (kDebugMode) {
+        print('started $name');
+      }
       _process = await Process.start(
         executable,
         arguments,
