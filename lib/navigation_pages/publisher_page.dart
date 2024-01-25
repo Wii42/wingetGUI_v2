@@ -6,10 +6,10 @@ import 'package:winget_gui/widget_assets/favicon_widget.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 
 import '../helpers/route_parameter.dart';
-import '../main.dart';
 import '../widget_assets/package_list_page.dart';
 import '../widget_assets/sort_by.dart';
 import '../winget_db/db_table.dart';
+import '../winget_db/winget_db.dart';
 
 class PublisherPage extends StatelessWidget {
   final String publisherId;
@@ -33,13 +33,14 @@ class PublisherPage extends StatelessWidget {
       bodyHeader: publisherTitle(context),
       listView: PackagePeekListView(
         dbTable: DBTable(
-          wingetDB.available.infos
+          WingetDB.instance.available.infos
               .where((element) => element.publisherID == publisherId)
               .toList(),
           content: 'publisher',
           wingetCommand: [],
         ),
-        reloadStream: wingetDB.available.stream,
+        reloadStream: WingetDB.instance.available.stream,
+        //showIsInstalled: ,
         showOnlyWithSourceButton: false,
         sortOptions: const [
           SortBy.name,

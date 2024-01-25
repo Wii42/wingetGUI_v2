@@ -3,17 +3,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/routes.dart';
 
-import '../main.dart';
 import '../widget_assets/package_list_page.dart';
 import '../widget_assets/package_peek_list_view.dart';
 import '../widget_assets/sort_by.dart';
 import '../winget_db/db_table.dart';
+import '../winget_db/winget_db.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({super.key});
 
   final TextEditingController controller = TextEditingController();
-  final DBTable dbTable = wingetDB.available;
+  final DBTable dbTable = WingetDB.instance.available;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,9 @@ class SearchPage extends StatelessWidget {
       title: title,
       customReload: () => dbTable.reloadFuture(locale),
       listView: PackagePeekListView(
-        dbTable: wingetDB.available,
+        dbTable: WingetDB.instance.available,
         showIsInstalled: (package, _) =>
-            wingetDB.installed.idMap.containsKey(package.id!.value),
+            WingetDB.instance.installed.idMap.containsKey(package.id!.value),
         showIsUpgradable: (package, _) => package.availableVersion != null,
         showOnlyWithSourceButton: false,
         sortOptions: const [

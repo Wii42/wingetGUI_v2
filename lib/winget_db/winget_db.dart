@@ -10,24 +10,30 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WingetDB {
   bool isInitialized = false;
+  static final WingetDB instance = WingetDB._();
   late DBTable updates, installed, available;
+
+  WingetDB._();
 
   Stream<String> init(BuildContext context) async* {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     WidgetsFlutterBinding.ensureInitialized();
 
-    DBTableCreator installedCreator =
-        DBTableCreator(content: 'installed', winget: Winget.installed);
+    DBTableCreator installedCreator = DBTableCreator(
+        content: 'installed', winget: Winget.installed, parentDB: this);
     yield* installedCreator.init(wingetLocale);
     installed = installedCreator.returnTable();
 
     DBTableCreator updatesCreator = DBTableCreator(
-        content: 'updates', winget: Winget.updates, filter: _filterUpdates);
+        content: 'updates',
+        winget: Winget.updates,
+        filter: _filterUpdates,
+        parentDB: this);
     yield* updatesCreator.init(wingetLocale);
     updates = updatesCreator.returnTable();
 
-    DBTableCreator availableCreator =
-        DBTableCreator(content: 'available', winget: Winget.availablePackages);
+    DBTableCreator availableCreator = DBTableCreator(
+        content: 'available', winget: Winget.availablePackages, parentDB: this);
     yield* availableCreator.init(wingetLocale);
     available = availableCreator.returnTable();
 

@@ -3,8 +3,8 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:winget_gui/winget_db/db_message.dart';
+import 'package:winget_gui/winget_db/winget_db.dart';
 
-import '../main.dart';
 import '../output_handling/one_line_info/one_line_info_parser.dart';
 import '../output_handling/package_infos/info.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
@@ -16,6 +16,7 @@ class DBTable {
   List<PackageInfosPeek> _infos;
   Map<String, List<PackageInfosPeek>>? _idMap;
   List<OneLineInfo> hints;
+  WingetDB? parentDB;
 
   final String content;
   final List<String> wingetCommand;
@@ -27,7 +28,8 @@ class DBTable {
       {this.hints = const [],
       required this.content,
       required this.wingetCommand,
-      this.creatorFilter});
+      this.creatorFilter,
+      this.parentDB});
 
   Map<String, List<PackageInfosPeek>> get idMap {
     if (_idMap == null) {
@@ -61,12 +63,13 @@ class DBTable {
       content: content,
       command: wingetCommand,
       filter: creatorFilter,
+      parentDB: parentDB,
     );
     yield* creator.init(wingetLocale);
     _infos = creator.extractInfos();
     hints = creator.extractHints();
     updateIDMap();
-    wingetDB.notifyListeners();
+    parentDB?.notifyListeners();
   }
 
   Stream<DBMessage> get stream => _streamController.stream;
@@ -86,22 +89,22 @@ class DBTable {
 
   void addInfo(PackageInfosPeek info) {
     _infos.add(info);
-    wingetDB.notifyListeners();
+    parentDB?.notifyListeners();
   }
 
   void removeInfo(PackageInfosPeek info) {
     _infos.remove(info);
-    wingetDB.notifyListeners();
+    parentDB?.notifyListeners();
   }
 
   void removeInfoWhere(bool Function(PackageInfosPeek) test) {
     _infos.removeWhere(test);
-    wingetDB.notifyListeners();
+    parentDB?.notifyListeners();
   }
 
   void removeAllInfos() {
     _infos.clear();
-    wingetDB.notifyListeners();
+    parentDB?.notifyListeners();
   }
 
   Future<void> reloadFuture(AppLocalizations wingetLocale) {

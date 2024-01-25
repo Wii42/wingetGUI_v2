@@ -6,12 +6,11 @@ import 'package:winget_gui/output_handling/plain_text/plain_text_parser.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../main.dart';
 import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_infos_full.dart';
 import '../output_handling/parsed_output.dart';
 import '../output_handling/show/show_parser.dart';
-import '../winget_commands.dart';
+import '../winget_db/winget_db.dart';
 import 'output_page.dart';
 
 class UnInstallingUpdatingPage extends OutputPage {
@@ -49,8 +48,9 @@ class UnInstallingUpdatingPage extends OutputPage {
         plainText.last.lastIsSuccessMessage &&
         show.isNotEmpty) {
       PackageInfosFull info = show.last.infos;
+      WingetDB wingetDB = WingetDB.instance;
       if (p.type == UnInstallingUpdatingType.uninstall) {
-        wingetDB.installed.removeInfoWhere(info.probablySamePackage);
+        WingetDB.instance.installed.removeInfoWhere(info.probablySamePackage);
         wingetDB.updates.removeInfoWhere(info.probablySamePackage);
         (wingetDB.installed.reloadFuture(wingetLocale)).then((_) {
           wingetDB.updates.reloadFuture(wingetLocale);

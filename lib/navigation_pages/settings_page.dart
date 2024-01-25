@@ -7,13 +7,13 @@ import 'package:winget_gui/helpers/package_screenshots_list.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
 import '../helpers/route_parameter.dart';
-import '../main.dart';
 import '../output_handling/output_handler.dart';
 import '../routes.dart';
 import '../widget_assets/app_locale.dart';
 import '../widget_assets/decorated_card.dart';
 import '../widget_assets/pane_item_body.dart';
 import '../winget_commands.dart';
+import '../winget_db/winget_db.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -75,13 +75,13 @@ class _SettingsPageSate extends State<SettingsPage> {
         children: [
           Button(
             onPressed: () async {
-              wingetDB.updates.reloadFuture(wingetLocale);
+              WingetDB.instance.updates.reloadFuture(wingetLocale);
             },
             child: const Text('Reload updates'),
           ),
           Button(
             onPressed: () {
-              wingetDB.updates.removeAllInfos();
+              WingetDB.instance.updates.removeAllInfos();
             },
             child: const Text('Remove all updates'),
           ),

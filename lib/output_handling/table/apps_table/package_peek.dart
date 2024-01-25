@@ -14,6 +14,7 @@ class PackagePeek extends StatelessWidget {
   final bool uninstallButton;
   final bool checkFavicon;
   final bool showMatch;
+  final bool showInstalledIcon;
 
   final MainAxisAlignment columnAlign = MainAxisAlignment.center;
 
@@ -23,7 +24,8 @@ class PackagePeek extends StatelessWidget {
       this.upgradeButton = true,
       this.uninstallButton = true,
       this.checkFavicon = false,
-      this.showMatch = false});
+      this.showMatch = false,
+      this.showInstalledIcon = false,});
 
   factory PackagePeek.fromCommand(PackageInfosPeek infos,
       {required List<String> command}) {

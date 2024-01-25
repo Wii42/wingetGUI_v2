@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:winget_gui/winget_db/winget_db.dart';
 
 import '../output_handling/one_line_info/one_line_info_parser.dart';
 import '../output_handling/output_handler.dart';
@@ -16,14 +17,17 @@ class DBTableCreator {
   List<ParsedOutput>? parsed;
   late List<String> wingetCommand;
   final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter;
+  final WingetDB? parentDB;
 
   String content;
 
-  DBTableCreator(
-      {this.content = 'output',
-      Winget? winget,
-      List<String>? command,
-      this.filter}) {
+  DBTableCreator({
+    this.content = 'output',
+    Winget? winget,
+    List<String>? command,
+    this.filter,
+    this.parentDB,
+  }) {
     assert(winget != null || command != null,
         'winget or command must be provided');
 
@@ -84,7 +88,8 @@ class DBTableCreator {
         hints: extractHints(),
         content: content,
         wingetCommand: wingetCommand,
-        creatorFilter: filter);
+        creatorFilter: filter,
+        parentDB: parentDB,);
   }
 
   static List<PackageInfosPeek> extractInfosStatic(

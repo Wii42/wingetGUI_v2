@@ -17,7 +17,7 @@ import 'output_handling/one_line_info/one_line_info_builder.dart';
 
 const String appTitle = 'WingetGUI';
 
-WingetDB wingetDB = WingetDB();
+//WingetDB wingetDB = WingetDB();
 
 void main() async {
   await initAppPrerequisites();
@@ -106,7 +106,7 @@ class DBInitializer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return wingetDB.isInitialized
+    return WingetDB.instance.isInitialized
         ? MainNavigation(title: appTitle)
         : StreamBuilder<String>(
             builder: (context, snapshot) {
@@ -127,7 +127,7 @@ class DBInitializer extends StatelessWidget {
               }
               return MainNavigation(title: appTitle);
             },
-            stream: wingetDB.init(context),
+            stream: WingetDB.instance.init(context),
           );
   }
 }
