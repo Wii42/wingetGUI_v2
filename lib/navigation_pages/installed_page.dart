@@ -24,8 +24,8 @@ class InstalledPage extends StatelessWidget {
       title: Winget.installed.title(locale),
       listView: PackagePeekListView(
         dbTable: dbTable,
-        showIsInstalled: (_, __) => true,
-        showIsUpgradable: (package, __) => package.hasAvailableVersion(),
+        showIsInstalled: (_) => true,
+        showIsUpgradable: WingetDB.isPackageUpgradable,
         sortOptions: const [
           SortBy.name,
           SortBy.publisher,

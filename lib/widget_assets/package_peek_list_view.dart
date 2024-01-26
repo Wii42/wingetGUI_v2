@@ -16,8 +16,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PackagePeekListView extends StatefulWidget {
   final DBTable dbTable;
-  final bool Function(PackageInfosPeek package, DBTable table) showIsInstalled;
-  final bool Function(PackageInfosPeek package, DBTable table) showIsUpgradable;
+  final bool Function(PackageInfosPeek package) showIsInstalled;
+  final bool Function(PackageInfosPeek package) showIsUpgradable;
   late final Stream<DBMessage> reloadStream;
   final bool showOnlyWithSourceButton;
   final bool onlyWithSourceInitialValue;
@@ -51,7 +51,7 @@ class PackagePeekListView extends StatefulWidget {
   @override
   State<PackagePeekListView> createState() => _PackagePeekListViewState();
 
-  static bool defaultFalse(PackageInfosPeek _, DBTable __) => false;
+  static bool defaultFalse(PackageInfosPeek _) => false;
 }
 
 class _PackagePeekListViewState extends State<PackagePeekListView> {
@@ -138,8 +138,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           if (!package.checkedForScreenshots) {
             package.setImplicitInfos();
           }
-          bool installed = widget.showIsInstalled(package, widget.dbTable);
-          bool upgradable = widget.showIsUpgradable(package, widget.dbTable);
+          bool installed = widget.showIsInstalled(package);
+          bool upgradable = widget.showIsUpgradable(package);
           return wrapInPadding(
               buildPackagePeek(package, installed, upgradable));
         },

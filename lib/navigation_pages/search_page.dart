@@ -24,9 +24,8 @@ class SearchPage extends StatelessWidget {
       customReload: () => dbTable.reloadFuture(locale),
       listView: PackagePeekListView(
         dbTable: WingetDB.instance.available,
-        showIsInstalled: (package, _) =>
-            WingetDB.instance.installed.idMap.containsKey(package.id!.value),
-        showIsUpgradable: (package, _) => package.availableVersion != null,
+        showIsInstalled: WingetDB.isPackageInstalled,
+        showIsUpgradable: WingetDB.isPackageUpgradable,
         showOnlyWithSourceButton: false,
         sortOptions: const [
           SortBy.name,

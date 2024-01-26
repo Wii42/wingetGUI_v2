@@ -26,8 +26,8 @@ class UpdatesPage extends StatelessWidget {
       title: Winget.updates.title(locale),
       listView: PackagePeekListView(
         dbTable: dbTable,
-        showIsInstalled: (_, __) => true,
-        showIsUpgradable: (_, __) => true,
+        showIsInstalled: (_) => true,
+        showIsUpgradable: (_) => true,
         showOnlyWithSourceButton: false,
         showOnlyWithExactVersionButton: true,
         onlyWithExactVersionInitialValue: true,

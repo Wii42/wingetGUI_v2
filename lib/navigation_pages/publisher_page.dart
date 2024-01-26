@@ -40,7 +40,8 @@ class PublisherPage extends StatelessWidget {
           wingetCommand: [],
         ),
         reloadStream: WingetDB.instance.available.stream,
-        //showIsInstalled: ,
+        showIsInstalled: WingetDB.isPackageInstalled,
+        showIsUpgradable: WingetDB.isPackageUpgradable,
         showOnlyWithSourceButton: false,
         sortOptions: const [
           SortBy.name,
