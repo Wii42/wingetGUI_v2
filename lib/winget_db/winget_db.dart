@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../output_handling/output_handler.dart';
+import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../winget_commands.dart';
 import 'db_table.dart';
@@ -87,7 +88,7 @@ class WingetDB {
     available.notifyListeners();
   }
 
-  static bool isPackageInstalled(PackageInfosPeek package) =>
+  static bool isPackageInstalled(PackageInfos package) =>
       WingetDB.instance.installed.idMap.containsKey(package.id!.value);
 
   static bool isPackageUpgradable(PackageInfosPeek package) =>

@@ -111,13 +111,21 @@ abstract class PackageInfos {
 
   bool hasKnownSource() => isWinget() || isMicrosoftStore();
 
-  String? versionWithoutEllipsis() {
-    if (version == null) {
+  String? versionWithoutEllipsis() => _withoutEllipsis(version);
+
+  bool hasCompleteId() {
+    return id != null && id!.value.isNotEmpty && !id!.value.endsWith('…');
+  }
+
+  String? idWithoutEllipsis() => _withoutEllipsis(id);
+
+  String? _withoutEllipsis(Info<String>? info) {
+    if (info == null) {
       return null;
     }
-    if (version!.value.endsWith('…')) {
-      return version?.value.substring(0, version!.value.length - 1);
+    if (info.value.endsWith('…')) {
+      return info.value.substring(0, info.value.length - 1);
     }
-    return version?.value;
+    return info.value;
   }
 }

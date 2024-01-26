@@ -1,8 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/widget_assets/favicon_widget.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 
 import '../../../routes.dart';
 import '../../package_infos/package_infos_peek.dart';
@@ -18,14 +20,16 @@ class PackagePeek extends StatelessWidget {
 
   final MainAxisAlignment columnAlign = MainAxisAlignment.center;
 
-  const PackagePeek(this.infos,
-      {super.key,
-      this.installButton = true,
-      this.upgradeButton = true,
-      this.uninstallButton = true,
-      this.checkFavicon = false,
-      this.showMatch = false,
-      this.showInstalledIcon = false,});
+  const PackagePeek(
+    this.infos, {
+    super.key,
+    this.installButton = true,
+    this.upgradeButton = true,
+    this.uninstallButton = true,
+    this.checkFavicon = false,
+    this.showMatch = false,
+    this.showInstalledIcon = false,
+  });
 
   factory PackagePeek.fromCommand(PackageInfosPeek infos,
       {required List<String> command}) {
@@ -68,8 +72,6 @@ class PackagePeek extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        //if (infos.screenshots?.icon != null &&
-        //    infos.screenshots!.icon.toString().isNotEmpty)
         favicon(faviconSize()),
         Expanded(
           child: nameAndSource(context),
@@ -78,9 +80,22 @@ class PackagePeek extends StatelessWidget {
           mainAxisAlignment: columnAlign,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            ..._versions(locale),
-            //if (infos.match != null) Text("${infos.match!.title(locale)}: ${infos.match!.value}", style: FluentTheme.of(context).typography.caption,),
-          ],
+            if (showInstalledIcon)
+              Row(
+                children: [
+                  const Icon(
+                    icons.FluentIcons.checkmark_circle_20_regular,
+                  ),
+                  const SizedBox(width: 5),
+                  smallText(locale.installed, context),
+                ],
+              ),
+            _versions(locale),
+            if (showMatch &&
+                infos.match != null &&
+                infos.match!.value.trim().isNotEmpty)
+              Text("${infos.match!.title(locale)}: ${infos.match!.value}")
+          ].withSpaceBetween(height: 5),
         ),
         if (isClickable()) ...[
           const SizedBox(width: 20),
@@ -121,16 +136,21 @@ class PackagePeek extends StatelessWidget {
 
   Widget sourceAndID(AppLocalizations locale, BuildContext context) {
     bool showSource = infos.source != null && infos.source!.value.isNotEmpty;
-    bool showId = infos.id != null && infos.id!.value.isNotEmpty && infos.publisherID != null;
+    bool showId = infos.id != null &&
+        infos.id!.value.isNotEmpty &&
+        infos.publisherID != null;
     return Row(
-        children: [
-          if (showSource)
-            smallText(locale.fromSource(infos.source!.value), context),
-          if (showSource && showId) SizedBox(width: 15, child: Center(child: smallText('·', context)),),
-          if (showId)
-            Expanded(child: smallText(infos.id!.value, context)),
-        ],
-      );
+      children: [
+        if (showSource)
+          smallText(locale.fromSource(infos.source!.value), context),
+        if (showSource && showId)
+          SizedBox(
+            width: 15,
+            child: Center(child: smallText('·', context)),
+          ),
+        if (showId) Expanded(child: smallText(infos.id!.value, context)),
+      ],
+    );
   }
 
   Widget smallText(String text, BuildContext context) {
@@ -144,8 +164,6 @@ class PackagePeek extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
     );
   }
-
-
 
   TextStyle? _titleStyle(BuildContext context) {
     TextStyle? blueprint = FluentTheme.of(context).typography.title;
@@ -185,17 +203,22 @@ class PackagePeek extends StatelessWidget {
     );
   }
 
-  List<Widget> _versions(AppLocalizations locale) {
-    return [
-      if (infos.version != null)
-        Text("${infos.version!.title(locale)}: ${infos.version!.value}"),
-      if (infos.availableVersion != null &&
-          infos.availableVersion!.value.isNotEmpty)
-        Text(
-            "${infos.availableVersion!.title(locale)}: ${infos.availableVersion!.value}"),
-      if(showMatch && infos.match != null && infos.match!.value.trim().isNotEmpty)
-        Text("${infos.match!.title(locale)}: ${infos.match!.value}")
-    ];
+  Widget _versions(AppLocalizations locale) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        if (infos.version != null)
+          Text("${infos.version!.title(locale)}: ${infos.version!.value}"),
+        if (infos.availableVersion != null &&
+            infos.availableVersion!.value.isNotEmpty)
+          Text(
+              "${infos.availableVersion!.title(locale)}: ${infos.availableVersion!.value}"),
+        if (showMatch &&
+            infos.match != null &&
+            infos.match!.value.trim().isNotEmpty)
+          Text("${infos.match!.title(locale)}: ${infos.match!.value}")
+      ],
+    );
   }
 
   bool isClickable() => infos.hasInfosFull();
@@ -209,9 +232,13 @@ class PackagePeek extends StatelessWidget {
 
     //}
     if (infos.screenshots == null && infos.publisherIcon == null) {
-      return DefaultFavicon(faviconSize: faviconSize, isClickable: isClickable(),);
+      return DefaultFavicon(
+        faviconSize: faviconSize,
+        isClickable: isClickable(),
+      );
     }
-    return FaviconWidget(infos: infos, faviconSize: faviconSize, isClickable: isClickable());
+    return FaviconWidget(
+        infos: infos, faviconSize: faviconSize, isClickable: isClickable());
   }
 
   static double faviconSize() => 60;

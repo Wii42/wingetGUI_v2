@@ -12,6 +12,7 @@ import '../../../widget_assets/link_button.dart';
 import '../../../winget_db/db_message.dart';
 import '../../../winget_db/winget_db.dart';
 import '../../package_infos/package_attribute.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 
 class TitleWidget extends Compartment {
   final PackageInfosFull infos;
@@ -22,38 +23,39 @@ class TitleWidget extends Compartment {
   Widget build(BuildContext context) {
     return DecoratedCard(
       padding: 20,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: buildCompartment(context),
-      ),
+      child: StreamBuilder<DBMessage>(
+          stream: WingetDB.instance.installed.stream,
+          builder: (context, snapshot) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: buildCompartment(context),
+            );
+          }),
     );
   }
 
   @override
   List<Widget> buildCompartment(BuildContext context) {
     return <Widget>[
-      AnimatedSize(
-        duration: const Duration(milliseconds: 100),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            favicon(faviconSize()),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  nameAndVersion(context),
-                  _detailsBelow(context),
-                ].withSpaceBetween(height: 10),
-              ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          favicon(faviconSize()),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                nameAndVersion(context),
+                _detailsBelow(context),
+              ].withSpaceBetween(height: 10),
             ),
-            if (infos.id != null)
-              Padding(
-                padding: const EdgeInsets.only(left: 25),
-                child: buildRightSide(),
-              ),
-          ],
-        ),
+          ),
+          if (infos.id != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 25),
+              child: buildRightSide(),
+            ),
+        ],
       ),
     ];
   }
@@ -62,8 +64,9 @@ class TitleWidget extends Compartment {
       stream: WingetDB.instance.installed.stream,
       builder: (context, snapshot) {
         bool isInstalled =
-        WingetDB.instance.installed.idMap.containsKey(infos.id?.value);
-        bool hasUpdate = WingetDB.instance.updates.idMap.containsKey(infos.id?.value);
+            WingetDB.instance.installed.idMap.containsKey(infos.id?.value);
+        bool hasUpdate =
+            WingetDB.instance.updates.idMap.containsKey(infos.id?.value);
         return RightSideButtons(
           infos: infos,
           install: !isInstalled,
@@ -111,6 +114,7 @@ class TitleWidget extends Compartment {
           LinkText(line: infos.category!.value),
           if (infos.isMicrosoftStore()) _showInStore(locale),
         ],
+        if(WingetDB.isPackageInstalled(infos)) installedIcon(context),
       ].withSpaceBetween(width: 5),
     );
   }
@@ -120,6 +124,19 @@ class TitleWidget extends Compartment {
         context: context,
         text: infos.agreement?.publisher?.text,
         url: infos.agreement?.publisher?.url);
+  }
+
+  Widget installedIcon(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(
+          icons.FluentIcons.checkmark_circle_20_regular,
+        ),
+        const SizedBox(width: 5),
+        Text(AppLocalizations.of(context)!.installed),
+      ],
+    );
   }
 
   Widget _website(AppLocalizations locale) {

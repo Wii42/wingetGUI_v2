@@ -65,7 +65,7 @@ class PackageDetailsFromWeb extends StatelessWidget {
     Locale? locale = AppLocale.of(context).guiLocale;
     AppLocalizations localization = AppLocalizations.of(context)!;
     return FutureBuilder<PackageInfosFull>(
-      future: extractOnlineFullInfos(locale),
+      future: getInfos(locale),
       builder:
           (BuildContext context, AsyncSnapshot<PackageInfosFull> snapshot) {
         if (snapshot.hasData) {
@@ -75,17 +75,18 @@ class PackageDetailsFromWeb extends StatelessWidget {
         }
         if (snapshot.hasError) {
           Object? error = snapshot.error;
+          Widget errorMessage = putInfo(error.runtimeType.toString(),
+              content: '$error\n${snapshot.stackTrace}', isLong: true);
           if (error.runtimeType == NoInternetException) {
-            return Center(
-              child: putInfo(localization.cantLoadDetails,
-                  content:
-                      '${localization.reason}: ${localization.noInternetConnection}',
-                  isLong: true),
-            );
+            errorMessage = putInfo(localization.cantLoadDetails,
+                content:
+                    '${localization.reason}: ${localization.noInternetConnection}',
+                isLong: true);
           }
-          return Center(
-            child: putInfo(error.runtimeType.toString(),
-                content: '$error\n${snapshot.stackTrace}', isLong: true),
+          return SingleChildScrollView(
+            child: Center(
+              child: errorMessage,
+            ),
           );
         }
         return const Center(
@@ -96,13 +97,41 @@ class PackageDetailsFromWeb extends StatelessWidget {
     );
   }
 
-  Future<PackageInfosFull> extractOnlineFullInfos(Locale? guiLocale) async {
+  Future<PackageInfosFull> getInfos(Locale? guiLocale) async {
+    if (package.hasCompleteId()) {
+      return extractInfosOnlineFromId(guiLocale, package.id!.value);
+    } else {
+      String idWithoutEllipsis = package.idWithoutEllipsis()!;
+      List<String> idParts = idWithoutEllipsis.split('.');
+      if (idWithoutEllipsis.endsWith('.')) {
+        idParts.add('');
+      }
+      List<String> soundParts = idParts.take(idParts.length - 1).toList();
+      GithubApi api = GithubApi.wingetManifest(packageID: soundParts.join('.'));
+      List<GithubApiFileInfo> files = await api.getFiles();
+      if (files.isEmpty) {
+        throw Exception('No files found');
+      }
+      List<GithubApiFileInfo> matchingFiles = files
+          .where((element) => element.name.startsWith(idParts.last))
+          .toList();
+      if (matchingFiles.length != 1) {
+        throw Exception('Not  1 matching file found');
+      }
+      soundParts.add(matchingFiles.single.name);
+      print(matchingFiles.map((e) => e.name));
+      return extractInfosOnlineFromId(guiLocale, soundParts.join('.'));
+    }
+  }
+
+  Future<PackageInfosFull> extractInfosOnlineFromId(
+      Locale? guiLocale, String packageID) async {
     bool hasAnyVersion =
         package.hasSpecificVersion() || package.hasSpecificAvailableVersion();
     List<GithubApiFileInfo> files;
     if (hasAnyVersion) {
       GithubApi manifestApi = GithubApi.wingetVersionManifest(
-          packageID: package.id!.value,
+          packageID: packageID,
           version: (package.hasSpecificAvailableVersion()
                   ? package.availableVersion?.value
                   : null) ??
@@ -111,11 +140,10 @@ class PackageDetailsFromWeb extends StatelessWidget {
                   : throw Exception('package has no specific version'))!);
 
       files = await manifestApi.getFiles(
-          onError: () => GithubApi.wingetManifest(packageID: package.id!.value)
-              .getFiles());
+          onError: () =>
+              GithubApi.wingetManifest(packageID: packageID).getFiles());
     } else {
-      GithubApi manifestApi =
-          GithubApi.wingetManifest(packageID: package.id!.value);
+      GithubApi manifestApi = GithubApi.wingetManifest(packageID: packageID);
 
       files = await manifestApi.getFiles();
     }
@@ -124,22 +152,21 @@ class PackageDetailsFromWeb extends StatelessWidget {
       throw Exception('No files found');
     }
     if (!WingetPackageVersionManifest.isVersionManifest(files,
-        packageId: package.id!.value)) {
+        packageId: packageID)) {
       files = await tryGetNewestVersionManifest(files);
       //throw Exception('Files are not a version manifest');
     }
 
     WingetPackageVersionManifest manifest =
-        WingetPackageVersionManifest.fromList(files,
-            packageId: package.id!.value);
+        WingetPackageVersionManifest.fromList(files, packageId: packageID);
 
     GithubApiFileInfo details;
     if (manifest.localizedFiles.length == 1) {
       details = manifest.localizedFiles.first;
     }
-    Locale locale = await chooseLocale(guiLocale, manifest);
+    Locale locale = await chooseLocale(guiLocale, manifest, packageID: packageID);
     details = manifest.localizedFiles
-        .firstWhere((element) => getLocaleFromName(element) == locale);
+        .firstWhere((element) => getLocaleFromName(element, packageID: packageID) == locale);
     YamlMap? detailsYaml = await getYaml(details.downloadUrl!);
 
     Map<dynamic, dynamic>? detailsMap = detailsYaml
@@ -160,11 +187,11 @@ class PackageDetailsFromWeb extends StatelessWidget {
   }
 
   Future<Locale> chooseLocale(
-      Locale? guiLocale, WingetPackageVersionManifest manifest) async {
+      Locale? guiLocale, WingetPackageVersionManifest manifest,{String? packageID}) async {
     List<GithubApiFileInfo> localizedFiles = manifest.localizedFiles;
 
     List<Locale> availableLocales =
-        localizedFiles.map<Locale>(getLocaleFromName).toList();
+        localizedFiles.map<Locale>((e)=> getLocaleFromName(e,packageID: packageID)).toList();
 
     if (availableLocales.length == 1) {
       return availableLocales.single;
@@ -186,9 +213,9 @@ class PackageDetailsFromWeb extends StatelessWidget {
     return defaultLocale ?? availableLocales.first;
   }
 
-  Locale getLocaleFromName(GithubApiFileInfo e) {
+  Locale getLocaleFromName(GithubApiFileInfo e, {String? packageID}) {
     String localeString = e.name
-        .replaceFirst("${package.id!.value}.locale.", '')
+        .replaceFirst("${packageID ?? package.id!.value}.locale.", '')
         .split('.')
         .first;
     return LocaleParser.parse(localeString);

@@ -43,6 +43,7 @@
   "error": "Error",
   "unexpectedError": "Unexpected error",
 
+  "installed": "Installed",
   "installSuccessful": "Installation successful",
   "uninstallSuccessful": "Uninstall successful",
 
