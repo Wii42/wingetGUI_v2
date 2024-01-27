@@ -74,13 +74,16 @@ class PaneItemBody extends StatelessWidget {
               height: iconSize,
               child: IconButton(
                 onPressed: customReload ??
-                    () async {
-                      WingetProcess newProcess = await process!.clone();
-                      navigator.pushReplacement(FluentPageRoute(
+                    () {
+                      WingetProcess newProcess = process!.clone();
+                      navigator.pushReplacement(
+                        FluentPageRoute(
                           builder: (_) => OutputPage(
-                                process: newProcess,
-                                title: title,
-                              )));
+                            process: newProcess,
+                            title: title,
+                          ),
+                        ),
+                      );
                     },
                 icon: const Icon(FluentIcons.update_restore),
               ),

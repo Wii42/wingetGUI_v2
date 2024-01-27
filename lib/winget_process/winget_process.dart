@@ -6,13 +6,11 @@ import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
 class WingetProcess {
-  final List<String> command;
   final String? name;
   final ProcessWrap process;
   late final Stream<List<String>> outputStream;
 
   WingetProcess._({
-    required this.command,
     required this.process,
     this.name,
   }) {
@@ -33,11 +31,10 @@ class WingetProcess {
         .rememberingStream();
   }
 
-  static Future<WingetProcess> runCommand(List<String> command,
-      {String? name}) async {
-    ProcessWrap process = ProcessWrap('winget', command);
+  factory WingetProcess.fromCommand(List<String> command, {String? name}) {
+    ProcessWrap process = ProcessWrap.winget(command);
     printReady(process);
-    return WingetProcess._(command: command, process: process, name: name);
+    return WingetProcess._(process: process, name: name);
   }
 
   static void printReady(ProcessWrap process) {
@@ -47,30 +44,29 @@ class WingetProcess {
     process.exitCode.then((value) => print('${process.name} done'));
   }
 
-  static Future<WingetProcess> runWinget(Winget winget) async {
-    return await runCommand(winget.fullCommand, name: winget.name);
+  factory WingetProcess.fromWinget(Winget winget) {
+    return WingetProcess.fromCommand(winget.fullCommand, name: winget.name);
   }
 
-  Future<WingetProcess> clone() async {
-    return await runCommand(command, name: name);
+  WingetProcess clone() {
+    return WingetProcess.fromCommand(command, name: name);
   }
+
+  List<String> get command => process.arguments;
 }
 
 class UnInstallingUpdatingProcess extends WingetProcess {
   final UnInstallingUpdatingType type;
   UnInstallingUpdatingProcess._(
-      {required super.command,
-      required super.process,
-      super.name,
-      required this.type})
+      {required super.process, super.name, required this.type})
       : super._();
 
-  static Future<UnInstallingUpdatingProcess> run(UnInstallingUpdatingType type,
-      {List<String> args = const []}) async {
+  factory UnInstallingUpdatingProcess.create(UnInstallingUpdatingType type,
+      {List<String> args = const []}) {
     var command = [...type.winget.fullCommand, ...args];
-    ProcessWrap process = ProcessWrap('winget', command);
+    ProcessWrap process = ProcessWrap.winget(command);
     return UnInstallingUpdatingProcess._(
-        command: command, process: process, name: type.winget.name, type: type);
+        process: process, name: type.winget.name, type: type);
   }
 }
 

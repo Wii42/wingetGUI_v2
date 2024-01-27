@@ -54,7 +54,7 @@ class _SettingsPageSate extends State<SettingsPage> {
               Winget.settings.title(localizations),
               Button(
                 onPressed: () {
-                  WingetProcess.runWinget(Winget.settings);
+                  WingetProcess.fromWinget(Winget.settings);
                 },
                 child: Text(localizations.openWingetSettingsFile),
               ),

@@ -48,12 +48,12 @@ class DBTableCreator {
   }
 
   Future<List<String>> getRawOutput(Winget wingetCommand) async {
-    WingetProcess winget = await WingetProcess.runWinget(wingetCommand);
+    WingetProcess winget = WingetProcess.fromWinget(wingetCommand);
     return await winget.outputStream.last;
   }
 
   Future<List<String>> getRawOutputC(List<String> command) async {
-    WingetProcess winget = await WingetProcess.runCommand(command);
+    WingetProcess winget = WingetProcess.fromCommand(command);
     List<String> output = await winget.outputStream.last;
     if (kDebugMode) {
       //print(output.join('\n'));
@@ -84,12 +84,14 @@ class DBTableCreator {
   }
 
   DBTable returnTable() {
-    return DBTable(extractInfos(),
-        hints: extractHints(),
-        content: content,
-        wingetCommand: wingetCommand,
-        creatorFilter: filter,
-        parentDB: parentDB,);
+    return DBTable(
+      extractInfos(),
+      hints: extractHints(),
+      content: content,
+      wingetCommand: wingetCommand,
+      creatorFilter: filter,
+      parentDB: parentDB,
+    );
   }
 
   static List<PackageInfosPeek> extractInfosStatic(

@@ -20,6 +20,7 @@ samples, guidance on mobile development, and a full API reference.
 - fix to many links found in expandable text
 
 - fix sources page
+weird bux with Canon PCL6 Driver
 
 
 

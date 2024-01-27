@@ -70,9 +70,16 @@ class InfoYamlMapParser {
       }
     }
 
-    List<InfoWithLink> list = node
-        .map((element) => InfoWithLink(title: (_) => element.toString()))
-        .toList();
+    List<InfoWithLink> list = node.map((element) {
+      if(element is YamlMap) {
+        return InfoWithLink(
+            title: (_) => element.keys.join(', '),
+            text: element['DocumentLabel'],
+            url: Uri.tryParse(element['DocumentUrl']));
+      }
+      return InfoWithLink(
+          title: (_) => element.toString(), text: element.toString());
+    }).toList();
     map.remove(attribute.yamlKey!);
     return Info<List<InfoWithLink>>(
         title: attribute.title,

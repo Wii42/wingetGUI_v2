@@ -116,7 +116,10 @@ class PackageDetailsFromWeb extends StatelessWidget {
           .where((element) => element.name.startsWith(idParts.last))
           .toList();
       if (matchingFiles.length != 1) {
-        throw Exception('Not  1 matching file found');
+        matchingFiles.removeWhere((element) => element.name == idParts.last);
+        if (matchingFiles.length != 1) {
+          throw Exception('Not  1 matching file found: ${matchingFiles.map((e) => e.name)}');
+        }
       }
       soundParts.add(matchingFiles.single.name);
       print(matchingFiles.map((e) => e.name));

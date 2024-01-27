@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
+import 'package:winget_gui/winget_process/output_page.dart';
 
-import 'winget_process/output_page_starter.dart';
 
 const String notFoundError = "NotFoundError";
 
@@ -61,10 +61,15 @@ enum Winget {
   List<String> get fullCommand => [baseCommand, ...options];
 
   Widget processPage(RouteParameter? parameters) {
-    return OutputPageStarter(
-      command: [...fullCommand, ...?parameters?.commandParameter],
-      winget: this,
-      titleInput: parameters?.titleAddon,
+    return Builder(
+      builder: (context) {
+        AppLocalizations locale = AppLocalizations.of(context)!;
+        return OutputPage.fromWinget(
+          this,
+          titleInput: parameters?.titleAddon,
+          locale: locale,
+        );
+      }
     );
   }
 

@@ -89,6 +89,20 @@ class ProcessWrap implements Process {
     ProcessScheduler.instance.addProcess(this);
   }
 
+  factory ProcessWrap.winget(List<String> arguments,
+      {String? workingDirectory,
+      Map<String, String>? environment,
+      bool includeParentEnvironment = true,
+      bool runInShell = false,
+      ProcessStartMode mode = ProcessStartMode.normal}) {
+    return ProcessWrap('winget', arguments,
+        workingDirectory: workingDirectory,
+        environment: environment,
+        includeParentEnvironment: includeParentEnvironment,
+        runInShell: runInShell,
+        mode: mode);
+  }
+
   void start() async {
     if (!hasStarted()) {
       if (kDebugMode) {

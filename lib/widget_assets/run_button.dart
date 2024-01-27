@@ -31,9 +31,9 @@ abstract class RunButton extends StatelessWidget {
 
   BaseButton buttonType(BuildContext context);
 
-  void Function()? onPressed(BuildContext context) => disabled? null : () async {
+  void Function()? onPressed(BuildContext context) => disabled? null : () {
         NavigatorState router = Navigator.of(context);
-        WingetProcess process = await WingetProcess.runCommand(command);
+        WingetProcess process = WingetProcess.fromCommand(command);
         router.push(FluentPageRoute(
             builder: (_) => OutputPage(
                   process: process,

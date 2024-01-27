@@ -23,10 +23,10 @@ class UnInstallingUpdatingButton extends CommandButton {
   @override
   void Function()? onPressed(BuildContext context) => disabled
       ? null
-      : () async {
+      : () {
           NavigatorState router = Navigator.of(context);
           UnInstallingUpdatingProcess process =
-              await UnInstallingUpdatingProcess.run(type,
+              UnInstallingUpdatingProcess.create(type,
                   args: args(infos, type.winget));
           router.push(FluentPageRoute(
               builder: (_) => UnInstallingUpdatingPage(
@@ -57,7 +57,7 @@ class UnInstallingUpdatingIconButton extends CommandIconButton {
       : () async {
           NavigatorState router = Navigator.of(context);
           UnInstallingUpdatingProcess process =
-              await UnInstallingUpdatingProcess.run(type,
+              UnInstallingUpdatingProcess.create(type,
                   args: args(infos, type.winget));
           router.push(FluentPageRoute(
               builder: (_) => UnInstallingUpdatingPage(
