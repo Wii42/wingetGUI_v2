@@ -35,6 +35,9 @@ class PackageActionProcess extends WingetProcess {
 
   void _reloadDB(
       int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
+    if(exitCode != 0){
+      return;
+    }
     type.reloadDB(exitCode, info, wingetLocale);
     WingetDB.instance.notifyListeners();
   }

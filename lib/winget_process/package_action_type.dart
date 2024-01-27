@@ -17,11 +17,14 @@ enum PackageActionType {
   static void reloadUninstall(
       int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
     WingetDB wingetDB = WingetDB.instance;
+    if(exitCode != 0){
+      return;
+    }
     if (info != null && exitCode == 0) {
       WingetDB.instance.installed.removeInfoWhere(info.probablySamePackage);
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);
     }
-    if (wingetLocale != null) {
+    if (wingetLocale != null && exitCode == 0) {
       (wingetDB.installed.reloadFuture(wingetLocale)).then(
             (_) {
           wingetDB.updates.reloadFuture(wingetLocale);

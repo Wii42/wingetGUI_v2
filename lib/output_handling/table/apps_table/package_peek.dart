@@ -213,10 +213,6 @@ class PackagePeek extends StatelessWidget {
             infos.availableVersion!.value.isNotEmpty)
           Text(
               "${infos.availableVersion!.title(locale)}: ${infos.availableVersion!.value}"),
-        if (showMatch &&
-            infos.match != null &&
-            infos.match!.value.trim().isNotEmpty)
-          Text("${infos.match!.title(locale)}: ${infos.match!.value}")
       ],
     );
   }

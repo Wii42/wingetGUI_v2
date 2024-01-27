@@ -4,6 +4,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
+import 'package:winget_gui/output_handling/output_parser.dart';
+import 'package:winget_gui/output_handling/show/show_parser.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/favicon_widget.dart';
@@ -54,7 +56,7 @@ class PackageActionWidget extends StatelessWidget {
       child: StreamBuilder(
           stream: action.process.outputStream,
           builder: (context, snapshot) {
-            //closeWidgetAfterDone(context, snapshot);
+            closeWidgetAfterDone(context, snapshot);
             return Row(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,28 +125,39 @@ class PackageActionWidget extends StatelessWidget {
       OutputHandler handler =
           OutputHandler(snapshot.data!, command: action.process.command);
       handler.determineResponsibility(wingetLocale);
-      output = handler.outputParsers.lastOrNull?.parse(wingetLocale);
+      OutputParser? lastPart = handler.outputParsers.lastOrNull;
+      if(lastPart != null && lastPart is! ShowParser){
+        output = lastPart.parse(wingetLocale);
+      }
+      //output = handler.outputParsers.lastOrNull?.parse(wingetLocale);
     }
     return Expanded(
       child: Stack(
         children: [
-          Builder(
-            builder: (context) {
-              if (output != null && output is Future) {
-                return FutureBuilder<ParsedOutput>(
-                    future: output as Future<ParsedOutput>,
-                    builder: (context, futureSnapshot) =>
-                        futureSnapshot.data?.widgetRepresentation() ??
-                        fallbackText(snapshot));
-              } else if (output != null && output is ParsedOutput) {
-                return output.singleLineRepresentations().lastOrNull ??
-                    fallbackText(snapshot);
-              } else {
-                return fallbackText(snapshot);
-              }
-            },
+          ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 50),
+            child: PositionedDirectional(
+              child: Center(
+                child: Builder(
+                  builder: (context) {
+                    if (output != null && output is Future) {
+                      return FutureBuilder<ParsedOutput>(
+                          future: output as Future<ParsedOutput>,
+                          builder: (context, futureSnapshot) =>
+                              futureSnapshot.data?.widgetRepresentation() ??
+                              fallbackText(snapshot));
+                    } else if (output != null && output is ParsedOutput) {
+                      return output.singleLineRepresentations().lastOrNull ??
+                          fallbackText(snapshot);
+                    } else {
+                      return fallbackText(snapshot);
+                    }
+                  },
+                ),
+              ),
+            ),
           ),
-          if (snapshot.connectionState != ConnectionState.done)
+          if (snapshot.connectionState != ConnectionState.done && snapshot.hasData)
             const FullWidthProgressbar(
               strokeWidth: 2,
             ),

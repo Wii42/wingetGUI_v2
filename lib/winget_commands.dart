@@ -64,10 +64,9 @@ enum Winget {
     return Builder(
       builder: (context) {
         AppLocalizations locale = AppLocalizations.of(context)!;
-        return OutputPage.fromWinget(
-          this,
+        return OutputPage.fromCommand(
+          [...fullCommand, ...?parameters?.commandParameter],
           titleInput: parameters?.titleAddon,
-          locale: locale,
         );
       }
     );
