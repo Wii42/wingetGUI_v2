@@ -33,30 +33,31 @@ class ParsedPlainText extends ParsedOutput {
   ParsedPlainText(this.lines, {this.lastIsSuccessMessage = false});
 
   @override
-  Widget? widgetRepresentation() {
-    if (lines.isEmpty) {
-      return null;
-    }
+  String toString() {
+    return "ParsedPlainText{$lines}";
+  }
 
+  @override
+  Widget listWrapper(List<Widget> widgets) {
     return Padding(
       padding: const EdgeInsetsDirectional.symmetric(horizontal: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for ((int, String) line in lines.indexed)
-            (line.$1 == lines.length - 1 && lastIsSuccessMessage)
-                ? InfoBar(
-                    title: Text(line.$2),
-                    severity: InfoBarSeverity.success,
-                  )
-                : LinkText(line: line.$2),
-        ].withSpaceBetween(height: 10),
+        children: widgets.withSpaceBetween(height: 10),
       ),
     );
   }
 
   @override
-  String toString() {
-    return "ParsedPlainText{$lines}";
+  List<Widget?> singleLineRepresentations() {
+    return [
+      for ((int, String) line in lines.indexed)
+        (line.$1 == lines.length - 1 && lastIsSuccessMessage)
+            ? InfoBar(
+                title: LinkText(line: line.$2),
+                severity: InfoBarSeverity.success,
+              )
+            : LinkText(line: line.$2),
+    ];
   }
 }

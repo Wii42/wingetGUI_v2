@@ -38,7 +38,8 @@ dependencies:
   pub_semver: ^2.1.4
   csv: ^5.1.1
   internet_connection_checker: ^1.0.0+1
-  fluentui_system_icons: ^1.1.224
+  fluentui_system_icons: ^1.1.225
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:

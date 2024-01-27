@@ -1,8 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/list/list_builder.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
 import 'package:winget_gui/output_handling/parsed_output.dart';
+
+import '../../widget_assets/decorated_card.dart';
+import '../../widget_assets/link_text.dart';
 
 class ListParser extends OutputParser {
   ListParser(super.lines);
@@ -71,7 +75,25 @@ class ParsedList extends ParsedOutput {
   ParsedList({required this.title, required this.listEntries});
 
   @override
-  Widget widgetRepresentation() {
-    return ListBuilder(title: title, list: listEntries);
+  Widget listWrapper(List<Widget> widgets) {
+    return DecoratedCard(
+      padding: 10,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: widgets.withSpaceBetween(height: 15),
+      ),
+    );
+  }
+
+  @override
+  List<Widget?> singleLineRepresentations() {
+    return [
+      Builder(builder: (context) {
+        Typography typography = FluentTheme.of(context).typography;
+        return Text('$title:', style: typography.bodyStrong);
+      }),
+      for (String key in listEntries.keys)
+        ListEntry(title: key, value: listEntries[key])
+    ];
   }
 }

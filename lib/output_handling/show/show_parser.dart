@@ -33,20 +33,21 @@ class ShowParser extends OutputParser {
     PackageInfosFull parsedInfos = PackageInfosFull.fromMap(
         details: infos, installerDetails: installerDetails, locale: locale);
 
-    if(!parsedInfos.hasVersion()){
+    if (!parsedInfos.hasVersion()) {
       extractVersionFromCommand(parsedInfos, '--version');
     }
-    if(!parsedInfos.hasVersion()){
+    if (!parsedInfos.hasVersion()) {
       extractVersionFromCommand(parsedInfos, '-v');
     }
     return parsedInfos;
-
-
   }
 
   void extractVersionFromCommand(PackageInfosFull parsedInfos, String keyword) {
-    if(command.contains(keyword) && command.indexOf(keyword) < command.length - 1){
-      parsedInfos.version = Info(title: PackageAttribute.version.title, value: command[command.indexOf(keyword) + 1]);
+    if (command.contains(keyword) &&
+        command.indexOf(keyword) < command.length - 1) {
+      parsedInfos.version = Info(
+          title: PackageAttribute.version.title,
+          value: command[command.indexOf(keyword) + 1]);
     }
   }
 
@@ -119,12 +120,12 @@ class ParsedShow extends ParsedOutput {
   ParsedShow({required this.infos, required this.command});
 
   @override
-  Widget widgetRepresentation() {
-    return ShowBuilder(infos: infos, command: command);
+  String toString() {
+    return "ParsedShow{infos: ($infos), command: $command}";
   }
 
   @override
-  String toString() {
-    return "ParsedShow{infos: ($infos), command: $command}";
+  List<Widget?> singleLineRepresentations() {
+    return [ShowBuilder(infos: infos, command: command)];
   }
 }

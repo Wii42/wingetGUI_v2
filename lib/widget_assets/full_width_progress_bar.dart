@@ -1,9 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 class FullWidthProgressbar extends StatelessWidget {
-  const FullWidthProgressbar({
-    super.key,
-  });
+  final double strokeWidth;
+  const FullWidthProgressbar({super.key, this.strokeWidth = 4.5});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +11,9 @@ class FullWidthProgressbar extends StatelessWidget {
         return SizedBox(
           height: 3,
           width: constraints.maxWidth,
-          child: const ProgressBar(
+          child: ProgressBar(
             backgroundColor: Colors.transparent,
+            strokeWidth: strokeWidth,
           ),
         );
       },

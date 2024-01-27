@@ -18,44 +18,14 @@ class OneLineInfoBuilder extends StatelessWidget {
 
   Widget infoWidgets(BuildContext context) {
     if (infos.length == 1) {
-      return oneLineInfo(infos.single, context);
+      return OneLineInfoWidget(infos.single);
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [for (OneLineInfo info in infos) oneLineInfo(info, context)]
+      children: [for (OneLineInfo info in infos) OneLineInfoWidget(info)]
           .withSpaceBetween(height: 5),
     );
   }
-
-  static Widget oneLineInfo(OneLineInfo info, BuildContext context,{void Function()? onClose}) {
-    String details = stripOfQuotationMarks(info.details);
-    if (isLink(details)) {
-      return LinkButton(url: Uri.parse(details), text: Text(info.title));
-    }
-    return InfoBar(
-      title: Text('${info.title}:'),
-      content: details.isNotEmpty ? LinkText(line: details) : null,
-      severity: info.severity,
-      onClose: onClose,
-    );
-  }
-
-  static String stripOfQuotationMarks(String string) {
-    string = string.trim();
-    if (string.startsWith(quotationMarksRegExp()) &&
-        string[string.length - 1].contains(quotationMarksRegExp()) &&
-        !string
-            .substring(1, string.length - 1)
-            .contains(quotationMarksRegExp())) {
-      string = string.substring(1, string.length - 1);
-      if (kDebugMode) {
-        print(string);
-      }
-    }
-    return string;
-  }
-
-  static RegExp quotationMarksRegExp() => RegExp(quotationMarks.join());
 
   bool isQuotationMark(String char) {
     return quotationMarks.contains(char);
@@ -93,3 +63,40 @@ const quotationMarks = [
   '„',
   '“'
 ];
+
+class OneLineInfoWidget extends StatelessWidget {
+  final OneLineInfo info;
+  final void Function()? onClose;
+  const OneLineInfoWidget(this.info, {super.key, this.onClose});
+
+  @override
+  Widget build(BuildContext context) {
+    String details = stripOfQuotationMarks(info.details);
+    if (isLink(details)) {
+      return LinkButton(url: Uri.parse(details), text: Text(info.title));
+    }
+    return InfoBar(
+      title: Text('${info.title}:'),
+      content: details.isNotEmpty ? LinkText(line: details) : null,
+      severity: info.severity,
+      onClose: onClose,
+    );
+  }
+
+  String stripOfQuotationMarks(String string) {
+    string = string.trim();
+    if (string.startsWith(quotationMarksRegExp()) &&
+        string[string.length - 1].contains(quotationMarksRegExp()) &&
+        !string
+            .substring(1, string.length - 1)
+            .contains(quotationMarksRegExp())) {
+      string = string.substring(1, string.length - 1);
+      if (kDebugMode) {
+        print(string);
+      }
+    }
+    return string;
+  }
+
+  static RegExp quotationMarksRegExp() => RegExp(quotationMarks.join());
+}

@@ -123,7 +123,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         runSpacing: 5,
         children: [
           for (OneLineInfo hint in widget.dbTable.hints)
-            OneLineInfoBuilder.oneLineInfo(hint, context, onClose: () {}),
+            OneLineInfoWidget(hint, onClose: () {}),
         ],
       ),
     );

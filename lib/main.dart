@@ -2,12 +2,15 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/main_navigation.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
+import 'package:winget_gui/package_actions_notifier.dart';
+import 'package:winget_gui/package_actions_widget.dart';
 import 'package:winget_gui/winget_db/winget_db.dart';
 import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
@@ -16,8 +19,6 @@ import 'helpers/package_screenshots_list.dart';
 import 'output_handling/one_line_info/one_line_info_builder.dart';
 
 const String appTitle = 'WingetGUI';
-
-//WingetDB wingetDB = WingetDB();
 
 void main() async {
   await initAppPrerequisites();
@@ -64,13 +65,22 @@ class WingetGui extends StatelessWidget {
             LocaleNamesLocalizationsDelegate()
           ],
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const WindowBrightnessSetter(
+          home: ChangeNotifierProvider(
+            create: (context) => PackageActionsNotifier(),
+            child: const WindowBrightnessSetter(
               child: Stack(
-            children: [
-              DBInitializer(),
-              ProcessSchedulerWarnings(),
-            ],
-          )),
+                children: [
+                  DBInitializer(),
+                  ProcessSchedulerWarnings(),
+                  Positioned(
+                    bottom: 0,
+                    left:0, right:0,
+                    child: PackageActionsList(),
+                  )
+                ],
+              ),
+            ),
+          ),
         );
       },
     );
@@ -142,7 +152,11 @@ class ProcessSchedulerWarnings extends StatelessWidget {
         if (snapshot.hasData) {
           if (snapshot.data! > 0) {
             return Positioned(
-              child: OneLineInfoBuilder.oneLineInfo(OneLineInfo(title: 'Warning', details: '${snapshot.data} processes are in queue for execution', severity: InfoBarSeverity.warning), context),
+              child: OneLineInfoWidget(OneLineInfo(
+                  title: 'Warning',
+                  details:
+                      '${snapshot.data} processes are in queue for execution',
+                  severity: InfoBarSeverity.warning)),
             );
           }
         }

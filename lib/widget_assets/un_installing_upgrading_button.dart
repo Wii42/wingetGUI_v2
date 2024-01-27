@@ -1,4 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
+import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/widget_assets/command_button.dart';
 import 'package:winget_gui/winget_process/un_installing_updating_page.dart';
 
@@ -28,6 +30,10 @@ class UnInstallingUpdatingButton extends CommandButton {
           UnInstallingUpdatingProcess process =
               UnInstallingUpdatingProcess.create(type,
                   args: args(infos, type.winget));
+          PackageAction action =
+          PackageAction(process: process, infos: infos, type: type);
+          Provider.of<PackageActionsNotifier>(context, listen: false)
+              .add(action);
           router.push(FluentPageRoute(
               builder: (_) => UnInstallingUpdatingPage(
                     process: process,
@@ -54,16 +60,23 @@ class UnInstallingUpdatingIconButton extends CommandIconButton {
   @override
   void Function()? onPressed(BuildContext context) => disabled
       ? null
-      : () async {
+      : () {
           NavigatorState router = Navigator.of(context);
           UnInstallingUpdatingProcess process =
               UnInstallingUpdatingProcess.create(type,
                   args: args(infos, type.winget));
-          router.push(FluentPageRoute(
+          PackageAction action =
+              PackageAction(process: process, infos: infos, type: type);
+          Provider.of<PackageActionsNotifier>(context, listen: false)
+              .add(action);
+          router.push(
+            FluentPageRoute(
               builder: (_) => UnInstallingUpdatingPage(
-                    process: process,
-                    title: title ?? "'$text'",
-                  )));
+                process: process,
+                title: title ?? "'$text'",
+              ),
+            ),
+          );
         };
 }
 

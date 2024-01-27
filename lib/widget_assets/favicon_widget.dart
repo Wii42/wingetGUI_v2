@@ -9,7 +9,8 @@ import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_full.dart';
 import 'decorated_card.dart';
 
-String githubFaviconUrl ='https://github.githubassets.com/favicons/favicon.svg';
+String githubFaviconUrl =
+    'https://github.githubassets.com/favicons/favicon.svg';
 
 class FaviconWidget extends StatefulWidget {
   final PackageInfos infos;
@@ -17,14 +18,17 @@ class FaviconWidget extends StatefulWidget {
   late final Uri? faviconUrl;
   final bool isClickable;
   final Uri? iconUrl;
+  final bool withRightSiePadding;
 
-  FaviconWidget(
-      {super.key,
-      required this.infos,
-      required this.faviconSize,
-      this.isClickable = true,
-      Uri? faviconUrl,
-      this.iconUrl}) {
+  FaviconWidget({
+    super.key,
+    required this.infos,
+    required this.faviconSize,
+    this.isClickable = true,
+    Uri? faviconUrl,
+    this.iconUrl,
+    this.withRightSiePadding = true,
+  }) {
     if (infos is PackageInfosFull && faviconUrl == null) {
       PackageInfosFull infosFull = infos as PackageInfosFull;
       this.faviconUrl =
@@ -51,7 +55,7 @@ class _FaviconWidgetState extends State<FaviconWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 25),
+      padding: widget.withRightSiePadding? const EdgeInsets.only(right: 25): EdgeInsets.zero,
       child: DecoratedCard(
         padding: 10,
         child: SizedBox(

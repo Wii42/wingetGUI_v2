@@ -14,7 +14,7 @@ class WingetProcess {
     required this.process,
     this.name,
   }) {
-    outputStream = _outputStream();
+    outputStream = _outputStream().asBroadcastStream();
   }
 
   Stream<List<String>> _outputStream() {

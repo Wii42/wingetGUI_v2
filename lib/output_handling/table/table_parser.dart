@@ -176,12 +176,12 @@ class ParsedTable extends ParsedOutput {
   TableData table;
   ParsedTable(this.table);
 
-  @override
-  Widget widgetRepresentation() {
-    return TableBuilder(table);
-  }
-
   bool isAppTable() => false;
+
+  @override
+  List<Widget?> singleLineRepresentations() {
+    return [TableBuilder(table)];
+  }
 }
 
 class ParsedAppTable extends ParsedTable {
@@ -191,13 +191,15 @@ class ParsedAppTable extends ParsedTable {
   ParsedAppTable(super.table, {required this.packages, required this.command});
 
   @override
-  Widget widgetRepresentation() => PackageList(packages, command: command);
-
-  @override
   bool isAppTable() => true;
 
   @override
   String toString() {
     return "ParsedAppTable{command: $command, ${packages.length} entries}";
+  }
+
+  @override
+  List<Widget?> singleLineRepresentations() {
+    return [PackageList(packages, command: command)];
   }
 }

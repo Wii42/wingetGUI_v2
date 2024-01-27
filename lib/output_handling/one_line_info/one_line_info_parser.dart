@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
 
@@ -53,8 +54,16 @@ class ParsedOneLineInfos extends ParsedOutput {
   ParsedOneLineInfos(this.infos);
 
   @override
-  Widget widgetRepresentation() {
-    return OneLineInfoBuilder(infos: infos);
+  Widget listWrapper(List<Widget> widgets) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: widgets.withSpaceBetween(height: 5),
+    );
+  }
+
+  @override
+  List<Widget?> singleLineRepresentations() {
+    return [for (OneLineInfo info in infos) OneLineInfoWidget(info)];
   }
 }
 

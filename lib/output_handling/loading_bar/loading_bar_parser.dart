@@ -85,12 +85,18 @@ class ParsedLoadingBars extends ParsedOutput {
   ParsedLoadingBars(this.loadingBars, {this.isLastCutOff = false});
 
   @override
-  Widget? widgetRepresentation() {
+  Widget listWrapper(List<Widget> widgets) {
+    return widgets.last;
+  }
+
+  @override
+  List<Widget?> singleLineRepresentations() {
     if (loadingBars.isEmpty) {
-      return null;
+      return [];
     }
-    return LoadingBarBuilder(
-        isLastCutOff ? loadingBars[loadingBars.length - 2] : loadingBars.last);
+    Iterable<LoadingBar> visibleBars =
+        isLastCutOff ? loadingBars.take(loadingBars.length - 1) : loadingBars;
+    return [for (LoadingBar bar in visibleBars) LoadingBarBuilder(bar)];
   }
 }
 
