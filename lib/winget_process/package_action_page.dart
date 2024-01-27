@@ -1,20 +1,15 @@
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/output_handling/plain_text/plain_text_parser.dart';
-import 'package:winget_gui/winget_process/winget_process.dart';
+import 'package:winget_gui/winget_process/package_action_process.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_handling/output_handler.dart';
-import '../output_handling/package_infos/package_infos_full.dart';
 import '../output_handling/parsed_output.dart';
-import '../output_handling/show/show_parser.dart';
-import '../winget_db/winget_db.dart';
 import 'output_page.dart';
 
-class UnInstallingUpdatingPage extends OutputPage {
-  const UnInstallingUpdatingPage(
-      {super.key, required UnInstallingUpdatingProcess process, super.title})
+class PackageActionPage extends OutputPage {
+  const PackageActionPage(
+      {super.key, required PackageActionProcess process, super.title})
       : super(process: process);
 
   @override
@@ -38,31 +33,6 @@ class UnInstallingUpdatingPage extends OutputPage {
       NavigatorState navigator,
       List<Widget> outputList,
       AppLocalizations guiLocale) {
-    Iterable<ParsedPlainText> plainText =
-        parsedOutput.whereType<ParsedPlainText>();
-    //print(plainText);
-    Iterable<ParsedShow> show = parsedOutput.whereType<ParsedShow>();
-    UnInstallingUpdatingProcess p = process as UnInstallingUpdatingProcess;
-    if (plainText.isNotEmpty &&
-        plainText.last.lastIsSuccessMessage &&
-        show.isNotEmpty) {
-      PackageInfosFull info = show.last.infos;
-      WingetDB wingetDB = WingetDB.instance;
-      if (p.type == UnInstallingUpdatingType.uninstall) {
-        WingetDB.instance.installed.removeInfoWhere(info.probablySamePackage);
-        wingetDB.updates.removeInfoWhere(info.probablySamePackage);
-        (wingetDB.installed.reloadFuture(wingetLocale)).then((_) {
-          wingetDB.updates.reloadFuture(wingetLocale);
-        });
-      } else if (p.type == UnInstallingUpdatingType.install) {
-        wingetDB.installed.addInfo(info.toPeek());
-        wingetDB.installed.reloadFuture(wingetLocale);
-      } else if (p.type == UnInstallingUpdatingType.update) {
-        wingetDB.updates.removeInfoWhere(info.probablySamePackage);
-        wingetDB.updates.reloadFuture(wingetLocale);
-      }
-      wingetDB.notifyListeners();
-    }
     addBackButton(navigator, outputList, guiLocale);
   }
 

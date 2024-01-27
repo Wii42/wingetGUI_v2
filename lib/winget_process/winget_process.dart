@@ -4,10 +4,6 @@ import 'dart:convert';
 import 'package:winget_gui/helpers/extensions/stream_modifier.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../output_handling/package_infos/package_infos_peek.dart';
-import '../winget_db/winget_db.dart';
 
 class WingetProcess {
   final String? name;
@@ -15,7 +11,7 @@ class WingetProcess {
   late final Stream<List<String>> outputStream;
   final List<void Function(int)> _onDoneCallbacks = [];
 
-  WingetProcess._({
+  WingetProcess({
     required this.process,
     this.name,
   }) {
@@ -40,7 +36,7 @@ class WingetProcess {
   factory WingetProcess.fromCommand(List<String> command, {String? name}) {
     ProcessWrap process = ProcessWrap.winget(command);
     printReady(process);
-    return WingetProcess._(process: process, name: name);
+    return WingetProcess(process: process, name: name);
   }
 
   static void printReady(ProcessWrap process) {
@@ -68,87 +64,5 @@ class WingetProcess {
     for (void Function(int) callback in _onDoneCallbacks) {
       callback(exitCode);
     }
-  }
-}
-
-class UnInstallingUpdatingProcess extends WingetProcess {
-  final UnInstallingUpdatingType type;
-  UnInstallingUpdatingProcess._(
-      {required super.process,
-      super.name,
-      required this.type,
-      PackageInfosPeek? info,
-      AppLocalizations? wingetLocale})
-      : super._() {
-    addOnDoneCallback(
-      (exitCode) => _reloadDB(exitCode, info, wingetLocale),
-    );
-  }
-
-  factory UnInstallingUpdatingProcess.create(UnInstallingUpdatingType type,
-      {List<String> args = const [],
-      required PackageInfosPeek? info,
-      required AppLocalizations? wingetLocale}) {
-    var command = [...type.winget.fullCommand, ...args];
-    ProcessWrap process = ProcessWrap.winget(command);
-    return UnInstallingUpdatingProcess._(
-        process: process,
-        name: type.winget.name,
-        type: type,
-        info: info,
-        wingetLocale: wingetLocale);
-  }
-
-  void _reloadDB(
-      int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
-    print('exit code: $exitCode');
-    type.reloadDB(exitCode, info, wingetLocale);
-    WingetDB.instance.notifyListeners();
-  }
-}
-
-enum UnInstallingUpdatingType {
-  uninstall(Winget.uninstall, reloadUninstall),
-  install(Winget.install, reloadInstall),
-  update(Winget.upgrade, reloadUpdate);
-
-  final Winget winget;
-  final void Function(
-          int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale)
-      reloadDB;
-  const UnInstallingUpdatingType(this.winget, this.reloadDB);
-
-  static void reloadUninstall(
-      int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
-    WingetDB wingetDB = WingetDB.instance;
-    if (info != null && exitCode == 0) {
-      WingetDB.instance.installed.removeInfoWhere(info.probablySamePackage);
-      wingetDB.updates.removeInfoWhere(info.probablySamePackage);
-    }
-    if (wingetLocale != null) {
-      (wingetDB.installed.reloadFuture(wingetLocale)).then(
-        (_) {
-          wingetDB.updates.reloadFuture(wingetLocale);
-        },
-      );
-    }
-  }
-
-  static void reloadInstall(
-      int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
-    WingetDB wingetDB = WingetDB.instance;
-    if (info != null && exitCode == 0) {
-      wingetDB.installed.addInfo(info);
-    }
-    if (wingetLocale != null) wingetDB.installed.reloadFuture(wingetLocale);
-  }
-
-  static void reloadUpdate(
-      int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
-    WingetDB wingetDB = WingetDB.instance;
-    if (info != null && exitCode == 0) {
-      wingetDB.updates.removeInfoWhere(info.probablySamePackage);
-    }
-    if (wingetLocale != null) wingetDB.updates.reloadFuture(wingetLocale);
   }
 }

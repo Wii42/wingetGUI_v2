@@ -1,11 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/widget_assets/un_installing_upgrading_button.dart';
+import 'package:winget_gui/widget_assets/package_action_button.dart';
 
 import '../output_handling/package_infos/package_infos.dart';
 import '../winget_commands.dart';
-import '../winget_process/winget_process.dart';
+import '../winget_process/package_action_type.dart';
 import 'command_button.dart';
 
 class RightSideButtons extends StatelessWidget {
@@ -35,17 +35,17 @@ class RightSideButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return buttons([
       ButtonInfo(
-          type: UnInstallingUpdatingType.install,
+          type: PackageActionType.install,
           visibility: ButtonVisibility.from(
               active: install,
               showIfInactive: showUnselectedOptionsAsDisabled)),
       ButtonInfo(
-          type: UnInstallingUpdatingType.update,
+          type: PackageActionType.update,
           visibility: ButtonVisibility.from(
               active: upgrade,
               showIfInactive: showUnselectedOptionsAsDisabled)),
       ButtonInfo(
-          type: UnInstallingUpdatingType.uninstall,
+          type: PackageActionType.uninstall,
           visibility: ButtonVisibility.from(
               active: uninstall,
               showIfInactive: showUnselectedOptionsAsDisabled)),
@@ -77,7 +77,7 @@ class RightSideButtons extends StatelessWidget {
   Widget? createButton(ButtonInfo buttonInfo, AppLocalizations locale) {
     if (buttonInfo.visibility == ButtonVisibility.invisible) return null;
     String appName = infos.name?.value ?? infos.id!.value;
-    UnInstallingUpdatingType command = buttonInfo.type;
+    PackageActionType command = buttonInfo.type;
     if (iconsOnly) {
       assert(command.winget.icon != null);
       return iconButton(command, locale, appName,
@@ -88,9 +88,9 @@ class RightSideButtons extends StatelessWidget {
   }
 
   CommandButton textButton(
-      UnInstallingUpdatingType command, AppLocalizations locale, String appName,
+      PackageActionType command, AppLocalizations locale, String appName,
       {required bool disabled}) {
-    return UnInstallingUpdatingButton(
+    return PackageActionButton(
       text: command.winget.title(locale),
       command: _createCommand(command.winget, locale),
       title: command.winget.titleWithInput(appName, localization: locale),
@@ -102,7 +102,7 @@ class RightSideButtons extends StatelessWidget {
   }
 
   CommandIconButton iconButton(
-      UnInstallingUpdatingType command, AppLocalizations locale, String appName,
+      PackageActionType command, AppLocalizations locale, String appName,
       {required bool disabled}) {
     return UnInstallingUpdatingIconButton(
       text: command.winget.title(locale),
@@ -140,7 +140,7 @@ class RightSideButtons extends StatelessWidget {
 }
 
 class ButtonInfo {
-  final UnInstallingUpdatingType type;
+  final PackageActionType type;
   final ButtonVisibility visibility;
   const ButtonInfo({required this.type, required this.visibility});
 }

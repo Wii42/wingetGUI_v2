@@ -90,7 +90,7 @@ class ParsedList extends ParsedOutput {
     return [
       Builder(builder: (context) {
         Typography typography = FluentTheme.of(context).typography;
-        return Text('$title:', style: typography.bodyStrong);
+        return LinkText(line: '$title:', style: typography.bodyStrong);
       }),
       for (String key in listEntries.keys)
         ListEntry(title: key, value: listEntries[key])

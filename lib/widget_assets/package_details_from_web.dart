@@ -122,7 +122,6 @@ class PackageDetailsFromWeb extends StatelessWidget {
         }
       }
       soundParts.add(matchingFiles.single.name);
-      print(matchingFiles.map((e) => e.name));
       return extractInfosOnlineFromId(guiLocale, soundParts.join('.'));
     }
   }

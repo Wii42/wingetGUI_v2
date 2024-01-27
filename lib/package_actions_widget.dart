@@ -60,16 +60,14 @@ class PackageActionWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (action.infos != null)
-                    ...[
-                      const SizedBox(),
-                      FaviconWidget(
-                        infos: action.infos!,
-                        faviconSize: 20,
-                        withRightSiePadding: false,
-                      ),
-                    ]
-                  else
+                  if (action.infos != null) ...[
+                    const SizedBox(),
+                    FaviconWidget(
+                      infos: action.infos!,
+                      faviconSize: 20,
+                      withRightSiePadding: false,
+                    ),
+                  ] else
                     const SizedBox(
                       width: 10,
                     ),
