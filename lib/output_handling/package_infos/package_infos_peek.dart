@@ -87,4 +87,7 @@ class PackageInfosPeek extends PackageInfos {
       ),
     );
   }
+
+  @override
+  PackageInfosPeek toPeek() => this;
 }

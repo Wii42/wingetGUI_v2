@@ -8,7 +8,6 @@ import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/favicon_widget.dart';
 import 'package:winget_gui/widget_assets/full_width_progress_bar.dart';
-import 'package:winget_gui/winget_process/winget_process.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'output_handling/parsed_output.dart';

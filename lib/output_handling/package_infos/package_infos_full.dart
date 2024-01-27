@@ -212,6 +212,7 @@ class PackageInfosFull extends PackageInfos {
     ].join(', ');
   }
 
+  @override
   PackageInfosPeek toPeek() {
     String? source = isWinget()
         ? 'winget'

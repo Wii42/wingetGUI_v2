@@ -1,5 +1,6 @@
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 
 import '../../helpers/package_screenshots.dart';
 import '../../helpers/package_screenshots_list.dart';
@@ -128,4 +129,6 @@ abstract class PackageInfos {
     }
     return info.value;
   }
+
+  PackageInfosPeek toPeek();
 }

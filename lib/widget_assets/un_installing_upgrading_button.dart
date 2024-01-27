@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
+import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/widget_assets/command_button.dart';
 import 'package:winget_gui/winget_process/un_installing_updating_page.dart';
@@ -26,19 +27,15 @@ class UnInstallingUpdatingButton extends CommandButton {
   void Function()? onPressed(BuildContext context) => disabled
       ? null
       : () {
-          NavigatorState router = Navigator.of(context);
           UnInstallingUpdatingProcess process =
               UnInstallingUpdatingProcess.create(type,
-                  args: args(infos, type.winget));
+                  args: args(infos, type.winget),
+                  info: infos.toPeek(),
+                  wingetLocale: OutputHandler.getWingetLocale(context));
           PackageAction action =
-          PackageAction(process: process, infos: infos, type: type);
+              PackageAction(process: process, infos: infos, type: type);
           Provider.of<PackageActionsNotifier>(context, listen: false)
               .add(action);
-          router.push(FluentPageRoute(
-              builder: (_) => UnInstallingUpdatingPage(
-                    process: process,
-                    title: title ?? "'$text'",
-                  )));
         };
 }
 
@@ -61,22 +58,14 @@ class UnInstallingUpdatingIconButton extends CommandIconButton {
   void Function()? onPressed(BuildContext context) => disabled
       ? null
       : () {
-          NavigatorState router = Navigator.of(context);
           UnInstallingUpdatingProcess process =
               UnInstallingUpdatingProcess.create(type,
-                  args: args(infos, type.winget));
+                  args: args(infos, type.winget), info: infos.toPeek(),
+                  wingetLocale: OutputHandler.getWingetLocale(context));
           PackageAction action =
               PackageAction(process: process, infos: infos, type: type);
           Provider.of<PackageActionsNotifier>(context, listen: false)
               .add(action);
-          router.push(
-            FluentPageRoute(
-              builder: (_) => UnInstallingUpdatingPage(
-                process: process,
-                title: title ?? "'$text'",
-              ),
-            ),
-          );
         };
 }
 
