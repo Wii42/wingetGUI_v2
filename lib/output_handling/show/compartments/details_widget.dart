@@ -59,7 +59,7 @@ class DetailsWidget extends ExpanderCompartment {
           otherButtons: [
             if (infos.publisherID != null)
               Button(
-                child: Text(locale.moreFromPublisher(infos.publisherID!)),
+                child: Text(locale.moreFromPublisher(infos.publisherName?? infos.publisherID!)),
                 onPressed: () {
                   Navigator.of(context).pushNamed(Routes.publisherPage.route,
                       arguments:

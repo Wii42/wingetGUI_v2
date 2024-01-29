@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -13,15 +15,20 @@ import '../output_handling/package_infos/package_infos_peek.dart';
 class PackageScreenshotsList {
   static const String wingetUIScreenshotDatabaseUrl =
       'https://raw.githubusercontent.com/marticliment/WingetUI/main/WebBasedData/screenshot-database-v2.json';
-  static final Uri source = Uri.parse(wingetUIScreenshotDatabaseUrl);
+  static const String wingetUIInvalidScreenshotsUrl =
+      "https://raw.githubusercontent.com/marticliment/WingetUI/main/WebBasedData/invalid_urls.txt";
+  static final Uri screenshotsSource = Uri.parse(wingetUIScreenshotDatabaseUrl);
+  static final Uri invalidScreenshotsSource =
+      Uri.parse(wingetUIInvalidScreenshotsUrl);
   static const String _packageScreenshotsKey = 'packagePictures';
   SharedPreferences? _prefs;
   static final PackageScreenshotsList instance = PackageScreenshotsList._();
 
   Map<String, PackageScreenshots> screenshotMap = {};
+  List<Uri> invalidScreenshotUrls = [];
   final Map<String, String> _idToPackageKeyMap = {};
 
-  Map<String, Uri> publisherIcons = {};
+  Map<String, PublisherObject> publisherIcons = {};
   Map<String, PackageScreenshots> customIcons = {};
 
   PackageScreenshotsList._();
@@ -38,8 +45,8 @@ class PackageScreenshotsList {
   String _getStringFromSharedPreferences() =>
       _prefs!.getString(_packageScreenshotsKey) ?? '';
 
-  Future<String> _getStringFromWeb() async {
-    Response request = await get(source);
+  Future<String> _getStringFromWeb(Uri url) async {
+    Response request = await get(url);
     return request.body;
   }
 
@@ -120,8 +127,27 @@ class PackageScreenshotsList {
 
   Future<void> fetchWebScreenshots() async {
     try {
-      String data = await _getStringFromWeb();
+      String data = await _getStringFromWeb(screenshotsSource);
       screenshotsFromJson(data);
+      if (kDebugMode) {
+        print('web data fetched');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  Future<void> fetchWebInvalidScreenshots() async {
+    try {
+      String data = await _getStringFromWeb(invalidScreenshotsSource);
+      List<String> lines = data.split('\n');
+      invalidScreenshotUrls = lines
+          .map<Uri?>((e) => Uri.tryParse(e.trim()))
+          .where((element) => element != null)
+          .cast<Uri>()
+          .toList();
       if (kDebugMode) {
         print('web data fetched');
       }
@@ -134,10 +160,16 @@ class PackageScreenshotsList {
 
   Future<void> fetchScreenshots() async {
     await ensureInitialized();
-    await loadPublisherIcons();
-    loadScreenshots();
-    await fetchWebScreenshots();
-    await loadCustomIcons();
+    await fetchWebInvalidScreenshots();
+    await Future.wait([
+      //loadPublisherIcons(),
+      loadPublisherJson(),
+      fetchWebScreenshots(),
+      loadCustomIcons(),
+    ]);
+    if (screenshotMap.isEmpty) {
+      loadScreenshots();
+    }
   }
 
   PackageScreenshots? getPackage(PackageInfos packageInfos) {
@@ -216,26 +248,35 @@ class PackageScreenshotsList {
     }
   }
 
-  Future<void> loadPublisherIcons() async {
-    Iterable<String> lines = await loadAsset('publisher_icons.csv');
-    for (String line in lines) {
-      List<String> parts = line.split(',');
-      if (parts.length < 2) {
-        continue;
-      }
-      String publisher = parts[0];
-      String iconUrl = parts[1];
-
-      if (iconUrl.trim().isEmpty) {
-        continue;
-      }
-      Uri? url = Uri.tryParse(iconUrl);
-      if (url == null) {
-        continue;
-      }
-
-      publisherIcons[publisher] = url;
+  Future<void> loadPublisherJson() async {
+    Iterable<String> lines = await loadAsset('publisher.json');
+    if (lines.isEmpty) {
+      return;
     }
+    publisherIcons = _parsePublisherJson(lines.join('\n'));
+  }
+
+  Map<String, PublisherObject> _parsePublisherJson(String data) {
+    Map<String, dynamic> json = jsonDecode(data);
+    return json.map((key, value) {
+      return MapEntry(key, PublisherObject.fromJson(key, value));
+    });
+  }
+
+  List<String> _parseCsvLine(String line) {
+    return line.split(',');
+  }
+
+  bool _isHeaderCorrect(List<String> header, List<String> expected) {
+    if (header.length != expected.length) {
+      return false;
+    }
+    for (int i = 0; i < header.length; i++) {
+      if (header[i] != expected[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 
   Future<Iterable<String>> loadAsset(String fileName) async {
@@ -246,11 +287,34 @@ class PackageScreenshotsList {
 
   Future<void> reloadPublisherIcons() async {
     publisherIcons.clear();
-    await loadPublisherIcons();
+    await loadPublisherJson();
   }
 
   Future<void> reloadCustomIcons() async {
     customIcons.clear();
     await loadCustomIcons();
+  }
+}
+
+class PublisherObject {
+  final String publisherId;
+  final String? publisherName;
+  final Uri? iconUrl;
+
+  const PublisherObject(
+      {required this.publisherId, this.publisherName, this.iconUrl});
+
+  factory PublisherObject.fromJson(
+      String publisherId, Map<String, dynamic> object) {
+    String? iconUrl = object['icon_url'];
+    return PublisherObject(
+        publisherId: publisherId,
+        publisherName: object['publisher_name'],
+        iconUrl: iconUrl != null ? Uri.tryParse(object['icon_url']) : null);
+  }
+
+  @override
+  String toString() {
+    return 'PublisherObject{publisherId: $publisherId, publisherName: $publisherName, iconUrl: $iconUrl}';
   }
 }

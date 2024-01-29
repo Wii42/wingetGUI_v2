@@ -38,6 +38,8 @@ class WingetDB {
     yield* availableCreator.init(wingetLocale);
     available = availableCreator.returnTable();
 
+
+    printPublishersPackageNrs();
     isInitialized = true;
     return;
   }

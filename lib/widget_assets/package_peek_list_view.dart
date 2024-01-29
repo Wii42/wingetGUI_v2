@@ -171,7 +171,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       packages = packages
           .where((element) =>
               (element.name?.value.containsCaseInsensitive(filter) ?? false) ||
-              (element.id?.value.containsCaseInsensitive(filter) ?? false))
+              (element.id?.value.containsCaseInsensitive(filter) ?? false) ||
+              (element.publisherName?.containsCaseInsensitive(filter) ?? false))
           .toList();
     }
     return packages;

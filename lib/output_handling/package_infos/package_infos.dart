@@ -14,6 +14,7 @@ abstract class PackageInfos {
   PackageScreenshots? screenshots;
   bool checkedForScreenshots = false;
   Uri? publisherIcon;
+  String? publisherName;
 
   PackageInfos({
     this.name,
@@ -23,7 +24,10 @@ abstract class PackageInfos {
     this.checkedForScreenshots = false,
     this.publisherIcon,
     this.otherInfos,
-  });
+  }) {
+    publisherName = PackageScreenshotsList
+        .instance.publisherIcons[probablyPublisherID()]?.publisherName;
+  }
 
   bool hasVersion() => (version != null && version?.value != 'Unknown');
   bool hasSpecificVersion() =>
@@ -36,8 +40,8 @@ abstract class PackageInfos {
   void setImplicitInfos() {
     screenshots = PackageScreenshotsList.instance.getPackage(this);
     checkedForScreenshots = true;
-    publisherIcon =
-        PackageScreenshotsList.instance.publisherIcons[probablyPublisherID()];
+    publisherIcon = PackageScreenshotsList
+        .instance.publisherIcons[probablyPublisherID()]?.iconUrl;
     //print('name: ${name?.value}, publisherIcon: $publisherIcon');
   }
 

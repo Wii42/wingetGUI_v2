@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/helpers/package_screenshots_list.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/widget_assets/favicon_widget.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
@@ -125,7 +126,10 @@ class PackagePeek extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         Text(
-          infos.publisherID ?? infos.id?.value ?? '<ID>',
+          infos.publisherName ??
+              infos.publisherID ??
+              infos.id?.value ??
+              '<ID>',
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
         ),
@@ -138,7 +142,7 @@ class PackagePeek extends StatelessWidget {
     bool showSource = infos.source != null && infos.source!.value.isNotEmpty;
     bool showId = infos.id != null &&
         infos.id!.value.isNotEmpty &&
-        infos.publisherID != null;
+        (infos.publisherID != null || infos.publisherName != null);
     return Row(
       children: [
         if (showSource)

@@ -151,7 +151,7 @@ class _FaviconWidgetState extends State<FaviconWidget> {
     );
   }
 
-  Color defaultColor() {
+  Color? defaultColor() {
     return FluentTheme.of(context)
         .inactiveColor
         .withAlpha(widget.isClickable ? 100 : 50);

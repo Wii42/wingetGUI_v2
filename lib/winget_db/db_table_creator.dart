@@ -99,7 +99,10 @@ class DBTableCreator {
       {List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter}) {
     Iterable<ParsedAppTable> appTables = parsed.whereType<ParsedAppTable>();
     if (appTables.isEmpty) {
-      throw Exception("No AppTables found in $content");
+      if (kDebugMode) {
+        print("No AppTables found in $content, $parsed");
+      }
+      return [];
     }
     List<PackageInfosPeek> infos = [];
     for (ParsedAppTable table in appTables) {

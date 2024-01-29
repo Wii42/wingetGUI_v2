@@ -13,8 +13,9 @@ import '../winget_db/winget_db.dart';
 
 class PublisherPage extends StatelessWidget {
   final String publisherId;
+  final String? publisherName;
 
-  const PublisherPage({super.key, required this.publisherId});
+  const PublisherPage({super.key, required this.publisherId, this.publisherName});
 
   static Widget inRoute(RouteParameter? parameters) {
     if (parameters! is! StringRouteParameter) {
@@ -22,14 +23,16 @@ class PublisherPage extends StatelessWidget {
           'Invalid route parameters, must be StringRouteParameter'));
     }
     String publisherId = (parameters as StringRouteParameter).string;
+    String? publisherName =
+        PackageScreenshotsList.instance.publisherIcons[publisherId]?.publisherName;
 
-    return PublisherPage(publisherId: publisherId);
+    return PublisherPage(publisherId: publisherId, publisherName: publisherName);
   }
 
   @override
   Widget build(BuildContext context) {
     return PackageListPage(
-      title: publisherId,
+      title: publisherName ?? publisherId,
       bodyHeader: publisherTitle(context),
       listView: PackagePeekListView(
         dbTable: DBTable(
@@ -62,13 +65,13 @@ class PublisherPage extends StatelessWidget {
         children: [
           FaviconWidget(
             infos: PackageInfosPeek(),
-            iconUrl:
-                PackageScreenshotsList.instance.publisherIcons[publisherId],
+            iconUrl: PackageScreenshotsList
+                .instance.publisherIcons[publisherId]?.iconUrl,
             faviconSize: TitleWidget.faviconSize(),
           ),
           Expanded(
             child: Text(
-              publisherId,
+              publisherName?? publisherId,
               style: typography.titleLarge,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

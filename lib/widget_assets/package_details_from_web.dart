@@ -118,7 +118,16 @@ class PackageDetailsFromWeb extends StatelessWidget {
       if (matchingFiles.length != 1) {
         matchingFiles.removeWhere((element) => element.name == idParts.last);
         if (matchingFiles.length != 1) {
-          throw Exception('Not  1 matching file found: ${matchingFiles.map((e) => e.name)}');
+          List<GithubApiFileInfo> matchingFilesByName = matchingFiles
+              .where((element) =>
+                  package.name?.value.replaceAll(' ', '').endsWith(element.name) ?? false)
+              .toList();
+          if (matchingFilesByName.length == 1) {
+            matchingFiles = matchingFilesByName;
+          } else {
+            throw Exception(
+                'Not  1 matching file found: ${matchingFiles.map((e) => e.name)}');
+          }
         }
       }
       soundParts.add(matchingFiles.single.name);
@@ -166,9 +175,10 @@ class PackageDetailsFromWeb extends StatelessWidget {
     if (manifest.localizedFiles.length == 1) {
       details = manifest.localizedFiles.first;
     }
-    Locale locale = await chooseLocale(guiLocale, manifest, packageID: packageID);
-    details = manifest.localizedFiles
-        .firstWhere((element) => getLocaleFromName(element, packageID: packageID) == locale);
+    Locale locale =
+        await chooseLocale(guiLocale, manifest, packageID: packageID);
+    details = manifest.localizedFiles.firstWhere((element) =>
+        getLocaleFromName(element, packageID: packageID) == locale);
     YamlMap? detailsYaml = await getYaml(details.downloadUrl!);
 
     Map<dynamic, dynamic>? detailsMap = detailsYaml
@@ -189,11 +199,13 @@ class PackageDetailsFromWeb extends StatelessWidget {
   }
 
   Future<Locale> chooseLocale(
-      Locale? guiLocale, WingetPackageVersionManifest manifest,{String? packageID}) async {
+      Locale? guiLocale, WingetPackageVersionManifest manifest,
+      {String? packageID}) async {
     List<GithubApiFileInfo> localizedFiles = manifest.localizedFiles;
 
-    List<Locale> availableLocales =
-        localizedFiles.map<Locale>((e)=> getLocaleFromName(e,packageID: packageID)).toList();
+    List<Locale> availableLocales = localizedFiles
+        .map<Locale>((e) => getLocaleFromName(e, packageID: packageID))
+        .toList();
 
     if (availableLocales.length == 1) {
       return availableLocales.single;
