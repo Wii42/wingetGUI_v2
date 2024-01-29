@@ -63,7 +63,6 @@ enum Winget {
   Widget processPage(RouteParameter? parameters) {
     return Builder(
       builder: (context) {
-        AppLocalizations locale = AppLocalizations.of(context)!;
         return OutputPage.fromCommand(
           [...fullCommand, ...?parameters?.commandParameter],
           titleInput: parameters?.titleAddon,

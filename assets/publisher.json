@@ -278,5 +278,215 @@
   },
   "VisualParadigm": {
     "publisher_name": "Visual Paradigm"
+  },
+  "3TSoftwareLabs": {
+    "publisher_name": "3T Software Labs"
+  },
+  "4tNiagaraSoftware": {
+    "publisher_name": "4t Niagara Software"
+  },
+  "AAAInternetPublishing": {
+    "publisher_name": "AAA Internet Publishing"
+  },
+  "AAS": {
+    "publisher_name": "American Astronomical Society"
+  },
+  "ACEStudio": {
+    "publisher_name": "ACE Studio"
+  },
+  "ASGARDEXMaintainers": {
+    "publisher_name": "ASGARDEX Maintainers"
+  },
+  "AVRDudes": {
+    "publisher_name": "AVR Dudes"
+  },
+  "AbdelrahmanBayoumi": {
+    "publisher_name": "Abdelrahman Bayoumi"
+  },
+  "AceStream": {
+    "publisher_name": "Ace Stream"
+  },
+  "AcornLabs": {
+    "publisher_name": "Acorn Labs"
+  },
+  "AcroSoftwareInc": {
+    "publisher_name": "Acro Software"
+  },
+  "AdamMiskiewicz": {
+    "publisher_name": "Adam Miskiewicz"
+  },
+  "AderitoNeto": {
+    "publisher_name": "Aderito Neto"
+  },
+  "AdrienAllard": {
+    "publisher_name": "Adrien Allard"
+  },
+  "AfreetSoftware": {
+    "publisher_name": "Afreet Software"
+  },
+  "AirExplorer": {
+    "publisher_name": "Air Explorer"
+  },
+  "AivarAnnamaa": {
+    "publisher_name": "Aivar Annamaa"
+  },
+  "AlekseyHoffman": {
+    "publisher_name": "Aleksey Hoffman"
+  },
+  "AlexKaul": {
+    "publisher_name": "Alex Kaul"
+  },
+  "AlexRedden": {
+    "publisher_name": "Alex Redden"
+  },
+  "AlexThuering": {
+    "publisher_name": "Alex Thuering"
+  },
+  "AlexanderKojevnikov": {
+    "publisher_name": "Alexander Kojevnikov"
+  },
+  "AlexanderPershin": {
+    "publisher_name": "Alexander Pershin"
+  },
+  "AlexandrSubbotin": {
+    "publisher_name": "Alexandr Subbotin"
+  },
+  "AllanBoll": {
+    "publisher_name": "Allan Boll"
+  },
+  "Allen&Heath": {
+    "publisher_name": "Allen & Heath"
+  },
+  "AllroundAutomations": {
+    "publisher_name": "Allround Automations"
+  },
+  "AmanHarwara": {
+    "publisher_name": "Aman Harwara"
+  },
+  "AmericanRadioRelayLeague": {
+    "publisher_name": "American Radio Relay League"
+  },
+  "AnalogDevices": {
+    "publisher_name": "Analog Devices"
+  },
+  "AndreWiethoff": {
+    "publisher_name": "Andre Wiethoff"
+  },
+  "AndreasWascher": {
+    "publisher_name": "Andreas Wäscher"
+  },
+  "AndresMorelos": {
+    "publisher_name": "Andres Morelos"
+  },
+  "AndrewZhezherun": {
+    "publisher_name": "Andrew Zhezherun"
+  },
+  "AngusJohnson": {
+    "publisher_name": "Angus Johnson"
+  },
+  "AntSoftware": {
+    "publisher_name": "Ant Software"
+  },
+  "AnthonyBeaumont": {
+    "publisher_name": "Anthony Beaumont"
+  },
+  "AntibodySoftware": {
+    "publisher_name": "Antibody Software"
+  },
+  "AntoineAflalo": {
+    "publisher_name": "Antoine Aflalo"
+  },
+  "AntoniKepinski": {
+    "publisher_name": "Antoni Kępiński"
+  },
+  "AntonyCourtney": {
+    "publisher_name": "Antony Courtney"
+  },
+  "AntstreamLtd": {
+    "publisher_name": "Antstream"
+  },
+  "AnyAssociation": {
+    "publisher_name": "Any Association"
+  },
+  "AnyDeskSoftwareGmbH": {
+    "publisher_name": "AnyDesk Software"
+  },
+  "ApacheFriends": {
+    "publisher_name": "Apache Friends"
+  },
+  "AppiumDevelopers": {
+    "publisher_name": "Appium Developers"
+  },
+  "AprelTech": {
+    "publisher_name": "Aprel Tech"
+  },
+  "AquaSecurity": {
+    "publisher_name": "Aqua Security"
+  },
+  "ArduinoSA": {
+    "publisher_name": "Arduino SA"
+  },
+  "ArmagetronAdvancedTeam": {
+    "publisher_name": "Armagetron Advanced Team"
+  },
+  "ArobasMusic": {
+    "publisher_name": "Arobas Music"
+  },
+  "ArrayNetworks": {
+    "publisher_name": "Array Networks"
+  },
+  "ArtifexSoftware": {
+    "publisher_name": "Artifex Software"
+  },
+  "ArtisteerLimited": {
+    "publisher_name": "Artisteer Limited"
+  },
+  "ArtisticStyle": {
+    "publisher_name": "Artistic Style"
+  },
+  "AsaphaHalifa": {
+    "publisher_name": "Asapha Halifa"
+  },
+  "AshishBharadwajJ": {
+    "publisher_name": "Ashish Bharadwaj J"
+  },
+  "AshleyStone": {
+    "publisher_name": "Ashley Stone"
+  },
+  "AsiasoftOnline": {
+    "publisher_name": "Asiasoft Online"
+  },
+  "AswaPaul": {
+    "publisher_name": "Aswa Paul"
+  },
+  "AtomixProductions": {
+    "publisher_name": "Atomix Productions"
+  },
+  "AudioRangerIT": {
+    "publisher_name": "AudioRanger IT"
+  },
+  "AustinLeath": {
+    "publisher_name": "Austin Leath"
+  },
+  "AutonomousSoftware": {
+    "publisher_name": "Autonomous Software"
+  },
+  "Avanquestpdfforge": {
+    "publisher_name": "Avanquest pdfforge"
+  },
+  "AveekSaha": {
+    "publisher_name": "Aveek Saha"
+  },
+  "AwthWathje": {
+    "publisher_name": "Awth Wathje"
+  },
+  "AxisCommunications": {
+    "publisher_name": "Axis Communications"
+  },
+  "AxisCommunicationsAB": {
+    "publisher_name": "Axis Communications"
+  },
+  "AyibatariIbaba": {
+    "publisher_name": "Ayibatari Ibaba"
   }
 }
