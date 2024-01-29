@@ -26,7 +26,7 @@ abstract class PackageInfos {
     this.otherInfos,
   }) {
     publisherName = PackageScreenshotsList
-        .instance.publisherIcons[probablyPublisherID()]?.publisherName;
+        .instance.publisherIcons[probablyPublisherID()]?.nameUsingDefaultSource;
   }
 
   bool hasVersion() => (version != null && version?.value != 'Unknown');
@@ -41,7 +41,7 @@ abstract class PackageInfos {
     screenshots = PackageScreenshotsList.instance.getPackage(this);
     checkedForScreenshots = true;
     publisherIcon = PackageScreenshotsList
-        .instance.publisherIcons[probablyPublisherID()]?.iconUrl;
+        .instance.publisherIcons[probablyPublisherID()]?.iconUsingDefaultSource;
     //print('name: ${name?.value}, publisherIcon: $publisherIcon');
   }
 

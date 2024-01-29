@@ -1,6 +1,6 @@
 {
   "Microsoft": {
-    "publisher_name": null,
+    "publisher_name": "Microsoft",
     "icon_url": "https://purepng.com/public/uploads/large/purepng.com-microsoft-logo-iconlogobrand-logoiconslogos-251519939091wmudn.png"
   },
   "Python": {
@@ -89,7 +89,7 @@
   },
   "Azul": {
     "publisher_name": null,
-    "icon_url": "https://upload.wikimedia.org/wikipedia/en/6/66/Azul_systems_logo.png"
+    "icon_url": "https://logodownload.org/wp-content/uploads/2017/04/adobe-logo-5-1.png"
   },
   "Zype": {
     "publisher_name": null,
@@ -100,8 +100,11 @@
     "icon_url": "https://cdn.icon-icons.com/icons2/2699/PNG/512/yubico_logo_icon_168733.png"
   },
   "AdobeSystemsIncorporated": {
-    "publisher_name": "Adobe",
-    "icon_url": null
+    "source_publisher_id": "Adobe"
+  },
+  "Adobe": {
+    "publisher_name": null,
+    "icon_url": "https://logodownload.org/wp-content/uploads/2017/04/adobe-logo-5-1.png"
   },
   "EpicGames": {
     "publisher_name": "Epic Games",

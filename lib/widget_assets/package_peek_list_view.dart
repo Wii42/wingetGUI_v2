@@ -17,39 +17,18 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PackagePeekListView extends StatefulWidget {
   final DBTable dbTable;
-  final bool Function(PackageInfos package) showIsInstalled;
-  final bool Function(PackageInfosPeek package) showIsUpgradable;
   late final Stream<DBMessage> reloadStream;
-  final bool showOnlyWithSourceButton;
-  final bool onlyWithSourceInitialValue;
-  final bool showOnlyWithExactVersionButton;
-  final bool onlyWithExactVersionInitialValue;
-  final SortBy defaultSortBy;
-  final List<SortBy> sortOptions;
-  final bool sortDefaultReversed;
-  final bool showDeepSearchButton;
-  final bool showFilterField;
-  final bool packageShowMatch;
-  final bool showInstalledIcon;
+  final PackageListMenuOptions menuOptions;
+  final PackageListPackageOptions packageOptions;
+
   PackagePeekListView({
     super.key,
     required this.dbTable,
-    this.showIsInstalled = defaultFalse,
-    this.showIsUpgradable = defaultFalse,
-    Stream<DBMessage>? reloadStream,
-    this.showOnlyWithSourceButton = true,
-    this.onlyWithSourceInitialValue = false,
-    this.showOnlyWithExactVersionButton = false,
-    this.onlyWithExactVersionInitialValue = false,
-    this.defaultSortBy = SortBy.auto,
-    this.sortOptions = SortBy.values,
-    this.sortDefaultReversed = false,
-    this.showDeepSearchButton = false,
-    this.showFilterField = true,
-    this.packageShowMatch = false,
-    this.showInstalledIcon = true,
+    Stream<DBMessage>? customReloadStream,
+    this.menuOptions = const PackageListMenuOptions(),
+    this.packageOptions = const PackageListPackageOptions(),
   }) {
-    this.reloadStream = reloadStream ?? dbTable.stream;
+    reloadStream = customReloadStream ?? dbTable.stream;
   }
 
   @override
@@ -68,10 +47,10 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   @override
   void initState() {
     super.initState();
-    onlyWithSource = widget.onlyWithSourceInitialValue;
-    onlyWithExactVersion = widget.onlyWithExactVersionInitialValue;
-    sortBy = widget.defaultSortBy;
-    sortReversed = widget.sortDefaultReversed;
+    onlyWithSource = widget.menuOptions.onlyWithSourceInitialValue;
+    onlyWithExactVersion = widget.menuOptions.onlyWithExactVersionInitialValue;
+    sortBy = widget.menuOptions.defaultSortBy;
+    sortReversed = widget.menuOptions.sortDefaultReversed;
   }
 
   @override
@@ -147,8 +126,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           if (!package.checkedForScreenshots) {
             package.setImplicitInfos();
           }
-          bool installed = widget.showIsInstalled(package);
-          bool upgradable = widget.showIsUpgradable(package);
+          bool installed = widget.packageOptions.isInstalled(package);
+          bool upgradable = widget.packageOptions.isUpgradable(package);
           return wrapInPadding(
               buildPackagePeek(package, installed, upgradable));
         },
@@ -200,15 +179,15 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       installButton: !installed,
       uninstallButton: installed,
       upgradeButton: upgradable,
-      showMatch: widget.packageShowMatch,
-      showInstalledIcon: installed && widget.showInstalledIcon,
+      showMatch: widget.packageOptions.showMatch,
+      showInstalledIcon: installed && widget.packageOptions.showInstalledIcon,
     );
   }
 
   Widget topRow(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     List<Widget> children = [
-      if (widget.showOnlyWithSourceButton)
+      if (widget.menuOptions.onlyWithSourceButton)
         Checkbox(
           checked: onlyWithSource,
           onChanged: (value) {
@@ -220,7 +199,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           },
           content: const Text('only with source'),
         ),
-      if (widget.showOnlyWithExactVersionButton)
+      if (widget.menuOptions.onlyWithExactVersionButton)
         Checkbox(
           checked: onlyWithExactVersion,
           onChanged: (value) {
@@ -232,9 +211,10 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           },
           content: const Text('only with exact version'),
         ),
-      if (widget.dbTable.infos.length >= 5 && widget.showFilterField) ...[
+      if (widget.dbTable.infos.length >= 5 &&
+          widget.menuOptions.filterField) ...[
         filterField(),
-        if (widget.showDeepSearchButton) deepSearchButton()
+        if (widget.menuOptions.deepSearchButton) deepSearchButton()
       ],
       Row(
         mainAxisSize: MainAxisSize.min,
@@ -242,7 +222,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           const Text('Sort by:'),
           ComboBox<SortBy>(
             items: [
-              for (SortBy value in widget.sortOptions)
+              for (SortBy value in widget.menuOptions.sortOptions)
                 ComboBoxItem(value: value, child: Text(value.title(locale))),
             ],
             onChanged: (value) {
@@ -298,4 +278,42 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 
   String get filter => filterController.text;
+}
+
+class PackageListMenuOptions {
+  final bool onlyWithSourceButton;
+  final bool onlyWithSourceInitialValue;
+  final bool onlyWithExactVersionButton;
+  final bool onlyWithExactVersionInitialValue;
+  final SortBy defaultSortBy;
+  final List<SortBy> sortOptions;
+  final bool sortDefaultReversed;
+  final bool deepSearchButton;
+  final bool filterField;
+
+  const PackageListMenuOptions({
+    this.onlyWithSourceButton = true,
+    this.onlyWithSourceInitialValue = false,
+    this.onlyWithExactVersionButton = false,
+    this.onlyWithExactVersionInitialValue = false,
+    this.defaultSortBy = SortBy.auto,
+    this.sortOptions = SortBy.values,
+    this.sortDefaultReversed = false,
+    this.deepSearchButton = false,
+    this.filterField = true,
+  });
+}
+
+class PackageListPackageOptions {
+  final bool Function(PackageInfos package) isInstalled;
+  final bool Function(PackageInfosPeek package) isUpgradable;
+  final bool showMatch;
+  final bool showInstalledIcon;
+
+  const PackageListPackageOptions({
+    this.isInstalled = PackagePeekListView.defaultFalse,
+    this.isUpgradable = PackagePeekListView.defaultFalse,
+    this.showMatch = false,
+    this.showInstalledIcon = true,
+  });
 }

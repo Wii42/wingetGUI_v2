@@ -1,10 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/routes.dart';
+import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
+import 'package:winget_gui/widget_assets/winget_db_table_page.dart';
 
-import '../widget_assets/package_list_page.dart';
-import '../widget_assets/package_peek_list_view.dart';
 import '../widget_assets/sort_by.dart';
 import '../winget_db/db_table.dart';
 import '../winget_db/winget_db.dart';
@@ -17,17 +16,12 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    String title = Routes.searchPage.title(locale);
-    return PackageListPage(
-      title: title,
-      customReload: () => dbTable.reloadFuture(locale),
-      listView: PackagePeekListView(
-        dbTable: WingetDB.instance.available,
-        showIsInstalled: WingetDB.isPackageInstalled,
-        showIsUpgradable: WingetDB.isPackageUpgradable,
-        showOnlyWithSourceButton: false,
-        sortOptions: const [
+    return WingetDBTablePage(
+      dbTable: dbTable,
+      title: Routes.searchPage.title,
+      menuOptions: const PackageListMenuOptions(
+        onlyWithSourceButton: false,
+        sortOptions: [
           SortBy.name,
           SortBy.publisher,
           SortBy.source,
@@ -35,7 +29,11 @@ class SearchPage extends StatelessWidget {
           SortBy.version,
           SortBy.auto,
         ],
-        showDeepSearchButton: true,
+        deepSearchButton: true,
+      ),
+      packageOptions: const PackageListPackageOptions(
+        isInstalled: WingetDB.isPackageInstalled,
+        isUpgradable: WingetDB.isPackageUpgradable,
       ),
     );
   }

@@ -1,10 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
+import 'package:winget_gui/widget_assets/winget_db_table_page.dart';
 
-import '../widget_assets/package_list_page.dart';
-import '../widget_assets/package_peek_list_view.dart';
 import '../widget_assets/sort_by.dart';
 import '../winget_commands.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../winget_db/db_table.dart';
 import '../winget_db/winget_db.dart';
@@ -19,14 +18,11 @@ class InstalledPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    return PackageListPage(
-      title: Winget.installed.title(locale),
-      listView: PackagePeekListView(
-        dbTable: dbTable,
-        showIsInstalled: (_) => true,
-        showIsUpgradable: WingetDB.isPackageUpgradable,
-        sortOptions: const [
+    return WingetDBTablePage(
+      dbTable: dbTable,
+      title: Winget.installed.title,
+      menuOptions: const PackageListMenuOptions(
+        sortOptions: [
           SortBy.name,
           SortBy.publisher,
           SortBy.source,
@@ -35,7 +31,10 @@ class InstalledPage extends StatelessWidget {
           SortBy.auto,
         ],
       ),
-      customReload: () => dbTable.reloadFuture(locale),
+      packageOptions: PackageListPackageOptions(
+        isInstalled: (_) => true,
+        isUpgradable: WingetDB.isPackageUpgradable,
+      ),
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -7,6 +5,7 @@ import 'package:ribs_core/ribs_core.dart';
 import 'package:ribs_json/ribs_json.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
+import 'package:winget_gui/helpers/publisher.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
 
@@ -28,7 +27,7 @@ class PackageScreenshotsList {
   List<Uri> invalidScreenshotUrls = [];
   final Map<String, String> _idToPackageKeyMap = {};
 
-  Map<String, PublisherObject> publisherIcons = {};
+  Map<String, Publisher> publisherIcons = {};
   Map<String, PackageScreenshots> customIcons = {};
 
   PackageScreenshotsList._();
@@ -217,9 +216,9 @@ class PackageScreenshotsList {
   }
 
   Future<void> loadCustomIcons() async {
-    Iterable<String> lines = await loadAsset('custom_icons.csv');
+    Iterable<String> lines = await loadLinesOfAsset('custom_icons.csv');
     for (String line in lines) {
-      List<String> parts = line.split(',');
+      List<String> parts = _parseCsvLine(line);
       if (parts.length < 2) {
         continue;
       }
@@ -249,18 +248,11 @@ class PackageScreenshotsList {
   }
 
   Future<void> loadPublisherJson() async {
-    Iterable<String> lines = await loadAsset('publisher.json');
-    if (lines.isEmpty) {
+    String data = await loadAsset('publisher.json');
+    if (data.isEmpty) {
       return;
     }
-    publisherIcons = _parsePublisherJson(lines.join('\n'));
-  }
-
-  Map<String, PublisherObject> _parsePublisherJson(String data) {
-    Map<String, dynamic> json = jsonDecode(data);
-    return json.map((key, value) {
-      return MapEntry(key, PublisherObject.fromJson(key, value));
-    });
+    publisherIcons = Publisher.parseJsonMap(data);
   }
 
   List<String> _parseCsvLine(String line) {
@@ -279,8 +271,12 @@ class PackageScreenshotsList {
     return true;
   }
 
-  Future<Iterable<String>> loadAsset(String fileName) async {
-    String string = await rootBundle.loadString('assets/$fileName');
+  Future<String> loadAsset(String fileName) async {
+    return rootBundle.loadString('assets/$fileName');
+  }
+
+  Future<Iterable<String>> loadLinesOfAsset(String fileName) async {
+    String string = await loadAsset(fileName);
     Iterable<String> lines = string.split('\n').map<String>((e) => e.trim());
     return lines;
   }
@@ -293,28 +289,5 @@ class PackageScreenshotsList {
   Future<void> reloadCustomIcons() async {
     customIcons.clear();
     await loadCustomIcons();
-  }
-}
-
-class PublisherObject {
-  final String publisherId;
-  final String? publisherName;
-  final Uri? iconUrl;
-
-  const PublisherObject(
-      {required this.publisherId, this.publisherName, this.iconUrl});
-
-  factory PublisherObject.fromJson(
-      String publisherId, Map<String, dynamic> object) {
-    String? iconUrl = object['icon_url'];
-    return PublisherObject(
-        publisherId: publisherId,
-        publisherName: object['publisher_name'],
-        iconUrl: iconUrl != null ? Uri.tryParse(object['icon_url']) : null);
-  }
-
-  @override
-  String toString() {
-    return 'PublisherObject{publisherId: $publisherId, publisherName: $publisherName, iconUrl: $iconUrl}';
   }
 }

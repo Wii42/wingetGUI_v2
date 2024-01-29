@@ -35,9 +35,12 @@ class DeepSearchPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return PackagePeekListView(
             dbTable: creator.returnTable(),
-            showOnlyWithSourceButton: false,
-            showFilterField: false,
-            packageShowMatch: true,
+            menuOptions: const PackageListMenuOptions(
+              onlyWithSourceButton: false,
+              filterField: false,
+            ),
+            packageOptions:
+                const PackageListPackageOptions(showMatch: true),
           );
         }
         if (snapshot.hasData) {

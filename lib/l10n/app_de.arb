@@ -64,5 +64,7 @@
   "multipleInstallersFound": "{nrOfInstallers} Installer gefunden für dieses Package. Wählen sie denjenigen aus, den Sie sehen möchten:",
   "multipleFittingInstallersFound": "{nrOfInstallers} Installer gefunden für gewählte Optionen. Wählen sie einen:",
   "noInstallerFound": "Kein Installer gefunden für die gewählten Optionen",
-  "close": "Schliessen"
+  "close": "Schliessen",
+
+  "localPC": "lokaler PC"
 }

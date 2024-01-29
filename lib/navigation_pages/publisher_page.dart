@@ -15,7 +15,8 @@ class PublisherPage extends StatelessWidget {
   final String publisherId;
   final String? publisherName;
 
-  const PublisherPage({super.key, required this.publisherId, this.publisherName});
+  const PublisherPage(
+      {super.key, required this.publisherId, this.publisherName});
 
   static Widget inRoute(RouteParameter? parameters) {
     if (parameters! is! StringRouteParameter) {
@@ -23,10 +24,11 @@ class PublisherPage extends StatelessWidget {
           'Invalid route parameters, must be StringRouteParameter'));
     }
     String publisherId = (parameters as StringRouteParameter).string;
-    String? publisherName =
-        PackageScreenshotsList.instance.publisherIcons[publisherId]?.publisherName;
+    String? publisherName = PackageScreenshotsList
+        .instance.publisherIcons[publisherId]?.nameUsingDefaultSource;
 
-    return PublisherPage(publisherId: publisherId, publisherName: publisherName);
+    return PublisherPage(
+        publisherId: publisherId, publisherName: publisherName);
   }
 
   @override
@@ -42,17 +44,21 @@ class PublisherPage extends StatelessWidget {
           content: 'publisher',
           wingetCommand: [],
         ),
-        reloadStream: WingetDB.instance.available.stream,
-        showIsInstalled: WingetDB.isPackageInstalled,
-        showIsUpgradable: WingetDB.isPackageUpgradable,
-        showOnlyWithSourceButton: false,
-        sortOptions: const [
-          SortBy.name,
-          SortBy.source,
-          SortBy.id,
-          SortBy.version,
-          SortBy.auto,
-        ],
+        customReloadStream: WingetDB.instance.available.stream,
+        menuOptions: const PackageListMenuOptions(
+          onlyWithSourceButton: false,
+          sortOptions: [
+            SortBy.name,
+            SortBy.source,
+            SortBy.id,
+            SortBy.version,
+            SortBy.auto,
+          ],
+        ),
+        packageOptions: const PackageListPackageOptions(
+          isInstalled: WingetDB.isPackageInstalled,
+          isUpgradable: WingetDB.isPackageUpgradable,
+        ),
       ),
     );
   }
@@ -66,12 +72,12 @@ class PublisherPage extends StatelessWidget {
           FaviconWidget(
             infos: PackageInfosPeek(),
             iconUrl: PackageScreenshotsList
-                .instance.publisherIcons[publisherId]?.iconUrl,
+                .instance.publisherIcons[publisherId]?.iconUsingDefaultSource,
             faviconSize: TitleWidget.faviconSize(),
           ),
           Expanded(
             child: Text(
-              publisherName?? publisherId,
+              publisherName ?? publisherId,
               style: typography.titleLarge,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,

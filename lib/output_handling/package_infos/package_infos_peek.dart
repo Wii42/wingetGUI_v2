@@ -43,9 +43,7 @@ class PackageInfosPeek extends PackageInfos {
   }
 
   bool hasInfosFull() {
-    return source != null &&
-        source!.value.isNotEmpty &&
-        id != null;// &&
+    return source != null && source!.value.isNotEmpty && id != null; // &&
   }
 
   bool hasAvailableVersion() {

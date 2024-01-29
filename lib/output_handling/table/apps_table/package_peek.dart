@@ -125,10 +125,7 @@ class PackagePeek extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         Text(
-          infos.publisherName ??
-              infos.publisherID ??
-              infos.id?.value ??
-              '<ID>',
+          infos.publisherName ?? infos.publisherID ?? infos.id?.value ?? '<ID>',
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
         ),
@@ -138,14 +135,17 @@ class PackagePeek extends StatelessWidget {
   }
 
   Widget sourceAndID(AppLocalizations locale, BuildContext context) {
-    bool showSource = infos.source != null && infos.source!.value.isNotEmpty;
+    //bool showSource = infos.source != null && infos.source!.value.isNotEmpty;
+    bool hasSource = infos.source != null && infos.source!.value.isNotEmpty;
+    bool showSource = true;
     bool showId = infos.id != null &&
         infos.id!.value.isNotEmpty &&
         (infos.publisherID != null || infos.publisherName != null);
+    //AppLocalizations locale = AppLocalizations.of(context)!;
     return Row(
       children: [
         if (showSource)
-          smallText(locale.fromSource(infos.source!.value), context),
+          smallText(locale.fromSource(hasSource? infos.source!.value: locale.localPC), context),
         if (showSource && showId)
           SizedBox(
             width: 15,
