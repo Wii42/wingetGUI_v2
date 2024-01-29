@@ -55,7 +55,9 @@ class _FaviconWidgetState extends State<FaviconWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: widget.withRightSiePadding? const EdgeInsets.only(right: 25): EdgeInsets.zero,
+      padding: widget.withRightSiePadding
+          ? const EdgeInsets.only(right: 25)
+          : EdgeInsets.zero,
       child: DecoratedCard(
         padding: 10,
         child: SizedBox(
@@ -78,9 +80,9 @@ class _FaviconWidgetState extends State<FaviconWidget> {
           icon = images.icon.toString();
         }
         if (icon == null &&
-            images.backupIcon != null &&
-            (images.backupIcon.toString().isNotEmpty)) {
-          icon = images.backupIcon.toString();
+            images.backup?.icon != null &&
+            (images.backup!.icon.toString().isNotEmpty)) {
+          icon = images.backup!.icon.toString();
         }
       }
       if (icon != null) {
@@ -88,11 +90,11 @@ class _FaviconWidgetState extends State<FaviconWidget> {
           widget.faviconSize,
           icon,
           () {
-            if (icon != images?.backupIcon.toString() &&
-                images?.backupIcon != null &&
-                (images?.backupIcon.toString().isNotEmpty ?? false)) {
+            if (icon != images?.backup?.icon.toString() &&
+                images?.backup?.icon != null &&
+                (images!.backup!.icon.toString().isNotEmpty)) {
               return loadFavicon(
-                  widget.faviconSize, images!.backupIcon.toString(), () {
+                  widget.faviconSize, images.backup!.icon.toString(), () {
                 if (widget.infos.publisherIcon != null &&
                     widget.infos.publisherIcon.toString().isNotEmpty) {
                   return loadFavicon(
@@ -185,5 +187,5 @@ class _FaviconWidgetState extends State<FaviconWidget> {
 class DefaultFavicon extends FaviconWidget {
   DefaultFavicon(
       {super.key, required super.faviconSize, super.isClickable = true})
-      : super(infos: PackageInfosPeek()..screenshots = null, faviconUrl: null);
+      : super(infos: PackageInfosPeek()..screenshots = null);
 }

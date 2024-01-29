@@ -3,8 +3,8 @@ import 'package:ribs_json/ribs_json.dart';
 class PackageScreenshots {
   String packageKey;
   Uri? icon;
-  Uri? backupIcon;
   List<Uri>? screenshots;
+  PackageScreenshots? backup;
 
   PackageScreenshots({required this.packageKey, this.icon, this.screenshots});
 

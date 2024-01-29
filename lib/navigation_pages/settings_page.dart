@@ -181,13 +181,13 @@ class _SettingsPageSate extends State<SettingsPage> {
         children: [
           Button(
             onPressed: () {
-              screenshots.reloadPublisherIcons();
+              screenshots.reloadPublisher();
             },
             child: const Text('Reload Publisher Icons'),
           ),
           Button(
             onPressed: () {
-              screenshots.reloadCustomIcons();
+              screenshots.reloadCustomScreenshots();
             },
             child: const Text('Reload Custom Icons'),
           ),

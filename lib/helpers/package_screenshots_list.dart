@@ -28,7 +28,8 @@ class PackageScreenshotsList {
   final Map<String, String> _idToPackageKeyMap = {};
 
   Map<String, Publisher> publisherIcons = {};
-  Map<String, PackageScreenshots> customIcons = {};
+  //Map<String, PackageScreenshots> customIcons = {};
+  Map<String, PackageScreenshots> customScreenshots = {};
 
   PackageScreenshotsList._();
 
@@ -49,7 +50,22 @@ class PackageScreenshotsList {
     return request.body;
   }
 
-  void screenshotsFromJson(String data) {
+  static Map<String, PackageScreenshots> parseScreenshotsMap(JsonObject jsonObject) {
+    IList<String> screenshotKeys = jsonObject.keys;
+    List<MapEntry<String, PackageScreenshots>?> screenshotEntriesList =
+        screenshotKeys
+            .map<MapEntry<String, PackageScreenshots>?>((packageName) =>
+                getEntryFromJson<MapEntry<String, PackageScreenshots>>(
+                    packageName: packageName,
+                    packageScreenshotsMap: jsonObject,
+                    fromJson: PackageScreenshots.getEntryFromJson))
+            .toList();
+
+    return Map<String, PackageScreenshots>.fromEntries(
+        screenshotEntriesList.nonNulls);
+  }
+
+  void screenshotsFromWingetUIJson(String data) {
     Json json = Json.parse(data).getOrElse(
       () {
         throw Exception('Error parsing JSON');
@@ -76,25 +92,23 @@ class PackageScreenshotsList {
       }
       return;
     }
-    IList<String> screenshotKeys = packageScreenshotsMap.keys;
-    List<MapEntry<String, PackageScreenshots>?> screenshotEntriesList =
-        screenshotKeys
-            .map<MapEntry<String, PackageScreenshots>?>((packageName) =>
-                getEntryFromJson<MapEntry<String, PackageScreenshots>>(
-                    packageName: packageName,
-                    packageScreenshotsMap: packageScreenshotsMap,
-                    fromJson: PackageScreenshots.getEntryFromJson))
-            .toList();
 
-    screenshotMap = Map<String, PackageScreenshots>.fromEntries(
-        screenshotEntriesList.nonNulls);
+    screenshotMap = parseScreenshotsMap(packageScreenshotsMap);
+    for (PackageScreenshots screenshots in screenshotMap.values) {
+      if (invalidScreenshotUrls.contains(screenshots.icon)) {
+        screenshots.icon = null;
+      }
+      if(screenshots.screenshots != null) {
+        screenshots.screenshots!.removeWhere((element) => invalidScreenshotUrls.contains(element));
+      }
+    }
 
     if (_prefs != null && _prefs!.getString(_packageScreenshotsKey) != data) {
       _prefs!.setString(_packageScreenshotsKey, data);
     }
   }
 
-  T? getEntryFromJson<T>(
+  static T? getEntryFromJson<T>(
       {required String packageName,
       required JsonObject packageScreenshotsMap,
       required T Function(String packageName, JsonObject packageObject)
@@ -113,7 +127,7 @@ class PackageScreenshotsList {
   void loadScreenshots() {
     try {
       String data = _getStringFromSharedPreferences();
-      screenshotsFromJson(data);
+      screenshotsFromWingetUIJson(data);
       if (kDebugMode) {
         print('stored data fetched');
       }
@@ -127,7 +141,7 @@ class PackageScreenshotsList {
   Future<void> fetchWebScreenshots() async {
     try {
       String data = await _getStringFromWeb(screenshotsSource);
-      screenshotsFromJson(data);
+      screenshotsFromWingetUIJson(data);
       if (kDebugMode) {
         print('web data fetched');
       }
@@ -148,7 +162,7 @@ class PackageScreenshotsList {
           .cast<Uri>()
           .toList();
       if (kDebugMode) {
-        print('web data fetched');
+        print('invalid icons fetched');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -164,7 +178,7 @@ class PackageScreenshotsList {
       //loadPublisherIcons(),
       loadPublisherJson(),
       fetchWebScreenshots(),
-      loadCustomIcons(),
+      loadCustomPackageScreenshots(),
     ]);
     if (screenshotMap.isEmpty) {
       loadScreenshots();
@@ -172,7 +186,7 @@ class PackageScreenshotsList {
   }
 
   PackageScreenshots? getPackage(PackageInfos packageInfos) {
-    if (screenshotMap.isEmpty && customIcons.isEmpty) {
+    if (screenshotMap.isEmpty && customScreenshots.isEmpty) {
       return null;
     }
 
@@ -183,8 +197,8 @@ class PackageScreenshotsList {
             'found packageKey $packageKey for ${packageInfos.id?.value} in idToPackageKeyMap');
       }
       return screenshotMap[packageKey] ??
-          customIcons[packageKey] ??
-          customIcons[packageInfos.idFirstTwoParts];
+          customScreenshots[packageKey] ??
+          customScreenshots[packageInfos.idFirstTwoParts];
     }
 
     return _guessPackageKey(packageInfos);
@@ -197,16 +211,17 @@ class PackageScreenshotsList {
         if (packageInfos.id != null) {
           _idToPackageKeyMap[packageInfos.id!.value] = possibleKey;
         }
-        if (screenshots.icon != null ||
-            screenshots.backupIcon != null ||
-            screenshots.screenshots != null) {
+        if (screenshots.icon != null || screenshots.screenshots != null) {
           return screenshots;
+        }
+        if (screenshots.backup != null) {
+          return screenshots.backup;
         }
       }
     }
     if (packageInfos.id != null) {
       String id = packageInfos.id!.value;
-      PackageScreenshots? screenshots = customIcons[id];
+      PackageScreenshots? screenshots = customScreenshots[id];
       if (screenshots != null) {
         _idToPackageKeyMap[id] = id;
       }
@@ -215,34 +230,31 @@ class PackageScreenshotsList {
     return null;
   }
 
-  Future<void> loadCustomIcons() async {
-    Iterable<String> lines = await loadLinesOfAsset('custom_icons.csv');
-    for (String line in lines) {
-      List<String> parts = _parseCsvLine(line);
-      if (parts.length < 2) {
-        continue;
+  Future<void> loadCustomPackageScreenshots() async {
+    String data = await loadAsset('custom_package_screenshots.json');
+    if (data.isEmpty) {
+      return;
+    }
+    Json json = Json.parse(data).getOrElse(
+      () {
+        throw Exception('Error parsing JSON');
+      },
+    );
+    JsonObject? object = json.asObject().toNullable();
+    if (object == null) {
+      if (kDebugMode) {
+        print('Json is not an object');
       }
-      String packageKey = parts[0];
-      String iconUrl = parts[1];
-
-      if (iconUrl.trim().isEmpty) {
-        continue;
-      }
-      Uri? url = Uri.tryParse(iconUrl);
-      if (url == null) {
-        continue;
-      }
+      return;
+    }
+    customScreenshots = parseScreenshotsMap(object);
+    for (String packageId in customScreenshots.keys) {
       PackageScreenshots? found =
-          getPackage(PackageInfosPeek.onlyId(packageKey));
+          getPackage(PackageInfosPeek.onlyId(packageId));
       if (found == null) {
-        customIcons[packageKey] =
-            PackageScreenshots(packageKey: packageKey, icon: url);
-        _idToPackageKeyMap[packageKey] = packageKey;
+        _idToPackageKeyMap[packageId] = packageId;
       } else {
-        if (found.icon != null && found.icon.toString().trim().isNotEmpty) {
-          found.backupIcon ??= found.icon;
-        }
-        found.icon = url;
+        found.backup ??= customScreenshots[packageId];
       }
     }
   }
@@ -255,22 +267,6 @@ class PackageScreenshotsList {
     publisherIcons = Publisher.parseJsonMap(data);
   }
 
-  List<String> _parseCsvLine(String line) {
-    return line.split(',');
-  }
-
-  bool _isHeaderCorrect(List<String> header, List<String> expected) {
-    if (header.length != expected.length) {
-      return false;
-    }
-    for (int i = 0; i < header.length; i++) {
-      if (header[i] != expected[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   Future<String> loadAsset(String fileName) async {
     return rootBundle.loadString('assets/$fileName');
   }
@@ -281,13 +277,13 @@ class PackageScreenshotsList {
     return lines;
   }
 
-  Future<void> reloadPublisherIcons() async {
+  Future<void> reloadPublisher() async {
     publisherIcons.clear();
     await loadPublisherJson();
   }
 
-  Future<void> reloadCustomIcons() async {
-    customIcons.clear();
-    await loadCustomIcons();
+  Future<void> reloadCustomScreenshots() async {
+    customScreenshots.clear();
+    await loadCustomPackageScreenshots();
   }
 }
