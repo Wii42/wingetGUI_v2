@@ -355,7 +355,8 @@
     "publisher_name": "Allan Boll"
   },
   "Allen&Heath": {
-    "publisher_name": "Allen & Heath"
+    "publisher_name": "Allen & Heath",
+    "icon_url": "https://www.allen-heath.com/content/uploads/2023/10/cropped-cropped-AH-trans-Favicon-192x192.png"
   },
   "AllroundAutomations": {
     "publisher_name": "Allround Automations"
@@ -488,5 +489,8 @@
   },
   "AyibatariIbaba": {
     "publisher_name": "Ayibatari Ibaba"
+  },
+  "AGSProjectTeam": {
+    "publisher_name": "AGS Project Team"
   }
 }
