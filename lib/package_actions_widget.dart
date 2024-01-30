@@ -126,7 +126,7 @@ class PackageActionWidget extends StatelessWidget {
           OutputHandler(snapshot.data!, command: action.process.command);
       handler.determineResponsibility(wingetLocale);
       OutputParser? lastPart = handler.outputParsers.lastOrNull;
-      if(lastPart != null && lastPart is! ShowParser){
+      if (lastPart != null && lastPart is! ShowParser) {
         output = lastPart.parse(wingetLocale);
       }
       //output = handler.outputParsers.lastOrNull?.parse(wingetLocale);
@@ -134,9 +134,9 @@ class PackageActionWidget extends StatelessWidget {
     return Expanded(
       child: Stack(
         children: [
-          ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 50),
-            child: PositionedDirectional(
+          PositionedDirectional(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 50),
               child: Center(
                 child: Builder(
                   builder: (context) {
@@ -157,7 +157,8 @@ class PackageActionWidget extends StatelessWidget {
               ),
             ),
           ),
-          if (snapshot.connectionState != ConnectionState.done && snapshot.hasData)
+          if (snapshot.connectionState != ConnectionState.done &&
+              snapshot.hasData)
             const FullWidthProgressbar(
               strokeWidth: 2,
             ),
