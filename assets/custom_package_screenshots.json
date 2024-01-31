@@ -105,7 +105,7 @@
     "icon": "http://pic.pdowncc.com/upload/2021-6/202162594456804.png"
   },
   "Microsoft.WindowsJournal": {
-    "icon": "https://i.computer-bild.de/imgs/1/3/7/6/0/6/3/5/Icon-Microsoft-Journal-Windows-App-48x48-f003a3843c88767b.png"
+    "icon": null
   },
   "Microsoft.WinDbg": {
     "icon": "https://store-images.s-microsoft.com/image/apps.39430.14179965677555945.4511bc55-f511-4c63-a99c-6ff01f7fb0af.3a6d737d-da45-47ff-b99c-6a9438490a7e"
@@ -114,7 +114,7 @@
     "icon": "https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/images/ttd-time-travel-debugging-logo.png"
   },
   "Microsoft.Sysinternals.TCPView": {
-    "icon": "https://i.computer-bild.de/imgs/1/0/4/9/1/3/6/Icon-TCPView-48x48.jpg-0cebf4a89646ee90.ico"
+    "icon": null
   },
   "Google.Talk": {
     "icon": "https://upload.turkcewiki.org/wikipedia/commons/thumb/9/93/Talk_%28Google%29.svg/2560px-Talk_%28Google%29.svg.png"
@@ -206,7 +206,7 @@
   "VSCodium.VSCodium.Insiders": {
     "icon": "https://community.chocolatey.org/content/packageimages/vscodium-insiders.1.85.0.23310.png"
   },
-    "StefansTools.grepWin": {
-        "icon": "https://cdn2.portableapps.com/grepWinPortable_128.png"
-    }
+  "StefansTools.grepWin": {
+    "icon": "https://cdn2.portableapps.com/grepWinPortable_128.png"
+  }
 }

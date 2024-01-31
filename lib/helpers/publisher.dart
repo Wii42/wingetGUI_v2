@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:winget_gui/helpers/package_screenshots_list.dart';
-
 class Publisher {
   final String publisherId;
   final String? publisherName;
@@ -52,11 +50,6 @@ class Publisher {
     Publisher? sourceObject = objects[sourcePublisherId!];
     return sourceObject?.iconUrl;
   }
-
-  String? get nameUsingDefaultSource =>
-      nameUsingSource(PackageScreenshotsList.instance.publisherIcons);
-  Uri? get iconUsingDefaultSource =>
-      iconUsingSource(PackageScreenshotsList.instance.publisherIcons);
 
   static Map<String, Publisher> parseJsonMap(String json) {
     Map<String, dynamic> jsonMap = jsonDecode(json);

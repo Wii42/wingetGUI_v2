@@ -24,7 +24,7 @@ class PackageScreenshots {
             .toList());
   }
 
-  static MapEntry<String, PackageScreenshots> getEntryFromJson(
+  static MapEntry<String, PackageScreenshots> getScreenshotsEntryFromJson(
       String packageName, JsonObject packageScreenshotsMap) {
     return MapEntry(packageName,
         PackageScreenshots.fromJson(packageName, packageScreenshotsMap));

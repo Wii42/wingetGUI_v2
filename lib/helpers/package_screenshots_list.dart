@@ -1,17 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
-import 'package:ribs_core/ribs_core.dart';
 import 'package:ribs_json/ribs_json.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/helpers/publisher.dart';
+import 'package:winget_gui/helpers/screenshots_list_load_helper.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
 
 import '../output_handling/package_infos/package_infos_peek.dart';
 
-class PackageScreenshotsList {
+class PackageScreenshotsList with ScreenshotsListLoadHelper{
   static const String wingetUIScreenshotDatabaseUrl =
       'https://raw.githubusercontent.com/marticliment/WingetUI/main/WebBasedData/screenshot-database-v2.json';
   static const String wingetUIInvalidScreenshotsUrl =
@@ -44,26 +43,6 @@ class PackageScreenshotsList {
 
   String _getStringFromSharedPreferences() =>
       _prefs!.getString(_packageScreenshotsKey) ?? '';
-
-  Future<String> _getStringFromWeb(Uri url) async {
-    Response request = await get(url);
-    return request.body;
-  }
-
-  static Map<String, PackageScreenshots> parseScreenshotsMap(JsonObject jsonObject) {
-    IList<String> screenshotKeys = jsonObject.keys;
-    List<MapEntry<String, PackageScreenshots>?> screenshotEntriesList =
-        screenshotKeys
-            .map<MapEntry<String, PackageScreenshots>?>((packageName) =>
-                getEntryFromJson<MapEntry<String, PackageScreenshots>>(
-                    packageName: packageName,
-                    packageScreenshotsMap: jsonObject,
-                    fromJson: PackageScreenshots.getEntryFromJson))
-            .toList();
-
-    return Map<String, PackageScreenshots>.fromEntries(
-        screenshotEntriesList.nonNulls);
-  }
 
   void screenshotsFromWingetUIJson(String data) {
     Json json = Json.parse(data).getOrElse(
@@ -108,22 +87,6 @@ class PackageScreenshotsList {
     }
   }
 
-  static T? getEntryFromJson<T>(
-      {required String packageName,
-      required JsonObject packageScreenshotsMap,
-      required T Function(String packageName, JsonObject packageObject)
-          fromJson}) {
-    JsonObject? packageObject =
-        packageScreenshotsMap.getUnsafe(packageName).asObject().toNullable();
-    if (packageObject == null) {
-      if (kDebugMode) {
-        print('$packageName is not an object');
-      }
-      return null;
-    }
-    return fromJson(packageName, packageObject);
-  }
-
   void loadScreenshots() {
     try {
       String data = _getStringFromSharedPreferences();
@@ -140,7 +103,7 @@ class PackageScreenshotsList {
 
   Future<void> fetchWebScreenshots() async {
     try {
-      String data = await _getStringFromWeb(screenshotsSource);
+      String data = await getStringFromWeb(screenshotsSource);
       screenshotsFromWingetUIJson(data);
       if (kDebugMode) {
         print('web data fetched');
@@ -154,7 +117,7 @@ class PackageScreenshotsList {
 
   Future<void> fetchWebInvalidScreenshots() async {
     try {
-      String data = await _getStringFromWeb(invalidScreenshotsSource);
+      String data = await getStringFromWeb(invalidScreenshotsSource);
       List<String> lines = data.split('\n');
       invalidScreenshotUrls = lines
           .map<Uri?>((e) => Uri.tryParse(e.trim()))
@@ -286,4 +249,11 @@ class PackageScreenshotsList {
     customScreenshots.clear();
     await loadCustomPackageScreenshots();
   }
+}
+
+extension PublisherUsingDefaultSource on Publisher{
+  String? get nameUsingDefaultSource =>
+      nameUsingSource(PackageScreenshotsList.instance.publisherIcons);
+  Uri? get iconUsingDefaultSource =>
+      iconUsingSource(PackageScreenshotsList.instance.publisherIcons);
 }
