@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:http/http.dart';
@@ -43,11 +45,10 @@ Future<void> checkCustomIcons() async {
 
 Future<void> checkPublisherIcons() async {
   print('PUBLISHER:');
-  String? publisherString =
-  await loadString('publisher.json');
+  String? publisherString = await loadString('publisher.json');
   if (publisherString == null || publisherString.isEmpty) {
-    print('publisher.json is empty' );
-    return null;
+    print('publisher.json is empty');
+    return;
   }
   Map<String, Publisher> map = Publisher.parseJsonMap(publisherString);
   for (Publisher publisher in map.values) {
@@ -62,10 +63,9 @@ Future<void> checkPublisherIcons() async {
 }
 
 Future<JsonObject?> getJson(String fileName) async {
-  String? customScreenshotsString =
-      await loadString(fileName);
+  String? customScreenshotsString = await loadString(fileName);
   if (customScreenshotsString == null || customScreenshotsString.isEmpty) {
-    print('$fileName is empty' );
+    print('$fileName is empty');
     return null;
   }
   Json json = Json.parse(customScreenshotsString).getOrElse(
@@ -77,8 +77,7 @@ Future<JsonObject?> getJson(String fileName) async {
 }
 
 Future<String?> loadString(String fileName) async {
-  String string =
-  await File('assets/$fileName').readAsString();
+  String string = await File('assets/$fileName').readAsString();
   if (string.isEmpty) {
     return null;
   }

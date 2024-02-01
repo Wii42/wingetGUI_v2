@@ -8,19 +8,21 @@ import '../winget_commands.dart';
 import './process_output.dart';
 
 class OutputPage extends ProcessOutput {
-  final String? title;
+  final String Function(AppLocalizations)? title;
 
   const OutputPage({required super.process, super.key, this.title});
 
-  factory OutputPage.fromCommand(List<String> command, {String? titleInput}) {
+  factory OutputPage.fromCommand(List<String> command, {String? title}) {
     return OutputPage(
-        process: WingetProcess.fromCommand(command), title: titleInput);
+        process: WingetProcess.fromCommand(command), title: title != null? (_) => title : null);
   }
   factory OutputPage.fromWinget(Winget winget,
-      {required AppLocalizations locale, String? titleInput}) {
+      {
+      String? titleInput,
+      List<String> parameters = const []}) {
     return OutputPage(
-        process: WingetProcess.fromWinget(winget),
-        title: titleInput != null
+        process: WingetProcess.fromWinget(winget, parameters: parameters),
+        title: (locale) => titleInput != null
             ? winget.titleWithInput(titleInput, localization: locale)
             : winget.title(locale));
   }
@@ -31,7 +33,7 @@ class OutputPage extends ProcessOutput {
     return FullWidthProgressBarOnTop(
       hasProgressBar: streamSnapshot.connectionState != ConnectionState.done,
       child: PaneItemBody(
-        title: title,
+        title: title!= null?title!(AppLocalizations.of(context)!): null,
         process: process,
         child: processOutput(streamSnapshot, context),
       ),

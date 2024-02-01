@@ -46,8 +46,10 @@ class WingetProcess {
     process.exitCode.then((value) => print('${process.name} done'));
   }
 
-  factory WingetProcess.fromWinget(Winget winget) {
-    return WingetProcess.fromCommand(winget.fullCommand, name: winget.name);
+  factory WingetProcess.fromWinget(Winget winget,
+      {List<String> parameters = const []}) {
+    return WingetProcess.fromCommand([...winget.fullCommand, ...parameters],
+        name: winget.name);
   }
 
   WingetProcess clone() {

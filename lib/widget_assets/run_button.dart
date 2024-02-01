@@ -37,7 +37,7 @@ abstract class RunButton extends StatelessWidget {
         router.push(FluentPageRoute(
             builder: (_) => OutputPage(
                   process: process,
-                  title: title ?? "'$text'",
+                  title: (_) => title ?? "'$text'",
                 )));
       };
 

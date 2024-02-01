@@ -76,13 +76,12 @@ class CommandPromptPage extends StatelessWidget {
 
   void Function(String) run(BuildContext context) {
     NavigatorState navigator = Navigator.of(context);
-    AppLocalizations locale = AppLocalizations.of(context)!;
     return (input) async {
       WingetProcess process = WingetProcess.fromCommand(input.split(' '));
       navigator.push(FluentPageRoute(
           builder: (_) => OutputPage(
                 process: process,
-                title: "${locale.runCommand} '$input'",
+                title: (locale) =>"${locale.runCommand} '$input'",
               )));
     };
   }

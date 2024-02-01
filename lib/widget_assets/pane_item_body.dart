@@ -80,7 +80,7 @@ class PaneItemBody extends StatelessWidget {
                         FluentPageRoute(
                           builder: (_) => OutputPage(
                             process: newProcess,
-                            title: title,
+                            title: title != null?(_) =>title! : null,
                           ),
                         ),
                       );

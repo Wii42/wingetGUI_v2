@@ -495,5 +495,37 @@
   },
   "AGSProjectTeam": {
     "publisher_name": "AGS Project Team"
+  },
+  "Bitnami": {
+    "publisher_name": null,
+    "icon_url": "https://freepngdesign.com/content/uploads/images/p-2735-3-bitnami-logo-png-transparent-logo-831021757653.png"
+  },
+  "Kubernetes": {
+    "publisher_name": null,
+    "icon_url": "https://vectorified.com/images/kubernetes-icon-31.png"
+  },
+  "AdoptOpenJDK": {
+    "publisher_name": null,
+    "icon_url": "https://adoptopenjdk.net/dist/assets/adopt_logo_white.svg"
+  },
+  "GeoGebra": {
+    "publisher_name": null,
+    "icon_url": "https://upload.wikimedia.org/wikipedia/commons/5/57/Geogebra.svg"
+  },
+  "Canonical": {
+    "publisher_name": null,
+    "icon_url": null
+  },
+  "Apache": {
+    "publisher_name": null,
+    "icon_url": "https://apache.org/logos/res/foundation/default.png"
+  },
+  "CrystalDewWorld": {
+    "publisher_name": "Crystal Dew World",
+    "icon_url": null
+  },
+  "IBM": {
+    "publisher_name": null,
+    "icon_url": "https://www.assessmentday.co.uk/profiles/logos/ibm-logo.png"
   }
 }

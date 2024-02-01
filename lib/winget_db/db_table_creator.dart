@@ -56,7 +56,7 @@ class DBTableCreator {
     WingetProcess winget = WingetProcess.fromCommand(command);
     List<String> output = await winget.outputStream.last;
     if (kDebugMode) {
-      print(output.join('\n'));
+      //print(output.join('\n'));
     }
     return output;
   }

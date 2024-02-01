@@ -32,6 +32,7 @@ mixin class ScreenshotsListLoadHelper {
     JsonObject? packageObject =
         packageScreenshotsMap.getUnsafe(packageName).asObject().toNullable();
     if (packageObject == null) {
+      // ignore: avoid_print
       print('$packageName is not an object');
 
       return null;

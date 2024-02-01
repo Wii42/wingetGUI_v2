@@ -208,5 +208,15 @@
   },
   "StefansTools.grepWin": {
     "icon": "https://cdn2.portableapps.com/grepWinPortable_128.png"
+  },
+  "Apache.Groovy.4":{
+    "icon": "https://apache.org/logos/res/groovy/default.png"
+  },
+  "Apache.Groovy.3":{
+    "icon": "https://apache.org/logos/res/groovy/default.png"
+  },
+  "Apache.Groovy.2.5":{
+    "icon": "https://apache.org/logos/res/groovy/default.png"
   }
+
 }

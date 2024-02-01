@@ -63,8 +63,8 @@ enum Winget {
   Widget processPage(RouteParameter? parameters) {
     return Builder(
       builder: (context) {
-        return OutputPage.fromCommand(
-          [...fullCommand, ...?parameters?.commandParameter],
+        return OutputPage.fromWinget(this, parameters:
+          [...?parameters?.commandParameter],
           titleInput: parameters?.titleAddon,
         );
       }

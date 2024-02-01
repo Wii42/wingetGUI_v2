@@ -6,6 +6,7 @@ import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
+import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/sort_by.dart';
 import 'package:winget_gui/winget_db/db_message.dart';
 
@@ -65,7 +66,10 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
             return Center(child: Text(snapshot.data!.message ?? ''));
           }
           if (widget.dbTable.infos.isEmpty) {
-            return const Center(child: Text('No Apps found'));
+            return Center(
+                child: Text(
+              locale.noAppsFound,
+            ));
           }
           List<PackageInfosPeek> packages = filterPackages();
           packages = sortPackages(packages, sortBy);
@@ -74,7 +78,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           }
           return Column(
             children: [
-              topRow(context),
+              menuOptions(context),
               Expanded(
                 child: Stack(
                   //crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,7 +86,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
                     if (packages.isNotEmpty)
                       buildListView(packages)
                     else
-                      const Center(child: Text('No fittig packages found')),
+                      Center(child: Text(locale.noFittingAppsFound)),
                     if (widget.dbTable.hints.isNotEmpty)
                       hintsAndWarnings(context),
                     numberOfAppsText(packages.length, locale),
@@ -109,14 +113,16 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 
   Positioned numberOfAppsText(int numberOfShownApps, AppLocalizations locale) {
+    int totalApps = widget.dbTable.infos.length;
     return Positioned(
         bottom: 0,
         right: 0,
-        child: Padding(
+        child: DecoratedCard(solidColor:true,child:Padding(
           padding: const EdgeInsets.all(5),
-          child: Text(locale.nrOfPackagesShown(
-              numberOfShownApps, widget.dbTable.infos.length)),
-        ));
+          child: Text((numberOfShownApps != totalApps)
+              ? locale.nrOfPackagesShown(numberOfShownApps, totalApps)
+              : locale.nrOfPackages(numberOfShownApps)),
+        )));
   }
 
   ListView buildListView(List<PackageInfosPeek> packages) {
@@ -184,7 +190,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     );
   }
 
-  Widget topRow(BuildContext context) {
+  Widget menuOptions(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     List<Widget> children = [
       if (widget.menuOptions.onlyWithSourceButton)
@@ -197,7 +203,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
               });
             }
           },
-          content: const Text('only with source'),
+          content: Text(locale.onlyAppsWithSource),
         ),
       if (widget.menuOptions.onlyWithExactVersionButton)
         Checkbox(
@@ -209,17 +215,17 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
               });
             }
           },
-          content: const Text('only with exact version'),
+          content: Text(locale.onlyAppsWithExactVersion),
         ),
       if (widget.dbTable.infos.length >= 5 &&
           widget.menuOptions.filterField) ...[
-        filterField(),
+        searchField(),
         if (widget.menuOptions.deepSearchButton) deepSearchButton()
       ],
       Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('Sort by:'),
+          Text(locale.sortBy),
           ComboBox<SortBy>(
             items: [
               for (SortBy value in widget.menuOptions.sortOptions)
@@ -253,7 +259,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     );
   }
 
-  Widget filterField() {
+  Widget searchField() {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 400),
@@ -263,7 +269,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
             padding: const EdgeInsets.only(
               left: 10,
             ),
-            child: Text(locale.filterFor),
+            child: Text('${locale.searchFor}:'),
           ),
           onChanged: (_) {
             setState(() {});
@@ -272,9 +278,10 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 
   Widget deepSearchButton() {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return FilledButton(
         onPressed: () => SearchPage.search(context)(filter),
-        child: const Text('Deep Search'));
+        child: Text(locale.extendedSearch));
   }
 
   String get filter => filterController.text;

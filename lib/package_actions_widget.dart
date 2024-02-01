@@ -27,10 +27,11 @@ class PackageActionsList extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
+            verticalDirection: VerticalDirection.up,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (PackageAction action in actionsNotifier.actions.reversed)
+              for (PackageAction action in actionsNotifier.actions)
                 PackageActionWidget(action: action),
             ].withSpaceBetween(height: 5),
           ),

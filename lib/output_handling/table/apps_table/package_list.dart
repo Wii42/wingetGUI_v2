@@ -186,7 +186,7 @@ class _PackageListState extends State<PackageList> {
             padding: const EdgeInsets.only(
               left: 10,
             ),
-            child: Text(locale.filterFor),
+            child: Text(locale.searchFor),
           ),
           onChanged: (_) {
             setState(() {});

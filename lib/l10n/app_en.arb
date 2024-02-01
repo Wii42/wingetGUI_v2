@@ -29,8 +29,8 @@
 
   "showOnlyClickablePackages": "show only selectable apps",
   "showOnlyPackagesWithSpecificVersion": "show only apps with known specific version",
-  "filterFor": "filter for:",
   "nrOfPackagesShown": "{number} of {total} apps are displayed",
+  "nrOfPackages": "{total} apps",
 
   "chooseDisplayMode": "Choose mode",
   "chooseLanguage": "Choose language",
@@ -61,10 +61,18 @@
   "moreFromPublisher": "More from {publisher}",
   "downloadManually": "Download {installerDescription} manually",
   "installer": "{description} installer",
-  "multipleInstallersFound": "{nrOfInstallers} installers found for this package. Select the one you want to see:",
+  "multipleInstallersFound": "{nrOfInstallers} installers found for this app. Select the one you want to see:",
   "multipleFittingInstallersFound": "{nrOfInstallers} installers found for the selected options. Select one:",
   "noInstallerFound": "No installer found for the selected options",
   "close": "Close",
 
-  "localPC": "local PC"
+  "localPC": "local PC",
+
+  "noAppsFound": "No apps found",
+  "noFittingAppsFound": "No fitting apps found",
+  "onlyAppsWithSource": "Only apps with source",
+  "onlyAppsWithExactVersion": "Only apps with exact version",
+  "sortBy": "Sort by",
+  "extendedSearch": "Extended search",
+  "searchFor": "Search for"
 }

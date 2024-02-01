@@ -74,7 +74,8 @@ class WingetGui extends StatelessWidget {
                   ProcessSchedulerWarnings(),
                   Positioned(
                     bottom: 0,
-                    left:0, right:0,
+                    left: 0,
+                    right: 0,
                     child: PackageActionsList(),
                   )
                 ],
@@ -116,7 +117,7 @@ class DBInitializer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WingetDB.instance.isInitialized
+    return WingetDB.instance.isReady()
         ? MainNavigation(title: appTitle)
         : StreamBuilder<String>(
             builder: (context, snapshot) {
@@ -135,7 +136,9 @@ class DBInitializer extends StatelessWidget {
                 }
                 return const Center(child: Text('...'));
               }
-              return MainNavigation(title: appTitle);
+              return WingetDB.instance.status == WingetDBStatus.ready
+                  ? MainNavigation(title: appTitle)
+                  : Center(child: Text(snapshot.data ?? 'An error occurred'));
             },
             stream: WingetDB.instance.init(context),
           );
