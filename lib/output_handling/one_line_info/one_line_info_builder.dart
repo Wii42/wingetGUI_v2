@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/foundation.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/widget_assets/link_button.dart';
@@ -91,9 +90,6 @@ class OneLineInfoWidget extends StatelessWidget {
             .substring(1, string.length - 1)
             .contains(quotationMarksRegExp())) {
       string = string.substring(1, string.length - 1);
-      if (kDebugMode) {
-        print(string);
-      }
     }
     return string;
   }

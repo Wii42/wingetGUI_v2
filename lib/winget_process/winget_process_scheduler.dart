@@ -3,25 +3,26 @@ import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import '../helpers/log_stream.dart';
 
 class ProcessScheduler {
+  late final Logger log;
   final Queue<ProcessWrap> _processQueue = Queue();
   ProcessWrap? _currentProcess;
   int _getProcessId = 0;
   final StreamController<int> _streamController =
       StreamController<int>.broadcast();
   static final instance = ProcessScheduler._();
-  ProcessScheduler._();
+  ProcessScheduler._() {
+    log = Logger(this);
+  }
 
   void addProcess(ProcessWrap process) {
     _processQueue.add(process);
     if (_currentProcess == null) {
       _startNextProcess();
     }
-    if (kDebugMode) {
-      print(currentState());
-    }
+    log.info(currentState());
     _streamController.add(_processQueue.length);
   }
 
@@ -33,9 +34,7 @@ class ProcessScheduler {
     } else {
       _processQueue.remove(process);
     }
-    if (kDebugMode) {
-      print(currentState());
-    }
+    log.info(currentState());
     _streamController.add(_processQueue.length);
   }
 
@@ -48,9 +47,7 @@ class ProcessScheduler {
       if (_processQueue.isNotEmpty) {
         _currentProcess = _processQueue.removeFirst();
         _currentProcess!.start();
-        if (kDebugMode) {
-          print(currentState());
-        }
+        log.info(currentState());
         _streamController.add(_processQueue.length);
         _currentProcess!.waitOnDone.then((value) {
           _currentProcess = null;
@@ -69,6 +66,7 @@ class ProcessScheduler {
 }
 
 class ProcessWrap implements Process {
+  late final Logger log;
   final Completer<Process> _processAwaiter = Completer<Process>();
   final String executable;
   List<String> arguments;
@@ -86,6 +84,7 @@ class ProcessWrap implements Process {
       this.includeParentEnvironment = true,
       this.runInShell = false,
       this.mode = ProcessStartMode.normal}) {
+    log = Logger(this);
     ProcessScheduler.instance.addProcess(this);
   }
 
@@ -105,9 +104,7 @@ class ProcessWrap implements Process {
 
   void start() async {
     if (!hasStarted()) {
-      if (kDebugMode) {
-        print('started $name');
-      }
+      log.info('started $name');
       _process = await Process.start(
         executable,
         arguments,

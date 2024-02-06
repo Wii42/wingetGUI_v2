@@ -42,7 +42,6 @@ abstract class PackageInfos {
     checkedForScreenshots = true;
     publisherIcon = PackageScreenshotsList
         .instance.publisherIcons[probablyPublisherID()]?.iconUsingDefaultSource;
-    //print('name: ${name?.value}, publisherIcon: $publisherIcon');
   }
 
   bool isWinget();

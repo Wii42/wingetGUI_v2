@@ -1,22 +1,26 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 
+import '../helpers/log_stream.dart';
 import 'github_api_file_info.dart';
 
 class GithubApi {
+  late final Logger log;
+
   final String repository;
   final String owner;
   final Uri? path;
 
-  const GithubApi({
+  GithubApi({
     required this.repository,
     required this.owner,
     this.path,
-  });
+  }) {
+    log = Logger(this);
+  }
 
   factory GithubApi.wingetVersionManifest(
           {required String packageID, required String version}) =>
@@ -45,9 +49,7 @@ class GithubApi {
 
   Future<List<GithubApiFileInfo>> getFiles(
       {Future<List<GithubApiFileInfo>> Function()? onError}) async {
-    if (kDebugMode) {
-      print(apiUri);
-    }
+    log.info('Fetching files from $apiUri');
     Response response;
     try {
       response = await get(apiUri);

@@ -1,7 +1,8 @@
-import 'package:flutter/foundation.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:ribs_json/ribs_json.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/helpers/publisher.dart';
 import 'package:winget_gui/helpers/screenshots_list_load_helper.dart';
@@ -10,7 +11,7 @@ import 'package:winget_gui/output_handling/package_infos/package_screenshot_iden
 
 import '../output_handling/package_infos/package_infos_peek.dart';
 
-class PackageScreenshotsList with ScreenshotsListLoadHelper{
+class PackageScreenshotsList with ScreenshotsListLoadHelper {
   static const String wingetUIScreenshotDatabaseUrl =
       'https://raw.githubusercontent.com/marticliment/WingetUI/main/WebBasedData/screenshot-database-v2.json';
   static const String wingetUIInvalidScreenshotsUrl =
@@ -19,18 +20,19 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper{
   static final Uri invalidScreenshotsSource =
       Uri.parse(wingetUIInvalidScreenshotsUrl);
   static const String _packageScreenshotsKey = 'packagePictures';
+  late final Logger log;
+
   SharedPreferences? _prefs;
   static final PackageScreenshotsList instance = PackageScreenshotsList._();
-
   Map<String, PackageScreenshots> screenshotMap = {};
   List<Uri> invalidScreenshotUrls = [];
   final Map<String, String> _idToPackageKeyMap = {};
-
   Map<String, Publisher> publisherIcons = {};
-  //Map<String, PackageScreenshots> customIcons = {};
   Map<String, PackageScreenshots> customScreenshots = {};
 
-  PackageScreenshotsList._();
+  PackageScreenshotsList._() {
+    log = Logger(this);
+  }
 
   Future<void> ensureInitialized() async {
     _prefs ??= await SharedPreferences.getInstance();
@@ -52,23 +54,17 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper{
     );
     JsonObject? object = json.asObject().toNullable();
     if (object == null) {
-      if (kDebugMode) {
-        print('Json is not an object');
-      }
+      log.error('Json is not an object');
       return;
     }
     if (!object.contains("icons_and_screenshots")) {
-      if (kDebugMode) {
-        print('json does not contain icons_and_screenshots');
-      }
+      log.error('json does not contain icons_and_screenshots');
       return;
     }
     JsonObject? packageScreenshotsMap =
         object.getUnsafe("icons_and_screenshots").asObject().toNullable();
     if (packageScreenshotsMap == null) {
-      if (kDebugMode) {
-        print('"icons_and_screenshots" not an object');
-      }
+      log.error('"icons_and_screenshots" not an object');
       return;
     }
 
@@ -77,8 +73,9 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper{
       if (invalidScreenshotUrls.contains(screenshots.icon)) {
         screenshots.icon = null;
       }
-      if(screenshots.screenshots != null) {
-        screenshots.screenshots!.removeWhere((element) => invalidScreenshotUrls.contains(element));
+      if (screenshots.screenshots != null) {
+        screenshots.screenshots!
+            .removeWhere((element) => invalidScreenshotUrls.contains(element));
       }
     }
 
@@ -91,13 +88,9 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper{
     try {
       String data = _getStringFromSharedPreferences();
       screenshotsFromWingetUIJson(data);
-      if (kDebugMode) {
-        print('stored data fetched');
-      }
+      log.info('stored data fetched');
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      log.error(e.toString());
     }
   }
 
@@ -105,13 +98,9 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper{
     try {
       String data = await getStringFromWeb(screenshotsSource);
       screenshotsFromWingetUIJson(data);
-      if (kDebugMode) {
-        print('web data fetched');
-      }
+      log.info('web data fetched');
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      log.error(e.toString());
     }
   }
 
@@ -124,13 +113,9 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper{
           .where((element) => element != null)
           .cast<Uri>()
           .toList();
-      if (kDebugMode) {
-        print('invalid icons fetched');
-      }
+      log.info('invalid icons fetched');
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      log.error(e.toString());
     }
   }
 
@@ -155,10 +140,9 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper{
 
     String? packageKey = _idToPackageKeyMap[packageInfos.id?.value];
     if (packageKey != null) {
-      if (kDebugMode) {
-        print(
-            'found packageKey $packageKey for ${packageInfos.id?.value} in idToPackageKeyMap');
-      }
+      log.info(
+          'found packageKey $packageKey for ${packageInfos.id?.value} in idToPackageKeyMap');
+
       return screenshotMap[packageKey] ??
           customScreenshots[packageKey] ??
           customScreenshots[packageInfos.idFirstTwoParts];
@@ -205,9 +189,7 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper{
     );
     JsonObject? object = json.asObject().toNullable();
     if (object == null) {
-      if (kDebugMode) {
-        print('Json is not an object');
-      }
+      log.error('Json is not an object');
       return;
     }
     customScreenshots = parseScreenshotsMap(object);
@@ -251,7 +233,7 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper{
   }
 }
 
-extension PublisherUsingDefaultSource on Publisher{
+extension PublisherUsingDefaultSource on Publisher {
   String? get nameUsingDefaultSource =>
       nameUsingSource(PackageScreenshotsList.instance.publisherIcons);
   Uri? get iconUsingDefaultSource =>

@@ -5,7 +5,10 @@ import 'package:winget_gui/helpers/extensions/stream_modifier.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
+import '../helpers/log_stream.dart';
+
 class WingetProcess {
+  static final Logger staticLog = Logger(null, sourceType: WingetProcess);
   final String? name;
   final ProcessWrap process;
   late final Stream<List<String>> outputStream;
@@ -40,10 +43,8 @@ class WingetProcess {
   }
 
   static void printReady(ProcessWrap process) {
-    // ignore: avoid_print
-    process.waitForReady.then((value) => print('${process.name} ready'));
-    // ignore: avoid_print
-    process.exitCode.then((value) => print('${process.name} done'));
+    process.waitForReady.then((value) => staticLog.info('${process.name} ready'));
+    process.exitCode.then((value) => staticLog.info('${process.name} done'));
   }
 
   factory WingetProcess.fromWinget(Winget winget,

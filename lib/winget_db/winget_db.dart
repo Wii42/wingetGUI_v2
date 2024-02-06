@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../helpers/log_stream.dart';
 import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
@@ -12,11 +13,14 @@ import 'db_table_creator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WingetDB {
+  late final Logger log;
   WingetDBStatus status = WingetDBStatus.initializing;
   static final WingetDB instance = WingetDB._();
   late DBTable updates, installed, available;
 
-  WingetDB._();
+  WingetDB._() {
+    log = Logger(this);
+  }
 
   Stream<String> init(BuildContext context) async* {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
@@ -66,14 +70,9 @@ class WingetDB {
       }
     }
 
-    map.entries
+    log.info(map.entries
         .sorted((a, b) => b.value.length.compareTo(a.value.length))
-        .forEach(
-      (element) {
-        // ignore: avoid_print
-        print('${element.key}: ${element.value.length}');
-      },
-    );
+        .join(('\n')));
   }
 
   List<PackageInfosPeek> _filterUpdates(infos) {
@@ -105,7 +104,8 @@ class WingetDB {
       WingetDB.instance.installed.idMap.containsKey(package.id!.value);
 
   static bool isPackageUpgradable(PackageInfosPeek package) =>
-      package.availableVersion != null && package.availableVersion!.value.isNotEmpty;
+      package.availableVersion != null &&
+      package.availableVersion!.value.isNotEmpty;
 
   static Future<bool> checkWingetAvailable() async {
     ProcessResult result = await Process.run('where', ['winget']);

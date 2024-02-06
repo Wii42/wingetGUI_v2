@@ -17,7 +17,8 @@ class MainNavigation extends StatefulWidget {
   static const List<Routes> advancedFooterItems = [
     Routes.about,
     Routes.sources,
-    Routes.commandPromptPage
+    Routes.commandPromptPage,
+    Routes.logPage
   ];
 
   final Routes expanderFooterItem = Routes.advancedOptions;

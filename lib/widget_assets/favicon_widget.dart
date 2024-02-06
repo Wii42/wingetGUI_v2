@@ -1,10 +1,10 @@
 import 'package:favicon/favicon.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/foundation.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/widget_assets/web_image.dart';
 
+import '../helpers/log_stream.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_full.dart';
 import 'decorated_card.dart';
@@ -13,6 +13,7 @@ String githubFaviconUrl =
     'https://github.githubassets.com/favicons/favicon.svg';
 
 class FaviconWidget extends StatefulWidget {
+  late final Logger log;
   final PackageInfos infos;
   final double faviconSize;
   late final Uri? faviconUrl;
@@ -29,6 +30,7 @@ class FaviconWidget extends StatefulWidget {
     this.iconUrl,
     this.withRightSiePadding = true,
   }) {
+    log = Logger(this);
     if (infos is PackageInfosFull && faviconUrl == null) {
       PackageInfosFull infosFull = infos as PackageInfosFull;
       this.faviconUrl =
@@ -133,9 +135,7 @@ class _FaviconWidgetState extends State<FaviconWidget> {
         if (snapshot.hasData) {
           Favicon? favicon = snapshot.data;
           if (favicon != null && favicon.url != githubFaviconUrl) {
-            if (kDebugMode) {
-              print(favicon.url);
-            }
+            widget.log.info(favicon.url);
             return loadFavicon(
                 widget.faviconSize, favicon.url, () => defaultFavicon());
           }

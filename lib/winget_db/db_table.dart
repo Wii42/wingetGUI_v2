@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
 import 'package:winget_gui/winget_db/db_message.dart';
 import 'package:winget_gui/winget_db/winget_db.dart';
 
+import '../helpers/log_stream.dart';
 import '../output_handling/one_line_info/one_line_info_parser.dart';
 import '../output_handling/package_infos/info.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
@@ -13,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'db_table_creator.dart';
 
 class DBTable {
+  late final Logger log;
   List<PackageInfosPeek> _infos;
   Map<String, List<PackageInfosPeek>>? _idMap;
   List<OneLineInfo> hints;
@@ -29,7 +30,9 @@ class DBTable {
       required this.content,
       required this.wingetCommand,
       this.creatorFilter,
-      this.parentDB});
+      this.parentDB}) {
+    log = Logger(this);
+  }
 
   Map<String, List<PackageInfosPeek>> get idMap {
     if (_idMap == null) {
@@ -76,12 +79,10 @@ class DBTable {
 
   void notifyListeners() {
     _streamController.add(DBMessage(DBStatus.ready));
-    //print("notified listeners of $content");
   }
 
   void notifyLoading() {
     _streamController.add(DBMessage(DBStatus.loading));
-    //print("loading $content");
   }
 
   UnmodifiableListView<PackageInfosPeek> get infos =>
@@ -110,9 +111,7 @@ class DBTable {
   Future<void> reloadFuture(AppLocalizations wingetLocale) {
     Completer completer = Completer<void>();
     reloadDBTable(wingetLocale).listen((String event) {
-      if (kDebugMode) {
-        print(event);
-      }
+      log.info(event);
       _streamController.add(DBMessage(DBStatus.loading, message: event));
     }, onDone: () {
       completer.complete();

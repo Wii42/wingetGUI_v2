@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -14,14 +13,17 @@ import '../github_api/github_api.dart';
 import '../github_api/github_api_file_info.dart';
 import '../github_api/winget_packages/winget_package_version_manifest.dart';
 import '../helpers/locale_parser.dart';
+import '../helpers/log_stream.dart';
 import '../winget_commands.dart';
 import 'app_locale.dart';
 
 class PackageDetailsFromWeb extends StatelessWidget {
+  late final Logger log;
   final PackageInfosPeek package;
   final String? titleInput;
-  const PackageDetailsFromWeb(
-      {super.key, required this.package, this.titleInput});
+  PackageDetailsFromWeb({super.key, required this.package, this.titleInput}) {
+    log = Logger(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +122,10 @@ class PackageDetailsFromWeb extends StatelessWidget {
         if (matchingFiles.length != 1) {
           List<GithubApiFileInfo> matchingFilesByName = matchingFiles
               .where((element) =>
-                  package.name?.value.replaceAll(' ', '').endsWith(element.name) ?? false)
+                  package.name?.value
+                      .replaceAll(' ', '')
+                      .endsWith(element.name) ??
+                  false)
               .toList();
           if (matchingFilesByName.length == 1) {
             matchingFiles = matchingFilesByName;
@@ -254,10 +259,9 @@ class PackageDetailsFromWeb extends StatelessWidget {
         return loadYaml(body) as YamlMap;
       }
     }
-    if (kDebugMode) {
-      print(
-          'Failed to load file from Github API: ${response.statusCode}\n${response.reasonPhrase}\n${response.body}');
-    }
+    log.error(
+        'Failed to load file from Github API: ${response.statusCode}\n${response.reasonPhrase}\n${response.body}');
+
     return null;
   }
 

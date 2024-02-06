@@ -3,7 +3,11 @@ import 'package:ribs_core/ribs_core.dart';
 import 'package:ribs_json/ribs_json.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 
+import 'log_stream.dart';
+
 mixin class ScreenshotsListLoadHelper {
+  static final Logger log = Logger(null, sourceType: ScreenshotsListLoadHelper);
+
   Future<String> getStringFromWeb(Uri url) async {
     Response request = await get(url);
     return request.body;
@@ -32,9 +36,7 @@ mixin class ScreenshotsListLoadHelper {
     JsonObject? packageObject =
         packageScreenshotsMap.getUnsafe(packageName).asObject().toNullable();
     if (packageObject == null) {
-      // ignore: avoid_print
-      print('$packageName is not an object');
-
+      log.error('$packageName is not an object');
       return null;
     }
     return fromJson(packageName, packageObject);

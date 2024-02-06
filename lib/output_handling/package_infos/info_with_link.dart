@@ -1,16 +1,19 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../helpers/extensions/string_extension.dart';
+import '../../helpers/log_stream.dart';
 import 'info.dart';
 import 'package_attribute.dart';
 
 class InfoWithLink {
+  late final Logger log;
   final String Function(AppLocalizations) title;
   final String? text;
   final Uri? url;
+
   InfoWithLink({required this.title, this.text, this.url}) {
     assert(text != null || url != null);
+    log = Logger(this);
   }
 
   static InfoWithLink? maybeFromMap(
@@ -38,9 +41,8 @@ class InfoWithLink {
   }
 
   Info<Uri> toUriInfo() {
-    if (kDebugMode && url == null) {
-      // ignore: avoid_print
-      print('Warning in InfoWithLink.toUriInfo(): url is null!');
+    if (url == null) {
+      log.warning('Warning in InfoWithLink.toUriInfo(): url is null!');
     }
     return (toUriInfoIfHasUrl()) ?? Info<Uri>(title: title, value: Uri());
   }

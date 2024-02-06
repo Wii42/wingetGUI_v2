@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/compartments/details_widget.dart';
@@ -9,19 +8,20 @@ import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/output_handling/show/stateful_installer_widget.dart';
 import 'package:winget_gui/widget_assets/search_button.dart';
 
+import '../../helpers/log_stream.dart';
 import '../package_infos/package_infos_full.dart';
 import 'compartments/agreement_widget.dart';
 
 class PackageLongInfo extends StatelessWidget {
+  late final Logger log;
   final PackageInfosFull infos;
 
-  const PackageLongInfo(this.infos, {super.key});
+  PackageLongInfo(this.infos, {super.key}) {
+    log = Logger(this);
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) {
-      print(infos.screenshots);
-    }
     return Column(
       children: [
         TitleWidget(infos: infos),
@@ -47,7 +47,8 @@ class PackageLongInfo extends StatelessWidget {
           ),
         DetailsWidget(infos: infos),
         if (infos.agreement != null) AgreementWidget(infos: infos.agreement!),
-        if (infos.installer != null) StatefulInstallerWidget(infos: infos.installer!),
+        if (infos.installer != null)
+          StatefulInstallerWidget(infos: infos.installer!),
         if (infos.hasTags()) _tagButtons(context),
       ].withSpaceBetween(height: 10),
     );

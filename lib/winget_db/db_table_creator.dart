@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:winget_gui/winget_db/winget_db.dart';
 
+import '../helpers/log_stream.dart';
 import '../output_handling/one_line_info/one_line_info_parser.dart';
 import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
@@ -13,6 +13,8 @@ import '../winget_process/winget_process.dart';
 import 'db_table.dart';
 
 class DBTableCreator {
+  late final Logger log;
+  static final Logger staticLog = Logger(null, sourceType: DBTableCreator);
   List<String>? raw;
   List<ParsedOutput>? parsed;
   late List<String> wingetCommand;
@@ -28,6 +30,7 @@ class DBTableCreator {
     this.filter,
     this.parentDB,
   }) {
+    log = Logger(this);
     assert(winget != null || command != null,
         'winget or command must be provided');
 
@@ -55,9 +58,7 @@ class DBTableCreator {
   Future<List<String>> getRawOutputC(List<String> command) async {
     WingetProcess winget = WingetProcess.fromCommand(command);
     List<String> output = await winget.outputStream.last;
-    if (kDebugMode) {
-      //print(output.join('\n'));
-    }
+    log.info(output.join('\n'));
     return output;
   }
 
@@ -99,9 +100,7 @@ class DBTableCreator {
       {List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter}) {
     Iterable<ParsedAppTable> appTables = parsed.whereType<ParsedAppTable>();
     if (appTables.isEmpty) {
-      if (kDebugMode) {
-        print("No AppTables found in $content, $parsed");
-      }
+      staticLog.error("No AppTables found in $content, $parsed");
       return [];
     }
     List<PackageInfosPeek> infos = [];
