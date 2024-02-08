@@ -1,29 +1,35 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../helpers/log_stream.dart';
+
 const double opacity = 0.5;
 const opaqueWhite = Color.fromRGBO(255, 255, 255, opacity);
 
 class WebImage extends StatelessWidget {
+  late final Logger log;
+
   final String url;
   final double? imageHeight;
   final double? imageWidth;
   final ImageConfig imageConfig;
   final bool isHalfTransparent;
 
-  const WebImage({
+  WebImage({
     super.key,
     required this.url,
     this.imageHeight,
     this.imageWidth,
     this.imageConfig = const ImageConfig(),
     this.isHalfTransparent = false,
-  });
+  }) {
+    log = Logger(this);
+    log.info(url);
+  }
 
   @override
   Widget build(BuildContext context) {
     String imageType = url.substring(url.lastIndexOf('.') + 1);
-
     if (imageType == 'svg') {
       return SvgPicture.network(url,
           width: imageWidth,

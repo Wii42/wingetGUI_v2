@@ -60,7 +60,7 @@
     "icon": "https://kkawazoe.github.io/images/logo/windows_terminal_logo.png"
   },
   "Microsoft.PowerBI": {
-    "icon": "https://1000logos.net/wp-content/uploads/2022/08/Microsoft-Power-BI-Logo-768x432.png"
+    "icon": "https://obliku.com/wp-content/uploads/2021/07/power-bi-logo.png"
   },
   "Microsoft.DotNet.DesktopRuntime.7": {
     "icon": "https://www.softportal.com/scr/47429/icons/microsoft_net_72.png"
@@ -186,7 +186,7 @@
     "icon": "https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/yarn-package-manager-icon.png"
   },
   "yang991178.fluent-reader": {
-    "icon": "https://raw.githubusercontent.com/yang991178/fluent-reader/9fd12a9fb21e67f4829253ef918fb060d5ecc6aa/dist/icons/logo.svg"
+    "icon": "https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_120,h_120/https://dashboard.snapcraft.io/site_media/appmedia/2020/08/fluentreader.png"
   },
   "Yandex.Disk": {
     "icon": "https://www.nesabamedia.com/wp-content/uploads/2019/09/Yandex.Disk-Logo-1.png"
@@ -209,14 +209,60 @@
   "StefansTools.grepWin": {
     "icon": "https://cdn2.portableapps.com/grepWinPortable_128.png"
   },
-  "Apache.Groovy.4":{
+  "Apache.Groovy.4": {
     "icon": "https://apache.org/logos/res/groovy/default.png"
   },
-  "Apache.Groovy.3":{
+  "Apache.Groovy.3": {
     "icon": "https://apache.org/logos/res/groovy/default.png"
   },
-  "Apache.Groovy.2.5":{
+  "Apache.Groovy.2.5": {
     "icon": "https://apache.org/logos/res/groovy/default.png"
+  },
+  "WhatsApp.WhatsApp": {
+    "icon": "https://www.pngall.com/wp-content/uploads/2016/04/WhatsApp-PNG-Picture-180x180.png"
+  },
+  "9P1J8S7CCWWT": {
+    "comment": "Microsoft Clipchamp",
+    "icon": "https://d4.alternativeto.net/U-XIaIb9D21-4gnb9pfL44pJIPggC46eZHmT-wQuFLo/rs:fit:280:280:0/g:ce:0:0/exar:1/YWJzOi8vZGlzdC9pY29ucy9jbGlwY2hhbXBfMjA5NTA1LnBuZw.png"
+  },
+  "9NBLGGH5L9XT": {
+    "comment": "Instagram",
+    "icon": "https://www.iservice.at/wp-content/uploads/2020/12/Instagram-Flaticon.png"
+  },
+  "ByteDance.CapCut": {
+    "icon": "https://creamostuvideo.com/wp-content/uploads/2022/01/capcut_editor_video-705x705.png"
+  },
+  "Mojang.MinecraftLauncher": {
+    "icon": "https://pngimg.com/uploads/minecraft/minecraft_PNG74.png"
+  },
+  "Facebook.Messenger": {
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Facebook_Messenger_logo_2020.svg/160px-Facebook_Messenger_logo_2020.svg.png"
+  },
+  "Ookla.Speedtest.Desktop": {
+    "icon": "https://www.rvmobileinternet.com/wp-content/uploads/2018/02/speedtestbyookla.png"
+  },
+  "Citrix.Workspace": {
+    "icon": "https://play-lh.googleusercontent.com/sasPZu1DPo4_Msn0wakoc6kmifxIz_43PYYSf8y70FNFsbIxa-71R2jmdvdFvnga5Q=w480-h960"
+  },
+  "Citrix.Workspace.LTSR": {
+    "icon": "https://play-lh.googleusercontent.com/sasPZu1DPo4_Msn0wakoc6kmifxIz_43PYYSf8y70FNFsbIxa-71R2jmdvdFvnga5Q=w480-h960"
+  },
+  "Canonical.Ubuntu.2204": {
+    "icon": "https://brandslogos.com/wp-content/uploads/images/ubuntu-logo.png"
+  },
+  "Canonical.Ubuntu.2004": {
+    "icon": "https://brandslogos.com/wp-content/uploads/images/ubuntu-logo.png"
+  },
+  "Canonical.Ubuntu.1804": {
+    "icon": "https://brandslogos.com/wp-content/uploads/images/ubuntu-logo.png"
+  },
+  "Canonical.Ubuntu.1604": {
+    "icon": "https://brandslogos.com/wp-content/uploads/images/ubuntu-logo.png"
+  },
+  "Dropbox.Capture": {
+    "icon": "https://www.fileeagle.com/data/2023/08/Dropbox-Capture.jpg"
+  },
+  "zyedidia.micro": {
+    "icon": "https://avatars.githubusercontent.com/u/21361806?s=200"
   }
-
 }

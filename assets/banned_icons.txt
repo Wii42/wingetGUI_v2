@@ -1,0 +1,6 @@
+whatsapp
+minecraftlauncher
+ubuntu-2204
+ubuntu-2004
+ubuntu-1804
+ubuntu-1604

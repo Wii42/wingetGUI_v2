@@ -11,6 +11,7 @@ import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/favicon_widget.dart';
 import 'package:winget_gui/widget_assets/full_width_progress_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
 import 'output_handling/parsed_output.dart';
 
@@ -63,32 +64,60 @@ class PackageActionWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (action.infos != null) ...[
-                    const SizedBox(),
-                    FaviconWidget(
-                      infos: action.infos!,
-                      faviconSize: 20,
-                      withRightSiePadding: false,
-                    ),
-                  ] else
-                    const SizedBox(
-                      width: 10,
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: actionTitle(localization),
+                  const SizedBox(
+                    width: 5,
                   ),
-                  outputField(snapshot, context),
-                  if (snapshot.connectionState == ConnectionState.done)
-                    IconButton(
-                      icon: const Icon(FluentIcons.chrome_close),
-                      onPressed: () => closeActionWidget(context),
+                  ...[
+                    if (action.infos != null) ...[
+                      FaviconWidget(
+                        infos: action.infos!,
+                        faviconSize: 30,
+                        withRightSiePadding: false,
+                      ),
+                    ] else
+                      const SizedBox(
+                        width: 10,
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: actionTitle(localization),
                     ),
-                  const SizedBox(width: 10),
-                ].withSpaceBetween(width: 20));
+                    outputField(snapshot, context),
+                    FutureBuilder(
+                        future: action.process.process.exitCode,
+                        builder: (context, exitCode) {
+                          if (exitCode.hasData) {
+                            if (exitCode.data == 0) {
+                              return button(FluentIcons.accept, 'Ok',
+                                  () => closeActionWidget(context));
+                            } else {
+                              return button(FluentIcons.error, 'Ok',
+                                  () => closeActionWidget(context));
+                            }
+                          } else {
+                            return button(FluentIcons.chrome_close,
+                                localization.endProcess, () {
+                              ProcessScheduler.instance
+                                  .removeProcess(action.process.process);
+                              closeActionWidget(context);
+                            });
+                          }
+                        }),
+                  ].withSpaceBetween(width: 20),
+                  const SizedBox(width: 5)
+                ]);
           }),
     );
   }
+
+  Button button(IconData icon, String text, void Function() onPressed) =>
+      Button(
+        onPressed: onPressed,
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [Icon(icon), Text(text)].withSpaceBetween(width: 10)),
+      );
 
   Text actionTitle(AppLocalizations locale) {
     String? optimalName;
@@ -102,25 +131,31 @@ class PackageActionWidget extends StatelessWidget {
     );
   }
 
-  Text fallbackText(AsyncSnapshot<List<String>> snapshot) =>
-      Text(snapshot.hasData ? snapshot.data!.last : 'waiting...');
+  Text fallbackText(
+          AsyncSnapshot<List<String>> snapshot, AppLocalizations locale) =>
+      Text(snapshot.hasData ? snapshot.data!.last : locale.waiting);
 
   void closeActionWidget(BuildContext context) {
     Provider.of<PackageActionsNotifier>(context, listen: false).remove(action);
   }
 
-  void closeWidgetAfterDone(BuildContext context, AsyncSnapshot snapshot) {
+  void closeWidgetAfterDone(
+      BuildContext context, AsyncSnapshot snapshot) async {
     if (snapshot.connectionState == ConnectionState.done) {
       PackageActionsNotifier actions =
           Provider.of<PackageActionsNotifier>(context, listen: false);
-      Future.delayed(const Duration(seconds: 5))
-          .then((value) => actions.remove(action));
+      int exitCode = await action.process.process.exitCode;
+      if (exitCode == 0) {
+        Future.delayed(const Duration(seconds: 5))
+            .then((value) => actions.remove(action));
+      }
     }
   }
 
   Widget outputField(
       AsyncSnapshot<List<String>> snapshot, BuildContext context) {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
+    AppLocalizations locale = AppLocalizations.of(context)!;
     FutureOr<ParsedOutput>? output;
     if (snapshot.hasData) {
       OutputHandler handler =
@@ -146,12 +181,12 @@ class PackageActionWidget extends StatelessWidget {
                           future: output as Future<ParsedOutput>,
                           builder: (context, futureSnapshot) =>
                               futureSnapshot.data?.widgetRepresentation() ??
-                              fallbackText(snapshot));
+                              fallbackText(snapshot, locale));
                     } else if (output != null && output is ParsedOutput) {
                       return output.singleLineRepresentations().lastOrNull ??
-                          fallbackText(snapshot);
+                          fallbackText(snapshot, locale);
                     } else {
-                      return fallbackText(snapshot);
+                      return fallbackText(snapshot, locale);
                     }
                   },
                 ),

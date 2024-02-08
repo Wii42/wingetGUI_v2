@@ -83,9 +83,10 @@ class TitleWidget extends Compartment {
           text: '${infos.name?.value ?? '<unknown>'} ',
           style: titleStyle(typography),
           children: [
-            if (infos.hasVersion())
+            if (infos.hasVersion() && infos.displayVersion() != null)
               TextSpan(
-                text: 'v${infos.version!.value}',
+                text:
+                    '${infos.displayVersion()!.startsWith(RegExp(r'[0-9]')) ? 'v' : ''}${infos.displayVersion()}',
                 style: versionStyle(typography),
               )
           ]),
@@ -114,7 +115,7 @@ class TitleWidget extends Compartment {
           LinkText(line: infos.category!.value),
           if (infos.isMicrosoftStore()) _showInStore(locale),
         ],
-        if(WingetDB.isPackageInstalled(infos)) installedIcon(context),
+        if (WingetDB.isPackageInstalled(infos)) installedIcon(context),
       ].withSpaceBetween(width: 5),
     );
   }

@@ -527,5 +527,13 @@
   "IBM": {
     "publisher_name": null,
     "icon_url": "https://www.assessmentday.co.uk/profiles/logos/ibm-logo.png"
+  },
+  "Mojang": {
+    "publisher_name": null,
+    "icon_url": "https://1000marche.net/wp-content/uploads/2021/11/Mojang-logo-1240x310.png"
+  },
+  "Ookla": {
+    "publisher_name": null,
+    "icon_url": "https://iconape.com/wp-content/png_logo_vector/ookla-logo.png"
   }
 }

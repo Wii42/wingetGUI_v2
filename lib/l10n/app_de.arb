@@ -74,5 +74,7 @@
   "onlyAppsWithExactVersion": "Nur Apps mit exakter Version",
   "sortBy": "Sortieren nach",
   "extendedSearch": "Erweiterte Suche",
-  "searchFor": "Suche nach"
+  "searchFor": "Suche nach",
+
+  "waiting": "wartend..."
 }

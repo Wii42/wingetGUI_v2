@@ -1,0 +1,14 @@
+{
+  "messenger": {
+    "new_key": "Adamant.Messenger"
+  },
+  "capture": {
+    "new_key": "FastStone.Capture"
+  },
+  "toolbox": {
+    "new_key": "JetBrains.Toolbox"
+  },
+  "hub": {
+    "new_key": "JetBrains.Hub"
+  }
+}

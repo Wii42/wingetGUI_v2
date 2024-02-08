@@ -134,4 +134,16 @@ abstract class PackageInfos {
   }
 
   PackageInfosPeek toPeek();
+
+  String? displayVersion() {
+    if (version == null) {
+      return null;
+    }
+    if (name != null) {
+      if (version!.value.startsWith(name!.value)) {
+        return version?.value.substring(name!.value.length).trim();
+      }
+    }
+    return version!.value;
+  }
 }

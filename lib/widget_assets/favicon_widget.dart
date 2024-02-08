@@ -61,7 +61,7 @@ class _FaviconWidgetState extends State<FaviconWidget> {
           ? const EdgeInsets.only(right: 25)
           : EdgeInsets.zero,
       child: DecoratedCard(
-        padding: 10,
+        padding: 0.17*widget.faviconSize,
         child: SizedBox(
           width: widget.faviconSize,
           height: widget.faviconSize,
