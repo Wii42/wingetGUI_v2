@@ -6,7 +6,8 @@ class PackageScreenshots {
   List<Uri>? screenshots;
   PackageScreenshots? backup;
 
-  PackageScreenshots({required this.packageKey, this.icon, this.screenshots});
+  PackageScreenshots(
+      {required this.packageKey, this.icon, this.screenshots, this.backup});
 
   factory PackageScreenshots.fromJson(String packageName, JsonObject json) {
     return PackageScreenshots(
@@ -40,5 +41,19 @@ class PackageScreenshots {
   @override
   String toString() {
     return 'PackageScreenshots{packageKey: $packageKey, icon: $icon, screenshots: $screenshots}';
+  }
+
+  PackageScreenshots copyWith({
+    String? packageKey,
+    Uri? icon,
+    List<Uri>? screenshots,
+    PackageScreenshots? backup,
+  }) {
+    return PackageScreenshots(
+      packageKey: packageKey ?? this.packageKey,
+      icon: icon ?? this.icon,
+      screenshots: screenshots ?? this.screenshots,
+      backup: backup ?? this.backup,
+    );
   }
 }

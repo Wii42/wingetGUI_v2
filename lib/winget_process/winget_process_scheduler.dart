@@ -14,7 +14,7 @@ class ProcessScheduler {
       StreamController<int>.broadcast();
   static final instance = ProcessScheduler._();
   ProcessScheduler._() {
-    log = Logger(this);
+    log = Logger(this, sourceType: ProcessScheduler);
   }
 
   void addProcess(ProcessWrap process) {
@@ -59,7 +59,7 @@ class ProcessScheduler {
 
   String currentState() {
     String state = _currentProcess?.name ?? 'idle';
-    return "ProcessScheduler: $state with Queue ${_processQueue.map((e) => e.name).toList()}";
+    return "$state with Queue ${_processQueue.map((e) => e.name).toList()}";
   }
 
   Stream<int> get queueLengthStream => _streamController.stream;

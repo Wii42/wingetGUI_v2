@@ -10,5 +10,27 @@
   },
   "hub": {
     "new_key": "JetBrains.Hub"
+  },
+  "music": {
+    "new_key": "Amazon.Music"
+  },
+  "studio": {
+    "new_key": "BrickLink.Studio",
+    "other_keys": [
+      "BrickLink.Studio.EarlyAccess"
+    ]
+  },
+  "ui": {
+    "new_key": "UbiquitiInc.UI"
+  },
+  "odrive": {
+    "new_key": "OxygenCloud.odrive"
+  },
+  "edge": {
+    "new_key": "Microsoft.Edge",
+    "other_keys": [
+      "Microsoft.EdgeWebView2Runtime",
+      "Microsoft.EdgeDriver"
+    ]
   }
 }

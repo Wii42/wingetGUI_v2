@@ -43,11 +43,47 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
       return;
     }
     screenshotMap = parseScreenshotsMap(packageScreenshotsMap);
+
+    await _removeBannedIconsFromScreenshotMap();
+    _removeInvalidUrlsFromScreenshotMap();
+    await _changeToCustomKeysInScreenshotMap();
+    _removeEmptyScreenshotsFromScreenshotsMap();
+
+    if (prefs != null && prefs!.getString(_packageScreenshotsKey) != data) {
+      prefs!.setString(_packageScreenshotsKey, data);
+    }
+  }
+
+  Future<void> _changeToCustomKeysInScreenshotMap() async {
+    Map<String, CustomIconKey> customIconKeys = await loadCustomIconKeys();
+    for (String oldKey in customIconKeys.keys) {
+      CustomIconKey customKeys = customIconKeys[oldKey]!;
+      log.info(customKeys.toString());
+      String? newKey = customKeys.newKey;
+      if (screenshotMap.containsKey(oldKey)) {
+        PackageScreenshots screenshots = screenshotMap[oldKey]!;
+        if (newKey != null) {
+          screenshotMap[newKey] = screenshots.copyWith(packageKey: newKey);
+          screenshotMap.remove(oldKey);
+        }
+        if (customKeys.otherKeys.isNotEmpty) {
+          for (String otherKey in customKeys.otherKeys) {
+            screenshotMap[otherKey] =
+                screenshots.copyWith(packageKey: otherKey);
+          }
+        }
+      }
+    }
+  }
+
+  Future<void> _removeBannedIconsFromScreenshotMap() async {
     List<String> bannedKeys = await loadBannedIcons();
     for (String key in bannedKeys) {
-      screenshotMap[key]?.icon = null;
+      screenshotMap.remove(key);
     }
+  }
 
+  void _removeInvalidUrlsFromScreenshotMap() {
     for (PackageScreenshots screenshots in screenshotMap.values) {
       if (invalidScreenshotUrls.contains(screenshots.icon)) {
         screenshots.icon = null;
@@ -56,21 +92,6 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
         screenshots.screenshots!
             .removeWhere((element) => invalidScreenshotUrls.contains(element));
       }
-    }
-
-    Map<String, String> customIconKeys = await loadCustomIconKeys();
-    for (String oldKey in customIconKeys.keys) {
-      String newKey = customIconKeys[oldKey]!;
-      if (screenshotMap.containsKey(oldKey)) {
-        PackageScreenshots screenshots = screenshotMap[oldKey]!;
-        screenshotMap[newKey] = screenshots;
-        screenshots.packageKey = newKey;
-        screenshotMap.remove(oldKey);
-      }
-    }
-
-    if (prefs != null && prefs!.getString(_packageScreenshotsKey) != data) {
-      prefs!.setString(_packageScreenshotsKey, data);
     }
   }
 
@@ -134,7 +155,9 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
       PackageScreenshots? found =
           getPackage(PackageInfosPeek.onlyId(packageId));
       if (found == null) {
-        idToPackageKeyMap[packageId] = packageId;
+        if (!packageId.endsWith('.*')) {
+          idToPackageKeyMap[packageId] = packageId;
+        }
       } else {
         found.backup ??= customScreenshots[packageId];
       }
@@ -159,12 +182,45 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
     return lines;
   }
 
-  Future<Map<String, String>> loadCustomIconKeys() async {
+  Future<Map<String, CustomIconKey>> loadCustomIconKeys() async {
     String data = await loadAsset('custom_icon_keys.json');
     if (data.isEmpty) {
       return {};
     }
     Map<String, dynamic> object = jsonDecode(data);
-    return object.map((key, value) => MapEntry(key, value['new_key']));
+    return object
+        .map((key, value) => MapEntry(key, CustomIconKey.fromJson(value, key)));
+  }
+
+  void _removeEmptyScreenshotsFromScreenshotsMap() {
+    screenshotMap.removeWhere(
+      (key, value) {
+        return (value.icon == null &&
+            (value.screenshots == null || value.screenshots!.isEmpty) &&
+            value.backup == null);
+      },
+    );
+  }
+}
+
+class CustomIconKey {
+  final String oldKey;
+  final String? newKey;
+  final List<String> otherKeys;
+
+  CustomIconKey({required this.oldKey, this.newKey, this.otherKeys = const []});
+
+  factory CustomIconKey.fromJson(Map<String, dynamic> json, String key) {
+    List<dynamic> otherKeys = json['other_keys'] ?? const [];
+    return CustomIconKey(
+      oldKey: key,
+      newKey: json['new_key'],
+      otherKeys: otherKeys.cast<String>(),
+    );
+  }
+
+  @override
+  String toString() {
+    return 'CustomIconKey{oldKey: $oldKey, newKey: $newKey, otherKeys: $otherKeys}';
   }
 }

@@ -52,11 +52,11 @@ Future<void> checkPublisherIcons() async {
   }
   Map<String, Publisher> map = Publisher.parseJsonMap(publisherString);
   for (Publisher publisher in map.values) {
-    if (publisher.iconUrl != null) {
-      Response response = await get(publisher.iconUrl!);
+    if (publisher.icon != null) {
+      Response response = await get(publisher.icon!);
       if (response.statusCode != 200) {
         print(
-            '${response.statusCode}: ${publisher.publisherNameOrId} icon ${publisher.iconUrl}');
+            '${response.statusCode}: ${publisher.publisherNameOrId} icon ${publisher.icon}');
       }
     }
   }

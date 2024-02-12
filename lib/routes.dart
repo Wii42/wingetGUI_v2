@@ -11,7 +11,7 @@ import 'package:winget_gui/winget_commands.dart';
 import 'helpers/route_parameter.dart';
 import 'navigation_pages/deep_search_page.dart';
 import 'navigation_pages/installed_page.dart';
-import 'navigation_pages/log_page.dart';
+import 'navigation_pages/logs_page.dart';
 import 'navigation_pages/publisher_page.dart';
 import 'navigation_pages/updates_page.dart';
 
@@ -68,8 +68,11 @@ enum Routes {
       body: InstalledPage.inRoute),
   publisherPage(route: '/publisherPage', body: PublisherPage.inRoute),
   deepSearchPage(route: '/deepSearchPage', body: DeepSearchPage.inRoute),
-  logPage(icon: FluentIcons.text_document,
-  route: '/logPage', body: LogPage.inRoute),
+  logsPage(
+      icon: FluentIcons.text_document,
+      route: '/logPage',
+      body: LogsPage.inRoute),
+  logDetailsPage(route: '/logDetailsPage', body: LogDetailsPage.inRoute),
   ;
 
   final String route;

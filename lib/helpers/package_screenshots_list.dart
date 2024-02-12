@@ -87,6 +87,15 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper {
       if (screenshots != null) {
         idToPackageKeyMap[id] = id;
       }
+      else{
+        for(String possibleKey in packageInfos.idWithWildcards) {
+          PackageScreenshots? possibleScreenshots = customScreenshots[possibleKey];
+          if(possibleScreenshots != null){
+            idToPackageKeyMap[id] = possibleKey;
+            return possibleScreenshots;
+          }
+        }
+      }
       return screenshots;
     }
     return null;
@@ -108,4 +117,5 @@ extension PublisherUsingDefaultSource on Publisher {
       nameUsingSource(PackageScreenshotsList.instance.publisherIcons);
   Uri? get iconUsingDefaultSource =>
       iconUsingSource(PackageScreenshotsList.instance.publisherIcons);
+  Uri? get solidIconUsingDefaultSource => solidIconUsingSource(PackageScreenshotsList.instance.publisherIcons);
 }

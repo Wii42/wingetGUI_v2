@@ -100,6 +100,19 @@ extension PackageScreenshotIdentifiers on PackageInfos {
     return idList.take(2).join('.');
   }
 
+  List<String> get idWithWildcards {
+    if (id == null) {
+      return [];
+    }
+    List<String> idList = id!.value.split('.');
+    List<String> idWithWildcards = [];
+    for (int i = 1; i < idList.length; i++) {
+      idWithWildcards.add('${idList.sublist(0, i).join('.')}.*');
+    }
+    log.info('${id!.value}: ${idWithWildcards.reversed.toList()}');
+    return idWithWildcards.reversed.toList();
+  }
+
   Set<String> get possibleScreenshotKeys => [
         id?.value,
         iconIdAsPerWingetUI,

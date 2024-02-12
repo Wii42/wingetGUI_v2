@@ -2,11 +2,14 @@ import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 
+import '../../helpers/log_stream.dart';
 import '../../helpers/package_screenshots.dart';
 import '../../helpers/package_screenshots_list.dart';
 import 'info.dart';
 
 abstract class PackageInfos {
+  late final Logger log;
+
   final Info<String>? name, id;
   Info<String>? version;
 
@@ -25,6 +28,7 @@ abstract class PackageInfos {
     this.publisherIcon,
     this.otherInfos,
   }) {
+    log = Logger(this);
     publisherName = PackageScreenshotsList
         .instance.publisherIcons[probablyPublisherID()]?.nameUsingDefaultSource;
   }

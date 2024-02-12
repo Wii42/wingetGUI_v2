@@ -70,9 +70,10 @@ class WingetDB {
       }
     }
 
-    log.info(map.entries
-        .sorted((a, b) => b.value.length.compareTo(a.value.length))
-        .join(('\n')));
+    log.info('Amount of packages per Publisher',
+        message: map.entries
+            .sorted((a, b) => b.value.length.compareTo(a.value.length)).map((e) => '${e.key}: ${e.value.length}')
+            .join(('\n')));
   }
 
   List<PackageInfosPeek> _filterUpdates(infos) {

@@ -1,4 +1,5 @@
 import '../output_handling/package_infos/package_infos_peek.dart';
+import 'log_stream.dart';
 
 class RouteParameter {
   final List<String>? commandParameter;
@@ -18,4 +19,10 @@ class StringRouteParameter extends RouteParameter {
   final String string;
 
   const StringRouteParameter({required this.string, super.commandParameter, super.titleAddon});
+}
+
+class LogRouteParameter extends RouteParameter {
+  final LogMessage log;
+
+  const LogRouteParameter({required this.log, super.commandParameter, super.titleAddon});
 }

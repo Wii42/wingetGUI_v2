@@ -18,7 +18,7 @@ class MainNavigation extends StatefulWidget {
     Routes.about,
     Routes.sources,
     Routes.commandPromptPage,
-    Routes.logPage
+    Routes.logsPage
   ];
 
   final Routes expanderFooterItem = Routes.advancedOptions;

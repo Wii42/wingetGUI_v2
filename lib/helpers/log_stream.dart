@@ -1,14 +1,17 @@
 import 'dart:async';
+import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'package:winget_gui/helpers/extensions/stream_modifier.dart';
 
 class LogStream {
   static final LogStream instance = LogStream._();
   final StreamController<LogMessage> _streamController =
       StreamController<LogMessage>.broadcast();
-
-  LogStream._(){addToStdOut();}
+  final List<LogMessage> _messages = [];
+  LogStream._() {
+    addToStdOut();
+  }
 
   Stream<LogMessage> get logStream => _streamController.stream;
   Stream<LogMessage> get errorLogsStream => _streamController.stream
@@ -19,39 +22,56 @@ class LogStream {
       errorLogsStream.rememberingStream();
 
   void _log(LogMessage message) {
+    _messages.add(message);
     _streamController.add(message);
   }
 
   void addToStdOut() {
     logStream.listen((event) {
-      if (kDebugMode) {
-        print(event);
-      }
+      // ignore: avoid_print
+      print(event);
     });
   }
+
+  UnmodifiableListView<LogMessage> get messages =>
+      UnmodifiableListView(_messages);
 }
 
 class LogMessage {
-  final String message;
+  final String title;
+  final String? message;
   final DateTime time;
   final LogSeverity severity;
   final Type? sourceType;
   final Object? sourceObject;
 
-  LogMessage(this.message, this.severity, {this.sourceType, this.sourceObject})
+  LogMessage(this.title, this.severity,
+      {this.message, this.sourceType, this.sourceObject})
       : time = DateTime.now();
 
   @override
   String toString() {
     Type? displayType = sourceType ?? sourceObject.runtimeType;
-    return "LogMessage: $time $displayType: $severity $message";
+    DateFormat formatter = DateFormat('HH:mm:ss');
+    String text = "LogMessage: ${formatter.format(time)} $displayType: ${severity.displayName} $title";
+    if (message != null) {
+      text += ": ${message?.replaceAll('\n', ', ')}";
+    }
+    return text;
+  }
+
+  factory LogMessage.template() {
+    return LogMessage('template', LogSeverity.info, message: 'template', sourceType: LogMessage);
   }
 }
 
 enum LogSeverity {
-  info,
-  warning,
-  error,
+  info('Info'),
+  warning('Warning!'),
+  error('ERROR');
+
+  final String displayName;
+  const LogSeverity(this.displayName);
 }
 
 class Logger {
@@ -61,15 +81,18 @@ class Logger {
 
   Logger(this.sourceObject, {this.sourceType});
 
-  void info(String message) {
-    masterLogger._log(LogMessage(message, LogSeverity.info));
+  void info(String title, {String? message}) {
+    masterLogger._log(LogMessage(title, LogSeverity.info,
+        message: message, sourceType: sourceType, sourceObject: sourceObject));
   }
 
-  void error(String message) {
-    masterLogger._log(LogMessage(message, LogSeverity.error));
+  void error(String title, {String? message}) {
+    masterLogger._log(LogMessage(title, LogSeverity.error,
+        message: message, sourceType: sourceType, sourceObject: sourceObject));
   }
 
-  void warning(String message) {
-    masterLogger._log(LogMessage(message, LogSeverity.warning));
+  void warning(String title, {String? message}) {
+    masterLogger._log(LogMessage(title, LogSeverity.warning,
+        message: message, sourceType: sourceType, sourceObject: sourceObject));
   }
 }

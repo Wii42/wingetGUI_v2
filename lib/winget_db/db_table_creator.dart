@@ -58,7 +58,7 @@ class DBTableCreator {
   Future<List<String>> getRawOutputC(List<String> command) async {
     WingetProcess winget = WingetProcess.fromCommand(command);
     List<String> output = await winget.outputStream.last;
-    log.info(output.join('\n'));
+    log.info("raw output of ${command.join(' ')}", message: output.join('\n'));
     return output;
   }
 

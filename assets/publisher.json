@@ -3,6 +3,15 @@
     "publisher_name": "Microsoft",
     "icon_url": "https://purepng.com/public/uploads/large/purepng.com-microsoft-logo-iconlogobrand-logoiconslogos-251519939091wmudn.png"
   },
+  "MicrosoftCorporationII": {
+    "source_publisher_id": "Microsoft"
+  },
+  "MicrosoftWindows": {
+    "source_publisher_id": "Microsoft"
+  },
+  "microsoft": {
+    "source_publisher_id": "Microsoft"
+  },
   "Python": {
     "publisher_name": null,
     "icon_url": "https://brandslogos.com/wp-content/uploads/images/large/python-logo-vector.svg"
@@ -136,7 +145,7 @@
   },
   "Elcomsoft": {
     "publisher_name": null,
-    "icon_url": "https://cdn-hbipl.nitrocdn.com/eFDYEhwyaysRPfaalbjiZUUJTRpMMAKx/assets/images/optimized/rev-75d2d48/thekernel.com/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2022/04/Group-2082.png.webp"
+    "icon_url": null
   },
   "Seewo": {
     "publisher_name": null,
@@ -535,5 +544,50 @@
   "Ookla": {
     "publisher_name": null,
     "icon_url": "https://iconape.com/wp-content/png_logo_vector/ookla-logo.png"
+  },
+  "ProtonTechnologies": {
+    "publisher_name": "Proton",
+    "icon_url": "https://res.cloudinary.com/dbulfrlrz/image/upload/v1693233221/static/logos/proton-logo-p_kftwpv.svg"
+  },
+  "Proton": {
+    "source_publisher_id": "ProtonTechnologies"
+  },
+  "UbiquitiInc": {
+    "publisher_name": "Ubiquiti Inc",
+    "icon_url": "https://futuraoffice.com.au/wp-content/uploads/2020/12/logo.png"
+  },
+  "SylvainRougeaux": {
+    "publisher_name": "Sylvain Rougeaux",
+    "icon_url": "https://s3.amazonaws.com/uploads.uservoice.com/logo/design_setting/83381/original/logo2.png"
+  },
+  "ChemAxon": {
+    "publisher_name": null,
+    "icon_url": "https://chemaxon.com/hubfs/favicon.svg"
+  },
+  "avosskuehler": {
+    "publisher_name": "Dr. Adrian Voßkühler"
+  },
+  "CloudMosaInc": {
+    "publisher_name": "CloudMosa"
+  },
+  "BitRecover": {
+    "publisher_name": null,
+    "icon_url": "https://www.bitrecover.com/asset/img/logo.png"
+  },
+  "ElectronCommunity": {
+    "publisher_name": "Electron Community",
+    "icon_url": "https://www.electronjs.org/assets/img/favicon.ico"
+  },
+  "OO-Software": {
+    "publisher_name": "O&O Software",
+    "icon_url": "https://www.oo-software.com/oocontent/themes/oo2017/images/logos/favicon-128.png"
+  },
+  "PlayStation": {
+    "publisher_name": null,
+    "icon_url": "https://1000logos.net/wp-content/uploads/2021/04/PlayStation-logo-1536x864.png"
+  },
+  "EaseUS": {
+    "publisher_name": null,
+    "icon_url": "https://www.antary.de/wp-content/uploads/2018/08/easeus_logo.png"
   }
 }

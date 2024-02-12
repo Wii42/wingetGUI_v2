@@ -13,7 +13,7 @@ class InfoWithLink {
 
   InfoWithLink({required this.title, this.text, this.url}) {
     assert(text != null || url != null);
-    log = Logger(this);
+    log = Logger(this, sourceType: InfoWithLink);
   }
 
   static InfoWithLink? maybeFromMap(

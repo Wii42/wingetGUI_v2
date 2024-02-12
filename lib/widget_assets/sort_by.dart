@@ -11,7 +11,8 @@ enum SortBy {
   source(sort: sortSource),
   match(sort: sortMatch),
   publisher(sort: sortPublisher),
-  auto(sort: sortAuto);
+  auto(sort: sortAuto),
+  random(sort: randomize);
 
   final List<PackageInfosPeek> Function(List<PackageInfosPeek>) sort;
 
@@ -72,4 +73,9 @@ enum SortBy {
   static List<PackageInfosPeek> sortAuto(List<PackageInfosPeek> packages) {
     return packages;
   }
+
+  static List<PackageInfosPeek> randomize(List<PackageInfosPeek> packages) {
+    return packages..shuffle();
+  }
+
 }

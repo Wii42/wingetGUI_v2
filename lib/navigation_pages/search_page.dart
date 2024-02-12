@@ -28,6 +28,7 @@ class SearchPage extends StatelessWidget {
           SortBy.id,
           SortBy.version,
           SortBy.auto,
+          SortBy.random,
         ],
         deepSearchButton: true,
       ),

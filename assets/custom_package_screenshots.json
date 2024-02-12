@@ -41,7 +41,7 @@
   "Intel.IntelDriverAndSupportAssistant": {
     "icon": "https://pics.computerbase.de/7/8/3/3/4/logo-192.b04e4110.png"
   },
-  "Python.Python.3.11": {
+  "Python.Python.*": {
     "icon": "https://brandslogos.com/wp-content/uploads/images/large/python-logo-vector.svg"
   },
   "Microsoft.Office": {
@@ -50,7 +50,7 @@
   "Microsoft.AppInstaller": {
     "icon": "https://upload.wikimedia.org/wikipedia/commons/f/f5/App_Installer_icon.svg"
   },
-  "Microsoft.VCLibs.Desktop.14": {
+  "Microsoft.VCLibs.*": {
     "icon": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Visual_Studio_Icon_2022.svg"
   },
   "Microsoft.DevHome": {
@@ -62,7 +62,10 @@
   "Microsoft.PowerBI": {
     "icon": "https://obliku.com/wp-content/uploads/2021/07/power-bi-logo.png"
   },
-  "Microsoft.DotNet.DesktopRuntime.7": {
+  "Microsoft.DotNet.*": {
+    "icon": "https://www.softportal.com/scr/47429/icons/microsoft_net_72.png"
+  },
+  "Microsoft.NET.*": {
     "icon": "https://www.softportal.com/scr/47429/icons/microsoft_net_72.png"
   },
   "Fortinet.FortiClientVPN": {
@@ -73,9 +76,6 @@
   },
   "XPDCFJDKLZJLP8": {
     "icon": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Visual_Studio_Icon_2022.svg"
-  },
-  "Microsoft.DotNet.Runtime.3_1": {
-    "icon": "https://www.softportal.com/scr/47429/icons/microsoft_net_72.png"
   },
   "JetBrains.MPS": {
     "icon": "https://resources.jetbrains.com/storage/products/mps/img/meta/mps_logo_300x300.png"
@@ -209,20 +209,20 @@
   "StefansTools.grepWin": {
     "icon": "https://cdn2.portableapps.com/grepWinPortable_128.png"
   },
-  "Apache.Groovy.4": {
-    "icon": "https://apache.org/logos/res/groovy/default.png"
-  },
-  "Apache.Groovy.3": {
-    "icon": "https://apache.org/logos/res/groovy/default.png"
-  },
-  "Apache.Groovy.2.5": {
+  "Apache.Groovy.*": {
     "icon": "https://apache.org/logos/res/groovy/default.png"
   },
   "WhatsApp.WhatsApp": {
     "icon": "https://www.pngall.com/wp-content/uploads/2016/04/WhatsApp-PNG-Picture-180x180.png"
   },
+  "WhatsApp.WhatsApp.Beta": {
+    "icon": "https://www.pngall.com/wp-content/uploads/2016/04/WhatsApp-PNG-Picture-180x180.png"
+  },
   "9P1J8S7CCWWT": {
     "comment": "Microsoft Clipchamp",
+    "icon": "https://d4.alternativeto.net/U-XIaIb9D21-4gnb9pfL44pJIPggC46eZHmT-wQuFLo/rs:fit:280:280:0/g:ce:0:0/exar:1/YWJzOi8vZGlzdC9pY29ucy9jbGlwY2hhbXBfMjA5NTA1LnBuZw.png"
+  },
+  "Clipchamp.*": {
     "icon": "https://d4.alternativeto.net/U-XIaIb9D21-4gnb9pfL44pJIPggC46eZHmT-wQuFLo/rs:fit:280:280:0/g:ce:0:0/exar:1/YWJzOi8vZGlzdC9pY29ucy9jbGlwY2hhbXBfMjA5NTA1LnBuZw.png"
   },
   "9NBLGGH5L9XT": {
@@ -264,5 +264,188 @@
   },
   "zyedidia.micro": {
     "icon": "https://avatars.githubusercontent.com/u/21361806?s=200"
+  },
+  "ArobasMusic.GuitarPro.6": {
+    "icon": "https://3.bp.blogspot.com/-NLMnCcKr634/VtgGy9Hpc0I/AAAAAAAAAPg/I2MTqXCCHz0/s1600/guitarpro.jpg"
+  },
+  "ArobasMusic.GuitarPro.8": {
+    "icon": "https://img.softwaresblue.com/upload/icons/arobas-music-guitar-pro.png"
+  },
+  "Velocidex.Velociraptor": {
+    "icon": "https://docs.velociraptor.app/images/favicon.png"
+  },
+  "FoldingAtHome.FoldingAtHome": {
+    "icon": "https://foldingathome.org/wp-content/uploads/2016/09/cropped-folding-at-home-logo-1-300x300.png"
+  },
+  "ZeroBrane.Studio": {
+    "icon": "https://studio.zerobrane.com/images/zerobrane-logo.png"
+  },
+  "Twitch.TwitchStudio": {
+    "icon": "https://www.techspot.com/images2/downloads/topdownload/2021/04/2021-04-07-ts3_thumbs-373-p.webp"
+  },
+  "StudioXID.ProtoPie": {
+    "icon": "https://cdn.newswire.com/files/x/a7/0b/40f061956e6ebd8478d9f15e674f.png"
+  },
+  "Proton.ProtonDrive": {
+    "icon": "https://www.dailymobile.ir/wp-content/uploads/2022/10/Proton-Drive.png"
+  },
+  "reMarkable.reMarkableCompanionApp": {
+    "icon": "https://play-lh.googleusercontent.com/i0tJ_HrObo3wlliGp2qsItbRCgH-xtJw5-4IzCZ7S75AaOFXEhJWvv3swo-wSNN2f0E=w480-h960"
+  },
+  "Microsoft.UI.Xaml.*": {
+    "icon": "https://store-images.s-microsoft.com/image/apps.5262.14261282404666398.bf7757f0-a103-4953-8ec2-64d5e0fc712d.5b664610-00ae-454f-b2e4-8a99f8d84a09?h=464"
+  },
+  "PrimateLabs.Geekbench.5": {
+    "icon": "https://www.primatelabs.com/assets/img/icons/corktown/corktown-pc.png"
+  },
+  "PrimateLabs.Geekbench.4": {
+    "icon": "https://www.geekbench.com/img/hogtown/app-icon.png"
+  },
+  "Chatty.Chatty": {
+    "icon": "https://chatty.github.io/Chatty.ico"
+  },
+  "1zilc.FishingFunds": {
+    "icon": "https://ff.1zilc.top/static/logo.png"
+  },
+  "ImageLine.FLStudio": {
+    "icon": "https://upload.wikimedia.org/wikipedia/en/6/69/FL_Studio_11_just_logo.png"
+  },
+  "SlashedIo.Inssist": {
+    "icon": "https://inssist.com/static/img/logo-286@2x.min.png"
+  },
+  "FreeOrion.FreeOrion": {
+    "icon": "https://dl.flathub.org/repo/appstream/x86_64/icons/128x128/org.freeorion.FreeOrion.png",
+    "images": [
+      "https://dl.flathub.org/repo/screenshots/org.freeorion.FreeOrion-stable/1504x846/org.freeorion.FreeOrion-c52915686f3c38260506d5fc4881a557.png",
+      "https://dl.flathub.org/repo/screenshots/org.freeorion.FreeOrion-stable/1504x846/org.freeorion.FreeOrion-332957f99f2613d18ec4a83d91d67885.png",
+      "https://dl.flathub.org/repo/screenshots/org.freeorion.FreeOrion-stable/1504x846/org.freeorion.FreeOrion-e080df3c048c4a23072cc3132ec26744.png",
+      "https://dl.flathub.org/repo/screenshots/org.freeorion.FreeOrion-stable/1504x846/org.freeorion.FreeOrion-576f9d213ad2bba19004d05dc5eb4ad5.png"
+    ]
+  },
+  "SylvainRougeaux.Echosync": {
+    "icon": "https://freesoft.ru/storage/images/709/7082/708168/708168_logo.png",
+    "images": [
+      "https://www.luminescence-software.org/user/pages/03.echosync/echosync_main.png"
+    ]
+  },
+  "SylvainRougeaux.Metatogger": {
+    "icon": null,
+    "images": [
+      "https://www.luminescence-software.org/user/pages/02.metatogger/metatogger_main.png"
+    ]
+  },
+  "ChemAxon.instantjchem": {
+    "icon": null,
+    "images": [
+      "https://chemaxon.com/hs-fs/hubfs/ijc_mass_spectra.png"
+    ]
+  },
+  "EXPSystems.PDFreDirect": {
+    "icon": "https://www.freesoftwarefiles.com/wp-content/uploads/2016/09/pdf-redirect-free-download.png"
+  },
+  "avosskuehler.viana": {
+    "icon": "http://www.viananet.de/sites/default/files/VianaLogo64.png"
+  },
+  "CloudMosaInc.PuffinSecureBrowser": {
+    "icon": "https://play-lh.googleusercontent.com/bas8yy7b_viSjPOlbYy7r9TN6wwV7dxd-ppTSvT3G1LvK1bRJLfsF5n1wnxtOzYrM7ud"
+  },
+  "RubyInstallerTeam.Ruby.*": {
+    "icon": "https://i.pinimg.com/originals/30/c2/c9/30c2c9b6652aeb0f7781890980e05706.png"
+  },
+  "MediaArea.MediaInfo": {
+    "icon": "https://mediaarea.net/images/45c0bef-2a31906.png"
+  },
+  "MediaArea.MediaInfo.GUI": {
+    "icon": "https://mediaarea.net/images/45c0bef-2a31906.png",
+    "images": [
+      "https://mediaarea.net/images/814eedf-af7515f.jpg"
+    ]
+  },
+  "MilosParipovic.OneCommander": {
+    "icon": "https://www.techspot.com/images2/downloads/topdownload/2023/10/2023-10-05-ts3_thumbs-723-p.webp",
+    "images": [
+      "https://onecommander.com/img/One-Commander-Slide1.jpg",
+      "https://onecommander.com/img/One-Commander-Slide2.jpg",
+      "https://onecommander.com/img/One-Commander-Slide3.jpg",
+      "https://onecommander.com/img/One-Commander-Slide4.jpg"
+    ]
+  },
+  "Qingfeng.HeyboxAccelerator": {
+    "icon": "https://cdn.max-c.com/static/heybox/accelerator/favicon.ico"
+  },
+  "Helix.Helix": {
+    "icon": "https://img.stackshare.io/service/48892/default_e031c1cb8c30dcabb18b906feabf58178a6980a0.png"
+  },
+  "VNGCorp.Zalo": {
+    "icon": "https://stc-zaloprofile.zdn.vn/favicon.ico"
+  },
+  "Jackaudio.JACK2": {
+    "icon": "https://jackaudio.org/assets/images/logo.png"
+  },
+  "Pulsar-Edit.Pulsar": {
+    "icon": "https://avatars.githubusercontent.com/u/108445160"
+  },
+  "yelosan.PH-UKL.TagbQRTY": {
+    "icon": "https://im.youronly.one/techmagus/favicon/android-chrome-192x192.d8fbf68333107c3e21f70d4889da73e23549a6eca9756ee90e56cf0ef5b800c77d4310d3a90ff55547d45088968f010b041fb1a81ebf00c8198fba24ab025af5.png"
+  },
+  "skymavis.mavishub": {
+    "icon": "https://welcome.skymavis.com/mavis-hub-full.svg"
+  },
+  "GauzyTech.NeatConverter": {
+    "icon": "https://www.neat-reader.cn/express/img/download/converter-icon.png"
+  },
+  "GauzyTech.NeatReader": {
+    "icon": "https://www.neat-reader.com/express/img/download-new/device-logo.png"
+  },
+  "dsheiko.puppetry": {
+    "icon": "https://puppetry.app/assets/img/favicon-96x96.png",
+    "images": [
+      "https://puppetry.app/assets/img/puppetry-welcome.png"
+    ]
+  },
+  "FrostWire.FrostWire": {
+    "icon": "https://www.freesoftwarefiles.com/wp-content/uploads/2016/02/FrostWire-Latest-Version-Free-Download.png",
+    "images": [
+      "https://static.frostwire.com/vink/images/home_header_2.png"
+    ]
+  },
+  "Devolutions.RemoteDesktopManagerFree": {
+    "icon": "https://webdevolutions.azureedge.net/images/projects/remote-desktop-manager/logos/remote-desktop-manager-icon-shadow.svg"
+  },
+  "Devolutions.RemoteDesktopManager": {
+    "icon": "https://webdevolutions.azureedge.net/images/projects/remote-desktop-manager/logos/remote-desktop-manager-icon-shadow.svg"
+  },
+  "Rustlang.Rust.*": {
+    "icon": "https://cdn-images-1.medium.com/v2/1*wL9FvRCwlO8X0ysJ8348kw.png"
+  },
+  "LLVM.LLVM": {
+    "icon": "https://llvm.org/img/LLVMWyvernSmall.png"
+  },
+  "Nethermind.Nethermind": {
+    "icon": "https://downloads.nethermind.io/images/nethermind_logo.png"
+  },
+  "FireDaemon.FireDaemonPro": {
+    "icon": "https://4.bp.blogspot.com/-oxQpXds7dMQ/V1cmzzH71LI/AAAAAAAAAuQ/m_Xseg3dTmAYfbU7I0qlURBz09elcj0JACLcB/s200/firedaemon.png"
+  },
+  "PlayStation.PSPlus": {
+    "icon": "https://pkmanager.twingalaxies.com/assets/article/2018/10/04/playstation-plus-logo_feature.png"
+  },
+  "PlayStation.PSRemotePlay": {
+    "icon": "https://img.xz7.com/d/file/2022/11-07%2F8b8451c129d0e4d567aecc8993737116.png"
+  },
+  "Internxt.Drive": {
+    "icon": "https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/2742c6a6-f06f-46e1-a12e-2a3b0dfb869f.png"
+  },
+  "Microsoft.Edge.*": {
+    "icon": "https://i.postimg.cc/pd256kHk/logo.png",
+    "images": [
+      "https://i.postimg.cc/L56h1HsP/edge.png"
+    ]
+  },
+  "Microsoft.MicrosoftEdge.*": {
+    "icon": "https://i.postimg.cc/pd256kHk/logo.png",
+    "images": [
+      "https://i.postimg.cc/L56h1HsP/edge.png"
+    ]
   }
 }
