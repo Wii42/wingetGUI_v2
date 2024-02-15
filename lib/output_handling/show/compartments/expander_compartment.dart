@@ -1,16 +1,15 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/widget_assets/icon_link_button.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
-import '../../../widget_assets//link_button.dart';
 import '../../package_infos/info.dart';
 import 'compartment.dart';
+import 'compartment_building_blocks.dart';
 
-abstract class ExpanderCompartment extends Compartment {
+abstract class ExpanderCompartment extends Compartment
+    with CompartmentBuildingBlocks {
   const ExpanderCompartment({super.key});
 
   String compartmentTitle(AppLocalizations locale);
@@ -55,24 +54,6 @@ abstract class ExpanderCompartment extends Compartment {
     );
   }
 
-  Wrap wrapInWrap({required String title, required Widget body}) {
-    return Wrap(
-      spacing: 5,
-      runSpacing: 5,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 0),
-          child: Text(
-            '$title:',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        body,
-      ],
-    );
-  }
-
   List<Widget> fullCompartment(
       {String? title,
       List<Widget>? mainColumn,
@@ -87,51 +68,6 @@ abstract class ExpanderCompartment extends Compartment {
         divider(),
       if (buttonRow != null && buttonRow.children.isNotEmpty) buttonRow
     ].withSpaceBetween(height: 10);
-  }
-
-  Padding divider() {
-    return const Padding(
-      padding: EdgeInsetsDirectional.symmetric(vertical: 5),
-      child: Divider(
-        style: DividerThemeData(horizontalMargin: EdgeInsets.zero),
-      ),
-    );
-  }
-
-  Widget textOrIconLink(
-      {required BuildContext context,
-      required String? text,
-      required Uri? url}) {
-    if (url != null) {
-      return RichText(
-          text: TextSpan(
-              text: text ?? url.toString(),
-              style: FluentTheme.of(context).typography.body,
-              children: [
-            WidgetSpan(
-                child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 19),
-                    child: IconLinkButton(url: url)),
-                alignment: PlaceholderAlignment.middle)
-          ]));
-    }
-    return textWithLinks(text: text!, context: context);
-  }
-
-  Widget textOrLinkButton(
-      {required BuildContext context, required Info<String> text}) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    if (isLink(text.value)) {
-      return LinkButton(
-          url: Uri.parse(text.value), text: Text(text.title(locale)));
-    }
-    return textWithLinks(text: text.value, context: context);
-  }
-
-  Widget linkButton(
-      {required Info<Uri> link, required AppLocalizations locale}) {
-    return LinkButton(
-        url: link.value, text: Text(link.customTitle ?? link.title(locale)));
   }
 
   Wrap buttonRow(List<Info<Uri>?> links, BuildContext context,
@@ -153,51 +89,8 @@ abstract class ExpanderCompartment extends Compartment {
     );
   }
 
-  Widget copyableInfo(
-      {required Info<String> info, required BuildContext context}) {
-    return RichText(
-        text: TextSpan(
-            text: info.value,
-            style: FluentTheme.of(context).typography.body,
-            children: [
-          WidgetSpan(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 19),
-                child: IconButton(
-                  icon: const Icon(FluentIcons.copy),
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: info.value));
-                  },
-                  style: ButtonStyle(
-                    padding: ButtonState.all(const EdgeInsets.symmetric(
-                        vertical: 0, horizontal: 10)),
-                  ),
-                ),
-              ),
-              alignment: PlaceholderAlignment.middle)
-        ]));
-  }
-
   List<Widget> detailsList(List<Info<String>?> details, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    //return [
-    //  table(details
-    //      .where((e) => e != null)
-    //      .map<(String, Widget)>((info) => (
-    //            info!.title(locale),
-    //            info.copyable
-    //                ? copyableInfo(info: info, context: context)
-    //                : info.couldBeLink
-    //                    ? textOrIconLink(
-    //                        context: context,
-    //                        text: info.value,
-    //                        url: isLink(info.value)
-    //                            ? Uri.tryParse(info.value)
-    //                            : null)
-    //                    : Text(info.value)
-    //          ))
-    //      .toList())
-    //];
     return [
       for (Info<String>? info in details)
         if (info != null)
@@ -214,24 +107,6 @@ abstract class ExpanderCompartment extends Compartment {
                               : null)
                       : Text(info.value)),
     ];
-  }
-
-  Widget table(List<(String, Widget)> list) {
-    return Table(
-      columnWidths: const {0: FixedColumnWidth(170)},
-      children: [
-        for (var (title, widget) in list)
-          TableRow(
-            children: [
-              Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              widget
-            ],
-          ),
-      ],
-    );
   }
 
   Widget displayDetails(List<(String, Widget)> list) {

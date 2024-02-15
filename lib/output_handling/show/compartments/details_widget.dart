@@ -38,8 +38,7 @@ class DetailsWidget extends ExpanderCompartment {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   for (InfoWithLink doc in infos.documentation!.value)
-                    textOrIconLink(
-                        context: context, text: doc.text, url: doc.url),
+                    fromInfoWithLink(context, doc),
                 ],
               ),
             ),

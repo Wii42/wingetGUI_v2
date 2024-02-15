@@ -16,6 +16,8 @@ class InfoWithLink {
     log = Logger(this, sourceType: InfoWithLink);
   }
 
+  bool hasText() => text != null;
+
   static InfoWithLink? maybeFromMap(
       {required Map<String, String>? map,
       required PackageAttribute textInfo,

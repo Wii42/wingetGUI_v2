@@ -62,10 +62,10 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         builder: (context, snapshot) {
           if (snapshot.hasData &&
               snapshot.data?.status != DBStatus.ready &&
-              widget.dbTable.infos.isEmpty) {
+              prefilteredInfos.isEmpty) {
             return Center(child: Text(snapshot.data!.message ?? ''));
           }
-          if (widget.dbTable.infos.isEmpty) {
+          if (prefilteredInfos.isEmpty) {
             return Center(
                 child: Text(
               locale.noAppsFound,
@@ -98,6 +98,14 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         });
   }
 
+  List<PackageInfosPeek> get prefilteredInfos {
+    List<PackageInfosPeek> infos = widget.dbTable.infos;
+    if (widget.packageOptions.packageFilter != null) {
+      return infos.where(widget.packageOptions.packageFilter!).toList();
+    }
+    return infos;
+  }
+
   Padding hintsAndWarnings(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -113,16 +121,18 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 
   Positioned numberOfAppsText(int numberOfShownApps, AppLocalizations locale) {
-    int totalApps = widget.dbTable.infos.length;
+    int totalApps = prefilteredInfos.length;
     return Positioned(
         bottom: 0,
         right: 0,
-        child: DecoratedCard(solidColor:true,child:Padding(
-          padding: const EdgeInsets.all(5),
-          child: Text((numberOfShownApps != totalApps)
-              ? locale.nrOfPackagesShown(numberOfShownApps, totalApps)
-              : locale.nrOfPackages(numberOfShownApps)),
-        )));
+        child: DecoratedCard(
+            solidColor: true,
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: Text((numberOfShownApps != totalApps)
+                  ? locale.nrOfPackagesShown(numberOfShownApps, totalApps)
+                  : locale.nrOfPackages(numberOfShownApps)),
+            )));
   }
 
   ListView buildListView(List<PackageInfosPeek> packages) {
@@ -144,7 +154,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 
   List<PackageInfosPeek> filterPackages() {
-    List<PackageInfosPeek> packages = widget.dbTable.infos;
+    List<PackageInfosPeek> packages = prefilteredInfos;
     if (onlyWithSource) {
       packages = packages.where((element) => element.hasKnownSource()).toList();
     }
@@ -217,7 +227,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           },
           content: Text(locale.onlyAppsWithExactVersion),
         ),
-      if (widget.dbTable.infos.length >= 5 &&
+      if (prefilteredInfos.length >= 5 &&
           widget.menuOptions.filterField) ...[
         searchField(),
         if (widget.menuOptions.deepSearchButton) deepSearchButton()
@@ -316,11 +326,13 @@ class PackageListPackageOptions {
   final bool Function(PackageInfosPeek package) isUpgradable;
   final bool showMatch;
   final bool showInstalledIcon;
+  final bool Function(PackageInfosPeek)? packageFilter;
 
   const PackageListPackageOptions({
     this.isInstalled = PackagePeekListView.defaultFalse,
     this.isUpgradable = PackagePeekListView.defaultFalse,
     this.showMatch = false,
     this.showInstalledIcon = true,
+    this.packageFilter,
   });
 }

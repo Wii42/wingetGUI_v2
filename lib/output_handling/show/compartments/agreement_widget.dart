@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/agreement_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
 
+import '../../package_infos/info_with_link.dart';
 import '../../package_infos/package_attribute.dart';
 import 'expander_compartment.dart';
 
@@ -21,13 +22,9 @@ class AgreementWidget extends ExpanderCompartment {
         title: compartmentTitle(locale),
         mainColumn: [
           if (infos.license?.text != null)
-            wrapInWrap(
-                title: PackageAttribute.license.title(locale),
-                body: _license(context)),
+            wrapInfoWithLink(context, infos.license),
           if (infos.copyright?.text != null)
-            wrapInWrap(
-                title: PackageAttribute.copyright.title(locale),
-                body: _copyright(context)),
+            wrapInfoWithLink(context, infos.copyright),
         ],
         buttonRow: buttonRow([
           if (infos.license?.text == null) infos.license?.toUriInfoIfHasUrl(),
@@ -44,17 +41,5 @@ class AgreementWidget extends ExpanderCompartment {
   @override
   String compartmentTitle(AppLocalizations locale) {
     return PackageAttribute.agreement.title(locale);
-  }
-
-  Widget _license(BuildContext context) {
-    return textOrIconLink(
-        context: context, text: infos.license?.text, url: infos.license?.url);
-  }
-
-  Widget _copyright(BuildContext context) {
-    return textOrIconLink(
-        context: context,
-        text: infos.copyright?.text,
-        url: infos.copyright?.url);
   }
 }

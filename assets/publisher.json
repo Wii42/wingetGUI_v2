@@ -22,7 +22,8 @@
   },
   "JetBrains": {
     "publisher_name": null,
-    "icon_url": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Cib-jetbrains_%28CoreUI_Icons_v1.0.0%29.svg"
+    "icon_url": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Cib-jetbrains_%28CoreUI_Icons_v1.0.0%29.svg",
+    "solid_icon_url": "https://ictacademy.com.ng/wp-content/uploads/2020/02/1200px-JetBrains_Logo_2016.svg_.png"
   },
   "Steam": {
     "publisher_name": null,
@@ -102,7 +103,7 @@
   },
   "Zype": {
     "publisher_name": null,
-    "icon_url": "https://www.zype-lang.cf/img/logo.png"
+    "icon_url": "https://miro.medium.com/v2/1*-gLMJWsqKjgUbQQlqM7KqA.png"
   },
   "Yubico": {
     "publisher_name": null,
@@ -129,7 +130,8 @@
   },
   "NirSoft": {
     "publisher_name": null,
-    "icon_url": null
+    "icon_url": null,
+    "solid_icon_url": "https://www.userlogos.org/files/logos/HastenJason/nirsoft.png"
   },
   "Japplis": {
     "publisher_name": null,
@@ -141,7 +143,7 @@
   },
   "LSoftTechnologies": {
     "publisher_name": "LSoft Technologies",
-    "icon_url": "https://www.softexia.com/wp-content/uploads/2017/01/Active_logo.png"
+    "icon_url": "https://www.lsoft.net/images/icons/killdisk.png"
   },
   "Elcomsoft": {
     "publisher_name": null,
@@ -404,7 +406,8 @@
     "publisher_name": "Anthony Beaumont"
   },
   "AntibodySoftware": {
-    "publisher_name": "Antibody Software"
+    "publisher_name": "Antibody Software",
+    "icon_url": "https://antibody-software.com/images/antibodylogo200x.png"
   },
   "AntoineAflalo": {
     "publisher_name": "Antoine Aflalo"
@@ -589,5 +592,16 @@
   "EaseUS": {
     "publisher_name": null,
     "icon_url": "https://www.antary.de/wp-content/uploads/2018/08/easeus_logo.png"
+  },
+  "MapleMedia": {
+    "publisher_name": "Maple Media",
+    "icon_url": "https://maplemedia.io/wp-content/uploads/2024/02/MM-Logo-Website-512x512-2.png"
+  },
+  "GlyphrStudio": {
+    "publisher_name": "Glyphr Studio",
+    "icon_url": "https://www.glyphrstudio.com/images/logo.svg"
+  },
+  "JohnMacFarlane": {
+    "publisher_name": "John MacFarlane"
   }
 }

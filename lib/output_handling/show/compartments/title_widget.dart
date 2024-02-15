@@ -11,6 +11,7 @@ import '../../../widget_assets/favicon_widget.dart';
 import '../../../widget_assets/link_button.dart';
 import '../../../winget_db/db_message.dart';
 import '../../../winget_db/winget_db.dart';
+import '../../package_infos/info.dart';
 import '../../package_infos/package_attribute.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 
@@ -141,9 +142,13 @@ class TitleWidget extends Compartment {
   }
 
   Widget _website(AppLocalizations locale) {
+    if (infos.website == null) return const SizedBox();
+    Info<Uri> website = infos.website!;
     return LinkButton(
-        url: infos.website!.value,
-        text: Text(PackageAttribute.website.title(locale)));
+        url: website.value,
+        text: Text(website.value.toString().startsWith('https://github.com/')
+            ? 'GitHub'
+            : website.title(locale)));
   }
 
   StoreButton _showInStore(AppLocalizations locale) {

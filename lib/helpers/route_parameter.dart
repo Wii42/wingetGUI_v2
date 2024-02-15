@@ -26,3 +26,9 @@ class LogRouteParameter extends RouteParameter {
 
   const LogRouteParameter({required this.log, super.commandParameter, super.titleAddon});
 }
+
+class SearchRouteParameter extends RouteParameter {
+  final bool Function(PackageInfosPeek)? packageFilter;
+
+  const SearchRouteParameter({this.packageFilter, super.commandParameter, super.titleAddon});
+}

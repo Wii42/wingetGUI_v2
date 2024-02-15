@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import 'package:winget_gui/widget_assets/winget_db_table_page.dart';
@@ -39,12 +40,12 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  static void Function(String) search(BuildContext context) {
+  static void Function(String) search(BuildContext context, {bool Function(PackageInfosPeek)? packageFilter}) {
     NavigatorState navigator = Navigator.of(context);
     return (input) {
       navigator.pushNamed(Routes.deepSearchPage.route,
-          arguments: RouteParameter(
-              commandParameter: [input], titleAddon: "'$input'"));
+          arguments: SearchRouteParameter(
+              commandParameter: [input], titleAddon: "'$input'", packageFilter: packageFilter));
     };
   }
 

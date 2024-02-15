@@ -7,12 +7,15 @@ import 'package:winget_gui/winget_db/db_table_creator.dart';
 import '../helpers/route_parameter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../output_handling/package_infos/package_infos_peek.dart';
 import '../winget_commands.dart';
 
 class DeepSearchPage extends StatelessWidget {
   final List<String> searchFor;
   final String? titleAddon;
-  const DeepSearchPage(this.searchFor, {super.key, this.titleAddon});
+  final bool Function(PackageInfosPeek)? packageFilter;
+  const DeepSearchPage(this.searchFor,
+      {super.key, this.titleAddon, this.packageFilter});
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +42,7 @@ class DeepSearchPage extends StatelessWidget {
               onlyWithSourceButton: false,
               filterField: false,
             ),
-            packageOptions:
-                const PackageListPackageOptions(showMatch: true),
+            packageOptions: const PackageListPackageOptions(showMatch: true),
           );
         }
         if (snapshot.hasData) {
@@ -62,9 +64,14 @@ class DeepSearchPage extends StatelessWidget {
           "Title addon of route parameter of DeepSearchPage must not be null");
     }
     List<String> searchFor = parameters.commandParameter!;
+    bool Function(PackageInfosPeek)? packageFilter;
+    if (parameters is SearchRouteParameter) {
+      packageFilter = parameters.packageFilter;
+    }
     return DeepSearchPage(
       searchFor,
       titleAddon: parameters.titleAddon,
+      packageFilter: packageFilter,
     );
   }
 }

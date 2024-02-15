@@ -447,5 +447,44 @@
     "images": [
       "https://i.postimg.cc/L56h1HsP/edge.png"
     ]
+  },
+  "JetBrains.IntelliJIDEA.*": {
+    "icon": "https://resources.jetbrains.com/storage/products/intellij-idea/img/meta/intellij-idea_logo_300x300.png"
+  },
+  "Microsoft.PowerAutomateDesktop": {
+    "icon": "https://smartbridge.com/wp-content/uploads/PowerAutomate-2020-icon-1024x1024-1-400x400.png"
+  },
+  "PulseBroswer.PulseBrowser": {
+    "icon": "https://raw.githubusercontent.com/pulse-browser/assets/main/stable/pulse-stable.png"
+  },
+  "WhatPulse.WhatPulse": {
+    "icon": "https://whatpulse.org/images/favicon/favicon-96x96.png"
+  },
+  "MapleMedia.PulseSMS": {
+    "icon": "https://home.pulsesms.app/resources/images/android-desktop.png"
+  },
+  "Fork.Fork": {
+    "icon": "https://git-fork.com/images/logo.png"
+  },
+  "PointPlanck.FileBot": {
+    "icon": "https://www.filebot.net/images/filebot.logo.svg"
+  },
+  "AntibodySoftware.WizFile": {
+    "icon": "https://antibodysoftware-17031.kxcdn.com/wizfile/images/wizfile445x.png"
+  },
+  "AntibodySoftware.WizKey": {
+    "icon": "https://antibody-software.com/wizkey/images/wizkey370x.png"
+  },
+  "AntibodySoftware.BulkImageDownloader": {
+    "icon": "https://antibodysoftware-17031.kxcdn.com/images/bid_icon_445x445.png"
+  },
+  "eibol.FFmpegBatchAVConverter": {
+    "icon": "https://ahlikompie.com/wp-content/uploads/2021/03/ffmpeg-569477.pngg"
+  },
+  "GlyphrStudio.Desktop": {
+    "icon": "https://www.glyphrstudio.com/blog/wp-content/uploads/2024/01/logo-icon-gradient-squircle.png"
+  },
+  "JohnMacFarlane.Pandoc": {
+    "icon": "https://www.godela.com.br/noticias/imgs/pandoc.png"
   }
 }
