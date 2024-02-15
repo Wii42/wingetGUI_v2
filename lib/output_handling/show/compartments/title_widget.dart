@@ -12,7 +12,6 @@ import '../../../widget_assets/link_button.dart';
 import '../../../winget_db/db_message.dart';
 import '../../../winget_db/winget_db.dart';
 import '../../package_infos/info.dart';
-import '../../package_infos/package_attribute.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 
 class TitleWidget extends Compartment {
