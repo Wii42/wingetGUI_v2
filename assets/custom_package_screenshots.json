@@ -573,5 +573,74 @@
   },
   "Harmonoid.Harmonoid": {
     "icon": "https://harmonoid.com/favicon.ico"
+  },
+  "PassMark.DiskCheckup": {
+    "icon": "https://freesoft.ru/storage/images/203/2028/202705/202705_logo.png"
+  },
+  "PassMark.BatteryMon": {
+    "icon": "https://freesoft.ru/storage/images/203/2028/202702/202702_logo.png"
+  },
+  "SocialchainInc.PiNetwork": {
+    "icon": "https://i.pinimg.com/originals/77/e9/3b/77e93b0b448519a4fd3d762392ad0032.png"
+  },
+  "y-chan.SHAREVOX.*": {
+    "icon": "https://www.sharevox.app/favicon.ico"
+  },
+  "y-chan.SHAREVOX": {
+    "icon": "https://www.sharevox.app/favicon.ico"
+  },
+  "XMoto.XMoto": {
+    "icon": "https://c.clc2l.com/c/thumbnail510webp/t/x/-/x-moto-1BIO-e.png"
+  },
+  "ChiaNetwork.GUIforChiaBlockchain": {
+    "icon": "https://www.chia.net/wp-content/uploads/2023/01/cropped-favicon-01-192x192.png"
+  },
+  "OliverSchwendener.ueli": {
+    "icon": "https://www.ueli.app/assets/favicon.png"
+  },
+  "Pext.Pext": {
+    "icon": "https://pext.io/pext.png"
+  },
+  "DuckDB.cli": {
+    "icon": "https://duckdb.org/images/favicon/favicon.ico"
+  },
+  "tinygo-org.tinygo": {
+    "icon": "https://tinygo.org/images/tinygo-logo.png"
+  },
+  "IcecreamApps.PDFCandy": {
+    "icon": "https://freesoft.ru/storage/images/217/2167/216669/216669_logo.png"
+  },
+  "Loom.Loom": {
+    "icon": "https://assets.stickpng.com/images/62a9b6cb8ff6441a2952dac4.png"
+  },
+  "RiotGames.LeagueOfLegends.*": {
+    "icon": "https://static.wikia.nocookie.net/leagueoflegends/images/1/12/League_of_Legends_Icon.png"
+  },
+  "RiotGames.LegendsOfRuneterra.*": {
+    "icon": "https://assets.stickpng.com/images/5fd60256b83d3d0004f54cf1.png"
+  },
+  "RiotGames.Valorant.*": {
+    "icon": "https://1000logos.net/wp-content/uploads/2022/09/Valorant-Emblem.png"
+  },
+  "GaijinNetwork.WarThunder": {
+    "icon": "https://static.wikia.nocookie.net/warthunder/images/a/a3/WarThunder_icon.png"
+  },
+  "GaijinNetwork.StarConflict": {
+    "icon": "https://mirprogramm.ru/wp-content/uploads/2019/12/star-conflict-logo.png"
+  },
+  "GaijinNetwork.Enlisted": {
+    "icon": "https://static.enlisted.net/modern-3/de/images/da55137c41425d74b22568db19d1fb24.png"
+  },
+  "GaijinNetwork.CRSED": {
+    "icon": "https://gamehag.com/img/games/logo/crsed-foad.png"
+  },
+  "GaijinNetwork.Crossout": {
+    "icon": "https://crossout.net/favicon.ico"
+  },
+  "SURF.eduVPNClient": {
+    "icon": "https://www.eduvpn.org/wp-content/uploads/2020/06/cropped-edu-vpn-logo-darkmode-e1592405552929-192x192.png"
+  },
+  "Diskuv.opam": {
+    "icon": "https://opam.ocaml.org/ext/img/opam.png"
   }
 }

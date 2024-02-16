@@ -614,5 +614,19 @@
   "Splashtop": {
     "publisher_name": null,
     "icon_url": "https://www.splashtop.com/favicon-512x512.png"
+  },
+  "PassMark": {
+    "publisher_name": null,
+    "icon_url": "https://www.passmark.com/source/images/favicon.png"
+  },
+  "OliverSchwendener": {
+    "publisher_name": "Oliver Schwendener"
+  },
+  "IcecreamApps": {
+    "publisher_name": "Icecream Apps"
+  },
+  "GaijinNetwork": {
+    "publisher_name": "Gaijin Network",
+    "icon_url": "https://i.imgflip.com/5of05g.png"
   }
 }
