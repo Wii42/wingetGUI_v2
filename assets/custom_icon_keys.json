@@ -32,5 +32,11 @@
       "Microsoft.EdgeWebView2Runtime",
       "Microsoft.EdgeDriver"
     ]
+  },
+  "classic": {
+    "new_key": "GeoGebra.Classic",
+    "other_keys": [
+      "GeoGebra.Classic.5"
+    ]
   }
 }

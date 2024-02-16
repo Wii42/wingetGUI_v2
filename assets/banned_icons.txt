@@ -9,3 +9,4 @@ drive
 python
 python-3-10
 mediainfo-gui
+zulu

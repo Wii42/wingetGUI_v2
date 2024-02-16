@@ -479,12 +479,99 @@
     "icon": "https://antibodysoftware-17031.kxcdn.com/images/bid_icon_445x445.png"
   },
   "eibol.FFmpegBatchAVConverter": {
-    "icon": "https://ahlikompie.com/wp-content/uploads/2021/03/ffmpeg-569477.pngg"
+    "icon": "https://ahlikompie.com/wp-content/uploads/2021/03/ffmpeg-569477.png"
   },
   "GlyphrStudio.Desktop": {
     "icon": "https://www.glyphrstudio.com/blog/wp-content/uploads/2024/01/logo-icon-gradient-squircle.png"
   },
   "JohnMacFarlane.Pandoc": {
     "icon": "https://www.godela.com.br/noticias/imgs/pandoc.png"
+  },
+  "LGElectronics.SmartShare": {
+    "icon": "https://tvoiprogrammy.ru/wp-content/uploads/2022/01/lg-smartshare-logo.png"
+  },
+  "LGElectronics.LGBridge": {
+    "icon": "https://freesoft.ru/storage/images/217/2168/216791/216791_logo.png"
+  },
+  "Azul.Zulu.*": {
+    "icon": "https://i.postimg.cc/bwR9h2mZ/zulu-icon.png"
+  },
+  "VolkerFischer.Jamulus": {
+    "icon": "https://jamulus.io/assets/img/jamulus-icon-2020.svg"
+  },
+  "AntoniKepinski.ParsifyDesktop": {
+    "icon": "https://avatars.githubusercontent.com/u/60750495"
+  },
+  "BlastApps.FluentSearch": {
+    "icon": "https://fluentsearch.net/favicon.ico"
+  },
+  "FXHOME.HitFilmExpress": {
+    "icon": "https://fxhome.com/wp-content/uploads/2022/02/Logo-Picker.svg"
+  },
+  "PurpleI2P.i2pd": {
+    "icon": "https://i2pd.website/images/favicon.png"
+  },
+  "AndreWiethoff.ExactAudioCopy": {
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/1/18/Exact-Audio-Copy-Icon.png"
+  },
+  "Spicetify.Spicetify": {
+    "icon": "https://spicetify.app/images/spicetify.png"
+  },
+  "TaskPlays.TSWModManager": {
+    "icon": "https://www.bendix.dev/images/tsw-mod-manager.png"
+  },
+  "Heaventools.ResourceTuner": {
+    "icon": "https://taiwebs.com/upload/icons/resource-tuner100-100.png"
+  },
+  "Nulana.Remotix": {
+    "icon": "https://remotix.com/str/images/icon_new2x_gTMUUpA.width-430.png"
+  },
+  "GorillaDevs.GDLauncher": {
+    "icon": "https://edge.gdlauncher.com/assets/gdlauncher_logo.svg"
+  },
+  "Trigone.SystemMonitor": {
+    "icon": "https://www.trigonesoft.com/images/logo.png"
+  },
+  "IrfanSkiljan.IrfanView": {
+    "icon": "https://www.guidingtech.com/wp-content/uploads/IrfanView_4d470f76dc99e18ad75087b1b8410ea9.png"
+  },
+  "ArtifexSoftware.mutool": {
+    "icon": "https://www.mupdf.com/images/logos/muPDF-plus-text.png"
+  },
+  "Alex313031.Thorium.AVX2": {
+    "icon": "https://thorium.rocks/imgs/thorium.svg"
+  },
+  "Cimbali.pympress": {
+    "icon": "https://pympress.github.io/_static/pympress.png"
+  },
+  "e2eSoft.iVCam": {
+    "icon": "https://play-lh.googleusercontent.com/8jC23Ld39DZlecsT9Hu5ZQOR2-8b-Fj-cvkEE3KWldxWPf1jEdv6ofbh9Z6CJ90I1w"
+  },
+  "Ghostery.GhosteryDawn": {
+    "icon": "https://www.techwibe.com/wp-content/uploads/2015/05/unnamed-3.png"
+  },
+  "Audius.Audius": {
+    "icon": "https://audius.co/assets/audiusLogoColored-f7137102.png"
+  },
+  "LyonBros.Turtl": {
+    "icon": "https://turtlapp.com/images/logo.svg"
+  },
+  "OpenStenoProject.Plover": {
+    "icon": "https://images.pling.com/cache/85x85-2/img/00/00/50/02/87/1307193/d0e650b2ddc8a0f8b99ef24da1230c03b69b.png"
+  },
+  "Alist.Alist": {
+    "icon": "https://alist.nn.ci/logo.svg"
+  },
+  "JinweiZhiguang.MasterGo": {
+    "icon": "https://mastergo.com/favicon.ico"
+  },
+  "Kaitai.StructCompiler": {
+    "icon": "https://kaitai.io/favicon.ico"
+  },
+  "CubeSoft.CubeICE": {
+    "icon": "https://www.naporitansushi.com/wp-content/uploads/2023/03/cubeice_02.png"
+  },
+  "Harmonoid.Harmonoid": {
+    "icon": "https://harmonoid.com/favicon.ico"
   }
 }

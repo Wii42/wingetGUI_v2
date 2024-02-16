@@ -99,7 +99,7 @@
   },
   "Azul": {
     "publisher_name": null,
-    "icon_url": "https://logodownload.org/wp-content/uploads/2017/04/adobe-logo-5-1.png"
+    "icon_url": "https://samory.sistemasresponsivos.com.br/wp-content/uploads/2021/10/logo_azul.png"
   },
   "Zype": {
     "publisher_name": null,
@@ -603,5 +603,16 @@
   },
   "JohnMacFarlane": {
     "publisher_name": "John MacFarlane"
+  },
+  "LGElectronics": {
+    "publisher_name": "LG Electronics",
+    "icon_url": "https://www.lg.com/lg5-common-gp/favicons/228x228.png"
+  },
+  "VolkerFischer": {
+    "publisher_name": "Volker Fischer"
+  },
+  "Splashtop": {
+    "publisher_name": null,
+    "icon_url": "https://www.splashtop.com/favicon-512x512.png"
   }
 }
