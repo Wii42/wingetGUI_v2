@@ -154,7 +154,6 @@ class PackageInfosFull extends PackageInfos {
       return PackageInfosFull();
     }
     Map<String, dynamic>? data = file['Data'];
-    print('data: $data ');
     InfoJsonParser dataParser = InfoJsonParser(map: data ?? {});
     List<dynamic>? versions = data?['Versions'];
     Map<String, dynamic>? version = versions?.lastOrNull;

@@ -1,7 +1,6 @@
 import 'package:winget_gui/output_handling/package_infos/agreement_infos.dart';
 
 import 'package:winget_gui/output_handling/package_infos/info.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/expected_return_code.dart';
 
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 

@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
-import 'package:winget_gui/microsoft_store_api/microsoft_store_api.dart';
 import 'package:winget_gui/microsoft_store_api/microsoft_store_manifest_api.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
@@ -116,7 +115,6 @@ class PackageDetailsFromWeb extends StatelessWidget {
     }
     MicrosoftStoreManifestApi api =
         MicrosoftStoreManifestApi(packageID: packageID);
-    print(api.apiUri);
     Map<String, dynamic> map = await api.getJson();
     return PackageInfosFull.fromMSJson(file: map, locale: guiLocale);
   }
