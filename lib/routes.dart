@@ -111,11 +111,9 @@ enum Routes {
   static Widget packageDetailsPage(RouteParameter? parameters) {
     if (parameters is PackageRouteParameter) {
       PackageInfosPeek package = parameters.package;
-      if (package.isWinget()) {
-        if (package.versionManifestPath != null) {
-          return PackageDetailsFromWeb(
-              package: package, titleInput: parameters.titleAddon);
-        }
+      if (package.isWinget() || package.isMicrosoftStore()) {
+        return PackageDetailsFromWeb(
+            package: package, titleInput: parameters.titleAddon);
       }
     }
     return Winget.show.processPage(parameters);

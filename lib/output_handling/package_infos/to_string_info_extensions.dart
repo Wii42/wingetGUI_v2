@@ -22,6 +22,15 @@ extension StringInfo on Info<String> {
         couldBeLink: true,
         customTitle: customTitle);
   }
+
+  Info<T> copyAs<T extends Object>({required T Function(String) parser}) {
+    return Info<T>(
+        title: title,
+        value: parser(value),
+        copyable: copyable,
+        couldBeLink: couldBeLink,
+        customTitle: customTitle);
+  }
 }
 
 extension ListToStringInfo<T> on Info<List<T>> {

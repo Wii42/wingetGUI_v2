@@ -58,14 +58,14 @@ class InfoWithLink {
   Info<String>? toInfoStringIfHasText() =>
       (text != null) ? toStringInfo() : null;
 
-  static InfoWithLink? maybeFromYamlMap(
+  static InfoWithLink? maybeFromApiMap(
       {required Map<dynamic, dynamic>? map,
       required PackageAttribute textInfo,
       required PackageAttribute urlInfo}) {
     if (map == null) {
       return null;
     }
-    return maybeFrom(map, textInfo, textInfo.yamlKey!, urlInfo.yamlKey!);
+    return maybeFrom(map, textInfo, textInfo.apiKey!, urlInfo.apiKey!);
   }
 
   static InfoWithLink? maybeFrom(

@@ -1,4 +1,5 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 
 class Info<T extends Object> {
   final String Function(AppLocalizations) title;
@@ -13,6 +14,15 @@ class Info<T extends Object> {
       this.copyable = false,
       this.couldBeLink = true,
       this.customTitle});
+
+  factory Info.fromAttribute(
+      PackageAttribute attribute, {required T value}) {
+    return Info<T>(
+        title: attribute.title,
+        value: value,
+        copyable: attribute.copyable,
+        couldBeLink: attribute.couldBeLink);
+  }
 
   Info<T> copyWith(
       {String Function(AppLocalizations)? title,

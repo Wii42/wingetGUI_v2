@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/output_handling/package_infos/info_json_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_mode.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_scope.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
@@ -6,7 +7,7 @@ import 'package:winget_gui/output_handling/package_infos/installer_objects/upgra
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../info.dart';
-import '../info_yaml_map_parser.dart';
+import '../info_yaml_parser.dart';
 import '../package_attribute.dart';
 import 'computer_architecture.dart';
 import 'installer_type.dart';
@@ -57,7 +58,7 @@ class Installer {
   static Installer fromYaml(Map installerMap) {
     Map<dynamic, dynamic> map =
         installerMap.map((key, value) => MapEntry(key, value));
-    InfoYamlMapParser parser = InfoYamlMapParser(map: map);
+    InfoYamlParser parser = InfoYamlParser(map: map);
     return Installer(
       architecture:
           parser.maybeArchitectureFromMap(PackageAttribute.architecture)!,
@@ -85,6 +86,39 @@ class Installer {
       availableCommands:
           parser.maybeStringListFromMap(PackageAttribute.availableCommands),
       other: map.map<String, String>(
+          (key, value) => MapEntry(key.toString(), value.toString())),
+    );
+  }
+
+  static Installer fromJson(Map<String, dynamic> installerMap) {
+    InfoJsonParser parser = InfoJsonParser(map: installerMap);
+    return Installer(
+      architecture:
+          parser.maybeArchitectureFromMap(PackageAttribute.architecture)!,
+      url: parser.maybeLinkFromMap(PackageAttribute.installerURL)!,
+      sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer)!,
+      locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale),
+      platform: parser.maybePlatformFromMap(PackageAttribute.platform),
+      minimumOSVersion:
+          parser.maybeStringFromMap(PackageAttribute.minimumOSVersion),
+      type: parser.maybeInstallerTypeFromMap(PackageAttribute.installerType),
+      scope: parser.maybeScopeFromMap(PackageAttribute.installScope),
+      signatureSha256:
+          parser.maybeStringFromMap(PackageAttribute.signatureSha256),
+      elevationRequirement:
+          parser.maybeStringFromMap(PackageAttribute.elevationRequirement),
+      productCode: parser.maybeStringFromMap(PackageAttribute.productCode),
+      appsAndFeaturesEntries:
+          parser.maybeStringFromMap(PackageAttribute.appsAndFeaturesEntries),
+      switches: parser.maybeStringFromMap(PackageAttribute.installerSwitches),
+      modes: parser.maybeInstallModesFromMap(PackageAttribute.installModes),
+      nestedInstallerType: parser
+          .maybeInstallerTypeFromMap(PackageAttribute.nestedInstallerType),
+      upgradeBehavior:
+          parser.maybeUpgradeBehaviorFromMap(PackageAttribute.upgradeBehavior),
+      availableCommands:
+          parser.maybeStringListFromMap(PackageAttribute.availableCommands),
+      other: installerMap.map<String, String>(
           (key, value) => MapEntry(key.toString(), value.toString())),
     );
   }

@@ -42,11 +42,9 @@ class PackageDetailsFromWeb extends StatelessWidget {
           title: Text(text),
           severity: InfoBarSeverity.error,
         ));
-    if (package.manifestApi == null) {
-      return putInfo('versionManifestPath is null');
-    }
-    if (!package.isWinget()) {
-      return putInfo('package is not from Winget');
+
+    if (!package.isWinget() && !package.isMicrosoftStore()) {
+      return putInfo('package is not from known source');
     }
     //if (!package.hasSpecificVersion() && !package.hasAvailableVersion()) {
     // return putInfo('package has no specific version');
@@ -100,6 +98,20 @@ class PackageDetailsFromWeb extends StatelessWidget {
   }
 
   Future<PackageInfosFull> getInfos(Locale? guiLocale) async {
+    if (package.isWinget()) {
+      return getWingetInfos(guiLocale);
+    }
+    else if (package.isMicrosoftStore()) {
+      return getMicrosoftStoreInfos(guiLocale);
+    }
+    throw Exception('Package is not from known Source');
+  }
+
+  Future<PackageInfosFull> getMicrosoftStoreInfos(Locale? guiLocale) async {
+    return PackageInfosFull();
+  }
+
+  Future<PackageInfosFull> getWingetInfos(Locale? guiLocale) async {
     if (package.hasCompleteId()) {
       return extractInfosOnlineFromId(guiLocale, package.id!.value);
     } else {

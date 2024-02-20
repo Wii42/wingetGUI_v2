@@ -101,8 +101,10 @@ class WingetDB {
     available.notifyListeners();
   }
 
-  static bool isPackageInstalled(PackageInfos package) =>
-      WingetDB.instance.installed.idMap.containsKey(package.id!.value);
+  static bool isPackageInstalled(PackageInfos package) {
+    if(package.id == null) return false;
+    return WingetDB.instance.installed.idMap.containsKey(package.id?.value);
+  }
 
   static bool isPackageUpgradable(PackageInfosPeek package) =>
       package.availableVersion != null &&

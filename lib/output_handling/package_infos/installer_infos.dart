@@ -5,8 +5,9 @@ import 'package:winget_gui/output_handling/package_infos/installer_objects/insta
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_scope.dart';
 
 import 'info.dart';
+import 'info_json_parser.dart';
 import 'info_map_parser.dart';
-import 'info_yaml_map_parser.dart';
+import 'info_yaml_parser.dart';
 import 'installer_objects/dependencies.dart';
 import 'installer_objects/installer.dart';
 import 'installer_objects/installer_type.dart';
@@ -89,7 +90,7 @@ class InstallerInfos {
     if (installerDetails == null || installerDetails.isEmpty) {
       return null;
     }
-    InfoYamlMapParser parser = InfoYamlMapParser(map: installerDetails);
+    InfoYamlParser parser = InfoYamlParser(map: installerDetails);
     return InstallerInfos(
         title: PackageAttribute.installer.title,
         type: parser.maybeInstallerTypeFromMap(PackageAttribute.installerType),
@@ -125,5 +126,20 @@ class InstallerInfos {
         protocols: parser.maybeStringListFromMap(PackageAttribute.protocols),
         otherInfos: installerDetails.map<String, String>(
             (key, value) => MapEntry(key.toString(), value.toString())));
+  }
+
+  static InstallerInfos? maybeFromJsonMap(
+      {Map<String, dynamic>? installerDetails}) {
+    if (installerDetails == null || installerDetails.isEmpty) {
+      return null;
+    }
+    InfoJsonParser parser = InfoJsonParser(map: installerDetails);
+    return InstallerInfos(
+      title: PackageAttribute.installer.title,
+      installers: parser.maybeListFromMap<Installer>(
+          PackageAttribute.installers, parser: (map) {
+        return Installer.fromYaml(map);
+      }),
+    );
   }
 }
