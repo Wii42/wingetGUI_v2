@@ -5,6 +5,7 @@ import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/helpers/locale_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/info_yaml_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
 
 import './package_infos.dart';
 import 'agreement_infos.dart';
@@ -159,35 +160,59 @@ class PackageInfosFull extends PackageInfos {
     Map<String, dynamic>? version = versions?.lastOrNull;
     InfoJsonParser versionParser = InfoJsonParser(map: version ?? {});
     Map<String, dynamic>? defaultLocale = version?['DefaultLocale'];
+    List<dynamic>? agreements = defaultLocale?['Agreements'];
     Map<String, dynamic>? selectedLocale =
         getOptimalLocaleMap(defaultLocale, version, locale);
-    InfoJsonParser localeParser =
-        InfoJsonParser(map: selectedLocale ?? defaultLocale ?? {});
+    InfoJsonParser localeParser = InfoJsonParser(
+        map: selectedLocale ?? defaultLocale ?? {}, agreements: agreements);
+    InfoJsonParser defaultLocaleParser =
+        InfoJsonParser(map: defaultLocale ?? {}, agreements: agreements);
+    InfoJsonParser agreementsParser = InfoJsonParser(
+        map: localeParser.agreementMap ??
+            defaultLocaleParser.agreementMap ??
+            {});
+
     PackageInfosFull infos = PackageInfosFull(
       name: localeParser.maybeStringFromMap(PackageAttribute.name),
       id: dataParser.maybeStringFromMap(PackageAttribute.id),
-      description:
-          localeParser.maybeStringFromMap(PackageAttribute.description),
+      description: localeParser
+              .maybeStringFromMap(PackageAttribute.description) ??
+          defaultLocaleParser.maybeStringFromMap(PackageAttribute.description),
       shortDescription:
-          localeParser.maybeStringFromMap(PackageAttribute.shortDescription),
+          (localeParser.maybeStringFromMap(PackageAttribute.shortDescription) ??
+                  defaultLocaleParser
+                      .maybeStringFromMap(PackageAttribute.shortDescription))
+              ?.onlyFirstLine(),
       supportUrl:
-          localeParser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
+          localeParser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl) ??
+              defaultLocaleParser
+                  .maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
       version: versionParser.maybeStringFromMap(PackageAttribute.version),
-      website: localeParser.maybeLinkFromMap(PackageAttribute.website),
-      author: localeParser.maybeStringFromMap(PackageAttribute.author),
-      moniker: localeParser.maybeStringFromMap(PackageAttribute.moniker),
+      website: localeParser.maybeLinkFromMap(PackageAttribute.website) ??
+          defaultLocaleParser.maybeLinkFromMap(PackageAttribute.website),
+      author: localeParser.maybeStringFromMap(PackageAttribute.author) ??
+          defaultLocaleParser.maybeStringFromMap(PackageAttribute.author),
+      moniker: localeParser.maybeStringFromMap(PackageAttribute.moniker) ??
+          defaultLocaleParser.maybeStringFromMap(PackageAttribute.moniker),
       releaseNotes: localeParser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.releaseNotes,
-          urlInfo: PackageAttribute.releaseNotesUrl),
-      agreement: versionParser.maybeAgreementFromMap(),
-      tags: versionParser.maybeTagsFromMap(),
+              textInfo: PackageAttribute.releaseNotes,
+              urlInfo: PackageAttribute.releaseNotesUrl) ??
+          defaultLocaleParser.maybeInfoWithLinkFromMap(
+              textInfo: PackageAttribute.releaseNotes,
+              urlInfo: PackageAttribute.releaseNotesUrl),
+      agreement: localeParser.maybeAgreementFromMap(),
+      tags: localeParser.maybeTagsFromMap() ??
+          defaultLocaleParser.maybeTagsFromMap(),
       packageLocale:
-          versionParser.maybeLocaleFromMap(PackageAttribute.packageLocale),
-      installer: InstallerInfos.maybeFromJsonMap(installerDetails: file),
-      otherInfos: file.isNotEmpty
-          ? file.map<String, String>(
-              (key, value) => MapEntry(key.toString(), value.toString()))
-          : null,
+          localeParser.maybeLocaleFromMap(PackageAttribute.packageLocale) ??
+              defaultLocaleParser
+                  .maybeLocaleFromMap(PackageAttribute.packageLocale),
+      installer: InstallerInfos.maybeFromJsonMap(installerDetails: version),
+      category: agreementsParser.maybeStringFromMap(PackageAttribute.category),
+      freeTrial:
+          agreementsParser.maybeStringFromMap(PackageAttribute.freeTrial),
+      pricing: agreementsParser.maybeStringFromMap(PackageAttribute.pricing),
+      otherInfos: localeParser.getOtherInfos(),
     );
     return infos..setImplicitInfos();
   }

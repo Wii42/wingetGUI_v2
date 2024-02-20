@@ -67,13 +67,15 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       (installer?.upgradeBehavior ?? infos.upgradeBehavior)
           ?.toStringInfo(context),
       (installer?.modes ?? infos.installModes)?.toStringInfo(localization),
-      infos.storeProductID,
+      installer?.storeProductID?? infos.storeProductID,
       installer?.sha256Hash ?? infos.sha256Hash,
       //infos.installerSwitches,
       installer?.elevationRequirement ?? infos.elevationRequirement,
       installer?.productCode ?? infos.productCode,
       infos.dependencies?.toStringInfo(),
       installer?.signatureSha256,
+      installer?.markets,
+      installer?.packageFamilyName
     ];
 
     Widget content = Column(
@@ -91,7 +93,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             ],
             buttonRow: template.buttonRow([
               infos.url,
-              selectedInstaller?.url.copyWith(
+              selectedInstaller?.url?.copyWith(
                   customTitle: localization.downloadInstallerManually(
                       selectedInstaller?.uniqueProperties(
                           infos.installers!.value, context)))

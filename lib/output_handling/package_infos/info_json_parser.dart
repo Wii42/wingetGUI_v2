@@ -5,13 +5,15 @@ import 'package:winget_gui/output_handling/package_infos/info.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 
 import 'info_api_parser.dart';
+import 'package:dart_casing/dart_casing.dart';
 
 class InfoJsonParser extends InfoApiParser<String> {
-  InfoJsonParser({required super.map});
+  List<dynamic>? agreements;
+  InfoJsonParser({required super.map, this.agreements});
 
   @override
   AgreementInfos? maybeAgreementFromMap() {
-    return AgreementInfos.maybeFromJsonMap(map: map);
+    return AgreementInfos.maybeFromJsonMap(map: map, agreementsMap: agreementMap);
   }
 
   @override
@@ -33,8 +35,62 @@ class InfoJsonParser extends InfoApiParser<String> {
     if (tagList != null) {
       List<String> tags = tagList.map((element) => element.toString()).toList();
       map.remove(key);
-      return tags;
+      if(tags.isNotEmpty) {
+        return tags;
+      }
     }
     return null;
+  }
+
+  @override
+  String? valueToString(value) {
+    if (value is Map<String, dynamic>) {
+      value.remove('\$type');
+      Map<String, String?> other = value
+          .map((key, value) => MapEntry(key.toString(), valueToString(value)));
+      other.removeWhere((key, value) => value == null);
+      Map<String, String> nonNulls = other.cast<String, String>();
+      if (nonNulls.length == 1) {
+        return nonNulls.values.first;
+      }
+      return nonNulls.isNotEmpty ? nonNulls.toString() : null;
+    }
+    if (value is List) {
+      List list = value.map<String?>((e) => valueToString(e)).nonNulls.toList();
+      if (list.length == 1) {
+        return list.first;
+      }
+      return list.isNotEmpty ? list.toString() : null;
+    }
+    return value.toString();
+  }
+
+  @override
+  Info<String>? maybeStringFromMap(PackageAttribute attribute) {
+    assert(attribute.apiKey != null);
+    dynamic node = map[attribute.apiKey];
+    String? detail = (node != null) ? valueToString(node) : null;
+    map.remove(attribute.apiKey!);
+    return (detail != null)
+        ? Info<String>.fromAttribute(attribute, value: detail)
+        : null;
+  }
+
+  Map<String, String>? get agreementMap {
+    if (agreements == null) return null;
+    Iterable<MapEntry<String?, String?>> nullableMap =
+        agreements!.map<MapEntry<String?, String?>>((e) {
+      String? key = e['AgreementLabel'];
+      if (key != null) {
+        key = Casing.pascalCase(key);
+      }
+      String? value = e['AgreementUrl'] ?? e['Agreement'];
+      return MapEntry(key, value);
+    });
+    Iterable<MapEntry<String, String>> nonNulls = nullableMap
+        .where((element) => element.key != null && element.value != null)
+        .map((e) => MapEntry(e.key!, e.value!));
+    if (nonNulls.isEmpty) return null;
+    return Map.fromEntries(nonNulls);
   }
 }

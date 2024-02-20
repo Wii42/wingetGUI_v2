@@ -14,9 +14,13 @@ import 'installer_type.dart';
 import 'windows_platform.dart';
 
 class Installer {
+  static final Info<ComputerArchitecture> fallbackArchitecture =
+      Info<ComputerArchitecture>.fromAttribute(PackageAttribute.architecture,
+          value: ComputerArchitecture.matchAll);
+
   final Info<ComputerArchitecture> architecture;
-  final Info<Uri> url;
-  final Info<String> sha256Hash;
+  final Info<Uri>? url;
+  final Info<String>? sha256Hash;
   final Info<Locale>? locale;
   final Info<List<WindowsPlatform>>? platform;
   final Info<String>? minimumOSVersion;
@@ -31,6 +35,9 @@ class Installer {
   final Info<UpgradeBehavior>? upgradeBehavior;
   final Info<InstallerType>? nestedInstallerType;
   final Info<List<String>>? availableCommands;
+  final Info<String>? storeProductID;
+  final Info<String>? markets;
+  final Info<String>? packageFamilyName;
 
   final Map<String, String> other;
 
@@ -52,6 +59,9 @@ class Installer {
     this.nestedInstallerType,
     this.upgradeBehavior,
     this.availableCommands,
+    this.storeProductID,
+    this.markets,
+    this.packageFamilyName,
     this.other = const {},
   });
 
@@ -61,9 +71,10 @@ class Installer {
     InfoYamlParser parser = InfoYamlParser(map: map);
     return Installer(
       architecture:
-          parser.maybeArchitectureFromMap(PackageAttribute.architecture)!,
-      url: parser.maybeLinkFromMap(PackageAttribute.installerURL)!,
-      sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer)!,
+          parser.maybeArchitectureFromMap(PackageAttribute.architecture) ??
+              fallbackArchitecture,
+      url: parser.maybeLinkFromMap(PackageAttribute.installerURL),
+      sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer),
       locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale),
       platform: parser.maybePlatformFromMap(PackageAttribute.platform),
       minimumOSVersion:
@@ -94,9 +105,10 @@ class Installer {
     InfoJsonParser parser = InfoJsonParser(map: installerMap);
     return Installer(
       architecture:
-          parser.maybeArchitectureFromMap(PackageAttribute.architecture)!,
-      url: parser.maybeLinkFromMap(PackageAttribute.installerURL)!,
-      sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer)!,
+          parser.maybeArchitectureFromMap(PackageAttribute.architecture) ??
+              fallbackArchitecture,
+      url: parser.maybeLinkFromMap(PackageAttribute.installerURL),
+      sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer),
       locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale),
       platform: parser.maybePlatformFromMap(PackageAttribute.platform),
       minimumOSVersion:
@@ -118,8 +130,11 @@ class Installer {
           parser.maybeUpgradeBehaviorFromMap(PackageAttribute.upgradeBehavior),
       availableCommands:
           parser.maybeStringListFromMap(PackageAttribute.availableCommands),
-      other: installerMap.map<String, String>(
-          (key, value) => MapEntry(key.toString(), value.toString())),
+      storeProductID: parser.maybeStringFromMap(PackageAttribute.storeProductID),
+      markets: parser.maybeStringFromMap(PackageAttribute.markets),
+      packageFamilyName:
+          parser.maybeStringFromMap(PackageAttribute.packageFamilyName),
+      other: parser.getOtherInfos() ?? {},
     );
   }
 

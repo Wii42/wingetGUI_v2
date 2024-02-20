@@ -118,7 +118,7 @@ class PackageDetailsFromWeb extends StatelessWidget {
         MicrosoftStoreManifestApi(packageID: packageID);
     print(api.apiUri);
     Map<String, dynamic> map = await api.getJson();
-    return PackageInfosFull.fromMSJson(file: map);
+    return PackageInfosFull.fromMSJson(file: map, locale: guiLocale);
   }
 
   Future<PackageInfosFull> getWingetInfos(Locale? guiLocale) async {

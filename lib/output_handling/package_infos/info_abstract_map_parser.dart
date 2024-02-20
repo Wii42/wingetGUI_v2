@@ -75,4 +75,9 @@ abstract class InfoAbstractMapParser<A, B> {
       PackageAttribute installerType) {
     return maybeValueFromMap(installerType, InstallerType.parse);
   }
+
+  Map<String, String>? getOtherInfos() {
+    if (map.isEmpty) return null;
+    return map.map((key, value) => MapEntry(key.toString(), value.toString()));
+  }
 }

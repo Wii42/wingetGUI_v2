@@ -31,6 +31,15 @@ extension StringInfo on Info<String> {
         couldBeLink: couldBeLink,
         customTitle: customTitle);
   }
+
+  Info<String> onlyFirstLine(){
+    String firstLine = value.split('\n').first;
+    if (firstLine.contains('. ')) {
+      firstLine = '${firstLine.split('. ').first}.';
+    }
+    return copyWith(value: firstLine);
+  }
+
 }
 
 extension ListToStringInfo<T> on Info<List<T>> {

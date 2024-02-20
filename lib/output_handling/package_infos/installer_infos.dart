@@ -138,7 +138,7 @@ class InstallerInfos {
       title: PackageAttribute.installer.title,
       installers: parser.maybeListFromMap<Installer>(
           PackageAttribute.installers, parser: (map) {
-        return Installer.fromYaml(map);
+        return Installer.fromJson(map);
       }),
     );
   }

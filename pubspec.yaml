@@ -40,6 +40,7 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   fluentui_system_icons: ^1.1.225
   provider: ^6.1.1
+  dart_casing: ^3.0.1
 
 dev_dependencies:
   flutter_test:

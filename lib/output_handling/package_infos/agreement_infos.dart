@@ -79,12 +79,15 @@ class AgreementInfos {
     return agreement.isNotEmpty() ? agreement : null;
   }
 
-  static AgreementInfos? maybeFromJsonMap(
-      {required Map<String, dynamic>? map}) {
-    if (map == null) {
+  static AgreementInfos? maybeFromJsonMap({
+    required Map<String, dynamic>? map,
+    required Map<String, dynamic>? agreementsMap,
+  }) {
+    if (map == null && agreementsMap == null) {
       return null;
     }
-    InfoJsonParser parser = InfoJsonParser(map: map);
+    InfoJsonParser parser = InfoJsonParser(map: map ?? {});
+    InfoJsonParser agreementsParser = InfoJsonParser(map: agreementsMap ?? {});
 
     AgreementInfos agreement = AgreementInfos(
       title: PackageAttribute.agreement.title,
@@ -94,6 +97,16 @@ class AgreementInfos {
       license: parser.maybeInfoWithLinkFromMap(
           textInfo: PackageAttribute.license,
           urlInfo: PackageAttribute.licenseUrl),
+      copyright: parser.maybeInfoWithLinkFromMap(
+          textInfo: PackageAttribute.copyright,
+          urlInfo: PackageAttribute.copyrightUrl),
+      privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl),
+      termsOfTransaction:
+          agreementsParser.maybeStringFromMap(PackageAttribute.termsOfTransaction),
+      seizureWarning:
+          agreementsParser.maybeStringFromMap(PackageAttribute.seizureWarning),
+      storeLicenseTerms:
+          agreementsParser.maybeStringFromMap(PackageAttribute.storeLicenseTerms),
     );
     return agreement.isNotEmpty() ? agreement : null;
   }

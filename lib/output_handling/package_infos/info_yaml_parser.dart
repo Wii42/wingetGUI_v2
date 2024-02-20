@@ -83,4 +83,28 @@ class InfoYamlParser extends InfoApiParser<dynamic> {
     return maybeFromMap<Dependencies>(dependencies,
         parser: (e) => Dependencies.fromYamlMap(e));
   }
+
+  @override
+  String? valueToString(value) {
+    if (value is YamlMap) {
+      Map<dynamic, dynamic> valueMap = value;
+      Map<String, String?> other = valueMap
+          .map((key, value) => MapEntry(key.toString(), valueToString(value)));
+      other.removeWhere((key, value) => value == null);
+      Map<String, String> nonNulls = other.cast<String, String>();
+      if (nonNulls.length == 1) {
+        return nonNulls.values.first;
+      }
+      return nonNulls.isNotEmpty ? nonNulls.toString() : null;
+    }
+    if (value is YamlList) {
+      List list =
+          value.value.map<String?>((e) => valueToString(e)).nonNulls.toList();
+      if (list.length == 1) {
+        return list.first;
+      }
+      return list.isNotEmpty ? list.toString() : null;
+    }
+    return value.toString();
+  }
 }
