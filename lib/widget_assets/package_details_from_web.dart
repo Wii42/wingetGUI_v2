@@ -2,6 +2,9 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
+import 'package:winget_gui/microsoft_store_api/microsoft_store_api.dart';
+import 'package:winget_gui/microsoft_store_api/microsoft_store_manifest_api.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
@@ -100,15 +103,22 @@ class PackageDetailsFromWeb extends StatelessWidget {
   Future<PackageInfosFull> getInfos(Locale? guiLocale) async {
     if (package.isWinget()) {
       return getWingetInfos(guiLocale);
-    }
-    else if (package.isMicrosoftStore()) {
+    } else if (package.isMicrosoftStore()) {
       return getMicrosoftStoreInfos(guiLocale);
     }
     throw Exception('Package is not from known Source');
   }
 
   Future<PackageInfosFull> getMicrosoftStoreInfos(Locale? guiLocale) async {
-    return PackageInfosFull();
+    String? packageID = package.id?.value;
+    if (packageID == null) {
+      throw Exception('Package has no ID');
+    }
+    MicrosoftStoreManifestApi api =
+        MicrosoftStoreManifestApi(packageID: packageID);
+    print(api.apiUri);
+    Map<String, dynamic> map = await api.getJson();
+    return PackageInfosFull.fromMSJson(file: map);
   }
 
   Future<PackageInfosFull> getWingetInfos(Locale? guiLocale) async {
@@ -229,15 +239,9 @@ class PackageDetailsFromWeb extends StatelessWidget {
     }
 
     if (guiLocale != null) {
-      List<Locale> matchingLocales = availableLocales
-          .where((element) => element.languageCode == guiLocale.languageCode)
-          .toList();
-      if (matchingLocales.isNotEmpty) {
-        if (matchingLocales.length == 1) {
-          return matchingLocales.single;
-        }
-        return matchingLocales.first;
-        //TODO: check for country code
+      Locale? bestFitting = guiLocale.bestFittingLocale(availableLocales);
+      if (bestFitting != null) {
+        return bestFitting;
       }
     }
     Locale? defaultLocale = await getDefaultLocale(manifest);

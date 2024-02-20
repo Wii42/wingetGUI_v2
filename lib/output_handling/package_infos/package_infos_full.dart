@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
+import 'package:winget_gui/helpers/locale_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/info_yaml_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 
@@ -146,37 +148,73 @@ class PackageInfosFull extends PackageInfos {
   }
 
   factory PackageInfosFull.fromMSJson(
-      {required Map<String, dynamic>? details}) {
-    if (details == null) {
+      {required Map<String, dynamic>? file, Locale? locale}) {
+    if (file == null) {
       return PackageInfosFull();
     }
-
-    details.removeWhere((key, value) => value == null);
-    InfoJsonParser parser = InfoJsonParser(map: details);
+    Map<String, dynamic>? data = file['Data'];
+    print('data: $data ');
+    InfoJsonParser dataParser = InfoJsonParser(map: data ?? {});
+    List<dynamic>? versions = data?['Versions'];
+    Map<String, dynamic>? version = versions?.lastOrNull;
+    InfoJsonParser versionParser = InfoJsonParser(map: version ?? {});
+    Map<String, dynamic>? defaultLocale = version?['DefaultLocale'];
+    Map<String, dynamic>? selectedLocale =
+        getOptimalLocaleMap(defaultLocale, version, locale);
+    InfoJsonParser localeParser =
+        InfoJsonParser(map: selectedLocale ?? defaultLocale ?? {});
     PackageInfosFull infos = PackageInfosFull(
-      name: parser.maybeStringFromMap(PackageAttribute.name),
-      id: parser.maybeStringFromMap(PackageAttribute.id),
-      description: parser.maybeStringFromMap(PackageAttribute.description),
+      name: localeParser.maybeStringFromMap(PackageAttribute.name),
+      id: dataParser.maybeStringFromMap(PackageAttribute.id),
+      description:
+          localeParser.maybeStringFromMap(PackageAttribute.description),
       shortDescription:
-          parser.maybeStringFromMap(PackageAttribute.shortDescription),
-      supportUrl: parser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
-      version: parser.maybeStringFromMap(PackageAttribute.version),
-      website: parser.maybeLinkFromMap(PackageAttribute.website),
-      author: parser.maybeStringFromMap(PackageAttribute.author),
-      moniker: parser.maybeStringFromMap(PackageAttribute.moniker),
-      releaseNotes: parser.maybeInfoWithLinkFromMap(
+          localeParser.maybeStringFromMap(PackageAttribute.shortDescription),
+      supportUrl:
+          localeParser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
+      version: versionParser.maybeStringFromMap(PackageAttribute.version),
+      website: localeParser.maybeLinkFromMap(PackageAttribute.website),
+      author: localeParser.maybeStringFromMap(PackageAttribute.author),
+      moniker: localeParser.maybeStringFromMap(PackageAttribute.moniker),
+      releaseNotes: localeParser.maybeInfoWithLinkFromMap(
           textInfo: PackageAttribute.releaseNotes,
           urlInfo: PackageAttribute.releaseNotesUrl),
-      agreement: parser.maybeAgreementFromMap(),
-      tags: parser.maybeTagsFromMap(),
-      packageLocale: parser.maybeLocaleFromMap(PackageAttribute.packageLocale),
-      installer: InstallerInfos.maybeFromJsonMap(installerDetails: details),
-      otherInfos: details.isNotEmpty
-          ? details.map<String, String>(
+      agreement: versionParser.maybeAgreementFromMap(),
+      tags: versionParser.maybeTagsFromMap(),
+      packageLocale:
+          versionParser.maybeLocaleFromMap(PackageAttribute.packageLocale),
+      installer: InstallerInfos.maybeFromJsonMap(installerDetails: file),
+      otherInfos: file.isNotEmpty
+          ? file.map<String, String>(
               (key, value) => MapEntry(key.toString(), value.toString()))
           : null,
     );
     return infos..setImplicitInfos();
+  }
+
+  static Map<String, dynamic>? getOptimalLocaleMap(
+      Map<String, dynamic>? defaultLocale,
+      Map<String, dynamic>? version,
+      Locale? locale) {
+    Map<String, dynamic>? selectedLocale = defaultLocale;
+    List<dynamic>? locales = version?['Locales'];
+    if (locales != null && locale != null && locales.isNotEmpty) {
+      List<Locale> availableLocales = locales
+          .map<Locale?>((e) =>
+              LocaleParser.tryParse(e[PackageAttribute.packageLocale.apiKey]))
+          .nonNulls
+          .toList();
+      Locale? bestFitting = locale.bestFittingLocale(availableLocales);
+      if (bestFitting != null) {
+        selectedLocale = locales.firstWhere(
+            (element) =>
+                LocaleParser.tryParse(
+                    element[PackageAttribute.packageLocale.apiKey]) ==
+                bestFitting,
+            orElse: () => defaultLocale);
+      }
+    }
+    return selectedLocale ?? defaultLocale;
   }
 
   bool hasInstallerDetails() => installer != null;
