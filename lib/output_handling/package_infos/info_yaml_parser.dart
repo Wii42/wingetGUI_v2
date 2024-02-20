@@ -5,6 +5,7 @@ import 'agreement_infos.dart';
 import 'info.dart';
 import 'info_api_parser.dart';
 import 'info_with_link.dart';
+import 'installer_objects/expected_return_code.dart';
 import 'package_attribute.dart';
 
 class InfoYamlParser extends InfoApiParser<dynamic> {

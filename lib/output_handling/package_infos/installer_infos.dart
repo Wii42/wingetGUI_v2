@@ -9,6 +9,7 @@ import 'info_json_parser.dart';
 import 'info_map_parser.dart';
 import 'info_yaml_parser.dart';
 import 'installer_objects/dependencies.dart';
+import 'installer_objects/expected_return_code.dart';
 import 'installer_objects/installer.dart';
 import 'installer_objects/installer_type.dart';
 import 'installer_objects/upgrade_behavior.dart';
@@ -37,6 +38,8 @@ class InstallerInfos {
   final Info<List<String>>? availableCommands;
   final Info<Dependencies>? dependencies;
   final Info<List<String>>? protocols;
+  final Info<List<ExpectedReturnCode>>? expectedReturnCodes;
+  final Info<List<int>>? successCodes;
 
   final Map<String, String>? otherInfos;
 
@@ -63,6 +66,8 @@ class InstallerInfos {
     this.availableCommands,
     this.protocols,
     this.dependencies,
+    this.expectedReturnCodes,
+    this.successCodes,
     this.otherInfos,
   });
 
@@ -124,6 +129,11 @@ class InstallerInfos {
         dependencies:
             parser.maybeDependenciesFromMap(PackageAttribute.dependencies),
         protocols: parser.maybeStringListFromMap(PackageAttribute.protocols),
+        expectedReturnCodes: parser.maybeExpectedReturnCodesFromMap(
+            PackageAttribute.expectedReturnCodes),
+        successCodes: parser.maybeListFromMap(
+            PackageAttribute.installerSuccessCodes,
+            parser: (e) => int.parse(e.toString())),
         otherInfos: installerDetails.map<String, String>(
             (key, value) => MapEntry(key.toString(), value.toString())));
   }

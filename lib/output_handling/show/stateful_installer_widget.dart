@@ -67,7 +67,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       (installer?.upgradeBehavior ?? infos.upgradeBehavior)
           ?.toStringInfo(context),
       (installer?.modes ?? infos.installModes)?.toStringInfo(localization),
-      installer?.storeProductID?? infos.storeProductID,
+      installer?.storeProductID ?? infos.storeProductID,
       installer?.sha256Hash ?? infos.sha256Hash,
       //infos.installerSwitches,
       installer?.elevationRequirement ?? infos.elevationRequirement,
@@ -75,7 +75,11 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       infos.dependencies?.toStringInfo(),
       installer?.signatureSha256,
       installer?.markets,
-      installer?.packageFamilyName
+      installer?.packageFamilyName,
+      (installer?.expectedReturnCodes ?? infos.expectedReturnCodes)
+          ?.toStringInfo(localization),
+      (installer?.successCodes ?? infos.successCodes)
+          ?.toStringInfoFromList((e) => e.toString()),
     ];
 
     Widget content = Column(
@@ -126,7 +130,9 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (infos.installers != null && infos.installers!.value.length > 1)
-          Text(localizations.multipleInstallersFound(infos.installers?.value.length??'<?>'),
+          Text(
+            localizations.multipleInstallersFound(
+                infos.installers?.value.length ?? '<?>'),
           ),
         Wrap(
           spacing: 10,
@@ -205,7 +211,8 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
               ),
             if (infos.installers != null && fittingInstallers.length >= 2)
               boxSelectInstaller<Installer>(
-                  categoryName:localizations.multipleFittingInstallersFound(fittingInstallers.length),
+                  categoryName: localizations
+                      .multipleFittingInstallersFound(fittingInstallers.length),
                   options: fittingInstallers,
                   title: (item) =>
                       item.uniqueProperties(fittingInstallers, context),

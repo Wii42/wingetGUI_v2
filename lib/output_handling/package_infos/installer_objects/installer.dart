@@ -10,6 +10,7 @@ import '../info.dart';
 import '../info_yaml_parser.dart';
 import '../package_attribute.dart';
 import 'computer_architecture.dart';
+import 'expected_return_code.dart';
 import 'installer_type.dart';
 import 'windows_platform.dart';
 
@@ -38,6 +39,8 @@ class Installer {
   final Info<String>? storeProductID;
   final Info<String>? markets;
   final Info<String>? packageFamilyName;
+  final Info<List<ExpectedReturnCode>>? expectedReturnCodes;
+  final Info<List<int>>? successCodes;
 
   final Map<String, String> other;
 
@@ -62,6 +65,8 @@ class Installer {
     this.storeProductID,
     this.markets,
     this.packageFamilyName,
+    this.expectedReturnCodes,
+    this.successCodes,
     this.other = const {},
   });
 
@@ -96,6 +101,11 @@ class Installer {
           parser.maybeUpgradeBehaviorFromMap(PackageAttribute.upgradeBehavior),
       availableCommands:
           parser.maybeStringListFromMap(PackageAttribute.availableCommands),
+      expectedReturnCodes: parser.maybeExpectedReturnCodesFromMap(
+          PackageAttribute.expectedReturnCodes),
+      successCodes: parser.maybeListFromMap(
+          PackageAttribute.installerSuccessCodes,
+          parser: (e) => int.parse(e.toString())),
       other: map.map<String, String>(
           (key, value) => MapEntry(key.toString(), value.toString())),
     );
@@ -130,10 +140,16 @@ class Installer {
           parser.maybeUpgradeBehaviorFromMap(PackageAttribute.upgradeBehavior),
       availableCommands:
           parser.maybeStringListFromMap(PackageAttribute.availableCommands),
-      storeProductID: parser.maybeStringFromMap(PackageAttribute.storeProductID),
+      storeProductID:
+          parser.maybeStringFromMap(PackageAttribute.storeProductID),
       markets: parser.maybeStringFromMap(PackageAttribute.markets),
       packageFamilyName:
           parser.maybeStringFromMap(PackageAttribute.packageFamilyName),
+      expectedReturnCodes: parser.maybeExpectedReturnCodesFromMap(
+          PackageAttribute.expectedReturnCodes),
+      successCodes: parser.maybeListFromMap(
+          PackageAttribute.installerSuccessCodes,
+          parser: (e) => int.parse(e.toString())),
       other: parser.getOtherInfos() ?? {},
     );
   }

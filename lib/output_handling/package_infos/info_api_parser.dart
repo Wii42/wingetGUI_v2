@@ -1,4 +1,5 @@
 import 'package:winget_gui/output_handling/package_infos/info_abstract_map_parser.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/expected_return_code.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 
 import 'info.dart';
@@ -88,4 +89,8 @@ abstract class InfoApiParser<A> extends InfoAbstractMapParser<A, dynamic> {
     other.removeWhere((key, value) => value == null);
     return other.cast<String, String>();
   }
+
+  Info<List<ExpectedReturnCode>>? maybeExpectedReturnCodesFromMap(
+      PackageAttribute expectedReturnCodes) => maybeListFromMap(expectedReturnCodes, parser: ExpectedReturnCode.fromMap);
+
 }

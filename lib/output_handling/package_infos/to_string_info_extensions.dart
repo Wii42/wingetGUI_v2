@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/windows_platform.dart';
 import 'info.dart';
 import 'installer_objects/dependencies.dart';
+import 'installer_objects/expected_return_code.dart';
 import 'installer_objects/install_mode.dart';
 import 'installer_objects/install_scope.dart';
 import 'installer_objects/upgrade_behavior.dart';
@@ -32,14 +33,13 @@ extension StringInfo on Info<String> {
         customTitle: customTitle);
   }
 
-  Info<String> onlyFirstLine(){
+  Info<String> onlyFirstLine() {
     String firstLine = value.split('\n').first;
     if (firstLine.contains('. ')) {
       firstLine = '${firstLine.split('. ').first}.';
     }
     return copyWith(value: firstLine);
   }
-
 }
 
 extension ListToStringInfo<T> on Info<List<T>> {
@@ -131,4 +131,10 @@ extension LocaleInfo on Info<Locale> {
     return toStringInfoFromObject((locale) =>
         localeNames?.nameOf(locale.toString()) ?? locale.toLanguageTag());
   }
+}
+
+extension ExpectedReturnCodeModeInfo on Info<List<ExpectedReturnCode>> {
+  Info<String> toStringInfo(AppLocalizations locale) =>
+      toStringInfoFromList((object) =>
+          "${object.returnCode}: ${object.response.title(locale)}${object.returnResponseUrl != null ? ' (${object.returnResponseUrl})' : ''}");
 }

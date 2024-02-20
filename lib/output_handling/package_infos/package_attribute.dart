@@ -63,6 +63,8 @@ enum PackageAttribute {
   protocols(apiKey: 'Protocols', couldBeLink: false),
   markets(apiKey: 'Markets'),
   packageFamilyName(apiKey: 'PackageFamilyName', copyable: true),
+  expectedReturnCodes(apiKey: 'ExpectedReturnCodes'),
+  installerSuccessCodes(apiKey: 'InstallerSuccessCodes'),
   ;
 
   final bool copyable;
