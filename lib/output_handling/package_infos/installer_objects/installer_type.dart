@@ -1,4 +1,9 @@
-enum InstallerType {
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+
+import 'identifying_property.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+enum InstallerType implements IdentifyingProperty {
   msix(key: 'msix', shortTitle: 'MSIX'),
   msi(key: 'msi', shortTitle: 'MSI'),
   appx(key: 'appx', shortTitle: 'APPX'),
@@ -17,10 +22,12 @@ enum InstallerType {
   matchAll(key: '_', shortTitle: '<match all>');
 
   final String key;
-  final String shortTitle;
-  final String? longTitle;
+  final String _shortTitle;
+  final String? _longTitle;
   const InstallerType(
-      {required this.key, required this.shortTitle, this.longTitle});
+      {required this.key, required String shortTitle, String? longTitle})
+      : _longTitle = longTitle,
+        _shortTitle = shortTitle;
 
   static InstallerType parse(String string) {
     return maybeParse(string)!;
@@ -38,10 +45,10 @@ enum InstallerType {
     throw ArgumentError('Unknown installer type: $string');
   }
 
-  String get fullTitle {
-    if (longTitle != null) {
-      return "$longTitle ($shortTitle)";
-    }
-    return shortTitle;
-  }
+  @override
+  String shortTitle([AppLocalizations? _]) => _shortTitle;
+  @override
+  String? longTitle([AppLocalizations? _, LocaleNames? __]) => _longTitle;
+  @override
+  bool get fullTitleHasShortAlways => true;
 }

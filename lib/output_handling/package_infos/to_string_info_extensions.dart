@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:intl/intl.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/computer_architecture.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_type.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/windows_platform.dart';
@@ -10,6 +11,7 @@ import 'installer_objects/dependencies.dart';
 import 'installer_objects/expected_return_code.dart';
 import 'installer_objects/install_mode.dart';
 import 'installer_objects/install_scope.dart';
+import 'installer_objects/installer_locale.dart';
 import 'installer_objects/upgrade_behavior.dart';
 
 extension StringInfo on Info<String> {
@@ -87,12 +89,12 @@ extension DependenciesInfo on Info<Dependencies> {
 
 extension InstallerTypeInfo on Info<InstallerType> {
   Info<String> toStringInfo() =>
-      toStringInfoFromObject((object) => object.fullTitle);
+      toStringInfoFromObject((object) => object.fullTitle());
 }
 
 extension ComputerArchitectureInfo on Info<ComputerArchitecture> {
   Info<String> toStringInfo() =>
-      toStringInfoFromObject((object) => object.title);
+      toStringInfoFromObject((object) => object.title());
 }
 
 extension InstallScopeInfo on Info<InstallScope> {
@@ -130,6 +132,14 @@ extension LocaleInfo on Info<Locale> {
     LocaleNames? localeNames = LocaleNames.of(context);
     return toStringInfoFromObject((locale) =>
         localeNames?.nameOf(locale.toString()) ?? locale.toLanguageTag());
+  }
+}
+
+extension InstallerLocaleInfo on Info<InstallerLocale> {
+  Info<String> toStringInfo(BuildContext context) {
+    LocaleNames? localeNames = LocaleNames.of(context);
+    return toStringInfoFromObject(
+        (locale) => locale.title(AppLocalizations.of(context), localeNames));
   }
 }
 

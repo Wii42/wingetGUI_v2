@@ -7,6 +7,7 @@ import '../../helpers/locale_parser.dart';
 import 'agreement_infos.dart';
 import 'info.dart';
 import 'info_with_link.dart';
+import 'installer_objects/installer_locale.dart';
 import 'installer_objects/installer_type.dart';
 
 abstract class InfoAbstractMapParser<A, B> {
@@ -44,6 +45,14 @@ abstract class InfoAbstractMapParser<A, B> {
       return null;
     }
     return localeInfo.copyAs<Locale>(parser: LocaleParser.parse);
+  }
+
+  Info<InstallerLocale>? maybeInstallerLocaleFromMap(PackageAttribute packageLocale) {
+    Info<String>? localeInfo = maybeStringFromMap(packageLocale);
+    if (localeInfo == null) {
+      return null;
+    }
+    return localeInfo.copyAs<InstallerLocale>(parser: LocaleParser.parse);
   }
 
   Info<T>? maybeValueFromMap<T extends Object>(

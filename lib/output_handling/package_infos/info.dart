@@ -46,4 +46,7 @@ class Info<T extends Object> {
         couldBeLink: couldBeLink,
         customTitle: customTitle);
   }
+  Type get valueType {
+    return T;
+  }
 }

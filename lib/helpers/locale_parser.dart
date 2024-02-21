@@ -1,12 +1,12 @@
-import 'dart:ui';
-
 import 'package:intl/locale.dart' as intl;
 
+import '../output_handling/package_infos/installer_objects/installer_locale.dart';
+
 class LocaleParser {
-  static Locale? tryParse(final String rawLocale) {
+  static InstallerLocale? tryParse(final String rawLocale) {
     final intlLocale = intl.Locale.tryParse(rawLocale);
     if (intlLocale != null) {
-      return Locale.fromSubtags(
+      return InstallerLocale.fromSubtags(
           languageCode: intlLocale.languageCode,
           countryCode: intlLocale.countryCode,
           scriptCode: intlLocale.scriptCode);
@@ -14,8 +14,8 @@ class LocaleParser {
     return null;
   }
 
-  static Locale parse(String rawLocale) {
-    Locale? locale = tryParse(rawLocale);
+  static InstallerLocale parse(String rawLocale) {
+    InstallerLocale? locale = tryParse(rawLocale);
     if (locale == null) {
       throw ArgumentError.value(rawLocale, 'rawLocale', 'Invalid locale');
     }

@@ -11,6 +11,7 @@ import 'info_yaml_parser.dart';
 import 'installer_objects/dependencies.dart';
 import 'installer_objects/expected_return_code.dart';
 import 'installer_objects/installer.dart';
+import 'installer_objects/installer_locale.dart';
 import 'installer_objects/installer_type.dart';
 import 'installer_objects/upgrade_behavior.dart';
 import 'installer_objects/windows_platform.dart';
@@ -25,7 +26,7 @@ class InstallerInfos {
   final Info<List<Installer>>? installers;
   final Info<UpgradeBehavior>? upgradeBehavior;
   final Info<List<String>>? fileExtensions;
-  final Info<Locale>? locale;
+  final Info<InstallerLocale>? locale;
   final Info<List<WindowsPlatform>>? platform;
   final Info<String>? minimumOSVersion;
   final Info<InstallScope>? scope;
@@ -83,7 +84,7 @@ class InstallerInfos {
         type: parser.maybeInstallerTypeFromMap(PackageAttribute.installerType),
         url: parser.maybeLinkFromMap(PackageAttribute.installerURL),
         sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer),
-        locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale),
+        locale: parser.maybeInstallerLocaleFromMap(PackageAttribute.installerLocale),
         storeProductID:
             parser.maybeStringFromMap(PackageAttribute.storeProductID),
         releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate),
@@ -99,7 +100,7 @@ class InstallerInfos {
     return InstallerInfos(
         title: PackageAttribute.installer.title,
         type: parser.maybeInstallerTypeFromMap(PackageAttribute.installerType),
-        locale: parser.maybeLocaleFromMap(PackageAttribute.installerLocale),
+        locale: parser.maybeInstallerLocaleFromMap(PackageAttribute.installerLocale),
         releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate),
         installers: parser.maybeListFromMap<Installer>(
             PackageAttribute.installers, parser: (map) {

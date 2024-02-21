@@ -1,4 +1,8 @@
-enum ComputerArchitecture {
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+enum ComputerArchitecture implements IdentifyingProperty {
   x86(key: 'x86', title: 'x86'),
   x64(key: 'x64', title: 'x64'),
   arm(key: 'arm', title: 'ARM'),
@@ -6,9 +10,9 @@ enum ComputerArchitecture {
   neutal(key: 'neutral', title: 'Architecture neutral'),
   matchAll(key: '_', title: '<match all>');
 
-
-  final String key, title;
-  const ComputerArchitecture({required this.key, required this.title});
+  final String key, _title;
+  const ComputerArchitecture({required this.key, required String title})
+      : _title = title;
 
   static ComputerArchitecture parse(String string) {
     return maybeParse(string)!;
@@ -25,4 +29,11 @@ enum ComputerArchitecture {
     }
     throw ArgumentError('Unknown architecture: $architecture');
   }
+
+  @override
+  String shortTitle([AppLocalizations? _]) => _title;
+  @override
+  String? longTitle([AppLocalizations? _, LocaleNames? __]) => null;
+  @override
+  bool get fullTitleHasShortAlways => true;
 }

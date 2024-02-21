@@ -1,15 +1,19 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 
 import '../package_infos/installer_objects/computer_architecture.dart';
 import '../package_infos/installer_objects/install_scope.dart';
 import '../package_infos/installer_objects/installer.dart';
+import '../package_infos/installer_objects/installer_locale.dart';
 import '../package_infos/installer_objects/installer_type.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../package_infos/package_attribute.dart';
 
 class InstallerDifferences {
   List<ComputerArchitecture> architectures;
   List<InstallerType?> types;
-  List<Locale?> locales;
+  List<InstallerLocale?> locales;
   List<InstallScope?> scopes;
 
   String architectureTitle, typeTitle, localeTitle, scopeTitle;
@@ -30,7 +34,7 @@ class InstallerDifferences {
     AppLocalizations locale = AppLocalizations.of(context)!;
     List<ComputerArchitecture> architectures = [];
     List<InstallerType?> types = [];
-    List<Locale?> locales = [];
+    List<InstallerLocale?> locales = [];
     List<InstallScope?> scopes = [];
 
     String? architectureTitle, typeTitle, localeTitle, scopeTitle;
@@ -68,6 +72,19 @@ class InstallerDifferences {
         typeTitle: typeTitle ?? 'Type',
         localeTitle: localeTitle ?? 'Locale',
         scopeTitle: scopeTitle ?? 'Scope');
+  }
+
+  Map<PackageAttribute, List<IdentifyingProperty?>> get asMap {
+    return {
+      PackageAttribute.architecture: architectures,
+      PackageAttribute.installerType: types,
+      PackageAttribute.installerLocale: locales,
+      PackageAttribute.installScope: scopes,
+    };
+  }
+
+  int get possibleCombinations {
+    return architectures.length * types.length * locales.length * scopes.length;
   }
 
   @override

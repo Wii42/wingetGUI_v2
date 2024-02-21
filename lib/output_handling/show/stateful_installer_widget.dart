@@ -5,13 +5,16 @@ import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 
 import '../../widget_assets/app_locale.dart';
 import '../package_infos/info.dart';
 import '../package_infos/installer_objects/computer_architecture.dart';
 import '../package_infos/installer_objects/install_scope.dart';
 import '../package_infos/installer_objects/installer.dart';
+import '../package_infos/installer_objects/installer_locale.dart';
 import '../package_infos/installer_objects/installer_type.dart';
 import '../package_infos/package_attribute.dart';
 import 'compartments/expander_compartment.dart';
@@ -31,11 +34,11 @@ class StatefulInstallerWidget extends StatefulWidget {
 }
 
 class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
-  final Locale matchAllLocale = const Locale('<match all>');
+  final InstallerLocale matchAllLocale = InstallerLocale('<match all>');
 
   ComputerArchitecture? installerArchitecture;
   InstallerType? installerType;
-  Locale? installerLocale;
+  InstallerLocale? installerLocale;
   InstallScope? installerScope;
 
   Installer? selectedInstaller;
@@ -113,17 +116,15 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   ExpanderCompartment get template => widget._template;
 
   Widget selectInstallerWidget(BuildContext context) {
-    print(Installer.equivalenceClasses(infos.installers!.value));
+    Iterable<List<PackageAttribute>> equivalenceClasses =
+        infos.installers!.value.equivalenceClasses();
+    print(equivalenceClasses);
     AppLocalizations localizations = AppLocalizations.of(context)!;
     LocaleNames localeNames = LocaleNames.of(context)!;
     InstallerDifferences differences =
         InstallerDifferences.fromList(infos.installers!.value, context);
-    int possibleCombinations = differences.architectures.length *
-        differences.types.length *
-        differences.locales.length *
-        differences.scopes.length;
     bool hasAllPossibleCombinations =
-        possibleCombinations == infos.installers?.value.length;
+        differences.possibleCombinations == infos.installers?.value.length;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -132,13 +133,31 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             localizations.multipleInstallersFound(
                 infos.installers?.value.length ?? '<?>'),
           ),
+        Wrap(spacing: 10, runSpacing: 10, children: [
+          for (List<PackageAttribute> equivalenceClass in equivalenceClasses)
+            boxSelectInstaller<PackageAttribute>(
+              categoryName: equivalenceClass
+                  .map((e) => e.title(localizations))
+                  .join(' / '),
+              options: equivalenceClass,
+              title: (item) => item.title(localizations),
+              value: equivalenceClass.first,
+              onChanged: (value) {
+                setState(() {
+                  setInstallerProperty(equivalenceClass.first, value);
+                  selectedInstaller = fittingInstallers.firstOrNull;
+                });
+              },
+            )
+        ]),
         if (infos.installers!.value.length == 2)
           boxSelectInstaller<Installer>(
-              categoryName: Installer.uniquePropertyNames(
-                  infos.installers!.value, context),
+              categoryName:
+                  infos.installers!.value.uniquePropertyNames(context),
               options: infos.installers!.value,
-              title: (item) =>
-                  item.uniqueProperties(infos.installers!.value, context, longNames: true),
+              title: (item) => item.uniqueProperties(
+                  infos.installers!.value, context,
+                  longNames: true),
               value: selectedInstaller,
               onChanged: (value) {
                 setState(() => selectedInstaller = value);
@@ -148,11 +167,31 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             spacing: 10,
             runSpacing: 10,
             children: [
+              for (MapEntry<PackageAttribute, Property> e
+                  in Installer.identifyingProperties.entries)
+                if (differences.asMap[e.key]!.length > 1)
+                  boxSelectInstaller<IdentifyingProperty?>(
+                    categoryName: e.key.title(localizations),
+                    options: differences.asMap[e.key]!,
+                    title: (item) =>
+                        item?.fullTitle(localizations, localeNames) ?? 'null',
+                    value: getInstallerProperty(e.key),
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          setInstallerProperty(e.key, value);
+                          selectedInstaller = fittingInstallers.firstOrNull;
+                        },
+                      );
+                    },
+                    matchAll:
+                        !hasAllPossibleCombinations ? getMatchAll(e.key) : null,
+                  ),
               if (differences.architectures.length > 1)
                 boxSelectInstaller<ComputerArchitecture>(
                   categoryName: differences.architectureTitle,
                   options: differences.architectures,
-                  title: (item) => item.title,
+                  title: (item) => item.title(),
                   value: installerArchitecture,
                   onChanged: (value) {
                     if (value != null) {
@@ -172,7 +211,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                 boxSelectInstaller<InstallerType?>(
                   categoryName: differences.typeTitle,
                   options: differences.types,
-                  title: (item) => item?.fullTitle ?? 'null',
+                  title: (item) => item?.fullTitle() ?? 'null',
                   value: installerType,
                   onChanged: (value) {
                     setState(
@@ -187,7 +226,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                       : null,
                 ),
               if (differences.locales.length > 1)
-                boxSelectInstaller<Locale?>(
+                boxSelectInstaller<InstallerLocale?>(
                   categoryName: differences.localeTitle,
                   options: differences.locales,
                   title: (item) =>
@@ -256,7 +295,8 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (categoryName.isNotEmpty) Text(categoryName, style: FluentTheme.of(context).typography.caption),
+        if (categoryName.isNotEmpty)
+          Text(categoryName, style: FluentTheme.of(context).typography.caption),
         ComboBox<T>(
           items: [
             for (T item in options)
@@ -319,6 +359,55 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       return widget.defaultLocale?.bestFittingLocale(installerLocales);
     }
     return null;
+  }
+
+  void setInstallerProperty(PackageAttribute attribute, dynamic value) {
+    switch (attribute) {
+      case PackageAttribute.architecture:
+        installerArchitecture = value;
+        break;
+      case PackageAttribute.installerType:
+        installerType = value;
+        break;
+      case PackageAttribute.installerLocale:
+        installerLocale = value;
+        break;
+      case PackageAttribute.installScope:
+        installerScope = value;
+        break;
+      default:
+        throw ArgumentError('Unknown attribute: $attribute');
+    }
+  }
+
+  IdentifyingProperty? getInstallerProperty(PackageAttribute attribute) {
+    switch (attribute) {
+      case PackageAttribute.architecture:
+        return installerArchitecture;
+      case PackageAttribute.installerType:
+        return installerType;
+      case PackageAttribute.installerLocale:
+        return installerLocale;
+      case PackageAttribute.installScope:
+        return installerScope;
+      default:
+        throw ArgumentError('Unknown attribute: $attribute');
+    }
+  }
+
+  IdentifyingProperty? getMatchAll(PackageAttribute attribute) {
+    switch (attribute) {
+      case PackageAttribute.architecture:
+        return ComputerArchitecture.matchAll;
+      case PackageAttribute.installerType:
+        return InstallerType.matchAll;
+      case PackageAttribute.installerLocale:
+        return matchAllLocale;
+      case PackageAttribute.installScope:
+        return InstallScope.matchAll;
+      default:
+        throw ArgumentError('Unknown attribute: $attribute');
+    }
   }
 }
 
