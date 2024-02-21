@@ -52,7 +52,7 @@
 
   "installMode": "{mode, select, interactive{interaktiv} silent{still} silentWithProgress{still mit Fortschritt} other{NotFoundError}}",
 
-  "upgradeBehavior": "{behavior, select, install{Installieren} uninstallPrevious{Bisherige Version deinstallieren} other{NotFoundError}}",
+  "upgradeBehavior": "{behavior, select, install{Installieren} uninstallPrevious{Bisherige Version deinstallieren} deny{Verweigern} custom{<Benutzerdefiniert>} other{NotFoundError}}",
 
   "cantLoadDetails": "Details konnten nicht geladen werden",
   "noInternetConnection": "Keine Internetverbindung",

@@ -3,6 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 enum UpgradeBehavior {
   install(key: 'install'),
   uninstallPrevious(key: 'uninstallPrevious'),
+  deny(key: 'deny'),
+  custom(key: '_')
   ;
 
   final String key;
@@ -14,7 +16,7 @@ enum UpgradeBehavior {
         return b;
       }
     }
-    throw ArgumentError('Unknown upgrade behavior: $behavior');
+    return custom;
   }
 
   String title(AppLocalizations locale) {

@@ -211,7 +211,8 @@ class PackageInfosFull extends PackageInfos {
       freeTrial:
           agreementsParser.maybeStringFromMap(PackageAttribute.freeTrial),
       pricing: agreementsParser.maybeStringFromMap(PackageAttribute.pricing),
-      otherInfos: localeParser.getOtherInfos(),
+      otherInfos: localeParser.getOtherInfos()
+        ?..remove(PackageAttribute.agreement.apiKey),
     );
     return infos..setImplicitInfos();
   }

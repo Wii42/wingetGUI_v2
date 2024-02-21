@@ -642,5 +642,8 @@
   },
   "Diskuv.opam": {
     "icon": "https://opam.ocaml.org/ext/img/opam.png"
+  },
+  "Google.PlayGames.Beta": {
+    "icon": "https://i.pinimg.com/originals/74/0d/03/740d03d3e888948ceb7098ec6e36b9b6.png"
   }
 }

@@ -52,7 +52,7 @@
 
   "installMode": "{mode, select, interactive{interactive} silent{silent} silentWithProgress{silent with progress} other{NotFoundError}}",
 
-  "upgradeBehavior": "{behavior, select, install{Install} uninstallPrevious{Uninstall previous version} other{NotFoundError}}",
+  "upgradeBehavior": "{behavior, select, install{Install} uninstallPrevious{Uninstall previous version} deny{Deny} custom{<Custom>} other{NotFoundError}}",
 
   "cantLoadDetails": "Can't load details",
   "noInternetConnection": "No internet connection",

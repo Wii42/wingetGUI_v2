@@ -6,6 +6,7 @@ import 'package:winget_gui/output_handling/show/compartments/expandable_text_com
 import 'package:winget_gui/output_handling/show/compartments/screenshots_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/output_handling/show/stateful_installer_widget.dart';
+import 'package:winget_gui/widget_assets/app_locale.dart';
 import 'package:winget_gui/widget_assets/search_button.dart';
 
 import '../../helpers/log_stream.dart';
@@ -22,6 +23,7 @@ class PackageLongInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Locale? guiLocale = AppLocale.of(context).guiLocale;
     return Column(
       children: [
         TitleWidget(infos: infos),
@@ -48,7 +50,11 @@ class PackageLongInfo extends StatelessWidget {
         DetailsWidget(infos: infos),
         if (infos.agreement != null) AgreementWidget(infos: infos.agreement!),
         if (infos.installer != null)
-          StatefulInstallerWidget(infos: infos.installer!),
+          StatefulInstallerWidget(
+            infos: infos.installer!,
+            guiLocale: guiLocale,
+            defaultLocale: infos.packageLocale?.value,
+          ),
         if (infos.hasTags()) _tagButtons(context),
       ].withSpaceBetween(height: 10),
     );
