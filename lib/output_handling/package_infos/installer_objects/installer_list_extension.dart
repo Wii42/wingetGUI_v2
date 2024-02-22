@@ -117,6 +117,23 @@ extension InstallerList on List<Installer> {
     print('done: $done');
     return done;
   }
+
+  List<Installer> fittingInstallers(ComputerArchitecture? installerArchitecture,
+      InstallerType? installerType, InstallerLocale? installerLocale,
+      InstallScope? installerScope, InstallerType? nestedInstallerType){
+    return where((installer) =>
+    (installer.architecture.value == installerArchitecture ||
+    installerArchitecture == ComputerArchitecture.matchAll) &&
+    (installer.type?.value == installerType ||
+    installerType == InstallerType.matchAll) &&
+    (installer.locale?.value == installerLocale ||
+    installerLocale == InstallerLocale.matchAll) &&
+    (installer.scope?.value == installerScope ||
+    installerScope == InstallScope.matchAll) &&
+    (installer.nestedInstallerType?.value == nestedInstallerType ||
+    nestedInstallerType == InstallerType.matchAll))
+        .toList();
+  }
 }
 
 class Partition<T extends IdentifyingProperty> {

@@ -15,6 +15,8 @@ class InstallerLocale extends Locale
     super.countryCode,
     super.scriptCode,
   }) : super.fromSubtags();
+
+  static final InstallerLocale matchAll = InstallerLocale('<match all>');
 }
 
 mixin LocaleTitleMixin on Locale implements IdentifyingProperty {

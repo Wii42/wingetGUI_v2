@@ -17,6 +17,7 @@ import '../package_infos/installer_objects/installer.dart';
 import '../package_infos/installer_objects/installer_locale.dart';
 import '../package_infos/installer_objects/installer_type.dart';
 import '../package_infos/package_attribute.dart';
+import 'box_select_installer.dart';
 import 'compartments/expander_compartment.dart';
 import 'installer_differences.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
@@ -34,8 +35,6 @@ class StatefulInstallerWidget extends StatefulWidget {
 }
 
 class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
-  final InstallerLocale matchAllLocale = InstallerLocale('<match all>');
-
   ComputerArchitecture? installerArchitecture;
   InstallerType? installerType;
   InstallerLocale? installerLocale;
@@ -138,7 +137,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
         if (equivalenceClasses.isNotEmpty)
           Wrap(spacing: 10, runSpacing: 10, children: [
             for (Cluster cluster in equivalenceClasses)
-              boxSelectInstaller<MultiProperty>(
+              BoxSelectInstaller<MultiProperty>(
                 categoryName: cluster.attributes
                     .map((e) => e.title(localizations))
                     .nonNulls
@@ -155,13 +154,14 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                     selectedInstaller = fittingInstallers.firstOrNull;
                   });
                 },
-                matchAll: !hasAllPossibleCombinations
-                    ? getMultiPropertyMatchAll(cluster)
-                    : null,
+                matchAll:
+                    !hasAllPossibleCombinations && equivalenceClasses.length > 1
+                        ? getMultiPropertyMatchAll(cluster)
+                        : null,
               )
           ]),
         if (infos.installers!.value.length == 2)
-          boxSelectInstaller<Installer>(
+          BoxSelectInstaller<Installer>(
               categoryName:
                   infos.installers!.value.uniquePropertyNames(context),
               options: infos.installers!.value,
@@ -180,7 +180,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
               for (MapEntry<PackageAttribute, Property> e
                   in Installer.identifyingProperties.entries)
                 if (differences.asMap[e.key]!.length > 1)
-                  boxSelectInstaller<IdentifyingProperty?>(
+                  BoxSelectInstaller<IdentifyingProperty?>(
                     categoryName: e.key.title(localizations),
                     options: differences.asMap[e.key]!,
                     title: (item) =>
@@ -198,7 +198,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                         !hasAllPossibleCombinations ? getMatchAll(e.key) : null,
                   ),
               if (infos.installers != null && fittingInstallers.length >= 2)
-                boxSelectInstaller<Installer>(
+                BoxSelectInstaller<Installer>(
                     categoryName: localizations.multipleFittingInstallersFound(
                         fittingInstallers.length),
                     options: fittingInstallers,
@@ -252,53 +252,30 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
     });
   }
 
-  Widget boxSelectInstaller<T>(
-      {required String categoryName,
-      required List<T> options,
-      required String Function(T) title,
-      T? value,
-      void Function(T?)? onChanged,
-      T? matchAll}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (categoryName.isNotEmpty)
-          Text(categoryName, style: FluentTheme.of(context).typography.caption),
-        ComboBox<T>(
-          items: [
-            for (T item in options)
-              ComboBoxItem(
-                  value: item,
-                  child: Text(title(item), overflow: TextOverflow.ellipsis)),
-            if (matchAll != null)
-              ComboBoxItem(
-                  value: matchAll,
-                  child:
-                      Text(title(matchAll), overflow: TextOverflow.ellipsis)),
-          ],
-          value: value,
-          onChanged: onChanged,
-          placeholder: const Text('null'),
-        ),
-      ],
-    );
+  List<Installer> get fittingInstallers {
+    return infos.installers?.value.fittingInstallers(
+            installerArchitecture,
+            installerType,
+            installerLocale,
+            installerScope,
+            nestedInstallerType) ??
+        [];
   }
 
-  List<Installer> get fittingInstallers {
-    return infos.installers?.value
-            .where((installer) =>
-                (installer.architecture.value == installerArchitecture ||
-                    installerArchitecture == ComputerArchitecture.matchAll) &&
-                (installer.type?.value == installerType ||
-                    installerType == InstallerType.matchAll) &&
-                (installer.locale?.value == installerLocale ||
-                    installerLocale == matchAllLocale) &&
-                (installer.scope?.value == installerScope ||
-                    installerScope == InstallScope.matchAll) &&
-                (installer.nestedInstallerType?.value == nestedInstallerType ||
-                    nestedInstallerType == InstallerType.matchAll))
-            .toList() ??
+  List<Installer> getFittingInstallersWith(
+      Map<PackageAttribute,dynamic> map) {
+    return infos.installers?.value.fittingInstallers(
+            attribute == PackageAttribute.architecture
+                ? value
+                : installerArchitecture,
+            attribute == PackageAttribute.installerType ? value : installerType,
+            attribute == PackageAttribute.installerLocale
+                ? value
+                : installerLocale,
+            attribute == PackageAttribute.installScope ? value : installerScope,
+            attribute == PackageAttribute.nestedInstallerType
+                ? value
+                : nestedInstallerType) ??
         [];
   }
 
@@ -381,7 +358,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       case PackageAttribute.installerType:
         return InstallerType.matchAll;
       case PackageAttribute.installerLocale:
-        return matchAllLocale;
+        return InstallerLocale.matchAll;
       case PackageAttribute.installScope:
         return InstallScope.matchAll;
       case PackageAttribute.nestedInstallerType:
