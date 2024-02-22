@@ -249,6 +249,16 @@ class MultiProperty {
     return properties;
   }
 
+  Map<PackageAttribute, IdentifyingProperty?> get asMap {
+    return {
+      if (hasArchitecture) PackageAttribute.architecture: architecture,
+      if (hasType) PackageAttribute.installerType: type,
+      if (hasLocale) PackageAttribute.installerLocale: locale,
+      if (hasScope) PackageAttribute.installScope: scope,
+      if (hasNestedInstaller) PackageAttribute.nestedInstallerType: nestedInstaller,
+    };
+  }
+
   @override
   bool operator ==(Object other) {
     if (other is MultiProperty) {

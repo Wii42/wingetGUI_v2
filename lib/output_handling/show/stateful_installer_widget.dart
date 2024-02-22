@@ -158,7 +158,13 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                     !hasAllPossibleCombinations && equivalenceClasses.length > 1
                         ? getMultiPropertyMatchAll(cluster)
                         : null,
-              )
+                greyOutItem: (value) {
+                  if (value == null) {
+                    return true;
+                  }
+                  return getFittingInstallersWith(value.asMap).isEmpty;
+                },
+              ),
           ]),
         if (infos.installers!.value.length == 2)
           BoxSelectInstaller<Installer>(
@@ -196,6 +202,12 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                     },
                     matchAll:
                         !hasAllPossibleCombinations ? getMatchAll(e.key) : null,
+                    greyOutItem: (value) {
+                      if (value == null) {
+                        return true;
+                      }
+                      return getFittingInstallersWith({e.key: value}).isEmpty;
+                    },
                   ),
               if (infos.installers != null && fittingInstallers.length >= 2)
                 BoxSelectInstaller<Installer>(
@@ -262,19 +274,22 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
         [];
   }
 
-  List<Installer> getFittingInstallersWith(
-      Map<PackageAttribute,dynamic> map) {
+  List<Installer> getFittingInstallersWith(Map<PackageAttribute, dynamic> map) {
     return infos.installers?.value.fittingInstallers(
-            attribute == PackageAttribute.architecture
-                ? value
+            map.containsKey(PackageAttribute.architecture)
+                ? map[PackageAttribute.architecture]
                 : installerArchitecture,
-            attribute == PackageAttribute.installerType ? value : installerType,
-            attribute == PackageAttribute.installerLocale
-                ? value
+            map.containsKey(PackageAttribute.installerType)
+                ? map[PackageAttribute.installerType]
+                : installerType,
+            map.containsKey(PackageAttribute.installerLocale)
+                ? map[PackageAttribute.installerLocale]
                 : installerLocale,
-            attribute == PackageAttribute.installScope ? value : installerScope,
-            attribute == PackageAttribute.nestedInstallerType
-                ? value
+            map.containsKey(PackageAttribute.installScope)
+                ? map[PackageAttribute.installScope]
+                : installerScope,
+            map.containsKey(PackageAttribute.nestedInstallerType)
+                ? map[PackageAttribute.nestedInstallerType]
                 : nestedInstallerType) ??
         [];
   }

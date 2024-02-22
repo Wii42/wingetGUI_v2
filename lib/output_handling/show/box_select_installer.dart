@@ -20,16 +20,6 @@ class BoxSelectInstaller<T> extends StatelessWidget {
     this.greyOutItem,
   });
 
-  ComboBoxItem<T> comboBoxItem(item) {
-    return ComboBoxItem(
-        value: item,
-        child: Text(
-          title(item),
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: Colors.red),
-        ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,8 +30,8 @@ class BoxSelectInstaller<T> extends StatelessWidget {
           Text(categoryName, style: FluentTheme.of(context).typography.caption),
         ComboBox<T>(
           items: [
-            for (T item in options) comboBoxItem(item),
-            if (matchAll != null) comboBoxItem(matchAll),
+            for (T item in options) comboBoxItem(item, context),
+            if (matchAll != null) comboBoxItem(matchAll as T, context),
           ],
           value: value,
           onChanged: onChanged,
@@ -49,5 +39,21 @@ class BoxSelectInstaller<T> extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  ComboBoxItem<T> comboBoxItem(T item, BuildContext context) {
+    FluentThemeData theme = FluentTheme.of(context);
+    return ComboBoxItem(
+        value: item,
+        child: Text(
+          title(item),
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+              color: greyOutItem != null
+                  ? (greyOutItem!(item)
+                      ? theme.typography.body?.color?.withOpacity(0.3)
+                      : null)
+                  : null),
+        ));
   }
 }
