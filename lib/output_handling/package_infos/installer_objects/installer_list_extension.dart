@@ -12,13 +12,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'installer_locale.dart';
 import 'installer_type.dart';
 
-typedef Feature = Info? Function(Installer);
+typedef Feature = Info<IdentifyingProperty>? Function(Installer);
 
 extension InstallerList on List<Installer> {
   List<Feature> minimalUniqueIdentifiers() {
     List<Feature> uniqueFeatures = [];
-    for (Info? Function(Installer) feature
-        in Installer.identifyingProperties.values) {
+    for (Feature feature in Installer.identifyingProperties.values) {
       if (isFeatureEverywhereTheSame(feature)) continue;
       if (isFeatureUniqueIdentifier(feature)) {
         return [feature];
@@ -54,77 +53,45 @@ extension InstallerList on List<Installer> {
     });
   }
 
-  Iterable<List<PackageAttribute>> equivalenceClasses() {
-    Map<ComputerArchitecture, List<Installer>> architectureClasses = {};
-    for (Installer installer in this) {
-      if (architectureClasses.containsKey(installer.architecture.value)) {
-        architectureClasses[installer.architecture.value]!.add(installer);
-      } else {
-        architectureClasses[installer.architecture.value] = [installer];
+  Iterable<Cluster> equivalenceClasses() {
+    List<Partition<IdentifyingProperty>> classes = [];
+    for (MapEntry<PackageAttribute, Property> entry
+        in Installer.identifyingProperties.entries) {
+      Map<IdentifyingProperty?, List<Installer>> classMap = {};
+      for (Installer installer in this) {
+        Info<IdentifyingProperty>? feature = entry.value(installer);
+        if (classMap.containsKey(feature?.value)) {
+          classMap[feature?.value]!.add(installer);
+        } else {
+          classMap[feature?.value] = [installer];
+        }
       }
+      classes.add(Partition(entry.key, classMap));
     }
 
-    Map<InstallerType?, List<Installer>> typeClasses = {};
-    for (Installer installer in this) {
-      if (typeClasses.containsKey(installer.type?.value)) {
-        typeClasses[installer.type?.value]!.add(installer);
-      } else {
-        typeClasses[installer.type?.value] = [installer];
-      }
-    }
+    classes.removeWhere((e) => e.classes.length <= 1);
 
-    Map<InstallerLocale?, List<Installer>> localeClasses = {};
-    for (Installer installer in this) {
-      if (localeClasses.containsKey(installer.locale?.value)) {
-        localeClasses[installer.locale?.value]!.add(installer);
-      } else {
-        localeClasses[installer.locale?.value] = [installer];
-      }
-    }
-
-    Map<InstallScope?, List<Installer>> scopeClasses = {};
-    for (Installer installer in this) {
-      if (scopeClasses.containsKey(installer.scope?.value)) {
-        scopeClasses[installer.scope?.value]!.add(installer);
-      } else {
-        scopeClasses[installer.scope?.value] = [installer];
-      }
-    }
-
-    Map<PackageAttribute, Map<IdentifyingProperty?, List<Installer>>> classes =
-        {
-      PackageAttribute.architecture: architectureClasses,
-      PackageAttribute.installerType: typeClasses,
-      PackageAttribute.installerLocale: localeClasses,
-      PackageAttribute.installScope: scopeClasses,
-    };
-
-    classes.removeWhere((key, value) => value.keys.length <= 1);
-
-    List<List<MapEntry<PackageAttribute, Map>>> clusters = List.generate(
-        classes.length,
-        (i) => List.generate(1, (j) => classes.entries.toList()[i]));
+    List<Cluster> clusters =
+        List.generate(classes.length, (i) => Cluster([classes[i]]));
 
     checkClusters(clusters);
-    print('\n${clusters.map((e) => e.length)}');
+    print('\n${clusters.map((e) => e.partitions.length)}');
     bool finished = false;
     while (!finished) {
       print('\n');
       cluster(clusters);
       finished = checkClusters(clusters);
-      print('\n${clusters.map((e) => e.map((e) => e.key.name))}');
+      print(
+          '\n${clusters.map((e) => e.partitions.map((e) => e.attribute.name))}');
     }
-    return clusters.map((e) => e.map((e) => e.key).toList());
+    return clusters;
   }
 
-  static void cluster(List<List<MapEntry<PackageAttribute, Map>>> clusters) {
-    DeepCollectionEquality eq = const DeepCollectionEquality();
+  static void cluster(List<Cluster> clusters) {
     for (int i = 0; i < clusters.length; i++) {
       for (int j = 0; j < clusters.length; j++) {
-        if (i != j &&
-            eq.equals(clusters[i].first.value.values,
-                clusters[j].first.value.values)) {
-          clusters[i].addAll(clusters[j]);
+        if (i != j && clusters[i].hasSamePartition(clusters[j])) {
+          clusters[i].merge(clusters[j]);
           clusters.removeAt(j);
           return;
         }
@@ -132,16 +99,12 @@ extension InstallerList on List<Installer> {
     }
   }
 
-  static bool checkClusters(
-      List<List<MapEntry<PackageAttribute, Map>>> clusters) {
-    DeepCollectionEquality eq = const DeepCollectionEquality();
+  static bool checkClusters(List<Cluster> clusters) {
     bool done = true;
     List<List<bool>> matrix2 = List.generate(
         clusters.length,
         (i) => List.generate(
-            clusters.length,
-            (j) => eq.equals(clusters[i].first.value.values,
-                clusters[j].first.value.values)));
+            clusters.length, (j) => clusters[i].hasSamePartition(clusters[j])));
     for (int i = 0; i < clusters.length; i++) {
       for (int j = 0; j < clusters.length; j++) {
         if (i != j && matrix2[i][j] == true) {
@@ -153,4 +116,128 @@ extension InstallerList on List<Installer> {
     print('done: $done');
     return done;
   }
+}
+
+class Partition<T extends IdentifyingProperty> {
+  final PackageAttribute attribute;
+
+  Map<T?, List<Installer>> classes;
+
+  Partition(this.attribute, this.classes);
+
+  List<T?> properties() {
+    return classes.keys.toList();
+  }
+}
+
+class Cluster<T extends IdentifyingProperty> {
+  final List<Partition<T>> partitions;
+
+  Cluster(this.partitions);
+
+  merge(Cluster<T> other) {
+    partitions.addAll(other.partitions);
+  }
+
+  Iterable<List<Installer>> get installerPartition {
+    return partitions.first.classes.values;
+  }
+
+  bool hasSamePartition(Cluster<T> other) {
+    DeepCollectionEquality eq = const DeepCollectionEquality();
+    return eq.equals(installerPartition, other.installerPartition);
+  }
+
+  Iterable<PackageAttribute> get attributes {
+    return partitions.map((e) => e.attribute);
+  }
+
+  List<List<T?>> get optionsList {
+    List<List<T?>> options = List.generate(
+        partitions.first.properties().length,
+        (i) => List.generate(
+            partitions.length, (j) => partitions[j].properties()[i]));
+    print(options);
+    return options;
+  }
+
+  List<Map<PackageAttribute, T?>> get optionsMap {
+    return optionsList.map((e) {
+      Map<PackageAttribute, T?> map = {};
+      for (int i = 0; i < partitions.length; i++) {
+        map[partitions[i].attribute] = e[i];
+      }
+      return map;
+    }).toList();
+  }
+
+  List<MultiProperty> get options =>
+      optionsMap.map((e) => MultiProperty.fromMap(e)).toList();
+
+  List<MultiProperty> getOptionsWith(MultiProperty property) {
+    return List.from(options)..add(property);
+  }
+}
+
+class MultiProperty {
+  final ComputerArchitecture? architecture;
+  final bool hasArchitecture;
+  final InstallerType? type;
+  final bool hasType;
+  final InstallerLocale? locale;
+  final bool hasLocale;
+  final InstallScope? scope;
+  final bool hasScope;
+  MultiProperty(
+      {required this.architecture,
+      required this.hasArchitecture,
+      required this.type,
+      required this.hasType,
+      required this.locale,
+      required this.hasLocale,
+      required this.scope,
+      required this.hasScope});
+
+  factory MultiProperty.fromMap(
+      Map<PackageAttribute, IdentifyingProperty?> map) {
+    print(map);
+    return MultiProperty(
+        architecture:
+            map[PackageAttribute.architecture] as ComputerArchitecture?,
+        hasArchitecture: map.containsKey(PackageAttribute.architecture),
+        type: map[PackageAttribute.installerType] as InstallerType?,
+        hasType: map.containsKey(PackageAttribute.installerType),
+        locale: map[PackageAttribute.installerLocale] as InstallerLocale?,
+        hasLocale: map.containsKey(PackageAttribute.installerLocale),
+        scope: map[PackageAttribute.installScope] as InstallScope?,
+        hasScope: map.containsKey(PackageAttribute.installScope));
+  }
+
+  List<IdentifyingProperty?> get properties {
+    List<IdentifyingProperty?> properties = [];
+    if (hasArchitecture) properties.add(architecture!);
+    if (hasType) properties.add(type);
+    if (hasLocale) properties.add(locale);
+    if (hasScope) properties.add(scope);
+    return properties;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is MultiProperty) {
+      return other.architecture == architecture &&
+          other.type == type &&
+          other.locale == locale &&
+          other.scope == scope &&
+          other.hasArchitecture == hasArchitecture &&
+          other.hasType == hasType &&
+          other.hasLocale == hasLocale &&
+          other.hasScope == hasScope;
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => Object.hash(architecture, type, locale, scope,
+      hasArchitecture, hasType, hasLocale, hasScope);
 }

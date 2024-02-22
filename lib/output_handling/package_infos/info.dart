@@ -49,4 +49,12 @@ class Info<T extends Object> {
   Type get valueType {
     return T;
   }
+
+  cast<A extends Object>(){
+    return Info<A>(
+        title: title,
+        value: value as A,
+        copyable: copyable,
+        couldBeLink: couldBeLink);
+  }
 }

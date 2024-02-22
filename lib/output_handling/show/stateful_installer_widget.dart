@@ -116,7 +116,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   ExpanderCompartment get template => widget._template;
 
   Widget selectInstallerWidget(BuildContext context) {
-    Iterable<List<PackageAttribute>> equivalenceClasses =
+    Iterable<Cluster> equivalenceClasses =
         infos.installers!.value.equivalenceClasses();
     print(equivalenceClasses);
     AppLocalizations localizations = AppLocalizations.of(context)!;
@@ -134,20 +134,56 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                 infos.installers?.value.length ?? '<?>'),
           ),
         Wrap(spacing: 10, runSpacing: 10, children: [
-          for (List<PackageAttribute> equivalenceClass in equivalenceClasses)
-            boxSelectInstaller<PackageAttribute>(
-              categoryName: equivalenceClass
+          for (Cluster cluster in equivalenceClasses)
+            boxSelectInstaller<MultiProperty>(
+              categoryName: cluster.attributes
                   .map((e) => e.title(localizations))
+                  .nonNulls
                   .join(' / '),
-              options: equivalenceClass,
-              title: (item) => item.title(localizations),
-              value: equivalenceClass.first,
+              options: cluster.options,
+              title: (item) => item.properties
+                  .map((e) => item.properties.length > 1
+                      ? e?.shortTitle(localizations)
+                      : e?.fullTitle(localizations, localeNames))
+                  .nonNulls
+                  .join(' '),
+              value: cluster
+                  .getOptionsWith(getMultiPropertyMatchAll(cluster))
+                  .firstWhereOrNull((element) {
+                if (element.hasArchitecture) {
+                  if (element.architecture != installerArchitecture) {
+                    return false;
+                  }
+                }
+                if (element.hasType) {
+                  if (element.type != installerType) {
+                    return false;
+                  }
+                }
+                if (element.hasLocale) {
+                  if (element.locale != installerLocale) {
+                    return false;
+                  }
+                }
+                if (element.hasScope) {
+                  if (element.scope != installerScope) {
+                    return false;
+                  }
+                }
+                return true;
+              }),
               onChanged: (value) {
                 setState(() {
-                  setInstallerProperty(equivalenceClass.first, value);
+                  for (int i = 0; i < cluster.attributes.length; i++) {
+                    setInstallerProperty(
+                        cluster.attributes.toList()[i], value?.properties[i]);
+                  }
                   selectedInstaller = fittingInstallers.firstOrNull;
                 });
               },
+              matchAll: !hasAllPossibleCombinations
+                  ? getMultiPropertyMatchAll(cluster)
+                  : null,
             )
         ]),
         if (infos.installers!.value.length == 2)
@@ -187,81 +223,6 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                     matchAll:
                         !hasAllPossibleCombinations ? getMatchAll(e.key) : null,
                   ),
-              if (differences.architectures.length > 1)
-                boxSelectInstaller<ComputerArchitecture>(
-                  categoryName: differences.architectureTitle,
-                  options: differences.architectures,
-                  title: (item) => item.title(),
-                  value: installerArchitecture,
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(
-                        () {
-                          installerArchitecture = value;
-                          selectedInstaller = fittingInstallers.firstOrNull;
-                        },
-                      );
-                    }
-                  },
-                  matchAll: !hasAllPossibleCombinations
-                      ? ComputerArchitecture.matchAll
-                      : null,
-                ),
-              if (differences.types.length > 1)
-                boxSelectInstaller<InstallerType?>(
-                  categoryName: differences.typeTitle,
-                  options: differences.types,
-                  title: (item) => item?.fullTitle() ?? 'null',
-                  value: installerType,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        installerType = value;
-                        selectedInstaller = fittingInstallers.firstOrNull;
-                      },
-                    );
-                  },
-                  matchAll: !hasAllPossibleCombinations
-                      ? InstallerType.matchAll
-                      : null,
-                ),
-              if (differences.locales.length > 1)
-                boxSelectInstaller<InstallerLocale?>(
-                  categoryName: differences.localeTitle,
-                  options: differences.locales,
-                  title: (item) =>
-                      localeNames.nameOf(item.toString()) ??
-                      item?.toLanguageTag() ??
-                      'null',
-                  value: installerLocale,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        installerLocale = value;
-                        selectedInstaller = fittingInstallers.firstOrNull;
-                      },
-                    );
-                  },
-                  matchAll: !hasAllPossibleCombinations ? matchAllLocale : null,
-                ),
-              if (differences.scopes.length > 1)
-                boxSelectInstaller<InstallScope?>(
-                  categoryName: differences.scopeTitle,
-                  options: differences.scopes,
-                  title: (item) => item?.title(localizations) ?? 'null',
-                  value: installerScope,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        installerScope = value;
-                        selectedInstaller = fittingInstallers.firstOrNull;
-                      },
-                    );
-                  },
-                  matchAll: !hasAllPossibleCombinations
-                      ? InstallScope.matchAll
-                      : null,
-                ),
               if (infos.installers != null && fittingInstallers.length >= 2)
                 boxSelectInstaller<Installer>(
                     categoryName: localizations.multipleFittingInstallersFound(
@@ -304,10 +265,14 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                   value: item,
                   child: Text(title(item), overflow: TextOverflow.ellipsis)),
             if (matchAll != null)
-              ComboBoxItem(value: matchAll, child: Text(title(matchAll))),
+              ComboBoxItem(
+                  value: matchAll,
+                  child:
+                      Text(title(matchAll), overflow: TextOverflow.ellipsis)),
           ],
           value: value,
           onChanged: onChanged,
+          placeholder: const Text('null'),
         ),
       ],
     );
@@ -395,7 +360,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
     }
   }
 
-  IdentifyingProperty? getMatchAll(PackageAttribute attribute) {
+  IdentifyingProperty getMatchAll(PackageAttribute attribute) {
     switch (attribute) {
       case PackageAttribute.architecture:
         return ComputerArchitecture.matchAll;
@@ -408,6 +373,12 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       default:
         throw ArgumentError('Unknown attribute: $attribute');
     }
+  }
+
+  MultiProperty getMultiPropertyMatchAll(Cluster cluster) {
+    Map<PackageAttribute, IdentifyingProperty?> map = Map.fromEntries(
+        cluster.attributes.map((e) => MapEntry(e, getMatchAll(e))));
+    return MultiProperty.fromMap(map);
   }
 }
 

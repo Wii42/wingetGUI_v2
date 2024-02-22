@@ -20,7 +20,7 @@ import 'installer_locale.dart';
 import 'installer_type.dart';
 import 'windows_platform.dart';
 
-typedef Property = Info? Function(Installer);
+typedef Property = Info<IdentifyingProperty>? Function(Installer);
 
 class Installer {
   static final Info<ComputerArchitecture> fallbackArchitecture =

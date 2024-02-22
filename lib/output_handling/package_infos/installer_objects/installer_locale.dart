@@ -21,18 +21,12 @@ mixin LocaleTitleMixin on Locale implements IdentifyingProperty {
   @override
   String? longTitle([AppLocalizations? locale, LocaleNames? localeNames]) {
     if (localeNames == null) throw ArgumentError.notNull("localeNames");
-    print("${toString()}: ${localeNames.nameOf(toString())}");
     return localeNames.nameOf(toString());
   }
 
   @override
   String shortTitle([AppLocalizations? locale]) {
     return toLanguageTag();
-  }
-
-  @override
-  String fullTitle([AppLocalizations? locale, LocaleNames? localeNames]) {
-    return title(locale, localeNames);
   }
 
   @override
