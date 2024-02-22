@@ -133,6 +133,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             localizations.multipleInstallersFound(
                 infos.installers?.value.length ?? '<?>'),
           ),
+        if(equivalenceClasses.isNotEmpty)
         Wrap(spacing: 10, runSpacing: 10, children: [
           for (Cluster cluster in equivalenceClasses)
             boxSelectInstaller<MultiProperty>(
@@ -147,31 +148,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                       : e?.fullTitle(localizations, localeNames))
                   .nonNulls
                   .join(' '),
-              value: cluster
-                  .getOptionsWith(getMultiPropertyMatchAll(cluster))
-                  .firstWhereOrNull((element) {
-                if (element.hasArchitecture) {
-                  if (element.architecture != installerArchitecture) {
-                    return false;
-                  }
-                }
-                if (element.hasType) {
-                  if (element.type != installerType) {
-                    return false;
-                  }
-                }
-                if (element.hasLocale) {
-                  if (element.locale != installerLocale) {
-                    return false;
-                  }
-                }
-                if (element.hasScope) {
-                  if (element.scope != installerScope) {
-                    return false;
-                  }
-                }
-                return true;
-              }),
+              value: getMultiPropertyValue(cluster),
               onChanged: (value) {
                 setState(() {
                   for (int i = 0; i < cluster.attributes.length; i++) {
@@ -243,6 +220,34 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
           ),
       ].withSpaceBetween(height: 20),
     );
+  }
+
+  MultiProperty? getMultiPropertyValue(Cluster<IdentifyingProperty> cluster) {
+    return cluster
+        .getOptionsWith(getMultiPropertyMatchAll(cluster))
+        .firstWhereOrNull((element) {
+      if (element.hasArchitecture) {
+        if (element.architecture != installerArchitecture) {
+          return false;
+        }
+      }
+      if (element.hasType) {
+        if (element.type != installerType) {
+          return false;
+        }
+      }
+      if (element.hasLocale) {
+        if (element.locale != installerLocale) {
+          return false;
+        }
+      }
+      if (element.hasScope) {
+        if (element.scope != installerScope) {
+          return false;
+        }
+      }
+      return true;
+    });
   }
 
   Widget boxSelectInstaller<T>(
