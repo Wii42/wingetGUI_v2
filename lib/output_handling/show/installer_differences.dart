@@ -15,8 +15,9 @@ class InstallerDifferences {
   List<InstallerType?> types;
   List<InstallerLocale?> locales;
   List<InstallScope?> scopes;
+  List<InstallerType?> nestedTypes;
 
-  String architectureTitle, typeTitle, localeTitle, scopeTitle;
+  String architectureTitle, typeTitle, localeTitle, scopeTitle, nestedTypeTitle;
 
   InstallerDifferences({
     required this.architectures,
@@ -27,6 +28,8 @@ class InstallerDifferences {
     required this.typeTitle,
     required this.localeTitle,
     required this.scopeTitle,
+    required this.nestedTypes,
+    required this.nestedTypeTitle,
   });
 
   factory InstallerDifferences.fromList(
@@ -36,8 +39,13 @@ class InstallerDifferences {
     List<InstallerType?> types = [];
     List<InstallerLocale?> locales = [];
     List<InstallScope?> scopes = [];
+    List<InstallerType?> nestedTypes = [];
 
-    String? architectureTitle, typeTitle, localeTitle, scopeTitle;
+    String? architectureTitle,
+        typeTitle,
+        localeTitle,
+        scopeTitle,
+        nestedTypeTitle;
     for (Installer installer in installers) {
       if (!architectures.contains(installer.architecture.value)) {
         architectures.add(installer.architecture.value);
@@ -51,6 +59,9 @@ class InstallerDifferences {
       if (!scopes.contains(installer.scope?.value)) {
         scopes.add(installer.scope?.value);
       }
+      if (!nestedTypes.contains(installer.nestedInstallerType?.value)) {
+        nestedTypes.add(installer.nestedInstallerType?.value);
+      }
 
       architectureTitle ??= installer.architecture.title(locale);
       if (installer.type != null) {
@@ -62,16 +73,22 @@ class InstallerDifferences {
       if (installer.scope != null) {
         scopeTitle ??= installer.scope!.title(locale);
       }
+      if (installer.nestedInstallerType != null) {
+        nestedTypeTitle ??= installer.nestedInstallerType!.title(locale);
+      }
     }
     return InstallerDifferences(
-        architectures: architectures,
-        types: types,
-        locales: locales,
-        scopes: scopes,
-        architectureTitle: architectureTitle!,
-        typeTitle: typeTitle ?? 'Type',
-        localeTitle: localeTitle ?? 'Locale',
-        scopeTitle: scopeTitle ?? 'Scope');
+      architectures: architectures,
+      types: types,
+      locales: locales,
+      scopes: scopes,
+      nestedTypes: nestedTypes,
+      architectureTitle: architectureTitle!,
+      typeTitle: typeTitle ?? 'Type',
+      localeTitle: localeTitle ?? 'Locale',
+      scopeTitle: scopeTitle ?? 'Scope',
+      nestedTypeTitle: nestedTypeTitle ?? 'Nested Type',
+    );
   }
 
   Map<PackageAttribute, List<IdentifyingProperty?>> get asMap {
@@ -80,15 +97,16 @@ class InstallerDifferences {
       PackageAttribute.installerType: types,
       PackageAttribute.installerLocale: locales,
       PackageAttribute.installScope: scopes,
+      PackageAttribute.nestedInstallerType: nestedTypes,
     };
   }
 
   int get possibleCombinations {
-    return architectures.length * types.length * locales.length * scopes.length;
+    return architectures.length * types.length * locales.length * scopes.length * nestedTypes.length;
   }
 
   @override
   String toString() {
-    return 'InstallerDifferences{architectures: $architectures, types: $types, locales: $locales, scopes: $scopes}';
+    return 'InstallerDifferences{architectures: $architectures, types: $types, locales: $locales, scopes: $scopes, nestedTypes: $nestedTypes}';
   }
 }

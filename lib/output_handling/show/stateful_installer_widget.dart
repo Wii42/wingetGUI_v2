@@ -40,6 +40,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   InstallerType? installerType;
   InstallerLocale? installerLocale;
   InstallScope? installerScope;
+  InstallerType? nestedInstallerType;
 
   Installer? selectedInstaller;
 
@@ -51,6 +52,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
     installerType = selectedInstaller?.type?.value;
     installerLocale = selectedInstaller?.locale?.value;
     installerScope = selectedInstaller?.scope?.value;
+    nestedInstallerType = selectedInstaller?.nestedInstallerType?.value;
   }
 
   @override
@@ -133,36 +135,31 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             localizations.multipleInstallersFound(
                 infos.installers?.value.length ?? '<?>'),
           ),
-        if(equivalenceClasses.isNotEmpty)
-        Wrap(spacing: 10, runSpacing: 10, children: [
-          for (Cluster cluster in equivalenceClasses)
-            boxSelectInstaller<MultiProperty>(
-              categoryName: cluster.attributes
-                  .map((e) => e.title(localizations))
-                  .nonNulls
-                  .join(' / '),
-              options: cluster.options,
-              title: (item) => item.properties
-                  .map((e) => item.properties.length > 1
-                      ? e?.shortTitle(localizations)
-                      : e?.fullTitle(localizations, localeNames))
-                  .nonNulls
-                  .join(' '),
-              value: getMultiPropertyValue(cluster),
-              onChanged: (value) {
-                setState(() {
-                  for (int i = 0; i < cluster.attributes.length; i++) {
-                    setInstallerProperty(
-                        cluster.attributes.toList()[i], value?.properties[i]);
-                  }
-                  selectedInstaller = fittingInstallers.firstOrNull;
-                });
-              },
-              matchAll: !hasAllPossibleCombinations
-                  ? getMultiPropertyMatchAll(cluster)
-                  : null,
-            )
-        ]),
+        if (equivalenceClasses.isNotEmpty)
+          Wrap(spacing: 10, runSpacing: 10, children: [
+            for (Cluster cluster in equivalenceClasses)
+              boxSelectInstaller<MultiProperty>(
+                categoryName: cluster.attributes
+                    .map((e) => e.title(localizations))
+                    .nonNulls
+                    .join(' / '),
+                options: cluster.options,
+                title: (item) => item.title(localizations, localeNames),
+                value: getMultiPropertyValue(cluster),
+                onChanged: (value) {
+                  setState(() {
+                    for (int i = 0; i < cluster.attributes.length; i++) {
+                      setInstallerProperty(
+                          cluster.attributes.toList()[i], value?.properties[i]);
+                    }
+                    selectedInstaller = fittingInstallers.firstOrNull;
+                  });
+                },
+                matchAll: !hasAllPossibleCombinations
+                    ? getMultiPropertyMatchAll(cluster)
+                    : null,
+              )
+          ]),
         if (infos.installers!.value.length == 2)
           boxSelectInstaller<Installer>(
               categoryName:
@@ -246,6 +243,11 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
           return false;
         }
       }
+      if (element.hasNestedInstaller) {
+        if (element.nestedInstaller != nestedInstallerType) {
+          return false;
+        }
+      }
       return true;
     });
   }
@@ -293,7 +295,9 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                 (installer.locale?.value == installerLocale ||
                     installerLocale == matchAllLocale) &&
                 (installer.scope?.value == installerScope ||
-                    installerScope == InstallScope.matchAll))
+                    installerScope == InstallScope.matchAll) &&
+                (installer.nestedInstallerType?.value == nestedInstallerType ||
+                    nestedInstallerType == InstallerType.matchAll))
             .toList() ??
         [];
   }
@@ -345,6 +349,9 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       case PackageAttribute.installScope:
         installerScope = value;
         break;
+      case PackageAttribute.nestedInstallerType:
+        nestedInstallerType = value;
+        break;
       default:
         throw ArgumentError('Unknown attribute: $attribute');
     }
@@ -360,6 +367,8 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
         return installerLocale;
       case PackageAttribute.installScope:
         return installerScope;
+      case PackageAttribute.nestedInstallerType:
+        return nestedInstallerType;
       default:
         throw ArgumentError('Unknown attribute: $attribute');
     }
@@ -375,6 +384,8 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
         return matchAllLocale;
       case PackageAttribute.installScope:
         return InstallScope.matchAll;
+      case PackageAttribute.nestedInstallerType:
+        return InstallerType.matchAll;
       default:
         throw ArgumentError('Unknown attribute: $attribute');
     }

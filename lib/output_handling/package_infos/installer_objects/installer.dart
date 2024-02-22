@@ -82,7 +82,8 @@ class Installer {
     PackageAttribute.architecture: (e) => e.architecture,
     PackageAttribute.installerType: (e) => e.type,
     PackageAttribute.installerLocale: (e) => e.locale,
-    PackageAttribute.installScope: (e) => e.scope
+    PackageAttribute.installScope: (e) => e.scope,
+    PackageAttribute.nestedInstallerType: (e) => e.nestedInstallerType,
   };
 
   static Installer fromYaml(Map installerMap) {

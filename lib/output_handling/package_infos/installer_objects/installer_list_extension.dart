@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 
 import '../info.dart';
@@ -188,29 +189,37 @@ class MultiProperty {
   final bool hasLocale;
   final InstallScope? scope;
   final bool hasScope;
-  MultiProperty(
-      {required this.architecture,
-      required this.hasArchitecture,
-      required this.type,
-      required this.hasType,
-      required this.locale,
-      required this.hasLocale,
-      required this.scope,
-      required this.hasScope});
+  final InstallerType? nestedInstaller;
+  final bool hasNestedInstaller;
+  MultiProperty({
+    required this.architecture,
+    required this.hasArchitecture,
+    required this.type,
+    required this.hasType,
+    required this.locale,
+    required this.hasLocale,
+    required this.scope,
+    required this.hasScope,
+    required this.nestedInstaller,
+    required this.hasNestedInstaller,
+  });
 
   factory MultiProperty.fromMap(
       Map<PackageAttribute, IdentifyingProperty?> map) {
     print(map);
     return MultiProperty(
-        architecture:
-            map[PackageAttribute.architecture] as ComputerArchitecture?,
-        hasArchitecture: map.containsKey(PackageAttribute.architecture),
-        type: map[PackageAttribute.installerType] as InstallerType?,
-        hasType: map.containsKey(PackageAttribute.installerType),
-        locale: map[PackageAttribute.installerLocale] as InstallerLocale?,
-        hasLocale: map.containsKey(PackageAttribute.installerLocale),
-        scope: map[PackageAttribute.installScope] as InstallScope?,
-        hasScope: map.containsKey(PackageAttribute.installScope));
+      architecture: map[PackageAttribute.architecture] as ComputerArchitecture?,
+      hasArchitecture: map.containsKey(PackageAttribute.architecture),
+      type: map[PackageAttribute.installerType] as InstallerType?,
+      hasType: map.containsKey(PackageAttribute.installerType),
+      locale: map[PackageAttribute.installerLocale] as InstallerLocale?,
+      hasLocale: map.containsKey(PackageAttribute.installerLocale),
+      scope: map[PackageAttribute.installScope] as InstallScope?,
+      hasScope: map.containsKey(PackageAttribute.installScope),
+      nestedInstaller:
+          map[PackageAttribute.nestedInstallerType] as InstallerType?,
+      hasNestedInstaller: map.containsKey(PackageAttribute.nestedInstallerType),
+    );
   }
 
   List<IdentifyingProperty?> get properties {
@@ -219,6 +228,7 @@ class MultiProperty {
     if (hasType) properties.add(type);
     if (hasLocale) properties.add(locale);
     if (hasScope) properties.add(scope);
+    if (hasNestedInstaller) properties.add(nestedInstaller);
     return properties;
   }
 
@@ -232,12 +242,35 @@ class MultiProperty {
           other.hasArchitecture == hasArchitecture &&
           other.hasType == hasType &&
           other.hasLocale == hasLocale &&
-          other.hasScope == hasScope;
+          other.hasScope == hasScope &&
+          other.nestedInstaller == nestedInstaller &&
+          other.hasNestedInstaller == hasNestedInstaller;
     }
     return false;
   }
 
   @override
-  int get hashCode => Object.hash(architecture, type, locale, scope,
-      hasArchitecture, hasType, hasLocale, hasScope);
+  int get hashCode => Object.hash(
+        architecture,
+        type,
+        locale,
+        scope,
+        hasArchitecture,
+        hasType,
+        hasLocale,
+        hasScope,
+        nestedInstaller,
+        hasNestedInstaller,
+      );
+
+  String title(AppLocalizations localizations, LocaleNames localeNames) {
+        String string = properties
+        .map((e) => properties.length > 1
+        ? e?.shortTitle(localizations)
+        : e?.fullTitle(localizations, localeNames))
+        .nonNulls
+        .join(' ');
+        if(string.isEmpty) return 'null';
+        return string;
+  }
 }
