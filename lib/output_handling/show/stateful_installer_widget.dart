@@ -119,7 +119,6 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   Widget selectInstallerWidget(BuildContext context) {
     Iterable<Cluster> equivalenceClasses =
         infos.installers!.value.equivalenceClasses();
-    print(equivalenceClasses);
     AppLocalizations localizations = AppLocalizations.of(context)!;
     LocaleNames localeNames = LocaleNames.of(context)!;
     InstallerDifferences differences =

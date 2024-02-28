@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 
+import '../../../helpers/log_stream.dart';
 import '../info.dart';
 import '../package_attribute.dart';
 import 'computer_architecture.dart';
@@ -76,14 +77,10 @@ extension InstallerList on List<Installer> {
         List.generate(classes.length, (i) => Cluster([classes[i]]));
 
     checkClusters(clusters);
-    print('\n${clusters.map((e) => e.partitions.length)}');
     bool finished = false;
     while (!finished) {
-      print('\n');
       cluster(clusters);
       finished = checkClusters(clusters);
-      print(
-          '\n${clusters.map((e) => e.partitions.map((e) => e.attribute.name))}');
     }
     return clusters;
   }
@@ -113,8 +110,6 @@ extension InstallerList on List<Installer> {
         }
       }
     }
-    print('\n${matrix2.join('\n')}');
-    print('done: $done');
     return done;
   }
 
@@ -137,11 +132,14 @@ extension InstallerList on List<Installer> {
 }
 
 class Partition<T extends IdentifyingProperty> {
+  late final Logger log;
   final PackageAttribute attribute;
 
   Map<T?, List<Installer>> classes;
 
-  Partition(this.attribute, this.classes);
+  Partition(this.attribute, this.classes){
+    log = Logger(this);
+  }
 
   List<T?> properties() {
     return classes.keys.toList();
@@ -149,9 +147,12 @@ class Partition<T extends IdentifyingProperty> {
 }
 
 class Cluster<T extends IdentifyingProperty> {
+  late final Logger log;
   final List<Partition<T>> partitions;
 
-  Cluster(this.partitions);
+  Cluster(this.partitions){
+    log = Logger(this);
+  }
 
   merge(Cluster<T> other) {
     partitions.addAll(other.partitions);
@@ -175,7 +176,7 @@ class Cluster<T extends IdentifyingProperty> {
         partitions.first.properties().length,
         (i) => List.generate(
             partitions.length, (j) => partitions[j].properties()[i]));
-    print(options);
+    log.info("optionsList: $options");
     return options;
   }
 
@@ -223,7 +224,6 @@ class MultiProperty {
 
   factory MultiProperty.fromMap(
       Map<PackageAttribute, IdentifyingProperty?> map) {
-    print(map);
     return MultiProperty(
       architecture: map[PackageAttribute.architecture] as ComputerArchitecture?,
       hasArchitecture: map.containsKey(PackageAttribute.architecture),
