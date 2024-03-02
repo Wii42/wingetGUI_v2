@@ -643,5 +643,14 @@
   },
   "Google.PlayGames.Beta": {
     "icon": "https://i.pinimg.com/originals/74/0d/03/740d03d3e888948ceb7098ec6e36b9b6.png"
+  },
+  "StartIsBack.StartAllBack": {
+    "icon": "https://dl.zhutix.net/2021/10/StartAllBack.png"
+  },
+  "StartIsBack.StartIsBack": {
+    "icon": "https://taiwebs.com/upload/icons/startisback220-220.png"
+  },
+  "Oracle.JDK.*": {
+    "icon": "https://s3.amazonaws.com/s3.timetoast.com/public/uploads/photos/12257694/JAVA_large_square.png"
   }
 }
