@@ -251,8 +251,12 @@ class PackageInfosFull extends PackageInfos {
   bool hasReleaseNotes() => releaseNotes?.text != null;
 
   @override
-  bool isMicrosoftStore() => (installer?.type?.value == InstallerType.msstore &&
-      installer?.storeProductID != null);
+  bool isMicrosoftStore() => ((installer?.type?.value ??
+              installer?.installers?.value.firstOrNull?.type?.value) ==
+          InstallerType.msstore &&
+      (installer?.storeProductID ??
+              installer?.installers?.value.firstOrNull?.storeProductID) !=
+          null);
 
   @override
   bool isWinget() =>

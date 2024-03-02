@@ -405,9 +405,7 @@
   },
   "FrostWire.FrostWire": {
     "icon": "https://www.freesoftwarefiles.com/wp-content/uploads/2016/02/FrostWire-Latest-Version-Free-Download.png",
-    "images": [
-      "https://static.frostwire.com/vink/images/home_header_2.png"
-    ]
+    "images": []
   },
   "Devolutions.RemoteDesktopManagerFree": {
     "icon": "https://webdevolutions.azureedge.net/images/projects/remote-desktop-manager/logos/remote-desktop-manager-icon-shadow.svg"

@@ -95,7 +95,6 @@ Future<List<UrlTestResponse>> check<T extends Object>({
         try {
           Response response = await get(uri);
           responseMsg.statusCode = response.statusCode;
-          print(responseMsg.toShortString());
           if (response.statusCode != 200) {
             responseList.add(responseMsg);
           }

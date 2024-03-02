@@ -227,15 +227,6 @@ class PackagePeek extends StatelessWidget {
   String? id() => infos.id?.value;
 
   Widget favicon(double faviconSize) {
-    //if (checkFavicon && !infos.checkedForScreenshots && infos.screenshots == null){
-
-    //}
-    if (infos.screenshots == null && infos.publisherIcon == null) {
-      return DefaultFavicon(
-        faviconSize: faviconSize,
-        isClickable: isClickable(),
-      );
-    }
     return FaviconWidget(
         infos: infos, faviconSize: faviconSize, isClickable: isClickable());
   }

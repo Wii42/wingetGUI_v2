@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:favicon/favicon.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
@@ -8,6 +10,7 @@ import '../helpers/log_stream.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_full.dart';
 import 'decorated_card.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 
 String githubFaviconUrl =
     'https://github.githubassets.com/favicons/favicon.svg';
@@ -31,13 +34,17 @@ class FaviconWidget extends StatefulWidget {
     this.withRightSiePadding = true,
   }) {
     log = Logger(this);
-    if (infos is PackageInfosFull && faviconUrl == null) {
+    if (faviconUrl != null) {
+      this.faviconUrl = faviconUrl;
+      return;
+    }
+    if (infos is PackageInfosFull) {
       PackageInfosFull infosFull = infos as PackageInfosFull;
       this.faviconUrl =
           infosFull.website?.value ?? infosFull.agreement?.publisher?.url;
-    } else {
-      this.faviconUrl = faviconUrl;
+      return;
     }
+    this.faviconUrl = null;
   }
 
   factory FaviconWidget.fromFullInfos(
@@ -61,7 +68,7 @@ class _FaviconWidgetState extends State<FaviconWidget> {
           ? const EdgeInsets.only(right: 25)
           : EdgeInsets.zero,
       child: DecoratedCard(
-        padding: 0.17*widget.faviconSize,
+        padding: 0.17 * widget.faviconSize,
         child: SizedBox(
           width: widget.faviconSize,
           height: widget.faviconSize,
@@ -72,60 +79,28 @@ class _FaviconWidgetState extends State<FaviconWidget> {
   }
 
   Widget favicon() {
-    PackageScreenshots? images = widget.infos.screenshots;
-    if (images != null || widget.iconUrl != null) {
-      String? icon;
-      if (widget.iconUrl != null) {
-        icon = widget.iconUrl.toString();
-      } else {
-        if (images!.icon != null && (images.icon.toString().isNotEmpty)) {
-          icon = images.icon.toString();
-        }
-        if (icon == null &&
-            images.backup?.icon != null &&
-            (images.backup!.icon.toString().isNotEmpty)) {
-          icon = images.backup!.icon.toString();
-        }
-      }
-      if (icon != null) {
-        return loadFavicon(
-          widget.faviconSize,
-          icon,
-          () {
-            if (icon != images?.backup?.icon.toString() &&
-                images?.backup?.icon != null &&
-                (images!.backup!.icon.toString().isNotEmpty)) {
-              return loadFavicon(
-                  widget.faviconSize, images.backup!.icon.toString(), () {
-                if (widget.infos.publisherIcon != null &&
-                    widget.infos.publisherIcon.toString().isNotEmpty) {
-                  return loadFavicon(
-                      widget.faviconSize,
-                      widget.infos.publisherIcon.toString(),
-                      () => defaultFavicon(),
-                      color: defaultColor());
-                }
-                return defaultFavicon();
-              });
-            }
-            return findFavicon();
-          },
-        );
-      }
-      if (widget.infos.publisherIcon != null &&
-          widget.infos.publisherIcon.toString().isNotEmpty) {
-        return loadFavicon(widget.faviconSize,
-            widget.infos.publisherIcon.toString(), () => defaultFavicon(),
-            color: defaultColor());
-      }
+    Queue urlQueue = Queue.from(getPossibleUrls());
+    return loadFaviconFromQueue(urlQueue);
+  }
+
+  Widget loadFaviconFromQueue(Queue urlQueue) {
+    if (urlQueue.isEmpty) {
+      return fallbackFavicon();
     }
-    if (widget.infos.publisherIcon != null &&
-        widget.infos.publisherIcon.toString().isNotEmpty) {
-      return loadFavicon(widget.faviconSize,
-          widget.infos.publisherIcon.toString(), () => defaultFavicon(),
-          color: defaultColor());
+    UrlColor urlColor = urlQueue.removeFirst();
+    return loadFavicon(
+      urlColor.url.toString(),
+      size: widget.faviconSize,
+      onError: () => loadFaviconFromQueue(urlQueue),
+      color: urlColor.color,
+    );
+  }
+
+  Widget fallbackFavicon() {
+    if (widget.faviconUrl != null) {
+      return findFavicon();
     }
-    return findFavicon();
+    return defaultFavicon();
   }
 
   Widget findFavicon() {
@@ -136,8 +111,8 @@ class _FaviconWidgetState extends State<FaviconWidget> {
           Favicon? favicon = snapshot.data;
           if (favicon != null && favicon.url != githubFaviconUrl) {
             widget.log.info(favicon.url);
-            return loadFavicon(
-                widget.faviconSize, favicon.url, () => defaultFavicon());
+            return loadFavicon(favicon.url,
+                size: widget.faviconSize, onError: () => defaultFavicon());
           }
         }
         return defaultFavicon();
@@ -146,8 +121,12 @@ class _FaviconWidgetState extends State<FaviconWidget> {
   }
 
   Widget defaultFavicon() {
+    IconData icon = FluentIcons.product;
+    if (widget.infos.isMicrosoftStore()) {
+      icon = icons.FluentIcons.store_microsoft_20_regular;
+    }
     return Icon(
-      FluentIcons.product,
+      icon,
       size: widget.faviconSize,
       color: defaultColor(),
     );
@@ -159,14 +138,16 @@ class _FaviconWidgetState extends State<FaviconWidget> {
         .withAlpha(widget.isClickable ? 100 : 50);
   }
 
-  Widget loadFavicon(double faviconSize, String url, Widget Function() onError,
-      {Color? color}) {
+  Widget loadFavicon(String url,
+      {required double size,
+      required Widget Function() onError,
+      Color? color}) {
     Widget image;
 
     image = WebImage(
       url: url,
-      imageHeight: faviconSize,
-      imageWidth: faviconSize,
+      imageHeight: size,
+      imageWidth: size,
       isHalfTransparent: !widget.isClickable,
       imageConfig: ImageConfig(
         filterQuality: FilterQuality.high,
@@ -174,13 +155,25 @@ class _FaviconWidgetState extends State<FaviconWidget> {
         errorBuilder: (context, error, stackTrace) {
           return onError();
         },
-        //loadingBuilder: (context) {
-        //  return defaultFavicon();
-        //},
         solidColor: color,
       ),
     );
     return image;
+  }
+
+  Iterable<UrlColor> getPossibleUrls() {
+    PackageScreenshots? images = widget.infos.screenshots;
+    Iterable<_TempUrlColor> urls = [
+      _TempUrlColor(url: widget.iconUrl),
+      _TempUrlColor(url: images?.icon),
+      _TempUrlColor(url: images?.backup?.icon),
+      _TempUrlColor(url: widget.infos.publisherIcon, color: defaultColor()),
+    ];
+    urls = urls.where((element) => element.url != null);
+    Iterable<UrlColor> urlColors =
+        urls.map((e) => UrlColor(url: e.url!, color: e.color));
+    return urlColors
+        .where((UrlColor element) => element.url.toString().isNotEmpty);
   }
 }
 
@@ -188,4 +181,18 @@ class DefaultFavicon extends FaviconWidget {
   DefaultFavicon(
       {super.key, required super.faviconSize, super.isClickable = true})
       : super(infos: PackageInfosPeek()..screenshots = null);
+}
+
+class _TempUrlColor {
+  Uri? url;
+  Color? color;
+
+  _TempUrlColor({required this.url, this.color});
+}
+
+class UrlColor {
+  Uri url;
+  Color? color;
+
+  UrlColor({required this.url, this.color});
 }

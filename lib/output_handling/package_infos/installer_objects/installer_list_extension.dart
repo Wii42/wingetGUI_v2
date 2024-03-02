@@ -113,21 +113,23 @@ extension InstallerList on List<Installer> {
     return done;
   }
 
-  List<Installer> fittingInstallers(ComputerArchitecture? installerArchitecture,
-      InstallerType? installerType, InstallerLocale? installerLocale,
-      InstallScope? installerScope, InstallerType? nestedInstallerType){
+  List<Installer> fittingInstallers(
+      ComputerArchitecture? installerArchitecture,
+      InstallerType? installerType,
+      InstallerLocale? installerLocale,
+      InstallScope? installerScope,
+      InstallerType? nestedInstallerType) {
     return where((installer) =>
-    (installer.architecture.value == installerArchitecture ||
-    installerArchitecture == ComputerArchitecture.matchAll) &&
-    (installer.type?.value == installerType ||
-    installerType == InstallerType.matchAll) &&
-    (installer.locale?.value == installerLocale ||
-    installerLocale == InstallerLocale.matchAll) &&
-    (installer.scope?.value == installerScope ||
-    installerScope == InstallScope.matchAll) &&
-    (installer.nestedInstallerType?.value == nestedInstallerType ||
-    nestedInstallerType == InstallerType.matchAll))
-        .toList();
+        (installer.architecture.value == installerArchitecture ||
+            installerArchitecture == ComputerArchitecture.matchAll) &&
+        (installer.type?.value == installerType ||
+            installerType == InstallerType.matchAll) &&
+        (installer.locale?.value == installerLocale ||
+            installerLocale == InstallerLocale.matchAll) &&
+        (installer.scope?.value == installerScope ||
+            installerScope == InstallScope.matchAll) &&
+        (installer.nestedInstallerType?.value == nestedInstallerType ||
+            nestedInstallerType == InstallerType.matchAll)).toList();
   }
 }
 
@@ -137,7 +139,7 @@ class Partition<T extends IdentifyingProperty> {
 
   Map<T?, List<Installer>> classes;
 
-  Partition(this.attribute, this.classes){
+  Partition(this.attribute, this.classes) {
     log = Logger(this);
   }
 
@@ -150,7 +152,7 @@ class Cluster<T extends IdentifyingProperty> {
   late final Logger log;
   final List<Partition<T>> partitions;
 
-  Cluster(this.partitions){
+  Cluster(this.partitions) {
     log = Logger(this);
   }
 
@@ -255,7 +257,8 @@ class MultiProperty {
       if (hasType) PackageAttribute.installerType: type,
       if (hasLocale) PackageAttribute.installerLocale: locale,
       if (hasScope) PackageAttribute.installScope: scope,
-      if (hasNestedInstaller) PackageAttribute.nestedInstallerType: nestedInstaller,
+      if (hasNestedInstaller)
+        PackageAttribute.nestedInstallerType: nestedInstaller,
     };
   }
 
@@ -291,13 +294,14 @@ class MultiProperty {
       );
 
   String title(AppLocalizations localizations, LocaleNames localeNames) {
-        String string = properties
-        .map((e) => properties.length > 1
-        ? e?.shortTitle(localizations)
-        : e?.fullTitle(localizations, localeNames))
+    List<String> titles = properties
+        .map((e) => properties.length > 2
+            ? e?.shortTitle(localizations)
+            : e?.fullTitle(localizations, localeNames))
         .nonNulls
-        .join(' ');
-        if(string.isEmpty) return 'null';
-        return string;
+        .toList();
+    String string = titles.toSet().join(' ');
+    if (string.isEmpty) return 'null';
+    return string;
   }
 }

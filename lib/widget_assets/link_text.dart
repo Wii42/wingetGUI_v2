@@ -9,19 +9,22 @@ class LinkText extends StatelessWidget {
   final String? title;
   final int maxLines;
   final TextStyle? style;
+  final void Function(String)? onHashtagTap;
+  final void Function(String)? onMentionTap;
 
-  const LinkText(
-      {required this.line,
-      this.maxLines = maxValue,
-      super.key,
-      this.style,
-      this.title});
+  const LinkText({
+    required this.line,
+    this.maxLines = maxValue,
+    super.key,
+    this.style,
+    this.title,
+    this.onHashtagTap,
+    this.onMentionTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    //FluentThemeData theme = FluentTheme.of(context);
-    //return Expander(header: Linkable(text: line,textColor: theme.activeColor, maxLines: 1,), content: Linkable(text: line, textColor: theme.activeColor),);
     return ExpandableText(
       line,
       style: style,
@@ -33,10 +36,25 @@ class LinkText extends StatelessWidget {
       maxLines: maxLines,
       animation: true,
       linkColor: FluentTheme.of(context).accentColor,
-      onUrlTap: (url) => launchUrl(Uri.parse(url)),
-      urlStyle: const TextStyle(
-        decoration: TextDecoration.underline,
-      ),
+      onUrlTap: launch,
+      urlStyle: linkTextStyle,
+      onHashtagTap: onHashtagTap,
+      hashtagStyle: onHashtagTap != null ? linkTextStyle : null,
+      onMentionTap: onMentionTap,
+      mentionStyle: onMentionTap != null ? linkTextStyle : null,
     );
+  }
+
+  TextStyle get linkTextStyle {
+    return const TextStyle(
+      decoration: TextDecoration.underline,
+    );
+  }
+
+  void launch(String url) {
+    if (!url.startsWith('http') && !url.startsWith('https')) {
+      url = 'https://$url';
+    }
+    launchUrl(Uri.parse(url));
   }
 }

@@ -152,7 +152,10 @@ class TitleWidget extends Compartment {
 
   StoreButton _showInStore(AppLocalizations locale) {
     return StoreButton(
-      storeId: infos.installer!.storeProductID!.value,
+      storeId: infos.installer?.storeProductID?.value ??
+          infos.installer?.installers?.value.firstOrNull?.storeProductID
+              ?.value ??
+          '',
     );
   }
 
