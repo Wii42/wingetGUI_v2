@@ -1,7 +1,7 @@
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-import '../github_api/github_api.dart';
+import '../github_api/exceptions/no_internet_exception.dart';
 import '../helpers/log_stream.dart';
 
 abstract class MicrosoftStoreApi {

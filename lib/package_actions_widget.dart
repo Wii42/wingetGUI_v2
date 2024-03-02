@@ -33,7 +33,7 @@ class PackageActionsList extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               for (PackageAction action in actionsNotifier.actions)
-                PackageActionWidget(action: action),
+                PackageActionWidget(action: action, key: action.uniqueKey),
             ].withSpaceBetween(height: 5),
           ),
         );

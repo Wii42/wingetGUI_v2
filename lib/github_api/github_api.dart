@@ -5,6 +5,9 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 
 import '../helpers/log_stream.dart';
+import 'exceptions/github_load_exception.dart';
+import 'exceptions/github_rate_limit_exception.dart';
+import 'exceptions/no_internet_exception.dart';
 import 'github_api_file_info.dart';
 
 class GithubApi {
@@ -73,6 +76,13 @@ class GithubApi {
     if (onError != null) {
       return onError();
     }
+    if(response.statusCode == 403 && response.reasonPhrase == 'rate limit exceeded') {
+      throw GithubRateLimitException.fromJson(
+          url: apiUri,
+          statusCode: response.statusCode,
+          reasonPhrase: response.reasonPhrase!,
+          jsonBody: response.body);
+    }
     throw GithubLoadException(
         url: apiUri,
         statusCode: response.statusCode,
@@ -86,38 +96,5 @@ class GithubApi {
 
   static String? idAsPath(String id) {
     return id.replaceAll('.', '/');
-  }
-}
-
-class GithubLoadException implements Exception {
-  Uri url;
-  int statusCode;
-  String? reasonPhrase;
-  String? responseBody;
-
-  GithubLoadException(
-      {required this.url,
-      required this.statusCode,
-      this.reasonPhrase,
-      this.responseBody});
-
-  @override
-  String toString() {
-    return [
-      'Failed to load files from Github API: $url',
-      'status code: $statusCode',
-      if (reasonPhrase != null) 'reason: $reasonPhrase',
-      if (responseBody != null) 'response body: $responseBody'
-    ].join(', ');
-  }
-}
-
-class NoInternetException implements Exception {
-  String? message;
-  NoInternetException([message]);
-  @override
-  String toString() {
-    if (message == null) return "No Internet Connection";
-    return "No Internet Connection: $message";
   }
 }

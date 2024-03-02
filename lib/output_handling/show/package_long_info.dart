@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/compartments/details_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/expandable_text_compartment.dart';
@@ -41,12 +42,7 @@ class PackageLongInfo extends StatelessWidget {
                 : null,
             titleIcon: FluentIcons.edit,
           ),
-        if (infos.hasReleaseNotes())
-          ExpandableTextCompartment(
-            text: infos.releaseNotes!.toStringInfo(),
-            buttonInfos: [infos.releaseNotes?.toUriInfoIfHasUrl()],
-            titleIcon: FluentIcons.product_release,
-          ),
+        if (infos.hasReleaseNotes()) releaseNotesCompartment(),
         DetailsWidget(infos: infos),
         if (infos.agreement != null) AgreementWidget(infos: infos.agreement!),
         if (infos.installer != null)
@@ -57,6 +53,41 @@ class PackageLongInfo extends StatelessWidget {
           ),
         if (infos.hasTags()) _tagButtons(context),
       ].withSpaceBetween(height: 10),
+    );
+  }
+
+  ExpandableTextCompartment releaseNotesCompartment() {
+    Uri? releaseNotesUrl = infos.releaseNotes?.url;
+    Uri? websiteUrl = infos.website?.value;
+    void Function(String)? launchMention;
+    if (releaseNotesUrl != null && releaseNotesUrl.host == 'github.com') {
+      launchMention = (String mention) {
+        log.info('Mention tapped: $mention');
+        launchUrl(Uri.parse("https://github.com/$mention"));
+      };
+    }
+
+    void Function(String)? launchHashtag;
+    if (websiteUrl != null && websiteUrl.host == 'github.com') {
+      launchHashtag = (String tag) {
+        log.info('Hashtag tapped: $tag');
+        launchUrl(Uri.parse("$websiteUrl/pull/$tag"));
+      };
+    }
+    if (releaseNotesUrl != null && releaseNotesUrl.host == 'github.com') {
+      launchHashtag = (String tag) {
+        log.info('Mention tapped: $tag');
+        launchUrl(Uri.parse(
+            "https://github.com/${releaseNotesUrl.pathSegments.take(2).join('/')}/pull/$tag"));
+      };
+    }
+
+    return ExpandableTextCompartment(
+      text: infos.releaseNotes!.toStringInfo(),
+      buttonInfos: [infos.releaseNotes?.toUriInfoIfHasUrl()],
+      titleIcon: FluentIcons.product_release,
+      onMentionTap: launchMention,
+      onHashtagTap: launchHashtag,
     );
   }
 

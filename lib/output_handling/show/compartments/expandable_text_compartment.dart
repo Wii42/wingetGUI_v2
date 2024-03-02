@@ -9,6 +9,8 @@ class ExpandableTextCompartment extends ExpanderCompartment {
   final Info<String> text;
   final Info<String>? title;
   final List<Info<Uri>?>? buttonInfos;
+  final void Function(String)? onHashtagTap;
+  final void Function(String)? onMentionTap;
 
   @override
   final IconData titleIcon;
@@ -19,6 +21,8 @@ class ExpandableTextCompartment extends ExpanderCompartment {
     this.title,
     this.buttonInfos,
     required this.titleIcon,
+    this.onHashtagTap,
+    this.onMentionTap,
   });
 
   @override
@@ -31,6 +35,8 @@ class ExpandableTextCompartment extends ExpanderCompartment {
             line: text.value,
             title: title?.value,
             maxLines: 10,
+            onHashtagTap: onHashtagTap,
+            onMentionTap: onMentionTap,
           )
         ]),
         buttonRow:

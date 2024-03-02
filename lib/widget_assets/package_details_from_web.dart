@@ -1,7 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart';
 import 'package:pub_semver/pub_semver.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/microsoft_store_api/microsoft_store_manifest_api.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
@@ -11,6 +13,8 @@ import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 import 'package:yaml/yaml.dart';
 
+import '../github_api/exceptions/github_rate_limit_exception.dart';
+import '../github_api/exceptions/no_internet_exception.dart';
 import '../github_api/github_api.dart';
 import '../github_api/github_api_file_info.dart';
 import '../github_api/winget_packages/winget_package_version_manifest.dart';
@@ -76,16 +80,11 @@ class PackageDetailsFromWeb extends StatelessWidget {
           );
         }
         if (snapshot.hasError) {
-          Object? error = snapshot.error;
-          Widget errorMessage = putInfo(error.runtimeType.toString(),
-              content: '$error\n${snapshot.stackTrace}', isLong: true);
-          if (error.runtimeType == NoInternetException) {
-            errorMessage = putInfo(localization.cantLoadDetails,
-                content:
-                    '${localization.reason}: ${localization.noInternetConnection}',
-                isLong: true);
-          }
+          log.error(snapshot.error.runtimeType.toString(),
+              message: '${snapshot.error}\n${snapshot.stackTrace}');
+          Widget errorMessage = errorWidget(snapshot, localization);
           return SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
             child: Center(
               child: errorMessage,
             ),
@@ -97,6 +96,56 @@ class PackageDetailsFromWeb extends StatelessWidget {
         ));
       },
     );
+  }
+
+  Widget errorWidget(AsyncSnapshot snapshot, AppLocalizations localization) {
+    Object? error = snapshot.error;
+    if (error.runtimeType == NoInternetException) {
+      return putInfo(localization.cantLoadDetails,
+          content:
+              '${localization.reason}: ${localization.noInternetConnection}',
+          isLong: true);
+    }
+    if (error.runtimeType == GithubRateLimitException) {
+      GithubRateLimitException e = error as GithubRateLimitException;
+      List<String> messageWithoutDocumentation =
+          e.message.split('documentation');
+      return Center(
+        child: InfoBar(
+            title: const Text('Too much requests to Github API'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text.rich(TextSpan(children: [
+                  for (int i = 0;
+                      i < messageWithoutDocumentation.length;
+                      i++) ...[
+                    if (i > 0)
+                      TextSpan(
+                        text: 'documentation',
+                        style: const TextStyle(
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            launchUrl(e.documentationUrl);
+                          },
+                      ),
+                    TextSpan(text: messageWithoutDocumentation[i]),
+                  ],
+                ])),
+                for (MapEntry<String, String> entry
+                    in e.responseBodyRest.entries)
+                  Text('${entry.key}: ${entry.value}'),
+              ],
+            ),
+            severity: InfoBarSeverity.error,
+            isLong: true),
+      );
+    }
+
+    return putInfo(error.runtimeType.toString(),
+        content: '$error\n${snapshot.stackTrace}', isLong: true);
   }
 
   Future<PackageInfosFull> getInfos(Locale? guiLocale) async {

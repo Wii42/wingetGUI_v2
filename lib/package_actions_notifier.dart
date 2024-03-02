@@ -32,5 +32,7 @@ class PackageAction {
   PackageInfos? infos;
   PackageActionType? type;
   WingetProcess process;
-  PackageAction({required this.process, this.infos, this.type});
+  Key uniqueKey;
+  PackageAction({required this.process, this.infos, this.type})
+      : uniqueKey = UniqueKey();
 }
