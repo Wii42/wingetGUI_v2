@@ -10,7 +10,7 @@ enum PackageAttribute {
   publisher(apiKey: 'Publisher'),
   publisherUrl(apiKey: 'PublisherUrl'),
   publisherSupportUrl(apiKey: 'PublisherSupportUrl'),
-  version(couldBeLink: false, apiKey: 'PackageVersion'),
+  version(copyable: true, couldBeLink: false, apiKey: 'PackageVersion'),
   availableVersion(couldBeLink: false),
   tags(apiKey: 'Tags'),
   releaseNotes(apiKey: 'ReleaseNotes'),

@@ -159,6 +159,9 @@ class WingetSource extends PackageSource {
   }
 
   Future<YamlMap?> getYaml(Uri url) async {
+    if(url.toString().contains('#')) {
+      url = Uri.parse(url.toString().replaceAll('#', '%23'));
+    }
     Response response = await get(url);
     if (response.statusCode == 200) {
       try {

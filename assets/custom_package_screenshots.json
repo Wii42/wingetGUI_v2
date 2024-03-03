@@ -652,5 +652,9 @@
   },
   "Oracle.JDK.*": {
     "icon": "https://s3.amazonaws.com/s3.timetoast.com/public/uploads/photos/12257694/JAVA_large_square.png"
+  },
+
+  "Coninfer.ECLiPSeCLP.*": {
+    "icon": "https://eclipseclp.org/eclipse_logo_blue.png"
   }
 }

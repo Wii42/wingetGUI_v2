@@ -29,6 +29,7 @@ class DetailsWidget extends ExpanderCompartment {
             infos.freeTrial,
             infos.ageRating,
             infos.id,
+            infos.version,
             infos.packageLocale?.toStringInfo(context),
           ], context),
           if (infos.documentation != null)
