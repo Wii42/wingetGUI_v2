@@ -12,8 +12,13 @@ import '../output_handling/package_infos/package_infos_full.dart';
 import 'decorated_card.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 
-String githubFaviconUrl =
-    'https://github.githubassets.com/favicons/favicon.svg';
+const Map<String, String> codeHosts = {
+  'github.com': 'https://github.githubassets.com/favicons/favicon.svg',
+  'sourceforge.net':
+      'https://a.fsdn.com/con/img/sandiego/svg/originals/sf-icon-orange-no_sf.svg',
+  'bitbucket.org':
+      'https://d301sr5gafysq2.cloudfront.net/3c154c6a443d/img/logos/bitbucket/android-chrome-192x192.png',
+};
 
 class FaviconWidget extends StatefulWidget {
   late final Logger log;
@@ -109,7 +114,7 @@ class _FaviconWidgetState extends State<FaviconWidget> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           Favicon? favicon = snapshot.data;
-          if (favicon != null && favicon.url != githubFaviconUrl) {
+          if (favicon != null && !isFaviconOfCodeHost(favicon.url)) {
             widget.log.info(favicon.url);
             return loadFavicon(favicon.url,
                 size: widget.faviconSize, onError: () => defaultFavicon());
@@ -174,6 +179,10 @@ class _FaviconWidgetState extends State<FaviconWidget> {
         urls.map((e) => UrlColor(url: e.url!, color: e.color));
     return urlColors
         .where((UrlColor element) => element.url.toString().isNotEmpty);
+  }
+
+  bool isFaviconOfCodeHost(String faviconUrl) {
+    return codeHosts.values.contains(faviconUrl);
   }
 }
 

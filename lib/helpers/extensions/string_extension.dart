@@ -59,16 +59,12 @@ extension ContainsExtentsion on String {
     return codePoints.where((codePoint) => isCjkIdeograph(codePoint)).length;
   }
 
-  String charAt(int index) {
-    return String.fromCharCode(codeUnitAt(index));
-  }
-
   String firstChar() {
-    return String.fromCharCode(codeUnits.first);
+    return this[0];
   }
 
   String lastChar() {
-    return String.fromCharCode(codeUnits.last);
+    return this[length - 1];
   }
 }
 

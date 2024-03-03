@@ -46,4 +46,6 @@ class GithubApiFileInfo {
   String toString() {
     return 'GithubFileInfo{name: $name,\n  path: $path,\n  sha: $sha,\n  size: $size,\n  url: $url,\n  htmlUrl: $htmlUrl,\n  gitUrl: $gitUrl,\n  downloadUrl: $downloadUrl,\n  type: $type,\n  links: $links}';
   }
+
+  List<String> get pathFragments => path.pathSegments;
 }

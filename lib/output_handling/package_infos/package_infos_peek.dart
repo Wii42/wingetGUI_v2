@@ -1,5 +1,8 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/package_sources/package_source.dart';
 
+import '../../package_sources/ms_store_source.dart';
+import '../../package_sources/winget_source.dart';
 import './package_infos.dart';
 import 'info.dart';
 import 'info_map_parser.dart';
@@ -88,4 +91,14 @@ class PackageInfosPeek extends PackageInfos {
 
   @override
   PackageInfosPeek toPeek() => this;
+
+  PackageSource? get packageSource {
+    if (isMicrosoftStore()) {
+      return MSStoreSource(this);
+    }
+    if (isWinget()) {
+      return WingetSource(this);
+    }
+    return null;
+  }
 }

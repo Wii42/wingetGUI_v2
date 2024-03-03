@@ -4,10 +4,10 @@ import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 
-import '../helpers/log_stream.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 import 'exceptions/github_load_exception.dart';
 import 'exceptions/github_rate_limit_exception.dart';
-import 'exceptions/no_internet_exception.dart';
+import '../no_internet_exception.dart';
 import 'github_api_file_info.dart';
 
 class GithubApi {
@@ -15,12 +15,12 @@ class GithubApi {
 
   final String repository;
   final String owner;
-  final Uri? path;
+  final List<String> pathFragments;
 
   GithubApi({
     required this.repository,
     required this.owner,
-    this.path,
+    this.pathFragments = const [],
   }) {
     log = Logger(this);
   }
@@ -30,25 +30,31 @@ class GithubApi {
       GithubApi(
         repository: 'winget-pkgs',
         owner: 'microsoft',
-        path: Uri.parse(
-            'manifests/${idInitialLetter(packageID)}/${idAsPath(packageID)}/$version'),
+        pathFragments: [
+          'manifests',
+          idInitialLetter(packageID),
+          ...idAsPath(packageID),
+          version
+        ],
       );
 
   factory GithubApi.wingetManifest({required String packageID}) => GithubApi(
         repository: 'winget-pkgs',
         owner: 'microsoft',
-        path: Uri.parse(
-            'manifests/${idInitialLetter(packageID)}/${idAsPath(packageID)}'),
+        pathFragments: [
+          'manifests',
+          idInitialLetter(packageID),
+          ...idAsPath(packageID)
+        ],
       );
 
-  factory GithubApi.wingetRepo(Uri path) => GithubApi(
+  factory GithubApi.wingetRepo(List<String> pathFragments) => GithubApi(
         repository: 'winget-pkgs',
         owner: 'microsoft',
-        path: path,
+        pathFragments: pathFragments,
       );
 
-  Uri get apiUri => Uri.parse(
-      'https://api.github.com/repos/$owner/$repository/contents/${path?.path ?? ''}');
+  Uri get apiUri => Uri(scheme: 'https', host: 'api.github.com', pathSegments: ['repos', owner, repository, 'contents', ...pathFragments]);
 
   Future<List<GithubApiFileInfo>> getFiles(
       {Future<List<GithubApiFileInfo>> Function()? onError}) async {
@@ -76,7 +82,8 @@ class GithubApi {
     if (onError != null) {
       return onError();
     }
-    if(response.statusCode == 403 && response.reasonPhrase == 'rate limit exceeded') {
+    if (response.statusCode == 403 &&
+        response.reasonPhrase == 'rate limit exceeded') {
       throw GithubRateLimitException.fromJson(
           url: apiUri,
           statusCode: response.statusCode,
@@ -90,11 +97,13 @@ class GithubApi {
         responseBody: response.body);
   }
 
-  static String? idInitialLetter(String id) {
+  String get path => pathFragments.join('/');
+
+  static String idInitialLetter(String id) {
     return id.firstChar().toLowerCase();
   }
 
-  static String? idAsPath(String id) {
-    return id.replaceAll('.', '/');
+  static List<String> idAsPath(String id) {
+    return id.split('.');
   }
 }

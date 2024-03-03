@@ -123,8 +123,8 @@ class TableParser extends OutputParser {
         if (tableCell.lastChar() != ' ') {
           int nextCharIndex = end;
           while (nextCharIndex < entry.length &&
-              entry.charAt(nextCharIndex) != ' ') {
-            tableCell = tableCell + entry.charAt(nextCharIndex);
+              entry[nextCharIndex] != ' ') {
+            tableCell = tableCell + entry[nextCharIndex];
             nextCharIndex++;
           }
         }
