@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:http/http.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:yaml/yaml.dart';
 import 'package:winget_gui/helpers/locale_parser.dart';
@@ -47,7 +48,7 @@ class WingetSource extends PackageSource {
         findBestMatchingFiles(files, lastKnownPart);
     if (matchingFiles.length != 1) {
       throw Exception(
-          'Not exactly 1 matching file found: ${matchingFiles.map((e) => e.name)} in ${api.apiUri}');
+          'Found ${matchingFiles.length} matching files, expected 1: ${matchingFiles.map((e) => e.name)} in ${api.apiUri}');
     }
     return matchingFiles.single;
   }
@@ -56,21 +57,48 @@ class WingetSource extends PackageSource {
       List<GithubApiFileInfo> files, String lastKnownPart) {
     List<GithubApiFileInfo> matchingFiles = List.from(files);
 
-    Queue<bool Function(GithubApiFileInfo)> matchingCriteria = Queue.from([
-      (GithubApiFileInfo element) => element.name.startsWith(lastKnownPart),
-      (GithubApiFileInfo element) => element.name != lastKnownPart,
-      (GithubApiFileInfo element) =>
-          package.name?.value.replaceAll(' ', '').endsWith(element.name) ??
-          false
-    ]);
+    Queue<bool Function(GithubApiFileInfo)> matchCriteria = Queue.from(
+      [
+        (GithubApiFileInfo element) => element.name.startsWith(lastKnownPart),
+        (GithubApiFileInfo element) => element.name != lastKnownPart,
+        (GithubApiFileInfo element) =>
+            package.name?.value.replaceAll(' ', '').endsWith(element.name) ??
+            false
+      ],
+    );
     List<GithubApiFileInfo> previousMatchingFiles = List.from(matchingFiles);
-    while (matchingCriteria.isNotEmpty && matchingFiles.length > 1) {
+    while (matchCriteria.isNotEmpty && matchingFiles.length > 1) {
       previousMatchingFiles = List.from(matchingFiles);
-      bool Function(GithubApiFileInfo) matchingCriterion =
-          matchingCriteria.removeFirst();
-      matchingFiles = matchingFiles.where(matchingCriterion).toList();
+      bool Function(GithubApiFileInfo) matchCriterion =
+          matchCriteria.removeFirst();
+      matchingFiles = matchingFiles.where(matchCriterion).toList();
     }
-    return matchingFiles.isNotEmpty ? matchingFiles : previousMatchingFiles;
+    matchingFiles =
+        matchingFiles.isNotEmpty ? matchingFiles : previousMatchingFiles;
+
+    if (matchingFiles.length > 1) {
+      matchingFiles = findNameMatch(matchingFiles);
+    }
+    return matchingFiles;
+  }
+
+  List<GithubApiFileInfo> findNameMatch(List<GithubApiFileInfo> matchingFiles) {
+    String? packageName = package.name?.value;
+    if (packageName != null) {
+      List<GithubApiFileInfo> nameMatchingFiles = List.from(matchingFiles);
+      int matchLength = 0;
+      while (nameMatchingFiles.length > 1) {
+        matchLength++;
+        nameMatchingFiles = matchingFiles
+            .where((element) =>
+                packageName.contains(element.name.take(matchLength)))
+            .toList();
+      }
+      if (nameMatchingFiles.isNotEmpty) {
+        matchingFiles = nameMatchingFiles;
+      }
+    }
+    return matchingFiles;
   }
 
   Future<PackageInfosFull> extractInfosOnlineFromId(

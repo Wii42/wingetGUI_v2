@@ -66,6 +66,13 @@ extension ContainsExtentsion on String {
   String lastChar() {
     return this[length - 1];
   }
+
+  String take(int count) {
+    if(count > length) {
+      return this;
+    }
+    return substring(0, count);
+  }
 }
 
 bool isCjkIdeograph(int codePoint) {
