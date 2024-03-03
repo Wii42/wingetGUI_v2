@@ -33,6 +33,7 @@ class PackageInfosFull extends PackageInfos {
   final Info<Uri>? website, supportUrl;
   final Info<Locale>? packageLocale;
   final InstallerInfos? installer;
+  final Uri? infosSource;
 
   PackageInfosFull({
     super.name,
@@ -54,6 +55,7 @@ class PackageInfosFull extends PackageInfos {
     this.tags,
     this.packageLocale,
     this.installer,
+    this.infosSource,
     super.otherInfos,
   });
 
@@ -105,7 +107,7 @@ class PackageInfosFull extends PackageInfos {
 
   factory PackageInfosFull.fromYamlMap(
       {required Map<dynamic, dynamic>? details,
-      required Map<dynamic, dynamic>? installerDetails}) {
+      required Map<dynamic, dynamic>? installerDetails, Uri? infosSource}) {
     if (details == null && installerDetails == null) {
       return PackageInfosFull();
     }
@@ -137,6 +139,7 @@ class PackageInfosFull extends PackageInfos {
         packageLocale:
             parser.maybeLocaleFromMap(PackageAttribute.packageLocale),
         installer: installer,
+        infosSource: infosSource,
         otherInfos: details.isNotEmpty
             ? details.map<String, String>(
                 (key, value) => MapEntry(key.toString(), value.toString()))
@@ -149,7 +152,7 @@ class PackageInfosFull extends PackageInfos {
   }
 
   factory PackageInfosFull.fromMSJson(
-      {required Map<String, dynamic>? file, Locale? locale}) {
+      {required Map<String, dynamic>? file, Locale? locale, Uri? infosSource}) {
     if (file == null) {
       return PackageInfosFull();
     }
@@ -211,6 +214,7 @@ class PackageInfosFull extends PackageInfos {
       freeTrial:
           agreementsParser.maybeStringFromMap(PackageAttribute.freeTrial),
       pricing: agreementsParser.maybeStringFromMap(PackageAttribute.pricing),
+      infosSource: infosSource,
       otherInfos: localeParser.getOtherInfos()
         ?..remove(PackageAttribute.agreement.apiKey),
     );

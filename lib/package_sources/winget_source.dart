@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:ui';
 import 'package:http/http.dart';
 import 'package:pub_semver/pub_semver.dart';
@@ -15,77 +16,69 @@ class WingetSource extends PackageSource {
 
   @override
   Future<PackageInfosFull> fetchInfos(Locale? guiLocale) async {
-    if (package.hasCompleteId()) {
-      return extractInfosOnlineFromId(guiLocale, package.id!.value);
-    } else {
-      String idWithoutEllipsis = package.idWithoutEllipsis()!;
-      List<String> idParts = idWithoutEllipsis.split('.');
-      if (idWithoutEllipsis.endsWith('.')) {
-        idParts.add('');
-      }
-      List<String> soundParts = idParts.take(idParts.length - 1).toList();
-      GithubApi api = GithubApi.wingetManifest(packageID: soundParts.join('.'));
-      List<GithubApiFileInfo> files = await api.getFiles();
-      if (files.isEmpty) {
-        throw Exception('No files found');
-      }
-      List<GithubApiFileInfo> matchingFiles = files
-          .where((element) => element.name.startsWith(idParts.last))
-          .toList();
-      if (matchingFiles.length != 1) {
-        matchingFiles.removeWhere((element) => element.name == idParts.last);
-        if (matchingFiles.length != 1) {
-          List<GithubApiFileInfo> matchingFilesByName = matchingFiles
-              .where((element) =>
-                  package.name?.value
-                      .replaceAll(' ', '')
-                      .endsWith(element.name) ??
-                  false)
-              .toList();
-          if (matchingFilesByName.length == 1) {
-            matchingFiles = matchingFilesByName;
-          } else {
-            throw Exception(
-                'Not  1 matching file found: ${matchingFiles.map((e) => e.name)}');
-          }
-        }
-      }
-      soundParts.add(matchingFiles.single.name);
-      return extractInfosOnlineFromId(guiLocale, soundParts.join('.'));
+    String packageID =
+        package.hasCompleteId() ? package.id!.value : await reconstructFullId();
+    return extractInfosOnlineFromId(guiLocale, packageID);
+  }
+
+  Future<String> reconstructFullId() async {
+    String idWithoutEllipsis = package.idWithoutEllipsis()!;
+    List<String> idParts = idWithoutEllipsis.split('.');
+    if (idWithoutEllipsis.endsWith('.')) {
+      idParts.add('');
     }
+    List<String> soundParts = idParts.take(idParts.length - 1).toList();
+    GithubApiFileInfo matchingFiles = await guessIdPartsBasedOnRepo(
+        soundIdPart: soundParts.join('.'), lastKnownPart: idParts.last);
+    soundParts.add(matchingFiles.name);
+    return soundParts.join('.');
+  }
+
+  /// Tries to guess the last part of the package ID
+  /// based on the files and directories in the winget-pkgs repository
+  Future<GithubApiFileInfo> guessIdPartsBasedOnRepo(
+      {required String soundIdPart, required String lastKnownPart}) async {
+    GithubApi api = GithubApi.wingetManifest(packageID: soundIdPart);
+    List<GithubApiFileInfo> files = await api.getFiles();
+    if (files.isEmpty) {
+      throw Exception('No files found in ${api.apiUri}');
+    }
+    List<GithubApiFileInfo> matchingFiles =
+        findBestMatchingFiles(files, lastKnownPart);
+    if (matchingFiles.length != 1) {
+      throw Exception(
+          'Not exactly 1 matching file found: ${matchingFiles.map((e) => e.name)} in ${api.apiUri}');
+    }
+    return matchingFiles.single;
+  }
+
+  List<GithubApiFileInfo> findBestMatchingFiles(
+      List<GithubApiFileInfo> files, String lastKnownPart) {
+    List<GithubApiFileInfo> matchingFiles = List.from(files);
+
+    Queue<bool Function(GithubApiFileInfo)> matchingCriteria = Queue.from([
+      (GithubApiFileInfo element) => element.name.startsWith(lastKnownPart),
+      (GithubApiFileInfo element) => element.name != lastKnownPart,
+      (GithubApiFileInfo element) =>
+          package.name?.value.replaceAll(' ', '').endsWith(element.name) ??
+          false
+    ]);
+    List<GithubApiFileInfo> previousMatchingFiles = List.from(matchingFiles);
+    while (matchingCriteria.isNotEmpty && matchingFiles.length > 1) {
+      previousMatchingFiles = List.from(matchingFiles);
+      bool Function(GithubApiFileInfo) matchingCriterion =
+          matchingCriteria.removeFirst();
+      matchingFiles = matchingFiles.where(matchingCriterion).toList();
+    }
+    return matchingFiles.isNotEmpty ? matchingFiles : previousMatchingFiles;
   }
 
   Future<PackageInfosFull> extractInfosOnlineFromId(
       Locale? guiLocale, String packageID) async {
-    bool hasAnyVersion =
-        package.hasSpecificVersion() || package.hasSpecificAvailableVersion();
-    List<GithubApiFileInfo> files;
-    if (hasAnyVersion) {
-      GithubApi manifestApi = GithubApi.wingetVersionManifest(
-          packageID: packageID,
-          version: (package.hasSpecificAvailableVersion()
-                  ? package.availableVersion?.value
-                  : null) ??
-              (package.hasSpecificVersion()
-                  ? package.version?.value
-                  : throw Exception('package has no specific version'))!);
-
-      files = await manifestApi.getFiles(
-          onError: () =>
-              GithubApi.wingetManifest(packageID: packageID).getFiles());
-    } else {
-      GithubApi manifestApi = GithubApi.wingetManifest(packageID: packageID);
-
-      files = await manifestApi.getFiles();
-    }
-
-    if (files.isEmpty) {
-      throw Exception('No files found');
-    }
+    List<GithubApiFileInfo> files = await getFiles(packageID);
     if (!WingetPackageVersionManifest.isVersionManifest(files,
         packageId: packageID)) {
       files = await tryGetNewestVersionManifest(files);
-      //throw Exception('Files are not a version manifest');
     }
 
     WingetPackageVersionManifest manifest =
@@ -99,38 +92,58 @@ class WingetSource extends PackageSource {
         await chooseLocale(guiLocale, manifest, packageID: packageID);
     details = manifest.localizedFiles.firstWhere((element) =>
         getLocaleFromName(element, packageID: packageID) == locale);
-    YamlMap? detailsYaml = await getYaml(details.downloadUrl!);
 
-    Map<dynamic, dynamic>? detailsMap = detailsYaml
-        ?.map<dynamic, dynamic>((key, value) => MapEntry(key, value));
-    detailsMap?.remove('ManifestVersion');
-    detailsMap?.remove('ManifestType');
-
-    YamlMap? installerYaml = await getYaml(manifest.installer.downloadUrl!);
-    Map<dynamic, dynamic>? installerMap = installerYaml
-        ?.map<dynamic, dynamic>((key, value) => MapEntry(key, value));
-    installerMap?.remove('ManifestVersion');
-    installerMap?.remove('ManifestType');
-    installerMap?.remove('PackageIdentifier');
-    installerMap?.remove('PackageVersion');
+    Map<dynamic, dynamic>? detailsMap = await getMap(details.downloadUrl,
+        keysToRemove: ['ManifestVersion', 'ManifestType']);
+    Map<dynamic, dynamic>? installerMap = await getMap(
+      manifest.installer.downloadUrl,
+      keysToRemove: [
+        'ManifestVersion',
+        'ManifestType',
+        'PackageIdentifier',
+        'PackageVersion',
+      ],
+    );
 
     return PackageInfosFull.fromYamlMap(
         details: detailsMap, installerDetails: installerMap);
+  }
+
+  Future<List<GithubApiFileInfo>> getFiles(String packageID) async {
+    bool hasAnyVersion =
+        package.hasSpecificVersion() || package.hasSpecificAvailableVersion();
+    fallBackFiles() =>
+        GithubApi.wingetManifest(packageID: packageID).getFiles();
+    List<GithubApiFileInfo> files;
+    if (hasAnyVersion) {
+      GithubApi manifestApi = GithubApi.wingetVersionManifest(
+          packageID: packageID,
+          version: (package.hasSpecificAvailableVersion()
+                  ? package.availableVersion?.value
+                  : null) ??
+              (package.hasSpecificVersion()
+                  ? package.version?.value
+                  : throw Exception('package has no specific version'))!);
+      files = await manifestApi.getFiles(onError: fallBackFiles);
+    } else {
+      files = await fallBackFiles();
+    }
+    if (files.isEmpty) {
+      throw Exception('No files found');
+    }
+    return files;
   }
 
   Future<Locale> chooseLocale(
       Locale? guiLocale, WingetPackageVersionManifest manifest,
       {String? packageID}) async {
     List<GithubApiFileInfo> localizedFiles = manifest.localizedFiles;
-
     List<Locale> availableLocales = localizedFiles
         .map<Locale>((e) => getLocaleFromName(e, packageID: packageID))
         .toList();
-
     if (availableLocales.length == 1) {
       return availableLocales.single;
     }
-
     if (guiLocale != null) {
       Locale? bestFitting = guiLocale.bestFittingLocale(availableLocales);
       if (bestFitting != null) {
@@ -159,7 +172,7 @@ class WingetSource extends PackageSource {
   }
 
   Future<YamlMap?> getYaml(Uri url) async {
-    if(url.toString().contains('#')) {
+    if (url.toString().contains('#')) {
       url = Uri.parse(url.toString().replaceAll('#', '%23'));
     }
     Response response = await get(url);
@@ -175,6 +188,22 @@ class WingetSource extends PackageSource {
         'Failed to load file from Github API: ${response.statusCode}\n${response.reasonPhrase}\n${response.body}');
 
     return null;
+  }
+
+  Future<Map<dynamic, dynamic>?> getMap(Uri? url,
+      {List<String> keysToRemove = const []}) async {
+    if (url == null) {
+      return null;
+    }
+    YamlMap? yaml = await getYaml(url);
+
+    Map<dynamic, dynamic>? map =
+        yaml?.map<dynamic, dynamic>((key, value) => MapEntry(key, value));
+    for (var element in keysToRemove) {
+      map?.remove(element);
+    }
+
+    return map;
   }
 
   Future<List<GithubApiFileInfo>> tryGetNewestVersionManifest(
