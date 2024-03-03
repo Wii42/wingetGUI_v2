@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -21,6 +22,7 @@ class PackagePeekListView extends StatefulWidget {
   late final Stream<DBMessage> reloadStream;
   final PackageListMenuOptions menuOptions;
   final PackageListPackageOptions packageOptions;
+  final StreamController<String> filterStreamController;
 
   PackagePeekListView({
     super.key,
@@ -28,7 +30,7 @@ class PackagePeekListView extends StatefulWidget {
     Stream<DBMessage>? customReloadStream,
     this.menuOptions = const PackageListMenuOptions(),
     this.packageOptions = const PackageListPackageOptions(),
-  }) {
+  }) : filterStreamController = StreamController<String>.broadcast() {
     reloadStream = customReloadStream ?? dbTable.stream;
   }
 
@@ -48,10 +50,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   @override
   void initState() {
     super.initState();
-    onlyWithSource = widget.menuOptions.onlyWithSourceInitialValue;
-    onlyWithExactVersion = widget.menuOptions.onlyWithExactVersionInitialValue;
-    sortBy = widget.menuOptions.defaultSortBy;
-    sortReversed = widget.menuOptions.sortDefaultReversed;
+    setDefaultValues();
+    listenToFilterStream();
   }
 
   @override
@@ -227,8 +227,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           },
           content: Text(locale.onlyAppsWithExactVersion),
         ),
-      if (prefilteredInfos.length >= 5 &&
-          widget.menuOptions.filterField) ...[
+      if (prefilteredInfos.length >= 5 && widget.menuOptions.filterField) ...[
         searchField(),
         if (widget.menuOptions.deepSearchButton) deepSearchButton()
       ],
@@ -295,6 +294,22 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 
   String get filter => filterController.text;
+
+  void listenToFilterStream() {
+    widget.filterStreamController.stream.listen((event) {
+      setState(() {
+        filterController.text = event;
+        setDefaultValues();
+      });
+    });
+  }
+
+  void setDefaultValues() {
+    onlyWithSource = widget.menuOptions.onlyWithSourceInitialValue;
+    onlyWithExactVersion = widget.menuOptions.onlyWithExactVersionInitialValue;
+    sortBy = widget.menuOptions.defaultSortBy;
+    sortReversed = widget.menuOptions.sortDefaultReversed;
+  }
 }
 
 class PackageListMenuOptions {

@@ -12,6 +12,7 @@ class PaneItemBody extends StatelessWidget {
   final Widget child;
   final WingetProcess? process;
   final void Function()? customReload;
+  final void Function()? goBackWithoutPreviousPage;
   final Widget? bodyHeader;
 
   const PaneItemBody(
@@ -20,7 +21,8 @@ class PaneItemBody extends StatelessWidget {
       required this.child,
       this.process,
       this.customReload,
-      this.bodyHeader});
+      this.bodyHeader,
+      this.goBackWithoutPreviousPage});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,9 @@ class PaneItemBody extends StatelessWidget {
               width: iconSize,
               height: iconSize,
               child: IconButton(
-                  onPressed: canGoBack(context) ? navigator.maybePop : null,
+                  onPressed: hasPreviousPage(context)
+                      ? navigator.maybePop
+                      : goBackWithoutPreviousPage,
                   icon: const Icon(
                     FluentIcons.back,
                   ))),
@@ -80,7 +84,7 @@ class PaneItemBody extends StatelessWidget {
                         FluentPageRoute(
                           builder: (_) => OutputPage(
                             process: newProcess,
-                            title: title != null?(_) =>title! : null,
+                            title: title != null ? (_) => title! : null,
                           ),
                         ),
                       );
@@ -93,7 +97,9 @@ class PaneItemBody extends StatelessWidget {
     );
   }
 
-  bool canGoBack(BuildContext context) => Navigator.of(context).canPop();
+  bool hasPreviousPage(BuildContext context) => Navigator.of(context).canPop();
+  bool canGoBack(BuildContext context) =>
+      goBackWithoutPreviousPage != null || hasPreviousPage(context);
 
   factory PaneItemBody.inRoute([Object? _]) =>
       const PaneItemBody(title: 'empty', child: Text('text'));

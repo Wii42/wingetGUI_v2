@@ -30,6 +30,9 @@ class PackageListPage extends StatelessWidget {
             title: title,
             bodyHeader: bodyHeader,
             customReload: customReload,
+            goBackWithoutPreviousPage: (){
+              listView.filterStreamController.add('');
+            },
             child: listView,
           ),
         );
