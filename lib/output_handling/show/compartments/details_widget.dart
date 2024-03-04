@@ -6,6 +6,7 @@ import 'package:winget_gui/output_handling/package_infos/to_string_info_extensio
 
 import '../../../helpers/route_parameter.dart';
 import '../../../routes.dart';
+import '../../package_infos/info.dart';
 import 'expander_compartment.dart';
 
 class DetailsWidget extends ExpanderCompartment {
@@ -29,7 +30,7 @@ class DetailsWidget extends ExpanderCompartment {
             infos.freeTrial,
             infos.ageRating,
             infos.id,
-            infos.version,
+            if (infos.version?.value != 'Unknown') infos.version,
             infos.packageLocale?.toStringInfo(context),
           ], context),
           if (infos.documentation != null)
@@ -54,12 +55,18 @@ class DetailsWidget extends ExpanderCompartment {
           [
             infos.supportUrl,
             infos.manifest,
+            if(infos.infosSource != null)
+              Info<Uri>(
+                title: (locale)=>'Source',
+                value: infos.infosSource!,
+              ),
           ],
           context,
           otherButtons: [
             if (infos.publisherID != null)
               Button(
-                child: Text(locale.moreFromPublisher(infos.publisherName?? infos.publisherID!)),
+                child: Text(locale.moreFromPublisher(
+                    infos.publisherName ?? infos.publisherID!)),
                 onPressed: () {
                   Navigator.of(context).pushNamed(Routes.publisherPage.route,
                       arguments:

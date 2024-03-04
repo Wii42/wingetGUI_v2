@@ -20,9 +20,9 @@ class AgreementWidget extends ExpanderCompartment {
     return fullCompartment(
         title: compartmentTitle(locale),
         mainColumn: [
-          if (infos.license?.text != null)
+          if (infos.license?.text != null && infos.license!.text!.isNotEmpty)
             wrapInfoWithLink(context, infos.license),
-          if (infos.copyright?.text != null)
+          if (infos.copyright?.text != null && infos.copyright!.text!.isNotEmpty)
             wrapInfoWithLink(context, infos.copyright),
         ],
         buttonRow: buttonRow([

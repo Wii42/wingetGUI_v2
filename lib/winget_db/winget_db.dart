@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:cron/cron.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../helpers/log_stream.dart';
@@ -54,6 +55,7 @@ class WingetDB {
 
     printPublishersPackageNrs();
     status = WingetDBStatus.ready;
+    scheduleReloadDBs(wingetLocale);
     return;
   }
 
@@ -72,7 +74,8 @@ class WingetDB {
 
     log.info('Amount of packages per Publisher',
         message: map.entries
-            .sorted((a, b) => b.value.length.compareTo(a.value.length)).map((e) => '${e.key}: ${e.value.length}')
+            .sorted((a, b) => b.value.length.compareTo(a.value.length))
+            .map((e) => '${e.key}: ${e.value.length}')
             .join(('\n')));
   }
 
@@ -102,7 +105,7 @@ class WingetDB {
   }
 
   static bool isPackageInstalled(PackageInfos package) {
-    if(package.id == null) return false;
+    if (package.id == null) return false;
     return WingetDB.instance.installed.idMap.containsKey(package.id?.value);
   }
 
@@ -113,6 +116,19 @@ class WingetDB {
   static Future<bool> checkWingetAvailable() async {
     ProcessResult result = await Process.run('where', ['winget']);
     return result.exitCode == 0;
+  }
+
+  void reloadDBs(AppLocalizations wingetLocale) {
+    updates.reloadFuture(wingetLocale);
+    installed.reloadFuture(wingetLocale);
+    available.reloadFuture(wingetLocale);
+  }
+
+  void scheduleReloadDBs(AppLocalizations wingetLocale) {
+    Cron cron = Cron();
+    cron.schedule(Schedule(hours: '*/1'), () {
+      reloadDBs(wingetLocale);
+    });
   }
 }
 

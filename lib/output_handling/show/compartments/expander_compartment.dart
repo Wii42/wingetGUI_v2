@@ -93,7 +93,7 @@ abstract class ExpanderCompartment extends Compartment
     AppLocalizations locale = AppLocalizations.of(context)!;
     return [
       for (Info<String>? info in details)
-        if (info != null)
+        if (info != null && info.value.isNotEmpty)
           wrapInWrap(
               title: info.title(locale),
               body: info.copyable
