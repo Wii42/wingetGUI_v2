@@ -109,7 +109,6 @@ extension PackageScreenshotIdentifiers on PackageInfos {
     for (int i = 1; i < idList.length; i++) {
       idWithWildcards.add('${idList.sublist(0, i).join('.')}.*');
     }
-    log.info('${id!.value}: ${idWithWildcards.reversed.toList()}');
     return idWithWildcards.reversed.toList();
   }
 

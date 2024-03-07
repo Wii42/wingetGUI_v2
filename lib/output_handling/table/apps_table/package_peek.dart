@@ -5,7 +5,7 @@ import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/widget_assets/favicon_widget.dart';
 import 'package:winget_gui/widget_assets/right_side_buttons.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
-
+import '../../../package_sources/package_source.dart';
 import '../../../routes.dart';
 import '../../package_infos/package_infos_peek.dart';
 
@@ -17,6 +17,7 @@ class PackagePeek extends StatelessWidget {
   final bool checkFavicon;
   final bool showMatch;
   final bool showInstalledIcon;
+  final bool defaultSourceIsLocalPC;
 
   final MainAxisAlignment columnAlign = MainAxisAlignment.center;
 
@@ -29,6 +30,7 @@ class PackagePeek extends StatelessWidget {
     this.checkFavicon = false,
     this.showMatch = false,
     this.showInstalledIcon = false,
+    this.defaultSourceIsLocalPC = false,
   });
 
   factory PackagePeek.fromCommand(PackageInfosPeek infos,
@@ -135,8 +137,7 @@ class PackagePeek extends StatelessWidget {
   }
 
   Widget sourceAndID(AppLocalizations locale, BuildContext context) {
-    //bool showSource = infos.source != null && infos.source!.value.isNotEmpty;
-    bool hasSource = infos.source != null && infos.source!.value.isNotEmpty;
+    bool hasSource = infos.source.value != PackageSources.none || !defaultSourceIsLocalPC;
     bool showSource = true;
     bool showId = infos.id != null &&
         infos.id!.value.isNotEmpty &&
@@ -145,7 +146,10 @@ class PackagePeek extends StatelessWidget {
     return Row(
       children: [
         if (showSource)
-          smallText(locale.fromSource(hasSource? infos.source!.value: locale.localPC), context),
+          smallText(
+              locale.fromSource(
+                  hasSource ? infos.source.value.title : locale.localPC),
+              context),
         if (showSource && showId)
           SizedBox(
             width: 15,

@@ -6,6 +6,7 @@ import 'package:winget_gui/helpers/locale_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/info_yaml_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
+import 'package:winget_gui/package_sources/package_source.dart';
 
 import './package_infos.dart';
 import 'agreement_infos.dart';
@@ -56,6 +57,7 @@ class PackageInfosFull extends PackageInfos {
     this.packageLocale,
     this.installer,
     this.infosSource,
+    super.source,
     super.otherInfos,
   });
 
@@ -107,7 +109,9 @@ class PackageInfosFull extends PackageInfos {
 
   factory PackageInfosFull.fromYamlMap(
       {required Map<dynamic, dynamic>? details,
-      required Map<dynamic, dynamic>? installerDetails, Uri? infosSource}) {
+      required Map<dynamic, dynamic>? installerDetails,
+      Uri? infosSource,
+      String? source}) {
     if (details == null && installerDetails == null) {
       return PackageInfosFull();
     }
@@ -140,6 +144,7 @@ class PackageInfosFull extends PackageInfos {
             parser.maybeLocaleFromMap(PackageAttribute.packageLocale),
         installer: installer,
         infosSource: infosSource,
+        source: PackageInfos.sourceInfo(source),
         otherInfos: details.isNotEmpty
             ? details.map<String, String>(
                 (key, value) => MapEntry(key.toString(), value.toString()))
@@ -147,12 +152,19 @@ class PackageInfosFull extends PackageInfos {
       );
       return infos..setImplicitInfos();
     } else {
-      return PackageInfosFull(installer: installer);
+      return PackageInfosFull(
+        installer: installer,
+        infosSource: infosSource,
+        source: PackageInfos.sourceInfo(source),
+      );
     }
   }
 
   factory PackageInfosFull.fromMSJson(
-      {required Map<String, dynamic>? file, Locale? locale, Uri? infosSource}) {
+      {required Map<String, dynamic>? file,
+      Locale? locale,
+      Uri? infosSource,
+      String? source}) {
     if (file == null) {
       return PackageInfosFull();
     }
@@ -215,6 +227,7 @@ class PackageInfosFull extends PackageInfos {
           agreementsParser.maybeStringFromMap(PackageAttribute.freeTrial),
       pricing: agreementsParser.maybeStringFromMap(PackageAttribute.pricing),
       infosSource: infosSource,
+      source: PackageInfos.sourceInfo(source),
       otherInfos: localeParser.getOtherInfos()
         ?..remove(PackageAttribute.agreement.apiKey),
     );
@@ -255,16 +268,19 @@ class PackageInfosFull extends PackageInfos {
   bool hasReleaseNotes() => releaseNotes?.text != null;
 
   @override
-  bool isMicrosoftStore() => ((installer?.type?.value ??
-              installer?.installers?.value.firstOrNull?.type?.value) ==
-          InstallerType.msstore &&
-      (installer?.storeProductID ??
-              installer?.installers?.value.firstOrNull?.storeProductID) !=
-          null);
+  bool isMicrosoftStore() =>
+      source.value == PackageSources.microsoftStore ||
+      ((installer?.type?.value ??
+                  installer?.installers?.value.firstOrNull?.type?.value) ==
+              InstallerType.msstore &&
+          (installer?.storeProductID ??
+                  installer?.installers?.value.firstOrNull?.storeProductID) !=
+              null);
 
   @override
   bool isWinget() =>
-      !isMicrosoftStore() && id != null && id!.value.contains('.');
+      source.value == PackageSources.winget ||
+      (!isMicrosoftStore() && id != null && id!.value.contains('.'));
 
   Info<String>? get additionalDescription {
     if (!hasDescription()) {
@@ -323,15 +339,13 @@ class PackageInfosFull extends PackageInfos {
     String? source = isWinget()
         ? 'winget'
         : isMicrosoftStore()
-            ? 'msstore'
-            : null;
+        ? 'msstore'
+        : null;
     return PackageInfosPeek(
       name: name,
       id: id,
       version: version,
-      source: source != null
-          ? Info<String>(value: source, title: PackageAttribute.source.title)
-          : null,
+      source: PackageInfos.sourceInfo(source),
       otherInfos: otherInfos,
       screenshots: screenshots,
       publisherIcon: publisherIcon,

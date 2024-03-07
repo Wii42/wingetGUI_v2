@@ -57,7 +57,8 @@ enum SortBy {
   }
 
   static List<PackageInfosPeek> sortSource(List<PackageInfosPeek> packages) {
-    return packages..sort((a, b) => sortInfo(a.source, b.source));
+    return packages
+      ..sort((a, b) => sortNull(a.source.value.title, b.source.value.title));
   }
 
   static List<PackageInfosPeek> sortMatch(List<PackageInfosPeek> packages) {
@@ -77,5 +78,4 @@ enum SortBy {
   static List<PackageInfosPeek> randomize(List<PackageInfosPeek> packages) {
     return packages..shuffle();
   }
-
 }

@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
+import 'package:winget_gui/package_sources/package_source.dart';
 
 import '../../../helpers/route_parameter.dart';
 import '../../../routes.dart';
@@ -48,6 +49,7 @@ class DetailsWidget extends ExpanderCompartment {
             infos.installer?.fileExtensions?.toStringInfo(),
             infos.installer?.availableCommands?.toStringInfo(),
             infos.installer?.protocols?.toStringInfo(),
+            infos.source.value != PackageSources.none? infos.source.toStringInfo(): null,
           ], context),
           ...displayRest(infos.otherInfos, context),
         ],

@@ -197,6 +197,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       upgradeButton: upgradable,
       showMatch: widget.packageOptions.showMatch,
       showInstalledIcon: installed && widget.packageOptions.showInstalledIcon,
+      defaultSourceIsLocalPC: widget.packageOptions.defaultSourceIsLocalPC,
     );
   }
 
@@ -341,6 +342,7 @@ class PackageListPackageOptions {
   final bool Function(PackageInfosPeek package) isUpgradable;
   final bool showMatch;
   final bool showInstalledIcon;
+  final bool defaultSourceIsLocalPC;
   final bool Function(PackageInfosPeek)? packageFilter;
 
   const PackageListPackageOptions({
@@ -349,5 +351,6 @@ class PackageListPackageOptions {
     this.showMatch = false,
     this.showInstalledIcon = true,
     this.packageFilter,
+    this.defaultSourceIsLocalPC = false,
   });
 }

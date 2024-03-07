@@ -134,7 +134,7 @@ class WingetSource extends PackageSource {
     );
 
     return PackageInfosFull.fromYamlMap(
-        details: detailsMap, installerDetails: installerMap);
+        details: detailsMap, installerDetails: installerMap, source: 'winget');
   }
 
   Future<List<GithubApiFileInfo>> getFiles(String packageID) async {

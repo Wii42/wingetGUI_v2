@@ -16,6 +16,6 @@ class MSStoreSource extends PackageSource {
     MicrosoftStoreManifestApi api =
         MicrosoftStoreManifestApi(packageID: packageID);
     Map<String, dynamic> map = await api.getJson();
-    return PackageInfosFull.fromMSJson(file: map, locale: guiLocale, infosSource: api.apiUri);
+    return PackageInfosFull.fromMSJson(file: map, locale: guiLocale, infosSource: api.apiUri, source: 'msstore');
   }
 }

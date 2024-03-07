@@ -6,6 +6,7 @@ import 'package:winget_gui/output_handling/package_infos/installer_objects/ident
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_type.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/windows_platform.dart';
+import 'package:winget_gui/package_sources/package_source.dart';
 import 'info.dart';
 import 'installer_objects/dependencies.dart';
 import 'installer_objects/expected_return_code.dart';
@@ -147,4 +148,11 @@ extension ExpectedReturnCodeModeInfo on Info<List<ExpectedReturnCode>> {
   Info<String> toStringInfo(AppLocalizations locale) =>
       toStringInfoFromList((object) =>
           "${object.returnCode}: ${object.response.title(locale)}${object.returnResponseUrl != null ? ' (${object.returnResponseUrl})' : ''}");
+}
+
+extension SourceInfo on Info<PackageSources> {
+  Info<String> toStringInfo() {
+    return toStringInfoFromObject(
+            (source) => source.title);
+  }
 }

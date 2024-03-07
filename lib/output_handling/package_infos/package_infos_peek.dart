@@ -9,7 +9,7 @@ import 'info_map_parser.dart';
 import 'package_attribute.dart';
 
 class PackageInfosPeek extends PackageInfos {
-  final Info<String>? availableVersion, source, match;
+  final Info<String>? availableVersion, match;
 
   PackageInfosPeek({
     super.name,
@@ -19,7 +19,7 @@ class PackageInfosPeek extends PackageInfos {
     super.checkedForScreenshots = false,
     super.publisherIcon,
     this.availableVersion,
-    this.source,
+    super.source,
     this.match,
     super.otherInfos,
   });
@@ -37,7 +37,7 @@ class PackageInfosPeek extends PackageInfos {
       version: parser.maybeStringFromMap(PackageAttribute.version),
       availableVersion:
           parser.maybeStringFromMap(PackageAttribute.availableVersion),
-      source: parser.maybeStringFromMap(PackageAttribute.source),
+      source: parser.sourceFromMap(PackageAttribute.source),
       match: parser.maybeStringFromMap(PackageAttribute.match),
       otherInfos: details.isNotEmpty ? details : null,
     );
@@ -46,7 +46,7 @@ class PackageInfosPeek extends PackageInfos {
   }
 
   bool hasInfosFull() {
-    return source != null && source!.value.isNotEmpty && id != null; // &&
+    return source.value != PackageSources.none && source.value != PackageSources.unknownSource && id != null; // &&
   }
 
   bool hasAvailableVersion() {
@@ -62,10 +62,10 @@ class PackageInfosPeek extends PackageInfos {
       !availableVersion!.value.contains('…');
 
   @override
-  bool isMicrosoftStore() => source?.value == 'msstore';
+  bool isMicrosoftStore() => source.value == PackageSources.microsoftStore;
 
   @override
-  bool isWinget() => source?.value == 'winget';
+  bool isWinget() => source.value == PackageSources.winget;
 
   @override
   String toString() {
@@ -74,7 +74,7 @@ class PackageInfosPeek extends PackageInfos {
         "id: ${id?.value}, "
         "version: ${version?.value}, "
         "availableVersion: ${availableVersion?.value}, "
-        "source: ${source?.value}, "
+        "source: ${source.value}, "
         "match: ${match?.value}, "
         "otherInfos: $otherInfos"
         "}";

@@ -34,6 +34,7 @@ class InstalledPage extends StatelessWidget {
       packageOptions: PackageListPackageOptions(
         isInstalled: (_) => true,
         isUpgradable: WingetDB.isPackageUpgradable,
+        defaultSourceIsLocalPC: true,
       ),
     );
   }

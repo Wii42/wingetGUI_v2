@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
+import 'package:winget_gui/package_sources/package_source.dart';
 
 import '../../helpers/locale_parser.dart';
 import 'agreement_infos.dart';
@@ -38,6 +39,15 @@ abstract class InfoAbstractMapParser<A, B> {
   }
 
   List<String>? maybeTagsFromMap();
+
+  Info<PackageSources> sourceFromMap(PackageAttribute packageLocale) {
+    Info<String>? localeInfo = maybeStringFromMap(packageLocale);
+    if (localeInfo == null) {
+      return Info<PackageSources>.fromAttribute(PackageAttribute.source,
+          value: PackageSources.none);
+    }
+    return localeInfo.copyAs<PackageSources>(parser: PackageSources.fromString);
+  }
 
   Info<Locale>? maybeLocaleFromMap(PackageAttribute packageLocale) {
     Info<String>? localeInfo = maybeStringFromMap(packageLocale);

@@ -5,12 +5,14 @@ import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart
 import '../../helpers/log_stream.dart';
 import '../../helpers/package_screenshots.dart';
 import '../../helpers/package_screenshots_list.dart';
+import '../../package_sources/package_source.dart';
 import 'info.dart';
 
 abstract class PackageInfos {
   late final Logger log;
 
   final Info<String>? name, id;
+  late final Info<PackageSources> source;
   Info<String>? version;
 
   final Map<String, String>? otherInfos;
@@ -26,11 +28,15 @@ abstract class PackageInfos {
     this.screenshots,
     this.checkedForScreenshots = false,
     this.publisherIcon,
+    Info<PackageSources>? source,
     this.otherInfos,
   }) {
     log = Logger(this);
     publisherName = PackageScreenshotsList
         .instance.publisherIcons[probablyPublisherID()]?.nameUsingDefaultSource;
+    this.source = source ??
+        Info<PackageSources>.fromAttribute(PackageAttribute.source,
+            value: PackageSources.none);
   }
 
   bool hasVersion() => (version != null && version?.value != 'Unknown');
@@ -149,5 +155,13 @@ abstract class PackageInfos {
       }
     }
     return version!.value;
+  }
+
+  static Info<PackageSources>? sourceInfo(String? source) {
+    if (source == null) {
+      return null;
+    }
+    return Info<PackageSources>.fromAttribute(PackageAttribute.source,
+        value: PackageSources.fromString(source));
   }
 }
