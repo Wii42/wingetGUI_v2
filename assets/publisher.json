@@ -629,7 +629,6 @@
     "publisher_name": "Gaijin Network",
     "icon_url": "https://i.imgflip.com/5of05g.png"
   },
-
   "SlackTechnologies": {
     "publisher_name": "Slack Technologies",
     "icon_url": "https://www.slack.com/favicon.ico"
@@ -637,5 +636,13 @@
   "Zoom": {
     "publisher_name": null,
     "icon_url": "https://st2.zoom.us/static/6.3.19658/image/new/topNav/Zoom_logo.svg"
+  },
+  "Git": {
+    "publisher_name": null,
+    "icon_url": "https://gitforwindows.org/favicon.ico"
+  },
+  "VMware": {
+    "publisher_name": null,
+    "icon_url": "https://www.getwsone.com/content/dam/getwsone/wsone-assets/images/vmware_logo_white.png"
   }
 }

@@ -19,18 +19,23 @@ class WingetSource extends PackageSource {
   Future<PackageInfosFull> fetchInfos(Locale? guiLocale) async {
     String packageID =
         package.hasCompleteId() ? package.id!.value : await reconstructFullId();
+    print(packageID);
     return extractInfosOnlineFromId(guiLocale, packageID);
   }
 
   Future<String> reconstructFullId() async {
     String idWithoutEllipsis = package.idWithoutEllipsis()!;
     List<String> idParts = idWithoutEllipsis.split('.');
-    if (idWithoutEllipsis.endsWith('.')) {
-      idParts.add('');
+    if(idParts.last.isEmpty) {
+      idParts.removeLast();
     }
-    List<String> soundParts = idParts.take(idParts.length - 1).toList();
+    bool endsWithPoint = idWithoutEllipsis.endsWith('.');
+    int soundPartsLength = endsWithPoint ? idParts.length : idParts.length - 1;
+    List<String> soundParts = idParts.take(soundPartsLength).toList();
+    String lastPart = endsWithPoint ? '' : idParts.last;
+
     GithubApiFileInfo matchingFiles = await guessIdPartsBasedOnRepo(
-        soundIdPart: soundParts.join('.'), lastKnownPart: idParts.last);
+        soundIdPart: soundParts.join('.'), lastKnownPart: lastPart);
     soundParts.add(matchingFiles.name);
     return soundParts.join('.');
   }
