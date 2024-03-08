@@ -305,3 +305,8 @@ class MultiProperty {
     return string;
   }
 }
+extension ClusterList on Iterable<Cluster> {
+  int get possibleCombinations{
+    return fold(1, (previousValue, element) => previousValue * element.options.length);
+  }
+}

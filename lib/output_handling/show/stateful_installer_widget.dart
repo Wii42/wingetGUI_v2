@@ -57,50 +57,18 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
-    Locale? locale = AppLocale.of(context).guiLocale;
 
-    Installer? installer = selectedInstaller;
-
-    List<Info<String>?> details = [
-      installer?.architecture.toStringInfo(),
-      (installer?.type ?? infos.type)?.toStringInfo(),
-      (installer?.locale ?? infos.locale)?.toStringInfo(context),
-      infos.releaseDate?.toStringInfo(locale),
-      (installer?.scope ?? infos.scope)?.toStringInfo(context),
-      installer?.minimumOSVersion ?? infos.minimumOSVersion,
-      (installer?.platform ?? infos.platform)?.toStringInfo(),
-      selectedInstaller?.availableCommands?.toStringInfo(),
-      (installer?.nestedInstallerType ?? infos.nestedInstallerType)
-          ?.toStringInfo(),
-      (installer?.upgradeBehavior ?? infos.upgradeBehavior)
-          ?.toStringInfo(context),
-      (installer?.modes ?? infos.installModes)?.toStringInfo(localization),
-      installer?.storeProductID ?? infos.storeProductID,
-      installer?.sha256Hash ?? infos.sha256Hash,
-      installer?.elevationRequirement ?? infos.elevationRequirement,
-      installer?.productCode ?? infos.productCode,
-      infos.dependencies?.toStringInfo(),
-      installer?.signatureSha256,
-      installer?.markets,
-      installer?.packageFamilyName,
-      (installer?.expectedReturnCodes ?? infos.expectedReturnCodes)
-          ?.toStringInfo(localization),
-      (installer?.successCodes ?? infos.successCodes)
-          ?.toStringInfoFromList((e) => e.toString()),
-    ];
-
+    bool multipleInstallers =
+        infos.installers != null && infos.installers!.value.length > 1;
     Widget content = Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: template.fullCompartment(
             title: template.compartmentTitle(localization),
             mainColumn: [
-              if (infos.installers != null) selectInstallerWidget(context),
-              if (infos.installers != null &&
-                  infos.installers!.value.length > 1)
-                template.divider(),
-              ...template.detailsList(details, context),
-              ...template.displayRest(infos.otherInfos, context),
-              ...template.displayRest(selectedInstaller?.other, context)
+              if (multipleInstallers) selectInstallerWidget(context),
+              if (multipleInstallers) template.divider(),
+              ...template.detailsList(shownDetails(context), context),
+              ...displayRest(context),
             ],
             buttonRow: template.buttonRow([
               infos.url,
@@ -111,6 +79,39 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             ], context),
             context: context));
     return widget._template.buildWithoutContent(context, content);
+  }
+
+  List<Info<String>?> shownDetails(BuildContext context) {
+    AppLocalizations localization = AppLocalizations.of(context)!;
+    Locale? locale = AppLocale.of(context).guiLocale;
+    return [
+      selectedInstaller?.architecture.toStringInfo(),
+      (selectedInstaller?.type ?? infos.type)?.toStringInfo(),
+      (selectedInstaller?.locale ?? infos.locale)?.toStringInfo(context),
+      infos.releaseDate?.toStringInfo(locale),
+      (selectedInstaller?.scope ?? infos.scope)?.toStringInfo(context),
+      selectedInstaller?.minimumOSVersion ?? infos.minimumOSVersion,
+      (selectedInstaller?.platform ?? infos.platform)?.toStringInfo(),
+      selectedInstaller?.availableCommands?.toStringInfo(),
+      (selectedInstaller?.nestedInstallerType ?? infos.nestedInstallerType)
+          ?.toStringInfo(),
+      (selectedInstaller?.upgradeBehavior ?? infos.upgradeBehavior)
+          ?.toStringInfo(context),
+      (selectedInstaller?.modes ?? infos.installModes)
+          ?.toStringInfo(localization),
+      selectedInstaller?.storeProductID ?? infos.storeProductID,
+      selectedInstaller?.sha256Hash ?? infos.sha256Hash,
+      selectedInstaller?.elevationRequirement ?? infos.elevationRequirement,
+      selectedInstaller?.productCode ?? infos.productCode,
+      infos.dependencies?.toStringInfo(),
+      selectedInstaller?.signatureSha256,
+      selectedInstaller?.markets,
+      selectedInstaller?.packageFamilyName,
+      (selectedInstaller?.expectedReturnCodes ?? infos.expectedReturnCodes)
+          ?.toStringInfo(localization),
+      (selectedInstaller?.successCodes ?? infos.successCodes)
+          ?.toStringInfoFromList((e) => e.toString()),
+    ];
   }
 
   InstallerInfos get infos => widget.infos;
@@ -125,6 +126,9 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
         InstallerDifferences.fromList(infos.installers!.value, context);
     bool hasAllPossibleCombinations =
         differences.possibleCombinations == infos.installers?.value.length;
+    bool hasAllPossibleClusterCombinations =
+        equivalenceClasses.possibleCombinations ==
+            infos.installers?.value.length;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -134,37 +138,57 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                 infos.installers?.value.length ?? '<?>'),
           ),
         if (equivalenceClasses.isNotEmpty)
-          Wrap(spacing: 10, runSpacing: 10, children: [
-            for (Cluster cluster in equivalenceClasses)
-              BoxSelectInstaller<MultiProperty>(
-                categoryName: cluster.attributes
-                    .map((e) => e.title(localizations))
-                    .nonNulls
-                    .join(' / '),
-                options: cluster.options,
-                title: (item) => item.title(localizations, localeNames),
-                value: getMultiPropertyValue(cluster),
-                onChanged: (value) {
-                  setState(() {
-                    for (int i = 0; i < cluster.attributes.length; i++) {
-                      setInstallerProperty(
-                          cluster.attributes.toList()[i], value?.properties[i]);
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              for (Cluster cluster in equivalenceClasses)
+                BoxSelectInstaller<MultiProperty>(
+                  categoryName: cluster.attributes
+                      .map((e) => e.title(localizations))
+                      .nonNulls
+                      .join(' / '),
+                  options: cluster.options,
+                  title: (item) => item.title(localizations, localeNames),
+                  value: getMultiPropertyValue(cluster),
+                  onChanged: (value) {
+                    setState(() {
+                      for (int i = 0; i < cluster.attributes.length; i++) {
+                        setInstallerProperty(cluster.attributes.toList()[i],
+                            value?.properties[i]);
+                      }
+                      selectedInstaller = fittingInstallers.firstOrNull;
+                    });
+                  },
+                  matchAll: !hasAllPossibleClusterCombinations &&
+                          equivalenceClasses.length > 1
+                      ? getMultiPropertyMatchAll(cluster)
+                      : null,
+                  greyOutItem: (value) {
+                    if (value == null) {
+                      return true;
                     }
-                    selectedInstaller = fittingInstallers.firstOrNull;
-                  });
-                },
-                matchAll:
-                    !hasAllPossibleCombinations && equivalenceClasses.length > 1
-                        ? getMultiPropertyMatchAll(cluster)
-                        : null,
-                greyOutItem: (value) {
-                  if (value == null) {
-                    return true;
-                  }
-                  return getFittingInstallersWith(value.asMap).isEmpty;
-                },
-              ),
-          ]),
+                    return getFittingInstallersWith(value.asMap).isEmpty;
+                  },
+                ),
+            ],
+          ),
+        if (infos.installers != null && fittingInstallers.length >= 2)
+          BoxSelectInstaller<Installer>(
+              categoryName: localizations.multipleFittingInstallersFound(
+                  fittingInstallers.length),
+              options: fittingInstallers,
+              title: (item) =>
+                  item.uniqueProperties(fittingInstallers, context),
+              value: selectedInstaller,
+              onChanged: (value) {
+                setState(() => selectedInstaller = value);
+              }),
+        if (infos.installers != null && fittingInstallers.isEmpty)
+          Text(
+            localizations.noInstallerFound,
+            style: TextStyle(color: Colors.red),
+          ),
         if (infos.installers!.value.length == 2)
           BoxSelectInstaller<Installer>(
               categoryName:
@@ -387,6 +411,11 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
         cluster.attributes.map((e) => MapEntry(e, getMatchAll(e))));
     return MultiProperty.fromMap(map);
   }
+
+  List<Widget> displayRest(BuildContext context) => [
+        ...template.displayRest(infos.otherInfos, context),
+        ...template.displayRest(selectedInstaller?.other, context),
+      ];
 }
 
 class _InstallerCompartmentStub extends ExpanderCompartment {
