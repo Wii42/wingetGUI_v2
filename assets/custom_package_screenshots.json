@@ -676,5 +676,88 @@
   },
   "Rowley.CrossWorks": {
     "icon": "https://www.sqm4.com/image/cache/data/products/software/CrossWorks%20Logo%20With%20CrossWorks%20Title-140x140.png"
+  },
+  "GodotEngine.GodotEngine": {
+    "icon": "https://godotengine.org/assets/favicon.svg"
+  },
+  "OpenMedia.4KVideoDownloaderPlus": {
+    "icon": "https://static.4kdownload.com/main/img/redesign-v2/products-page/favicons/videodownloaderplus.svg"
+  },
+  "OpenMedia.4KYoutubetoMP3": {
+    "icon": "https://static.4kdownload.com/main/img/redesign-v2/products-page/favicons/youtubetomp3.svg",
+    "images": [
+      "https://static.4kdownload.com/main/img/redesign/product-screenshots/cards/new-cards/youtubetomp3-card@1x.png",
+      "https://static.4kdownload.com/main/img/redesign-v2/products-page/youtubetomp3/playlist@1x.png"
+    ]
+  },
+  "OpenMedia.4KVideoToMP3": {
+    "icon": "https://static.4kdownload.com/main/img/redesign-v2/products-page/favicons/videotomp3.svg",
+    "images": [
+      "https://static.4kdownload.com/main/img/redesign/product-screenshots/cards/new-cards/videotomp3-card@1x.png",
+      "https://static.4kdownload.com/main/img/redesign-v2/products-page/videotomp3/import@1x.png"
+    ]
+  },
+  "3Dconnexion.3DxWare.10": {
+    "icon": "https://3dconnexion.com/us/wp-content/uploads/sites/27/2021/06/cropped-Round-Favicon-200x200.png"
+  },
+  "8x8.Work": {
+    "icon": "https://talkingpointz.com/wp-content/uploads/2017/03/8x8-275x126.png"
+  },
+  "ACEStudio.ACEStudio": {
+    "icon": "https://web.tdacestudio.com/assets/logo-7c8654fd.png"
+  },
+  "FinalWire.AIDA64.*": {
+    "icon": "https://play-lh.googleusercontent.com/WaX1cl4Im4T1EFj7G8gbi0CRmFpetUm9IyvumTVofC2W-V_-WbFE9XnEuypYhcXXVbHu",
+    "images": [
+      "https://www.aida64.com/sites/default/files/2024-02/xe_shot_08.png",
+      "https://www.aida64.com/sites/default/files/2023-12/amd_cpuid.png",
+      "https://www.aida64.com/sites/default/files/2024-02/xe_shot_05.png",
+      "https://www.aida64.com/sites/default/files/2023-12/shot2_gpgpu_rx7600_0.png",
+      "https://www.aida64.com/sites/default/files/2024-02/xe_shot_15_0.png",
+      "https://www.aida64.com/sites/default/files/2024-02/xe_shot_06.png",
+      "https://www.aida64.com/sites/default/files/2024-02/xe_shot_07.png",
+      "https://www.aida64.com/sites/default/files/2024-02/ee_shot_11.png",
+      "https://www.aida64.com/sites/default/files/2024-02/ee_shot_01.png",
+      "https://www.aida64.com/sites/default/files/2024-02/ee_shot_14.png",
+      "https://www.aida64.com/sites/default/files/2024-02/ee_shot_17.png",
+      "https://www.aida64.com/sites/default/files/2024-02/ee_shot_02.png",
+      "https://www.aida64.com/sites/default/files/2024-02/ee_shot_10.png",
+      "https://www.aida64.com/sites/default/files/2024-02/ee_shot_12.png",
+      "https://www.aida64.com/sites/default/files/2024-02/ee_shot_13.png",
+      "https://www.aida64.com/sites/default/files/2024-02/ee_shot_09.png",
+      "https://www.aida64.com/sites/default/files/2024-02/ee_shot_16.png"
+
+
+    ]
+  },
+  "Graebert.AresCommander.*": {
+    "icon": "https://cad.com.au/wp-content/uploads/2020/11/ares-logo-red.png",
+    "images": [
+      "https://www.graebert.com/wp-content/uploads/2021/02/ARES-Commander-2020-tower-transparent-with-logo-1.jpg",
+      "https://www.graebert.com/wp-content/uploads/2021/08/ARES_Kudo2.jpg",
+      "https://windows-cdn.softpedia.com/screenshots/ARES-Commander-Edition_3.png",
+      "https://www.graebert.com/wp-content/uploads/2022/03/sheet_list_2023_2.jpg"
+    ]
+  },
+  "Graebert.AresMechanical.*": {
+    "icon": "https://www.graebert.com/wp-content/uploads/2022/03/New_Prod_ARES_Mechanical_256x256_183w_2x.png",
+    "images": [
+      "https://img.youtube.com/vi/yk15tlH2YoQ/0.jpg",
+      "https://www.graebert.com/wp-content/uploads/2022/02/ARES-Mechanical-woman-work-on-mechanical-piece_cut_kl.jpg",
+      "https://www.graebert.com/wp-content/uploads/2018/06/02_ares_mech_n.jpg",
+      "https://www.graebert.com/wp-content/uploads/2017/11/aresmech_screen-1_2017.png"
+    ]
+  },
+  "ATLauncher.ATLauncher": {
+    "icon": "https://styles.redditmedia.com/t5_2wu9t/styles/communityIcon_tfju8141ah631.png"
+  },
+  "SystweakSoftware.AdvancedDiskRecovery": {
+    "icon": "https://cdn.systweak.com/content/wp/systweak_com/v2/adr-logo-shadow.png"
+  },
+  "Xidicone.AgentGit": {
+    "icon": "https://www.zeusedit.com/agentgit/images/agent_icon.png"
+  },
+  "Aircall.Aircall": {
+    "icon": "https://aircall.io/favicon.svg"
   }
 }

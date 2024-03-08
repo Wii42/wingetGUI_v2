@@ -14,3 +14,7 @@ valorant
 dotnet-aspnetcore-7
 jdk-18
 jdk-17
+4kyoutubetomp3
+4kvideotomp3
+aida64-extreme
+aida64-engineer

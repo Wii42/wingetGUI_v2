@@ -19,7 +19,6 @@ class WingetSource extends PackageSource {
   Future<PackageInfosFull> fetchInfos(Locale? guiLocale) async {
     String packageID =
         package.hasCompleteId() ? package.id!.value : await reconstructFullId();
-    print(packageID);
     return extractInfosOnlineFromId(guiLocale, packageID);
   }
 

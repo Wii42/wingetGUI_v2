@@ -147,7 +147,7 @@
   },
   "Elcomsoft": {
     "publisher_name": null,
-    "icon_url": null
+    "icon_url": "https://mergenpro.com/wp-content/uploads/2022/08/Red-Logo-Elcomsoft-MergenPro-1536x247.png"
   },
   "Seewo": {
     "publisher_name": null,
@@ -644,5 +644,21 @@
   "VMware": {
     "publisher_name": null,
     "icon_url": "https://www.getwsone.com/content/dam/getwsone/wsone-assets/images/vmware_logo_white.png"
+  },
+  "GodotEngine": {
+    "publisher_name": "Godot Engine",
+    "icon_url": "https://godotengine.org/assets/favicon.svg"
+  },
+  "SystweakSoftware": {
+    "publisher_name": "Systweak Software",
+    "icon_url": "https://cdn.systweak.com/content/wp/systweak_com/img/systweak.svg"
+  },
+  "Mythicsoft": {
+    "publisher_name": null,
+    "icon_url": "https://www.mythicsoft.com/wp-content/uploads/2017/06/cropped-Favicon-300x300.png"
+  },
+  "Aircall": {
+    "publisher_name": null,
+    "icon_url": "https://a.storyblok.com/f/157376/x/fca06c0477/logo-green.svg"
   }
 }
