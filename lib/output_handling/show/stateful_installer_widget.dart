@@ -19,7 +19,6 @@ import '../package_infos/installer_objects/installer_type.dart';
 import '../package_infos/package_attribute.dart';
 import 'box_select_installer.dart';
 import 'compartments/expander_compartment.dart';
-import 'installer_differences.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 
 class StatefulInstallerWidget extends StatefulWidget {
@@ -122,10 +121,6 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
         infos.installers!.value.equivalenceClasses();
     AppLocalizations localizations = AppLocalizations.of(context)!;
     LocaleNames localeNames = LocaleNames.of(context)!;
-    InstallerDifferences differences =
-        InstallerDifferences.fromList(infos.installers!.value, context);
-    bool hasAllPossibleCombinations =
-        differences.possibleCombinations == infos.installers?.value.length;
     bool hasAllPossibleClusterCombinations =
         equivalenceClasses.possibleCombinations ==
             infos.installers?.value.length;
@@ -173,10 +168,10 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
                 ),
             ],
           ),
-        if (infos.installers != null && fittingInstallers.length >= 2)
+        if (infos.installers != null && fittingInstallers.length > 1)
           BoxSelectInstaller<Installer>(
-              categoryName: localizations.multipleFittingInstallersFound(
-                  fittingInstallers.length),
+              categoryName: localizations
+                  .multipleFittingInstallersFound(fittingInstallers.length),
               options: fittingInstallers,
               title: (item) =>
                   item.uniqueProperties(fittingInstallers, context),
@@ -188,67 +183,6 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
           Text(
             localizations.noInstallerFound,
             style: TextStyle(color: Colors.red),
-          ),
-        if (infos.installers!.value.length == 2)
-          BoxSelectInstaller<Installer>(
-              categoryName:
-                  infos.installers!.value.uniquePropertyNames(context),
-              options: infos.installers!.value,
-              title: (item) => item.uniqueProperties(
-                  infos.installers!.value, context,
-                  longNames: true),
-              value: selectedInstaller,
-              onChanged: (value) {
-                setState(() => selectedInstaller = value);
-              })
-        else
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              for (MapEntry<PackageAttribute, Property> e
-                  in Installer.identifyingProperties.entries)
-                if (differences.asMap[e.key]!.length > 1)
-                  BoxSelectInstaller<IdentifyingProperty?>(
-                    categoryName: e.key.title(localizations),
-                    options: differences.asMap[e.key]!,
-                    title: (item) =>
-                        item?.fullTitle(localizations, localeNames) ?? 'null',
-                    value: getInstallerProperty(e.key),
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          setInstallerProperty(e.key, value);
-                          selectedInstaller = fittingInstallers.firstOrNull;
-                        },
-                      );
-                    },
-                    matchAll:
-                        !hasAllPossibleCombinations ? getMatchAll(e.key) : null,
-                    greyOutItem: (value) {
-                      if (value == null) {
-                        return true;
-                      }
-                      return getFittingInstallersWith({e.key: value}).isEmpty;
-                    },
-                  ),
-              if (infos.installers != null && fittingInstallers.length >= 2)
-                BoxSelectInstaller<Installer>(
-                    categoryName: localizations.multipleFittingInstallersFound(
-                        fittingInstallers.length),
-                    options: fittingInstallers,
-                    title: (item) =>
-                        item.uniqueProperties(fittingInstallers, context),
-                    value: selectedInstaller,
-                    onChanged: (value) {
-                      setState(() => selectedInstaller = value);
-                    }),
-              if (infos.installers != null && fittingInstallers.isEmpty)
-                Text(
-                  localizations.noInstallerFound,
-                  style: TextStyle(color: Colors.red),
-                ),
-            ],
           ),
       ].withSpaceBetween(height: 20),
     );
