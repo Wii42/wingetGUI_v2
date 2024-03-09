@@ -1,13 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
-import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
+import 'package:winget_gui/output_handling/show/installer_selector.dart';
 
 import '../../widget_assets/app_locale.dart';
 import '../package_infos/info.dart';
@@ -17,7 +16,6 @@ import '../package_infos/installer_objects/installer.dart';
 import '../package_infos/installer_objects/installer_locale.dart';
 import '../package_infos/installer_objects/installer_type.dart';
 import '../package_infos/package_attribute.dart';
-import 'box_select_installer.dart';
 import 'compartments/expander_compartment.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 
@@ -30,10 +28,10 @@ class StatefulInstallerWidget extends StatefulWidget {
       : _template = _InstallerCompartmentStub(infos: infos);
 
   @override
-  State<StatefulWidget> createState() => _StatefulInstallerWidgetState();
+  State<StatefulWidget> createState() => StatefulInstallerWidgetState();
 }
 
-class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
+class StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   ComputerArchitecture? installerArchitecture;
   InstallerType? installerType;
   InstallerLocale? installerLocale;
@@ -64,7 +62,18 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
         children: template.fullCompartment(
             title: template.compartmentTitle(localization),
             mainColumn: [
-              if (multipleInstallers) selectInstallerWidget(context),
+              if (multipleInstallers)
+                InstallerSelector(
+                  installers: infos.installers!.value,
+                  installerArchitecture: installerArchitecture,
+                  installerType: installerType,
+                  installerLocale: installerLocale,
+                  installerScope: installerScope,
+                  nestedInstallerType: nestedInstallerType,
+                  setSelectedInstaller: setSelectedInstaller,
+                  setInstallerProperty: setInstallerProperty,
+                  selectedInstaller: selectedInstaller,
+                ),
               if (multipleInstallers) template.divider(),
               ...template.detailsList(shownDetails(context), context),
               ...displayRest(context),
@@ -116,111 +125,6 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   InstallerInfos get infos => widget.infos;
   ExpanderCompartment get template => widget._template;
 
-  Widget selectInstallerWidget(BuildContext context) {
-    Iterable<Cluster> equivalenceClasses =
-        infos.installers!.value.equivalenceClasses();
-    AppLocalizations localizations = AppLocalizations.of(context)!;
-    LocaleNames localeNames = LocaleNames.of(context)!;
-    bool hasAllPossibleClusterCombinations =
-        equivalenceClasses.possibleCombinations ==
-            infos.installers?.value.length;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (infos.installers != null && infos.installers!.value.length > 1)
-          Text(
-            localizations.multipleInstallersFound(
-                infos.installers?.value.length ?? '<?>'),
-          ),
-        if (equivalenceClasses.isNotEmpty)
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              for (Cluster cluster in equivalenceClasses)
-                BoxSelectInstaller<MultiProperty>(
-                  categoryName: cluster.attributes
-                      .map((e) => e.title(localizations))
-                      .nonNulls
-                      .join(' / '),
-                  options: cluster.options,
-                  title: (item) => item.title(localizations, localeNames),
-                  value: getMultiPropertyValue(cluster),
-                  onChanged: (value) {
-                    setState(() {
-                      for (int i = 0; i < cluster.attributes.length; i++) {
-                        setInstallerProperty(cluster.attributes.toList()[i],
-                            value?.properties[i]);
-                      }
-                      selectedInstaller = fittingInstallers.firstOrNull;
-                    });
-                  },
-                  matchAll: !hasAllPossibleClusterCombinations &&
-                          equivalenceClasses.length > 1
-                      ? getMultiPropertyMatchAll(cluster)
-                      : null,
-                  greyOutItem: (value) {
-                    if (value == null) {
-                      return true;
-                    }
-                    return getFittingInstallersWith(value.asMap).isEmpty;
-                  },
-                ),
-            ],
-          ),
-        if (infos.installers != null && fittingInstallers.length > 1)
-          BoxSelectInstaller<Installer>(
-              categoryName: localizations
-                  .multipleFittingInstallersFound(fittingInstallers.length),
-              options: fittingInstallers,
-              title: (item) =>
-                  item.uniqueProperties(fittingInstallers, context),
-              value: selectedInstaller,
-              onChanged: (value) {
-                setState(() => selectedInstaller = value);
-              }),
-        if (infos.installers != null && fittingInstallers.isEmpty)
-          Text(
-            localizations.noInstallerFound,
-            style: TextStyle(color: Colors.red),
-          ),
-      ].withSpaceBetween(height: 20),
-    );
-  }
-
-  MultiProperty? getMultiPropertyValue(Cluster<IdentifyingProperty> cluster) {
-    return cluster
-        .getOptionsWith(getMultiPropertyMatchAll(cluster))
-        .firstWhereOrNull((element) {
-      if (element.hasArchitecture) {
-        if (element.architecture != installerArchitecture) {
-          return false;
-        }
-      }
-      if (element.hasType) {
-        if (element.type != installerType) {
-          return false;
-        }
-      }
-      if (element.hasLocale) {
-        if (element.locale != installerLocale) {
-          return false;
-        }
-      }
-      if (element.hasScope) {
-        if (element.scope != installerScope) {
-          return false;
-        }
-      }
-      if (element.hasNestedInstaller) {
-        if (element.nestedInstaller != nestedInstallerType) {
-          return false;
-        }
-      }
-      return true;
-    });
-  }
-
   List<Installer> get fittingInstallers {
     return infos.installers?.value.fittingInstallers(
             installerArchitecture,
@@ -228,26 +132,6 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             installerLocale,
             installerScope,
             nestedInstallerType) ??
-        [];
-  }
-
-  List<Installer> getFittingInstallersWith(Map<PackageAttribute, dynamic> map) {
-    return infos.installers?.value.fittingInstallers(
-            map.containsKey(PackageAttribute.architecture)
-                ? map[PackageAttribute.architecture]
-                : installerArchitecture,
-            map.containsKey(PackageAttribute.installerType)
-                ? map[PackageAttribute.installerType]
-                : installerType,
-            map.containsKey(PackageAttribute.installerLocale)
-                ? map[PackageAttribute.installerLocale]
-                : installerLocale,
-            map.containsKey(PackageAttribute.installScope)
-                ? map[PackageAttribute.installScope]
-                : installerScope,
-            map.containsKey(PackageAttribute.nestedInstallerType)
-                ? map[PackageAttribute.nestedInstallerType]
-                : nestedInstallerType) ??
         [];
   }
 
@@ -284,66 +168,37 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
     return null;
   }
 
-  void setInstallerProperty(PackageAttribute attribute, dynamic value) {
-    switch (attribute) {
-      case PackageAttribute.architecture:
-        installerArchitecture = value;
-        break;
-      case PackageAttribute.installerType:
-        installerType = value;
-        break;
-      case PackageAttribute.installerLocale:
-        installerLocale = value;
-        break;
-      case PackageAttribute.installScope:
-        installerScope = value;
-        break;
-      case PackageAttribute.nestedInstallerType:
-        nestedInstallerType = value;
-        break;
-      default:
-        throw ArgumentError('Unknown attribute: $attribute');
-    }
+  void setInstallerProperty(
+      {required PackageAttribute attribute,
+      required IdentifyingProperty? value}) {
+    setState(() {
+      switch (attribute) {
+        case PackageAttribute.architecture:
+          installerArchitecture = value as ComputerArchitecture;
+          break;
+        case PackageAttribute.installerType:
+          installerType = value as InstallerType?;
+          break;
+        case PackageAttribute.installerLocale:
+          installerLocale = value as InstallerLocale?;
+          break;
+        case PackageAttribute.installScope:
+          installerScope = value as InstallScope?;
+          break;
+        case PackageAttribute.nestedInstallerType:
+          nestedInstallerType = value as InstallerType?;
+          break;
+        default:
+          throw ArgumentError('Unknown attribute: $attribute');
+      }
+      selectedInstaller = fittingInstallers.firstOrNull;
+    });
   }
 
-  IdentifyingProperty? getInstallerProperty(PackageAttribute attribute) {
-    switch (attribute) {
-      case PackageAttribute.architecture:
-        return installerArchitecture;
-      case PackageAttribute.installerType:
-        return installerType;
-      case PackageAttribute.installerLocale:
-        return installerLocale;
-      case PackageAttribute.installScope:
-        return installerScope;
-      case PackageAttribute.nestedInstallerType:
-        return nestedInstallerType;
-      default:
-        throw ArgumentError('Unknown attribute: $attribute');
-    }
-  }
-
-  IdentifyingProperty getMatchAll(PackageAttribute attribute) {
-    switch (attribute) {
-      case PackageAttribute.architecture:
-        return ComputerArchitecture.matchAll;
-      case PackageAttribute.installerType:
-        return InstallerType.matchAll;
-      case PackageAttribute.installerLocale:
-        return InstallerLocale.matchAll;
-      case PackageAttribute.installScope:
-        return InstallScope.matchAll;
-      case PackageAttribute.nestedInstallerType:
-        return InstallerType.matchAll;
-      default:
-        throw ArgumentError('Unknown attribute: $attribute');
-    }
-  }
-
-  MultiProperty getMultiPropertyMatchAll(Cluster cluster) {
-    Map<PackageAttribute, IdentifyingProperty?> map = Map.fromEntries(
-        cluster.attributes.map((e) => MapEntry(e, getMatchAll(e))));
-    return MultiProperty.fromMap(map);
+  void setSelectedInstaller(Installer? installer) {
+    setState(() {
+      selectedInstaller = installer;
+    });
   }
 
   List<Widget> displayRest(BuildContext context) => [

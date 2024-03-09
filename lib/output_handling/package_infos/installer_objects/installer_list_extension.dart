@@ -16,7 +16,7 @@ import 'installer_type.dart';
 
 typedef Feature = Info<IdentifyingProperty>? Function(Installer);
 
-extension InstallerList on List<Installer> {
+extension InstallerList on Iterable<Installer> {
   List<Feature> minimalUniqueIdentifiers() {
     List<Feature> uniqueFeatures = [];
     for (Feature feature in Installer.identifyingProperties.values) {
