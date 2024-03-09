@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/output_handling/show/stateful_installer_widget.dart';
 
 import '../package_infos/installer_objects/computer_architecture.dart';
 import '../package_infos/installer_objects/identifying_property.dart';
@@ -54,7 +53,7 @@ class InstallerSelector extends StatelessWidget {
       children: [
         if (installers.length > 1)
           Text(
-            localizations.multipleInstallersFound(installers.length ?? '<?>'),
+            localizations.multipleInstallersFound(installers.length),
           ),
         if (equivalenceClasses.isNotEmpty)
           Wrap(
