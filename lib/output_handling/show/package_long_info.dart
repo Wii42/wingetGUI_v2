@@ -1,14 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/show/compartments/details_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/expandable_text_compartment.dart';
 import 'package:winget_gui/output_handling/show/compartments/screenshots_widget.dart';
+import 'package:winget_gui/output_handling/show/compartments/tags_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/output_handling/show/stateful_installer_widget.dart';
 import 'package:winget_gui/widget_assets/app_locale.dart';
-import 'package:winget_gui/widget_assets/search_button.dart';
 
 import '../../helpers/log_stream.dart';
 import '../package_infos/package_infos_full.dart';
@@ -45,13 +44,17 @@ class PackageLongInfo extends StatelessWidget {
         if (infos.hasReleaseNotes()) releaseNotesCompartment(),
         DetailsWidget(infos: infos),
         if (infos.agreement != null) AgreementWidget(infos: infos.agreement!),
+        if (infos.hasTags())
+          TagsWidget(
+            tags: infos.tags!,
+            moniker: infos.moniker,
+          ),
         if (infos.installer != null)
           StatefulInstallerWidget(
             infos: infos.installer!,
             guiLocale: guiLocale,
             defaultLocale: infos.packageLocale?.value,
           ),
-        if (infos.hasTags()) _tagButtons(context),
       ].withSpaceBetween(height: 10),
     );
   }
@@ -88,27 +91,6 @@ class PackageLongInfo extends StatelessWidget {
       titleIcon: FluentIcons.product_release,
       onMentionTap: launchMention,
       onHashtagTap: launchHashtag,
-    );
-  }
-
-  Widget _tagButtons(BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context)!;
-    return Wrap(
-      runSpacing: 5,
-      spacing: 5,
-      alignment: WrapAlignment.center,
-      children: [
-        if (infos.moniker != null)
-          SearchButton(
-            searchTarget: infos.moniker!.value,
-            localization: locale,
-          ),
-        for (String tag in infos.tags!)
-          SearchButton(
-            searchTarget: tag,
-            localization: locale,
-          )
-      ],
     );
   }
 }
