@@ -1,4 +1,4 @@
-import 'package:pub_semver/pub_semver.dart';
+
 
 import '../output_handling/package_infos/info.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
@@ -64,7 +64,7 @@ enum SortBy {
           return a.version!.value.version!.compareTo(b.version!.value.version!);
         }
         return sortNull(
-            a.version?.value.stringValue, b.version?.value.stringValue);
+            a.version?.value.sortingString, b.version?.value.sortingString);
       });
   }
 

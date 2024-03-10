@@ -61,7 +61,7 @@ mixin CompartmentBuildingBlocks on Compartment {
   Widget textOrLinkButton(
       {required BuildContext context, required Info<String> text}) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    if (isLink(text.value)) {
+    if (StringHelper.isLink(text.value)) {
       return LinkButton(
           url: Uri.parse(text.value), text: Text(text.title(locale)));
     }

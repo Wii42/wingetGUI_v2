@@ -71,7 +71,6 @@ class WingetDB {
         map[publisherId] = [package];
       }
     }
-
     log.info('Amount of packages per Publisher',
         message: map.entries
             .sorted((a, b) => b.value.length.compareTo(a.value.length))

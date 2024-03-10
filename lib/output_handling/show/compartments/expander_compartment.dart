@@ -102,7 +102,7 @@ abstract class ExpanderCompartment extends Compartment
                       ? textOrIconLink(
                           context: context,
                           text: info.value,
-                          url: isLink(info.value)
+                          url: StringHelper.isLink(info.value)
                               ? Uri.tryParse(info.value)
                               : null)
                       : Text(info.value)),
@@ -134,7 +134,9 @@ abstract class ExpanderCompartment extends Compartment
             body: textOrIconLink(
                 context: context,
                 text: value(key),
-                url: isLink(value(key)) ? Uri.tryParse(value(key)) : null),
+                url: StringHelper.isLink(value(key))
+                    ? Uri.tryParse(value(key))
+                    : null),
           ),
     ];
   }

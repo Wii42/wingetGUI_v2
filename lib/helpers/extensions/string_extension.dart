@@ -1,7 +1,7 @@
 import 'package:string_validator/string_validator.dart' as validator;
 import 'package:winget_gui/helpers/extensions/int_extension.dart';
 
-extension ContainsExtentsion on String {
+extension StringHelper on String {
   bool isLoadingSymbols() {
     if (isEmpty) {
       return false;
@@ -66,29 +66,36 @@ extension ContainsExtentsion on String {
   String lastChar() {
     return this[length - 1];
   }
-
+ /// Returns a new string containing the substring of this string up to to [count], exclusive.
   String take(int count) {
-    if(count > length) {
+    if (count > length) {
       return this;
     }
     return substring(0, count);
   }
-}
 
-bool isCjkIdeograph(int codePoint) {
-  return codePoint.isBetween(0x4E00, 0x9FFF) || codePoint.isBetween(0x20000, 0x2A6DF) || codePoint.isBetween(0xAC00, 0xD7AF);
-  //return (codePoint.isBetween(0x4E00, 0x62FF) ||
-  //    codePoint.isBetween(0x6300, 0x77FF) ||
-  //    codePoint.isBetween(0x7800, 0x8CFF) ||
-  //    codePoint.isBetween(0x8D00, 0x9FFF));
-}
-
-bool isLink(String? text) {
-  if (text == null) {
-    return false;
+  bool isDigits() {
+    return RegExp(r'^[0-9]+$').hasMatch(this);
   }
-  return (validator.isURL(text) ||
-      (text.startsWith('ms-windows-store://') && !text.trim().contains(' ')) ||
-      (text.startsWith('mailto:') && !text.contains(' ')) &&
-          text.contains('@'));
+
+  static bool isCjkIdeograph(int codePoint) {
+    return codePoint.isBetween(0x4E00, 0x9FFF) ||
+        codePoint.isBetween(0x20000, 0x2A6DF) ||
+        codePoint.isBetween(0xAC00, 0xD7AF);
+    //return (codePoint.isBetween(0x4E00, 0x62FF) ||
+    //    codePoint.isBetween(0x6300, 0x77FF) ||
+    //    codePoint.isBetween(0x7800, 0x8CFF) ||
+    //    codePoint.isBetween(0x8D00, 0x9FFF));
+  }
+
+  static bool isLink(String? text) {
+    if (text == null) {
+      return false;
+    }
+    return (validator.isURL(text) ||
+        (text.startsWith('ms-windows-store://') &&
+            !text.trim().contains(' ')) ||
+        (text.startsWith('mailto:') && !text.contains(' ')) &&
+            text.contains('@'));
+  }
 }

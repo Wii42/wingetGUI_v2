@@ -76,13 +76,13 @@ class InfoWithLink {
       return null;
     }
     if (text != null && urlString == null) {
-      if (isLink(text)) {
+      if (StringHelper.isLink(text)) {
         urlString = text;
         text = null;
       }
     }
     if (text != null) {
-      if (isLink(text)) {
+      if (StringHelper.isLink(text)) {
         text = null;
       }
     }

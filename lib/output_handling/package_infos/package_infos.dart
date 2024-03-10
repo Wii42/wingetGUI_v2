@@ -148,7 +148,7 @@ abstract class PackageInfos {
     }
     VersionOrString version = this.version!.value;
     if(version.isTypeVersion()){
-      return version.version?.canonicalizedVersion;
+      return version.version?.toString();
     }
     if (name != null) {
       if (version.stringVersion!.startsWith(name!.value)) {

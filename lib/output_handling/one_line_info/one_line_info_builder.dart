@@ -71,7 +71,7 @@ class OneLineInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String details = stripOfQuotationMarks(info.details);
-    if (isLink(details)) {
+    if (StringHelper.isLink(details)) {
       return LinkButton(url: Uri.parse(details), text: Text(info.title));
     }
     return InfoBar(

@@ -138,7 +138,10 @@ class DBInitializer extends StatelessWidget {
               }
               return WingetDB.instance.status == WingetDBStatus.ready
                   ? MainNavigation(title: appTitle)
-                  : Center(child: Text(snapshot.data ?? 'An error occurred'));
+                  : Center(
+                      child: Text(snapshot.data ??
+                          snapshot.error?.toString() ??
+                          'An error occurred'));
             },
             stream: WingetDB.instance.init(context),
           );
