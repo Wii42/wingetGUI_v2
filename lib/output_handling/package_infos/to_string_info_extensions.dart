@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:intl/intl.dart';
+import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/computer_architecture.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_type.dart';
@@ -152,7 +153,12 @@ extension ExpectedReturnCodeModeInfo on Info<List<ExpectedReturnCode>> {
 
 extension SourceInfo on Info<PackageSources> {
   Info<String> toStringInfo() {
-    return toStringInfoFromObject(
-            (source) => source.title);
+    return toStringInfoFromObject((source) => source.title);
+  }
+}
+
+extension VersionOrStringInfo on Info<VersionOrString> {
+  Info<String> toStringInfo() {
+    return toStringInfoFromObject((source) => source.toString());
   }
 }

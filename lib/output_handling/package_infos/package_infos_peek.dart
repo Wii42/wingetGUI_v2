@@ -34,7 +34,7 @@ class PackageInfosPeek extends PackageInfos {
     PackageInfosPeek infos = PackageInfosPeek(
       name: parser.maybeStringFromMap(PackageAttribute.name),
       id: parser.maybeStringFromMap(PackageAttribute.id),
-      version: parser.maybeStringFromMap(PackageAttribute.version),
+      version: parser.maybeVersionOrStringFromMap(PackageAttribute.version),
       availableVersion:
           parser.maybeStringFromMap(PackageAttribute.availableVersion),
       source: parser.sourceFromMap(PackageAttribute.source),

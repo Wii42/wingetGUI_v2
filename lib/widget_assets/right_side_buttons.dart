@@ -125,7 +125,7 @@ class RightSideButtons extends StatelessWidget {
       infos.id!.value,
       if (winget != Winget.upgrade && infos.hasVersion()) ...[
         '-v',
-        infos.version!.value
+        infos.version!.value.stringValue
       ]
     ];
   }

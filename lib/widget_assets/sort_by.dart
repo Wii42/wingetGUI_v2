@@ -1,3 +1,5 @@
+import 'package:pub_semver/pub_semver.dart';
+
 import '../output_handling/package_infos/info.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../winget_commands.dart';
@@ -53,7 +55,17 @@ enum SortBy {
   }
 
   static List<PackageInfosPeek> sortVersion(List<PackageInfosPeek> packages) {
-    return packages..sort((a, b) => sortInfo(a.version, b.version));
+    return packages
+      ..sort((a, b) {
+        if (a.version != null &&
+            b.version != null &&
+            a.version!.value.isTypeVersion() &&
+            b.version!.value.isTypeVersion()) {
+          return a.version!.value.version!.compareTo(b.version!.value.version!);
+        }
+        return sortNull(
+            a.version?.value.stringValue, b.version?.value.stringValue);
+      });
   }
 
   static List<PackageInfosPeek> sortSource(List<PackageInfosPeek> packages) {

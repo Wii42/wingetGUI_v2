@@ -154,7 +154,7 @@ class WingetSource extends PackageSource {
                   ? package.availableVersion?.value
                   : null) ??
               (package.hasSpecificVersion()
-                  ? package.version?.value
+                  ? package.version?.value.stringValue
                   : throw Exception('package has no specific version'))!);
       files = await manifestApi.getFiles(onError: fallBackFiles);
     } else {

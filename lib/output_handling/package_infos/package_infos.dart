@@ -1,10 +1,12 @@
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
 
 import '../../helpers/log_stream.dart';
 import '../../helpers/package_screenshots.dart';
 import '../../helpers/package_screenshots_list.dart';
+import '../../helpers/version_or_string.dart';
 import '../../package_sources/package_source.dart';
 import 'info.dart';
 
@@ -13,7 +15,7 @@ abstract class PackageInfos {
 
   final Info<String>? name, id;
   late final Info<PackageSources> source;
-  Info<String>? version;
+  Info<VersionOrString>? version;
 
   final Map<String, String>? otherInfos;
   PackageScreenshots? screenshots;
@@ -39,13 +41,8 @@ abstract class PackageInfos {
             value: PackageSources.none);
   }
 
-  bool hasVersion() => (version != null && version?.value != 'Unknown');
-  bool hasSpecificVersion() =>
-      (version != null &&
-          version?.value != 'Unknown' &&
-          !version!.value.contains('<')) &&
-      !version!.value.contains('>') &&
-      !version!.value.contains('…');
+  bool hasVersion() => (version != null && version?.value.stringVersion != 'Unknown');
+  bool hasSpecificVersion() => version != null && version!.value.isSpecificVersion();
 
   void setImplicitInfos() {
     screenshots = PackageScreenshotsList.instance.getPackage(this);
@@ -125,7 +122,7 @@ abstract class PackageInfos {
 
   bool hasKnownSource() => isWinget() || isMicrosoftStore();
 
-  String? versionWithoutEllipsis() => _withoutEllipsis(version);
+  String? versionWithoutEllipsis() => _withoutEllipsis(version?.toStringInfo());
 
   bool hasCompleteId() {
     return id != null && id!.value.isNotEmpty && !id!.value.endsWith('…');
@@ -146,15 +143,19 @@ abstract class PackageInfos {
   PackageInfosPeek toPeek();
 
   String? displayVersion() {
-    if (version == null) {
+    if (this.version == null) {
       return null;
     }
+    VersionOrString version = this.version!.value;
+    if(version.isTypeVersion()){
+      return version.version?.canonicalizedVersion;
+    }
     if (name != null) {
-      if (version!.value.startsWith(name!.value)) {
-        return version?.value.substring(name!.value.length).trim();
+      if (version.stringVersion!.startsWith(name!.value)) {
+        return version.stringVersion!.substring(name!.value.length).trim();
       }
     }
-    return version!.value;
+    return version.stringVersion;
   }
 
   static Info<PackageSources>? sourceInfo(String? source) {

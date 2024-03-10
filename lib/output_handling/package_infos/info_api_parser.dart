@@ -84,13 +84,13 @@ abstract class InfoApiParser<A> extends InfoAbstractMapParser<A, dynamic> {
   Map<String, String>? getOtherInfos() {
     map.remove('\$type');
     if (map.isEmpty) return null;
-    Map<String, String?> other = map.map(
-        (key, value) => MapEntry(key.toString(), valueToString(value)));
+    Map<String, String?> other =
+        map.map((key, value) => MapEntry(key.toString(), valueToString(value)));
     other.removeWhere((key, value) => value == null);
     return other.cast<String, String>();
   }
 
   Info<List<ExpectedReturnCode>>? maybeExpectedReturnCodesFromMap(
-      PackageAttribute expectedReturnCodes) => maybeListFromMap(expectedReturnCodes, parser: ExpectedReturnCode.fromMap);
-
+          PackageAttribute expectedReturnCodes) =>
+      maybeListFromMap(expectedReturnCodes, parser: ExpectedReturnCode.fromMap);
 }

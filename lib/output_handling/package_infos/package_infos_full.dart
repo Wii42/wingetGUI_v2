@@ -83,7 +83,7 @@ class PackageInfosFull extends PackageInfos {
             destination: PackageAttribute.shortDescription),
         supportUrl:
             parser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
-        version: parser.maybeStringFromMap(PackageAttribute.version),
+        version: parser.maybeVersionOrStringFromMap(PackageAttribute.version),
         website: parser.maybeLinkFromMap(PackageAttribute.website),
         author: parser.maybeStringFromMap(PackageAttribute.author),
         moniker: parser.maybeStringFromMap(PackageAttribute.moniker),
@@ -129,7 +129,7 @@ class PackageInfosFull extends PackageInfos {
             parser.maybeStringFromMap(PackageAttribute.shortDescription),
         supportUrl:
             parser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
-        version: parser.maybeStringFromMap(PackageAttribute.version),
+        version: parser.maybeVersionOrStringFromMap(PackageAttribute.version),
         website: parser.maybeLinkFromMap(PackageAttribute.website),
         author: parser.maybeStringFromMap(PackageAttribute.author),
         moniker: parser.maybeStringFromMap(PackageAttribute.moniker),
@@ -201,7 +201,8 @@ class PackageInfosFull extends PackageInfos {
           localeParser.maybeLinkFromMap(PackageAttribute.publisherSupportUrl) ??
               defaultLocaleParser
                   .maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
-      version: versionParser.maybeStringFromMap(PackageAttribute.version),
+      version:
+          versionParser.maybeVersionOrStringFromMap(PackageAttribute.version),
       website: localeParser.maybeLinkFromMap(PackageAttribute.website) ??
           defaultLocaleParser.maybeLinkFromMap(PackageAttribute.website),
       author: localeParser.maybeStringFromMap(PackageAttribute.author) ??
@@ -339,8 +340,8 @@ class PackageInfosFull extends PackageInfos {
     String? source = isWinget()
         ? 'winget'
         : isMicrosoftStore()
-        ? 'msstore'
-        : null;
+            ? 'msstore'
+            : null;
     return PackageInfosPeek(
       name: name,
       id: id,

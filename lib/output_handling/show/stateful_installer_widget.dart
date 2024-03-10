@@ -28,10 +28,10 @@ class StatefulInstallerWidget extends StatefulWidget {
       : _template = _InstallerCompartmentStub(infos: infos);
 
   @override
-  State<StatefulWidget> createState() => StatefulInstallerWidgetState();
+  State<StatefulWidget> createState() => _StatefulInstallerWidgetState();
 }
 
-class StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
+class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   ComputerArchitecture? installerArchitecture;
   InstallerType? installerType;
   InstallerLocale? installerLocale;
@@ -127,11 +127,12 @@ class StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
 
   List<Installer> get fittingInstallers {
     return infos.installers?.value.fittingInstallers(
-            installerArchitecture,
-            installerType,
-            installerLocale,
-            installerScope,
-            nestedInstallerType) ??
+          installerArchitecture,
+          installerType,
+          installerLocale,
+          installerScope,
+          nestedInstallerType,
+        ) ??
         [];
   }
 

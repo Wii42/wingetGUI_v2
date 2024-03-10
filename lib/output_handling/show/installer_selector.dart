@@ -108,9 +108,10 @@ class InstallerSelector extends StatelessWidget {
   }
 
   MultiProperty? getMultiPropertyValue(Cluster<IdentifyingProperty> cluster) {
-    return cluster
-        .getOptionsWith(getMultiPropertyMatchAll(cluster))
-        .firstWhereOrNull((element) {
+    List<MultiProperty> options = cluster.getOptionsWith(
+      getMultiPropertyMatchAll(cluster),
+    );
+    return options.firstWhereOrNull((element) {
       if (element.hasArchitecture) {
         if (element.architecture != installerArchitecture) {
           return false;

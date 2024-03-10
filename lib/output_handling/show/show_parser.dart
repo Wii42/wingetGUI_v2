@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
+import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
 import 'package:winget_gui/output_handling/parsed_output.dart';
 import 'package:winget_gui/output_handling/show/show_builder.dart';
@@ -45,9 +46,8 @@ class ShowParser extends OutputParser {
   void extractVersionFromCommand(PackageInfosFull parsedInfos, String keyword) {
     if (command.contains(keyword) &&
         command.indexOf(keyword) < command.length - 1) {
-      parsedInfos.version = Info(
-          title: PackageAttribute.version.title,
-          value: command[command.indexOf(keyword) + 1]);
+      parsedInfos.version = Info.fromAttribute(PackageAttribute.version,
+          value: VersionOrString.parse(command[command.indexOf(keyword) + 1]));
     }
   }
 

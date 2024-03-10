@@ -5,6 +5,7 @@ import 'package:winget_gui/output_handling/package_infos/to_string_info_extensio
 import 'package:winget_gui/package_sources/package_source.dart';
 
 import '../../helpers/locale_parser.dart';
+import '../../helpers/version_or_string.dart';
 import 'agreement_infos.dart';
 import 'info.dart';
 import 'info_with_link.dart';
@@ -31,11 +32,7 @@ abstract class InfoAbstractMapParser<A, B> {
       {required PackageAttribute textInfo, required PackageAttribute urlInfo});
 
   Info<DateTime>? maybeDateTimeFromMap(PackageAttribute attribute) {
-    Info<String>? dateInfo = maybeStringFromMap(attribute);
-    if (dateInfo == null) {
-      return null;
-    }
-    return dateInfo.copyAs<DateTime>(parser: DateTime.parse);
+    return maybeValueFromMap<DateTime>(attribute, DateTime.parse);
   }
 
   List<String>? maybeTagsFromMap();
@@ -50,19 +47,12 @@ abstract class InfoAbstractMapParser<A, B> {
   }
 
   Info<Locale>? maybeLocaleFromMap(PackageAttribute packageLocale) {
-    Info<String>? localeInfo = maybeStringFromMap(packageLocale);
-    if (localeInfo == null) {
-      return null;
-    }
-    return localeInfo.copyAs<Locale>(parser: LocaleParser.parse);
+    return maybeValueFromMap<Locale>(packageLocale, LocaleParser.parse);
   }
 
-  Info<InstallerLocale>? maybeInstallerLocaleFromMap(PackageAttribute packageLocale) {
-    Info<String>? localeInfo = maybeStringFromMap(packageLocale);
-    if (localeInfo == null) {
-      return null;
-    }
-    return localeInfo.copyAs<InstallerLocale>(parser: LocaleParser.parse);
+  Info<InstallerLocale>? maybeInstallerLocaleFromMap(
+      PackageAttribute packageLocale) {
+    return maybeValueFromMap(packageLocale, LocaleParser.parse);
   }
 
   Info<T>? maybeValueFromMap<T extends Object>(
@@ -98,5 +88,10 @@ abstract class InfoAbstractMapParser<A, B> {
   Map<String, String>? getOtherInfos() {
     if (map.isEmpty) return null;
     return map.map((key, value) => MapEntry(key.toString(), value.toString()));
+  }
+
+  Info<VersionOrString>? maybeVersionOrStringFromMap(
+      PackageAttribute attribute) {
+    return maybeValueFromMap<VersionOrString>(attribute, VersionOrString.parse);
   }
 }

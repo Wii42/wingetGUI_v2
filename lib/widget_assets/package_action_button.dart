@@ -75,7 +75,7 @@ List<String> args(PackageInfos infos, Winget winget) {
     infos.id!.value,
     if (winget != Winget.upgrade && infos.hasVersion()) ...[
       '-v',
-      infos.version!.value
+      infos.version!.value.stringValue
     ],
   ];
 }

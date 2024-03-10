@@ -31,7 +31,8 @@ class DetailsWidget extends ExpanderCompartment {
             infos.freeTrial,
             infos.ageRating,
             infos.id,
-            if (infos.version?.value != 'Unknown') infos.version,
+            if (infos.version?.value.stringValue != 'Unknown')
+              infos.version?.toStringInfo(),
             infos.packageLocale?.toStringInfo(context),
           ], context),
           if (infos.documentation != null)
@@ -49,7 +50,9 @@ class DetailsWidget extends ExpanderCompartment {
             infos.installer?.fileExtensions?.toStringInfo(),
             infos.installer?.availableCommands?.toStringInfo(),
             infos.installer?.protocols?.toStringInfo(),
-            infos.source.value != PackageSources.none? infos.source.toStringInfo(): null,
+            infos.source.value != PackageSources.none
+                ? infos.source.toStringInfo()
+                : null,
           ], context),
           ...displayRest(infos.otherInfos, context),
         ],
@@ -57,9 +60,9 @@ class DetailsWidget extends ExpanderCompartment {
           [
             infos.supportUrl,
             infos.manifest,
-            if(infos.infosSource != null)
+            if (infos.infosSource != null)
               Info<Uri>(
-                title: (locale)=>'Source',
+                title: (locale) => 'Source',
                 value: infos.infosSource!,
               ),
           ],

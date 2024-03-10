@@ -86,7 +86,7 @@ class WingetDB {
       if (installed.idMap.containsKey(id)) {
         List<PackageInfosPeek> installedPackages = installed.idMap[id]!;
         List<String?> installedVersions =
-            installedPackages.map((e) => e.version?.value).toList();
+            installedPackages.map((e) => e.version?.value.stringValue).toList();
         if (installedVersions.contains(package.availableVersion?.value) ||
             installedVersions
                 .contains("> ${package.availableVersion?.value}")) {
