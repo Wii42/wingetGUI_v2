@@ -7,7 +7,7 @@ import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:yaml/yaml.dart';
 import 'package:winget_gui/helpers/locale_parser.dart';
-import '../helpers/version_or_string.dart';
+import '../helpers/version.dart';
 import 'github_api/github_api.dart';
 import 'github_api/github_api_file_info.dart';
 import 'github_api/winget_packages/winget_package_version_manifest.dart';
