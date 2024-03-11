@@ -1,12 +1,13 @@
 import 'dart:collection';
 import 'dart:ui';
+import 'package:collection/collection.dart';
 import 'package:http/http.dart';
-import 'package:pub_semver/pub_semver.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:yaml/yaml.dart';
 import 'package:winget_gui/helpers/locale_parser.dart';
+import '../helpers/version_or_string.dart';
 import 'github_api/github_api.dart';
 import 'github_api/github_api_file_info.dart';
 import 'github_api/winget_packages/winget_package_version_manifest.dart';
@@ -25,7 +26,7 @@ class WingetSource extends PackageSource {
   Future<String> reconstructFullId() async {
     String idWithoutEllipsis = package.idWithoutEllipsis()!;
     List<String> idParts = idWithoutEllipsis.split('.');
-    if(idParts.last.isEmpty) {
+    if (idParts.last.isEmpty) {
       idParts.removeLast();
     }
     bool endsWithPoint = idWithoutEllipsis.endsWith('.');
@@ -151,7 +152,7 @@ class WingetSource extends PackageSource {
       GithubApi manifestApi = GithubApi.wingetVersionManifest(
           packageID: packageID,
           version: (package.hasSpecificAvailableVersion()
-                  ? package.availableVersion?.value
+                  ? package.availableVersion?.value.stringValue
                   : null) ??
               (package.hasSpecificVersion()
                   ? package.version?.value.stringValue
@@ -247,21 +248,17 @@ class WingetSource extends PackageSource {
   }
 
   List<String> tryGetNewestVersionManifestPath(List<GithubApiFileInfo> files) {
-    List<GithubApiFileInfo> versionManifests =
-        files.where((element) => isBuiltInVersion(element.name)).toList();
+    List<GithubApiFileInfo> versionManifests = files
+        .where((element) => Version.tryParse(element.name) != null)
+        .toList();
     if (versionManifests.isNotEmpty) {
       List<Version> versions =
           versionManifests.map<Version>((e) => Version.parse(e.name)).toList();
-      Version newestVersion = Version.primary(versions);
+      Version? newestVersion = Version.primary(versions);
       GithubApiFileInfo newestVersionManifest = versionManifests.firstWhere(
           (element) => Version.parse(element.name) == newestVersion);
 
       return newestVersionManifest.pathFragments;
-    }
-    versionManifests =
-        files.where((element) => isFourPartVersion(element.name)).toList();
-    if (versionManifests.isNotEmpty) {
-      return versionManifests.last.pathFragments;
     }
     if (package.version != null) {
       List<GithubApiFileInfo> maybeCurrentVersionManifest = files
@@ -269,26 +266,20 @@ class WingetSource extends PackageSource {
               element.name.startsWith(package.versionWithoutEllipsis()!))
           .toList();
       if (maybeCurrentVersionManifest.isNotEmpty) {
-        return maybeCurrentVersionManifest.last.pathFragments;
+        List<Version> versions = maybeCurrentVersionManifest
+            .map<Version?>((e) => Version.tryParse(e.name))
+            .nonNulls
+            .toList();
+        Version? primaryVersion = Version.primary(versions);
+        GithubApiFileInfo? primaryFile =
+            maybeCurrentVersionManifest.firstWhereOrNull(
+                (element) => element.name == primaryVersion.toString());
+        return (primaryFile ?? maybeCurrentVersionManifest.last).pathFragments;
       }
     }
     if (files.length == 1) {
       return files.single.pathFragments;
     }
     throw Exception('No version manifest found: ${files.map((e) => e.name)}');
-  }
-
-  bool isBuiltInVersion(String string) {
-    try {
-      Version.parse(string);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  bool isFourPartVersion(String string) {
-    RegExp versionRegex = RegExp(r'^\d+\.\d+\.\d+\.\d+$');
-    return versionRegex.hasMatch(string);
   }
 }

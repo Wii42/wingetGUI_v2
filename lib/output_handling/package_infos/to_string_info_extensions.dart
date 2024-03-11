@@ -159,6 +159,6 @@ extension SourceInfo on Info<PackageSources> {
 
 extension VersionOrStringInfo on Info<VersionOrString> {
   Info<String> toStringInfo() {
-    return toStringInfoFromObject((source) => source.toString());
+    return toStringInfoFromObject((source) => source.stringValue);
   }
 }

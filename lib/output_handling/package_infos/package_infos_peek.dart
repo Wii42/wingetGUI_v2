@@ -1,6 +1,7 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
+import '../../helpers/version_or_string.dart';
 import '../../package_sources/ms_store_source.dart';
 import '../../package_sources/winget_source.dart';
 import './package_infos.dart';
@@ -9,7 +10,8 @@ import 'info_map_parser.dart';
 import 'package_attribute.dart';
 
 class PackageInfosPeek extends PackageInfos {
-  final Info<String>? availableVersion, match;
+  final Info<String>? match;
+  final Info<VersionOrString>? availableVersion;
 
   PackageInfosPeek({
     super.name,
@@ -36,7 +38,7 @@ class PackageInfosPeek extends PackageInfos {
       id: parser.maybeStringFromMap(PackageAttribute.id),
       version: parser.maybeVersionOrStringFromMap(PackageAttribute.version),
       availableVersion:
-          parser.maybeStringFromMap(PackageAttribute.availableVersion),
+          parser.maybeVersionOrStringFromMap(PackageAttribute.availableVersion),
       source: parser.sourceFromMap(PackageAttribute.source),
       match: parser.maybeStringFromMap(PackageAttribute.match),
       otherInfos: details.isNotEmpty ? details : null,
@@ -46,20 +48,17 @@ class PackageInfosPeek extends PackageInfos {
   }
 
   bool hasInfosFull() {
-    return source.value != PackageSources.none && source.value != PackageSources.unknownSource && id != null; // &&
+    return source.value != PackageSources.none &&
+        source.value != PackageSources.unknownSource &&
+        id != null; // &&
   }
 
   bool hasAvailableVersion() {
-    return availableVersion != null && availableVersion!.value.isNotEmpty;
+    return availableVersion != null && availableVersion!.value.isVersion();
   }
 
   bool hasSpecificAvailableVersion() =>
-      (availableVersion != null &&
-          availableVersion!.value.isNotEmpty &&
-          availableVersion?.value != 'Unknown' &&
-          !availableVersion!.value.contains('<')) &&
-      !availableVersion!.value.contains('>') &&
-      !availableVersion!.value.contains('…');
+      availableVersion != null && availableVersion!.value.isSpecificVersion();
 
   @override
   bool isMicrosoftStore() => source.value == PackageSources.microsoftStore;

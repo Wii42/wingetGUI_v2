@@ -34,14 +34,22 @@ class VersionOrString {
     return version?.sortingString ?? stringVersion!;
   }
 
+  bool isVersion() {
+    return version != null ||
+        (stringVersion != null && stringVersion!.isNotEmpty);
+  }
+
   bool isSpecificVersion() {
+    bool isSpecific;
     if (isTypeVersion()) {
-      return version!.rangeIndicator == null;
+      isSpecific = version!.rangeIndicator == null;
+    } else {
+      isSpecific = stringVersion != 'Unknown' &&
+          !stringVersion!.contains('<') &&
+          !stringVersion!.contains('>') &&
+          !stringVersion!.contains('…');
     }
-    return stringVersion != 'Unknown' &&
-        !stringVersion!.contains('<') &&
-        !stringVersion!.contains('>') &&
-        !stringVersion!.contains('…');
+    return isSpecific && isVersion();
   }
 
   bool isTypeVersion() {
@@ -70,23 +78,24 @@ class Version implements Comparable<Version> {
 
   static const Map<(String?, String?), int> rangeIndicatorCompareTable = {
     ('<', '>'): -1,
-    ('<', '<='): 0,
+    ('<', '<='): -1,
     ('<', '>='): -1,
     ('<', '^'): -1,
     ('<', null): -1,
     ('>', '<='): 1,
-    ('>', '>='): 0,
+    ('>', '>='): 1,
     ('>', '^'): 1,
     ('>', null): 1,
-    ('<=', '>='): 0,
-    ('<=', '^'): 0,
-    ('<=', null): 0,
-    ('>=', '^'): 0,
-    ('>=', null): 0,
+    ('<=', '>='): -1,
+    ('<=', '^'): -1,
+    ('<=', null): -1,
+    ('>=', '^'): 1,
+    ('>=', null): 1,
     ('^', null): 0,
   };
 
   static int compareRangeIndicators(String? a, String? b) {
+    if (a == b) return 0;
     int? result = rangeIndicatorCompareTable[(a, b)];
     if (result != null) {
       return result;
@@ -143,10 +152,13 @@ class Version implements Comparable<Version> {
       String lastSegment = segments.last;
       if (!lastSegment.isDigits()) {
         int preReleaseIndex = _getPreReleaseIndex(lastSegment);
-        if (preReleaseIndex == 0) return null;
         preRelease = lastSegment.substring(preReleaseIndex);
         lastSegment = lastSegment.take(preReleaseIndex);
         segments.last = lastSegment;
+        if (preReleaseIndex == 0){
+          segments.removeLast();
+          preRelease = '.$preRelease';
+        }
       }
     }
     if (segments.any((e) => !e.isDigits())) return null;
@@ -211,6 +223,8 @@ class Version implements Comparable<Version> {
     return parts.join();
   }
 
+  bool get isPreRelease => preRelease != null;
+
   /// Compares two versions, returns -1 if this version is lower, 0 if they are equal, 1 if this version is higher.
   /// If two version differ in number segments, but are otherwise equal (e.g one has trailing zeroes), the version with more segments is considered higher.
   /// If two versions are equal, but one has a pre-release tag, it is higher.
@@ -255,4 +269,40 @@ class Version implements Comparable<Version> {
     }
     return 0;
   }
+
+  static Version? primary(List<Version> versions) {
+    if (versions.isEmpty) return null;
+    Version primary = versions.first;
+    for (var version in versions.skip(1)) {
+      if ((!version.isPreRelease && primary.isPreRelease) ||
+          (version.isPreRelease == primary.isPreRelease && version > primary)) {
+        primary = version;
+      }
+    }
+    return primary;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (other is Version) {
+      return compareTo(other) == 0;
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode {
+    List<Object?> data = [
+      for (int e in intSegments) e,
+      preRelease,
+      prefix,
+      rangeIndicator,
+    ];
+    return Object.hashAll(data);
+  }
+
+  bool operator <(Version other) => compareTo(other) < 0;
+  bool operator <=(Version other) => compareTo(other) <= 0;
+  bool operator >(Version other) => compareTo(other) > 0;
+  bool operator >=(Version other) => compareTo(other) >= 0;
 }

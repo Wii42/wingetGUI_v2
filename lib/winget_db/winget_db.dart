@@ -5,6 +5,7 @@ import 'package:cron/cron.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../helpers/log_stream.dart';
+import '../helpers/version_or_string.dart';
 import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
@@ -84,11 +85,14 @@ class WingetDB {
       String id = package.id!.value;
       if (installed.idMap.containsKey(id)) {
         List<PackageInfosPeek> installedPackages = installed.idMap[id]!;
-        List<String?> installedVersions =
-            installedPackages.map((e) => e.version?.value.stringValue).toList();
-        if (installedVersions.contains(package.availableVersion?.value) ||
-            installedVersions
-                .contains("> ${package.availableVersion?.value}")) {
+        List<VersionOrString?> installedVersions =
+            installedPackages.map((e) => e.version?.value).toList();
+        if (installedVersions.any((e) =>
+                e?.stringValue ==
+                package.availableVersion?.value.stringValue) ||
+            installedVersions.any((e) =>
+                e?.stringValue ==
+                "> ${package.availableVersion?.value.stringValue}")) {
           toRemoveFromUpdates.add(package);
         }
       }
@@ -110,7 +114,7 @@ class WingetDB {
 
   static bool isPackageUpgradable(PackageInfosPeek package) =>
       package.availableVersion != null &&
-      package.availableVersion!.value.isNotEmpty;
+      package.availableVersion!.value.isVersion();
 
   static Future<bool> checkWingetAvailable() async {
     ProcessResult result = await Process.run('where', ['winget']);

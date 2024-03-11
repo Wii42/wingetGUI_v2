@@ -38,7 +38,7 @@ class PackagePeek extends StatelessWidget {
     return PackagePeek(infos,
         installButton: !(command[0] == 'upgrade' || command[0] == 'list'),
         upgradeButton: infos.availableVersion != null &&
-            infos.availableVersion!.value.isNotEmpty);
+            infos.availableVersion!.value.isVersion());
   }
 
   @override
@@ -137,7 +137,8 @@ class PackagePeek extends StatelessWidget {
   }
 
   Widget sourceAndID(AppLocalizations locale, BuildContext context) {
-    bool hasSource = infos.source.value != PackageSources.none || !defaultSourceIsLocalPC;
+    bool hasSource =
+        infos.source.value != PackageSources.none || !defaultSourceIsLocalPC;
     bool showSource = true;
     bool showId = infos.id != null &&
         infos.id!.value.isNotEmpty &&
@@ -215,11 +216,12 @@ class PackagePeek extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         if (infos.version != null)
-          Text("${infos.version!.title(locale)}: ${infos.version!.value}"),
-        if (infos.availableVersion != null &&
-            infos.availableVersion!.value.isNotEmpty)
           Text(
-              "${infos.availableVersion!.title(locale)}: ${infos.availableVersion!.value}"),
+              "${infos.version!.title(locale)}: ${infos.version!.value.stringValue}"),
+        if (infos.availableVersion != null &&
+            infos.availableVersion!.value.isVersion())
+          Text(
+              "${infos.availableVersion!.title(locale)}: ${infos.availableVersion!.value.stringValue}"),
       ],
     );
   }
