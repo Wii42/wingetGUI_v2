@@ -34,7 +34,6 @@ class PackageInfosFull extends PackageInfos {
   final Info<Uri>? website, supportUrl;
   final Info<Locale>? packageLocale;
   final InstallerInfos? installer;
-  final Uri? infosSource;
 
   PackageInfosFull({
     super.name,
@@ -56,7 +55,6 @@ class PackageInfosFull extends PackageInfos {
     this.tags,
     this.packageLocale,
     this.installer,
-    this.infosSource,
     super.source,
     super.otherInfos,
   });
@@ -143,7 +141,6 @@ class PackageInfosFull extends PackageInfos {
         packageLocale:
             parser.maybeLocaleFromMap(PackageAttribute.packageLocale),
         installer: installer,
-        infosSource: infosSource,
         source: PackageInfos.sourceInfo(source),
         otherInfos: details.isNotEmpty
             ? details.map<String, String>(
@@ -154,17 +151,13 @@ class PackageInfosFull extends PackageInfos {
     } else {
       return PackageInfosFull(
         installer: installer,
-        infosSource: infosSource,
         source: PackageInfos.sourceInfo(source),
       );
     }
   }
 
   factory PackageInfosFull.fromMSJson(
-      {required Map<String, dynamic>? file,
-      Locale? locale,
-      Uri? infosSource,
-      String? source}) {
+      {required Map<String, dynamic>? file, Locale? locale, String? source}) {
     if (file == null) {
       return PackageInfosFull();
     }
@@ -227,7 +220,6 @@ class PackageInfosFull extends PackageInfos {
       freeTrial:
           agreementsParser.maybeStringFromMap(PackageAttribute.freeTrial),
       pricing: agreementsParser.maybeStringFromMap(PackageAttribute.pricing),
-      infosSource: infosSource,
       source: PackageInfos.sourceInfo(source),
       otherInfos: localeParser.getOtherInfos()
         ?..remove(PackageAttribute.agreement.apiKey),

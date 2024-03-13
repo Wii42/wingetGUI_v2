@@ -8,7 +8,6 @@ import 'package:winget_gui/package_sources/package_source.dart';
 import '../../../helpers/route_parameter.dart';
 import '../../../navigation_pages/search_page.dart';
 import '../../../routes.dart';
-import '../../package_infos/info.dart';
 import 'expander_compartment.dart';
 
 class DetailsWidget extends ExpanderCompartment {
@@ -61,11 +60,6 @@ class DetailsWidget extends ExpanderCompartment {
           [
             infos.supportUrl,
             infos.manifest,
-            if (infos.infosSource != null)
-              Info<Uri>(
-                title: (locale) => 'Source',
-                value: infos.infosSource!,
-              ),
           ],
           context,
           otherButtons: [

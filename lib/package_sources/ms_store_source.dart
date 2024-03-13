@@ -17,7 +17,6 @@ class MSStoreSource extends PackageSource {
     return PackageInfosFull.fromMSJson(
         file: map,
         locale: guiLocale,
-        infosSource: api!.apiUri,
         source: 'msstore');
   }
 
