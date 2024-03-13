@@ -16,7 +16,7 @@ enum PackageAttribute {
   releaseNotes(apiKey: 'ReleaseNotes'),
   releaseNotesUrl(apiKey: 'ReleaseNotesUrl'),
   installer,
-  source,
+  source(apiKey: 'Source'),
   website(apiKey: 'PackageUrl'),
   license(apiKey: 'License'),
   licenseUrl(apiKey: 'LicenseUrl'),
@@ -34,7 +34,7 @@ enum PackageAttribute {
   category(apiKey: 'Category'),
   pricing(apiKey: 'Pricing'),
   freeTrial(apiKey: 'FreeTrial'),
-  ageRating,
+  ageRating(apiKey: 'AgeRating'),
   installerType(apiKey: 'InstallerType'),
   storeProductID(apiKey: 'MSStoreProductIdentifier', copyable: true),
   installerURL(apiKey: 'InstallerUrl'),
@@ -76,7 +76,8 @@ enum PackageAttribute {
   String key(AppLocalizations local) {
     String key = local.infoKey(this.name);
     if (key == notFoundError) {
-      throw Exception("$key: ${this.name} in AppAttributes.key");
+      //throw Exception("$key: ${this.name} in AppAttributes.key");
+      return '___________<not_found>___________';
     }
     return key;
   }

@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
-import 'package:winget_gui/output_handling/package_infos/info_json_parser.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/info_json_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_mode.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_scope.dart';
@@ -8,8 +8,9 @@ import 'package:winget_gui/output_handling/package_infos/installer_objects/insta
 import 'package:winget_gui/output_handling/package_infos/installer_objects/upgrade_behavior.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../helpers/version_or_string.dart';
 import '../info.dart';
-import '../info_yaml_parser.dart';
+import '../parsers/info_yaml_parser.dart';
 import '../package_attribute.dart';
 import 'computer_architecture.dart';
 import 'expected_return_code.dart';
@@ -29,7 +30,7 @@ class Installer {
   final Info<String>? sha256Hash;
   final Info<InstallerLocale>? locale;
   final Info<List<WindowsPlatform>>? platform;
-  final Info<String>? minimumOSVersion;
+  final Info<VersionOrString>? minimumOSVersion;
   final Info<InstallerType>? type;
   final Info<InstallScope>? scope;
   final Info<String>? signatureSha256;
@@ -97,7 +98,7 @@ class Installer {
           parser.maybeInstallerLocaleFromMap(PackageAttribute.installerLocale),
       platform: parser.maybePlatformFromMap(PackageAttribute.platform),
       minimumOSVersion:
-          parser.maybeStringFromMap(PackageAttribute.minimumOSVersion),
+          parser.maybeVersionOrStringFromMap(PackageAttribute.minimumOSVersion),
       type: parser.maybeInstallerTypeFromMap(PackageAttribute.installerType),
       scope: parser.maybeScopeFromMap(PackageAttribute.installScope),
       signatureSha256:
@@ -137,7 +138,7 @@ class Installer {
           parser.maybeInstallerLocaleFromMap(PackageAttribute.installerLocale),
       platform: parser.maybePlatformFromMap(PackageAttribute.platform),
       minimumOSVersion:
-          parser.maybeStringFromMap(PackageAttribute.minimumOSVersion),
+          parser.maybeVersionOrStringFromMap(PackageAttribute.minimumOSVersion),
       type: parser.maybeInstallerTypeFromMap(PackageAttribute.installerType),
       scope: parser.maybeScopeFromMap(PackageAttribute.installScope),
       signatureSha256:

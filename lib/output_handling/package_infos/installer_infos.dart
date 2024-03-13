@@ -1,11 +1,12 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_mode.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_scope.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/full_map_parser.dart';
 
 import 'info.dart';
-import 'info_json_parser.dart';
-import 'info_map_parser.dart';
-import 'info_yaml_parser.dart';
+import 'parsers/info_json_parser.dart';
+import 'parsers/info_yaml_parser.dart';
 import 'installer_objects/dependencies.dart';
 import 'installer_objects/expected_return_code.dart';
 import 'installer_objects/installer.dart';
@@ -26,7 +27,7 @@ class InstallerInfos {
   final Info<List<String>>? fileExtensions;
   final Info<InstallerLocale>? locale;
   final Info<List<WindowsPlatform>>? platform;
-  final Info<String>? minimumOSVersion;
+  final Info<VersionOrString>? minimumOSVersion;
   final Info<InstallScope>? scope;
   final Info<List<InstallMode>>? installModes;
   final Info<String>? installerSwitches;
@@ -70,23 +71,11 @@ class InstallerInfos {
     this.otherInfos,
   });
 
-  static maybeFromMap(
-      {required Map<String, String>? installerDetails,
-      required AppLocalizations locale}) {
-    if (installerDetails == null || installerDetails.isEmpty) {
-      return null;
-    }
-    InfoMapParser parser = InfoMapParser(map: installerDetails, locale: locale);
-    return InstallerInfos(
-        title: PackageAttribute.installer.title,
-        type: parser.maybeInstallerTypeFromMap(PackageAttribute.installerType),
-        url: parser.maybeLinkFromMap(PackageAttribute.installerURL),
-        sha256Hash: parser.maybeStringFromMap(PackageAttribute.sha256Installer),
-        locale: parser.maybeInstallerLocaleFromMap(PackageAttribute.installerLocale),
-        storeProductID:
-            parser.maybeStringFromMap(PackageAttribute.storeProductID),
-        releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate),
-        otherInfos: installerDetails);
+  static InstallerInfos? maybeFromMap(
+      {installerDetails, required AppLocalizations locale}) {
+    return FullMapParser(
+            installerDetails: installerDetails ?? {}, locale: locale)
+        .parseInstallerInfos();
   }
 
   static InstallerInfos? maybeFromYamlMap(
@@ -98,7 +87,8 @@ class InstallerInfos {
     return InstallerInfos(
         title: PackageAttribute.installer.title,
         type: parser.maybeInstallerTypeFromMap(PackageAttribute.installerType),
-        locale: parser.maybeInstallerLocaleFromMap(PackageAttribute.installerLocale),
+        locale: parser
+            .maybeInstallerLocaleFromMap(PackageAttribute.installerLocale),
         releaseDate: parser.maybeDateTimeFromMap(PackageAttribute.releaseDate),
         installers: parser.maybeListFromMap<Installer>(
             PackageAttribute.installers, parser: (map) {
@@ -110,7 +100,7 @@ class InstallerInfos {
             parser.maybeStringListFromMap(PackageAttribute.fileExtensions),
         platform: parser.maybePlatformFromMap(PackageAttribute.platform),
         minimumOSVersion:
-            parser.maybeStringFromMap(PackageAttribute.minimumOSVersion),
+            parser.maybeVersionOrStringFromMap(PackageAttribute.minimumOSVersion),
         scope: parser.maybeScopeFromMap(PackageAttribute.installScope),
         installerSwitches:
             parser.maybeStringFromMap(PackageAttribute.installerSwitches),

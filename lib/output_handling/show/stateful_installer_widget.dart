@@ -98,7 +98,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       (selectedInstaller?.locale ?? infos.locale)?.toStringInfo(context),
       infos.releaseDate?.toStringInfo(locale),
       (selectedInstaller?.scope ?? infos.scope)?.toStringInfo(context),
-      selectedInstaller?.minimumOSVersion ?? infos.minimumOSVersion,
+      (selectedInstaller?.minimumOSVersion ?? infos.minimumOSVersion)?.toStringInfo(),
       (selectedInstaller?.platform ?? infos.platform)?.toStringInfo(),
       selectedInstaller?.availableCommands?.toStringInfo(),
       (selectedInstaller?.nestedInstallerType ?? infos.nestedInstallerType)

@@ -110,6 +110,8 @@ class Version implements Comparable<Version> {
     );
   }
 
+  /// Returns the primary version from a list of versions, the primary version is the highest non-pre-release version, if there are no non-pre-release versions, the highest pre-release version is returned.
+  /// Return null if the list is empty.
   static Version? primary(Iterable<Version> versions) {
     if (versions.isEmpty) return null;
     Version primary = versions.first;

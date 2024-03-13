@@ -4,7 +4,7 @@ import 'package:winget_gui/package_sources/package_source.dart';
 import '../../helpers/version_or_string.dart';
 import './package_infos.dart';
 import 'info.dart';
-import 'info_map_parser.dart';
+import 'parsers/info_map_parser.dart';
 import 'package_attribute.dart';
 
 class PackageInfosPeek extends PackageInfos {

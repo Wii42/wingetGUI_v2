@@ -1,10 +1,10 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/full_map_parser.dart';
 
 import 'info.dart';
-import 'info_json_parser.dart';
-import 'info_map_parser.dart';
+import 'parsers/info_json_parser.dart';
 import 'info_with_link.dart';
-import 'info_yaml_parser.dart';
+import 'parsers/info_yaml_parser.dart';
 import 'package_attribute.dart';
 
 class AgreementInfos {
@@ -27,32 +27,8 @@ class AgreementInfos {
 
   static AgreementInfos? maybeFromMap(
       {required Map<String, String>? map, required AppLocalizations locale}) {
-    if (map == null) {
-      return null;
-    }
-    InfoMapParser parser = InfoMapParser(map: map, locale: locale);
-
-    AgreementInfos agreement = AgreementInfos(
-      title: PackageAttribute.agreement.title,
-      publisher: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.publisher,
-          urlInfo: PackageAttribute.publisherUrl),
-      license: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.license,
-          urlInfo: PackageAttribute.licenseUrl),
-      copyright: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.copyright,
-          urlInfo: PackageAttribute.copyrightUrl),
-      privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl),
-      buyUrl: parser.maybeLinkFromMap(PackageAttribute.buyUrl),
-      termsOfTransaction:
-          parser.maybeStringFromMap(PackageAttribute.termsOfTransaction),
-      seizureWarning:
-          parser.maybeStringFromMap(PackageAttribute.seizureWarning),
-      storeLicenseTerms:
-          parser.maybeStringFromMap(PackageAttribute.storeLicenseTerms),
-    );
-    return agreement.isNotEmpty() ? agreement : null;
+    return FullMapParser(details: map ?? {}, locale: locale)
+        .parseAgreementInfos(map ?? {});
   }
 
   static AgreementInfos? maybeFromYamlMap(
@@ -101,12 +77,12 @@ class AgreementInfos {
           textInfo: PackageAttribute.copyright,
           urlInfo: PackageAttribute.copyrightUrl),
       privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl),
-      termsOfTransaction:
-          agreementsParser.maybeStringFromMap(PackageAttribute.termsOfTransaction),
+      termsOfTransaction: agreementsParser
+          .maybeStringFromMap(PackageAttribute.termsOfTransaction),
       seizureWarning:
           agreementsParser.maybeStringFromMap(PackageAttribute.seizureWarning),
-      storeLicenseTerms:
-          agreementsParser.maybeStringFromMap(PackageAttribute.storeLicenseTerms),
+      storeLicenseTerms: agreementsParser
+          .maybeStringFromMap(PackageAttribute.storeLicenseTerms),
     );
     return agreement.isNotEmpty() ? agreement : null;
   }

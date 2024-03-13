@@ -8,7 +8,7 @@ enum InstallMode {
   final String key;
   const InstallMode({required this.key});
 
-  factory InstallMode.fromYaml(dynamic string) {
+  factory InstallMode.fromApi(dynamic string) {
     return maybeParse(string)!;
   }
 

@@ -1,9 +1,10 @@
-import 'package:winget_gui/output_handling/package_infos/agreement_infos.dart';
-
 import 'package:winget_gui/output_handling/package_infos/info.dart';
+import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/dependencies.dart';
 
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 
+import '../installer_objects/installer.dart';
 import 'info_api_parser.dart';
 import 'package:dart_casing/dart_casing.dart';
 
@@ -12,13 +13,8 @@ class InfoJsonParser extends InfoApiParser<String> {
   InfoJsonParser({required super.map, this.agreements});
 
   @override
-  AgreementInfos? maybeAgreementFromMap() {
-    return AgreementInfos.maybeFromJsonMap(map: map, agreementsMap: agreementMap);
-  }
-
-  @override
   Info<List<T>>? maybeListFromMap<T>(PackageAttribute attribute,
-      {required T Function(dynamic p1) parser}) {
+      {required T Function(dynamic) parser}) {
     dynamic node = map[attribute.apiKey!];
     if (node == null || node is! List) {
       return null;
@@ -35,7 +31,7 @@ class InfoJsonParser extends InfoApiParser<String> {
     if (tagList != null) {
       List<String> tags = tagList.map((element) => element.toString()).toList();
       map.remove(key);
-      if(tags.isNotEmpty) {
+      if (tags.isNotEmpty) {
         return tags;
       }
     }
@@ -65,17 +61,6 @@ class InfoJsonParser extends InfoApiParser<String> {
     return value.toString();
   }
 
-  @override
-  Info<String>? maybeStringFromMap(PackageAttribute attribute) {
-    assert(attribute.apiKey != null);
-    dynamic node = map[attribute.apiKey];
-    String? detail = (node != null) ? valueToString(node) : null;
-    map.remove(attribute.apiKey!);
-    return (detail != null)
-        ? Info<String>.fromAttribute(attribute, value: detail)
-        : null;
-  }
-
   Map<String, String>? get agreementMap {
     if (agreements == null) return null;
     Iterable<MapEntry<String?, String?>> nullableMap =
@@ -92,5 +77,30 @@ class InfoJsonParser extends InfoApiParser<String> {
         .map((e) => MapEntry(e.key!, e.value!));
     if (nonNulls.isEmpty) return null;
     return Map.fromEntries(nonNulls);
+  }
+
+  @override
+  Info<List<InfoWithLink>>? maybeDocumentationsFromMap(
+      PackageAttribute attribute) {
+    return maybeValueFromMap(
+        attribute,
+        (p0) => [
+              InfoWithLink(
+                  title: (locale) => p0.toString(), text: p0.toString())
+            ]);
+  }
+
+  @override
+  Info<List<Installer>>? maybeInstallersFromMap(PackageAttribute installers) {
+    return maybeListFromMap<Installer>(PackageAttribute.installers,
+        parser: (map) {
+      return Installer.fromJson(map);
+    });
+  }
+
+  @override
+  Info<Dependencies>? maybeDependenciesFromMap(PackageAttribute dependencies) {
+    return maybeFromMap<Dependencies>(dependencies,
+        parser: (e) => Dependencies());
   }
 }

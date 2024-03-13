@@ -1,15 +1,16 @@
 import 'package:winget_gui/output_handling/package_infos/installer_objects/dependencies.dart';
+import 'package:winget_gui/output_handling/package_infos/installer_objects/installer.dart';
 import 'package:yaml/yaml.dart';
 
-import 'agreement_infos.dart';
-import 'info.dart';
+import '../info.dart';
 import 'info_api_parser.dart';
-import 'info_with_link.dart';
-import 'package_attribute.dart';
+import '../info_with_link.dart';
+import '../package_attribute.dart';
 
 class InfoYamlParser extends InfoApiParser<dynamic> {
   InfoYamlParser({required super.map});
 
+  @override
   Info<List<InfoWithLink>>? maybeDocumentationsFromMap(
       PackageAttribute attribute) {
     YamlList? node = map[attribute.apiKey!];
@@ -63,11 +64,6 @@ class InfoYamlParser extends InfoApiParser<dynamic> {
   }
 
   @override
-  AgreementInfos? maybeAgreementFromMap() {
-    return AgreementInfos.maybeFromYamlMap(map: map);
-  }
-
-  @override
   List<String>? maybeTagsFromMap() {
     String key = PackageAttribute.tags.apiKey!;
     YamlList? tagList = map[key] as YamlList?;
@@ -79,6 +75,7 @@ class InfoYamlParser extends InfoApiParser<dynamic> {
     return null;
   }
 
+  @override
   Info<Dependencies>? maybeDependenciesFromMap(PackageAttribute dependencies) {
     return maybeFromMap<Dependencies>(dependencies,
         parser: (e) => Dependencies.fromYamlMap(e));
@@ -106,5 +103,13 @@ class InfoYamlParser extends InfoApiParser<dynamic> {
       return list.isNotEmpty ? list.toString() : null;
     }
     return value.toString();
+  }
+
+  @override
+  Info<List<Installer>>? maybeInstallersFromMap(PackageAttribute installers) {
+    return maybeListFromMap<Installer>(PackageAttribute.installers,
+        parser: (map) {
+      return Installer.fromYaml(map);
+    });
   }
 }

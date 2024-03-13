@@ -1,11 +1,13 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/output_handling/package_infos/info_abstract_map_parser.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 
-import 'agreement_infos.dart';
-import 'info.dart';
-import 'info_with_link.dart';
-import 'package_attribute.dart';
+import '../info.dart';
+import '../info_with_link.dart';
+import '../installer_objects/computer_architecture.dart';
+import '../installer_objects/dependencies.dart';
+import '../installer_objects/installer.dart';
+import '../package_attribute.dart';
 
 class InfoMapParser extends InfoAbstractMapParser<String, String> {
   AppLocalizations locale;
@@ -25,14 +27,6 @@ class InfoMapParser extends InfoAbstractMapParser<String, String> {
       PackageAttribute attribute) {
     return maybeListFromMap(attribute,
         parser: (e) => InfoWithLink(title: attribute.title, text: e));
-  }
-
-  @override
-  AgreementInfos? maybeAgreementFromMap() {
-    return AgreementInfos.maybeFromMap(
-      map: map,
-      locale: locale,
-    );
   }
 
   @override
@@ -75,5 +69,31 @@ class InfoMapParser extends InfoAbstractMapParser<String, String> {
     }
     return list.copyAs<List<T>>(
         parser: (e) => e.split('\n').map(parser).toList());
+  }
+
+  @override
+  Info<List<InfoWithLink>>? maybeDocumentationsFromMap(
+      PackageAttribute attribute) {
+    return maybeListFromMap(attribute,
+        parser: (p0) => InfoWithLink(
+            title: (locale) => p0.toString(), text: p0.toString()));
+  }
+
+  @override
+  Info<List<Installer>>? maybeInstallersFromMap(PackageAttribute installers) {
+    return maybeListFromMap<Installer>(PackageAttribute.installers,
+        parser: (map) {
+      return Installer(
+          architecture: Info<ComputerArchitecture>.fromAttribute(
+              PackageAttribute.architecture,
+              value: ComputerArchitecture.matchAll),
+          url: null,
+          sha256Hash: null);
+    });
+  }
+
+  @override
+  Info<Dependencies>? maybeDependenciesFromMap(PackageAttribute dependencies) {
+    return maybeValueFromMap<Dependencies>(dependencies, (e) => Dependencies());
   }
 }
