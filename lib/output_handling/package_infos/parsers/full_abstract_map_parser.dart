@@ -1,8 +1,10 @@
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/agreement_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
 
+import '../info.dart';
 import '../package_attribute.dart';
 
 abstract class FullAbstractMapParser<A, B> {
@@ -14,11 +16,14 @@ abstract class FullAbstractMapParser<A, B> {
   PackageInfosFull parse() {
     Map<A, B> detailsMap = flattenedDetailsMap();
     InfoAbstractMapParser<A, B> p = getParser(detailsMap);
+    Info<String>? description =
+        p.maybeStringFromMap(PackageAttribute.description);
+    Info<String>? shortDescription = _getShortDescription(p, description);
     PackageInfosFull infos = PackageInfosFull(
       name: p.maybeStringFromMap(PackageAttribute.name),
       id: p.maybeStringFromMap(PackageAttribute.id),
-      description: p.maybeStringFromMap(PackageAttribute.description),
-      shortDescription: p.maybeStringFromMap(PackageAttribute.shortDescription),
+      description: description,
+      shortDescription: shortDescription,
       supportUrl: p.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
       version: p.maybeVersionOrStringFromMap(PackageAttribute.version),
       website: p.maybeLinkFromMap(PackageAttribute.website),
@@ -41,6 +46,23 @@ abstract class FullAbstractMapParser<A, B> {
       otherInfos: p.otherDetails(),
     );
     return infos..setImplicitInfos();
+  }
+
+  Info<String>? _getShortDescription(
+      InfoAbstractMapParser<dynamic, dynamic> p, Info<String>? description) {
+    Info<String>? shortDescription =
+        p.maybeStringFromMap(PackageAttribute.shortDescription);
+    if (shortDescription != null &&
+        shortDescription.value.trim().endsWith('...') &&
+        description != null) {
+      String shortWithoutEllipsis =
+          shortDescription.value.take(shortDescription.value.length - 3).trim();
+      if (description.value.startsWith(shortWithoutEllipsis)) {
+        shortDescription = shortDescription.copyWith(
+            value: shortWithoutEllipsis.split(RegExp(r'[\n.]')).first);
+      }
+    }
+    return shortDescription;
   }
 
   InstallerInfos? parseInstallerInfos() {
