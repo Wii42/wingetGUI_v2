@@ -47,9 +47,10 @@ class DetailsWidget extends ExpanderCompartment {
               ),
             ),
           ...detailsList([
-            infos.installer?.fileExtensions?.toStringInfo(),
-            infos.installer?.availableCommands?.toStringInfo(),
-            infos.installer?.protocols?.toStringInfo(),
+            infos.installer?.value.firstOrNull?.fileExtensions?.toStringInfo(),
+            infos.installer?.value.firstOrNull?.availableCommands
+                ?.toStringInfo(),
+            infos.installer?.value.firstOrNull?.protocols?.toStringInfo(),
             infos.source.value != PackageSources.none
                 ? infos.source.toStringInfo()
                 : null,

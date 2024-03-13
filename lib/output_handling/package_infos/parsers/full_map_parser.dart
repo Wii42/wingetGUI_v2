@@ -16,7 +16,7 @@ class FullMapParser extends FullAbstractMapParser<String, String> {
   Map<String, String> flattenedDetailsMap() => details;
 
   @override
-  Map<String, String> flattenedInstallerDetailsMap() => installerDetails;
+  Iterable<Map<String,String>> flattenedInstallerList() => [installerDetails];
 
   @override
   InfoMapParser getParser(Map<String, String> map) {

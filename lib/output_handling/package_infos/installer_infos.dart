@@ -73,9 +73,8 @@ class InstallerInfos {
 
   static InstallerInfos? maybeFromMap(
       {installerDetails, required AppLocalizations locale}) {
-    return FullMapParser(
-            installerDetails: installerDetails ?? {}, locale: locale)
-        .parseInstallerInfos();
+    return null;
+    //
   }
 
   static InstallerInfos? maybeFromYamlMap(

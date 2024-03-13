@@ -32,7 +32,6 @@ abstract class InfoApiParser<A> extends InfoAbstractMapParser<A, dynamic> {
     );
   }
 
-  @override
   Map<String, String>? getOtherInfos() {
     map.remove('\$type');
     if (map.isEmpty) return null;

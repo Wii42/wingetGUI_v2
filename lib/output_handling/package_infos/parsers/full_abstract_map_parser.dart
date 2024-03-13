@@ -5,6 +5,8 @@ import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart
 import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
 
 import '../info.dart';
+import '../installer_objects/computer_architecture.dart';
+import '../installer_objects/installer.dart';
 import '../package_attribute.dart';
 
 abstract class FullAbstractMapParser<A, B> {
@@ -41,7 +43,7 @@ abstract class FullAbstractMapParser<A, B> {
       agreement: _parseAgreementInfos(detailsMap),
       tags: p.maybeTagsFromMap(),
       packageLocale: p.maybeLocaleFromMap(PackageAttribute.packageLocale),
-      installer: parseInstallerInfos(),
+      installer: _parseInstallerInfos(),
       source: p.sourceFromMap(PackageAttribute.source),
       otherInfos: p.otherDetails(),
     );
@@ -65,45 +67,61 @@ abstract class FullAbstractMapParser<A, B> {
     return shortDescription;
   }
 
-  InstallerInfos? parseInstallerInfos() {
-    InfoAbstractMapParser<A, B> p = getParser(flattenedInstallerDetailsMap());
-    return InstallerInfos(
-      title: PackageAttribute.installer.title,
-      type: p.maybeInstallerTypeFromMap(PackageAttribute.installerType),
+  Info<List<Installer>>? _parseInstallerInfos() {
+    Iterable<Map<A, B>> installerDetailsList = flattenedInstallerList();
+    if (installerDetailsList.isEmpty) {
+      return null;
+    }
+    return Info<List<Installer>>.fromAttribute(PackageAttribute.installer,
+        value: installerDetailsList.map<Installer>(parseInstaller).toList());
+  }
+
+  Installer parseInstaller(Map<A, B> map) {
+    InfoAbstractMapParser<A, B> p = getParser(map);
+    return Installer(
+      architecture: p.maybeArchitectureFromMap(PackageAttribute.architecture) ??
+          fallbackArchitecture,
       url: p.maybeLinkFromMap(PackageAttribute.installerURL),
       sha256Hash: p.maybeStringFromMap(PackageAttribute.sha256Installer),
       locale: p.maybeInstallerLocaleFromMap(PackageAttribute.installerLocale),
-      storeProductID: p.maybeStringFromMap(PackageAttribute.storeProductID),
-      releaseDate: p.maybeDateTimeFromMap(PackageAttribute.releaseDate),
-      installers: p.maybeInstallersFromMap(PackageAttribute.installers),
-      upgradeBehavior:
-          p.maybeUpgradeBehaviorFromMap(PackageAttribute.upgradeBehavior),
-      fileExtensions: p.maybeStringListFromMap(PackageAttribute.fileExtensions),
       platform: p.maybePlatformFromMap(PackageAttribute.platform),
       minimumOSVersion:
           p.maybeVersionOrStringFromMap(PackageAttribute.minimumOSVersion),
+      type: p.maybeInstallerTypeFromMap(PackageAttribute.installerType),
       scope: p.maybeScopeFromMap(PackageAttribute.installScope),
-      installModes: p.maybeInstallModesFromMap(PackageAttribute.installModes),
-      installerSwitches:
-          p.maybeStringFromMap(PackageAttribute.installerSwitches),
+      signatureSha256: p.maybeStringFromMap(PackageAttribute.signatureSha256),
       elevationRequirement:
           p.maybeStringFromMap(PackageAttribute.elevationRequirement),
       productCode: p.maybeStringFromMap(PackageAttribute.productCode),
       appsAndFeaturesEntries:
           p.maybeStringFromMap(PackageAttribute.appsAndFeaturesEntries),
+      switches: p.maybeStringFromMap(PackageAttribute.installerSwitches),
+      modes: p.maybeInstallModesFromMap(PackageAttribute.installModes),
       nestedInstallerType:
           p.maybeInstallerTypeFromMap(PackageAttribute.nestedInstallerType),
+      upgradeBehavior:
+          p.maybeUpgradeBehaviorFromMap(PackageAttribute.upgradeBehavior),
       availableCommands:
           p.maybeStringListFromMap(PackageAttribute.availableCommands),
-      protocols: p.maybeStringListFromMap(PackageAttribute.protocols),
-      dependencies: p.maybeDependenciesFromMap(PackageAttribute.dependencies),
+      storeProductID: p.maybeStringFromMap(PackageAttribute.storeProductID),
+      markets: p.maybeStringFromMap(PackageAttribute.markets),
+      packageFamilyName:
+          p.maybeStringFromMap(PackageAttribute.packageFamilyName),
       expectedReturnCodes: p.maybeExpectedReturnCodesFromMap(
           PackageAttribute.expectedReturnCodes),
+      releaseDate: p.maybeDateTimeFromMap(PackageAttribute.releaseDate),
+      fileExtensions: p.maybeStringListFromMap(PackageAttribute.fileExtensions),
+      protocols: p.maybeStringListFromMap(PackageAttribute.protocols),
+      dependencies: p.maybeDependenciesFromMap(PackageAttribute.dependencies),
       successCodes: p.maybeListFromMap(PackageAttribute.installerSuccessCodes,
           parser: (e) => int.parse(e.toString())),
-      otherInfos: p.otherDetails(),
+      other: p.otherDetails() ?? {},
     );
   }
+
+  static final Info<ComputerArchitecture> fallbackArchitecture =
+      Info<ComputerArchitecture>.fromAttribute(PackageAttribute.architecture,
+          value: ComputerArchitecture.matchAll);
 
   AgreementInfos? _parseAgreementInfos(Map<A, B> agreementDetails) {
     InfoAbstractMapParser<A, B> p = getParser(agreementDetails);
@@ -137,8 +155,8 @@ abstract class FullAbstractMapParser<A, B> {
   /// Returns a map with all the details of the package, except the installer details.
   Map<A, B> flattenedDetailsMap();
 
-  /// Returns a map with all the details of the installer.
-  Map<A, B> flattenedInstallerDetailsMap();
+  /// Returns an iterable with all the installer details of the package.
+  Iterable<Map<A, B>> flattenedInstallerList();
 
   /// Returns the parser to be used to parse the details.
   InfoAbstractMapParser<A, B> getParser(Map<A, B> map);

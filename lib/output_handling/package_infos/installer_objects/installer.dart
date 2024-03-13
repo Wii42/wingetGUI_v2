@@ -13,6 +13,7 @@ import '../info.dart';
 import '../parsers/info_yaml_parser.dart';
 import '../package_attribute.dart';
 import 'computer_architecture.dart';
+import 'dependencies.dart';
 import 'expected_return_code.dart';
 import 'installer_locale.dart';
 import 'installer_type.dart';
@@ -29,6 +30,7 @@ class Installer {
   final Info<Uri>? url;
   final Info<String>? sha256Hash;
   final Info<InstallerLocale>? locale;
+  final Info<DateTime>? releaseDate;
   final Info<List<WindowsPlatform>>? platform;
   final Info<VersionOrString>? minimumOSVersion;
   final Info<InstallerType>? type;
@@ -40,12 +42,15 @@ class Installer {
   final Info<String>? switches;
   final Info<List<InstallMode>>? modes;
   final Info<UpgradeBehavior>? upgradeBehavior;
+  final Info<List<String>>? fileExtensions;
   final Info<InstallerType>? nestedInstallerType;
   final Info<List<String>>? availableCommands;
   final Info<String>? storeProductID;
   final Info<String>? markets;
   final Info<String>? packageFamilyName;
+  final Info<List<String>>? protocols;
   final Info<List<ExpectedReturnCode>>? expectedReturnCodes;
+  final Info<Dependencies>? dependencies;
   final Info<List<int>>? successCodes;
 
   final Map<String, String> other;
@@ -72,6 +77,10 @@ class Installer {
     this.markets,
     this.packageFamilyName,
     this.expectedReturnCodes,
+    this.releaseDate,
+    this.fileExtensions,
+    this.protocols,
+    this.dependencies,
     this.successCodes,
     this.other = const {},
   });

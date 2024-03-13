@@ -13,6 +13,7 @@ import 'info.dart';
 
 import 'info_with_link.dart';
 import 'installer_infos.dart';
+import 'installer_objects/installer.dart';
 import 'installer_objects/installer_type.dart';
 
 class PackageInfosFull extends PackageInfos {
@@ -30,7 +31,7 @@ class PackageInfosFull extends PackageInfos {
   final AgreementInfos? agreement;
   final Info<Uri>? website, supportUrl;
   final Info<Locale>? packageLocale;
-  final InstallerInfos? installer;
+  final Info<List<Installer>>? installer;
 
   PackageInfosFull({
     super.name,
@@ -96,12 +97,8 @@ class PackageInfosFull extends PackageInfos {
   @override
   bool isMicrosoftStore() =>
       source.value == PackageSources.microsoftStore ||
-      ((installer?.type?.value ??
-                  installer?.installers?.value.firstOrNull?.type?.value) ==
-              InstallerType.msstore &&
-          (installer?.storeProductID ??
-                  installer?.installers?.value.firstOrNull?.storeProductID) !=
-              null);
+      ((installer?.value.firstOrNull?.type?.value) == InstallerType.msstore &&
+          (installer?.value.firstOrNull?.storeProductID) != null);
 
   @override
   bool isWinget() =>

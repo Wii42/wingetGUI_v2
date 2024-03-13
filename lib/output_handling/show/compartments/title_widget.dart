@@ -110,7 +110,8 @@ class TitleWidget extends Compartment {
       runSpacing: 5,
       children: [
         from(context),
-        if (infos.website != null && infos.website!.isNotEmpty) _website(locale),
+        if (infos.website != null && infos.website!.isNotEmpty)
+          _website(locale),
         if (infos.category != null) ...[
           LinkText(line: infos.category!.value),
           if (infos.isMicrosoftStore()) _showInStore(locale),
@@ -152,10 +153,7 @@ class TitleWidget extends Compartment {
 
   StoreButton _showInStore(AppLocalizations locale) {
     return StoreButton(
-      storeId: infos.installer?.storeProductID?.value ??
-          infos.installer?.installers?.value.firstOrNull?.storeProductID
-              ?.value ??
-          '',
+      storeId: infos.installer?.value.firstOrNull?.storeProductID?.value ?? '',
     );
   }
 

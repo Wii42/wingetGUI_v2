@@ -21,7 +21,7 @@ import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 
 class StatefulInstallerWidget extends StatefulWidget {
   late final _InstallerCompartmentStub _template;
-  final InstallerInfos infos;
+  final Info<List<Installer>> infos;
   final Locale? guiLocale, defaultLocale;
   StatefulInstallerWidget(
       {required this.infos, super.key, this.guiLocale, this.defaultLocale})
@@ -55,8 +55,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   Widget build(BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
 
-    bool multipleInstallers =
-        infos.installers != null && infos.installers!.value.length > 1;
+    bool multipleInstallers = infos.length > 1;
     Widget content = Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: template.fullCompartment(
@@ -64,7 +63,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             mainColumn: [
               if (multipleInstallers)
                 InstallerSelector(
-                  installers: infos.installers!.value,
+                  installers: infos,
                   installerArchitecture: installerArchitecture,
                   installerType: installerType,
                   installerLocale: installerLocale,
@@ -79,11 +78,9 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
               ...displayRest(context),
             ],
             buttonRow: template.buttonRow([
-              infos.url,
               selectedInstaller?.url?.copyWith(
                   customTitle: localization.downloadInstallerManually(
-                      selectedInstaller?.uniqueProperties(
-                          infos.installers!.value, context)))
+                      selectedInstaller?.uniqueProperties(infos, context)))
             ], context),
             context: context));
     return widget._template.buildWithoutContent(context, content);
@@ -94,65 +91,58 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
     Locale? locale = AppLocale.of(context).guiLocale;
     return [
       selectedInstaller?.architecture.toStringInfo(),
-      (selectedInstaller?.type ?? infos.type)?.toStringInfo(),
-      (selectedInstaller?.locale ?? infos.locale)?.toStringInfo(context),
-      infos.releaseDate?.toStringInfo(locale),
-      (selectedInstaller?.scope ?? infos.scope)?.toStringInfo(context),
-      (selectedInstaller?.minimumOSVersion ?? infos.minimumOSVersion)?.toStringInfo(),
-      (selectedInstaller?.platform ?? infos.platform)?.toStringInfo(),
-      selectedInstaller?.availableCommands?.toStringInfo(),
-      (selectedInstaller?.nestedInstallerType ?? infos.nestedInstallerType)
-          ?.toStringInfo(),
-      (selectedInstaller?.upgradeBehavior ?? infos.upgradeBehavior)
-          ?.toStringInfo(context),
-      (selectedInstaller?.modes ?? infos.installModes)
-          ?.toStringInfo(localization),
-      selectedInstaller?.storeProductID ?? infos.storeProductID,
-      selectedInstaller?.sha256Hash ?? infos.sha256Hash,
-      selectedInstaller?.elevationRequirement ?? infos.elevationRequirement,
-      selectedInstaller?.productCode ?? infos.productCode,
-      infos.dependencies?.toStringInfo(),
+      selectedInstaller?.type?.toStringInfo(),
+      selectedInstaller?.locale?.toStringInfo(context),
+      selectedInstaller?.releaseDate?.toStringInfo(locale),
+      selectedInstaller?.scope?.toStringInfo(context),
+      selectedInstaller?.minimumOSVersion?.toStringInfo(),
+      selectedInstaller?.platform?.toStringInfo(),
+      selectedInstaller?.nestedInstallerType?.toStringInfo(),
+      selectedInstaller?.upgradeBehavior?.toStringInfo(context),
+      selectedInstaller?.modes?.toStringInfo(localization),
+      selectedInstaller?.storeProductID,
+      selectedInstaller?.sha256Hash,
+      selectedInstaller?.elevationRequirement,
+      selectedInstaller?.productCode,
+      selectedInstaller?.dependencies?.toStringInfo(),
       selectedInstaller?.signatureSha256,
       selectedInstaller?.markets,
       selectedInstaller?.packageFamilyName,
-      (selectedInstaller?.expectedReturnCodes ?? infos.expectedReturnCodes)
-          ?.toStringInfo(localization),
-      (selectedInstaller?.successCodes ?? infos.successCodes)
+      selectedInstaller?.expectedReturnCodes?.toStringInfo(localization),
+      selectedInstaller?.successCodes
           ?.toStringInfoFromList((e) => e.toString()),
     ];
   }
 
-  InstallerInfos get infos => widget.infos;
+  List<Installer> get infos => widget.infos.value;
   ExpanderCompartment get template => widget._template;
 
   List<Installer> get fittingInstallers {
-    return infos.installers?.value.fittingInstallers(
+    return infos.fittingInstallers(
           installerArchitecture,
           installerType,
           installerLocale,
           installerScope,
           nestedInstallerType,
-        ) ??
-        [];
+        );
   }
 
   Installer? getBestFittingLocaleInstaller() {
     if (widget.guiLocale != null) {
-      List<Locale> installerLocales = infos.installers?.value
+      List<Locale> installerLocales = infos
               .map((e) => e.locale?.value)
               .nonNulls
-              .toList() ??
-          [];
+              .toList();
       if (installerLocales.length <= 1) {
-        return infos.installers?.value.firstOrNull;
+        return infos.firstOrNull;
       }
       Locale? bestFitting = getBestFittingLocale(installerLocales);
       if (bestFitting != null) {
-        return infos.installers?.value
+        return infos
             .firstWhereOrNull((e) => e.locale?.value == bestFitting);
       }
     }
-    return widget.infos.installers?.value.firstOrNull;
+    return widget.infos.value.firstOrNull;
   }
 
   Locale? getBestFittingLocale(List<Locale> installerLocales) {
@@ -203,13 +193,12 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   }
 
   List<Widget> displayRest(BuildContext context) => [
-        ...template.displayRest(infos.otherInfos, context),
         ...template.displayRest(selectedInstaller?.other, context),
       ];
 }
 
 class _InstallerCompartmentStub extends ExpanderCompartment {
-  final InstallerInfos infos;
+  final Info<List<Installer>> infos;
 
   const _InstallerCompartmentStub({required this.infos});
 
