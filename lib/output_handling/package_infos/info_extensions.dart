@@ -44,9 +44,20 @@ extension StringInfo on Info<String> {
     }
     return copyWith(value: firstLine);
   }
+
+  bool get isEmpty => value.isEmpty;
+  bool get isNotEmpty => !isEmpty;
 }
 
-extension ListToStringInfo<T> on Info<List<T>> {
+extension UriInfo on Info<Uri> {
+  Info<String> toStringInfo() =>
+      toStringInfoFromObject((object) => object.toString());
+
+  bool get isEmpty => value.toString().isEmpty;
+  bool get isNotEmpty => !isEmpty;
+}
+
+extension ListInfo<T> on Info<List<T>> {
   Info<String> toStringInfoFromList(String Function(T)? toString) {
     return toStringInfoFromObject((object) {
       List<dynamic> list = object

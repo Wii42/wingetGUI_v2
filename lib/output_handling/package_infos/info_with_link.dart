@@ -72,6 +72,9 @@ class InfoWithLink {
       Map map, PackageAttribute textInfo, String textKey, String urlKey) {
     String? text = map[textKey];
     String? urlString = map[urlKey];
+    if (urlString != null && urlString.isEmpty) {
+      urlString = null;
+    }
     if (text == null && urlString == null) {
       return null;
     }

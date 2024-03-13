@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
 import '../../package_infos/info.dart';
@@ -79,7 +80,7 @@ abstract class ExpanderCompartment extends Compartment
       crossAxisAlignment: WrapCrossAlignment.start,
       children: [
         for (Info<Uri>? link in links)
-          if (link != null)
+          if (link != null && link.isNotEmpty)
             linkButton(
               locale: locale,
               link: link,

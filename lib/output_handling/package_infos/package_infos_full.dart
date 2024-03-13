@@ -5,7 +5,7 @@ import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/helpers/locale_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/info_yaml_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
+import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
 import './package_infos.dart';

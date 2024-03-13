@@ -5,7 +5,7 @@ import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
-import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
+import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/output_handling/show/installer_selector.dart';
 
 import '../../widget_assets/app_locale.dart';

@@ -2,10 +2,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
-import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
+import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
 import '../../../helpers/route_parameter.dart';
+import '../../../navigation_pages/search_page.dart';
 import '../../../routes.dart';
 import '../../package_infos/info.dart';
 import 'expander_compartment.dart';
@@ -68,19 +69,39 @@ class DetailsWidget extends ExpanderCompartment {
           ],
           context,
           otherButtons: [
-            if (infos.publisherID != null)
-              Button(
-                child: Text(locale.moreFromPublisher(
-                    infos.publisherName ?? infos.publisherID!)),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.publisherPage.route,
-                      arguments:
-                          StringRouteParameter(string: infos.publisherID!));
-                },
-              )
+            if (showMoreFromPublisherButton()) moreFromPublisher(context),
           ],
         ),
         context: context);
+  }
+
+  bool showMoreFromPublisherButton() =>
+      infos.publisherID != null ||
+      (infos.agreement?.publisher?.text != null &&
+          infos.agreement!.publisher!.text!.isNotEmpty);
+
+  Widget moreFromPublisher(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    if (infos.publisherID != null) {
+      return Button(
+        child: Text(locale
+            .moreFromPublisher(infos.publisherName ?? infos.publisherID!)),
+        onPressed: () {
+          Navigator.of(context).pushNamed(Routes.publisherPage.route,
+              arguments: StringRouteParameter(string: infos.publisherID!));
+        },
+      );
+    }
+    if (infos.agreement?.publisher?.text != null &&
+        infos.agreement!.publisher!.text!.isNotEmpty) {
+      return Button(
+        child:
+            Text(locale.moreFromPublisher(infos.agreement!.publisher!.text!)),
+        onPressed: () =>
+            SearchPage.search(context)(infos.agreement!.publisher!.text!),
+      );
+    }
+    return const SizedBox();
   }
 
   @override

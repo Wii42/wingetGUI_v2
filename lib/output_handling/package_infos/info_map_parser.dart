@@ -1,6 +1,6 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/info_abstract_map_parser.dart';
-import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
+import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 
 import 'agreement_infos.dart';
 import 'info.dart';

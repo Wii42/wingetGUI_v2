@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
@@ -109,7 +110,7 @@ class TitleWidget extends Compartment {
       runSpacing: 5,
       children: [
         from(context),
-        if (infos.website != null) _website(locale),
+        if (infos.website != null && infos.website!.isNotEmpty) _website(locale),
         if (infos.category != null) ...[
           LinkText(line: infos.category!.value),
           if (infos.isMicrosoftStore()) _showInStore(locale),

@@ -17,7 +17,7 @@ abstract class Compartment extends StatelessWidget {
       {required BuildContext context,
       required String? text,
       required Uri? url}) {
-    if (url != null) {
+    if (url != null && url.toString().isNotEmpty) {
       return InlineLinkButton(url: url, text: Text(text ?? url.toString()));
     }
     return textWithLinks(text: text!, context: context);

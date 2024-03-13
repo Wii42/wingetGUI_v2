@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
-import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
+import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
 import '../../helpers/locale_parser.dart';
