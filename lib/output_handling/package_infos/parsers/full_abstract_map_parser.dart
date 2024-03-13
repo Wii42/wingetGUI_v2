@@ -1,6 +1,5 @@
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/agreement_infos.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
 

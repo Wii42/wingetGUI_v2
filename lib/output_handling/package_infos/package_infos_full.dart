@@ -12,7 +12,6 @@ import 'agreement_infos.dart';
 import 'info.dart';
 
 import 'info_with_link.dart';
-import 'installer_infos.dart';
 import 'installer_objects/installer.dart';
 import 'installer_objects/installer_type.dart';
 

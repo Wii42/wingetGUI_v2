@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_infos.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
@@ -55,7 +54,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   Widget build(BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
 
-    bool multipleInstallers = infos.length > 1;
+    bool multipleInstallers = installers.length > 1;
     Widget content = Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: template.fullCompartment(
@@ -63,7 +62,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             mainColumn: [
               if (multipleInstallers)
                 InstallerSelector(
-                  installers: infos,
+                  installers: installers,
                   installerArchitecture: installerArchitecture,
                   installerType: installerType,
                   installerLocale: installerLocale,
@@ -80,7 +79,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             buttonRow: template.buttonRow([
               selectedInstaller?.url?.copyWith(
                   customTitle: localization.downloadInstallerManually(
-                      selectedInstaller?.uniqueProperties(infos, context)))
+                      selectedInstaller?.uniqueProperties(installers, context)))
             ], context),
             context: context));
     return widget._template.buildWithoutContent(context, content);
@@ -114,35 +113,33 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
     ];
   }
 
-  List<Installer> get infos => widget.infos.value;
+  List<Installer> get installers => widget.infos.value;
   ExpanderCompartment get template => widget._template;
 
   List<Installer> get fittingInstallers {
-    return infos.fittingInstallers(
-          installerArchitecture,
-          installerType,
-          installerLocale,
-          installerScope,
-          nestedInstallerType,
-        );
+    return installers.fittingInstallers(
+      installerArchitecture,
+      installerType,
+      installerLocale,
+      installerScope,
+      nestedInstallerType,
+    );
   }
 
   Installer? getBestFittingLocaleInstaller() {
     if (widget.guiLocale != null) {
-      List<Locale> installerLocales = infos
-              .map((e) => e.locale?.value)
-              .nonNulls
-              .toList();
+      List<Locale> installerLocales =
+          installers.map((e) => e.locale?.value).nonNulls.toList();
       if (installerLocales.length <= 1) {
-        return infos.firstOrNull;
+        return installers.firstOrNull;
       }
       Locale? bestFitting = getBestFittingLocale(installerLocales);
       if (bestFitting != null) {
-        return infos
+        return installers
             .firstWhereOrNull((e) => e.locale?.value == bestFitting);
       }
     }
-    return widget.infos.value.firstOrNull;
+    return installers.firstOrNull;
   }
 
   Locale? getBestFittingLocale(List<Locale> installerLocales) {
