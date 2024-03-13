@@ -122,18 +122,7 @@ class FullJsonParser extends FullAbstractMapParser<String, dynamic> {
   }
 
   @override
-  InfoJsonParser getInfoParser(Map<String, dynamic> details) =>
-      _getParser(details);
-
-  @override
-  InfoJsonParser getInstallerParser(Map<String, dynamic> installerDetails) =>
-      _getParser(installerDetails);
-
-  @override
-  InfoJsonParser getAgreementParser(Map<String, dynamic> agreementDetails) =>
-      _getParser(agreementDetails);
-
-  InfoJsonParser _getParser(Map<String, dynamic> details) {
-    return InfoJsonParser(map: details);
+  InfoJsonParser getParser(Map<String, dynamic> map) {
+    return InfoJsonParser(map: map);
   }
 }

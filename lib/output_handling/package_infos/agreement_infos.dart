@@ -28,7 +28,7 @@ class AgreementInfos {
   static AgreementInfos? maybeFromMap(
       {required Map<String, String>? map, required AppLocalizations locale}) {
     return FullMapParser(details: map ?? {}, locale: locale)
-        .parseAgreementInfos(map ?? {});
+        .parseAgreementInfos();
   }
 
   static AgreementInfos? maybeFromYamlMap(

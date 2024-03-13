@@ -22,18 +22,7 @@ class FullYamlParser extends FullAbstractMapParser<dynamic, dynamic> {
   Map<dynamic, dynamic> flattenedInstallerDetailsMap() => installerDetails;
 
   @override
-  InfoYamlParser getInfoParser(Map<dynamic, dynamic> details) =>
-      _getParser(details);
-
-  @override
-  InfoYamlParser getInstallerParser(Map<dynamic, dynamic> installerDetails) =>
-      _getParser(installerDetails);
-
-  @override
-  InfoYamlParser getAgreementParser(Map<dynamic, dynamic> agreementDetails) =>
-      _getParser(agreementDetails);
-
-  InfoYamlParser _getParser(Map<dynamic, dynamic> details) {
-    return InfoYamlParser(map: details);
+  InfoYamlParser getParser(Map<dynamic, dynamic> map) {
+    return InfoYamlParser(map: map);
   }
 }

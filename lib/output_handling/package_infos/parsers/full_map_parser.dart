@@ -19,18 +19,7 @@ class FullMapParser extends FullAbstractMapParser<String, String> {
   Map<String, String> flattenedInstallerDetailsMap() => installerDetails;
 
   @override
-  InfoMapParser getInfoParser(Map<String, String> details) =>
-      _getParser(details);
-
-  @override
-  InfoMapParser getInstallerParser(Map<String, String> installerDetails) =>
-      _getParser(installerDetails);
-
-  @override
-  InfoMapParser getAgreementParser(Map<String, String> agreementDetails) =>
-      _getParser(agreementDetails);
-
-  InfoMapParser _getParser(Map<String, String> details) {
-    return InfoMapParser(map: details, locale: locale);
+  InfoMapParser getParser(Map<String, String> map) {
+    return InfoMapParser(map: map, locale: locale);
   }
 }

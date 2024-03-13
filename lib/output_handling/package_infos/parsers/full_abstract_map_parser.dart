@@ -10,9 +10,10 @@ abstract class FullAbstractMapParser<A, B> {
 
   FullAbstractMapParser(this.details);
 
+  /// Parses the details of the package and returns a [PackageInfosFull] object.
   PackageInfosFull parse() {
     Map<A, B> detailsMap = flattenedDetailsMap();
-    InfoAbstractMapParser<A, B> p = getInfoParser(detailsMap);
+    InfoAbstractMapParser<A, B> p = getParser(detailsMap);
     PackageInfosFull infos = PackageInfosFull(
       name: p.maybeStringFromMap(PackageAttribute.name),
       id: p.maybeStringFromMap(PackageAttribute.id),
@@ -32,7 +33,7 @@ abstract class FullAbstractMapParser<A, B> {
       releaseNotes: p.maybeInfoWithLinkFromMap(
           textInfo: PackageAttribute.releaseNotes,
           urlInfo: PackageAttribute.releaseNotesUrl),
-      agreement: parseAgreementInfos(detailsMap),
+      agreement: _parseAgreementInfos(detailsMap),
       tags: p.maybeTagsFromMap(),
       packageLocale: p.maybeLocaleFromMap(PackageAttribute.packageLocale),
       installer: parseInstallerInfos(),
@@ -43,8 +44,7 @@ abstract class FullAbstractMapParser<A, B> {
   }
 
   InstallerInfos? parseInstallerInfos() {
-    InfoAbstractMapParser<A, B> p =
-        getInstallerParser(flattenedInstallerDetailsMap());
+    InfoAbstractMapParser<A, B> p = getParser(flattenedInstallerDetailsMap());
     return InstallerInfos(
       title: PackageAttribute.installer.title,
       type: p.maybeInstallerTypeFromMap(PackageAttribute.installerType),
@@ -83,8 +83,8 @@ abstract class FullAbstractMapParser<A, B> {
     );
   }
 
-  AgreementInfos? parseAgreementInfos(Map<A, B> agreementDetails) {
-    InfoAbstractMapParser<A, B> p = getInstallerParser(agreementDetails);
+  AgreementInfos? _parseAgreementInfos(Map<A, B> agreementDetails) {
+    InfoAbstractMapParser<A, B> p = getParser(agreementDetails);
     AgreementInfos agreement = AgreementInfos(
       title: PackageAttribute.agreement.title,
       publisher: p.maybeInfoWithLinkFromMap(
@@ -107,11 +107,17 @@ abstract class FullAbstractMapParser<A, B> {
     return agreement.isNotEmpty() ? agreement : null;
   }
 
+  AgreementInfos? parseAgreementInfos() {
+    Map<A, B> agreementDetails = flattenedDetailsMap();
+    return _parseAgreementInfos(agreementDetails);
+  }
+
+  /// Returns a map with all the details of the package, except the installer details.
   Map<A, B> flattenedDetailsMap();
 
+  /// Returns a map with all the details of the installer.
   Map<A, B> flattenedInstallerDetailsMap();
 
-  InfoAbstractMapParser<A, B> getInfoParser(Map<A, B> details);
-  InfoAbstractMapParser<A, B> getInstallerParser(Map<A, B> installerDetails);
-  InfoAbstractMapParser<A, B> getAgreementParser(Map<A, B> agreementDetails);
+  /// Returns the parser to be used to parse the details.
+  InfoAbstractMapParser<A, B> getParser(Map<A, B> map);
 }
