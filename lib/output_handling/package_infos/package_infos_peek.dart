@@ -42,7 +42,6 @@ class PackageInfosPeek extends PackageInfos {
       otherInfos: details.isNotEmpty ? details : null,
     );
     return infos;
-    //..setImplicitInfos();
   }
 
   bool hasInfosFull() {

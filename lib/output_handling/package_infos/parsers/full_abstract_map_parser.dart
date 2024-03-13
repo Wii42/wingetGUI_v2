@@ -58,8 +58,8 @@ abstract class FullAbstractMapParser<A, B> {
       String shortWithoutEllipsis =
           shortDescription.value.take(shortDescription.value.length - 3).trim();
       if (description.value.startsWith(shortWithoutEllipsis)) {
-        shortDescription = shortDescription.copyWith(
-            value: shortWithoutEllipsis.split(RegExp(r'[\n.]')).first);
+        shortDescription = p.maybeFirstLineFromInfo(description,
+            destination: PackageAttribute.shortDescription);
       }
     }
     return shortDescription;

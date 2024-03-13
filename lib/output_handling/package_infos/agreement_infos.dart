@@ -1,11 +1,10 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/full_json_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/parsers/full_map_parser.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/full_yaml_parser.dart';
 
 import 'info.dart';
-import 'parsers/info_json_parser.dart';
 import 'info_with_link.dart';
-import 'parsers/info_yaml_parser.dart';
-import 'package_attribute.dart';
 
 class AgreementInfos {
   final String Function(AppLocalizations) title;
@@ -33,58 +32,14 @@ class AgreementInfos {
 
   static AgreementInfos? maybeFromYamlMap(
       {required Map<dynamic, dynamic>? map}) {
-    if (map == null) {
-      return null;
-    }
-    InfoYamlParser parser = InfoYamlParser(map: map);
-
-    AgreementInfos agreement = AgreementInfos(
-      title: PackageAttribute.agreement.title,
-      publisher: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.publisher,
-          urlInfo: PackageAttribute.publisherUrl),
-      license: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.license,
-          urlInfo: PackageAttribute.licenseUrl),
-      copyright: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.copyright,
-          urlInfo: PackageAttribute.copyrightUrl),
-      privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl),
-      buyUrl: parser.maybeLinkFromMap(PackageAttribute.buyUrl),
-    );
-    return agreement.isNotEmpty() ? agreement : null;
+    return FullYamlParser(details: map ?? {}).parseAgreementInfos();
   }
 
   static AgreementInfos? maybeFromJsonMap({
     required Map<String, dynamic>? map,
     required Map<String, dynamic>? agreementsMap,
   }) {
-    if (map == null && agreementsMap == null) {
-      return null;
-    }
-    InfoJsonParser parser = InfoJsonParser(map: map ?? {});
-    InfoJsonParser agreementsParser = InfoJsonParser(map: agreementsMap ?? {});
-
-    AgreementInfos agreement = AgreementInfos(
-      title: PackageAttribute.agreement.title,
-      publisher: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.publisher,
-          urlInfo: PackageAttribute.publisherUrl),
-      license: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.license,
-          urlInfo: PackageAttribute.licenseUrl),
-      copyright: parser.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.copyright,
-          urlInfo: PackageAttribute.copyrightUrl),
-      privacyUrl: parser.maybeLinkFromMap(PackageAttribute.privacyUrl),
-      termsOfTransaction: agreementsParser
-          .maybeStringFromMap(PackageAttribute.termsOfTransaction),
-      seizureWarning:
-          agreementsParser.maybeStringFromMap(PackageAttribute.seizureWarning),
-      storeLicenseTerms: agreementsParser
-          .maybeStringFromMap(PackageAttribute.storeLicenseTerms),
-    );
-    return agreement.isNotEmpty() ? agreement : null;
+    return FullJsonParser(details: map ?? {}).parseAgreementInfos();
   }
 
   bool isEmpty() {
