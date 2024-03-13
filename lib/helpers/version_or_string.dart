@@ -1,5 +1,3 @@
-
-
 import 'package:winget_gui/helpers/version.dart';
 
 class VersionOrString {

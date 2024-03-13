@@ -4,10 +4,12 @@ import 'package:collection/collection.dart';
 import 'package:http/http.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
+import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:yaml/yaml.dart';
 import 'package:winget_gui/helpers/locale_parser.dart';
 import '../helpers/version.dart';
+import '../output_handling/package_infos/package_infos_peek.dart';
 import 'github_api/github_api.dart';
 import 'github_api/github_api_file_info.dart';
 import 'github_api/winget_packages/winget_package_version_manifest.dart';
@@ -15,6 +17,25 @@ import 'package_source.dart';
 
 class WingetSource extends PackageSource {
   WingetSource(super.package);
+
+  @override
+  Uri? get manifestUrl {
+    return Uri(scheme: 'https', host: 'github.com', pathSegments: [
+      'microsoft',
+      'winget-pkgs',
+      'tree',
+      'master',
+      'manifests',
+      idInitialLetter ?? '',
+      ...idAsPath
+    ]);
+  }
+
+  /// First letter of the package id
+  String? get idInitialLetter => package.id?.value.get(0)?.toLowerCase();
+
+  /// The package id as a list of path segments
+  List<String> get idAsPath => package.id?.value.split('.') ?? [];
 
   @override
   Future<PackageInfosFull> fetchInfos(Locale? guiLocale) async {
@@ -142,29 +163,48 @@ class WingetSource extends PackageSource {
         details: detailsMap, installerDetails: installerMap, source: 'winget');
   }
 
+  /// Returns the files of the manifest of the given package.
   Future<List<GithubApiFileInfo>> getFiles(String packageID) async {
-    bool hasAnyVersion =
-        package.hasSpecificVersion() || package.hasSpecificAvailableVersion();
-    fallBackFiles() =>
-        GithubApi.wingetManifest(packageID: packageID).getFiles();
+    GithubApi fallBackApi = GithubApi.wingetManifest(packageID: packageID);
     List<GithubApiFileInfo> files;
-    if (hasAnyVersion) {
-      GithubApi manifestApi = GithubApi.wingetVersionManifest(
-          packageID: packageID,
-          version: (package.hasSpecificAvailableVersion()
-                  ? package.availableVersion?.value.stringValue
-                  : null) ??
-              (package.hasSpecificVersion()
-                  ? package.version?.value.stringValue
-                  : throw Exception('package has no specific version'))!);
-      files = await manifestApi.getFiles(onError: fallBackFiles);
-    } else {
-      files = await fallBackFiles();
-    }
+    GithubApi manifestApi = versionManifest ?? fallBackApi;
+    files = await manifestApi.getFiles(onError: fallBackApi.getFiles);
     if (files.isEmpty) {
       throw Exception('No files found');
     }
     return files;
+  }
+
+  /// Returns the [GithubApi] for the manifest of the given version.
+  /// If  [package] is a [PackageInfosPeek] and has a specific available version,
+  /// returns the manifest of the available version.
+  /// Returns null if no specific version is available.
+  GithubApi? get versionManifest {
+    VersionOrString? availableVersion;
+    VersionOrString? versionManifest;
+    if (package is PackageInfosPeek) {
+      PackageInfosPeek package = this.package as PackageInfosPeek;
+      if (package.hasSpecificAvailableVersion()) {
+        availableVersion = package.availableVersion?.value;
+      }
+    }
+    if (package.hasSpecificVersion()) {
+      versionManifest = package.version?.value;
+    }
+    if (availableVersion == null && versionManifest == null) {
+      return null;
+    }
+    return _getManifestOfVersion((availableVersion ?? versionManifest)!);
+  }
+
+  /// return the [GithubApi] for the manifest of the given version.
+  /// If the version is not a specific version, throws an exception.
+  GithubApi _getManifestOfVersion(VersionOrString version) {
+    if (!version.isSpecificVersion()) {
+      throw Exception('Version is not a specific version: $version');
+    }
+    return GithubApi.wingetVersionManifest(
+        packageID: package.id!.value, version: version.stringValue);
   }
 
   Future<Locale> chooseLocale(

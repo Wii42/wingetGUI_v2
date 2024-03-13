@@ -7,7 +7,7 @@ extension PackageScreenshotIdentifiers on PackageInfos {
     }
     String nameWithoutVersion = name!.value;
     if (hasVersion()) {
-      nameWithoutVersion = name!.value.replaceFirst(' ${version!.value}', '');
+      nameWithoutVersion = name!.value.replaceFirst(' ${version!.value.stringValue}', '');
     }
     String string = nameWithoutVersion.replaceAll(' ', '').toLowerCase();
     return string;

@@ -81,7 +81,36 @@ class Version implements Comparable<Version> {
     return _VersionComparator(this, other).compare();
   }
 
-  static Version? primary(List<Version> versions) {
+  /// Returns a new version with the given properties
+  Version copyWith({
+    List<String>? stringSegments,
+    String? preRelease,
+    String? prefix,
+    String? rangeIndicator,
+  }) {
+    return Version(
+      stringSegments ?? this.stringSegments,
+      preRelease: preRelease ?? this.preRelease,
+      prefix: prefix ?? this.prefix,
+      rangeIndicator: rangeIndicator ?? this.rangeIndicator,
+    );
+  }
+
+  /// Returns a new version with the given properties if they are null in the original version
+  Version copyWithIfNull({
+    String? preRelease,
+    String? prefix,
+    String? rangeIndicator,
+  }) {
+    return Version(
+      stringSegments,
+      preRelease: this.preRelease ?? preRelease,
+      prefix: this.prefix ?? prefix,
+      rangeIndicator: this.rangeIndicator ?? rangeIndicator,
+    );
+  }
+
+  static Version? primary(Iterable<Version> versions) {
     if (versions.isEmpty) return null;
     Version primary = versions.first;
     for (var version in versions.skip(1)) {

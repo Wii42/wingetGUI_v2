@@ -1,4 +1,3 @@
-import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/package_infos/to_string_info_extensions.dart';
@@ -7,7 +6,9 @@ import '../../helpers/log_stream.dart';
 import '../../helpers/package_screenshots.dart';
 import '../../helpers/package_screenshots_list.dart';
 import '../../helpers/version_or_string.dart';
+import '../../package_sources/ms_store_source.dart';
 import '../../package_sources/package_source.dart';
+import '../../package_sources/winget_source.dart';
 import 'info.dart';
 
 abstract class PackageInfos {
@@ -41,8 +42,10 @@ abstract class PackageInfos {
             value: PackageSources.none);
   }
 
-  bool hasVersion() => (version != null && version?.value.stringVersion != 'Unknown');
-  bool hasSpecificVersion() => version != null && version!.value.isSpecificVersion();
+  bool hasVersion() =>
+      (version != null && version?.value.stringVersion != 'Unknown');
+  bool hasSpecificVersion() =>
+      version != null && version!.value.isSpecificVersion();
 
   void setImplicitInfos() {
     screenshots = PackageScreenshotsList.instance.getPackage(this);
@@ -54,48 +57,23 @@ abstract class PackageInfos {
   bool isWinget();
   bool isMicrosoftStore();
 
+  PackageSource? get packageSource {
+    if (isMicrosoftStore()) {
+      return MSStoreSource(this);
+    }
+    if (isWinget()) {
+      return WingetSource(this);
+    }
+    return null;
+  }
+
   Info<Uri>? get manifest {
-    if (id == null || !isWinget()) {
+    Uri? manifestUrl = packageSource?.manifestUrl;
+    if (manifestUrl == null) {
       return null;
     }
-    return Info<Uri>(
-        title: (locale) => locale.infoTitle(PackageAttribute.manifest.name),
-        value: Uri.parse(
-            'https://github.com/microsoft/winget-pkgs/tree/master/manifests/$idInitialLetter/$idAsPath'));
-  }
-
-  Info<Uri>? get manifestApi {
-    if (id == null && isWinget()) {
-      return null;
-    }
-    return Info<Uri>(
-        title: (locale) => locale.infoTitle(PackageAttribute.manifest.name),
-        value: Uri.parse(
-            'https://api.github.com/repos/microsoft/winget-pkgs/contents/manifests/$idInitialLetter/$idAsPath'));
-  }
-
-  Info<Uri>? get versionManifestPath {
-    if (id == null && isWinget() && hasSpecificVersion()) {
-      return null;
-    }
-    return Info<Uri>(
-        title: (locale) => locale.infoTitle(PackageAttribute.manifest.name),
-        value: Uri.parse(
-            'https://raw.githubusercontent.com/microsoft/winget-pkgs/master/manifests/$idInitialLetter/$idAsPath/${version!.value}/${id!.value}'));
-  }
-
-  String? get idInitialLetter {
-    if (id == null) {
-      return null;
-    }
-    return id!.value.firstChar().toLowerCase();
-  }
-
-  String? get idAsPath {
-    if (id == null) {
-      return null;
-    }
-    return id!.value.replaceAll('.', '/');
+    return Info<Uri>.fromAttribute(PackageAttribute.manifest,
+        value: manifestUrl);
   }
 
   String? get publisherID => isWinget() ? probablyPublisherID() : null;
@@ -147,8 +125,8 @@ abstract class PackageInfos {
       return null;
     }
     VersionOrString version = this.version!.value;
-    if(version.isTypeVersion()){
-      return version.version?.toString();
+    if (version.isTypeVersion()) {
+      return version.version!.copyWithIfNull(prefix: 'v').toString();
     }
     if (name != null) {
       if (version.stringVersion!.startsWith(name!.value)) {

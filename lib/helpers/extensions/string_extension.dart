@@ -66,7 +66,8 @@ extension StringHelper on String {
   String lastChar() {
     return this[length - 1];
   }
- /// Returns a new string containing the substring of this string up to to [count], exclusive.
+
+  /// Returns a new string containing the substring of this string up to to [count], exclusive.
   String take(int count) {
     if (count > length) {
       return this;
@@ -97,5 +98,12 @@ extension StringHelper on String {
             !text.trim().contains(' ')) ||
         (text.startsWith('mailto:') && !text.contains(' ')) &&
             text.contains('@'));
+  }
+
+  String? get(int index) {
+    if (index < 0 || index >= length) {
+      return null;
+    }
+    return this[index];
   }
 }

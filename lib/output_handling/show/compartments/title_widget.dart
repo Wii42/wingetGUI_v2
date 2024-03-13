@@ -83,10 +83,9 @@ class TitleWidget extends Compartment {
           text: '${infos.name?.value ?? '<unknown>'} ',
           style: titleStyle(typography),
           children: [
-            if (infos.hasVersion() && infos.displayVersion() != null)
+            if (infos.hasVersion())
               TextSpan(
-                text:
-                    '${infos.displayVersion()!.startsWith(RegExp(r'[0-9]')) ? 'v' : ''}${infos.displayVersion()}',
+                text: infos.displayVersion(),
                 style: versionStyle(typography),
               )
           ]),

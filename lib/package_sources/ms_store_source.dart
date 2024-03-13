@@ -13,9 +13,21 @@ class MSStoreSource extends PackageSource {
     if (packageID == null) {
       throw Exception('Package has no ID');
     }
-    MicrosoftStoreManifestApi api =
-        MicrosoftStoreManifestApi(packageID: packageID);
-    Map<String, dynamic> map = await api.getJson();
-    return PackageInfosFull.fromMSJson(file: map, locale: guiLocale, infosSource: api.apiUri, source: 'msstore');
+    Map<String, dynamic> map = await api!.getJson();
+    return PackageInfosFull.fromMSJson(
+        file: map,
+        locale: guiLocale,
+        infosSource: api!.apiUri,
+        source: 'msstore');
+  }
+
+  @override
+  Uri? get manifestUrl => api?.apiUri;
+
+  MicrosoftStoreManifestApi? get api {
+    if (package.id == null) {
+      return null;
+    }
+    return MicrosoftStoreManifestApi(packageID: package.id!.value);
   }
 }
