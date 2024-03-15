@@ -1,12 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:provider/provider.dart';
-import 'package:winget_gui/output_handling/output_handler.dart';
-import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/widget_assets/command_button.dart';
 
 import '../output_handling/package_infos/package_infos.dart';
-import '../winget_commands.dart';
-import '../winget_process/package_action_process.dart';
 import '../winget_process/package_action_type.dart';
 
 class PackageActionButton extends CommandButton {
@@ -24,25 +19,14 @@ class PackageActionButton extends CommandButton {
   });
 
   @override
-  void Function()? onPressed(BuildContext context) => disabled
-      ? null
-      : () {
-          PackageActionProcess process =
-              PackageActionProcess.create(type,
-                  args: args(infos, type.winget),
-                  info: infos.toPeek(),
-                  wingetLocale: OutputHandler.getWingetLocale(context));
-          PackageAction action =
-              PackageAction(process: process, infos: infos, type: type);
-          Provider.of<PackageActionsNotifier>(context, listen: false)
-              .add(action);
-        };
+  void Function()? onPressed(BuildContext context) =>
+      disabled ? null : () => type.runAction(infos, context);
 }
 
-class UnInstallingUpdatingIconButton extends CommandIconButton {
+class PackageActionIconButton extends CommandIconButton {
   final PackageActionType type;
   final PackageInfos infos;
-  const UnInstallingUpdatingIconButton({
+  const PackageActionIconButton({
     super.key,
     required super.text,
     required super.command,
@@ -55,27 +39,6 @@ class UnInstallingUpdatingIconButton extends CommandIconButton {
   });
 
   @override
-  void Function()? onPressed(BuildContext context) => disabled
-      ? null
-      : () {
-          PackageActionProcess process =
-              PackageActionProcess.create(type,
-                  args: args(infos, type.winget), info: infos.toPeek(),
-                  wingetLocale: OutputHandler.getWingetLocale(context));
-          PackageAction action =
-              PackageAction(process: process, infos: infos, type: type);
-          Provider.of<PackageActionsNotifier>(context, listen: false)
-              .add(action);
-        };
-}
-
-List<String> args(PackageInfos infos, Winget winget) {
-  return [
-    '--id',
-    infos.id!.value,
-    if (winget != Winget.upgrade && infos.hasVersion()) ...[
-      '-v',
-      infos.version!.value.stringValue
-    ],
-  ];
+  void Function()? onPressed(BuildContext context) =>
+      disabled ? null : () => type.runAction(infos, context);
 }

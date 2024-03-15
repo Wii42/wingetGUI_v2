@@ -7,6 +7,7 @@ import '../winget_commands.dart';
 
 import '../winget_db/db_table.dart';
 import '../winget_db/winget_db.dart';
+import '../winget_process/package_action_type.dart';
 
 DBTable dbTable = WingetDB.instance.updates;
 
@@ -34,6 +35,7 @@ class UpdatesPage extends StatelessWidget {
           SortBy.version,
           SortBy.auto,
         ],
+        runActionOnAllPackagesButtons: [PackageActionType.update],
       ),
       packageOptions: PackageListPackageOptions(
         isInstalled: (_) => true,

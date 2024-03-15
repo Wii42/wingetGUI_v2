@@ -19,7 +19,7 @@ class PackageActionProcess extends WingetProcess {
     );
   }
 
-  factory PackageActionProcess.create(PackageActionType type,
+  factory PackageActionProcess(PackageActionType type,
       {List<String> args = const [],
       required PackageInfosPeek? info,
       required AppLocalizations? wingetLocale}) {

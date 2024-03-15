@@ -88,46 +88,34 @@ class RightSideButtons extends StatelessWidget {
   }
 
   CommandButton textButton(
-      PackageActionType command, AppLocalizations locale, String appName,
+      PackageActionType action, AppLocalizations locale, String appName,
       {required bool disabled}) {
     return PackageActionButton(
-      text: command.winget.title(locale),
-      command: _createCommand(command.winget, locale),
-      title: command.winget.titleWithInput(appName, localization: locale),
-      icon: showIcons ? command.winget.icon : null,
-      type: command,
+      text: action.winget.title(locale),
+      command: action.createCommand(infos),
+      title: action.winget.titleWithInput(appName, localization: locale),
+      icon: showIcons ? action.winget.icon : null,
+      type: action,
       infos: infos,
       disabled: disabled,
     );
   }
 
   CommandIconButton iconButton(
-      PackageActionType command, AppLocalizations locale, String appName,
+      PackageActionType action, AppLocalizations locale, String appName,
       {required bool disabled}) {
-    return UnInstallingUpdatingIconButton(
-      text: command.winget.title(locale),
-      command: _createCommand(command.winget, locale),
-      title: command.winget.titleWithInput(appName, localization: locale),
-      icon: command.winget.icon ?? FluentIcons.error,
+    return PackageActionIconButton(
+      text: action.winget.title(locale),
+      command: action.createCommand(infos),
+      title: action.winget.titleWithInput(appName, localization: locale),
+      icon: action.winget.icon ?? FluentIcons.error,
       padding: numberOfButtons < 3
           ? const EdgeInsets.all(5)
           : const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-      type: command,
+      type: action,
       infos: infos,
       disabled: disabled,
     );
-  }
-
-  List<String> _createCommand(Winget winget, AppLocalizations locale) {
-    return [
-      ...winget.fullCommand,
-      '--id',
-      infos.id!.value,
-      if (winget != Winget.upgrade && infos.hasVersion()) ...[
-        '-v',
-        infos.version!.value.stringValue
-      ]
-    ];
   }
 
   int get numberOfButtons {

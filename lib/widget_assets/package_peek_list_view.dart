@@ -17,6 +17,8 @@ import '../output_handling/table/apps_table/package_peek.dart';
 import '../winget_db/db_table.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../winget_process/package_action_type.dart';
+
 class PackagePeekListView extends StatefulWidget {
   final DBTable dbTable;
   late final Stream<DBMessage> reloadStream;
@@ -78,7 +80,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           }
           return Column(
             children: [
-              menuOptions(context),
+              menuOptions(context, packages),
               Expanded(
                 child: Stack(
                   //crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +203,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     );
   }
 
-  Widget menuOptions(BuildContext context) {
+  Widget menuOptions(BuildContext context, List<PackageInfos> visiblePackages) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     List<Widget> children = [
       if (widget.menuOptions.onlyWithSourceButton)
@@ -254,6 +256,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
               icon: Icon(
                   sortReversed ? FluentIcons.sort_up : FluentIcons.sort_down),
               onPressed: () => setState(() => sortReversed = !sortReversed)),
+          for(PackageActionType action in widget.menuOptions.runActionOnAllPackagesButtons)
+            packageActionOnAll(visiblePackages, action),
         ].withSpaceBetween(width: 5),
       ),
     ];
@@ -294,6 +298,19 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         child: Text(locale.extendedSearch));
   }
 
+  /// button which performs the selected [PackageActionType] ((un-)install/upgrade) on all packages
+  Widget packageActionOnAll(
+      List<PackageInfos> packages, PackageActionType action) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    return FilledButton(
+        onPressed: () {
+          for (PackageInfos package in packages) {
+            action.runAction(package, context);
+          }
+        },
+        child: Text(action.winget.title(locale)));
+  }
+
   String get filter => filterController.text;
 
   void listenToFilterStream() {
@@ -323,6 +340,7 @@ class PackageListMenuOptions {
   final bool sortDefaultReversed;
   final bool deepSearchButton;
   final bool filterField;
+  final List<PackageActionType> runActionOnAllPackagesButtons;
 
   const PackageListMenuOptions({
     this.onlyWithSourceButton = true,
@@ -334,6 +352,7 @@ class PackageListMenuOptions {
     this.sortDefaultReversed = false,
     this.deepSearchButton = false,
     this.filterField = true,
+    this.runActionOnAllPackagesButtons = const [],
   });
 }
 
