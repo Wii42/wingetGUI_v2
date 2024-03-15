@@ -4,7 +4,6 @@ import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/package_action_button.dart';
 
 import '../output_handling/package_infos/package_infos.dart';
-import '../winget_commands.dart';
 import '../winget_process/package_action_type.dart';
 import 'command_button.dart';
 
@@ -81,23 +80,20 @@ class RightSideButtons extends StatelessWidget {
     if (iconsOnly) {
       assert(command.winget.icon != null);
       return iconButton(command, locale, appName,
-          disabled: buttonInfo.visibility == ButtonVisibility.disabled);
+          disabled: buttonInfo.visibility.isDisabled);
     }
-    return textButton(command, locale, appName,
-        disabled: buttonInfo.visibility == ButtonVisibility.disabled);
+    return textButton(command, locale,
+        disabled: buttonInfo.visibility.isDisabled);
   }
 
-  CommandButton textButton(
-      PackageActionType action, AppLocalizations locale, String appName,
+  CommandButton textButton(PackageActionType action, AppLocalizations locale,
       {required bool disabled}) {
     return PackageActionButton(
-      text: action.winget.title(locale),
-      command: action.createCommand(infos),
-      title: action.winget.titleWithInput(appName, localization: locale),
-      icon: showIcons ? action.winget.icon : null,
       type: action,
       infos: infos,
       disabled: disabled,
+      locale: locale,
+      showIcon: showIcons,
     );
   }
 
@@ -151,4 +147,7 @@ enum ButtonVisibility {
       }
     }
   }
+  bool get isVisible => this == ButtonVisibility.visible;
+  bool get isDisabled => this == ButtonVisibility.disabled;
+  bool get isInvisible => this == ButtonVisibility.invisible;
 }
