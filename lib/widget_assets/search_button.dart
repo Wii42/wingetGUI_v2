@@ -8,23 +8,27 @@ import '../winget_commands.dart';
 
 const Winget winget = Winget.search;
 
-class SearchButton extends RunButton {
+class SearchButton extends RunButton with TextButtonMixin {
   final bool Function(PackageInfosPeek)? packageFilter;
+  final String searchTarget;
+  @override
+  final IconData? icon = null;
   SearchButton({
     super.key,
-    required String searchTarget,
+    required this.searchTarget,
     required AppLocalizations localization,
     String? title,
     this.packageFilter,
-  }) : super(
-            text: searchTarget,
-            title: title ??
-                winget.titleWithInput(searchTarget, localization: localization),
-            command: [...winget.fullCommand, searchTarget]);
+  }) : super(command: [...winget.fullCommand, searchTarget]);
 
   @override
-  BaseButton buttonType(BuildContext context) => Button(
-      onPressed: () =>
-          SearchPage.search(context, packageFilter: packageFilter)(text),
-      child: child());
+  BaseButton buttonType(
+          {required Widget child, required VoidCallback? onPressed}) =>
+      Button(onPressed: onPressed, child: child);
+
+  @override
+  void onPressed(BuildContext context) =>
+      SearchPage.search(context, packageFilter: packageFilter)(searchTarget);
+  @override
+  String get buttonText => searchTarget;
 }

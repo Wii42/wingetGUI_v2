@@ -5,7 +5,6 @@ import 'package:winget_gui/widget_assets/package_action_button.dart';
 
 import '../output_handling/package_infos/package_infos.dart';
 import '../winget_process/package_action_type.dart';
-import 'command_button.dart';
 
 class RightSideButtons extends StatelessWidget {
   final PackageInfos infos;
@@ -86,7 +85,7 @@ class RightSideButtons extends StatelessWidget {
         disabled: buttonInfo.visibility.isDisabled);
   }
 
-  CommandButton textButton(PackageActionType action, AppLocalizations locale,
+  Widget textButton(PackageActionType action, AppLocalizations locale,
       {required bool disabled}) {
     return PackageActionButton(
       type: action,
@@ -97,13 +96,10 @@ class RightSideButtons extends StatelessWidget {
     );
   }
 
-  CommandIconButton iconButton(
+  Widget iconButton(
       PackageActionType action, AppLocalizations locale, String appName,
       {required bool disabled}) {
     return PackageActionIconButton(
-      text: action.winget.title(locale),
-      command: action.createCommand(infos),
-      title: action.winget.titleWithInput(appName, localization: locale),
       icon: action.winget.icon ?? FluentIcons.error,
       padding: numberOfButtons < 3
           ? const EdgeInsets.all(5)
