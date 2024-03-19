@@ -34,7 +34,14 @@ abstract class AbstractLinkButton extends AbstractButton {
   Widget buildButton(BuildContext context) {
     return Link(
       uri: url,
-      builder: (context, open) => buttonType(child: child, onPressed: open),
+      builder: (context, open) => buttonType(
+        child: child,
+        onPressed: disabledOrNullOr(open),
+      ),
     );
   }
+
+  Future<void> Function()? disabledOrNullOr(
+          Future<void> Function()? onPressed) =>
+      disabled || onPressed == null ? null : onPressed;
 }

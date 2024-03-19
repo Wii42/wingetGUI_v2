@@ -40,12 +40,15 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  static void Function(String) search(BuildContext context, {bool Function(PackageInfosPeek)? packageFilter}) {
+  static void Function(String) search(BuildContext context,
+      {bool Function(PackageInfosPeek)? packageFilter}) {
     NavigatorState navigator = Navigator.of(context);
     return (input) {
       navigator.pushNamed(Routes.deepSearchPage.route,
           arguments: SearchRouteParameter(
-              commandParameter: [input], titleAddon: "'$input'", packageFilter: packageFilter));
+              commandParameter: [input],
+              titleAddon: "'$input'",
+              packageFilter: packageFilter));
     };
   }
 

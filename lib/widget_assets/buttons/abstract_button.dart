@@ -19,7 +19,7 @@ abstract class AbstractButton extends StatelessWidget {
   }
 
   /// The button to be displayed. should only be overridden by the higher level classes.
-  /// Should use [buttonType] to create the button and pass [child] as its child.
+  /// Should use [buttonType] to create the button and pass [child] and [disabledOr] idf possible.
   Widget buildButton(BuildContext context);
 
   /// The tooltip to be displayed when hovering over the button.
@@ -32,6 +32,11 @@ abstract class AbstractButton extends StatelessWidget {
 
   /// The button's child widget, e.g. what is displayed on the button.
   Widget get child;
+
+  /// If the button is disabled, it returns null, otherwise it returns the onPressed function.
+  void Function()? disabledOr(
+          void Function(BuildContext)? onPressed, BuildContext context) =>
+      disabled || onPressed == null ? null : () => onPressed(context);
 }
 
 mixin TextButtonMixin on AbstractButton {
@@ -86,4 +91,13 @@ mixin PlainButtonMixin on AbstractButton {
   BaseButton buttonType(
           {required Widget child, required VoidCallback? onPressed}) =>
       Button(onPressed: onPressed, child: child);
+}
+
+mixin CustomToolTipMixin on AbstractButton {
+  String get tooltipMessage;
+
+  @override
+  ButtonTooltip buildTooltip(BuildContext context, {required Widget child}) {
+    return CustomTooltip(message: tooltipMessage, button: child);
+  }
 }

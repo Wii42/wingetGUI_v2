@@ -51,3 +51,15 @@ class LinkToolTip extends ButtonTooltip {
   @override
   String get message => url.toString();
 }
+
+class CustomTooltip extends ButtonTooltip {
+  @override
+  final String message;
+
+  const CustomTooltip({
+    super.key,
+    required this.message,
+    required super.button,
+    super.useMousePosition = false,
+  });
+}

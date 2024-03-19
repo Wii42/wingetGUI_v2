@@ -6,8 +6,7 @@ import '../../winget_process/output_page.dart';
 import '../../winget_process/winget_process.dart';
 import 'abstract_button.dart';
 
-
-
+/// A button that runs a winget command and shows the output in a new page.
 class CommandButton extends RunButton
     with TextButtonWithIconMixin, FilledButtonMixin, RunAndOutputMixin {
   @override
@@ -48,15 +47,26 @@ class CommandIconButton extends RunButton
 
 mixin RunAndOutputMixin on RunButton {
   @override
-  void onPressed(BuildContext context) {
-    NavigatorState router = Navigator.of(context);
-    WingetProcess process = WingetProcess.fromCommand(command);
-    router.push(FluentPageRoute(
-        builder: (_) => OutputPage(
-              process: process,
-              title: pageTitle,
-            )));
-  }
+  void onPressed(BuildContext context) => runCommand(
+        context: context,
+        command: command,
+        title: pageTitle,
+      );
 
   String pageTitle(AppLocalizations locale);
+
+  static void runCommand(
+      {required BuildContext context,
+      required List<String> command,
+      String Function(AppLocalizations)? title}) {
+    WingetProcess process = WingetProcess.fromCommand(command);
+    Navigator.of(context).push(
+      FluentPageRoute(
+        builder: (_) => OutputPage(
+          process: process,
+          title: title,
+        ),
+      ),
+    );
+  }
 }
