@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/widget_assets/abstract_link_button.dart';
+import 'abstract_link_button.dart';
 
 class LinkButton extends AbstractLinkButton {
   final Text text;

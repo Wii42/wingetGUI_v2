@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/widget_assets/favicon_widget.dart';
-import 'package:winget_gui/widget_assets/right_side_buttons.dart';
+import 'package:winget_gui/widget_assets/buttons/right_side_buttons.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 import '../../../package_sources/package_source.dart';
 import '../../../routes.dart';

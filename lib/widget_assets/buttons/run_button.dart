@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/widget_assets/run_button_tooltip.dart';
+import 'package:winget_gui/widget_assets/buttons/run_button_tooltip.dart';
 
 /// A button that runs a command when pressed.
 /// The concrete behaviour and appearance needs to be implemented by the subclasses, for example with the provided mixins.

@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 
-import '../../../widget_assets/inline_link_button.dart';
+import '../../../widget_assets/buttons/inline_link_button.dart';
 
 abstract class Compartment extends StatelessWidget {
   const Compartment({super.key});

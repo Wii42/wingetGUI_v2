@@ -3,7 +3,7 @@ import 'package:flutter/material.dart' as material;
 
 import '../../helpers/extensions/string_extension.dart';
 import '../../widget_assets/decorated_card.dart';
-import '../../widget_assets/inline_link_button.dart';
+import '../../widget_assets/buttons/inline_link_button.dart';
 import 'table_parser.dart';
 
 class TableBuilder extends StatelessWidget {

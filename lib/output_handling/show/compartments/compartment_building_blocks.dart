@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
-import '../../../widget_assets/icon_link_button.dart';
-import '../../../widget_assets/link_button.dart';
+import '../../../widget_assets/buttons/icon_link_button.dart';
+import '../../../widget_assets/buttons/link_button.dart';
 import '../../package_infos/info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

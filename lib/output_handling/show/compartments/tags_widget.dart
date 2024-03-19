@@ -3,7 +3,7 @@ import 'package:winget_gui/output_handling/package_infos/package_attribute.dart'
 import 'package:winget_gui/output_handling/show/compartments/expander_compartment.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../widget_assets/search_button.dart';
+import '../../../widget_assets/buttons/search_button.dart';
 import '../../package_infos/info.dart';
 
 class TagsWidget extends ExpanderCompartment{

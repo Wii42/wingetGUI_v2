@@ -1,5 +1,3 @@
-
-
 import '../output_handling/package_infos/info.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../winget_commands.dart';

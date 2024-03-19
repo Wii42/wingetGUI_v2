@@ -1,10 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/widget_assets/package_action_button.dart';
+import 'package:winget_gui/widget_assets/buttons/package_action_button.dart';
 
-import '../output_handling/package_infos/package_infos.dart';
-import '../winget_process/package_action_type.dart';
+import '../../output_handling/package_infos/package_infos.dart';
+import '../../winget_process/package_action_type.dart';
 
 class RightSideButtons extends StatelessWidget {
   final PackageInfos infos;
