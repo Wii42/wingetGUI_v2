@@ -10,6 +10,8 @@ import '../helpers/route_parameter.dart';
 import '../routes.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../widget_assets/buttons/page_button.dart';
+
 class LogsPage extends StatefulWidget {
   const LogsPage({super.key});
 
@@ -54,29 +56,7 @@ class _LogsPageState extends State<LogsPage> {
       title: Routes.logsPage.title(AppLocalizations.of(context)!),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (LogSeverity severity in LogSeverity.values)
-                filter == severity
-                    ? FilledButton(
-                        child: Text(severity.displayName),
-                        onPressed: () {
-                          setState(() {
-                            filter = severity;
-                          });
-                        },
-                      )
-                    : Button(
-                        child: Text(severity.displayName),
-                        onPressed: () {
-                          setState(() {
-                            filter = severity;
-                          });
-                        },
-                      )
-            ].withSpaceBetween(width: 10),
-          ),
+          severitySelector(),
           Expanded(
             child: StreamBuilder(
               stream: LogStream.instance.logsListStream,
@@ -119,6 +99,32 @@ class _LogsPageState extends State<LogsPage> {
     );
   }
 
+  Row severitySelector() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (LogSeverity severity in LogSeverity.values)
+          filter == severity
+              ? FilledButton(
+                  child: Text(severity.displayName),
+                  onPressed: () {
+                    setState(() {
+                      filter = severity;
+                    });
+                  },
+                )
+              : Button(
+                  child: Text(severity.displayName),
+                  onPressed: () {
+                    setState(() {
+                      filter = severity;
+                    });
+                  },
+                )
+      ].withSpaceBetween(width: 10),
+    );
+  }
+
   Padding listItem(LogMessage log, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -128,12 +134,12 @@ class _LogsPageState extends State<LogsPage> {
           children: [
             Expanded(child: LogsPage.header(log, context)),
             if (log.message != null)
-              IconButton(
-                  icon: const Icon(FluentIcons.info),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Routes.logDetailsPage.route,
-                        arguments: LogRouteParameter(log: log));
-                  }),
+              PageIconButton(
+                icon: FluentIcons.info,
+                pageRoute: Routes.logDetailsPage,
+                tooltipMessage: 'View log details',
+                routeParameter: LogRouteParameter(log: log),
+              ),
           ],
         ),
       ),

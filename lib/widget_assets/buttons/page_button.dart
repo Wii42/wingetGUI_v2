@@ -1,24 +1,25 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/buttons/abstract_button.dart';
-import 'package:winget_gui/widget_assets/buttons/run_button.dart';
-import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
 
 import '../../helpers/route_parameter.dart';
 import '../../routes.dart';
 import 'normal_button.dart';
 
-class PageButton extends NormalButton with TextButtonMixin, PlainButtonMixin, CustomToolTipMixin {
+class PageButton extends NormalButton
+    with TextButtonMixin, PlainButtonMixin, CustomToolTipMixin, PushPageMixin {
+  @override
   final Routes pageRoute;
   @override
   final String buttonText;
   @override
   final String tooltipMessage;
+  @override
   final RouteParameter? routeParameter;
   PageButton({
     super.key,
     required this.pageRoute,
     required this.buttonText,
-    this.tooltipMessage = 'Open page',
+    required this.tooltipMessage,
     this.routeParameter,
   });
 
@@ -27,4 +28,37 @@ class PageButton extends NormalButton with TextButtonMixin, PlainButtonMixin, Cu
     NavigatorState navigator = Navigator.of(context);
     navigator.pushNamed(pageRoute.route, arguments: routeParameter);
   }
+}
+
+class PageIconButton extends NormalButton
+    with IconButtonMixin, CustomToolTipMixin, PushPageMixin {
+  @override
+  final Routes pageRoute;
+  @override
+  final IconData icon;
+  @override
+  final EdgeInsetsGeometry padding;
+  @override
+  final String tooltipMessage;
+  @override
+  final RouteParameter? routeParameter;
+  PageIconButton({
+    super.key,
+    required this.pageRoute,
+    required this.icon,
+    this.padding = EdgeInsets.zero,
+    required this.tooltipMessage,
+    this.routeParameter,
+  });
+}
+
+mixin PushPageMixin on NormalButton {
+  @override
+  void onPressed(BuildContext context) {
+    NavigatorState navigator = Navigator.of(context);
+    navigator.pushNamed(pageRoute.route, arguments: routeParameter);
+  }
+
+  Routes get pageRoute;
+  RouteParameter? get routeParameter;
 }
