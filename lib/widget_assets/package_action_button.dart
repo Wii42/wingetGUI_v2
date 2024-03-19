@@ -6,7 +6,7 @@ import '../output_handling/package_infos/package_infos.dart';
 import '../winget_process/package_action_type.dart';
 
 class PackageActionButton extends RunButton
-    with TextButtonMixin, FilledButtonMixin, RunPackageActionMixin {
+    with TextButtonWithIconMixin, FilledButtonMixin, RunPackageActionMixin {
   @override
   final PackageActionType type;
   @override
@@ -49,4 +49,13 @@ class PackageActionIconButton extends RunButton
     required this.infos,
     super.disabled,
   }) : super(command: type.createCommand(infos));
+}
+
+mixin RunPackageActionMixin on RunButton {
+  PackageActionType get type;
+
+  PackageInfos get infos;
+
+  @override
+  void onPressed(BuildContext context) => type.runAction(infos, context);
 }

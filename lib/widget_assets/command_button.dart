@@ -2,8 +2,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/widget_assets/run_button.dart';
 
+import '../winget_process/output_page.dart';
+import '../winget_process/winget_process.dart';
+
 class CommandButton extends RunButton
-    with TextButtonMixin, FilledButtonMixin, RunAndOutputMixin {
+    with TextButtonWithIconMixin, FilledButtonMixin, RunAndOutputMixin {
   @override
   final String buttonText;
   @override
@@ -38,4 +41,19 @@ class CommandIconButton extends RunButton
 
   @override
   String pageTitle(AppLocalizations locale) => title;
+}
+
+mixin RunAndOutputMixin on RunButton {
+  @override
+  void onPressed(BuildContext context) {
+    NavigatorState router = Navigator.of(context);
+    WingetProcess process = WingetProcess.fromCommand(command);
+    router.push(FluentPageRoute(
+        builder: (_) => OutputPage(
+              process: process,
+              title: pageTitle,
+            )));
+  }
+
+  String pageTitle(AppLocalizations locale);
 }

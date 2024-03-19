@@ -12,7 +12,6 @@ class SearchButton extends RunButton with TextButtonMixin {
   final bool Function(PackageInfosPeek)? packageFilter;
   final String searchTarget;
   @override
-  final IconData? icon = null;
   SearchButton({
     super.key,
     required this.searchTarget,

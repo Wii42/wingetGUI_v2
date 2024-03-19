@@ -1,14 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/run_button_tooltip.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../output_handling/package_infos/package_infos.dart';
-import '../winget_process/output_page.dart';
-import '../winget_process/package_action_type.dart';
-import '../winget_process/winget_process.dart';
-
+/// A button that runs a command when pressed.
+/// The concrete behaviour and appearance needs to be implemented by the subclasses, for example with the provided mixins.
 abstract class RunButton extends StatelessWidget {
+  /// The command to be run when the button is pressed. Needed for the tooltip.
   final List<String> command;
   final bool disabled;
 
@@ -27,6 +24,7 @@ abstract class RunButton extends StatelessWidget {
     );
   }
 
+  /// If the button is disabled, it returns null, otherwise it returns the onPressed function.
   void Function()? _disabledOr(
           void Function(BuildContext) onPressed, BuildContext context) =>
       disabled ? null : () => onPressed(context);
@@ -45,7 +43,14 @@ abstract class RunButton extends StatelessWidget {
 
 mixin TextButtonMixin on RunButton {
   String get buttonText;
+
+  @override
+  Widget get child => Text(buttonText);
+}
+
+mixin TextButtonWithIconMixin on RunButton {
   IconData? get icon;
+  String get buttonText;
 
   @override
   Widget get child => icon != null
@@ -81,27 +86,4 @@ mixin FilledButtonMixin on RunButton {
       {required Widget child, required VoidCallback? onPressed}) {
     return FilledButton(onPressed: onPressed, child: child);
   }
-}
-mixin RunAndOutputMixin on RunButton {
-  @override
-  void onPressed(BuildContext context) {
-    NavigatorState router = Navigator.of(context);
-    WingetProcess process = WingetProcess.fromCommand(command);
-    router.push(FluentPageRoute(
-        builder: (_) => OutputPage(
-              process: process,
-              title: pageTitle,
-            )));
-  }
-
-  String pageTitle(AppLocalizations locale);
-}
-
-mixin RunPackageActionMixin on RunButton {
-  PackageActionType get type;
-
-  PackageInfos get infos;
-
-  @override
-  void onPressed(BuildContext context) => type.runAction(infos, context);
 }
