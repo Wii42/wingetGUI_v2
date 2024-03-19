@@ -3,21 +3,10 @@ import 'package:url_launcher/link.dart';
 import 'package:winget_gui/widget_assets/buttons/abstract_button.dart';
 import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
 
- abstract class AbstractLinkButton extends StatelessWidget {
+abstract class AbstractLinkButton extends AbstractButton {
   final Uri url;
 
   const AbstractLinkButton({super.key, required this.url});
-
-  @override
-  Widget build(BuildContext context) {
-    return LinkToolTip(
-        useMousePosition: false,
-        url: url,
-        button: Link(
-          uri: url,
-          builder: (context, open) => button(context, open),
-        ));
-  }
 
   String checkUrlContainsHttp(String url) {
     if (url.startsWith('http://') ||
@@ -30,8 +19,6 @@ import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
     }
   }
 
-  BaseButton button(BuildContext context, Future<void> Function()? open);
-
   @override
   ButtonTooltip buildTooltip(BuildContext context, {required Widget child}) {
     return LinkToolTip(
@@ -41,5 +28,13 @@ import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
           uri: url,
           builder: (context, open) => child,
         ));
+  }
+
+  @override
+  Widget buildButton(BuildContext context) {
+    return Link(
+      uri: url,
+      builder: (context, open) => buttonType(child: child, onPressed: open),
+    );
   }
 }

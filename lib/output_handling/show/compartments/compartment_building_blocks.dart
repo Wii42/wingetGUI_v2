@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 
 import '../../../helpers/extensions/string_extension.dart';
-import '../../../widget_assets/buttons/icon_link_button.dart';
+import '../../../widget_assets/buttons/mini_icon_link_button.dart';
 import '../../../widget_assets/buttons/link_button.dart';
 import '../../package_infos/info.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -51,7 +51,7 @@ mixin CompartmentBuildingBlocks on Compartment {
             WidgetSpan(
                 child: ConstrainedBox(
                     constraints: const BoxConstraints(maxHeight: 19),
-                    child: IconLinkButton(url: url)),
+                    child: MiniIconLinkButton(url: url)),
                 alignment: PlaceholderAlignment.middle)
           ]));
     }
@@ -63,7 +63,7 @@ mixin CompartmentBuildingBlocks on Compartment {
     AppLocalizations locale = AppLocalizations.of(context)!;
     if (StringHelper.isLink(text.value)) {
       return LinkButton(
-          url: Uri.parse(text.value), text: Text(text.title(locale)));
+          url: Uri.parse(text.value), buttonText: text.title(locale));
     }
     return textWithLinks(text: text.value, context: context);
   }
@@ -71,7 +71,7 @@ mixin CompartmentBuildingBlocks on Compartment {
   Widget linkButton(
       {required Info<Uri> link, required AppLocalizations locale}) {
     return LinkButton(
-        url: link.value, text: Text(link.customTitle ?? link.title(locale)));
+        url: link.value, buttonText: link.customTitle ?? link.title(locale));
   }
 
   Widget copyableInfo(

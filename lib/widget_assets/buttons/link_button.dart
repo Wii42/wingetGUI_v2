@@ -1,16 +1,10 @@
-import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/widget_assets/buttons/abstract_button.dart';
 import 'abstract_link_button.dart';
 
-class LinkButton extends AbstractLinkButton {
-  final Text text;
-
-  const LinkButton({super.key, required super.url, required this.text});
-
+class LinkButton extends AbstractLinkButton
+    with TextButtonMixin, PlainButtonMixin {
   @override
-  BaseButton button(BuildContext context, Future<void> Function()? open) {
-    return Button(
-      onPressed: open,
-      child: text,
-    );
-  }
+  final String buttonText;
+
+  const LinkButton({super.key, required super.url, required this.buttonText});
 }

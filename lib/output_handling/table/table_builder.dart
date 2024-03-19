@@ -46,7 +46,7 @@ class TableBuilder extends StatelessWidget {
 
   Widget tableCell(String text) {
     return (StringHelper.isLink(text))
-        ? InlineLinkButton(url: Uri.parse(text), text: Text(text))
+        ? InlineLinkButton(url: Uri.parse(text), buttonText: text)
         : Text(text);
   }
 }

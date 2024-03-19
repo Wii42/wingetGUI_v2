@@ -146,9 +146,9 @@ class TitleWidget extends Compartment {
     Info<Uri> website = infos.website!;
     return LinkButton(
         url: website.value,
-        text: Text(website.value.toString().startsWith('https://github.com/')
+        buttonText: website.value.toString().startsWith('https://github.com/')
             ? 'GitHub'
-            : website.title(locale)));
+            : website.title(locale));
   }
 
   StoreButton _showInStore(AppLocalizations locale) {

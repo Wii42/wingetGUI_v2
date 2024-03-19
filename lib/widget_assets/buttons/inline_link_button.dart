@@ -1,20 +1,23 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import 'abstract_button.dart';
 import 'abstract_link_button.dart';
 
-class InlineLinkButton extends AbstractLinkButton {
-  final Text text;
-  const InlineLinkButton({super.key, required super.url, required this.text});
+class InlineLinkButton extends AbstractLinkButton with TextButtonMixin {
+  @override
+  final String buttonText;
+  const InlineLinkButton(
+      {super.key, required super.url, required this.buttonText});
 
   @override
-  BaseButton button(BuildContext context, Future<void> Function()? open) {
+  BaseButton buttonType(
+      {required Widget child, required VoidCallback? onPressed}) {
     return HyperlinkButton(
       style: ButtonStyle(
         padding: ButtonState.all(EdgeInsets.zero),
-        //textStyle: ButtonState.all(FluentTheme.of(context).typography.body),
       ),
-      onPressed: open,
-      child: text,
+      onPressed: onPressed,
+      child: child,
     );
   }
 }

@@ -9,7 +9,7 @@ import 'abstract_button.dart';
 
 const Winget winget = Winget.search;
 
-class SearchButton extends RunButton with TextButtonMixin {
+class SearchButton extends RunButton with TextButtonMixin, PlainButtonMixin {
   final bool Function(PackageInfosPeek)? packageFilter;
   final String searchTarget;
   @override
@@ -20,11 +20,6 @@ class SearchButton extends RunButton with TextButtonMixin {
     String? title,
     this.packageFilter,
   }) : super(command: [...winget.fullCommand, searchTarget]);
-
-  @override
-  BaseButton buttonType(
-          {required Widget child, required VoidCallback? onPressed}) =>
-      Button(onPressed: onPressed, child: child);
 
   @override
   void onPressed(BuildContext context) =>

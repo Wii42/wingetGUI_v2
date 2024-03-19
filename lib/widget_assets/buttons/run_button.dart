@@ -22,4 +22,17 @@ abstract class RunButton extends AbstractButton {
       command: command,
     );
   }
+
+  @override
+  Widget buildButton(BuildContext context) {
+    return buttonType(child: child, onPressed: _disabledOr(onPressed, context));
+  }
+
+  /// If the button is disabled, it returns null, otherwise it returns the onPressed function.
+  void Function()? _disabledOr(
+          void Function(BuildContext) onPressed, BuildContext context) =>
+      disabled ? null : () => onPressed(context);
+
+  /// What happens when the button is pressed.
+  void onPressed(BuildContext context);
 }
