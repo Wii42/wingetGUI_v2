@@ -12,12 +12,14 @@ const Winget winget = Winget.search;
 class SearchButton extends RunButton with TextButtonMixin, PlainButtonMixin {
   final bool Function(PackageInfosPeek)? packageFilter;
   final String searchTarget;
+  final String? customButtonText;
   @override
   SearchButton({
     super.key,
     required this.searchTarget,
     required AppLocalizations localization,
     String? title,
+    this.customButtonText,
     this.packageFilter,
   }) : super(command: [...winget.fullCommand, searchTarget]);
 
@@ -25,5 +27,5 @@ class SearchButton extends RunButton with TextButtonMixin, PlainButtonMixin {
   void onPressed(BuildContext context) =>
       SearchPage.search(context, packageFilter: packageFilter)(searchTarget);
   @override
-  String get buttonText => searchTarget;
+  String get buttonText => customButtonText ?? searchTarget;
 }

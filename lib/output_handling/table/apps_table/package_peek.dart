@@ -7,6 +7,7 @@ import 'package:winget_gui/widget_assets/buttons/right_side_buttons.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 import '../../../package_sources/package_source.dart';
 import '../../../routes.dart';
+import '../../../widget_assets/buttons/page_button.dart';
 import '../../package_infos/package_infos_peek.dart';
 
 class PackagePeek extends StatelessWidget {
@@ -43,14 +44,16 @@ class PackagePeek extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Button(
-      onPressed: (isClickable())
-          ? () {
-              if (infos.id != null) {
-                pushPackageDetails(context);
-              }
-            }
-          : null,
+    return CustomPageButton(
+      pageRoute: Routes.show,
+      disabled: !isClickable(),
+      routeParameter: PackageRouteParameter(commandParameter: [
+        '--id',
+        infos.id!.value,
+        //if (infos.hasVersion()) ...['-v', infos.version!.value]
+      ], titleAddon: infos.name?.value, package: infos),
+      tooltipMessage: infos.name?.value ?? 'Show App',
+      useMousePosition: true,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: SizedBox(height: 90, child: _shortInfo(context)),
@@ -240,8 +243,9 @@ class PackagePeek extends StatelessWidget {
   static double faviconSize() => 60;
 
   static Widget get prototypeWidget {
-    return Button(
-      onPressed: () {},
+    return CustomPageButton(
+      pageRoute: Routes.show,
+      tooltipMessage: 'Show App',
       child: const Padding(
         padding: EdgeInsets.all(10),
         child: SizedBox(height: 90),

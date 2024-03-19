@@ -22,12 +22,6 @@ class PageButton extends NormalButton
     required this.tooltipMessage,
     this.routeParameter,
   });
-
-  @override
-  void onPressed(BuildContext context) {
-    NavigatorState navigator = Navigator.of(context);
-    navigator.pushNamed(pageRoute.route, arguments: routeParameter);
-  }
 }
 
 class PageIconButton extends NormalButton
@@ -49,6 +43,29 @@ class PageIconButton extends NormalButton
     this.padding = EdgeInsets.zero,
     required this.tooltipMessage,
     this.routeParameter,
+  });
+}
+
+class CustomPageButton extends NormalButton
+    with PlainButtonMixin, CustomToolTipMixin, PushPageMixin {
+  @override
+  final Widget child;
+  @override
+  final Routes pageRoute;
+  @override
+  final String tooltipMessage;
+  @override
+  final RouteParameter? routeParameter;
+  @override
+  final bool useMousePosition;
+  CustomPageButton({
+    super.key,
+    required this.pageRoute,
+    required this.tooltipMessage,
+    required this.child,
+    this.routeParameter,
+    super.disabled,
+    this.useMousePosition = false,
   });
 }
 

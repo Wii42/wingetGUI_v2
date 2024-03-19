@@ -98,6 +98,12 @@ mixin CustomToolTipMixin on AbstractButton {
 
   @override
   ButtonTooltip buildTooltip(BuildContext context, {required Widget child}) {
-    return CustomTooltip(message: tooltipMessage, button: child);
+    return CustomTooltip(
+      message: tooltipMessage,
+      button: child,
+      useMousePosition: useMousePosition,
+    );
   }
+
+  bool get useMousePosition => false;
 }

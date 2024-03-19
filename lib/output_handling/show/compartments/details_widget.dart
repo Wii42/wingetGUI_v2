@@ -8,6 +8,8 @@ import 'package:winget_gui/package_sources/package_source.dart';
 import '../../../helpers/route_parameter.dart';
 import '../../../navigation_pages/search_page.dart';
 import '../../../routes.dart';
+import '../../../widget_assets/buttons/page_button.dart';
+import '../../../widget_assets/buttons/search_button.dart';
 import 'expander_compartment.dart';
 
 class DetailsWidget extends ExpanderCompartment {
@@ -78,22 +80,21 @@ class DetailsWidget extends ExpanderCompartment {
   Widget moreFromPublisher(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     if (infos.publisherID != null) {
-      return Button(
-        child: Text(locale
-            .moreFromPublisher(infos.publisherName ?? infos.publisherID!)),
-        onPressed: () {
-          Navigator.of(context).pushNamed(Routes.publisherPage.route,
-              arguments: StringRouteParameter(string: infos.publisherID!));
-        },
+      return PageButton(
+        pageRoute: Routes.publisherPage,
+        routeParameter: StringRouteParameter(string: infos.publisherID!),
+        buttonText:
+            locale.moreFromPublisher(infos.publisherName ?? infos.publisherID!),
+        tooltipMessage: 'Show all Apps from this Publisher',
       );
     }
     if (infos.agreement?.publisher?.text != null &&
         infos.agreement!.publisher!.text!.isNotEmpty) {
-      return Button(
-        child:
-            Text(locale.moreFromPublisher(infos.agreement!.publisher!.text!)),
-        onPressed: () =>
-            SearchPage.search(context)(infos.agreement!.publisher!.text!),
+      return SearchButton(
+        searchTarget: infos.agreement!.publisher!.text!,
+        customButtonText:
+            locale.moreFromPublisher(infos.agreement!.publisher!.text!),
+        localization: locale,
       );
     }
     return const SizedBox();
