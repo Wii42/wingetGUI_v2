@@ -4,6 +4,7 @@ import 'package:winget_gui/widget_assets/buttons/run_button.dart';
 
 import '../../output_handling/package_infos/package_infos.dart';
 import '../../winget_process/package_action_type.dart';
+import 'abstract_button.dart';
 
 
 class PackageActionButton extends RunButton

@@ -5,6 +5,7 @@ import 'package:winget_gui/widget_assets/buttons/run_button.dart';
 import '../../navigation_pages/search_page.dart';
 import '../../output_handling/package_infos/package_infos_peek.dart';
 import '../../winget_commands.dart';
+import 'abstract_button.dart';
 
 const Winget winget = Winget.search;
 
