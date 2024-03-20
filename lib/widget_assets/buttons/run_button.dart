@@ -1,7 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
 
-import 'abstract_button.dart';
 import 'normal_button.dart';
 
 /// A button that runs a command when pressed.

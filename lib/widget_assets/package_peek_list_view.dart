@@ -13,7 +13,7 @@ import 'package:winget_gui/winget_db/db_message.dart';
 
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
-import '../output_handling/table/apps_table/package_peek.dart';
+import '../output_handling/table/package_peek.dart';
 import '../winget_db/db_table.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -73,17 +73,12 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
               locale.noAppsFound,
             ));
           }
-          List<PackageInfosPeek> packages = filterPackages();
-          packages = sortPackages(packages, sortBy);
-          if (sortReversed) {
-            packages = packages.reversed.toList();
-          }
+          List<PackageInfosPeek> packages = getVisiblePackages();
           return Column(
             children: [
               menuOptions(context, packages),
               Expanded(
                 child: Stack(
-                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (packages.isNotEmpty)
                       buildListView(packages)
@@ -98,6 +93,15 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
             ],
           );
         });
+  }
+
+  List<PackageInfosPeek> getVisiblePackages() {
+    List<PackageInfosPeek> packages = filterPackages();
+    packages = sortPackages(packages, sortBy);
+    if (sortReversed) {
+      packages = packages.reversed.toList();
+    }
+    return packages;
   }
 
   List<PackageInfosPeek> get prefilteredInfos {
@@ -139,20 +143,44 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
 
   ListView buildListView(List<PackageInfosPeek> packages) {
     return ListView.builder(
-        itemBuilder: (context, index) {
-          PackageInfosPeek package = packages[index];
-          if (!package.checkedForScreenshots) {
-            package.setImplicitInfos();
-          }
-          bool installed = widget.packageOptions.isInstalled(package);
-          bool upgradable = widget.packageOptions.isUpgradable(package);
-          return wrapInPadding(
-              buildPackagePeek(package, installed, upgradable));
-        },
+        itemBuilder: buildByIndex(packages),
         itemCount: packages.length,
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         prototypeItem: wrapInPadding(PackagePeek.prototypeWidget));
+  }
+
+  Widget Function(BuildContext, int) buildByIndex(
+      List<PackageInfosPeek> packages) {
+    return (BuildContext context, int index) {
+      PackageInfosPeek package = packages[index];
+      if (!package.checkedForScreenshots) {
+        package.setImplicitInfos();
+      }
+      bool installed = widget.packageOptions.isInstalled(package);
+      bool upgradable = widget.packageOptions.isUpgradable(package);
+      return wrapInPadding(buildPackagePeek(package, installed, upgradable));
+    };
+  }
+
+  Widget wrapInPadding(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: child,
+    );
+  }
+
+  Widget buildPackagePeek(
+      PackageInfosPeek package, bool installed, bool upgradable) {
+    return PackagePeek(
+      package,
+      installButton: !installed || widget.packageOptions.showAllButtons,
+      uninstallButton: installed || widget.packageOptions.showAllButtons,
+      upgradeButton: upgradable || widget.packageOptions.showAllButtons,
+      showMatch: widget.packageOptions.showMatch,
+      showInstalledIcon: installed && widget.packageOptions.showInstalledIcon,
+      defaultSourceIsLocalPC: widget.packageOptions.defaultSourceIsLocalPC,
+    );
   }
 
   List<PackageInfosPeek> filterPackages() {
@@ -181,26 +209,6 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       packages = List.of(packages);
     }
     return sortBy.sort(packages);
-  }
-
-  Widget wrapInPadding(Widget child) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: child,
-    );
-  }
-
-  Widget buildPackagePeek(
-      PackageInfosPeek package, bool installed, bool upgradable) {
-    return PackagePeek(
-      package,
-      installButton: !installed,
-      uninstallButton: installed,
-      upgradeButton: upgradable,
-      showMatch: widget.packageOptions.showMatch,
-      showInstalledIcon: installed && widget.packageOptions.showInstalledIcon,
-      defaultSourceIsLocalPC: widget.packageOptions.defaultSourceIsLocalPC,
-    );
   }
 
   Widget menuOptions(BuildContext context, List<PackageInfos> visiblePackages) {
@@ -256,7 +264,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
               icon: Icon(
                   sortReversed ? FluentIcons.sort_up : FluentIcons.sort_down),
               onPressed: () => setState(() => sortReversed = !sortReversed)),
-          for(PackageActionType action in widget.menuOptions.runActionOnAllPackagesButtons)
+          for (PackageActionType action
+              in widget.menuOptions.runActionOnAllPackagesButtons)
             packageActionOnAll(visiblePackages, action),
         ].withSpaceBetween(width: 5),
       ),
@@ -330,6 +339,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 }
 
+/// Options for the [PackagePeekList] widget, concerning the menu options bar
 class PackageListMenuOptions {
   final bool onlyWithSourceButton;
   final bool onlyWithSourceInitialValue;
@@ -356,13 +366,22 @@ class PackageListMenuOptions {
   });
 }
 
+/// Options for the [PackagePeekList] widget, concerning the individual packages
 class PackageListPackageOptions {
-  final bool Function(PackageInfos package) isInstalled;
+  final bool Function(PackageInfosPeek package) isInstalled;
   final bool Function(PackageInfosPeek package) isUpgradable;
   final bool showMatch;
+
+  /// Show an icon indicating if the package is installed
   final bool showInstalledIcon;
+
+  /// If true, if [package.source] is null, it defaults to be the local PC
   final bool defaultSourceIsLocalPC;
   final bool Function(PackageInfosPeek)? packageFilter;
+
+  /// If true, all buttons are shown, overriding [isInstalled] and [isUpgradable].
+  /// If false, only the necessary buttons are shown
+  final bool showAllButtons;
 
   const PackageListPackageOptions({
     this.isInstalled = PackagePeekListView.defaultFalse,
@@ -371,5 +390,6 @@ class PackageListPackageOptions {
     this.showInstalledIcon = true,
     this.packageFilter,
     this.defaultSourceIsLocalPC = false,
+    this.showAllButtons = false,
   });
 }

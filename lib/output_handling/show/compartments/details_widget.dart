@@ -6,7 +6,6 @@ import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
 import '../../../helpers/route_parameter.dart';
-import '../../../navigation_pages/search_page.dart';
 import '../../../routes.dart';
 import '../../../widget_assets/buttons/page_button.dart';
 import '../../../widget_assets/buttons/search_button.dart';

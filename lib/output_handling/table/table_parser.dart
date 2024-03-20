@@ -6,8 +6,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/table_builder.dart';
+import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import 'package:winget_gui/winget_db/db_table.dart';
-import '../../widget_assets/package_peek_list.dart';
 import '../output_parser.dart';
 import '../package_infos/package_attribute.dart';
 import '../package_infos/package_infos_peek.dart';
@@ -199,6 +199,13 @@ class ParsedAppTable extends ParsedTable {
 
   @override
   List<Widget?> singleLineRepresentations() {
-    return [PackagePeekList(packages)];
+    return [
+      SizedBox(
+        height: 400,
+        child: PackagePeekListView(
+            dbTable: DBTable(packages, content: 'Apps', wingetCommand: []),
+            packageOptions: const PackageListPackageOptions(showAllButtons: true)),
+      )
+    ];
   }
 }

@@ -8,7 +8,7 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 import '../../../package_sources/package_source.dart';
 import '../../../routes.dart';
 import '../../../widget_assets/buttons/page_button.dart';
-import '../../package_infos/package_infos_peek.dart';
+import '../package_infos/package_infos_peek.dart';
 
 class PackagePeek extends StatelessWidget {
   final PackageInfosPeek infos;
