@@ -34,7 +34,7 @@ enum PackageAttribute {
   category(apiKey: 'Category'),
   pricing(apiKey: 'Pricing'),
   freeTrial(apiKey: 'FreeTrial'),
-  ageRating(apiKey: 'AgeRating'),
+  ageRating(apiKey: 'AgeRatings'),
   installerType(apiKey: 'InstallerType'),
   storeProductID(apiKey: 'MSStoreProductIdentifier', copyable: true),
   installerURL(apiKey: 'InstallerUrl'),
