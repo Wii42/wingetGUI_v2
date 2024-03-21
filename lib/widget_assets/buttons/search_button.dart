@@ -29,3 +29,13 @@ class SearchButton extends RunButton with TextButtonMixin, PlainButtonMixin {
   @override
   String get buttonText => customButtonText ?? searchTarget;
 }
+
+class FilledSearchButton extends SearchButton with FilledButtonMixin {
+  FilledSearchButton(
+      {super.key,
+      required super.searchTarget,
+      required super.localization,
+      super.customButtonText,
+      super.title,
+      super.packageFilter});
+}

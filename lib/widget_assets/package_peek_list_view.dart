@@ -4,7 +4,6 @@ import 'dart:collection';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
@@ -19,6 +18,7 @@ import '../winget_db/db_table.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../winget_process/package_action_type.dart';
+import 'buttons/search_button.dart';
 
 class PackagePeekListView extends StatefulWidget {
   final DBTable dbTable;
@@ -81,6 +81,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           return Column(
             children: [
               menuOptions(context, packages),
+              const Divider(),
               Expanded(
                 child: Stack(
                   children: [
@@ -316,9 +317,11 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
 
   Widget deepSearchButton() {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    return FilledButton(
-        onPressed: () => SearchPage.search(context)(filter),
-        child: Text(locale.extendedSearch));
+    return FilledSearchButton(
+      searchTarget: filter,
+      localization: locale,
+      customButtonText: locale.extendedSearch,
+    );
   }
 
   /// button which performs the selected [PackageActionType] ((un-)install/upgrade) on all packages
