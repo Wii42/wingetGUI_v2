@@ -10,6 +10,7 @@ import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../winget_commands.dart';
+import 'db_message.dart';
 import 'db_table.dart';
 import 'db_table_creator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -24,25 +25,28 @@ class WingetDB {
     log = Logger(this);
   }
 
-  Stream<String> init(BuildContext context) async* {
+  Stream<LocalizedString> init(BuildContext context) async* {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     WidgetsFlutterBinding.ensureInitialized();
 
-    yield 'Checking winget availability...';
+    yield (locale) => locale.checkingWingetAvailability;
     bool isWingetAvailable = await checkWingetAvailable();
     if (!isWingetAvailable) {
-      yield 'Winget is not available\nPlease install the winget command line tool and restart the app.';
+      yield (locale) => locale.errorWingetNotAvailable;
       status = WingetDBStatus.error;
       return;
     }
 
     DBTableCreator installedCreator = DBTableCreator(
-        content: 'installed', winget: Winget.installed, parentDB: this);
+      content: (locale) => locale.wingetTitle(Winget.installed.name),
+      winget: Winget.installed,
+      parentDB: this,
+    );
     yield* installedCreator.init(wingetLocale);
     installed = installedCreator.returnTable();
 
     DBTableCreator updatesCreator = DBTableCreator(
-        content: 'updates',
+        content: (locale) => locale.wingetTitle(Winget.updates.name),
         winget: Winget.updates,
         filter: _filterUpdates,
         parentDB: this);
@@ -50,7 +54,10 @@ class WingetDB {
     updates = updatesCreator.returnTable();
 
     DBTableCreator availableCreator = DBTableCreator(
-        content: 'available', winget: Winget.availablePackages, parentDB: this);
+      content: (locale) => locale.wingetTitle(Winget.availablePackages.name),
+      winget: Winget.availablePackages,
+      parentDB: this,
+    );
     yield* availableCreator.init(wingetLocale);
     available = availableCreator.returnTable();
 

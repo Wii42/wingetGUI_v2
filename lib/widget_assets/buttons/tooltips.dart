@@ -1,4 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+typedef LocalizedString = String Function(AppLocalizations);
 
 abstract class ButtonTooltip extends StatelessWidget {
   final Widget button;
@@ -12,15 +15,16 @@ abstract class ButtonTooltip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return Tooltip(
-      message: message,
+      message: message(locale),
       useMousePosition: useMousePosition,
       style: const TooltipThemeData(preferBelow: true),
       child: button,
     );
   }
 
-  String get message;
+  LocalizedString get message;
 }
 
 class RunButtonTooltip extends ButtonTooltip {
@@ -33,9 +37,7 @@ class RunButtonTooltip extends ButtonTooltip {
   });
 
   @override
-  String get message {
-    return 'Run command "winget ${command.join(" ")}"';
-  }
+  LocalizedString get message => (locale) => locale.runCommandTooltip('winget ${command.join(' ')}');
 }
 
 class LinkToolTip extends ButtonTooltip {
@@ -49,12 +51,12 @@ class LinkToolTip extends ButtonTooltip {
   });
 
   @override
-  String get message => url.toString();
+  LocalizedString get message => (_) => url.toString();
 }
 
 class CustomTooltip extends ButtonTooltip {
   @override
-  final String message;
+  final LocalizedString message;
 
   const CustomTooltip({
     super.key,

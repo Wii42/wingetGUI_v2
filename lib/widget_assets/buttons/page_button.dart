@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/buttons/abstract_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../helpers/route_parameter.dart';
 import '../../routes.dart';
@@ -12,7 +13,7 @@ class PageButton extends NormalButton
   @override
   final String buttonText;
   @override
-  final String tooltipMessage;
+  final String Function(AppLocalizations) tooltipMessage;
   @override
   final RouteParameter? routeParameter;
   PageButton({
@@ -33,7 +34,7 @@ class PageIconButton extends NormalButton
   @override
   final EdgeInsetsGeometry padding;
   @override
-  final String tooltipMessage;
+  final String Function(AppLocalizations) tooltipMessage;
   @override
   final RouteParameter? routeParameter;
   PageIconButton({
@@ -53,7 +54,7 @@ class CustomPageButton extends NormalButton
   @override
   final Routes pageRoute;
   @override
-  final String tooltipMessage;
+  final String Function(AppLocalizations) tooltipMessage;
   @override
   final RouteParameter? routeParameter;
   @override

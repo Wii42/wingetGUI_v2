@@ -65,7 +65,10 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           if (snapshot.hasData &&
               snapshot.data?.status != DBStatus.ready &&
               prefilteredInfos.isEmpty) {
-            return Center(child: Text(snapshot.data!.message ?? ''));
+            return Center(
+                child: Text(snapshot.data?.message != null
+                    ? snapshot.data!.message!(locale)
+                    : ''));
           }
           if (prefilteredInfos.isEmpty) {
             return Center(

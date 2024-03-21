@@ -17,6 +17,7 @@ import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 import 'global_app_data.dart';
 import 'helpers/package_screenshots_list.dart';
 import 'output_handling/one_line_info/one_line_info_builder.dart';
+import 'winget_db/db_message.dart';
 
 const String appTitle = 'WingetGUI';
 
@@ -117,9 +118,10 @@ class DBInitializer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return WingetDB.instance.isReady()
         ? MainNavigation(title: appTitle)
-        : StreamBuilder<String>(
+        : StreamBuilder<LocalizedString>(
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 if (snapshot.hasData) {
@@ -130,7 +132,7 @@ class DBInitializer extends StatelessWidget {
                       const ProgressRing(
                         backgroundColor: Colors.transparent,
                       ),
-                      Text(snapshot.data!),
+                      Text(snapshot.data!(locale)),
                     ].withSpaceBetween(height: 20),
                   ));
                 }
@@ -139,9 +141,10 @@ class DBInitializer extends StatelessWidget {
               return WingetDB.instance.status == WingetDBStatus.ready
                   ? MainNavigation(title: appTitle)
                   : Center(
-                      child: Text(snapshot.data ??
-                          snapshot.error?.toString() ??
-                          'An error occurred'));
+                      child: Text(snapshot.hasData
+                          ? snapshot.data!(locale)
+                          : snapshot.error?.toString() ??
+                              locale.errorOccurred));
             },
             stream: WingetDB.instance.init(context),
           );
@@ -153,15 +156,15 @@ class ProcessSchedulerWarnings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
     return StreamBuilder<int>(
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data! > 0) {
             return Positioned(
               child: OneLineInfoWidget(OneLineInfo(
-                  title: 'Warning',
-                  details:
-                      '${snapshot.data} processes are in queue for execution',
+                  title: locale.warning,
+                  details: locale.processesQueued(snapshot.data!),
                   severity: InfoBarSeverity.warning)),
             );
           }

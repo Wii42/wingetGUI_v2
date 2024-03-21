@@ -203,7 +203,7 @@ class ParsedAppTable extends ParsedTable {
       SizedBox(
         height: 400,
         child: PackagePeekListView(
-            dbTable: DBTable(packages, content: 'Apps', wingetCommand: []),
+            dbTable: DBTable(packages, content: (locale) => locale.apps, wingetCommand: []),
             packageOptions: const PackageListPackageOptions(showAllButtons: true)),
       )
     ];

@@ -8,17 +8,6 @@ abstract class AbstractLinkButton extends AbstractButton {
 
   const AbstractLinkButton({super.key, required this.url});
 
-  String checkUrlContainsHttp(String url) {
-    if (url.startsWith('http://') ||
-        url.startsWith('https://') ||
-        url.startsWith('mailto:') ||
-        url.startsWith('ms-windows-store://')) {
-      return url;
-    } else {
-      return 'https://$url';
-    }
-  }
-
   @override
   ButtonTooltip buildTooltip(BuildContext context, {required Widget child}) {
     return LinkToolTip(

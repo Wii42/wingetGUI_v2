@@ -137,7 +137,7 @@ class _LogsPageState extends State<LogsPage> {
               PageIconButton(
                 icon: FluentIcons.info,
                 pageRoute: Routes.logDetailsPage,
-                tooltipMessage: 'View log details',
+                tooltipMessage: (locale) => locale.viewLogDetailsTooltip,
                 routeParameter: LogRouteParameter(log: log),
               ),
           ],

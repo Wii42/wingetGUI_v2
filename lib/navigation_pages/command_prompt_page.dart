@@ -56,9 +56,10 @@ class CommandPromptPage extends StatelessWidget {
         children: [
           Text(Routes.help.title(locale)),
           PageButton(
-              pageRoute: Routes.help,
-              buttonText: locale.showInSeparatePage,
-              tooltipMessage: 'Open help in a new page')
+            pageRoute: Routes.help,
+            buttonText: locale.showInSeparatePage,
+            tooltipMessage: (locale) => locale.openHelpTooltip,
+          )
         ],
       ),
       content: SizedBox(

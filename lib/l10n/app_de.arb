@@ -3,7 +3,7 @@
 
   "runCommand": "Führe Befehl aus",
 
-  "wingetTitle": "{command, select, updates{Aktualisierungen} updatesPage{Aktualisierungen} installed{Installiert} installedPage{Installiert} about{Über Winget} help{Hilfe} search{Suche Apps} settings{Winget-Einstellungen} sources{Quellen} install{Installieren} upgrade{Aktualisieren} uninstall{Deinstallieren} show {Anzeigen} searchPage{Suche Apps} commandPromptPage{Befehl Ausführen} upgradeAll{Alle Aktualisieren} advancedOptions{Erweitert} settingsPage{Einstellungen} logsPage{Logs} logDetailsPage{Log Details} other{NotFoundError}}",
+  "wingetTitle": "{command, select, updates{Aktualisierungen} updatesPage{Aktualisierungen} installed{Installiert} installedPage{Installiert} about{Über Winget} help{Hilfe} search{Suche Apps} settings{Winget-Einstellungen} sources{Quellen} install{Installieren} upgrade{Aktualisieren} uninstall{Deinstallieren} show {Anzeigen} searchPage{Suche Apps} commandPromptPage{Befehl Ausführen} upgradeAll{Alle Aktualisieren} advancedOptions{Erweitert} settingsPage{Einstellungen} logsPage{Logs} logDetailsPage{Log Details} availablePackages{Verfügbare Apps} other{NotFoundError}}",
   "wingetTitlePrefix": "{command, select, search{Suche nach} install{Installiere} upgrade{Aktualisiere} uninstall{Deinstalliere} show {} other{NotFoundError}}",
 
   "history": "Verlauf",
@@ -78,5 +78,24 @@
 
   "waiting": "wartend...",
 
-  "returnResponse": "{response, select, packageInUse{Package in Benutzung} packageInUseByApplication{Package wird von Applikation benutzt} installInProgress{Installation im Gang} fileInUse{Datei in Benutzung} missingDependency{Fehlende Abhängigkeit} diskFull{Festplatte voll}  insufficientMemory{Nicht genügend Arbeitsspeicher} invalidParameter{Invalider Parameter} noNetwork{Kein Netzwerk} contactSupport{Kontaktieren Sie den Support} rebootRequiredToFinish{Neustart zum Abschluss erforderlich} rebootRequiredForInstall{Neustart erforderlich für Installation} rebootInitiated{Neustart eingeleitet} cancelledByUser{Vom Benutzer abgebrochen} alreadyInstalled{Bereits installiert} downgrade{Downgrade} blockedByPolicy{Durch Richtlinien blockiert} systemNotSupported{System nicht unterstützt} custom{Benutzerdefinierte Antwort} other{NotFoundError}}"
+  "returnResponse": "{response, select, packageInUse{Package in Benutzung} packageInUseByApplication{Package wird von Applikation benutzt} installInProgress{Installation im Gang} fileInUse{Datei in Benutzung} missingDependency{Fehlende Abhängigkeit} diskFull{Festplatte voll}  insufficientMemory{Nicht genügend Arbeitsspeicher} invalidParameter{Invalider Parameter} noNetwork{Kein Netzwerk} contactSupport{Kontaktieren Sie den Support} rebootRequiredToFinish{Neustart zum Abschluss erforderlich} rebootRequiredForInstall{Neustart erforderlich für Installation} rebootInitiated{Neustart eingeleitet} cancelledByUser{Vom Benutzer abgebrochen} alreadyInstalled{Bereits installiert} downgrade{Downgrade} blockedByPolicy{Durch Richtlinien blockiert} systemNotSupported{System nicht unterstützt} custom{Benutzerdefinierte Antwort} other{NotFoundError}}",
+
+  "copyToClipboardTooltip": "In Zwischenablage kopieren",
+  "openMSStorePageTooltip": "Öffne Microsoft Store-Seite für diese App",
+  "openHelpTooltip": "Öffne Hilfe auf neuer Seite",
+  "viewLogDetailsTooltip": "Zeige Log-Details",
+  "moreFromPublisherTooltip": "Zeige alle Apps von diesem Herausgeber",
+  "packagePeekTooltip": "Zeige App-Details",
+  "runCommandTooltip": "Führe Befehl '{command}' aus",
+
+  "readOutputOfCommand": "Ausgabe von '{command}' wird gelesen...",
+  "loading": "Wird geladen...",
+  "output": "Ausgabe",
+  "parsingContent": "{content} wird analysiert...",
+  "apps": "Apps",
+  "checkingWingetAvailability": "Überprüfe Verfügbarkeit von winget...",
+  "errorWingetNotAvailable": "Winget ist nicht verfügbar\nBitte installieren Sie winget und starten Sie die App erneut.",
+  "errorOccurred": "Ein Fehler ist aufgetreten",
+  "warning": "Warnung",
+  "processesQueued": "{nrOfProcesses} Prozesse in Warteschlange"
 }

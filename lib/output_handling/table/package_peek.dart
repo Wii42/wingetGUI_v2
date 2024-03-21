@@ -52,7 +52,8 @@ class PackagePeek extends StatelessWidget {
         infos.id!.value,
         //if (infos.hasVersion()) ...['-v', infos.version!.value]
       ], titleAddon: infos.name?.value, package: infos),
-      tooltipMessage: infos.name?.value ?? 'Show App',
+      tooltipMessage: (locale) =>
+          infos.name?.value ?? locale.packagePeekTooltip,
       useMousePosition: true,
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -245,7 +246,7 @@ class PackagePeek extends StatelessWidget {
   static Widget get prototypeWidget {
     return CustomPageButton(
       pageRoute: Routes.show,
-      tooltipMessage: 'Show App',
+      tooltipMessage: (locale) => locale.packagePeekTooltip,
       child: const Padding(
         padding: EdgeInsets.all(10),
         child: SizedBox(height: 90),

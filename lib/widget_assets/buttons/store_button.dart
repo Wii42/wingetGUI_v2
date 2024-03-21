@@ -17,10 +17,8 @@ class StoreButton extends NormalButton with CustomToolTipMixin, PlainButtonMixin
   }
 
   @override
-  // TODO: implement buttonText
   String get buttonText => text ?? locale.showInStore;
 
   @override
-  // TODO: implement tooltipMessage
-  String get tooltipMessage => 'Open the Microsoft Store page for this app.';
+  String Function(AppLocalizations) get tooltipMessage => (locale) => locale.openMSStorePageTooltip;
 }

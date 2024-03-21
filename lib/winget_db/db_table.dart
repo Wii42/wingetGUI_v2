@@ -19,7 +19,7 @@ class DBTable {
   List<OneLineInfo> hints;
   WingetDB? parentDB;
 
-  final String content;
+  final LocalizedString content;
   final List<String> wingetCommand;
   final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? creatorFilter;
   final StreamController<DBMessage> _streamController =
@@ -61,7 +61,7 @@ class DBTable {
     }
   }
 
-  Stream<String> reloadDBTable(AppLocalizations wingetLocale) async* {
+  Stream<LocalizedString> reloadDBTable(AppLocalizations wingetLocale) async* {
     DBTableCreator creator = DBTableCreator(
       content: content,
       command: wingetCommand,
@@ -110,8 +110,8 @@ class DBTable {
 
   Future<void> reloadFuture(AppLocalizations wingetLocale) {
     Completer completer = Completer<void>();
-    reloadDBTable(wingetLocale).listen((String event) {
-      log.info(event);
+    reloadDBTable(wingetLocale).listen((LocalizedString event) {
+      log.info(event(wingetLocale));
       _streamController.add(DBMessage(DBStatus.loading, message: event));
     }, onDone: () {
       completer.complete();

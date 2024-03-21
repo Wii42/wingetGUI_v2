@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:winget_gui/widget_assets/buttons/normal_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'abstract_button.dart';
 import 'mini_icon_link_button.dart';
@@ -16,7 +17,8 @@ class MiniIconCopyButton extends NormalButton
       Clipboard.setData(ClipboardData(text: copiedData));
 
   @override
-  String get tooltipMessage => 'Copy to clipboard';
+  String Function(AppLocalizations) get tooltipMessage =>
+      (locale) => locale.copyToClipboardTooltip;
 
   @override
   IconData get icon => FluentIcons.copy;

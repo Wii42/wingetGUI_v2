@@ -8,6 +8,7 @@ import '../output_handling/parsed_output.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_handling/table/table_parser.dart';
+import '../widget_assets/buttons/tooltips.dart';
 import '../winget_commands.dart';
 import '../winget_process/winget_process.dart';
 import 'db_table.dart';
@@ -21,10 +22,10 @@ class DBTableCreator {
   final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter;
   final WingetDB? parentDB;
 
-  String content;
+  LocalizedString content;
 
   DBTableCreator({
-    this.content = 'output',
+    this.content = defaultContent,
     Winget? winget,
     List<String>? command,
     this.filter,
@@ -41,11 +42,14 @@ class DBTableCreator {
     }
   }
 
-  Stream<String> init(AppLocalizations wingetLocale) async* {
-    yield "reading output of winget ${wingetCommand.join(' ')}...";
+  static String defaultContent(AppLocalizations locale) => locale.output;
+
+  Stream<LocalizedString> init(AppLocalizations wingetLocale) async* {
+    yield (locale) =>
+        locale.readOutputOfCommand("winget ${wingetCommand.join(' ').trim()}");
     raw = await getRawOutputC(wingetCommand);
 
-    yield "parsing $content...";
+    yield (locale) => locale.parsingContent(content(locale));
     parsed = await parsedOutputList(raw!, wingetCommand, wingetLocale);
     return;
   }
@@ -96,7 +100,7 @@ class DBTableCreator {
   }
 
   static List<PackageInfosPeek> extractInfosStatic(
-      List<ParsedOutput> parsed, String content,
+      List<ParsedOutput> parsed, LocalizedString content,
       {List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter}) {
     Iterable<ParsedAppTable> appTables = parsed.whereType<ParsedAppTable>();
     if (appTables.isEmpty) {
@@ -114,7 +118,7 @@ class DBTableCreator {
   }
 
   static List<OneLineInfo> extractHintsStatic(
-      List<ParsedOutput> parsed, String content) {
+      List<ParsedOutput> parsed, LocalizedString content) {
     Iterable<ParsedOneLineInfos> appTables =
         parsed.whereType<ParsedOneLineInfos>();
     List<OneLineInfo> infos = [];

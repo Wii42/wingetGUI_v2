@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 abstract class AbstractButton extends StatelessWidget {
   final bool disabled;
@@ -94,8 +95,7 @@ mixin PlainButtonMixin on AbstractButton {
 }
 
 mixin CustomToolTipMixin on AbstractButton {
-  String get tooltipMessage;
-
+  LocalizedString get tooltipMessage;
   @override
   ButtonTooltip buildTooltip(BuildContext context, {required Widget child}) {
     return CustomTooltip(

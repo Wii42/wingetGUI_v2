@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';
+import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/widget_assets/favicon_widget.dart';
@@ -42,7 +43,8 @@ class PublisherPage extends StatelessWidget {
           WingetDB.instance.available.infos
               .where((element) => element.publisherID == publisherId)
               .toList(),
-          content: 'publisher',
+          content: (locale) =>
+              locale.infoTitle(PackageAttribute.publisher.name),
           wingetCommand: [],
         ),
         customReloadStream: WingetDB.instance.available.stream,

@@ -84,7 +84,7 @@ class DetailsWidget extends ExpanderCompartment {
         routeParameter: StringRouteParameter(string: infos.publisherID!),
         buttonText:
             locale.moreFromPublisher(infos.publisherName ?? infos.publisherID!),
-        tooltipMessage: 'Show all Apps from this Publisher',
+        tooltipMessage: (locale) => locale.moreFromPublisherTooltip,
       );
     }
     if (infos.agreement?.publisher?.text != null &&

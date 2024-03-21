@@ -3,7 +3,7 @@
 
   "runCommand": "Run Command",
 
-  "wingetTitle": "{command, select, updates{Updates}  updatesPage{Updates} installed{Installed}  installedPage{Installed} about{About Winget} help{Help} search{Search Packages} settings{Winget Settings} sources{Sources} install{Install} upgrade{Upgrade} uninstall{Uninstall}  show{Show}  searchPage{Search Packages} commandPromptPage{Run Command} upgradeAll{Upgrade All} advancedOptions{Advanced} settingsPage{Settings} logsPage{Logs} logDetailsPage{Log Details} other{NotFoundError}}",
+  "wingetTitle": "{command, select, updates{Updates}  updatesPage{Updates} installed{Installed}  installedPage{Installed} about{About Winget} help{Help} search{Search Packages} settings{Winget Settings} sources{Sources} install{Install} upgrade{Upgrade} uninstall{Uninstall}  show{Show}  searchPage{Search Packages} commandPromptPage{Run Command} upgradeAll{Upgrade All} advancedOptions{Advanced} settingsPage{Settings} logsPage{Logs} logDetailsPage{Log Details} availablePackages{Available Apps} other{NotFoundError}}",
   "wingetTitlePrefix": "{command, select, search{Search} show {} other{NotFoundError}}",
 
   "history": "History",
@@ -78,5 +78,23 @@
 
   "waiting": "waiting...",
 
-  "returnResponse": "{response, select, packageInUse{Package in Use} packageInUseByApplication{Package in Use by Application} installInProgress{Install in Progress} fileInUse{File in Use} missingDependency{Missing Dependency} diskFull{Disk Full}  insufficientMemory{Insufficient Memory} invalidParameter{Invalid Parameter} noNetwork{No Network} contactSupport{Contact Support} rebootRequiredToFinish{Reboot Required to Finish} rebootRequiredForInstall{Reboot Required for Install} rebootInitiated{Reboot Initiated} cancelledByUser{Cancelled by User} alreadyInstalled{Already Installed} downgrade{Downgrade} blockedByPolicy{Blocked by Policy} systemNotSupported{System Not Supported} custom{Custom Response} other{NotFoundError}}"
+  "returnResponse": "{response, select, packageInUse{Package in Use} packageInUseByApplication{Package in Use by Application} installInProgress{Install in Progress} fileInUse{File in Use} missingDependency{Missing Dependency} diskFull{Disk Full}  insufficientMemory{Insufficient Memory} invalidParameter{Invalid Parameter} noNetwork{No Network} contactSupport{Contact Support} rebootRequiredToFinish{Reboot Required to Finish} rebootRequiredForInstall{Reboot Required for Install} rebootInitiated{Reboot Initiated} cancelledByUser{Cancelled by User} alreadyInstalled{Already Installed} downgrade{Downgrade} blockedByPolicy{Blocked by Policy} systemNotSupported{System Not Supported} custom{Custom Response} other{NotFoundError}}",
+  "copyToClipboardTooltip": "Copy to clipboard",
+  "openMSStorePageTooltip": "Open the Microsoft Store page for this app",
+  "openHelpTooltip": "Open help in a new page",
+  "viewLogDetailsTooltip": "View log details",
+  "moreFromPublisherTooltip": "Show all Apps from this Publisher",
+  "packagePeekTooltip": "Show app details",
+  "runCommandTooltip": "Run command '{command}'",
+
+  "readOutputOfCommand": "Reading output of '{command}'...",
+  "loading": "Loading...",
+  "output": "Output",
+  "parsingContent": "Parsing {content}...",
+  "apps": "Apps",
+  "checkingWingetAvailability": "Checking winget availability...",
+  "errorWingetNotAvailable": "Winget is not available\nPlease install the winget command line tool and restart the app.",
+  "errorOccurred": "An error occurred",
+  "warning": "Warning",
+  "processesQueued": "{nrOfProcesses} processes are in queue for execution"
 }
