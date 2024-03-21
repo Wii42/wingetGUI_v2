@@ -35,10 +35,9 @@ dependencies:
   yaml: ^3.1.2
   flutter_localized_locales: ^2.0.5
   collection: any
-  pub_semver: ^2.1.4
   csv: ^6.0.0
   internet_connection_checker: ^1.0.0+1
-  fluentui_system_icons: ^1.1.229
+  fluentui_system_icons: ^1.1.231
   provider: ^6.1.2
   dart_casing: ^3.0.1
   cron: ^0.6.0
