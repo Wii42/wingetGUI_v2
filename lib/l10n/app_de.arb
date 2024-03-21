@@ -97,5 +97,9 @@
   "errorWingetNotAvailable": "Winget ist nicht verfügbar\nBitte installieren Sie winget und starten Sie die App erneut.",
   "errorOccurred": "Ein Fehler ist aufgetreten",
   "warning": "Warnung",
-  "processesQueued": "{nrOfProcesses} Prozesse in Warteschlange"
+  "processesQueued": "{nrOfProcesses} Prozesse in Warteschlange",
+
+  "onlyAppsWithSourceTooltip": "Nur Apps anzeigen, die von einer bekannten Paketquelle stammen",
+  "onlyAppsWithExactVersionTooltip": "Nur Apps anzeigen, die eine bekannte exakte Version haben",
+  "actionOnAll": "Alle {action}"
 }

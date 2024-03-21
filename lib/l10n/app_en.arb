@@ -79,6 +79,7 @@
   "waiting": "waiting...",
 
   "returnResponse": "{response, select, packageInUse{Package in Use} packageInUseByApplication{Package in Use by Application} installInProgress{Install in Progress} fileInUse{File in Use} missingDependency{Missing Dependency} diskFull{Disk Full}  insufficientMemory{Insufficient Memory} invalidParameter{Invalid Parameter} noNetwork{No Network} contactSupport{Contact Support} rebootRequiredToFinish{Reboot Required to Finish} rebootRequiredForInstall{Reboot Required for Install} rebootInitiated{Reboot Initiated} cancelledByUser{Cancelled by User} alreadyInstalled{Already Installed} downgrade{Downgrade} blockedByPolicy{Blocked by Policy} systemNotSupported{System Not Supported} custom{Custom Response} other{NotFoundError}}",
+
   "copyToClipboardTooltip": "Copy to clipboard",
   "openMSStorePageTooltip": "Open the Microsoft Store page for this app",
   "openHelpTooltip": "Open help in a new page",
@@ -96,5 +97,9 @@
   "errorWingetNotAvailable": "Winget is not available\nPlease install the winget command line tool and restart the app.",
   "errorOccurred": "An error occurred",
   "warning": "Warning",
-  "processesQueued": "{nrOfProcesses} processes are in queue for execution"
+  "processesQueued": "{nrOfProcesses} processes are in queue for execution",
+
+  "onlyAppsWithSourceTooltip": "Show only apps from a known package source",
+  "onlyAppsWithExactVersionTooltip": "Show only apps with a known specific version",
+  "actionOnAll": "{action} all"
 }

@@ -7,6 +7,7 @@ import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
+import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/sort_by.dart';
 import 'package:winget_gui/winget_db/db_message.dart';
@@ -218,28 +219,34 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     AppLocalizations locale = AppLocalizations.of(context)!;
     List<Widget> children = [
       if (widget.menuOptions.onlyWithSourceButton)
-        Checkbox(
-          checked: onlyWithSource,
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                onlyWithSource = value;
-              });
-            }
-          },
-          content: Text(locale.onlyAppsWithSource),
+        CustomTooltip(
+          message: (locale) => locale.onlyAppsWithSourceTooltip,
+          button: Checkbox(
+            checked: onlyWithSource,
+            onChanged: (value) {
+              if (value != null) {
+                setState(() {
+                  onlyWithSource = value;
+                });
+              }
+            },
+            content: Text(locale.onlyAppsWithSource),
+          ),
         ),
       if (widget.menuOptions.onlyWithExactVersionButton)
-        Checkbox(
-          checked: onlyWithExactVersion,
-          onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                onlyWithExactVersion = value;
-              });
-            }
-          },
-          content: Text(locale.onlyAppsWithExactVersion),
+        CustomTooltip(
+          message: (locale) => locale.onlyAppsWithExactVersionTooltip,
+          button: Checkbox(
+            checked: onlyWithExactVersion,
+            onChanged: (value) {
+              if (value != null) {
+                setState(() {
+                  onlyWithExactVersion = value;
+                });
+              }
+            },
+            content: Text(locale.onlyAppsWithExactVersion),
+          ),
         ),
       if (prefilteredInfos.length >= 5 && widget.menuOptions.filterField) ...[
         searchField(),
@@ -249,20 +256,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(locale.sortBy),
-          ComboBox<SortBy>(
-            items: [
-              for (SortBy value in widget.menuOptions.sortOptions)
-                ComboBoxItem(value: value, child: Text(value.title(locale))),
-            ],
-            onChanged: (value) {
-              if (value != null) {
-                setState(() {
-                  sortBy = value;
-                });
-              }
-            },
-            placeholder: Text(sortBy.title(locale)),
-          ),
+          sortByComboBox(locale),
           IconButton(
               icon: Icon(
                   sortReversed ? FluentIcons.sort_up : FluentIcons.sort_down),
@@ -282,6 +276,23 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         crossAxisAlignment: WrapCrossAlignment.center,
         children: children,
       ),
+    );
+  }
+
+  ComboBox<SortBy> sortByComboBox(AppLocalizations locale) {
+    return ComboBox<SortBy>(
+      items: [
+        for (SortBy value in widget.menuOptions.sortOptions)
+          ComboBoxItem(value: value, child: Text(value.title(locale))),
+      ],
+      onChanged: (value) {
+        if (value != null) {
+          setState(() {
+            sortBy = value;
+          });
+        }
+      },
+      placeholder: Text(sortBy.title(locale)),
     );
   }
 
@@ -320,7 +331,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
             action.runAction(package, context);
           }
         },
-        child: Text(action.winget.title(locale)));
+        child: Text(locale.actionOnAll(action.winget.title(locale))));
   }
 
   String get filter => filterController.text;
