@@ -22,12 +22,14 @@ class AgreementWidget extends ExpanderCompartment {
         mainColumn: [
           if (infos.license?.text != null && infos.license!.text!.isNotEmpty)
             wrapInfoWithLink(context, infos.license),
-          if (infos.copyright?.text != null && infos.copyright!.text!.isNotEmpty)
+          if (infos.copyright?.text != null &&
+              infos.copyright!.text!.isNotEmpty)
             wrapInfoWithLink(context, infos.copyright),
         ],
         buttonRow: buttonRow([
           if (infos.license?.text == null) infos.license?.toUriInfoIfHasUrl(),
-          if (infos.copyright?.text == null) infos.copyright?.toUriInfoIfHasUrl(),
+          if (infos.copyright?.text == null)
+            infos.copyright?.toUriInfoIfHasUrl(),
           infos.privacyUrl,
           infos.buyUrl,
           infos.termsOfTransaction?.tryToUriInfo(),

@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../helpers/route_parameter.dart';
 import '../../routes.dart';
+import 'inline_link_button.dart';
 import 'normal_button.dart';
 
 class PageButton extends NormalButton
@@ -67,6 +68,26 @@ class CustomPageButton extends NormalButton
     this.routeParameter,
     super.disabled,
     this.useMousePosition = false,
+  });
+}
+
+class InlinePageButton extends NormalButton
+    with TextButtonMixin, InlineLinkButtonMixin, CustomToolTipMixin, PushPageMixin {
+  @override
+  final Routes pageRoute;
+  @override
+  final String buttonText;
+  @override
+  final String Function(AppLocalizations) tooltipMessage;
+  @override
+  final RouteParameter? routeParameter;
+
+  InlinePageButton({
+    super.key,
+    required this.pageRoute,
+    required this.buttonText,
+    required this.tooltipMessage,
+    this.routeParameter,
   });
 }
 

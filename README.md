@@ -23,8 +23,6 @@ samples, guidance on mobile development, and a full API reference.
 - weird bux with Canon PCL6 Driver
 - fix correct dbtables are reloaded on package action
 
--fix url generation with space/hastag in version (Coninfer ECLiPSeCLP)
-
 
 
 

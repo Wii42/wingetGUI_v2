@@ -7,6 +7,10 @@ import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 import 'package:winget_gui/widget_assets/buttons/right_side_buttons.dart';
 import 'package:winget_gui/widget_assets/buttons/store_button.dart';
+import '../../../helpers/route_parameter.dart';
+import '../../../routes.dart';
+import '../../../widget_assets/buttons/page_button.dart';
+import '../../../widget_assets/buttons/search_button.dart';
 import '../../../widget_assets/decorated_card.dart';
 import '../../../widget_assets/favicon_widget.dart';
 import '../../../widget_assets/buttons/link_button.dart';
@@ -109,7 +113,7 @@ class TitleWidget extends Compartment {
       spacing: 5,
       runSpacing: 5,
       children: [
-        from(context),
+        publisher(context),
         if (infos.website != null && infos.website!.isNotEmpty)
           _website(locale),
         if (infos.category != null) ...[
@@ -119,13 +123,6 @@ class TitleWidget extends Compartment {
         if (WingetDB.isPackageInstalled(infos)) installedIcon(context),
       ].withSpaceBetween(width: 5),
     );
-  }
-
-  Widget publisher(BuildContext context) {
-    return textOrInlineLink(
-        context: context,
-        text: infos.agreement?.publisher?.text,
-        url: infos.agreement?.publisher?.url);
   }
 
   Widget installedIcon(BuildContext context) {
@@ -164,19 +161,28 @@ class TitleWidget extends Compartment {
 
   static double faviconSize() => 70;
 
-  Widget from(BuildContext context) {
-    String? author = infos.author?.value;
-    String? publisher = infos.agreement?.publisher?.text;
-    String? authorOrPublisher = chooseShorterString(author, publisher);
-    String text = authorOrPublisher ??
-        infos.id?.value.split('.').firstOrNull ??
-        '<unknown>';
-    return textOrInlineLink(
-        context: context, text: text, url: infos.agreement?.publisher?.url);
-  }
-
-  String? chooseShorterString(String? a, String? b) {
-    if (a == null || b == null) return a ?? b;
-    return a.length < b.length ? a : b;
+  Widget publisher(BuildContext context) {
+    AppLocalizations locale = AppLocalizations.of(context)!;
+    if (infos.publisherID != null) {
+      return InlinePageButton(
+        pageRoute: Routes.publisherPage,
+        routeParameter: StringRouteParameter(string: infos.publisherID!),
+        buttonText: infos.publisherName ?? infos.publisherID!,
+        tooltipMessage: (locale) => locale.moreFromPublisherTooltip,
+      );
+    }
+    if (infos.agreement?.publisher?.text != null &&
+        infos.agreement!.publisher!.text!.isNotEmpty) {
+      return InlineSearchButton(
+        searchTarget: infos.agreement!.publisher!.text!,
+        customButtonText: infos.agreement!.publisher!.text!,
+        localization: locale,
+      );
+    }
+    return Text(
+      infos.author?.value ??
+          infos.id?.value.split('.').firstOrNull ??
+          '<unknown>',
+    );
   }
 }

@@ -6,6 +6,7 @@ import '../../navigation_pages/search_page.dart';
 import '../../output_handling/package_infos/package_infos_peek.dart';
 import '../../winget_commands.dart';
 import 'abstract_button.dart';
+import 'inline_link_button.dart';
 
 const Winget winget = Winget.search;
 
@@ -32,6 +33,16 @@ class SearchButton extends RunButton with TextButtonMixin, PlainButtonMixin {
 
 class FilledSearchButton extends SearchButton with FilledButtonMixin {
   FilledSearchButton(
+      {super.key,
+      required super.searchTarget,
+      required super.localization,
+      super.customButtonText,
+      super.title,
+      super.packageFilter});
+}
+
+class InlineSearchButton extends SearchButton with InlineLinkButtonMixin {
+  InlineSearchButton(
       {super.key,
       required super.searchTarget,
       required super.localization,

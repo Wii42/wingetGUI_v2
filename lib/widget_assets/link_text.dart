@@ -52,9 +52,10 @@ class LinkText extends StatelessWidget {
   }
 
   void launch(String url) {
-    if (!url.startsWith('http') && !url.startsWith('https')) {
-      url = 'https://$url';
+    Uri link = Uri.parse(url);
+   if (link.scheme.isEmpty) {
+      link = link.replace(scheme: 'https');
     }
-    launchUrl(Uri.parse(url));
+    launchUrl(link);
   }
 }

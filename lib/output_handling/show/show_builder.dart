@@ -15,7 +15,6 @@ class ShowBuilder extends StatelessWidget {
     if (Winget.show.allNames.contains(command[0])) {
       return PackageLongInfo(infos);
     }
-    //return PackageLongInfo(infos);
     return PackageInfoSliver(infos: infos);
   }
 }
