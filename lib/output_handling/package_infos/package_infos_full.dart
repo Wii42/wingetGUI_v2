@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/parsers/full_json_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/parsers/full_map_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/parsers/full_yaml_parser.dart';
@@ -158,19 +159,38 @@ class PackageInfosFull extends PackageInfos {
 
   @override
   PackageInfosPeek toPeek() {
-    String? source = isWinget()
-        ? 'winget'
+    PackageSources? source = isWinget()
+        ? PackageSources.winget
         : isMicrosoftStore()
-            ? 'msstore'
+            ? PackageSources.microsoftStore
             : null;
     return PackageInfosPeek(
       name: name,
       id: id,
       version: version,
-      source: PackageInfos.sourceInfo(source),
+      source: (source != null)
+          ? Info<PackageSources>.fromAttribute(PackageAttribute.source,
+              value: source)
+          : this.source,
       otherInfos: otherInfos,
       screenshots: screenshots,
       publisherIcon: publisherIcon,
     );
+  }
+
+  @override
+  void setPublisherName() {
+    super.setPublisherName();
+    if (publisherName == null) {
+      List<String?> otherNames = [agreement?.publisher?.text, author?.value];
+      for (String? name in otherNames) {
+        if (name != null &&
+            name.isNotEmpty &&
+            name.replaceAll(' ', '') == probablyPublisherID()) {
+          publisherName = name;
+          return;
+        }
+      }
+    }
   }
 }

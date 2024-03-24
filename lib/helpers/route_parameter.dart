@@ -1,8 +1,10 @@
 import '../output_handling/package_infos/package_infos_peek.dart';
 import 'log_stream.dart';
-
+/// Parameters for a route.
 class RouteParameter {
+  /// Parameter added to the winget command.
   final List<String>? commandParameter;
+  /// String added to the page title.
   final String? titleAddon;
 
   const RouteParameter({this.commandParameter, this.titleAddon});
@@ -22,6 +24,7 @@ class StringRouteParameter extends RouteParameter {
 }
 
 class LogRouteParameter extends RouteParameter {
+  /// Log message to display on the page.
   final LogMessage log;
 
   const LogRouteParameter({required this.log, super.commandParameter, super.titleAddon});

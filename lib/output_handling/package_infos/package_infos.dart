@@ -35,11 +35,23 @@ abstract class PackageInfos {
     this.otherInfos,
   }) {
     log = Logger(this);
-    publisherName = PackageScreenshotsList
-        .instance.publisherIcons[probablyPublisherID()]?.nameUsingDefaultSource;
-    this.source = source ??
+    setPublisherName();
+    setSource(source);
+  }
+
+  /// Set the [source] based on other attributes.
+  /// Overrides should call [super.setSource()] at the start.
+  void setSource(Info<PackageSources>? sourceInfo) {
+    source = sourceInfo ??
         Info<PackageSources>.fromAttribute(PackageAttribute.source,
             value: PackageSources.none);
+  }
+
+  /// Set the [publisherName] based on other attributes.
+  /// Overrides should call [super.setPublisherName()] at the start.
+  void setPublisherName() {
+    publisherName = PackageScreenshotsList
+        .instance.publisherIcons[probablyPublisherID()]?.nameUsingDefaultSource;
   }
 
   bool hasVersion() =>

@@ -26,8 +26,9 @@ class PublisherPage extends StatelessWidget {
           'Invalid route parameters, must be StringRouteParameter'));
     }
     String publisherId = (parameters as StringRouteParameter).string;
-    String? publisherName = PackageScreenshotsList
-        .instance.publisherIcons[publisherId]?.nameUsingDefaultSource;
+    String? publisherName = parameters.titleAddon ??
+        PackageScreenshotsList
+            .instance.publisherIcons[publisherId]?.nameUsingDefaultSource;
 
     return PublisherPage(
         publisherId: publisherId, publisherName: publisherName);

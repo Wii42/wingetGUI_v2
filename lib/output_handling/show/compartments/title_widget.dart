@@ -166,7 +166,7 @@ class TitleWidget extends Compartment {
     if (infos.publisherID != null) {
       return InlinePageButton(
         pageRoute: Routes.publisherPage,
-        routeParameter: StringRouteParameter(string: infos.publisherID!),
+        routeParameter: StringRouteParameter(string: infos.publisherID!, titleAddon: infos.publisherName),
         buttonText: infos.publisherName ?? infos.publisherID!,
         tooltipMessage: (locale) => locale.moreFromPublisherTooltip,
       );
