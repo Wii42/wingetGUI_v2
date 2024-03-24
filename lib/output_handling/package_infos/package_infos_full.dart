@@ -184,9 +184,11 @@ class PackageInfosFull extends PackageInfos {
     if (publisherName == null) {
       List<String?> otherNames = [agreement?.publisher?.text, author?.value];
       for (String? name in otherNames) {
-        if (name != null &&
-            name.isNotEmpty &&
-            name.replaceAll(' ', '') == probablyPublisherID()) {
+        if (name == null || name.isEmpty) {
+          continue;
+        }
+        String nameAsId = name.replaceAll(' ', '').replaceAll('.', '');
+        if (nameAsId.toLowerCase() == probablyPublisherID()?.toLowerCase()) {
           publisherName = name;
           return;
         }

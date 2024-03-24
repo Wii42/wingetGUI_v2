@@ -12,7 +12,7 @@ import '../../../routes.dart';
 import '../../../widget_assets/buttons/page_button.dart';
 import '../../../widget_assets/buttons/search_button.dart';
 import '../../../widget_assets/decorated_card.dart';
-import '../../../widget_assets/favicon_widget.dart';
+import '../../../widget_assets/app_icon.dart';
 import '../../../widget_assets/buttons/link_button.dart';
 import '../../../winget_db/db_message.dart';
 import '../../../winget_db/winget_db.dart';
@@ -156,7 +156,7 @@ class TitleWidget extends Compartment {
   }
 
   Widget favicon(double faviconSize) {
-    return FaviconWidget(infos: infos, faviconSize: faviconSize);
+    return AppIcon.fromInfos(infos, iconSize: faviconSize);
   }
 
   static double faviconSize() => 70;
@@ -166,7 +166,8 @@ class TitleWidget extends Compartment {
     if (infos.publisherID != null) {
       return InlinePageButton(
         pageRoute: Routes.publisherPage,
-        routeParameter: StringRouteParameter(string: infos.publisherID!, titleAddon: infos.publisherName),
+        routeParameter: StringRouteParameter(
+            string: infos.publisherID!, titleAddon: infos.publisherName),
         buttonText: infos.publisherName ?? infos.publisherID!,
         tooltipMessage: (locale) => locale.moreFromPublisherTooltip,
       );

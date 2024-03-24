@@ -46,6 +46,7 @@ class WebImage extends StatelessWidget {
           frameBuilder: imageConfig.loadingBuilder != null
               ? (context, _, __, ___) => imageConfig.loadingBuilder!(context)
               : null,
+          fit: BoxFit.contain,
           color: color(),
           colorBlendMode: colorBlendMode());
     }

@@ -1,9 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
-import 'package:winget_gui/widget_assets/favicon_widget.dart';
+import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 
 import '../helpers/publisher.dart';
@@ -75,11 +74,12 @@ class PublisherPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
-          FaviconWidget(
-            infos: PackageInfosPeek(),
-            iconUrl: publisher?.solidIconUsingDefaultSource ??
-                publisher?.iconUsingDefaultSource,
-            faviconSize: TitleWidget.faviconSize(),
+          AppIcon(
+            iconUrls: [
+              publisher?.solidIconUsingDefaultSource,
+              publisher?.iconUsingDefaultSource
+            ],
+            iconSize: TitleWidget.faviconSize(),
           ),
           Expanded(
             child: Text(

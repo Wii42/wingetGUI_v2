@@ -3,6 +3,7 @@ import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
@@ -11,6 +12,7 @@ import 'package:winget_gui/main_navigation.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/package_actions_widget.dart';
+import 'package:winget_gui/widget_assets/favicon_db.dart';
 import 'package:winget_gui/winget_db/winget_db.dart';
 import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
@@ -29,6 +31,8 @@ void main() async {
 
 Future<void> initAppPrerequisites() async {
   WidgetsFlutterBinding.ensureInitialized();
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
   await Future.wait([
     Window.initialize().then((_) async => await Future.wait([
           Window.setEffect(effect: WindowEffect.mica),
@@ -45,6 +49,7 @@ Future<void> initAppPrerequisites() async {
     SystemTheme.accentColor.load(),
     SettingsCache.instance.ensureInitialized(),
     PackageScreenshotsList.instance.ensureInitialized(),
+    FaviconDB.instance.ensureInitialized(),
   ]);
 }
 

@@ -726,8 +726,6 @@
       "https://www.aida64.com/sites/default/files/2024-02/ee_shot_13.png",
       "https://www.aida64.com/sites/default/files/2024-02/ee_shot_09.png",
       "https://www.aida64.com/sites/default/files/2024-02/ee_shot_16.png"
-
-
     ]
   },
   "Graebert.AresCommander.*": {
@@ -759,5 +757,11 @@
   },
   "Aircall.Aircall": {
     "icon": "https://aircall.io/favicon.svg"
+  },
+  "Canonical.Multipass": {
+    "icon": "https://assets.ubuntu.com/v1/b9411b66-Multipass-favicon_128px.png"
+  },
+  "Canonical.Juju": {
+    "icon": "https://juju.is/static/favicon.png"
   }
 }
