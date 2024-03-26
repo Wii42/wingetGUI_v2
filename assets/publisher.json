@@ -12,6 +12,9 @@
   "microsoft": {
     "source_publisher_id": "Microsoft"
   },
+  "Microsoft Corporation": {
+    "source_publisher_id": "Microsoft"
+  },
   "Python": {
     "publisher_name": null,
     "icon_url": "https://brandslogos.com/wp-content/uploads/images/large/python-logo-vector.svg"
@@ -115,6 +118,12 @@
   "Adobe": {
     "publisher_name": null,
     "icon_url": "https://logodownload.org/wp-content/uploads/2017/04/adobe-logo-5-1.png"
+  },
+  "ADOBE INC.": {
+    "source_publisher_id": "Adobe"
+  },
+  "Adobe Inc.": {
+    "source_publisher_id": "Adobe"
   },
   "EpicGames": {
     "publisher_name": "Epic Games",
@@ -270,7 +279,7 @@
     "publisher_name": "Paradox Interactive"
   },
   "ZelloInc": {
-    "publisher_name": "Zello"
+    "publisher_name": "Zello Inc"
   },
   "YoYoGames": {
     "publisher_name": "YoYo Games"
@@ -324,7 +333,7 @@
     "publisher_name": "Acorn Labs"
   },
   "AcroSoftwareInc": {
-    "publisher_name": "Acro Software"
+    "publisher_name": "Acro Software Inc."
   },
   "AdamMiskiewicz": {
     "publisher_name": "Adam Miskiewicz"
@@ -412,9 +421,6 @@
   "AntoineAflalo": {
     "publisher_name": "Antoine Aflalo"
   },
-  "AntoniKepinski": {
-    "publisher_name": "Antoni Kępiński"
-  },
   "AntonyCourtney": {
     "publisher_name": "Antony Courtney"
   },
@@ -496,12 +502,6 @@
   "AwthWathje": {
     "publisher_name": "Awth Wathje"
   },
-  "AxisCommunications": {
-    "publisher_name": "Axis Communications"
-  },
-  "AxisCommunicationsAB": {
-    "publisher_name": "Axis Communications"
-  },
   "AyibatariIbaba": {
     "publisher_name": "Ayibatari Ibaba"
   },
@@ -556,7 +556,7 @@
     "source_publisher_id": "ProtonTechnologies"
   },
   "UbiquitiInc": {
-    "publisher_name": "Ubiquiti Inc",
+    "publisher_name": "Ubiquiti Inc.",
     "icon_url": "https://futuraoffice.com.au/wp-content/uploads/2020/12/logo.png"
   },
   "SylvainRougeaux": {
@@ -571,7 +571,7 @@
     "publisher_name": "Dr. Adrian Voßkühler"
   },
   "CloudMosaInc": {
-    "publisher_name": "CloudMosa"
+    "publisher_name": "CloudMosa Inc."
   },
   "BitRecover": {
     "publisher_name": null,
@@ -660,5 +660,9 @@
   "Aircall": {
     "publisher_name": null,
     "icon_url": "https://a.storyblok.com/f/157376/x/fca06c0477/logo-green.svg"
+  },
+  "RazerInc": {
+    "publisher_name": "Razer Inc.",
+    "icon_url": "https://www.razer.com/favicon.ico"
   }
 }

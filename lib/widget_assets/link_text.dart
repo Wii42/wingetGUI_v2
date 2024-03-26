@@ -25,29 +25,33 @@ class LinkText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
+    FluentThemeData theme = FluentTheme.of(context);
     return ExpandableText(
       line,
       style: style,
       prefixText: title,
       prefixStyle: const TextStyle(fontWeight: FontWeight.bold),
-      linkEllipsis: false,
+      linkEllipsis: true,
       expandText: locale.showMore,
       collapseText: locale.showLess,
       maxLines: maxLines,
       animation: true,
+      linkStyle: const TextStyle(
+    decoration: TextDecoration.underline,),
       linkColor: FluentTheme.of(context).accentColor,
       onUrlTap: launch,
-      urlStyle: linkTextStyle,
+      urlStyle: linkTextStyle(theme),
       onHashtagTap: onHashtagTap,
-      hashtagStyle: onHashtagTap != null ? linkTextStyle : null,
+      hashtagStyle: onHashtagTap != null ? linkTextStyle(theme) : null,
       onMentionTap: onMentionTap,
-      mentionStyle: onMentionTap != null ? linkTextStyle : null,
+      mentionStyle: onMentionTap != null ? linkTextStyle(theme) : null,
     );
   }
 
-  TextStyle get linkTextStyle {
-    return const TextStyle(
-      decoration: TextDecoration.underline,
+  TextStyle linkTextStyle(FluentThemeData theme) {
+    return TextStyle(
+      //decoration: TextDecoration.underline,
+      color: theme.accentColor,
     );
   }
 

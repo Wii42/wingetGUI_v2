@@ -31,6 +31,7 @@ class AppIcon extends StatefulWidget {
   final bool withRightSidePadding;
   final PackageSources packageSource;
   final String? packageId;
+  final List<Uri> automaticFoundFavicons;
 
   AppIcon({
     super.key,
@@ -42,6 +43,7 @@ class AppIcon extends StatefulWidget {
     this.withRightSidePadding = true,
     this.packageSource = PackageSources.none,
     this.packageId,
+    this.automaticFoundFavicons = const [],
   }) {
     log = Logger(this);
   }
@@ -67,6 +69,9 @@ class AppIcon extends StatefulWidget {
       withRightSidePadding: withRightSidePadding,
       isClickable: isClickable,
       packageId: infos.id?.value,
+      automaticFoundFavicons: [
+        if (infos.automaticFoundFavicons != null) infos.automaticFoundFavicons!
+      ],
     );
   }
 
@@ -75,6 +80,13 @@ class AppIcon extends StatefulWidget {
 }
 
 class _AppIconState extends State<AppIcon> {
+  List<Uri> automaticFoundFavicons = [];
+  @override
+  void initState() {
+    automaticFoundFavicons = widget.automaticFoundFavicons;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -121,8 +133,7 @@ class _AppIconState extends State<AppIcon> {
     if (widget.packageId == null) {
       return null;
     }
-    FaviconDBEntry? entry = FaviconDB.instance.getEntry(widget.packageId!);
-    return entry?.url;
+    return FaviconDB.instance.getFavicon(widget.packageId!);
   }
 
   Widget findFavicon() {
@@ -133,6 +144,7 @@ class _AppIconState extends State<AppIcon> {
         if (snapshot.hasData) {
           Favicon? favicon = snapshot.data;
           if (favicon != null) {
+            automaticFoundFavicons.add(Uri.parse(favicon.url));
             widget.log.info(favicon.url);
             return loadFavicon(favicon.url,
                 size: widget.iconSize, onError: () => defaultIcon());
@@ -188,6 +200,7 @@ class _AppIconState extends State<AppIcon> {
     Iterable<UrlColor> urls = [
       ...asUrlColors(widget.iconUrls),
       ...asUrlColors(widget.fallbackIconUrls, color: defaultColor()),
+      ...asUrlColors(automaticFoundFavicons),
       ...asUrlColors([faviconUrlFromDB()]),
     ];
     return urls;
@@ -232,7 +245,7 @@ class FaviconGetter {
       return null;
     }
     if (packageId != null) {
-      FaviconDB.instance.insert(
+      FaviconDB.instance.insertFavicon(
           FaviconDBEntry(packageId: packageId, url: Uri.parse(favicon.url)));
     }
     return favicon;

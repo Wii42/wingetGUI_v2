@@ -8,6 +8,7 @@ import 'package:winget_gui/output_handling/package_infos/parsers/full_yaml_parse
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
+import '../../widget_assets/favicon_db.dart';
 import './package_infos.dart';
 import 'agreement_infos.dart';
 import 'info.dart';
@@ -179,20 +180,22 @@ class PackageInfosFull extends PackageInfos {
   }
 
   @override
-  void setPublisherName() {
-    super.setPublisherName();
-    if (publisherName == null) {
-      List<String?> otherNames = [agreement?.publisher?.text, author?.value];
-      for (String? name in otherNames) {
-        if (name == null || name.isEmpty) {
-          continue;
-        }
-        String nameAsId = name.replaceAll(' ', '').replaceAll('.', '');
-        if (nameAsId.toLowerCase() == probablyPublisherID()?.toLowerCase()) {
-          publisherName = name;
-          return;
-        }
-      }
+  Iterable<String?> get possiblePublisherNames {
+    return [
+      agreement?.publisher?.text,
+      author?.value,
+      ...super.possiblePublisherNames,
+    ];
+  }
+
+  @override
+  void savePublisherName() {
+    if (id != null && publisherName != null) {
+      FaviconDB.instance.insertPublisherName(PublisherDBEntry(
+          packageId: id!.value, publisherName: publisherName!));
     }
   }
+
+  @override
+  String? anyPublisherName() => agreement?.publisher?.text ?? author?.value;
 }

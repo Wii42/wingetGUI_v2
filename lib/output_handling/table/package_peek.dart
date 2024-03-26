@@ -120,24 +120,31 @@ class PackagePeek extends StatelessWidget {
 
   Widget nameAndSource(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: columnAlign,
-      children: [
-        Text(
-          infos.name?.value ?? '<Name>',
-          style: _titleStyle(context),
-          textAlign: TextAlign.start,
-          overflow: TextOverflow.ellipsis,
-        ),
-        Text(
-          infos.publisherName ?? infos.publisherID ?? infos.id?.value ?? '<ID>',
-          textAlign: TextAlign.start,
-          overflow: TextOverflow.ellipsis,
-        ),
-        sourceAndID(locale, context)
-      ],
-    );
+    return Builder(// to ensure rebuild if publisherNameFromDB() changes
+        builder: (context) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: columnAlign,
+        children: [
+          Text(
+            infos.name?.value ?? '<Name>',
+            style: _titleStyle(context),
+            textAlign: TextAlign.start,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            infos.publisherName ??
+                infos.publisherNameFromDB() ??
+                infos.publisherID ??
+                infos.id?.value ??
+                '<ID>',
+            textAlign: TextAlign.start,
+            overflow: TextOverflow.ellipsis,
+          ),
+          sourceAndID(locale, context)
+        ],
+      );
+    });
   }
 
   Widget sourceAndID(AppLocalizations locale, BuildContext context) {
@@ -146,7 +153,9 @@ class PackagePeek extends StatelessWidget {
     bool showSource = true;
     bool showId = infos.id != null &&
         infos.id!.value.isNotEmpty &&
-        (infos.publisherID != null || infos.publisherName != null);
+        (infos.publisherID != null ||
+            infos.publisherName != null ||
+            infos.publisherNameFromDB() != null);
     //AppLocalizations locale = AppLocalizations.of(context)!;
     return Row(
       children: [

@@ -1,10 +1,15 @@
+import 'dart:collection';
+
+import 'package:diacritic/diacritic.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
+import 'package:winget_gui/widget_assets/favicon_db.dart';
 
 import '../../helpers/log_stream.dart';
 import '../../helpers/package_screenshots.dart';
 import '../../helpers/package_screenshots_list.dart';
+import '../../helpers/publisher.dart';
 import '../../helpers/version_or_string.dart';
 import '../../package_sources/ms_store_source.dart';
 import '../../package_sources/package_source.dart';
@@ -23,6 +28,7 @@ abstract class PackageInfos {
   bool checkedForScreenshots = false;
   Uri? publisherIcon;
   String? publisherName;
+  Uri? automaticFoundFavicons;
 
   PackageInfos({
     this.name,
@@ -33,10 +39,11 @@ abstract class PackageInfos {
     this.publisherIcon,
     Info<PackageSources>? source,
     this.otherInfos,
+    this.automaticFoundFavicons,
   }) {
     log = Logger(this);
-    setPublisherName();
     setSource(source);
+    setPublisherName();
   }
 
   /// Set the [source] based on other attributes.
@@ -50,9 +57,24 @@ abstract class PackageInfos {
   /// Set the [publisherName] based on other attributes.
   /// Overrides should call [super.setPublisherName()] at the start.
   void setPublisherName() {
-    publisherName = PackageScreenshotsList
-        .instance.publisherIcons[probablyPublisherID()]?.nameUsingDefaultSource;
+    publisherName = PackageScreenshotsList.instance
+            .publisherIcons[probablyPublisherID()]?.nameUsingDefaultSource ??
+        publisherNameFromDB();
+    if (publisherName != null) {
+      return;
+    }
+    String? reconstructedName =
+        reconstructPublisherNameByCompareTo(possiblePublisherNames);
+    if (publisherID == null && reconstructedName == null) {
+      reconstructedName = anyPublisherName();
+    }
+    if (reconstructedName != null) {
+      publisherName = reconstructedName;
+      savePublisherName();
+    }
   }
+
+  void savePublisherName() {}
 
   bool hasVersion() =>
       (version != null && version?.value.stringVersion != 'Unknown');
@@ -60,10 +82,16 @@ abstract class PackageInfos {
       version != null && version!.value.isSpecificVersion();
 
   void setImplicitInfos() {
-    screenshots = PackageScreenshotsList.instance.getPackage(this);
+    PackageScreenshotsList screenshotsList = PackageScreenshotsList.instance;
+    screenshots = screenshotsList.getPackage(this);
     checkedForScreenshots = true;
-    publisherIcon = PackageScreenshotsList
-        .instance.publisherIcons[probablyPublisherID()]?.iconUsingDefaultSource;
+    Publisher? publisher =
+        screenshotsList.publisherIcons[probablyPublisherID()] ??
+            screenshotsList.publisherIcons[publisherName];
+    publisherIcon = publisher?.iconUsingDefaultSource;
+    if (id != null) {
+      automaticFoundFavicons = FaviconDB.instance.getFavicon(id!.value);
+    }
   }
 
   bool isWinget();
@@ -154,5 +182,80 @@ abstract class PackageInfos {
     }
     return Info<PackageSources>.fromAttribute(PackageAttribute.source,
         value: PackageSources.fromString(source));
+  }
+
+  /// Try to guess the correct spaces and dots in the publisher name.
+  String? reconstructPublisherNameByCompareTo(Iterable<String?> otherNames) {
+    List<String> names =
+        otherNames.nonNulls.where((element) => element.isNotEmpty).toList();
+    addPartialNames(names);
+    if (names.isEmpty || probablyPublisherID() == null) {
+      return null;
+    }
+    String? publisherID = _canonicalize(probablyPublisherID()!);
+    for (String name in names) {
+      String nameAsId = _canonicalize(name);
+      if (nameAsId == publisherID) {
+        return name;
+      }
+      String nameAsIdCustom = _canonicalize(name, customDiacritics: true);
+      if (nameAsIdCustom == publisherID) {
+        return name;
+      }
+    }
+    return null;
+  }
+
+  /// Add all partial names, e.g. "Microsoft Corporation Ltd." -> ["Microsoft Corporation", "Microsoft"]
+  void addPartialNames(List<String> names) {
+    LinkedHashSet<String> partNames = LinkedHashSet();
+    for (String name in names) {
+      Iterable<String> parts = name.split(' ');
+      if (parts.length > 1) {
+        for (int i = parts.length - 1; i > 1; i--) {
+          String partName = parts.take(i).join(' ');
+          partNames.add(partName);
+        }
+      }
+    }
+    names.addAll(partNames.where((element) => element.isNotEmpty));
+  }
+
+  ///remove all spaces, dots and commas and convert to lowercase.
+  /// [customDiacritics] if true, use custom diacritics, like ä -> ae.
+  String _canonicalize(String string, {bool customDiacritics = false}) {
+    if (customDiacritics) {
+      string = _replaceDiacriticsWithCustom(string);
+    }
+    string = removeDiacritics(string);
+    return string.replaceAll(RegExp(r'[ .,\-&]'), '').toLowerCase();
+  }
+
+  String _replaceDiacriticsWithCustom(String string) {
+    return string.replaceAllMapped(RegExp(r'[äöüÄÖÜ]'), (match) {
+      return switch (match.group(0)!) {
+        'ä' => 'ae',
+        'ö' => 'oe',
+        'ü' => 'ue',
+        'Ä' => 'ae',
+        'Ö' => 'oe',
+        'Ü' => 'ue',
+        _ => match.group(0)!
+      };
+    });
+  }
+
+  /// A list of names that could be the publisher name.
+  Iterable<String?> get possiblePublisherNames => [name?.value];
+
+  String? anyPublisherName() {
+    return null;
+  }
+
+  String? publisherNameFromDB() {
+    if (id == null) {
+      return null;
+    }
+    return FaviconDB.instance.getPublisherName(id!.value);
   }
 }
