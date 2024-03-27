@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
-import 'package:winget_gui/helpers/publisher.dart';
+import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/screenshots_list_load_helper.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
@@ -16,7 +16,7 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper {
   Map<String, PackageScreenshots> screenshotMap = {};
   List<Uri> invalidScreenshotUrls = [];
   final Map<String, String> idToPackageKeyMap = {};
-  Map<String, Publisher> publisherIcons = {};
+  Map<String, JsonPublisher> publisherIcons = {};
   Map<String, PackageScreenshots> customScreenshots = {};
 
   PackageScreenshotsList._() {
@@ -112,7 +112,7 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper {
   }
 }
 
-extension PublisherUsingDefaultSource on Publisher {
+extension PublisherUsingDefaultSource on JsonPublisher {
   String? get nameUsingDefaultSource =>
       nameUsingSource(PackageScreenshotsList.instance.publisherIcons);
   Uri? get iconUsingDefaultSource =>

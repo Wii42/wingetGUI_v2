@@ -6,7 +6,7 @@ import 'package:ribs_json/ribs_json.dart';
 import '../../output_handling/package_infos/package_infos_peek.dart';
 import '../package_screenshots.dart';
 import '../package_screenshots_list.dart';
-import '../publisher.dart';
+import '../json_publisher.dart';
 
 extension ScreenshotsListLoader on PackageScreenshotsList {
   static const String wingetUIScreenshotDatabaseUrl =
@@ -169,7 +169,7 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
     if (data.isEmpty) {
       return;
     }
-    publisherIcons = Publisher.parseJsonMap(data);
+    publisherIcons = JsonPublisher.parseJsonMap(data);
   }
 
   Future<String> loadAsset(String fileName) async {

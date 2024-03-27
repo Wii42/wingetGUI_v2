@@ -44,6 +44,9 @@ abstract class FullAbstractMapParser<A, B> {
       packageLocale: p.maybeLocaleFromMap(PackageAttribute.packageLocale),
       installer: _parseInstallerInfos(),
       source: p.sourceFromMap(PackageAttribute.source),
+      publisherInfo: p.maybeInfoWithLinkFromMap(
+          textInfo: PackageAttribute.publisher,
+          urlInfo: PackageAttribute.publisherUrl),
       otherInfos: p.otherDetails(),
     );
     return infos..setImplicitInfos();
@@ -126,9 +129,6 @@ abstract class FullAbstractMapParser<A, B> {
     InfoAbstractMapParser<A, B> p = getParser(agreementDetails);
     AgreementInfos agreement = AgreementInfos(
       title: PackageAttribute.agreement.title,
-      publisher: p.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.publisher,
-          urlInfo: PackageAttribute.publisherUrl),
       license: p.maybeInfoWithLinkFromMap(
           textInfo: PackageAttribute.license,
           urlInfo: PackageAttribute.licenseUrl),

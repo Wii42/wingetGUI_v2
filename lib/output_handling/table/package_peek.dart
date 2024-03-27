@@ -9,6 +9,7 @@ import '../../../package_sources/package_source.dart';
 import '../../../routes.dart';
 import '../../../widget_assets/buttons/page_button.dart';
 import '../package_infos/package_infos_peek.dart';
+import '../package_infos/publisher.dart';
 
 class PackagePeek extends StatelessWidget {
   final PackageInfosPeek infos;
@@ -133,9 +134,9 @@ class PackagePeek extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            infos.publisherName ??
-                infos.publisherNameFromDB() ??
-                infos.publisherID ??
+            infos.publisher?.nameFittingId ??
+                Publisher.nameFromDB(infos.id?.value) ??
+                infos.publisher?.id ??
                 infos.id?.value ??
                 '<ID>',
             textAlign: TextAlign.start,
@@ -153,9 +154,9 @@ class PackagePeek extends StatelessWidget {
     bool showSource = true;
     bool showId = infos.id != null &&
         infos.id!.value.isNotEmpty &&
-        (infos.publisherID != null ||
-            infos.publisherName != null ||
-            infos.publisherNameFromDB() != null);
+        (infos.publisher?.id != null ||
+            infos.publisher?.nameFittingId != null ||
+            Publisher.nameFromDB(infos.id?.value) != null);
     //AppLocalizations locale = AppLocalizations.of(context)!;
     return Row(
       children: [

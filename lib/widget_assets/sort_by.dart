@@ -76,9 +76,9 @@ enum SortBy {
   }
 
   static List<PackageInfosPeek> sortPublisher(List<PackageInfosPeek> packages) {
-    return packages
-      ..sort((a, b) => sortNull(
-          a.publisherName ?? a.publisherID, b.publisherName ?? b.publisherID));
+    String? publisher(PackageInfosPeek infos) =>
+        infos.publisher?.nameFittingId ?? infos.publisher?.id;
+    return packages..sort((a, b) => sortNull(publisher(a), publisher(b)));
   }
 
   static List<PackageInfosPeek> sortAuto(List<PackageInfosPeek> packages) {

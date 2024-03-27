@@ -163,20 +163,22 @@ class TitleWidget extends Compartment {
 
   Widget publisher(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    if (infos.publisherID != null) {
+    String? publisherId = infos.publisher!.id;
+    String? publisherName = infos.publisher?.nameFittingId ?? publisherId;
+    if (publisherId != null) {
       return InlinePageButton(
         pageRoute: Routes.publisherPage,
         routeParameter: StringRouteParameter(
-            string: infos.publisherID!, titleAddon: infos.publisherName),
-        buttonText: infos.publisherName ?? infos.publisherID!,
+            string: publisherId, titleAddon: publisherName),
+        buttonText: publisherName!,
         tooltipMessage: (locale) => locale.moreFromPublisherTooltip,
       );
     }
-    if (infos.agreement?.publisher?.text != null &&
-        infos.agreement!.publisher!.text!.isNotEmpty) {
+    if (publisherName != null &&
+        publisherName.isNotEmpty) {
       return InlineSearchButton(
-        searchTarget: infos.agreement!.publisher!.text!,
-        customButtonText: infos.agreement!.publisher!.text!,
+        searchTarget: publisherName,
+        customButtonText: publisherName,
         localization: locale,
       );
     }

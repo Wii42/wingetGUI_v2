@@ -55,8 +55,13 @@ class PackageInfosFull extends PackageInfos {
     this.packageLocale,
     this.installer,
     super.source,
+    super.publisher,
+    InfoWithLink? publisherInfo, // name and website
     super.otherInfos,
-  });
+  }) {
+    setPublisher(
+        fullName: publisherInfo?.text, publisherWebsite: publisherInfo?.url);
+  }
 
   factory PackageInfosFull.fromMap(
       {required Map<String, String>? details,
@@ -175,27 +180,19 @@ class PackageInfosFull extends PackageInfos {
           : this.source,
       otherInfos: otherInfos,
       screenshots: screenshots,
-      publisherIcon: publisherIcon,
+      publisher: publisher,
     );
   }
 
   @override
   Iterable<String?> get possiblePublisherNames {
     return [
-      agreement?.publisher?.text,
       author?.value,
       ...super.possiblePublisherNames,
     ];
   }
 
   @override
-  void savePublisherName() {
-    if (id != null && publisherName != null) {
-      FaviconDB.instance.insertPublisherName(PublisherDBEntry(
-          packageId: id!.value, publisherName: publisherName!));
-    }
-  }
-
-  @override
-  String? anyPublisherName() => agreement?.publisher?.text ?? author?.value;
+  Iterable<String?> get anyPublisherNames =>
+      [author?.value, ...super.anyPublisherNames];
 }

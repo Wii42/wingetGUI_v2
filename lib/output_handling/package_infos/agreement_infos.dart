@@ -8,13 +8,12 @@ import 'info_with_link.dart';
 
 class AgreementInfos {
   final String Function(AppLocalizations) title;
-  final InfoWithLink? publisher, license, copyright;
+  final InfoWithLink? license, copyright;
   final Info<Uri>? privacyUrl, buyUrl;
   final Info<String>? termsOfTransaction, seizureWarning, storeLicenseTerms;
 
   AgreementInfos({
     required this.title,
-    this.publisher,
     this.license,
     this.copyright,
     this.privacyUrl,
@@ -43,7 +42,7 @@ class AgreementInfos {
   }
 
   bool isEmpty() {
-    return (publisher == null &&
+    return (
         license == null &&
         copyright == null &&
         privacyUrl == null &&

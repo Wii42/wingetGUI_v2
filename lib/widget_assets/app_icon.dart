@@ -61,10 +61,10 @@ class AppIcon extends StatefulWidget {
     }
     return AppIcon(
       iconSize: iconSize,
-      iconUrls: [images?.icon, images?.icon, images?.backup?.icon],
+      iconUrls: [images?.icon, images?.backup?.icon],
       faviconUrl:
-          infosFull?.website?.value ?? infosFull?.agreement?.publisher?.url,
-      fallbackIconUrls: [infos.publisherIcon],
+          infosFull?.website?.value ?? infos.publisher?.website,
+      fallbackIconUrls: [infos.publisher?.icon],
       packageSource: infos.source.value,
       withRightSidePadding: withRightSidePadding,
       isClickable: isClickable,

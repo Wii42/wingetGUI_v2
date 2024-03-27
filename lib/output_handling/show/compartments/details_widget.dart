@@ -21,8 +21,8 @@ class DetailsWidget extends ExpanderCompartment {
     return fullCompartment(
         title: compartmentTitle(locale),
         mainColumn: [
-          if (infos.agreement?.publisher != null)
-            wrapInfoWithLink(context, infos.agreement?.publisher),
+          if (infos.publisher != null)
+            wrapInfoWithLink(context, infos.publisher?.infoWithLink),
           ...detailsList([
             infos.author,
             infos.pricing,
@@ -66,9 +66,9 @@ class DetailsWidget extends ExpanderCompartment {
   }
 
   bool showMoreFromPublisherButton() =>
-      infos.publisherID != null ||
-      (infos.agreement?.publisher?.text != null &&
-          infos.agreement!.publisher!.text!.isNotEmpty);
+      infos.publisher?.id != null ||
+      (infos.publisher?.nameFittingId != null &&
+          infos.publisher!.nameFittingId!.isNotEmpty);
 
   @override
   String compartmentTitle(AppLocalizations locale) {

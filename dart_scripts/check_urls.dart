@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:ribs_json/ribs_json.dart';
-import 'package:winget_gui/helpers/publisher.dart';
+import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/screenshots_list_load_helper.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 
@@ -33,15 +33,15 @@ Future<List<UrlTestResponse>> checkCustomIcons() async {
 }
 
 Future<List<UrlTestResponse>> checkPublisherIcons() async {
-  return await check<Publisher>(
+  return await check<JsonPublisher>(
     testName: 'PUBLISHER ICONS',
     fileName: 'publisher.json',
-    parseJsonMap: Publisher.parseJsonMap,
-    urlMap: (Publisher publisher) => {
+    parseJsonMap: JsonPublisher.parseJsonMap,
+    urlMap: (JsonPublisher publisher) => {
       'icon': publisher.icon,
       'solid icon': publisher.solidIcon,
     },
-    objectId: (Publisher publisher) => publisher.publisherNameOrId,
+    objectId: (JsonPublisher publisher) => publisher.publisherNameOrId,
   );
 }
 

@@ -5,7 +5,7 @@ import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 
-import '../helpers/publisher.dart';
+import '../helpers/json_publisher.dart';
 import '../helpers/route_parameter.dart';
 import '../widget_assets/package_list_page.dart';
 import '../widget_assets/sort_by.dart';
@@ -41,7 +41,7 @@ class PublisherPage extends StatelessWidget {
       listView: PackagePeekListView(
         dbTable: DBTable(
           WingetDB.instance.available.infos
-              .where((element) => element.publisherID == publisherId)
+              .where((element) => element.publisher?.id == publisherId)
               .toList(),
           content: (locale) =>
               locale.infoTitle(PackageAttribute.publisher.name),
@@ -68,7 +68,7 @@ class PublisherPage extends StatelessWidget {
 
   Widget publisherTitle(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
-    Publisher? publisher =
+    JsonPublisher? publisher =
         PackageScreenshotsList.instance.publisherIcons[publisherId];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),

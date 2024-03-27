@@ -17,12 +17,14 @@ class PackageInfosPeek extends PackageInfos {
     super.version,
     super.screenshots,
     super.checkedForScreenshots = false,
-    super.publisherIcon,
     this.availableVersion,
     super.source,
+    super.publisher,
     this.match,
     super.otherInfos,
-  });
+  }) {
+    setPublisher();
+  }
 
   factory PackageInfosPeek.fromMap(
       {required Map<String, String>? details,
