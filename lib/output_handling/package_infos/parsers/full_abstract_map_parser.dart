@@ -3,6 +3,7 @@ import 'package:winget_gui/output_handling/package_infos/agreement_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
 
+import '../../../package_sources/package_source.dart';
 import '../info.dart';
 import '../installer_objects/computer_architecture.dart';
 import '../installer_objects/installer.dart';
@@ -20,9 +21,10 @@ abstract class FullAbstractMapParser<A, B> {
     Info<String>? description =
         p.maybeStringFromMap(PackageAttribute.description);
     Info<String>? shortDescription = _getShortDescription(p, description);
+    Info<PackageSources>? source = p.sourceFromMap(PackageAttribute.source);
     PackageInfosFull infos = PackageInfosFull(
       name: p.maybeStringFromMap(PackageAttribute.name),
-      id: p.maybePackageIdFromMap(PackageAttribute.id),
+      id: p.maybePackageIdFromMap(PackageAttribute.id, source: source.value),
       description: description,
       shortDescription: shortDescription,
       supportUrl: p.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),
@@ -43,7 +45,7 @@ abstract class FullAbstractMapParser<A, B> {
       tags: p.maybeTagsFromMap(),
       packageLocale: p.maybeLocaleFromMap(PackageAttribute.packageLocale),
       installer: _parseInstallerInfos(),
-      source: p.sourceFromMap(PackageAttribute.source),
+      source: source,
       publisherInfo: p.maybeInfoWithLinkFromMap(
           textInfo: PackageAttribute.publisher,
           urlInfo: PackageAttribute.publisherUrl),

@@ -43,13 +43,13 @@ abstract class InfoAbstractMapParser<A, B> {
 
   List<String>? maybeTagsFromMap();
 
-  Info<PackageSources> sourceFromMap(PackageAttribute packageLocale) {
-    Info<String>? localeInfo = maybeStringFromMap(packageLocale);
-    if (localeInfo == null) {
+  Info<PackageSources> sourceFromMap(PackageAttribute source) {
+    Info<String>? sourceInfo = maybeStringFromMap(source);
+    if (sourceInfo == null) {
       return Info<PackageSources>.fromAttribute(PackageAttribute.source,
           value: PackageSources.none);
     }
-    return localeInfo.copyAs<PackageSources>(parser: PackageSources.fromString);
+    return sourceInfo.copyAs<PackageSources>(parser: PackageSources.fromString);
   }
 
   Info<Locale>? maybeLocaleFromMap(PackageAttribute packageLocale) {
@@ -144,7 +144,7 @@ abstract class InfoAbstractMapParser<A, B> {
           PackageAttribute expectedReturnCodes) =>
       maybeListFromMap(expectedReturnCodes, parser: ExpectedReturnCode.fromMap);
 
-  Info<PackageId>? maybePackageIdFromMap(PackageAttribute packageId) {
-    return maybeValueFromMap(packageId, PackageId.parse);
+  Info<PackageId>? maybePackageIdFromMap(PackageAttribute packageId, {required PackageSources source}) {
+    return maybeValueFromMap(packageId, (element) => PackageId.parse(element, source: source));
   }
 }

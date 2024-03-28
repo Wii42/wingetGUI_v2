@@ -108,4 +108,13 @@ class PackageId {
   int get hashCode => string.hashCode;
 
   String? get initialLetter => string.firstChar().toLowerCase();
+
+  String? get idPartsAsName {
+    if (idParts.isEmpty) return null;
+    String result = idParts.join(' ');
+    if(hasEllipsis) {
+      result += ellipsis;
+    }
+    return result;
+  }
 }

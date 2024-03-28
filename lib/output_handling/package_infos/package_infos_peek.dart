@@ -34,13 +34,14 @@ class PackageInfosPeek extends PackageInfos {
       return PackageInfosPeek();
     }
     InfoMapParser parser = InfoMapParser(map: details, locale: locale);
+    Info<PackageSources>? source = parser.sourceFromMap(PackageAttribute.source);
     PackageInfosPeek infos = PackageInfosPeek(
       name: parser.maybeStringFromMap(PackageAttribute.name),
-      id: parser.maybePackageIdFromMap(PackageAttribute.id),
+      id: parser.maybePackageIdFromMap(PackageAttribute.id, source: source.value),
       version: parser.maybeVersionOrStringFromMap(PackageAttribute.version),
       availableVersion:
           parser.maybeVersionOrStringFromMap(PackageAttribute.availableVersion),
-      source: parser.sourceFromMap(PackageAttribute.source),
+      source: source,
       match: parser.maybeStringFromMap(PackageAttribute.match),
       otherInfos: details.isNotEmpty ? details : null,
     );

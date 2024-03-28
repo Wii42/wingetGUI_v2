@@ -85,7 +85,7 @@ class TitleWidget extends Compartment {
     Typography typography = FluentTheme.of(context).typography;
     return RichText(
       text: TextSpan(
-          text: '${infos.name?.value ?? '<unknown>'} ',
+          text: '${infos.name?.value ?? infos.id?.value.idPartsAsName ??'<unknown>'} ',
           style: titleStyle(typography),
           children: [
             if (infos.hasVersion())
