@@ -7,15 +7,28 @@ import '../helpers/log_stream.dart';
 
 class FaviconDB {
   static final FaviconDB instance = FaviconDB._();
-  static const String faviconsTable = 'favicon';
-  static const publisherNameTable = 'publisherName';
-  String get dbName => '${faviconsTable}_database.db';
-  Map<String, Uri> _favicons = {};
-  Map<String, String> _publisherNames = {};
+  static const String dbName = 'favicon_database.db';
+  late final FaviconTable favicons;
+  late final PublisherNameTable publisherNamesByPackageId;
+  late final PublisherNameTable publisherNamesByPublisherId;
+  List<DBTable> get tables =>
+      [favicons, publisherNamesByPackageId, publisherNamesByPublisherId];
   Database? _database;
   late final Logger log;
+
   FaviconDB._() {
     log = Logger(this);
+    favicons = FaviconTable(this);
+    publisherNamesByPackageId = PublisherNameTable(
+      tableName: 'publisherName',
+      idKey: 'packageId',
+      parentDB: this,
+    );
+    publisherNamesByPublisherId = PublisherNameTable(
+      tableName: 'publisherNameByPublisherId',
+      idKey: 'publisherId',
+      parentDB: this,
+    );
   }
 
   Future<void> ensureInitialized() async {
@@ -25,191 +38,184 @@ class FaviconDB {
     _database = await openDatabase(
       path.join(await getDatabasesPath(), dbName),
       onCreate: (db, version) {
-        db.execute(
-          '''CREATE TABLE $faviconsTable(
-          ${FaviconDBEntry.idKey} TEXT PRIMARY KEY,
-          ${FaviconDBEntry.urlKey} TEXT
-          )''',
-        );
-        db.execute(
-          '''CREATE TABLE $publisherNameTable(
-          ${PublisherDBEntry.idKey} TEXT PRIMARY KEY,
-          ${PublisherDBEntry.publisherNameKey} TEXT
-          )''',
-        );
+        for (DBTable table in tables) {
+          table.initTable(db);
+        }
       },
       version: 1,
     );
-    _favicons = await _dbToMapFavicons();
-    _publisherNames = await _dbToMapPublisherNames();
-    log.info('init publisherNamesDB',
-        message: (await _dbToMapPublisherNames()).toString());
-  }
-
-  Future<Map<String, Uri>> _dbToMapFavicons() async {
-    List<FaviconDBEntry> dbEntries = await _getAllFaviconsDB();
-    return {for (var e in dbEntries) e.packageId: e.url};
-  }
-
-  Future<Map<String, String>> _dbToMapPublisherNames() async {
-    List<PublisherDBEntry> dbEntries = await _getAllPublisherNamesDB();
-    return {for (var e in dbEntries) e.packageId: e.publisherName};
-  }
-
-  void insertFavicon(FaviconDBEntry entry) {
-    _favicons[entry.packageId] = entry.url;
-    _insertDB(entry, faviconsTable);
-  }
-
-  void insertPublisherName(PublisherDBEntry entry) {
-    _publisherNames[entry.packageId] = entry.publisherName;
-    _insertDB(entry, publisherNameTable);
-    _dbToMapPublisherNames();
-  }
-
-  Future<void> _insertDB(DBEntry entry, String tableName) async {
-    if (_database == null) {
-      await ensureInitialized();
+    for (DBTable table in tables) {
+      table._setEntriesFromDB();
     }
-    await _database!.insert(
+    log.info('init publisherNamesByPackageIdDB',
+        message: (await publisherNamesByPackageId._dbToMap()).toString());
+    log.info('init publisherNamesByPublisherIdDB',
+        message: (await publisherNamesByPublisherId._dbToMap()).toString());
+  }
+}
+
+abstract class DBTable<K extends Object, V extends Object> {
+  String get tableName;
+  String get idKey;
+  (K, V) _fromMap(Map<String, dynamic> map);
+  Map<String, dynamic> _toMap((K, V) entry);
+
+  Map<K, V> _entries = {};
+  final FaviconDB parentDB;
+
+  DBTable(this.parentDB);
+
+  initTable(Database db);
+
+  void insert(K id, V value) {
+    _entries[id] = value;
+    _insertDB((id, value));
+    _setEntriesFromDB();
+  }
+
+  void delete(K id) {
+    _entries.remove(id);
+    _deleteInDB(id);
+    _setEntriesFromDB();
+  }
+
+  V? getEntry(K id) {
+    return _entries[id];
+  }
+
+  Map<K, V> get entries => UnmodifiableMapView(_entries);
+
+  Future<void> _ensureDBInitialized() {
+    if (parentDB._database == null) {
+      return parentDB.ensureInitialized();
+    }
+    return Future.value();
+  }
+
+  Future<List<(K, V)>> _getAllEntriesDB() async {
+    await _ensureDBInitialized();
+    List<Map<String, dynamic>> maps =
+        await parentDB._database!.query(tableName);
+    return maps.map((e) => _fromMap(e)).toList();
+  }
+
+  Future<void> _deleteInDB(K id) async {
+    await _ensureDBInitialized();
+    await parentDB._database!.delete(
       tableName,
-      entry.toMap(),
+      where: '$idKey = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<void> _insertDB((K, V) entry) async {
+    await _ensureDBInitialized();
+    await parentDB._database!.insert(
+      tableName,
+      _toMap(entry),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    switch (tableName) {
-      case faviconsTable:
-        _favicons = await _dbToMapFavicons();
-        break;
-      case publisherNameTable:
-        _publisherNames = await _dbToMapPublisherNames();
-        break;
-    }
   }
 
-  Uri? getFavicon(String packageId) {
-    return _favicons[packageId];
-  }
-
-  String? getPublisherName(String? packageId) {
-    return _publisherNames[packageId];
-  }
-
-  Future<FaviconDBEntry?> _getFaviconEntryDB(String packageId) async {
-    if (_database == null) {
-      await ensureInitialized();
-    }
-    List<Map<String, dynamic>> maps = await _database!.query(
-      faviconsTable,
-      where: '${FaviconDBEntry.idKey} = ?',
-      whereArgs: [packageId],
+  Future<(K, V)?> _getEntryDB(K id) async {
+    await _ensureDBInitialized();
+    List<Map<String, dynamic>> maps = await parentDB._database!.query(
+      tableName,
+      where: '$idKey = ?',
+      whereArgs: [id],
     );
     if (maps.isEmpty) {
       return null;
     }
-    return FaviconDBEntry.fromMap(maps.first);
+    return _fromMap(maps.first);
   }
 
-  Map<String, Uri> get favicons => UnmodifiableMapView(_favicons);
-  Map<String, String> get publisherNames =>
-      UnmodifiableMapView(_publisherNames);
-
-  Future<List<FaviconDBEntry>> _getAllFaviconsDB() async {
-    if (_database == null) {
-      await ensureInitialized();
-    }
-    List<Map<String, dynamic>> maps = await _database!.query(faviconsTable);
-    return maps.map((e) => FaviconDBEntry.fromMap(e)).toList();
+  Future<Map<K, V>> _dbToMap() async {
+    List<(K, V)> dbEntries = await _getAllEntriesDB();
+    return {for (var e in dbEntries) e.$1: e.$2};
   }
 
-  Future<List<PublisherDBEntry>> _getAllPublisherNamesDB() async {
-    if (_database == null) {
-      await ensureInitialized();
-    }
-    List<Map<String, dynamic>> maps =
-        await _database!.query(publisherNameTable);
-    return maps.map((e) => PublisherDBEntry.fromMap(e)).toList();
+  _setEntriesFromDB() async {
+    _entries = await _dbToMap();
   }
 
-  void deleteFavicon(String packageId) {
-    _favicons.remove(packageId);
-    _deleteInDB(packageId, faviconsTable);
+  Future<void> _deleteAllInDB() async {
+    await _ensureDBInitialized();
+    await parentDB._database!.delete(tableName);
   }
 
-  void deletePublisherName(String packageId) {
-    _publisherNames.remove(packageId);
-    _deleteInDB(packageId, publisherNameTable);
-  }
-
-  Future<void> _deleteInDB(String packageId, String table) async {
-    if (_database == null) {
-      await ensureInitialized();
-    }
-    await _database!.delete(
-      table,
-      where: '${FaviconDBEntry.idKey} = ?',
-      whereArgs: [packageId],
-    );
+  void deleteAll() {
+    _entries.clear();
+    _deleteAllInDB();
   }
 }
 
-abstract class DBEntry {
-  Map<String, dynamic> toMap();
-}
+class FaviconTable extends DBTable<String, Uri> {
+  @override
+  final String tableName = 'favicon';
+  @override
+  final String idKey = 'packageId';
+  final urlKey = 'url';
 
-class FaviconDBEntry extends DBEntry {
-  static const idKey = 'packageId';
-  static const urlKey = 'url';
-  final String packageId;
-  final Uri url;
-
-  FaviconDBEntry({required this.packageId, required this.url});
+  FaviconTable(super.parentDB);
 
   @override
-  Map<String, dynamic> toMap() {
+  void initTable(Database db) {
+    db.execute(
+      '''CREATE TABLE $tableName(
+          $idKey TEXT PRIMARY KEY,
+          $urlKey TEXT
+          )''',
+    );
+  }
+
+  @override
+  (String, Uri) _fromMap(Map<String, dynamic> map) {
+    return (map[idKey], Uri.parse(map[urlKey]));
+  }
+
+  @override
+  Map<String, dynamic> _toMap((String, Uri) entry) {
     return {
-      idKey: packageId,
-      urlKey: url.toString(),
+      idKey: entry.$1,
+      urlKey: entry.$2.toString(),
     };
   }
-
-  factory FaviconDBEntry.fromMap(Map<String, dynamic> map) {
-    return FaviconDBEntry(
-      packageId: map[idKey],
-      url: Uri.parse(map[urlKey]),
-    );
-  }
-
-  @override
-  String toString() {
-    return 'FaviconDBEntry{packageId: $packageId, url: $url}';
-  }
 }
 
-class PublisherDBEntry extends DBEntry {
-  static const idKey = 'packageId';
-  static const publisherNameKey = 'publisherName';
-  final String packageId;
-  final String publisherName;
+class PublisherNameTable extends DBTable<String, String> {
+  @override
+  final String tableName;
+  @override
+  final String idKey;
+  final publisherNameKey = 'publisherName';
 
-  PublisherDBEntry({required this.packageId, required this.publisherName});
+  PublisherNameTable(
+      {required this.tableName,
+      required this.idKey,
+      required FaviconDB parentDB})
+      : super(parentDB);
 
   @override
-  Map<String, dynamic> toMap() {
-    return {
-      idKey: packageId,
-      publisherNameKey: publisherName,
-    };
-  }
-
-  factory PublisherDBEntry.fromMap(Map<String, dynamic> map) {
-    return PublisherDBEntry(
-      packageId: map[idKey],
-      publisherName: map[publisherNameKey],
+  void initTable(Database db) {
+    db.execute(
+      '''CREATE TABLE $tableName(
+          $idKey TEXT PRIMARY KEY,
+          $publisherNameKey TEXT
+          )''',
     );
   }
 
   @override
-  String toString() {
-    return 'PublisherDBEntry{packageId: $packageId, publisherName: $publisherName}';
+  (String, String) _fromMap(Map<String, dynamic> map) {
+    return (map[idKey], map[publisherNameKey]);
+  }
+
+  @override
+  Map<String, dynamic> _toMap((String, String) entry) {
+    return {
+      idKey: entry.$1,
+      publisherNameKey: entry.$2,
+    };
   }
 }

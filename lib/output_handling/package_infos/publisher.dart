@@ -64,11 +64,15 @@ class Publisher {
     );
   }
 
-  static String? nameFromDB(String? packageId) {
-    if (packageId == null) {
-      return null;
+  String? nameFromDBbyPublisherId() {
+    return _PublisherBuilder.nameFromDBbyPublisherId(id);
+  }
+
+  static String? nameFromDBbyPackageId(String? packageId) {
+    if (packageId != null) {
+      return FaviconDB.instance.publisherNamesByPackageId.getEntry(packageId);
     }
-    return FaviconDB.instance.getPublisherName(packageId);
+    return null;
   }
 }
 
@@ -115,7 +119,8 @@ class _PublisherBuilder {
   String? fetchName() {
     String? publisherName = PackageScreenshotsList.instance
             .publisherIcons[probablyPublisherID()]?.nameUsingDefaultSource ??
-        Publisher.nameFromDB(packageId);
+        nameFromDBbyPublisherId(publisherId) ??
+        Publisher.nameFromDBbyPackageId(packageId);
     if (publisherName != null) {
       return publisherName;
     }
@@ -208,10 +213,23 @@ class _PublisherBuilder {
     });
   }
 
+  static String? nameFromDBbyPublisherId(String? publisherId) {
+    if (publisherId != null) {
+      return FaviconDB.instance.publisherNamesByPublisherId
+          .getEntry(publisherId);
+    }
+    return null;
+  }
+
   void savePublisherName(String? name) {
-    if (packageId != null && name != null) {
-      FaviconDB.instance.insertPublisherName(
-          PublisherDBEntry(packageId: packageId!, publisherName: name));
+    if (name == null) {
+      return;
+    }
+    if (publisherId != null) {
+      FaviconDB.instance.publisherNamesByPublisherId.insert(publisherId!, name);
+    }
+    if (packageId != null) {
+      FaviconDB.instance.publisherNamesByPackageId.insert(packageId!, name);
     }
   }
 

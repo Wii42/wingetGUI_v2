@@ -123,7 +123,6 @@ class PackagePeek extends StatelessWidget {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Builder(// to ensure rebuild if publisherNameFromDB() changes
         builder: (context) {
-
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: columnAlign,
@@ -136,7 +135,8 @@ class PackagePeek extends StatelessWidget {
           ),
           Text(
             infos.publisher?.nameFittingId ??
-                Publisher.nameFromDB(infos.id?.value) ??
+                infos.publisher?.nameFromDBbyPublisherId() ??
+                Publisher.nameFromDBbyPackageId(infos.id?.value) ??
                 infos.publisher?.id ??
                 infos.id?.value ??
                 '<ID>',
@@ -157,7 +157,7 @@ class PackagePeek extends StatelessWidget {
         infos.id!.value.isNotEmpty &&
         (infos.publisher?.id != null ||
             infos.publisher?.nameFittingId != null ||
-            Publisher.nameFromDB(infos.id?.value) != null);
+            Publisher.nameFromDBbyPackageId(infos.id?.value) != null);
     //AppLocalizations locale = AppLocalizations.of(context)!;
     return Row(
       children: [

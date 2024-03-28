@@ -58,7 +58,7 @@ abstract class PackageInfos {
     screenshots = screenshotsList.getPackage(this);
     checkedForScreenshots = true;
     if (id != null) {
-      automaticFoundFavicons = FaviconDB.instance.getFavicon(id!.value);
+      automaticFoundFavicons = FaviconDB.instance.favicons.getEntry(id!.value);
     }
   }
 

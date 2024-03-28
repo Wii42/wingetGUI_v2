@@ -7,6 +7,7 @@ import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 
 import '../helpers/json_publisher.dart';
 import '../helpers/route_parameter.dart';
+import '../widget_assets/favicon_db.dart' as faviconDB;
 import '../widget_assets/package_list_page.dart';
 import '../widget_assets/sort_by.dart';
 import '../winget_db/db_table.dart';
@@ -27,7 +28,9 @@ class PublisherPage extends StatelessWidget {
     String publisherId = (parameters as StringRouteParameter).string;
     String? publisherName = parameters.titleAddon ??
         PackageScreenshotsList
-            .instance.publisherIcons[publisherId]?.nameUsingDefaultSource;
+            .instance.publisherIcons[publisherId]?.nameUsingDefaultSource ??
+        faviconDB.FaviconDB.instance.publisherNamesByPublisherId
+            .getEntry(publisherId);
 
     return PublisherPage(
         publisherId: publisherId, publisherName: publisherName);

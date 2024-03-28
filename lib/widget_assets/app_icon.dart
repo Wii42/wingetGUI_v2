@@ -62,8 +62,7 @@ class AppIcon extends StatefulWidget {
     return AppIcon(
       iconSize: iconSize,
       iconUrls: [images?.icon, images?.backup?.icon],
-      faviconUrl:
-          infosFull?.website?.value ?? infos.publisher?.website,
+      faviconUrl: infosFull?.website?.value ?? infos.publisher?.website,
       fallbackIconUrls: [infos.publisher?.icon],
       packageSource: infos.source.value,
       withRightSidePadding: withRightSidePadding,
@@ -133,7 +132,7 @@ class _AppIconState extends State<AppIcon> {
     if (widget.packageId == null) {
       return null;
     }
-    return FaviconDB.instance.getFavicon(widget.packageId!);
+    return FaviconDB.instance.favicons.getEntry(widget.packageId!);
   }
 
   Widget findFavicon() {
@@ -245,8 +244,7 @@ class FaviconGetter {
       return null;
     }
     if (packageId != null) {
-      FaviconDB.instance.insertFavicon(
-          FaviconDBEntry(packageId: packageId, url: Uri.parse(favicon.url)));
+      FaviconDB.instance.favicons.insert(packageId, Uri.parse(favicon.url));
     }
     return favicon;
   }
