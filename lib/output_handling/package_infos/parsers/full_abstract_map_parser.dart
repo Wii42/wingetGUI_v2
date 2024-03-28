@@ -22,7 +22,7 @@ abstract class FullAbstractMapParser<A, B> {
     Info<String>? shortDescription = _getShortDescription(p, description);
     PackageInfosFull infos = PackageInfosFull(
       name: p.maybeStringFromMap(PackageAttribute.name),
-      id: p.maybeStringFromMap(PackageAttribute.id),
+      id: p.maybePackageIdFromMap(PackageAttribute.id),
       description: description,
       shortDescription: shortDescription,
       supportUrl: p.maybeLinkFromMap(PackageAttribute.publisherSupportUrl),

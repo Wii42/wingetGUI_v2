@@ -7,6 +7,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../helpers/log_stream.dart';
 import '../helpers/version_or_string.dart';
 import '../output_handling/output_handler.dart';
+import '../output_handling/package_infos/package_id.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../winget_commands.dart';
@@ -72,7 +73,7 @@ class WingetDB {
   void printPublishersPackageNrs() {
     Map<String, List<PackageInfosPeek>> map = {};
     for (PackageInfosPeek package in available.infos) {
-      String publisherId = package.probablyPublisherID()!;
+      String publisherId = package.id!.value.probablyPublisherId()!;
       if (map.containsKey(publisherId)) {
         map[publisherId]!.add(package);
       } else {
@@ -89,7 +90,7 @@ class WingetDB {
   List<PackageInfosPeek> _filterUpdates(infos) {
     List<PackageInfosPeek> toRemoveFromUpdates = [];
     for (PackageInfosPeek package in infos) {
-      String id = package.id!.value;
+      PackageId id = package.id!.value;
       if (installed.idMap.containsKey(id)) {
         List<PackageInfosPeek> installedPackages = installed.idMap[id]!;
         List<VersionOrString?> installedVersions =

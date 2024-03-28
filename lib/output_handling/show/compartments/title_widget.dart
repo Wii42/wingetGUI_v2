@@ -68,10 +68,10 @@ class TitleWidget extends Compartment {
   Widget buildRightSide() => StreamBuilder<DBMessage>(
       stream: WingetDB.instance.installed.stream,
       builder: (context, snapshot) {
-        bool isInstalled =
-            WingetDB.instance.installed.idMap.containsKey(infos.id?.value);
-        bool hasUpdate =
-            WingetDB.instance.updates.idMap.containsKey(infos.id?.value);
+        bool isInstalled = WingetDB.instance.installed.idMap
+            .containsKey(infos.id?.value);
+        bool hasUpdate = WingetDB.instance.updates.idMap
+            .containsKey(infos.id?.value);
         return RightSideButtons(
           infos: infos,
           install: !isInstalled,
@@ -168,14 +168,12 @@ class TitleWidget extends Compartment {
     if (publisherId != null) {
       return InlinePageButton(
         pageRoute: Routes.publisherPage,
-        routeParameter: StringRouteParameter(
-            string: publisherId),
+        routeParameter: StringRouteParameter(string: publisherId),
         buttonText: publisherName!,
         tooltipMessage: (locale) => locale.moreFromPublisherTooltip,
       );
     }
-    if (publisherName != null &&
-        publisherName.isNotEmpty) {
+    if (publisherName != null && publisherName.isNotEmpty) {
       return InlineSearchButton(
         searchTarget: publisherName,
         customButtonText: publisherName,
@@ -184,7 +182,7 @@ class TitleWidget extends Compartment {
     }
     return Text(
       infos.author?.value ??
-          infos.id?.value.split('.').firstOrNull ??
+          infos.id?.value.probablyPublisherId() ??
           '<unknown>',
     );
   }

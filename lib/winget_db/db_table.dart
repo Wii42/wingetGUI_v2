@@ -7,6 +7,7 @@ import 'package:winget_gui/winget_db/winget_db.dart';
 import '../helpers/log_stream.dart';
 import '../output_handling/one_line_info/one_line_info_parser.dart';
 import '../output_handling/package_infos/info.dart';
+import '../output_handling/package_infos/package_id.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,7 +16,7 @@ import 'db_table_creator.dart';
 class DBTable {
   late final Logger log;
   List<PackageInfosPeek> _infos;
-  Map<String, List<PackageInfosPeek>>? _idMap;
+  Map<PackageId, List<PackageInfosPeek>>? _idMap;
   List<OneLineInfo> hints;
   WingetDB? parentDB;
 
@@ -34,7 +35,7 @@ class DBTable {
     log = Logger(this);
   }
 
-  Map<String, List<PackageInfosPeek>> get idMap {
+  Map<PackageId, List<PackageInfosPeek>> get idMap {
     if (_idMap == null) {
       _generateIdMap();
     }
@@ -44,7 +45,7 @@ class DBTable {
   void _generateIdMap() {
     _idMap = {};
     for (PackageInfosPeek info in _infos) {
-      Info<String>? id = info.id;
+      Info<PackageId>? id = info.id;
       if (id != null) {
         if (_idMap!.containsKey(id.value)) {
           _idMap![id.value]!.add(info);

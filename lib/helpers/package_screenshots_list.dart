@@ -53,7 +53,7 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper {
       return null;
     }
 
-    String? packageKey = idToPackageKeyMap[packageInfos.id?.value];
+    String? packageKey = idToPackageKeyMap[packageInfos.id?.value.string];
     if (packageKey != null) {
       log.info(
           'found packageKey $packageKey for ${packageInfos.id?.value} in idToPackageKeyMap');
@@ -71,7 +71,7 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper {
       PackageScreenshots? screenshots = screenshotMap[possibleKey];
       if (screenshots != null) {
         if (packageInfos.id != null) {
-          idToPackageKeyMap[packageInfos.id!.value] = possibleKey;
+          idToPackageKeyMap[packageInfos.id!.value.string] = possibleKey;
         }
         if (screenshots.icon != null || screenshots.screenshots != null) {
           return screenshots;
@@ -82,7 +82,7 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper {
       }
     }
     if (packageInfos.id != null) {
-      String id = packageInfos.id!.value;
+      String id = packageInfos.id!.value.string;
       PackageScreenshots? screenshots = customScreenshots[id];
       if (screenshots != null) {
         idToPackageKeyMap[id] = id;

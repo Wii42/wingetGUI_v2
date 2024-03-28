@@ -5,6 +5,7 @@ import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/package_id.dart';
 
 import '../../helpers/json_publisher.dart';
 import '../../helpers/package_screenshots_list.dart';
@@ -31,7 +32,7 @@ class Publisher {
   });
 
   factory Publisher.build({
-    required String? packageId,
+    required PackageId? packageId,
     String? fullName,
     Uri? website,
     Iterable<String?> possiblePublisherNames = const [],
@@ -69,16 +70,16 @@ class Publisher {
     return _PublisherBuilder.nameFromDBbyPublisherId(id);
   }
 
-  static String? nameFromDBbyPackageId(String? packageId) {
-    if (packageId != null) {
-      return FaviconDB.instance.publisherNamesByPackageId[packageId];
+  static String? nameFromDBbyPackageId(PackageId? packageId) {
+    if (packageId != null && packageId.string.isNotEmpty) {
+      return FaviconDB.instance.publisherNamesByPackageId[packageId.string];
     }
     return null;
   }
 }
 
 class _PublisherBuilder {
-  String? packageId;
+  PackageId? packageId;
   String? publisherId;
   String? fullName;
   String? nameFittingId;
@@ -104,8 +105,7 @@ class _PublisherBuilder {
   });
 
   Publisher build() {
-    publisherId ??=
-        (source == PackageSources.winget ? probablyPublisherID() : null);
+    publisherId ??= packageId?.probablyPublisherId();
     nameFittingId ??= fetchName();
     icon ??= fetchIcon();
     return Publisher(
@@ -118,8 +118,10 @@ class _PublisherBuilder {
   }
 
   String? fetchName() {
-    String? publisherName = PackageScreenshotsList.instance
-            .publisherIcons[probablyPublisherID()]?.nameUsingDefaultSource ??
+    String? publisherName = PackageScreenshotsList
+            .instance
+            .publisherIcons[packageId?.probablyPublisherId()]
+            ?.nameUsingDefaultSource ??
         nameFromDBbyPublisherId(publisherId) ??
         Publisher.nameFromDBbyPackageId(packageId);
     if (publisherName != null) {
@@ -139,30 +141,16 @@ class _PublisherBuilder {
     return publisherName;
   }
 
-  String? probablyPublisherID() {
-    String? publisherId = packageId;
-    if (publisherId == null) {
-      return null;
-    }
-    if (publisherId.contains('.')) {
-      return publisherId.split('.').first;
-    }
-    if (publisherId.trim().contains(' ')) {
-      return publisherId.trim().split(' ').first;
-    }
-    return null;
-  }
-
   /// Try to guess the correct spaces and dots in the publisher name.
   String? reconstructPublisherNameByCompareTo(Iterable<String?> otherNames) {
     List<String> names =
         otherNames.nonNulls.where((element) => element.isNotEmpty).toList();
     int lengthFullNames = names.length;
     addPartialNames(names);
-    if (names.isEmpty || probablyPublisherID() == null) {
+    if (names.isEmpty || packageId?.probablyPublisherId() == null) {
       return null;
     }
-    String? publisherID = _canonicalize(probablyPublisherID()!);
+    String? publisherID = _canonicalize(packageId!.probablyPublisherId()!);
     for ((int, String) indexedName in names.indexed) {
       String name = indexedName.$2;
       int index = indexedName.$1;
@@ -238,14 +226,14 @@ class _PublisherBuilder {
       FaviconDB.instance.publisherNamesByPublisherId[publisherId!] = name;
     }
     if (packageId != null) {
-      FaviconDB.instance.publisherNamesByPackageId[packageId!] = name;
+      FaviconDB.instance.publisherNamesByPackageId[packageId!.string] = name;
     }
   }
 
   Uri? fetchIcon() {
     PackageScreenshotsList screenshotsList = PackageScreenshotsList.instance;
     JsonPublisher? publisher =
-        screenshotsList.publisherIcons[probablyPublisherID()] ??
+        screenshotsList.publisherIcons[packageId?.probablyPublisherId()] ??
             screenshotsList.publisherIcons[nameFittingId];
     return publisher?.iconUsingDefaultSource;
   }

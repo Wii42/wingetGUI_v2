@@ -203,7 +203,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       packages = packages
           .where((element) =>
               (element.name?.value.containsCaseInsensitive(filter) ?? false) ||
-              (element.id?.value.containsCaseInsensitive(filter) ?? false) ||
+              (element.id?.value.string.containsCaseInsensitive(filter) ?? false) ||
               (element.publisher?.nameFittingId
                       ?.containsCaseInsensitive(filter) ??
                   false))

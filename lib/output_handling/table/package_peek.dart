@@ -50,7 +50,7 @@ class PackagePeek extends StatelessWidget {
       disabled: !isClickable(),
       routeParameter: PackageRouteParameter(commandParameter: [
         '--id',
-        infos.id!.value,
+        infos.id!.value.string,
         //if (infos.hasVersion()) ...['-v', infos.version!.value]
       ], titleAddon: infos.name?.value, package: infos),
       tooltipMessage: (locale) =>
@@ -68,7 +68,7 @@ class PackagePeek extends StatelessWidget {
     router.pushNamed(Routes.show.route,
         arguments: PackageRouteParameter(commandParameter: [
           '--id',
-          infos.id!.value,
+          infos.id!.value.string,
           //if (infos.hasVersion()) ...['-v', infos.version!.value]
         ], titleAddon: infos.name?.value, package: infos));
   }
@@ -138,7 +138,7 @@ class PackagePeek extends StatelessWidget {
                 infos.publisher?.nameFromDBbyPublisherId() ??
                 Publisher.nameFromDBbyPackageId(infos.id?.value) ??
                 infos.publisher?.id ??
-                infos.id?.value ??
+                infos.id?.value.string ??
                 '<ID>',
             textAlign: TextAlign.start,
             overflow: TextOverflow.ellipsis,
@@ -154,9 +154,9 @@ class PackagePeek extends StatelessWidget {
         infos.source.value != PackageSources.none || !defaultSourceIsLocalPC;
     bool showSource = true;
     bool showId = infos.id != null &&
-        infos.id!.value.isNotEmpty &&
+        infos.id!.value.string.isNotEmpty &&
         (infos.publisher?.id != null ||
-            infos.publisher?.nameFittingId != null ||
+            infos.publisher?.nameFittingId != null ||infos.publisher?.nameFromDBbyPublisherId() != null ||
             Publisher.nameFromDBbyPackageId(infos.id?.value) != null);
     //AppLocalizations locale = AppLocalizations.of(context)!;
     return Row(
@@ -171,7 +171,7 @@ class PackagePeek extends StatelessWidget {
             width: 15,
             child: Center(child: smallText('·', context)),
           ),
-        if (showId) Expanded(child: smallText(infos.id!.value, context)),
+        if (showId) Expanded(child: smallText(infos.id!.value.string, context)),
       ],
     );
   }
@@ -242,10 +242,6 @@ class PackagePeek extends StatelessWidget {
   }
 
   bool isClickable() => infos.hasInfosFull();
-
-  String? name() => infos.name?.value;
-
-  String? id() => infos.id?.value;
 
   Widget favicon(double faviconSize) {
     return AppIcon.fromInfos(infos,

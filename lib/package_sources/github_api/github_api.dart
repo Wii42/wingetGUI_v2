@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:winget_gui/helpers/extensions/string_extension.dart';
 
 import 'package:winget_gui/helpers/log_stream.dart';
+import '../../output_handling/package_infos/package_id.dart';
 import 'exceptions/github_load_exception.dart';
 import 'exceptions/github_rate_limit_exception.dart';
 import '../no_internet_exception.dart';
@@ -26,25 +26,25 @@ class GithubApi {
   }
 
   factory GithubApi.wingetVersionManifest(
-          {required String packageID, required String version}) =>
+          {required PackageId packageID, required String version}) =>
       GithubApi(
         repository: 'winget-pkgs',
         owner: 'microsoft',
         pathFragments: [
           'manifests',
-          idInitialLetter(packageID),
-          ...idAsPath(packageID),
+          packageID.initialLetter!,
+          ...packageID.allParts,
           version
         ],
       );
 
-  factory GithubApi.wingetManifest({required String packageID}) => GithubApi(
+  factory GithubApi.wingetManifest({required PackageId packageId}) => GithubApi(
         repository: 'winget-pkgs',
         owner: 'microsoft',
         pathFragments: [
           'manifests',
-          idInitialLetter(packageID),
-          ...idAsPath(packageID)
+          packageId.initialLetter!,
+          ...packageId.allParts
         ],
       );
 
@@ -95,15 +95,5 @@ class GithubApi {
         statusCode: response.statusCode,
         reasonPhrase: response.reasonPhrase,
         responseBody: response.body);
-  }
-
-  String get path => pathFragments.join('/');
-
-  static String idInitialLetter(String id) {
-    return id.firstChar().toLowerCase();
-  }
-
-  static List<String> idAsPath(String id) {
-    return id.split('.');
   }
 }

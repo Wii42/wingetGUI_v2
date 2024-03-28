@@ -1,4 +1,5 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/package_id.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
 import '../../helpers/version_or_string.dart';
@@ -35,7 +36,7 @@ class PackageInfosPeek extends PackageInfos {
     InfoMapParser parser = InfoMapParser(map: details, locale: locale);
     PackageInfosPeek infos = PackageInfosPeek(
       name: parser.maybeStringFromMap(PackageAttribute.name),
-      id: parser.maybeStringFromMap(PackageAttribute.id),
+      id: parser.maybePackageIdFromMap(PackageAttribute.id),
       version: parser.maybeVersionOrStringFromMap(PackageAttribute.version),
       availableVersion:
           parser.maybeVersionOrStringFromMap(PackageAttribute.availableVersion),
@@ -82,7 +83,7 @@ class PackageInfosPeek extends PackageInfos {
     return PackageInfosPeek(
       id: Info(
         title: (_) => '',
-        value: id,
+        value: PackageId.parse(id),
       ),
     );
   }

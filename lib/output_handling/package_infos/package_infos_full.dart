@@ -59,7 +59,9 @@ class PackageInfosFull extends PackageInfos {
     super.otherInfos,
   }) {
     setPublisher(
-        fullName: publisherInfo?.text, publisherWebsite: publisherInfo?.url, isFullInfos: true);
+        fullName: publisherInfo?.text,
+        publisherWebsite: publisherInfo?.url,
+        isFullInfos: true);
   }
 
   factory PackageInfosFull.fromMap(
@@ -108,7 +110,7 @@ class PackageInfosFull extends PackageInfos {
   @override
   bool isWinget() =>
       source.value == PackageSources.winget ||
-      (!isMicrosoftStore() && id != null && id!.value.contains('.'));
+      (!isMicrosoftStore() && id != null && id!.value.separator == '.');
 
   Info<String>? get additionalDescription {
     if (!hasDescription()) {

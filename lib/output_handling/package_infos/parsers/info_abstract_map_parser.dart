@@ -18,6 +18,7 @@ import '../installer_objects/installer_locale.dart';
 import '../installer_objects/installer_type.dart';
 import '../installer_objects/upgrade_behavior.dart';
 import '../installer_objects/windows_platform.dart';
+import '../package_id.dart';
 
 abstract class InfoAbstractMapParser<A, B> {
   Map<A, B> map;
@@ -98,9 +99,9 @@ abstract class InfoAbstractMapParser<A, B> {
   Info<List<InfoWithLink>>? maybeDocumentationsFromMap(
       PackageAttribute attribute);
 
-  Map<String,String>? otherDetails() => map.isNotEmpty
-  ? map.map<String, String>(
-  (key, value) => MapEntry(key.toString(), value.toString()))
+  Map<String, String>? otherDetails() => map.isNotEmpty
+      ? map.map<String, String>(
+          (key, value) => MapEntry(key.toString(), value.toString()))
       : null;
 
   Info<List<Installer>>? maybeInstallersFromMap(PackageAttribute installers);
@@ -140,7 +141,10 @@ abstract class InfoAbstractMapParser<A, B> {
   Info<Dependencies>? maybeDependenciesFromMap(PackageAttribute dependencies);
 
   Info<List<ExpectedReturnCode>>? maybeExpectedReturnCodesFromMap(
-      PackageAttribute expectedReturnCodes) =>
+          PackageAttribute expectedReturnCodes) =>
       maybeListFromMap(expectedReturnCodes, parser: ExpectedReturnCode.fromMap);
 
+  Info<PackageId>? maybePackageIdFromMap(PackageAttribute packageId) {
+    return maybeValueFromMap(packageId, PackageId.parse);
+  }
 }

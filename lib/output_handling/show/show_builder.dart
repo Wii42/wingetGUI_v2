@@ -35,7 +35,7 @@ class PackageInfoSliver extends TitleWidget {
   @override
   Widget buildRightSide() {
     if (infos.id != null) {
-      return Text(infos.id!.value);
+      return Text(infos.id!.value.string);
     }
     return const SizedBox();
   }

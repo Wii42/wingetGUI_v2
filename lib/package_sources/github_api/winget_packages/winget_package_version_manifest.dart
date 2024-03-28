@@ -1,3 +1,4 @@
+import '../../../output_handling/package_infos/package_id.dart';
 import '../github_api_file_info.dart';
 
 class WingetPackageVersionManifest {
@@ -12,7 +13,7 @@ class WingetPackageVersionManifest {
   });
 
   factory WingetPackageVersionManifest.fromList(List<GithubApiFileInfo> files,
-      {required String packageId}) {
+      {required PackageId packageId}) {
     GithubApiFileInfo installer = files
         .firstWhere((element) => isInstaller(element, packageId: packageId));
     List<GithubApiFileInfo> localizedFiles = files.where(isLocale).toList();
@@ -25,20 +26,20 @@ class WingetPackageVersionManifest {
     );
   }
 
-  static bool isInstaller(GithubApiFileInfo file, {required String packageId}) {
-    return file.name == '$packageId.installer.yaml' && file.type.isFile;
+  static bool isInstaller(GithubApiFileInfo file, {required PackageId packageId}) {
+    return file.name == '${packageId.string}.installer.yaml' && file.type.isFile;
   }
 
   static bool isLocale(GithubApiFileInfo file) {
     return file.name.contains('.locale.') && file.type.isFile;
   }
 
-  static bool isManifest(GithubApiFileInfo file, {required String packageId}) {
-    return file.name == "$packageId.yaml" && file.type.isFile;
+  static bool isManifest(GithubApiFileInfo file, {required PackageId packageId}) {
+    return file.name == "${packageId.string}.yaml" && file.type.isFile;
   }
 
   static isVersionManifest(List<GithubApiFileInfo> files,
-      {required String packageId}) {
+      {required PackageId packageId}) {
     return files.any((element) => isInstaller(element, packageId: packageId)) &&
         files.any(isLocale) &&
         files.any((element) => isManifest(element, packageId: packageId));

@@ -1,4 +1,5 @@
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
+import 'package:winget_gui/output_handling/package_infos/package_id.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/output_handling/package_infos/publisher.dart';
@@ -16,7 +17,8 @@ import 'info.dart';
 abstract class PackageInfos {
   late final Logger log;
 
-  final Info<String>? name, id;
+  final Info<String>? name;
+  final Info<PackageId>? id;
   late final Info<PackageSources> source;
   Info<VersionOrString>? version;
   Publisher? publisher;
@@ -58,7 +60,8 @@ abstract class PackageInfos {
     screenshots = screenshotsList.getPackage(this);
     checkedForScreenshots = true;
     if (id != null) {
-      automaticFoundFavicons = FaviconDB.instance.favicons[id!.value];
+      automaticFoundFavicons =
+          FaviconDB.instance.favicons[id!.value.string];
     }
   }
 
@@ -84,20 +87,6 @@ abstract class PackageInfos {
         value: manifestUrl);
   }
 
-  String? probablyPublisherID() {
-    String? id = this.id?.value;
-    if (id == null) {
-      return null;
-    }
-    if (id.contains('.')) {
-      return id.split('.').first;
-    }
-    if (id.trim().contains(' ')) {
-      return id.trim().split(' ').first;
-    }
-    return null;
-  }
-
   bool probablySamePackage(PackageInfos i) {
     bool sameID = id != null && i.id?.value == id?.value;
     bool sameVersion = version == null || i.version?.value == version?.value;
@@ -109,10 +98,8 @@ abstract class PackageInfos {
   String? versionWithoutEllipsis() => _withoutEllipsis(version?.toStringInfo());
 
   bool hasCompleteId() {
-    return id != null && id!.value.isNotEmpty && !id!.value.endsWith('…');
+    return id != null && id!.value.isComplete;
   }
-
-  String? idWithoutEllipsis() => _withoutEllipsis(id);
 
   String? _withoutEllipsis(Info<String>? info) {
     if (info == null) {

@@ -74,7 +74,7 @@ class RightSideButtons extends StatelessWidget {
 
   Widget? createButton(ButtonInfo buttonInfo, AppLocalizations locale) {
     if (buttonInfo.visibility == ButtonVisibility.invisible) return null;
-    String appName = infos.name?.value ?? infos.id!.value;
+    String appName = infos.name?.value ?? infos.id!.value.string;
     PackageActionType command = buttonInfo.type;
     if (iconsOnly) {
       assert(command.winget.icon != null);

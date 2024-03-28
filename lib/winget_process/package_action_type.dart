@@ -28,7 +28,7 @@ enum PackageActionType {
   List<String> commandArgs(PackageInfos package) {
     return [
       '--id',
-      package.id!.value,
+      package.id!.value.string,
       if (winget != Winget.upgrade && package.hasVersion()) ...[
         '-v',
         package.version!.value.stringValue

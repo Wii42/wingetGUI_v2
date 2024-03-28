@@ -1,3 +1,5 @@
+import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
+
 import '../output_handling/package_infos/info.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../winget_commands.dart';
@@ -49,7 +51,8 @@ enum SortBy {
   }
 
   static List<PackageInfosPeek> sortId(List<PackageInfosPeek> packages) {
-    return packages..sort((a, b) => sortInfo(a.id, b.id));
+    return packages
+      ..sort((a, b) => sortInfo(a.id?.toStringInfo(), b.id?.toStringInfo()));
   }
 
   static List<PackageInfosPeek> sortVersion(List<PackageInfosPeek> packages) {

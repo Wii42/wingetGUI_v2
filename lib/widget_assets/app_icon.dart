@@ -6,6 +6,7 @@ import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/widget_assets/web_image.dart';
 
 import '../helpers/log_stream.dart';
+import '../output_handling/package_infos/package_id.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_full.dart';
 import '../package_sources/package_source.dart';
@@ -30,7 +31,7 @@ class AppIcon extends StatefulWidget {
   final List<Uri?> fallbackIconUrls;
   final bool withRightSidePadding;
   final PackageSources packageSource;
-  final String? packageId;
+  final PackageId? packageId;
   final List<Uri> automaticFoundFavicons;
 
   AppIcon({
@@ -132,7 +133,7 @@ class _AppIconState extends State<AppIcon> {
     if (widget.packageId == null) {
       return null;
     }
-    return FaviconDB.instance.favicons.getEntry(widget.packageId!);
+    return FaviconDB.instance.favicons[widget.packageId!.string];
   }
 
   Widget findFavicon() {
@@ -233,9 +234,11 @@ class FaviconGetter {
         'https://a.fsdn.com/con/img/sandiego/svg/originals/sf-icon-orange-no_sf.svg',
     'bitbucket.org':
         'https://d301sr5gafysq2.cloudfront.net/3c154c6a443d/img/logos/bitbucket/android-chrome-192x192.png',
+    'gitlab.com':
+        'https://gitlab.com/assets/favicon-72a2cad5025aa931d6ea56c3201d1f18e68a8cd39788c7c80d5b2b82aa5143ef.png',
   };
 
-  static Future<Favicon?> getFavicon(Uri? url, {String? packageId}) async {
+  static Future<Favicon?> getFavicon(Uri? url, {PackageId? packageId}) async {
     if (url == null) {
       return null;
     }
@@ -244,7 +247,7 @@ class FaviconGetter {
       return null;
     }
     if (packageId != null) {
-      FaviconDB.instance.favicons[packageId] = Uri.parse(favicon.url);
+      FaviconDB.instance.favicons[packageId.string] = Uri.parse(favicon.url);
     }
     return favicon;
   }

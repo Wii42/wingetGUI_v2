@@ -21,14 +21,14 @@ class DetailsWidget extends ExpanderCompartment {
     return fullCompartment(
         title: compartmentTitle(locale),
         mainColumn: [
-          if (infos.publisher != null)
+          if (infos.publisher?.infoWithLink != null)
             wrapInfoWithLink(context, infos.publisher?.infoWithLink),
           ...detailsList([
             infos.author,
             infos.pricing,
             infos.freeTrial,
             infos.ageRating,
-            infos.id,
+            infos.id?.toStringInfo(),
             if (infos.version?.value.stringValue != 'Unknown')
               infos.version?.toStringInfo(),
             infos.packageLocale?.toStringInfo(context),

@@ -7,6 +7,7 @@ import 'package:winget_gui/output_handling/package_infos/installer_objects/ident
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_type.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/windows_platform.dart';
+import 'package:winget_gui/output_handling/package_infos/package_id.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 import 'info.dart';
 import 'installer_objects/dependencies.dart';
@@ -171,5 +172,11 @@ extension SourceInfo on Info<PackageSources> {
 extension VersionOrStringInfo on Info<VersionOrString> {
   Info<String> toStringInfo() {
     return toStringInfoFromObject((source) => source.stringValue);
+  }
+}
+
+extension PackageIdInfo on Info<PackageId> {
+  Info<String> toStringInfo() {
+    return toStringInfoFromObject((source) => source.string);
   }
 }

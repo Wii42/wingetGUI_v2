@@ -7,17 +7,11 @@ extension PackageScreenshotIdentifiers on PackageInfos {
     }
     String nameWithoutVersion = name!.value;
     if (hasVersion()) {
-      nameWithoutVersion = name!.value.replaceFirst(' ${version!.value.stringValue}', '');
+      nameWithoutVersion =
+          name!.value.replaceFirst(' ${version!.value.stringValue}', '');
     }
     String string = nameWithoutVersion.replaceAll(' ', '').toLowerCase();
     return string;
-  }
-
-  String? get publisherID {
-    if (id == null) {
-      return null;
-    }
-    return id!.value.split('.').firstOrNull;
   }
 
   String? get nameWithoutPublisherIDAndVersion {
@@ -28,92 +22,53 @@ extension PackageScreenshotIdentifiers on PackageInfos {
     if (hasVersion()) {
       nameWithoutVersion = name!.value.replaceFirst(' ${version!.value}', '');
     }
-    if (publisherID != null) {
-      nameWithoutVersion = nameWithoutVersion.replaceFirst('$publisherID', '');
+    if (publisher?.id != null) {
+      nameWithoutVersion =
+          nameWithoutVersion.replaceFirst('${publisher?.id}', '');
     }
     String string = nameWithoutVersion.replaceAll(' ', '').toLowerCase();
     return string;
   }
 
-  String? get idWithHyphen {
-    if (id == null) {
-      return null;
-    }
-    return id!.value.replaceAll('.', '-').toLowerCase();
-  }
+  String? get idWithHyphen =>
+      id?.value.copyWith(separator: '-').string.toLowerCase();
 
-  String? get idWithoutPublisherID {
-    if (id == null) {
-      return null;
-    }
-    return id!.value
-        .replaceFirst('$publisherID.', '')
-        .replaceAll('.', '')
-        .toLowerCase();
-  }
+  String? get idWithoutPublisherID => id?.value.idParts.join('').toLowerCase();
 
-  String? get idWithoutPublisherIDAndHyphen {
-    if (id == null) {
-      return null;
-    }
-    return id!.value
-        .replaceFirst('$publisherID.', '')
-        .replaceAll('.', '-')
-        .toLowerCase();
-  }
+  String? get idWithoutPublisherIDAndHyphen =>
+      id?.value.idParts.join('').toLowerCase();
 
   String? get iconIdAsPerWingetUI {
     if (id == null) {
       return null;
     }
-    String iconId = id!.value.toLowerCase();
-    List<String> idList = iconId.split('.');
-    idList.removeAt(0);
-    iconId = idList.join('.');
+    String iconId = idWithoutPublisherIDAndHyphen!;
     return iconId
         .replaceAll(" ", "-")
         .replaceAll("_", "-")
         .replaceAll(".", "-");
   }
 
-  String? get secondIdPartOnly {
-    if (id == null) {
-      return null;
-    }
-    String iconId = id!.value.toLowerCase();
-    List<String> idList = iconId.split('.');
-    if (idList.length < 2) {
-      return null;
-    }
-    return idList[1];
-  }
+  String? get secondIdPartOnly => id?.value.idParts.firstOrNull?.toLowerCase();
 
-  String? get idFirstTwoParts {
-    if (id == null) {
-      return null;
-    }
-    String iconId = id!.value;
-    List<String> idList = iconId.split('.');
-    if (idList.length <= 2) {
-      return null;
-    }
-    return idList.take(2).join('.');
-  }
+  String? get idFirstTwoParts =>
+      id?.value.idParts.take(2).join(id?.value.separator ?? '.').toLowerCase();
 
   List<String> get idWithWildcards {
     if (id == null) {
       return [];
     }
-    List<String> idList = id!.value.split('.');
+    List<String> idList = id!.value.allParts;
     List<String> idWithWildcards = [];
+    String separator = id!.value.separator ?? '.';
     for (int i = 1; i < idList.length; i++) {
-      idWithWildcards.add('${idList.sublist(0, i).join('.')}.*');
+      idWithWildcards.add('${idList.sublist(0, i).join(separator)}$separator*');
     }
     return idWithWildcards.reversed.toList();
   }
 
   Set<String> get possibleScreenshotKeys => [
-        id?.value,
+        id?.value.string,
         iconIdAsPerWingetUI,
         nameWithoutVersion,
         nameWithoutPublisherIDAndVersion,

@@ -9,6 +9,7 @@ import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart
 import 'package:yaml/yaml.dart';
 import 'package:winget_gui/helpers/locale_parser.dart';
 import '../helpers/version.dart';
+import '../output_handling/package_infos/package_id.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import 'github_api/github_api.dart';
 import 'github_api/github_api_file_info.dart';
@@ -32,21 +33,21 @@ class WingetSource extends PackageSource {
   }
 
   /// First letter of the package id
-  String? get idInitialLetter => package.id?.value.get(0)?.toLowerCase();
+  String? get idInitialLetter => package.id?.value.string.get(0)?.toLowerCase();
 
   /// The package id as a list of path segments
-  List<String> get idAsPath => package.id?.value.split('.') ?? [];
+  List<String> get idAsPath => package.id?.value.allParts ?? [];
 
   @override
   Future<PackageInfosFull> fetchInfos(Locale? guiLocale) async {
-    String packageID =
+    PackageId packageID =
         package.hasCompleteId() ? package.id!.value : await reconstructFullId();
     return extractInfosOnlineFromId(guiLocale, packageID);
   }
 
-  Future<String> reconstructFullId() async {
-    String idWithoutEllipsis = package.idWithoutEllipsis()!;
-    List<String> idParts = idWithoutEllipsis.split('.');
+  Future<PackageId> reconstructFullId() async {
+    String idWithoutEllipsis = package.id!.value.stringWithoutEllipsis();
+    List<String> idParts = package.id!.value.allParts;
     if (idParts.last.isEmpty) {
       idParts.removeLast();
     }
@@ -56,16 +57,16 @@ class WingetSource extends PackageSource {
     String lastPart = endsWithPoint ? '' : idParts.last;
 
     GithubApiFileInfo matchingFiles = await guessIdPartsBasedOnRepo(
-        soundIdPart: soundParts.join('.'), lastKnownPart: lastPart);
+        soundIdPart: PackageId.parse(soundParts.join('.')), lastKnownPart: lastPart);
     soundParts.add(matchingFiles.name);
-    return soundParts.join('.');
+    return PackageId.parse(soundParts.join('.'), source: PackageSources.winget);
   }
 
   /// Tries to guess the last part of the package ID
   /// based on the files and directories in the winget-pkgs repository
   Future<GithubApiFileInfo> guessIdPartsBasedOnRepo(
-      {required String soundIdPart, required String lastKnownPart}) async {
-    GithubApi api = GithubApi.wingetManifest(packageID: soundIdPart);
+      {required PackageId soundIdPart, required String lastKnownPart}) async {
+    GithubApi api = GithubApi.wingetManifest(packageId: soundIdPart);
     List<GithubApiFileInfo> files = await api.getFiles();
     if (files.isEmpty) {
       throw Exception('No files found in ${api.apiUri}');
@@ -128,7 +129,7 @@ class WingetSource extends PackageSource {
   }
 
   Future<PackageInfosFull> extractInfosOnlineFromId(
-      Locale? guiLocale, String packageID) async {
+      Locale? guiLocale, PackageId packageID) async {
     List<GithubApiFileInfo> files = await getFiles(packageID);
     if (!WingetPackageVersionManifest.isVersionManifest(files,
         packageId: packageID)) {
@@ -164,8 +165,8 @@ class WingetSource extends PackageSource {
   }
 
   /// Returns the files of the manifest of the given package.
-  Future<List<GithubApiFileInfo>> getFiles(String packageID) async {
-    GithubApi fallBackApi = GithubApi.wingetManifest(packageID: packageID);
+  Future<List<GithubApiFileInfo>> getFiles(PackageId packageID) async {
+    GithubApi fallBackApi = GithubApi.wingetManifest(packageId: packageID);
     List<GithubApiFileInfo> files;
     GithubApi manifestApi = versionManifest ?? fallBackApi;
     files = await manifestApi.getFiles(onError: fallBackApi.getFiles);
@@ -209,7 +210,7 @@ class WingetSource extends PackageSource {
 
   Future<Locale> chooseLocale(
       Locale? guiLocale, WingetPackageVersionManifest manifest,
-      {String? packageID}) async {
+      {PackageId? packageID}) async {
     List<GithubApiFileInfo> localizedFiles = manifest.localizedFiles;
     List<Locale> availableLocales = localizedFiles
         .map<Locale>((e) => getLocaleFromName(e, packageID: packageID))
@@ -227,9 +228,9 @@ class WingetSource extends PackageSource {
     return defaultLocale ?? availableLocales.first;
   }
 
-  Locale getLocaleFromName(GithubApiFileInfo e, {String? packageID}) {
+  Locale getLocaleFromName(GithubApiFileInfo e, {PackageId? packageID}) {
     String localeString = e.name
-        .replaceFirst("${packageID ?? package.id!.value}.locale.", '')
+        .replaceFirst("${(packageID ?? package.id!.value).string}.locale.", '')
         .split('.')
         .first;
     return LocaleParser.parse(localeString);
