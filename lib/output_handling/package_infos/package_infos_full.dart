@@ -8,7 +8,6 @@ import 'package:winget_gui/output_handling/package_infos/parsers/full_yaml_parse
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
-import '../../widget_assets/favicon_db.dart';
 import './package_infos.dart';
 import 'agreement_infos.dart';
 import 'info.dart';
@@ -60,7 +59,7 @@ class PackageInfosFull extends PackageInfos {
     super.otherInfos,
   }) {
     setPublisher(
-        fullName: publisherInfo?.text, publisherWebsite: publisherInfo?.url);
+        fullName: publisherInfo?.text, publisherWebsite: publisherInfo?.url, isFullInfos: true);
   }
 
   factory PackageInfosFull.fromMap(

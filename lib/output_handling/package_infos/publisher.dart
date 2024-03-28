@@ -36,6 +36,7 @@ class Publisher {
     Iterable<String?> possiblePublisherNames = const [],
     Iterable<String?> anyPublisherNames = const [],
     PackageSources source = PackageSources.none,
+    bool isFullInfos = false,
   }) {
     return _PublisherBuilder(
       packageId: packageId,
@@ -44,6 +45,7 @@ class Publisher {
       possiblePublisherNames: possiblePublisherNames,
       anyPublisherNames: anyPublisherNames,
       source: source,
+      isFullInfos: isFullInfos,
     ).build();
   }
 
@@ -78,6 +80,7 @@ class _PublisherBuilder {
   Uri? icon;
   Uri? website;
   PackageSources source;
+  bool isFullInfos;
 
   /// Names which are matched against the publisher id.
   Iterable<String?> possiblePublisherNames;
@@ -92,12 +95,13 @@ class _PublisherBuilder {
     this.possiblePublisherNames = const [],
     this.anyPublisherNames = const [],
     this.source = PackageSources.none,
+    this.isFullInfos = false,
   });
 
   Publisher build() {
     publisherId ??=
         (source == PackageSources.winget ? probablyPublisherID() : null);
-    nameFittingId ??= fetchName() ?? publisherId ?? fullName;
+    nameFittingId ??= fetchName();
     icon ??= fetchIcon();
     return Publisher(
       id: publisherId,
@@ -117,13 +121,14 @@ class _PublisherBuilder {
     }
     String? reconstructedName = reconstructPublisherNameByCompareTo(
         [fullName, ...possiblePublisherNames]);
-    print('reconstructedName: $reconstructedName');
     if (publisherId == null && reconstructedName == null) {
       reconstructedName = fullName ?? anyPublisherNames.nonNulls.firstOrNull;
     }
     if (reconstructedName != null) {
       publisherName = reconstructedName;
-      //savePublisherName();
+      if (isFullInfos) {
+        savePublisherName(publisherName);
+      }
     }
     return publisherName;
   }
@@ -203,10 +208,10 @@ class _PublisherBuilder {
     });
   }
 
-  void savePublisherName() {
-    if (packageId != null && fullName != null) {
+  void savePublisherName(String? name) {
+    if (packageId != null && name != null) {
       FaviconDB.instance.insertPublisherName(
-          PublisherDBEntry(packageId: packageId!, publisherName: fullName!));
+          PublisherDBEntry(packageId: packageId!, publisherName: name));
     }
   }
 

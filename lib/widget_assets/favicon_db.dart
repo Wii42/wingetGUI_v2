@@ -3,6 +3,8 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import '../helpers/log_stream.dart';
+
 class FaviconDB {
   static final FaviconDB instance = FaviconDB._();
   static const String faviconsTable = 'favicon';
@@ -11,7 +13,10 @@ class FaviconDB {
   Map<String, Uri> _favicons = {};
   Map<String, String> _publisherNames = {};
   Database? _database;
-  FaviconDB._();
+  late final Logger log;
+  FaviconDB._() {
+    log = Logger(this);
+  }
 
   Future<void> ensureInitialized() async {
     if (_database != null) {
@@ -37,7 +42,8 @@ class FaviconDB {
     );
     _favicons = await _dbToMapFavicons();
     _publisherNames = await _dbToMapPublisherNames();
-    print(await _dbToMapPublisherNames());
+    log.info('init publisherNamesDB',
+        message: (await _dbToMapPublisherNames()).toString());
   }
 
   Future<Map<String, Uri>> _dbToMapFavicons() async {
@@ -58,7 +64,7 @@ class FaviconDB {
   void insertPublisherName(PublisherDBEntry entry) {
     _publisherNames[entry.packageId] = entry.publisherName;
     _insertDB(entry, publisherNameTable);
-    _dbToMapPublisherNames().then(print);
+    _dbToMapPublisherNames();
   }
 
   Future<void> _insertDB(DBEntry entry, String tableName) async {

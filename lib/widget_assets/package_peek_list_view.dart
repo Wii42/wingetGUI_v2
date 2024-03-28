@@ -185,6 +185,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       showMatch: widget.packageOptions.showMatch,
       showInstalledIcon: installed && widget.packageOptions.showInstalledIcon,
       defaultSourceIsLocalPC: widget.packageOptions.defaultSourceIsLocalPC,
+      key:
+          ValueKey("${package.id!.value}${package.version?.value.stringValue}"),
     );
   }
 
@@ -202,7 +204,9 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           .where((element) =>
               (element.name?.value.containsCaseInsensitive(filter) ?? false) ||
               (element.id?.value.containsCaseInsensitive(filter) ?? false) ||
-              (element.publisher?.nameFittingId?.containsCaseInsensitive(filter) ?? false))
+              (element.publisher?.nameFittingId
+                      ?.containsCaseInsensitive(filter) ??
+                  false))
           .toList();
     }
     return packages;

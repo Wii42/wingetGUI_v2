@@ -123,6 +123,7 @@ class PackagePeek extends StatelessWidget {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Builder(// to ensure rebuild if publisherNameFromDB() changes
         builder: (context) {
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: columnAlign,

@@ -1,6 +1,3 @@
-import 'dart:collection';
-
-import 'package:diacritic/diacritic.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
@@ -160,7 +157,8 @@ abstract class PackageInfos {
     return [];
   }
 
-  void setPublisher({String? fullName, Uri? publisherWebsite}) {
+  void setPublisher(
+      {String? fullName, Uri? publisherWebsite, bool isFullInfos = false}) {
     publisher ??= Publisher.build(
       packageId: id?.value,
       fullName: fullName,
@@ -168,7 +166,7 @@ abstract class PackageInfos {
       possiblePublisherNames: possiblePublisherNames,
       anyPublisherNames: anyPublisherNames,
       source: source.value,
+      isFullInfos: isFullInfos,
     );
-    print(publisher?.nameFittingId);
   }
 }
