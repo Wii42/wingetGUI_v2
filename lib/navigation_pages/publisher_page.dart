@@ -29,8 +29,7 @@ class PublisherPage extends StatelessWidget {
     String? publisherName = parameters.titleAddon ??
         PackageScreenshotsList
             .instance.publisherIcons[publisherId]?.nameUsingDefaultSource ??
-        faviconDB.FaviconDB.instance.publisherNamesByPublisherId
-            .getEntry(publisherId);
+        faviconDB.FaviconDB.instance.publisherNamesByPublisherId[publisherId];
 
     return PublisherPage(
         publisherId: publisherId, publisherName: publisherName);

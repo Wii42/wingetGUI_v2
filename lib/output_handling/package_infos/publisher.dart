@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:diacritic/diacritic.dart';
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -70,7 +71,7 @@ class Publisher {
 
   static String? nameFromDBbyPackageId(String? packageId) {
     if (packageId != null) {
-      return FaviconDB.instance.publisherNamesByPackageId.getEntry(packageId);
+      return FaviconDB.instance.publisherNamesByPackageId[packageId];
     }
     return null;
   }
@@ -156,18 +157,27 @@ class _PublisherBuilder {
   String? reconstructPublisherNameByCompareTo(Iterable<String?> otherNames) {
     List<String> names =
         otherNames.nonNulls.where((element) => element.isNotEmpty).toList();
+    int lengthFullNames = names.length;
     addPartialNames(names);
     if (names.isEmpty || probablyPublisherID() == null) {
       return null;
     }
     String? publisherID = _canonicalize(probablyPublisherID()!);
-    for (String name in names) {
+    for ((int, String) indexedName in names.indexed) {
+      String name = indexedName.$2;
+      int index = indexedName.$1;
       String nameAsId = _canonicalize(name);
-      if (nameAsId == publisherID) {
+      if (nameAsId == publisherID || publisherID.startsWith(nameAsId)) {
+        if (name.contains(RegExp(r'[a-zA-Z],$')) && index < lengthFullNames) {
+          name = name.take(name.length - 1);
+        }
         return name;
       }
       String nameAsIdCustom = _canonicalize(name, customDiacritics: true);
-      if (nameAsIdCustom == publisherID) {
+      if (nameAsIdCustom == publisherID || publisherID.startsWith(nameAsId)) {
+        if (name.contains(RegExp(r'[a-zA-Z],$')) && index < lengthFullNames) {
+          name = name.take(name.length - 1);
+        }
         return name;
       }
     }
@@ -215,8 +225,7 @@ class _PublisherBuilder {
 
   static String? nameFromDBbyPublisherId(String? publisherId) {
     if (publisherId != null) {
-      return FaviconDB.instance.publisherNamesByPublisherId
-          .getEntry(publisherId);
+      return FaviconDB.instance.publisherNamesByPublisherId[publisherId];
     }
     return null;
   }
@@ -226,10 +235,10 @@ class _PublisherBuilder {
       return;
     }
     if (publisherId != null) {
-      FaviconDB.instance.publisherNamesByPublisherId.insert(publisherId!, name);
+      FaviconDB.instance.publisherNamesByPublisherId[publisherId!] = name;
     }
     if (packageId != null) {
-      FaviconDB.instance.publisherNamesByPackageId.insert(packageId!, name);
+      FaviconDB.instance.publisherNamesByPackageId[packageId!] = name;
     }
   }
 

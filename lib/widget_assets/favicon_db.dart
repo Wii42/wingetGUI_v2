@@ -148,6 +148,9 @@ abstract class DBTable<K extends Object, V extends Object> {
     _entries.clear();
     _deleteAllInDB();
   }
+
+  operator []=(K id, V value) => insert(id, value);
+  operator [](K id) => getEntry(id);
 }
 
 class FaviconTable extends DBTable<String, Uri> {

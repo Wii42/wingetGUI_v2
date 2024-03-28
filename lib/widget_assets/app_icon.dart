@@ -244,7 +244,7 @@ class FaviconGetter {
       return null;
     }
     if (packageId != null) {
-      FaviconDB.instance.favicons.insert(packageId, Uri.parse(favicon.url));
+      FaviconDB.instance.favicons[packageId] = Uri.parse(favicon.url);
     }
     return favicon;
   }
