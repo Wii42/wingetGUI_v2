@@ -117,7 +117,7 @@ abstract class DBTable<K extends Object, V extends Object> {
     );
   }
 
-  Future<(K, V)?> _getEntryDB(K id) async {
+  Future<(K, V)?> getEntryDB(K id) async {
     await _ensureDBInitialized();
     List<Map<String, dynamic>> maps = await parentDB._database!.query(
       tableName,
