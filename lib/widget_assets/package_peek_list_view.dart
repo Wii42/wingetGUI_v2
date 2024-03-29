@@ -19,6 +19,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../winget_process/package_action_type.dart';
 import 'buttons/search_button.dart';
+import 'loading_widget.dart';
 
 class PackagePeekListView extends StatefulWidget {
   final DBTable dbTable;
@@ -66,10 +67,10 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           if (snapshot.hasData &&
               snapshot.data?.status != DBStatus.ready &&
               prefilteredInfos.isEmpty) {
-            return Center(
-                child: Text(snapshot.data?.message != null
-                    ? snapshot.data!.message!(locale)
-                    : ''));
+            return LoadingWidget(
+                text: snapshot.data?.message != null
+                    ? snapshot.data!.message!
+                    : (locale) => '');
           }
           if (prefilteredInfos.isEmpty) {
             return Center(
@@ -203,7 +204,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       packages = packages
           .where((element) =>
               (element.name?.value.containsCaseInsensitive(filter) ?? false) ||
-              (element.id?.value.string.containsCaseInsensitive(filter) ?? false) ||
+              (element.id?.value.string.containsCaseInsensitive(filter) ??
+                  false) ||
               (element.publisher?.nameFittingId
                       ?.containsCaseInsensitive(filter) ??
                   false))

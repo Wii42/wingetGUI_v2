@@ -6,13 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/main_navigation.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/package_actions_widget.dart';
 import 'package:winget_gui/widget_assets/favicon_db.dart';
+import 'package:winget_gui/widget_assets/loading_widget.dart';
 import 'package:winget_gui/winget_db/winget_db.dart';
 import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
@@ -130,16 +130,7 @@ class DBInitializer extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState != ConnectionState.done) {
                 if (snapshot.hasData) {
-                  return Center(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const ProgressRing(
-                        backgroundColor: Colors.transparent,
-                      ),
-                      Text(snapshot.data!(locale)),
-                    ].withSpaceBetween(height: 20),
-                  ));
+                  return LoadingWidget(text: snapshot.data!);
                 }
                 return const Center(child: Text('...'));
               }

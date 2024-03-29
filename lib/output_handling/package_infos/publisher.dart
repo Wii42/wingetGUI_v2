@@ -9,7 +9,6 @@ import 'package:winget_gui/output_handling/package_infos/package_id.dart';
 
 import '../../helpers/json_publisher.dart';
 import '../../helpers/package_screenshots_list.dart';
-import '../../package_sources/package_source.dart';
 import '../../widget_assets/favicon_db.dart';
 
 class Publisher {
@@ -37,7 +36,6 @@ class Publisher {
     Uri? website,
     Iterable<String?> possiblePublisherNames = const [],
     Iterable<String?> anyPublisherNames = const [],
-    PackageSources source = PackageSources.none,
     bool isFullInfos = false,
   }) {
     return _PublisherBuilder(
@@ -46,7 +44,6 @@ class Publisher {
       website: website,
       possiblePublisherNames: possiblePublisherNames,
       anyPublisherNames: anyPublisherNames,
-      source: source,
       isFullInfos: isFullInfos,
     ).build();
   }
@@ -85,7 +82,6 @@ class _PublisherBuilder {
   String? nameFittingId;
   Uri? icon;
   Uri? website;
-  PackageSources source;
   bool isFullInfos;
 
   /// Names which are matched against the publisher id.
@@ -100,7 +96,6 @@ class _PublisherBuilder {
     this.website,
     this.possiblePublisherNames = const [],
     this.anyPublisherNames = const [],
-    this.source = PackageSources.none,
     this.isFullInfos = false,
   });
 
@@ -156,14 +151,14 @@ class _PublisherBuilder {
       int index = indexedName.$1;
       String nameAsId = _canonicalize(name);
       if (nameAsId == publisherID || publisherID.startsWith(nameAsId)) {
-        if (name.contains(RegExp(r'[a-zA-Z],$')) && index < lengthFullNames) {
+        if (name.contains(RegExp(r'[a-zA-Z],$')) && index >= lengthFullNames) {
           name = name.take(name.length - 1);
         }
         return name;
       }
       String nameAsIdCustom = _canonicalize(name, customDiacritics: true);
       if (nameAsIdCustom == publisherID || publisherID.startsWith(nameAsId)) {
-        if (name.contains(RegExp(r'[a-zA-Z],$')) && index < lengthFullNames) {
+        if (name.contains(RegExp(r'[a-zA-Z],$')) && index >= lengthFullNames) {
           name = name.take(name.length - 1);
         }
         return name;

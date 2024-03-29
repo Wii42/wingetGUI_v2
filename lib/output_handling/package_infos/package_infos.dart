@@ -60,8 +60,7 @@ abstract class PackageInfos {
     screenshots = screenshotsList.getPackage(this);
     checkedForScreenshots = true;
     if (id != null) {
-      automaticFoundFavicons =
-          FaviconDB.instance.favicons[id!.value.string];
+      automaticFoundFavicons = FaviconDB.instance.favicons[id!.value.string];
     }
   }
 
@@ -152,7 +151,6 @@ abstract class PackageInfos {
       website: publisherWebsite,
       possiblePublisherNames: possiblePublisherNames,
       anyPublisherNames: anyPublisherNames,
-      source: source.value,
       isFullInfos: isFullInfos,
     );
   }

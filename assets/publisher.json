@@ -664,5 +664,16 @@
   "RazerInc": {
     "publisher_name": "Razer Inc.",
     "icon_url": "https://www.razer.com/favicon.ico"
+  },
+  "HP": {
+    "publisher_name": null,
+    "icon_url": "https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg"
+  },
+  "HP Inc.": {
+    "source_publisher_id": "HP"
+  },
+  "Seagate": {
+    "publisher_name": null,
+    "icon_url": "https://www.seagate.com/content/dam/seagate/migrated-assets/ww/redesign/assets/seagate-logo.svg"
   }
 }

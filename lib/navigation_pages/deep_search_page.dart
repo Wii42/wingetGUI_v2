@@ -8,6 +8,7 @@ import '../helpers/route_parameter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_handling/package_infos/package_infos_peek.dart';
+import '../widget_assets/loading_widget.dart';
 import '../winget_commands.dart';
 import '../winget_db/db_message.dart';
 
@@ -30,7 +31,6 @@ class DeepSearchPage extends StatelessWidget {
 
   Widget buildContent(BuildContext context) {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
-    AppLocalizations guiLocale = AppLocalizations.of(context)!;
     DBTableCreator creator = DBTableCreator(
         content: (locale) => locale.extendedSearch,
         command: [Winget.search.baseCommand, ...searchFor]);
@@ -48,9 +48,9 @@ class DeepSearchPage extends StatelessWidget {
           );
         }
         if (snapshot.hasData) {
-          return Center(child: Text(snapshot.data!(guiLocale)));
+          return LoadingWidget(text: snapshot.data!);
         } else {
-          return Center(child: Text(guiLocale.loading));
+          return LoadingWidget(text: (locale) => locale.loading);
         }
       },
     );
