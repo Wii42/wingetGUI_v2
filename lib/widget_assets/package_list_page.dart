@@ -21,7 +21,7 @@ class PackageListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<DBMessage>(
       stream: listView.reloadStream,
-      initialData: DBMessage(DBStatus.ready),
+      initialData: DBMessage(listView.dbTable.status),
       builder: (context, snapshot) {
         return FullWidthProgressBarOnTop(
           hasProgressBar:

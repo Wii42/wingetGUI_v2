@@ -75,13 +75,13 @@ class _SettingsPageSate extends State<SettingsPage> {
         children: [
           Button(
             onPressed: () async {
-              WingetDB.instance.updates.reloadFuture(wingetLocale);
+              PackageTables.instance.updates.reloadFuture(wingetLocale);
             },
             child: const Text('Reload updates'),
           ),
           Button(
             onPressed: () {
-              WingetDB.instance.updates.removeAllInfos();
+              PackageTables.instance.updates.removeAllInfos();
             },
             child: const Text('Remove all updates'),
           ),

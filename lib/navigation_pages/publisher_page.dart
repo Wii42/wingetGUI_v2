@@ -8,8 +8,10 @@ import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import '../helpers/json_publisher.dart';
 import '../helpers/route_parameter.dart';
 import '../widget_assets/favicon_db.dart' as favicon_db;
+import '../widget_assets/favicon_db.dart';
 import '../widget_assets/package_list_page.dart';
 import '../widget_assets/sort_by.dart';
+import '../winget_db/db_message.dart';
 import '../winget_db/db_table.dart';
 import '../winget_db/winget_db.dart';
 
@@ -41,15 +43,16 @@ class PublisherPage extends StatelessWidget {
       title: publisherName ?? publisherId,
       bodyHeader: publisherTitle(context),
       listView: PackagePeekListView(
-        dbTable: DBTable(
-          WingetDB.instance.available.infos
+        dbTable: WingetDBTable(
+          PackageTables.instance.available.infos
               .where((element) => element.publisher?.id == publisherId)
               .toList(),
           content: (locale) =>
               locale.infoTitle(PackageAttribute.publisher.name),
-          wingetCommand: [],
+          wingetCommand: [], parentDB: FaviconDB.instance,
+          status: DBStatus.ready, tableName: 'publisher',
         ),
-        customReloadStream: WingetDB.instance.available.stream,
+        customReloadStream: PackageTables.instance.available.stream,
         menuOptions: const PackageListMenuOptions(
           onlyWithSourceButton: false,
           sortOptions: [
@@ -61,8 +64,8 @@ class PublisherPage extends StatelessWidget {
           ],
         ),
         packageOptions: const PackageListPackageOptions(
-          isInstalled: WingetDB.isPackageInstalled,
-          isUpgradable: WingetDB.isPackageUpgradable,
+          isInstalled: PackageTables.isPackageInstalled,
+          isUpgradable: PackageTables.isPackageUpgradable,
         ),
       ),
     );

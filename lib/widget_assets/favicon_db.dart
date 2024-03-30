@@ -57,8 +57,8 @@ class FaviconDB {
 abstract class DBTable<K extends Object, V extends Object> {
   String get tableName;
   String get idKey;
-  (K, V) _fromMap(Map<String, dynamic> map);
-  Map<String, dynamic> _toMap((K, V) entry);
+  (K, V) fromMap(Map<String, dynamic> map);
+  Map<String, dynamic> toMap((K, V) entry);
 
   Map<K, V> _entries = {};
   final FaviconDB parentDB;
@@ -96,7 +96,7 @@ abstract class DBTable<K extends Object, V extends Object> {
     await _ensureDBInitialized();
     List<Map<String, dynamic>> maps =
         await parentDB._database!.query(tableName);
-    return maps.map((e) => _fromMap(e)).toList();
+    return maps.map((e) => fromMap(e)).toList();
   }
 
   Future<void> _deleteInDB(K id) async {
@@ -112,7 +112,7 @@ abstract class DBTable<K extends Object, V extends Object> {
     await _ensureDBInitialized();
     await parentDB._database!.insert(
       tableName,
-      _toMap(entry),
+      toMap(entry),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -127,7 +127,7 @@ abstract class DBTable<K extends Object, V extends Object> {
     if (maps.isEmpty) {
       return null;
     }
-    return _fromMap(maps.first);
+    return fromMap(maps.first);
   }
 
   Future<Map<K, V>> _dbToMap() async {
@@ -173,12 +173,12 @@ class FaviconTable extends DBTable<String, Uri> {
   }
 
   @override
-  (String, Uri) _fromMap(Map<String, dynamic> map) {
+  (String, Uri) fromMap(Map<String, dynamic> map) {
     return (map[idKey], Uri.parse(map[urlKey]));
   }
 
   @override
-  Map<String, dynamic> _toMap((String, Uri) entry) {
+  Map<String, dynamic> toMap((String, Uri) entry) {
     return {
       idKey: entry.$1,
       urlKey: entry.$2.toString(),
@@ -210,12 +210,12 @@ class PublisherNameTable extends DBTable<String, String> {
   }
 
   @override
-  (String, String) _fromMap(Map<String, dynamic> map) {
+  (String, String) fromMap(Map<String, dynamic> map) {
     return (map[idKey], map[publisherNameKey]);
   }
 
   @override
-  Map<String, dynamic> _toMap((String, String) entry) {
+  Map<String, dynamic> toMap((String, String) entry) {
     return {
       idKey: entry.$1,
       publisherNameKey: entry.$2,

@@ -124,7 +124,7 @@ class DBInitializer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    return WingetDB.instance.isReady()
+    return PackageTables.instance.isReady()
         ? MainNavigation(title: appTitle)
         : StreamBuilder<LocalizedString>(
             builder: (context, snapshot) {
@@ -134,7 +134,7 @@ class DBInitializer extends StatelessWidget {
                 }
                 return const Center(child: Text('...'));
               }
-              return WingetDB.instance.status == WingetDBStatus.ready
+              return PackageTables.instance.isReady()
                   ? MainNavigation(title: appTitle)
                   : Center(
                       child: Text(snapshot.hasData
@@ -142,7 +142,7 @@ class DBInitializer extends StatelessWidget {
                           : snapshot.error?.toString() ??
                               locale.errorOccurred));
             },
-            stream: WingetDB.instance.init(context),
+            stream: PackageTables.instance.init(context),
           );
   }
 }

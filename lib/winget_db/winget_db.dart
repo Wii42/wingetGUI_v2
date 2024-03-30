@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:cron/cron.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 
 import '../helpers/log_stream.dart';
 import '../helpers/version_or_string.dart';
@@ -10,19 +11,20 @@ import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_id.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
+import '../widget_assets/favicon_db.dart';
 import '../winget_commands.dart';
 import 'db_message.dart';
 import 'db_table.dart';
-import 'db_table_creator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class WingetDB {
+class PackageTables {
   late final Logger log;
-  WingetDBStatus status = WingetDBStatus.initializing;
-  static final WingetDB instance = WingetDB._();
-  late DBTable updates, installed, available;
+  DBStatus status = DBStatus.loading;
+  static final PackageTables instance = PackageTables._();
+  late WingetDBTable updates, installed, available;
+  List<WingetDBTable> get tables => [updates, installed, available];
 
-  WingetDB._() {
+  PackageTables._() {
     log = Logger(this);
   }
 
@@ -34,41 +36,42 @@ class WingetDB {
     bool isWingetAvailable = await checkWingetAvailable();
     if (!isWingetAvailable) {
       yield (locale) => locale.errorWingetNotAvailable;
-      status = WingetDBStatus.error;
+      status = DBStatus.error;
       return;
     }
 
-    DBTableCreator installedCreator = DBTableCreator(
-      content: (locale) => locale.wingetTitle(Winget.installed.name),
-      winget: Winget.installed,
-      parentDB: this,
-    );
-    yield* installedCreator.init(wingetLocale);
-    installed = installedCreator.returnTable();
-
-    DBTableCreator updatesCreator = DBTableCreator(
-        content: (locale) => locale.wingetTitle(Winget.updates.name),
-        winget: Winget.updates,
-        filter: _filterUpdates,
-        parentDB: this);
-    yield* updatesCreator.init(wingetLocale);
-    updates = updatesCreator.returnTable();
-
-    DBTableCreator availableCreator = DBTableCreator(
-      content: (locale) => locale.wingetTitle(Winget.availablePackages.name),
-      winget: Winget.availablePackages,
-      parentDB: this,
-    );
-    yield* availableCreator.init(wingetLocale);
-    available = availableCreator.returnTable();
-
-    printPublishersPackageNrs();
-    status = WingetDBStatus.ready;
+    installed = getDBTable(winget: Winget.installed);
+    updates = getDBTable(winget: Winget.updates, creatorFilter: _filterUpdates);
+    available = getDBTable(winget: Winget.availablePackages);
+    installed.reloadFuture(wingetLocale);
+    updates.reloadFuture(wingetLocale);
+    available.reloadFuture(wingetLocale);
+    //reloadDBs(wingetLocale);
+    //printPublishersPackageNrs();
+    status = DBStatus.ready;
     scheduleReloadDBs(wingetLocale);
     return;
   }
 
-  bool isReady() => status == WingetDBStatus.ready;
+  WingetDBTable getDBTable({
+    List<PackageInfosPeek> infos = const [],
+    List<OneLineInfo> hints = const [],
+    PackageFilter? creatorFilter,
+    required Winget winget,
+  }) {
+    return WingetDBTable(
+      infos,
+      hints: hints,
+      content: (locale) => locale.wingetTitle(winget.name),
+      wingetCommand: winget.fullCommand,
+      creatorFilter: creatorFilter,
+      parent: this,
+      parentDB: FaviconDB.instance,
+      tableName: winget.name,
+    );
+  }
+
+  bool isReady() => status == DBStatus.ready;
 
   void printPublishersPackageNrs() {
     Map<String, List<PackageInfosPeek>> map = {};
@@ -117,7 +120,7 @@ class WingetDB {
 
   static bool isPackageInstalled(PackageInfos package) {
     if (package.id == null) return false;
-    return WingetDB.instance.installed.idMap.containsKey(package.id?.value);
+    return PackageTables.instance.installed.idMap.containsKey(package.id?.value);
   }
 
   static bool isPackageUpgradable(PackageInfosPeek package) =>
@@ -130,9 +133,9 @@ class WingetDB {
   }
 
   void reloadDBs(AppLocalizations wingetLocale) {
-    updates.reloadFuture(wingetLocale);
-    installed.reloadFuture(wingetLocale);
-    available.reloadFuture(wingetLocale);
+    for(WingetDBTable table in tables) {
+      table.reloadFuture(wingetLocale);
+    }
   }
 
   void scheduleReloadDBs(AppLocalizations wingetLocale) {
@@ -142,5 +145,3 @@ class WingetDB {
     });
   }
 }
-
-enum WingetDBStatus { initializing, ready, error }

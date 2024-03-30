@@ -9,7 +9,7 @@ import '../winget_db/db_table.dart';
 import '../winget_db/winget_db.dart';
 
 class InstalledPage extends StatelessWidget {
-  final DBTable dbTable = WingetDB.instance.installed;
+  final WingetDBTable dbTable = PackageTables.instance.installed;
   InstalledPage({super.key});
 
   static Widget inRoute([dynamic parameters]) {
@@ -33,7 +33,7 @@ class InstalledPage extends StatelessWidget {
       ),
       packageOptions: PackageListPackageOptions(
         isInstalled: (_) => true,
-        isUpgradable: WingetDB.isPackageUpgradable,
+        isUpgradable: PackageTables.isPackageUpgradable,
         defaultSourceIsLocalPC: true,
       ),
     );

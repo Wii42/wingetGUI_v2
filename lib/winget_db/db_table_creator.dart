@@ -1,4 +1,4 @@
-import 'package:winget_gui/winget_db/winget_db.dart';
+
 
 import '../helpers/log_stream.dart';
 import '../output_handling/one_line_info/one_line_info_parser.dart';
@@ -11,7 +11,6 @@ import '../output_handling/table/table_parser.dart';
 import '../widget_assets/buttons/tooltips.dart';
 import '../winget_commands.dart';
 import '../winget_process/winget_process.dart';
-import 'db_table.dart';
 
 class DBTableCreator {
   late final Logger log;
@@ -20,7 +19,6 @@ class DBTableCreator {
   List<ParsedOutput>? parsed;
   late List<String> wingetCommand;
   final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter;
-  final WingetDB? parentDB;
 
   LocalizedString content;
 
@@ -29,7 +27,6 @@ class DBTableCreator {
     Winget? winget,
     List<String>? command,
     this.filter,
-    this.parentDB,
   }) {
     log = Logger(this);
     assert(winget != null || command != null,
@@ -86,17 +83,6 @@ class DBTableCreator {
       throw Exception("$content has not been parsed");
     }
     return extractHintsStatic(parsed!, content);
-  }
-
-  DBTable returnTable() {
-    return DBTable(
-      extractInfos(),
-      hints: extractHints(),
-      content: content,
-      wingetCommand: wingetCommand,
-      creatorFilter: filter,
-      parentDB: parentDB,
-    );
   }
 
   static List<PackageInfosPeek> extractInfosStatic(

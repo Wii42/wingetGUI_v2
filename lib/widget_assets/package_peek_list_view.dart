@@ -22,7 +22,7 @@ import 'buttons/search_button.dart';
 import 'loading_widget.dart';
 
 class PackagePeekListView extends StatefulWidget {
-  final DBTable dbTable;
+  final WingetDBTable dbTable;
   late final Stream<DBMessage> reloadStream;
   final PackageListMenuOptions menuOptions;
   final PackageListPackageOptions packageOptions;
@@ -62,10 +62,12 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return StreamBuilder<DBMessage>(
+        initialData: DBMessage(widget.dbTable.status),
         stream: widget.reloadStream,
         builder: (context, snapshot) {
           if (snapshot.hasData &&
               snapshot.data?.status != DBStatus.ready &&
+              widget.dbTable.status != DBStatus.ready &&
               prefilteredInfos.isEmpty) {
             return LoadingWidget(
                 text: snapshot.data?.message != null

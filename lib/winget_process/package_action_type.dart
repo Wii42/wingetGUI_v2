@@ -50,12 +50,12 @@ enum PackageActionType {
 
   static void reloadUninstall(
       int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
-    WingetDB wingetDB = WingetDB.instance;
+    PackageTables wingetDB = PackageTables.instance;
     if (exitCode != 0) {
       return;
     }
     if (info != null && exitCode == 0) {
-      WingetDB.instance.installed.removeInfoWhere(info.probablySamePackage);
+      PackageTables.instance.installed.removeInfoWhere(info.probablySamePackage);
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);
     }
     if (wingetLocale != null && exitCode == 0) {
@@ -69,7 +69,7 @@ enum PackageActionType {
 
   static void reloadInstall(
       int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
-    WingetDB wingetDB = WingetDB.instance;
+    PackageTables wingetDB = PackageTables.instance;
     if (info != null && exitCode == 0) {
       wingetDB.installed.addInfo(info);
     }
@@ -78,7 +78,7 @@ enum PackageActionType {
 
   static void reloadUpdate(
       int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
-    WingetDB wingetDB = WingetDB.instance;
+    PackageTables wingetDB = PackageTables.instance;
     if (info != null && exitCode == 0) {
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);
     }

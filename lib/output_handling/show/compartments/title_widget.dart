@@ -29,7 +29,7 @@ class TitleWidget extends Compartment {
     return DecoratedCard(
       padding: 20,
       child: StreamBuilder<DBMessage>(
-          stream: WingetDB.instance.installed.stream,
+          stream: PackageTables.instance.installed.stream,
           builder: (context, snapshot) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -66,11 +66,11 @@ class TitleWidget extends Compartment {
   }
 
   Widget buildRightSide() => StreamBuilder<DBMessage>(
-      stream: WingetDB.instance.installed.stream,
+      stream: PackageTables.instance.installed.stream,
       builder: (context, snapshot) {
-        bool isInstalled = WingetDB.instance.installed.idMap
+        bool isInstalled = PackageTables.instance.installed.idMap
             .containsKey(infos.id?.value);
-        bool hasUpdate = WingetDB.instance.updates.idMap
+        bool hasUpdate = PackageTables.instance.updates.idMap
             .containsKey(infos.id?.value);
         return RightSideButtons(
           infos: infos,
@@ -120,7 +120,7 @@ class TitleWidget extends Compartment {
           LinkText(line: infos.category!.value),
           if (infos.isMicrosoftStore()) _showInStore(locale),
         ],
-        if (WingetDB.isPackageInstalled(infos)) installedIcon(context),
+        if (PackageTables.isPackageInstalled(infos)) installedIcon(context),
       ].withSpaceBetween(width: 5),
     );
   }

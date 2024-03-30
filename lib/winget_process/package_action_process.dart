@@ -39,6 +39,6 @@ class PackageActionProcess extends WingetProcess {
       return;
     }
     type.reloadDB(exitCode, info, wingetLocale);
-    WingetDB.instance.notifyListeners();
+    PackageTables.instance.notifyListeners();
   }
 }

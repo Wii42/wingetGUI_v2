@@ -150,14 +150,14 @@ class _PublisherBuilder {
       String name = indexedName.$2;
       int index = indexedName.$1;
       String nameAsId = _canonicalize(name);
-      if (nameAsId == publisherID || publisherID.startsWith(nameAsId)) {
+      if (nameAsId == publisherID) {
         if (name.contains(RegExp(r'[a-zA-Z],$')) && index >= lengthFullNames) {
           name = name.take(name.length - 1);
         }
         return name;
       }
       String nameAsIdCustom = _canonicalize(name, customDiacritics: true);
-      if (nameAsIdCustom == publisherID || publisherID.startsWith(nameAsId)) {
+      if (nameAsIdCustom == publisherID) {
         if (name.contains(RegExp(r'[a-zA-Z],$')) && index >= lengthFullNames) {
           name = name.take(name.length - 1);
         }

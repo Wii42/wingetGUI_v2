@@ -9,10 +9,10 @@ import '../winget_db/db_table.dart';
 import '../winget_db/winget_db.dart';
 import '../winget_process/package_action_type.dart';
 
-DBTable dbTable = WingetDB.instance.updates;
+WingetDBTable dbTable = PackageTables.instance.updates;
 
 class UpdatesPage extends StatelessWidget {
-  final DBTable dbTable = WingetDB.instance.updates;
+  final WingetDBTable dbTable = PackageTables.instance.updates;
   UpdatesPage({super.key});
 
   static Widget inRoute([dynamic parameters]) {

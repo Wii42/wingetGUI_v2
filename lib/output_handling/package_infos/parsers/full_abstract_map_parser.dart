@@ -1,6 +1,7 @@
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/agreement_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/abstract_map_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
 
 import '../../../package_sources/package_source.dart';
@@ -9,12 +10,12 @@ import '../installer_objects/computer_architecture.dart';
 import '../installer_objects/installer.dart';
 import '../package_attribute.dart';
 
-abstract class FullAbstractMapParser<A, B> {
-  Map<A, B> details;
-
-  FullAbstractMapParser(this.details);
+abstract class FullAbstractMapParser<A, B>
+    extends AbstractMapParser<A, B, PackageInfosFull> {
+  FullAbstractMapParser(super.details);
 
   /// Parses the details of the package and returns a [PackageInfosFull] object.
+  @override
   PackageInfosFull parse() {
     Map<A, B> detailsMap = flattenedDetailsMap();
     InfoAbstractMapParser<A, B> p = getParser(detailsMap);
@@ -153,12 +154,6 @@ abstract class FullAbstractMapParser<A, B> {
     return _parseAgreementInfos(agreementDetails);
   }
 
-  /// Returns a map with all the details of the package, except the installer details.
-  Map<A, B> flattenedDetailsMap();
-
   /// Returns an iterable with all the installer details of the package.
   Iterable<Map<A, B>> flattenedInstallerList();
-
-  /// Returns the parser to be used to parse the details.
-  InfoAbstractMapParser<A, B> getParser(Map<A, B> map);
 }

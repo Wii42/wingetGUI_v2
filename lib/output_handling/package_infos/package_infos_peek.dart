@@ -1,12 +1,12 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/package_id.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/peek_db_map_parser.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/peek_map_parser.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
 import '../../helpers/version_or_string.dart';
 import './package_infos.dart';
 import 'info.dart';
-import 'parsers/info_map_parser.dart';
-import 'package_attribute.dart';
 
 class PackageInfosPeek extends PackageInfos {
   final Info<String>? match;
@@ -30,22 +30,11 @@ class PackageInfosPeek extends PackageInfos {
   factory PackageInfosPeek.fromMap(
       {required Map<String, String>? details,
       required AppLocalizations locale}) {
-    if (details == null) {
-      return PackageInfosPeek();
-    }
-    InfoMapParser parser = InfoMapParser(map: details, locale: locale);
-    Info<PackageSources>? source = parser.sourceFromMap(PackageAttribute.source);
-    PackageInfosPeek infos = PackageInfosPeek(
-      name: parser.maybeStringFromMap(PackageAttribute.name),
-      id: parser.maybePackageIdFromMap(PackageAttribute.id, source: source.value),
-      version: parser.maybeVersionOrStringFromMap(PackageAttribute.version),
-      availableVersion:
-          parser.maybeVersionOrStringFromMap(PackageAttribute.availableVersion),
-      source: source,
-      match: parser.maybeStringFromMap(PackageAttribute.match),
-      otherInfos: details.isNotEmpty ? details : null,
-    );
-    return infos;
+    return PeekMapParser(details: details ?? {}, locale: locale).parse();
+  }
+
+  factory PackageInfosPeek.fromDBMap(Map<String, String>? details) {
+    return PeekDBMapParser(details ?? {}).parse();
   }
 
   bool hasInfosFull() {

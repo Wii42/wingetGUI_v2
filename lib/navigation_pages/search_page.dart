@@ -13,7 +13,7 @@ class SearchPage extends StatelessWidget {
   SearchPage({super.key});
 
   final TextEditingController controller = TextEditingController();
-  final DBTable dbTable = WingetDB.instance.available;
+  final WingetDBTable dbTable = PackageTables.instance.available;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +34,8 @@ class SearchPage extends StatelessWidget {
         deepSearchButton: true,
       ),
       packageOptions: const PackageListPackageOptions(
-        isInstalled: WingetDB.isPackageInstalled,
-        isUpgradable: WingetDB.isPackageUpgradable,
+        isInstalled: PackageTables.isPackageInstalled,
+        isUpgradable: PackageTables.isPackageUpgradable,
       ),
     );
   }
