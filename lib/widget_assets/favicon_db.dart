@@ -2,8 +2,15 @@ import 'package:collection/collection.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:winget_gui/helpers/version_or_string.dart';
 
 import '../helpers/log_stream.dart';
+import '../output_handling/one_line_info/one_line_info_parser.dart';
+import '../output_handling/package_infos/package_infos_peek.dart';
+import '../winget_commands.dart';
+import '../winget_db/db_message.dart';
+import '../winget_db/db_table.dart';
+import '../winget_db/winget_db.dart';
 
 class FaviconDB {
   static final FaviconDB instance = FaviconDB._();
@@ -11,8 +18,16 @@ class FaviconDB {
   late final FaviconTable favicons;
   late final PublisherNameTable publisherNamesByPackageId;
   late final PublisherNameTable publisherNamesByPublisherId;
-  List<DBTable> get tables =>
-      [favicons, publisherNamesByPackageId, publisherNamesByPublisherId];
+  late final WingetDBTable updates, installed, available;
+  List<DBTable> get tables => [
+        ...faviconTables,
+        ...wingetTables,
+      ];
+  List<WingetDBTable> get wingetTables => [installed, updates, available];
+  List<DBTable> get faviconTables => [favicons,
+  publisherNamesByPackageId,
+  publisherNamesByPublisherId,
+  ];
   Database? _database;
   late final Logger log;
 
@@ -29,6 +44,11 @@ class FaviconDB {
       idKey: 'publisherId',
       parentDB: this,
     );
+
+    installed = getDBTable(winget: Winget.installed);
+    updates = getDBTable(
+        winget: Winget.updates, creatorFilter: PackageTables.filterUpdates);
+    available = getDBTable(winget: Winget.availablePackages);
   }
 
   Future<void> ensureInitialized() async {
@@ -44,13 +64,32 @@ class FaviconDB {
       },
       version: 1,
     );
-    for (DBTable table in tables) {
-      table._setEntriesFromDB();
+    for (DBTable table in faviconTables) {
+      await table._setEntriesFromDB();
     }
-    log.info('init publisherNamesByPackageIdDB',
-        message: (await publisherNamesByPackageId._dbToMap()).toString());
-    log.info('init publisherNamesByPublisherIdDB',
-        message: (await publisherNamesByPublisherId._dbToMap()).toString());
+    for (WingetDBTable table in wingetTables) {
+      await table._setEntriesFromDB();
+      table.infos = table._entries.values.toList();
+      table.status = DBStatus.ready;
+    }
+  }
+
+  WingetDBTable getDBTable({
+    List<PackageInfosPeek> infos = const [],
+    List<OneLineInfo> hints = const [],
+    PackageFilter? creatorFilter,
+    required Winget winget,
+  }) {
+    return WingetDBTable(
+      infos,
+      hints: hints,
+      content: (locale) => locale.wingetTitle(winget.name),
+      wingetCommand: winget.fullCommand,
+      creatorFilter: creatorFilter,
+      parent: PackageTables.instance,
+      parentDB: this,
+      tableName: winget.name,
+    );
   }
 }
 
@@ -117,6 +156,17 @@ abstract class DBTable<K extends Object, V extends Object> {
     );
   }
 
+  Future<void> _insertMultipleDB(Map<K, V> entries) async {
+    await _ensureDBInitialized();
+    for (var entry in entries.entries) {
+      await parentDB._database!.insert(
+        tableName,
+        toMap((entry.key, entry.value)),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+  }
+
   Future<(K, V)?> getEntryDB(K id) async {
     await _ensureDBInitialized();
     List<Map<String, dynamic>> maps = await parentDB._database!.query(
@@ -135,7 +185,7 @@ abstract class DBTable<K extends Object, V extends Object> {
     return {for (var e in dbEntries) e.$1: e.$2};
   }
 
-  _setEntriesFromDB() async {
+  Future<void> _setEntriesFromDB() async {
     _entries = await _dbToMap();
   }
 
@@ -147,6 +197,12 @@ abstract class DBTable<K extends Object, V extends Object> {
   void deleteAll() {
     _entries.clear();
     _deleteAllInDB();
+  }
+
+  void setEntries(Map<K, V> entries) {
+    _entries = entries;
+    _deleteAllInDB();
+    _insertMultipleDB(entries);
   }
 
   operator []=(K id, V value) => insert(id, value);
@@ -220,5 +276,16 @@ class PublisherNameTable extends DBTable<String, String> {
       idKey: entry.$1,
       publisherNameKey: entry.$2,
     };
+  }
+}
+
+mixin PackageTableMixin
+    on DBTable<(String, VersionOrString), PackageInfosPeek> {
+  void setList(Iterable<PackageInfosPeek> list) {
+    _entries = Map<(String, VersionOrString), PackageInfosPeek>.fromEntries(
+        list.map((PackageInfosPeek e) =>
+            MapEntry((e.id!.value.string, e.version!.value), e)));
+    _deleteAllInDB();
+    _insertMultipleDB(_entries);
   }
 }

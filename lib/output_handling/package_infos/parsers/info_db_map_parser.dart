@@ -40,7 +40,14 @@ class InfoDBMapParser extends InfoAbstractMapParser<String, dynamic> {
 
   @override
   Info<String>? maybeStringFromMap(PackageAttribute attribute) {
-    return Info.fromAttribute(attribute, value: map[attribute.name]);
+    String? value = map[attribute.name];
+    if(value == 'null'){
+      value = null;
+    }
+    if(value == null){
+      return null;
+    }
+    return Info.fromAttribute(attribute, value: value);
   }
 
   @override

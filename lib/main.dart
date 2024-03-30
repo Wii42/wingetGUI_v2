@@ -26,6 +26,7 @@ const String appTitle = 'WingetGUI';
 void main() async {
   await initAppPrerequisites();
   await PackageScreenshotsList.instance.fetchScreenshots();
+  await FaviconDB.instance.ensureInitialized();
   runApp(const WingetGui());
 }
 
@@ -49,7 +50,6 @@ Future<void> initAppPrerequisites() async {
     SystemTheme.accentColor.load(),
     SettingsCache.instance.ensureInitialized(),
     PackageScreenshotsList.instance.ensureInitialized(),
-    FaviconDB.instance.ensureInitialized(),
   ]);
 }
 

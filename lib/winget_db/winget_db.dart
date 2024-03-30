@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:cron/cron.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 
 import '../helpers/log_stream.dart';
 import '../helpers/version_or_string.dart';
@@ -12,7 +11,6 @@ import '../output_handling/package_infos/package_id.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../widget_assets/favicon_db.dart';
-import '../winget_commands.dart';
 import 'db_message.dart';
 import 'db_table.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -40,35 +38,15 @@ class PackageTables {
       return;
     }
 
-    installed = getDBTable(winget: Winget.installed);
-    updates = getDBTable(winget: Winget.updates, creatorFilter: _filterUpdates);
-    available = getDBTable(winget: Winget.availablePackages);
+    installed = FaviconDB.instance.installed;
+    updates = FaviconDB.instance.updates;
+    available = FaviconDB.instance.available;
     installed.reloadFuture(wingetLocale);
     updates.reloadFuture(wingetLocale);
     available.reloadFuture(wingetLocale);
-    //reloadDBs(wingetLocale);
-    //printPublishersPackageNrs();
     status = DBStatus.ready;
     scheduleReloadDBs(wingetLocale);
     return;
-  }
-
-  WingetDBTable getDBTable({
-    List<PackageInfosPeek> infos = const [],
-    List<OneLineInfo> hints = const [],
-    PackageFilter? creatorFilter,
-    required Winget winget,
-  }) {
-    return WingetDBTable(
-      infos,
-      hints: hints,
-      content: (locale) => locale.wingetTitle(winget.name),
-      wingetCommand: winget.fullCommand,
-      creatorFilter: creatorFilter,
-      parent: this,
-      parentDB: FaviconDB.instance,
-      tableName: winget.name,
-    );
   }
 
   bool isReady() => status == DBStatus.ready;
@@ -90,12 +68,13 @@ class PackageTables {
             .join(('\n')));
   }
 
-  List<PackageInfosPeek> _filterUpdates(infos) {
+  static List<PackageInfosPeek> filterUpdates(infos) {
     List<PackageInfosPeek> toRemoveFromUpdates = [];
     for (PackageInfosPeek package in infos) {
       PackageId id = package.id!.value;
-      if (installed.idMap.containsKey(id)) {
-        List<PackageInfosPeek> installedPackages = installed.idMap[id]!;
+      if (PackageTables.instance.installed.idMap.containsKey(id)) {
+        List<PackageInfosPeek> installedPackages =
+            PackageTables.instance.installed.idMap[id]!;
         List<VersionOrString?> installedVersions =
             installedPackages.map((e) => e.version?.value).toList();
         if (installedVersions.any((e) =>
@@ -120,7 +99,8 @@ class PackageTables {
 
   static bool isPackageInstalled(PackageInfos package) {
     if (package.id == null) return false;
-    return PackageTables.instance.installed.idMap.containsKey(package.id?.value);
+    return PackageTables.instance.installed.idMap
+        .containsKey(package.id?.value);
   }
 
   static bool isPackageUpgradable(PackageInfosPeek package) =>
@@ -133,7 +113,7 @@ class PackageTables {
   }
 
   void reloadDBs(AppLocalizations wingetLocale) {
-    for(WingetDBTable table in tables) {
+    for (WingetDBTable table in tables) {
       table.reloadFuture(wingetLocale);
     }
   }
