@@ -42,19 +42,20 @@ class PackageActionsList extends StatelessWidget {
       header: PackageActionWidget(
           action: actionsNotifier.actions.first,
           key: actionsNotifier.actions.first.uniqueKey),
-      direction: ExpanderDirection.down,
-      initiallyExpanded: true,
+      direction: ExpanderDirection.up,
       content: Column(
         verticalDirection: VerticalDirection.up,
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (PackageAction action in actionsNotifier.actions)
+          for (PackageAction action in actionsNotifier.actions.skip(1))
             PackageActionWidget(action: action, key: action.uniqueKey),
-        ].withSpaceBetween(height: spaceBetweenItems),
+        ].withSpaceBetween(height: PackageActionsList.spaceBetweenItems),
       ),
-      contentPadding: const EdgeInsets.only(top: spaceBetweenItems),
+      contentPadding:
+          const EdgeInsets.only(bottom: PackageActionsList.spaceBetweenItems),
       contentBackgroundColor: Colors.transparent,
+      headerBackgroundColor: ButtonState.all(Colors.transparent),
     );
   }
 }
