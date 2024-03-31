@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:sqflite/sqflite.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/winget_db/db_message.dart';
@@ -136,48 +134,6 @@ class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
       _streamController.add(DBMessage(DBStatus.ready));
     });
     return completer.future;
-  }
-
-  @override
-  initTable(Database db) {
-    db.execute(
-      '''CREATE TABLE $tableName(
-          $idKey TEXT,
-          ${PackageAttribute.name.name} TEXT,
-          ${PackageAttribute.version.name} TEXT,
-          ${PackageAttribute.availableVersion.name} TEXT,
-          ${PackageAttribute.source.name} TEXT,
-          ${PackageAttribute.match.name} TEXT,
-          CONSTRAINT PK_Info PRIMARY KEY ($idKey,${PackageAttribute.version.name})
-          )''',
-    );
-  }
-
-  @override
-  ((String, VersionOrString), PackageInfosPeek) fromMap(
-      Map<String, dynamic> map) {
-    Map<String,String> tempMap = map.map((key, value) => MapEntry(key, value.toString()));
-    PackageInfosPeek info =
-        PackageInfosPeek.fromDBMap(tempMap);
-    return ((info.id!.value.string, info.version!.value), info..setImplicitInfos());
-  }
-
-  @override
-  Map<String, dynamic> toMap(
-      ((String, VersionOrString), PackageInfosPeek) entry) {
-    (String, VersionOrString) primaryKey = entry.$1;
-    String id = primaryKey.$1;
-    VersionOrString version = primaryKey.$2;
-    PackageInfosPeek info = entry.$2;
-    return {
-      idKey: id,
-      PackageAttribute.name.name: info.name?.value,
-      PackageAttribute.version.name: version.stringValue,
-      PackageAttribute.availableVersion.name:
-          info.availableVersion?.value.stringValue,
-      PackageAttribute.source.name: info.source.value.key,
-      PackageAttribute.match.name: info.match?.value,
-    };
   }
 
   void sendLoadingMessage() {

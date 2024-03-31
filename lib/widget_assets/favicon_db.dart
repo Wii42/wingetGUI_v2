@@ -6,6 +6,7 @@ import 'package:winget_gui/helpers/version_or_string.dart';
 
 import '../helpers/log_stream.dart';
 import '../output_handling/one_line_info/one_line_info_parser.dart';
+import '../output_handling/package_infos/package_attribute.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../winget_commands.dart';
 import '../winget_db/db_message.dart';
@@ -281,6 +282,49 @@ class PublisherNameTable extends DBTable<String, String> {
 
 mixin PackageTableMixin
     on DBTable<(String, VersionOrString), PackageInfosPeek> {
+
+  @override
+  initTable(Database db) {
+    db.execute(
+      '''CREATE TABLE $tableName(
+          $idKey TEXT,
+          ${PackageAttribute.name.name} TEXT,
+          ${PackageAttribute.version.name} TEXT,
+          ${PackageAttribute.availableVersion.name} TEXT,
+          ${PackageAttribute.source.name} TEXT,
+          ${PackageAttribute.match.name} TEXT,
+          CONSTRAINT PK_Info PRIMARY KEY ($idKey,${PackageAttribute.version.name})
+          )''',
+    );
+  }
+
+  @override
+  ((String, VersionOrString), PackageInfosPeek) fromMap(
+      Map<String, dynamic> map) {
+    Map<String,String> tempMap = map.map((key, value) => MapEntry(key, value.toString()));
+    PackageInfosPeek info =
+    PackageInfosPeek.fromDBMap(tempMap);
+    return ((info.id!.value.string, info.version!.value), info..setImplicitInfos());
+  }
+
+  @override
+  Map<String, dynamic> toMap(
+      ((String, VersionOrString), PackageInfosPeek) entry) {
+    (String, VersionOrString) primaryKey = entry.$1;
+    String id = primaryKey.$1;
+    VersionOrString version = primaryKey.$2;
+    PackageInfosPeek info = entry.$2;
+    return {
+      idKey: id,
+      PackageAttribute.name.name: info.name?.value,
+      PackageAttribute.version.name: version.stringValue,
+      PackageAttribute.availableVersion.name:
+      info.availableVersion?.value.stringValue,
+      PackageAttribute.source.name: info.source.value.key,
+      PackageAttribute.match.name: info.match?.value,
+    };
+  }
+
   void setList(Iterable<PackageInfosPeek> list) {
     _entries = Map<(String, VersionOrString), PackageInfosPeek>.fromEntries(
         list.map((PackageInfosPeek e) =>

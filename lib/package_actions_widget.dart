@@ -16,28 +16,45 @@ import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 import 'output_handling/parsed_output.dart';
 
 class PackageActionsList extends StatelessWidget {
-  const PackageActionsList({
-    super.key,
-  });
+  static const double spaceBetweenItems = 5;
+  const PackageActionsList({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<PackageActionsNotifier>(
       builder: (BuildContext context, PackageActionsNotifier actionsNotifier,
           Widget? child) {
+        if (actionsNotifier.actions.isEmpty) return const SizedBox();
         return Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(
-            verticalDirection: VerticalDirection.up,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              for (PackageAction action in actionsNotifier.actions)
-                PackageActionWidget(action: action, key: action.uniqueKey),
-            ].withSpaceBetween(height: 5),
-          ),
+          child: actionsWidget(actionsNotifier),
         );
       },
+    );
+  }
+
+  Widget actionsWidget(PackageActionsNotifier actionsNotifier) {
+    if (actionsNotifier.actions.length == 1) {
+      PackageAction action = actionsNotifier.actions.single;
+      return PackageActionWidget(action: action, key: action.uniqueKey);
+    }
+    return Expander(
+      header: PackageActionWidget(
+          action: actionsNotifier.actions.first,
+          key: actionsNotifier.actions.first.uniqueKey),
+      direction: ExpanderDirection.down,
+      initiallyExpanded: true,
+      content: Column(
+        verticalDirection: VerticalDirection.up,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (PackageAction action in actionsNotifier.actions)
+            PackageActionWidget(action: action, key: action.uniqueKey),
+        ].withSpaceBetween(height: spaceBetweenItems),
+      ),
+      contentPadding: const EdgeInsets.only(top: spaceBetweenItems),
+      contentBackgroundColor: Colors.transparent,
     );
   }
 }

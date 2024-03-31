@@ -1,5 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:winget_gui/package_actions_notifier.dart';
+import 'package:winget_gui/package_actions_widget.dart';
 import 'package:winget_gui/routes.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -95,9 +98,6 @@ class MainNavigationState extends State<MainNavigation>
     return const RoundedRectangleBorder();
   }
 
-  PaneItemAction buildPaneItemAction() => PaneItemAction(
-      icon: const Icon(FluentIcons.add), title: const Text('hi'), onTap: () {});
-
   List<NavigationPaneItem> createNavItems(List<Routes> commands) {
     return [for (Routes winget in commands) _navItem(winget)];
   }
@@ -107,7 +107,7 @@ class MainNavigationState extends State<MainNavigation>
     return PaneItem(
       title: Text(route.title(local)),
       icon: Icon(route.icon),
-      body: navigators[route] ?? notFoundMessage(),
+      body: PackageActionWrap(navigators[route] ?? notFoundMessage()),
     );
   }
 
@@ -152,6 +152,17 @@ class MainNavigationState extends State<MainNavigation>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class PackageActionWrap extends StatelessWidget{
+  static const actionsList = PackageActionsList();
+  final Widget child;
+
+  const PackageActionWrap(this.child, {super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [Expanded(child: child),actionsList],);
+  }
 }
 
 class NavigationNavigator extends StatefulWidget {
