@@ -159,7 +159,7 @@ class PackageActionWrap extends StatelessWidget{
   const PackageActionWrap(this.child, {super.key});
   @override
   Widget build(BuildContext context) {
-    return Column(children: [Expanded(child: child),actionsList],);
+    return Column(children: [Expanded(child: child), actionsList],);
   }
 }
 

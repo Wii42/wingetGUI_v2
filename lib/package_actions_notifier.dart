@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:fluent_ui/fluent_ui.dart';
@@ -14,17 +15,27 @@ class PackageActionsNotifier extends ChangeNotifier {
 
   void add(PackageAction stream) {
     _actions.add(stream);
+    stream.listenForOutput(this);
     notifyListeners();
   }
 
   void removeAll() {
+    for (var element in _actions) {
+      element.stopListeningForOutput();
+    }
     _actions.clear();
+    notifyListeners();
   }
 
   bool remove(PackageAction stream) {
     bool success = _actions.remove(stream);
+    stream.stopListeningForOutput();
     notifyListeners();
     return success;
+  }
+
+  void notify() {
+    notifyListeners();
   }
 }
 
@@ -33,6 +44,19 @@ class PackageAction {
   PackageActionType? type;
   WingetProcess process;
   Key uniqueKey;
+  List<String> output = [];
+  StreamSubscription<List<String>>? _outputSubscription;
   PackageAction({required this.process, this.infos, this.type})
       : uniqueKey = UniqueKey();
+
+  void listenForOutput(PackageActionsNotifier notifier) {
+    _outputSubscription = process.outputStream.listen((event) {
+      output = event;
+      notifier.notify();
+    });
+  }
+
+  void stopListeningForOutput() {
+    _outputSubscription?.cancel();
+  }
 }
