@@ -101,5 +101,7 @@
 
   "onlyAppsWithSourceTooltip": "Show only apps from a known package source",
   "onlyAppsWithExactVersionTooltip": "Show only apps with a known specific version",
-  "actionOnAll": "{action} all"
+  "actionOnAll": "{action} all",
+
+  "ok": "Ok"
 }

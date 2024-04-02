@@ -138,7 +138,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   Positioned numberOfAppsText(int numberOfShownApps, AppLocalizations locale) {
     int totalApps = prefilteredInfos.length;
     return Positioned(
-        bottom: 0,
+        bottom: 5,
         right: horizontalPadding,
         child: DecoratedCard(
             solidColor: true,

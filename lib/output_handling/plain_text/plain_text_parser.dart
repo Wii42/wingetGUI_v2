@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
+import '../../widget_assets/custom_info_bar.dart';
 import '../../widget_assets/link_text.dart';
 import '../output_parser.dart';
 import '../parsed_output.dart';
@@ -53,9 +54,10 @@ class ParsedPlainText extends ParsedOutput {
     return [
       for ((int, String) line in lines.indexed)
         (line.$1 == lines.length - 1 && lastIsSuccessMessage)
-            ? InfoBar(
+            ? CustomInfoBar(
                 title: LinkText(line: line.$2),
                 severity: InfoBarSeverity.success,
+                isSmallHeight: true,
               )
             : LinkText(line: line.$2),
     ];

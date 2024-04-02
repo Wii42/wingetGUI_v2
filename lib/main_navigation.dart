@@ -114,7 +114,7 @@ class MainNavigationState extends State<MainNavigation>
     return PaneItemExpander(
       title: Text(route.title(local)),
       icon: Icon(route.icon),
-      body: navigators[route] ?? notFoundMessage(),
+      body:  PackageActionWrap(navigators[route] ?? notFoundMessage()),
       items: createNavItems(children),
     );
   }

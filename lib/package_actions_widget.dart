@@ -26,14 +26,13 @@ class PackageActionsList extends StatelessWidget {
       builder: (BuildContext context, PackageActionsNotifier actionsNotifier,
           Widget? child) {
         if (actionsNotifier.actions.isEmpty) return const SizedBox();
-        return Column(
-          children: [
-            const Divider(),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: actionsWidget(actionsNotifier),
-            ),
-          ],
+        return DecoratedCard(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(5)),
+          hasBorder: false,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: actionsWidget(actionsNotifier),
+          ),
         );
       },
     );
@@ -77,39 +76,37 @@ class PackageActionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
     return DecoratedCard(
-      solidColor: true,
       child: FutureBuilder<int>(
           future: action.process.process.exitCode,
           builder: (context, exitCode) {
             closeWidgetAfterDone(context, exitCode);
-            return Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  ...[
-                    if (action.infos != null) ...[
-                      AppIcon.fromInfos(
-                        action.infos!,
-                        iconSize: 30,
-                        withRightSidePadding: false,
+            return SizedBox(
+              height: 40,
+              child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(width: 5),
+                    ...[
+                      if (action.infos != null)
+                        AppIcon.fromInfos(
+                          action.infos!,
+                          iconSize: 20,
+                          withRightSidePadding: false,
+                        ),
+                      Row(
+                        children: [
+                          Icon(action.type?.winget.icon, size: 15,),
+                          actionTitle(localization),
+                        ].withSpaceBetween(width:5),
                       ),
-                    ] else
-                      const SizedBox(
-                        width: 10,
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: actionTitle(localization),
-                    ),
-                    outputField(exitCode, context),
-                    buttonAtEnd(exitCode, context),
-                  ].withSpaceBetween(width: 20),
-                  const SizedBox(width: 5)
-                ]);
+                      outputField(exitCode, context),
+                      buttonAtEnd(exitCode, context),
+                    ].withSpaceBetween(width: 10),
+                    const SizedBox(width: 5)
+                  ]),
+            );
           }),
     );
   }
@@ -127,11 +124,11 @@ class PackageActionWidget extends StatelessWidget {
     AppLocalizations localization = AppLocalizations.of(context)!;
     if (exitCode.hasData) {
       if (exitCode.data == 0) {
-        return button(
-            FluentIcons.accept, 'Ok', () => closeActionWidget(context));
+        return button(FluentIcons.accept, localization.ok,
+            () => closeActionWidget(context));
       } else {
-        return button(
-            FluentIcons.error, 'Ok', () => closeActionWidget(context));
+        return button(FluentIcons.error, localization.ok,
+            () => closeActionWidget(context));
       }
     } else {
       return button(FluentIcons.chrome_close, localization.endProcess, () {
@@ -142,13 +139,8 @@ class PackageActionWidget extends StatelessWidget {
   }
 
   Text actionTitle(AppLocalizations locale) {
-    String? optimalName;
-    if (action.infos?.name != null) {
-      optimalName = action.type?.winget
-          .titleWithInput(action.infos!.name!.value, localization: locale);
-    }
     return Text(
-      optimalName ?? action.process.name ?? action.process.command.join(' '),
+      action.infos?.name?.value ?? action.process.command.join(' '),
       style: const TextStyle(fontWeight: FontWeight.bold),
     );
   }
@@ -190,10 +182,10 @@ class PackageActionWidget extends StatelessWidget {
     return Expanded(
       child: Stack(
         children: [
-          PositionedDirectional(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 50),
-              child: Center(
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 40),
+            child: Center(
+              child: SingleChildScrollView(
                 child: Builder(
                   builder: (context) {
                     if (output != null && output is Future) {

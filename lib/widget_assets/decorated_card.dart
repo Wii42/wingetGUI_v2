@@ -4,9 +4,17 @@ class DecoratedCard extends StatelessWidget {
   final Widget child;
   final double? padding;
   final bool solidColor;
+  final BorderRadius? borderRadius;
+  final BoxBorder? border;
+  final bool hasBorder;
 
   const DecoratedCard(
-      {required this.child, super.key, this.padding, this.solidColor = false});
+      {required this.child,
+      super.key,
+      this.padding,
+      this.solidColor = false,
+      this.borderRadius,
+      this.border, this.hasBorder = true});
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +22,18 @@ class DecoratedCard extends StatelessWidget {
     Color cardColor = FluentTheme.of(context).cardColor;
     return DecoratedBox(
         decoration: BoxDecoration(
-          border: Border.fromBorderSide(
-            BorderSide(
-              color:
-                  //theme.resources.controlStrokeColorDefault,
-                  theme.resources.controlStrokeColorSecondary,
-              width: 0.33,
-            ),
-          ),
+          border: hasBorder? border ??
+              Border.fromBorderSide(
+                BorderSide(
+                  color:
+                      theme.resources.controlStrokeColorSecondary,
+                  width: 0.33,
+                ),
+              ): null,
           color: solidColor
               ? FluentTheme.of(context).inactiveBackgroundColor
               : cardColor,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: borderRadius ?? BorderRadius.circular(5),
         ),
         child: padding == null
             ? child

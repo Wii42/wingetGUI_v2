@@ -101,5 +101,7 @@
 
   "onlyAppsWithSourceTooltip": "Nur Apps anzeigen, die von einer bekannten Paketquelle stammen",
   "onlyAppsWithExactVersionTooltip": "Nur Apps anzeigen, die eine bekannte exakte Version haben",
-  "actionOnAll": "Alle {action}"
+  "actionOnAll": "Alle {action}",
+
+  "ok": "Ok"
 }
