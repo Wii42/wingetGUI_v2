@@ -7,6 +7,7 @@ import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
 import 'package:winget_gui/output_handling/show/show_parser.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
+import 'package:winget_gui/widget_assets/custom_expander.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/full_width_progress_bar.dart';
@@ -43,7 +44,7 @@ class PackageActionsList extends StatelessWidget {
       PackageAction action = actionsNotifier.actions.single;
       return PackageActionWidget(action: action, key: action.uniqueKey);
     }
-    return Expander(
+    return CustomExpander(
       header: PackageActionWidget(
           action: actionsNotifier.actions.first,
           key: actionsNotifier.actions.first.uniqueKey),
@@ -59,8 +60,6 @@ class PackageActionsList extends StatelessWidget {
       ),
       contentPadding:
           const EdgeInsets.only(bottom: PackageActionsList.spaceBetweenItems),
-      contentBackgroundColor: Colors.transparent,
-      headerBackgroundColor: ButtonState.all(Colors.transparent),
       initiallyExpanded: true,
     );
   }
@@ -107,7 +106,7 @@ class PackageActionWidget extends StatelessWidget {
                       child: actionTitle(localization),
                     ),
                     outputField(exitCode, context),
-                          buttonAtEnd(exitCode, context),
+                    buttonAtEnd(exitCode, context),
                   ].withSpaceBetween(width: 20),
                   const SizedBox(width: 5)
                 ]);
@@ -124,23 +123,21 @@ class PackageActionWidget extends StatelessWidget {
             children: [Icon(icon), Text(text)].withSpaceBetween(width: 10)),
       );
 
-  Widget buttonAtEnd(AsyncSnapshot<int> exitCode, BuildContext context){
+  Widget buttonAtEnd(AsyncSnapshot<int> exitCode, BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
     if (exitCode.hasData) {
       if (exitCode.data == 0) {
-        return button(FluentIcons.accept, 'Ok',
-                () => closeActionWidget(context));
+        return button(
+            FluentIcons.accept, 'Ok', () => closeActionWidget(context));
       } else {
-        return button(FluentIcons.error, 'Ok',
-                () => closeActionWidget(context));
+        return button(
+            FluentIcons.error, 'Ok', () => closeActionWidget(context));
       }
     } else {
-      return button(FluentIcons.chrome_close,
-          localization.endProcess, () {
-            ProcessScheduler.instance
-                .removeProcess(action.process.process);
-            closeActionWidget(context);
-          });
+      return button(FluentIcons.chrome_close, localization.endProcess, () {
+        ProcessScheduler.instance.removeProcess(action.process.process);
+        closeActionWidget(context);
+      });
     }
   }
 
@@ -156,8 +153,7 @@ class PackageActionWidget extends StatelessWidget {
     );
   }
 
-  Text fallbackText(
-          AppLocalizations locale) =>
+  Text fallbackText(AppLocalizations locale) =>
       Text(action.output.isNotEmpty ? action.output.last : locale.waiting);
 
   void closeActionWidget(BuildContext context) {
@@ -177,7 +173,7 @@ class PackageActionWidget extends StatelessWidget {
     }
   }
 
-  Widget outputField(AsyncSnapshot<int> exitCode,BuildContext context) {
+  Widget outputField(AsyncSnapshot<int> exitCode, BuildContext context) {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     AppLocalizations locale = AppLocalizations.of(context)!;
     FutureOr<ParsedOutput>? output;

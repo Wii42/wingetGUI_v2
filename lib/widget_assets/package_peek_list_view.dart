@@ -45,6 +45,7 @@ class PackagePeekListView extends StatefulWidget {
 }
 
 class _PackagePeekListViewState extends State<PackagePeekListView> {
+  static const double horizontalPadding = 10;
   TextEditingController filterController = TextEditingController();
   late bool onlyWithSource;
   late bool onlyWithExactVersion;
@@ -122,7 +123,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
 
   Padding hintsAndWarnings(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
       child: Wrap(
         spacing: 5,
         runSpacing: 5,
@@ -138,7 +139,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     int totalApps = prefilteredInfos.length;
     return Positioned(
         bottom: 0,
-        right: 0,
+        right: horizontalPadding,
         child: DecoratedCard(
             solidColor: true,
             child: Padding(
@@ -154,7 +155,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         itemBuilder: buildByIndex(packages),
         itemCount: packages.length,
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: horizontalPadding),
         prototypeItem: wrapInPadding(PackagePeek.prototypeWidget));
   }
 
@@ -278,7 +279,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     ];
 
     return Padding(
-      padding: EdgeInsets.all(children.isNotEmpty ? 10 : 0),
+      padding: EdgeInsets.all(children.isNotEmpty ? horizontalPadding : 0),
       child: Wrap(
         spacing: 20,
         runSpacing: 10,
