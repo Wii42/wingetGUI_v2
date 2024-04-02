@@ -17,8 +17,9 @@ import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 import 'output_handling/parsed_output.dart';
 
 class PackageActionsList extends StatelessWidget {
+  final double maxListHeight;
   static const double spaceBetweenItems = 5;
-  const PackageActionsList({super.key});
+  const PackageActionsList({super.key, required this.maxListHeight});
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +49,16 @@ class PackageActionsList extends StatelessWidget {
           action: actionsNotifier.actions.first,
           key: actionsNotifier.actions.first.uniqueKey),
       direction: ExpanderDirection.up,
-      content: Column(
-        verticalDirection: VerticalDirection.up,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (PackageAction action in actionsNotifier.actions.skip(1))
-            PackageActionWidget(action: action, key: action.uniqueKey),
-        ].withSpaceBetween(height: PackageActionsList.spaceBetweenItems),
+      content: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: maxListHeight),
+        child: ListView(
+          reverse: true,
+          shrinkWrap: true,
+          children: [
+            for (PackageAction action in actionsNotifier.actions.skip(1))
+              PackageActionWidget(action: action, key: action.uniqueKey),
+          ].withSpaceBetween(height: PackageActionsList.spaceBetweenItems),
+        ),
       ),
       contentPadding:
           const EdgeInsets.only(bottom: PackageActionsList.spaceBetweenItems),

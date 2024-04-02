@@ -114,7 +114,7 @@ class MainNavigationState extends State<MainNavigation>
     return PaneItemExpander(
       title: Text(route.title(local)),
       icon: Icon(route.icon),
-      body:  PackageActionWrap(navigators[route] ?? notFoundMessage()),
+      body: PackageActionWrap(navigators[route] ?? notFoundMessage()),
       items: createNavItems(children),
     );
   }
@@ -152,14 +152,20 @@ class MainNavigationState extends State<MainNavigation>
   bool get wantKeepAlive => true;
 }
 
-class PackageActionWrap extends StatelessWidget{
-  static const actionsList = PackageActionsList();
+class PackageActionWrap extends StatelessWidget {
   final Widget child;
 
   const PackageActionWrap(this.child, {super.key});
   @override
   Widget build(BuildContext context) {
-    return Column(children: [Expanded(child: child), actionsList],);
+    return LayoutBuilder(builder: (context, constraints) {
+      return Column(
+        children: [
+          Expanded(child: child),
+          PackageActionsList(maxListHeight: constraints.maxHeight / 3)
+        ],
+      );
+    });
   }
 }
 
