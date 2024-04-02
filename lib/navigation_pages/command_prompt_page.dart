@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
@@ -23,31 +25,35 @@ class CommandPromptPage extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: PaneItemBody(
         title: title,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 500),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title),
-                const SizedBox(
-                  height: 10,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CommandPromptField(title: title),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    expandingHelpWindow(locale, constraints.maxHeight-250)
+                  ],
                 ),
-                CommandPromptField(title: title),
-                const SizedBox(
-                  height: 40,
-                ),
-                expandingHelpWindow(locale)
-              ],
-            ),
-          ),
+              ),
+            );
+          }
         ),
       ),
     );
   }
 
-  Expander expandingHelpWindow(AppLocalizations locale) {
+  Expander expandingHelpWindow(AppLocalizations locale, double maxHeight) {
     return Expander(
       header: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -62,8 +68,9 @@ class CommandPromptPage extends StatelessWidget {
           )
         ],
       ),
-      content: SizedBox(
-          width: 500, height: 500, child: SimpleOutput.fromWinget(Winget.help)),
+      content: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: max(maxHeight, 0), maxWidth: 500),
+          child: SimpleOutput.fromWinget(Winget.help)),
     );
   }
 }
