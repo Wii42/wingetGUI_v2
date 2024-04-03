@@ -25,30 +25,28 @@ class CommandPromptPage extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: PaneItemBody(
         title: title,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 500),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    CommandPromptField(title: title),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    expandingHelpWindow(locale, constraints.maxHeight-250)
-                  ],
-                ),
+        child: LayoutBuilder(builder: (context, constraints) {
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 500),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CommandPromptField(title: title),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  expandingHelpWindow(locale, constraints.maxHeight - 250)
+                ],
               ),
-            );
-          }
-        ),
+            ),
+          );
+        }),
       ),
     );
   }
@@ -69,7 +67,8 @@ class CommandPromptPage extends StatelessWidget {
         ],
       ),
       content: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: max(maxHeight, 0), maxWidth: 500),
+          constraints:
+              BoxConstraints(maxHeight: max(maxHeight, 0), maxWidth: 500),
           child: SimpleOutput.fromWinget(Winget.help)),
     );
   }
@@ -84,11 +83,12 @@ class CommandPromptField extends StatefulWidget {
 }
 
 class _CommandPromptFieldState extends State<CommandPromptField> {
-  final TextEditingController controller = TextEditingController();
+  late TextEditingController controller;
 
   @override
   void initState() {
     super.initState();
+    controller = TextEditingController();
     controller.addListener(() {
       setState(() {});
     });
@@ -121,5 +121,11 @@ class _CommandPromptFieldState extends State<CommandPromptField> {
             title: outputPageTitle(controller.text)),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
 }

@@ -51,6 +51,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   late bool onlyWithExactVersion;
   late SortBy sortBy;
   late bool sortReversed;
+  late StreamSubscription<String> filterStreamSubscription;
 
   @override
   void initState() {
@@ -155,7 +156,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         itemBuilder: buildByIndex(packages),
         itemCount: packages.length,
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: horizontalPadding),
+        padding: const EdgeInsets.symmetric(
+            vertical: 5, horizontal: horizontalPadding),
         prototypeItem: wrapInPadding(PackagePeek.prototypeWidget));
   }
 
@@ -349,7 +351,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   String get filter => filterController.text;
 
   void listenToFilterStream() {
-    widget.filterStreamController.stream.listen((event) {
+    filterStreamSubscription =
+        widget.filterStreamController.stream.listen((event) {
       setState(() {
         filterController.text = event;
         setDefaultValues();
@@ -362,6 +365,12 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     onlyWithExactVersion = widget.menuOptions.onlyWithExactVersionInitialValue;
     sortBy = widget.menuOptions.defaultSortBy;
     sortReversed = widget.menuOptions.sortDefaultReversed;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    filterStreamSubscription.cancel();
   }
 }
 

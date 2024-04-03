@@ -83,8 +83,8 @@ class _AppIconState extends State<AppIcon> {
   List<Uri> automaticFoundFavicons = [];
   @override
   void initState() {
-    automaticFoundFavicons = widget.automaticFoundFavicons;
     super.initState();
+    automaticFoundFavicons = widget.automaticFoundFavicons;
   }
 
   @override
@@ -190,6 +190,13 @@ class _AppIconState extends State<AppIcon> {
         errorBuilder: (context, error, stackTrace) {
           return onError();
         },
+        loadingBuilder: (context) =>
+            Stack(alignment: Alignment.center, children: [
+          const ProgressRing(
+            backgroundColor: Colors.transparent,
+          ),
+          defaultIcon()
+        ]),
         solidColor: color,
       ),
     );

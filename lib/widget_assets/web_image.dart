@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -37,19 +38,40 @@ class WebImage extends StatelessWidget {
           placeholderBuilder: imageConfig.loadingBuilder,
           colorFilter: colorFilter());
     } else {
-      return Image.network(url,
-          width: imageWidth,
-          height: imageWidth,
-          filterQuality: imageConfig.filterQuality,
-          isAntiAlias: imageConfig.isAntiAlias,
-          errorBuilder: imageConfig.errorBuilder,
-          frameBuilder: imageConfig.loadingBuilder != null
-              ? (context, _, __, ___) => imageConfig.loadingBuilder!(context)
-              : null,
-          fit: BoxFit.contain,
-          color: color(),
-          colorBlendMode: colorBlendMode());
+      return CachedNetworkImage(
+        imageUrl: url,
+        width: imageWidth,
+        height: imageWidth,
+        filterQuality: imageConfig.filterQuality,
+        errorWidget: imageConfig.errorBuilder,
+        placeholder: imageConfig.loadingBuilder != null
+            ? (context, _) => imageConfig.loadingBuilder!(context)
+            : null,
+        fit: BoxFit.contain,
+        color: color(),
+        colorBlendMode: colorBlendMode(),
+        memCacheWidth: ratio <= 1 ? calculatePixels(imageWidth, context) : null,
+        memCacheHeight:
+            ratio > 1 ? calculatePixels(imageHeight, context) : null,
+        errorListener: (object) => log.error(object.toString()),
+        fadeInDuration: const Duration(milliseconds: 0),
+        fadeOutDuration: const Duration(milliseconds: 0),
+      );
     }
+  }
+
+  /// Returns the ratio of the image width to the image height.
+  /// If the image is taller than it is wide, the ratio will be smaller than 1.
+  /// if either the image width or height is null, the ratio will be 1.
+  double get ratio => imageWidth != null && imageHeight != null
+      ? imageWidth! / imageHeight!
+      : 1;
+
+  static int? calculatePixels(double? imageDimension, BuildContext context) {
+    if (imageDimension == null) {
+      return null;
+    }
+    return (imageDimension * MediaQuery.of(context).devicePixelRatio).round();
   }
 
   BlendMode? colorBlendMode() {
@@ -86,13 +108,10 @@ class WebImage extends StatelessWidget {
 class ImageConfig {
   final FilterQuality filterQuality;
   final bool isAntiAlias;
-  final Widget Function(
-    BuildContext context,
-    Object error,
-    StackTrace? stackTrace,
-  )? errorBuilder;
+  final Widget Function(BuildContext context, String string, Object object)?
+      errorBuilder;
   final Color? solidColor;
-  final Widget Function(BuildContext)? loadingBuilder;
+  final Widget Function(BuildContext context)? loadingBuilder;
 
   const ImageConfig({
     this.filterQuality = FilterQuality.high,

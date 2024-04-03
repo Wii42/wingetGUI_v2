@@ -9,11 +9,35 @@ import '../widget_assets/sort_by.dart';
 import '../winget_db/db_table.dart';
 import '../winget_db/winget_db.dart';
 
-class SearchPage extends StatelessWidget {
-  SearchPage({super.key});
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
 
-  final TextEditingController controller = TextEditingController();
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+
+  static void Function(String) search(BuildContext context,
+      {bool Function(PackageInfosPeek)? packageFilter}) {
+    NavigatorState navigator = Navigator.of(context);
+    return (input) {
+      navigator.pushNamed(Routes.deepSearchPage.route,
+          arguments: SearchRouteParameter(
+              commandParameter: [input],
+              titleAddon: "'$input'",
+              packageFilter: packageFilter));
+    };
+  }
+
+  factory SearchPage.inRoute([RouteParameter? _]) => const SearchPage();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  late TextEditingController controller;
   final WingetDBTable dbTable = PackageTables.instance.available;
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +64,9 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  static void Function(String) search(BuildContext context,
-      {bool Function(PackageInfosPeek)? packageFilter}) {
-    NavigatorState navigator = Navigator.of(context);
-    return (input) {
-      navigator.pushNamed(Routes.deepSearchPage.route,
-          arguments: SearchRouteParameter(
-              commandParameter: [input],
-              titleAddon: "'$input'",
-              packageFilter: packageFilter));
-    };
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
   }
-
-  factory SearchPage.inRoute([RouteParameter? _]) => SearchPage();
 }
