@@ -65,6 +65,7 @@ enum PackageAttribute {
   packageFamilyName(apiKey: 'PackageFamilyName', copyable: true),
   expectedReturnCodes(apiKey: 'ExpectedReturnCodes'),
   installerSuccessCodes(apiKey: 'InstallerSuccessCodes'),
+  installationNotes(apiKey: 'InstallationNotes'),
   ;
 
   final bool copyable;

@@ -52,6 +52,7 @@ class DetailsWidget extends ExpanderCompartment {
             infos.source.value != PackageSources.none
                 ? infos.source.toStringInfo()
                 : null,
+            infos.installationNotes,
           ], context),
           ...displayRest(infos.otherInfos, context),
         ],

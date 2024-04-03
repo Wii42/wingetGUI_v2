@@ -32,6 +32,7 @@ class PackageInfosFull extends PackageInfos {
   final Info<Uri>? website, supportUrl;
   final Info<Locale>? packageLocale;
   final Info<List<Installer>>? installer;
+  final Info<String>? installationNotes;
 
   PackageInfosFull({
     super.name,
@@ -52,6 +53,7 @@ class PackageInfosFull extends PackageInfos {
     this.agreement,
     this.tags,
     this.packageLocale,
+    this.installationNotes,
     this.installer,
     super.source,
     super.publisher,
