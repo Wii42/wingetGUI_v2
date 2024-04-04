@@ -21,10 +21,14 @@ class DeepSearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
-    WingetDBTable table = WingetDBTable([],
-        content: (locale) => locale.extendedSearch,
-        wingetCommand: [Winget.search.baseCommand, ...searchFor],
-        parentDB: FaviconDB.instance, tableName: 'extended_search');
+    WingetDBTable table = WingetDBTable(
+      [],
+      content: (locale) => locale.extendedSearch,
+      wingetCommand: [Winget.search.baseCommand, ...searchFor],
+      parentDB: FaviconDB.instance,
+      tableName: 'extended_search',
+      saveToDB: false,
+    );
     table.reloadFuture(wingetLocale);
     return WingetDBTablePage(
       title: (locale) => titleAddon != null

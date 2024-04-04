@@ -25,10 +25,11 @@ class FaviconDB {
         ...wingetTables,
       ];
   List<WingetDBTable> get wingetTables => [installed, updates, available];
-  List<DBTable> get faviconTables => [favicons,
-  publisherNamesByPackageId,
-  publisherNamesByPublisherId,
-  ];
+  List<DBTable> get faviconTables => [
+        favicons,
+        publisherNamesByPackageId,
+        publisherNamesByPublisherId,
+      ];
   Database? _database;
   late final Logger log;
 
@@ -282,7 +283,6 @@ class PublisherNameTable extends DBTable<String, String> {
 
 mixin PackageTableMixin
     on DBTable<(String, VersionOrString), PackageInfosPeek> {
-
   @override
   initTable(Database db) {
     db.execute(
@@ -301,10 +301,13 @@ mixin PackageTableMixin
   @override
   ((String, VersionOrString), PackageInfosPeek) fromMap(
       Map<String, dynamic> map) {
-    Map<String,String> tempMap = map.map((key, value) => MapEntry(key, value.toString()));
-    PackageInfosPeek info =
-    PackageInfosPeek.fromDBMap(tempMap);
-    return ((info.id!.value.string, info.version!.value), info..setImplicitInfos());
+    Map<String, String> tempMap =
+        map.map((key, value) => MapEntry(key, value.toString()));
+    PackageInfosPeek info = PackageInfosPeek.fromDBMap(tempMap);
+    return (
+      (info.id!.value.string, info.version!.value),
+      info..setImplicitInfos()
+    );
   }
 
   @override
@@ -319,17 +322,19 @@ mixin PackageTableMixin
       PackageAttribute.name.name: info.name?.value,
       PackageAttribute.version.name: version.stringValue,
       PackageAttribute.availableVersion.name:
-      info.availableVersion?.value.stringValue,
+          info.availableVersion?.value.stringValue,
       PackageAttribute.source.name: info.source.value.key,
       PackageAttribute.match.name: info.match?.value,
     };
   }
 
-  void setList(Iterable<PackageInfosPeek> list) {
+  void setList(Iterable<PackageInfosPeek> list, {bool saveToDB = true}) {
     _entries = Map<(String, VersionOrString), PackageInfosPeek>.fromEntries(
         list.map((PackageInfosPeek e) =>
             MapEntry((e.id!.value.string, e.version!.value), e)));
-    _deleteAllInDB();
-    _insertMultipleDB(_entries);
+    if (saveToDB) {
+      _deleteAllInDB();
+      _insertMultipleDB(_entries);
+    }
   }
 }

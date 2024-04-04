@@ -24,6 +24,7 @@ class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
   List<OneLineInfo> hints;
   PackageTables? parent;
   DBStatus status;
+  bool saveToDB;
   @override
   final String tableName;
   @override
@@ -45,6 +46,7 @@ class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
     this.status = DBStatus.loading,
     required this.tableName,
     required FaviconDB parentDB,
+    this.saveToDB = true,
   }) : super(parentDB) {
     log = Logger(this);
   }
@@ -86,7 +88,7 @@ class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
     infos = creator.extractInfos();
     hints = creator.extractHints();
     updateIDMap();
-    setList(infos);
+    setList(infos, saveToDB: saveToDB);
     parent?.notifyListeners();
   }
 

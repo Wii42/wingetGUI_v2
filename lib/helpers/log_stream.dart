@@ -53,7 +53,8 @@ class LogMessage {
   String toString() {
     Type? displayType = sourceType ?? sourceObject.runtimeType;
     DateFormat formatter = DateFormat('HH:mm:ss');
-    String text = "LogMessage: ${formatter.format(time)} $displayType: ${severity.displayName} $title";
+    String text =
+        "LogMessage: ${formatter.format(time)} $displayType: ${severity.displayName} $title";
     if (message != null) {
       text += ": ${message?.replaceAll('\n', ', ')}";
     }
@@ -61,7 +62,8 @@ class LogMessage {
   }
 
   factory LogMessage.template() {
-    return LogMessage('template', LogSeverity.info, message: 'template', sourceType: LogMessage);
+    return LogMessage('template', LogSeverity.info,
+        message: 'template', sourceType: LogMessage);
   }
 }
 
