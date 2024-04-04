@@ -763,5 +763,9 @@
   },
   "Canonical.Juju": {
     "icon": "https://juju.is/static/favicon.png"
+  },
+
+  "Microsoft.VisualStudio.*": {
+    "icon": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Visual_Studio_Icon_2022.svg"
   }
 }

@@ -32,32 +32,32 @@ class WebImage extends StatelessWidget {
   Widget build(BuildContext context) {
     String imageType = url.substring(url.lastIndexOf('.') + 1);
     if (imageType == 'svg') {
-      return SvgPicture.network(url,
-          width: imageWidth,
-          height: imageHeight,
-          placeholderBuilder: imageConfig.loadingBuilder,
-          colorFilter: colorFilter());
-    } else {
-      return CachedNetworkImage(
-        imageUrl: url,
+      return SvgPicture.network(
+        url,
         width: imageWidth,
-        height: imageWidth,
-        filterQuality: imageConfig.filterQuality,
-        errorWidget: imageConfig.errorBuilder,
-        placeholder: imageConfig.loadingBuilder != null
-            ? (context, _) => imageConfig.loadingBuilder!(context)
-            : null,
-        fit: BoxFit.contain,
-        color: color(),
-        colorBlendMode: colorBlendMode(),
-        memCacheWidth: ratio <= 1 ? calculatePixels(imageWidth, context) : null,
-        memCacheHeight:
-            ratio > 1 ? calculatePixels(imageHeight, context) : null,
-        errorListener: (object) => log.error(object.toString()),
-        fadeInDuration: const Duration(milliseconds: 0),
-        fadeOutDuration: const Duration(milliseconds: 0),
+        height: imageHeight,
+        placeholderBuilder: imageConfig.loadingBuilder,
+        colorFilter: colorFilter(),
       );
     }
+    return CachedNetworkImage(
+      imageUrl: url,
+      width: imageWidth,
+      height: imageWidth,
+      filterQuality: imageConfig.filterQuality,
+      errorWidget: imageConfig.errorBuilder,
+      placeholder: imageConfig.loadingBuilder != null
+          ? (context, _) => imageConfig.loadingBuilder!(context)
+          : null,
+      fit: BoxFit.contain,
+      color: color(),
+      colorBlendMode: colorBlendMode(),
+      memCacheWidth: ratio <= 1 ? calculatePixels(imageWidth, context) : null,
+      memCacheHeight: ratio > 1 ? calculatePixels(imageHeight, context) : null,
+      errorListener: (object) => log.error(object.toString()),
+      fadeInDuration: const Duration(milliseconds: 0),
+      fadeOutDuration: const Duration(milliseconds: 0),
+    );
   }
 
   /// Returns the ratio of the image width to the image height.

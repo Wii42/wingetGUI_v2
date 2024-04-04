@@ -675,5 +675,17 @@
   "Seagate": {
     "publisher_name": null,
     "icon_url": "https://www.seagate.com/content/dam/seagate/migrated-assets/ww/redesign/assets/seagate-logo.svg"
+  },
+  "Datto": {
+    "publisher_name": null,
+    "icon_url": "https://www.datto.com/img/brand/datto-logo-blue-datto.svg"
+  },
+  "Plex": {
+    "publisher_name": null,
+    "icon_url": "https://www.plex.tv/wp-content/themes/plex/assets/img/plex-logo.svg"
+  },
+  "Jsoftware": {
+    "publisher_name": null,
+    "icon_url": "https://www.jsoftware.com/images/jblue.png"
   }
 }
