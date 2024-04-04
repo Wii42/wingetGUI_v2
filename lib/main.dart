@@ -77,12 +77,7 @@ class WingetGui extends StatelessWidget {
           home: ChangeNotifierProvider(
             create: (context) => PackageActionsNotifier(),
             child: const WindowBrightnessSetter(
-              child: Stack(
-                children: [
-                  DBInitializer(),
-                  ProcessSchedulerWarnings(), //PackageActionsList(),
-                ],
-              ),
+              child: MainWidget(),
             ),
           ),
         );
@@ -98,6 +93,22 @@ class WingetGui extends StatelessWidget {
       navigationPaneTheme: const NavigationPaneThemeData(
         backgroundColor: Colors.transparent,
       ),
+    );
+  }
+}
+
+class MainWidget extends StatelessWidget {
+  const MainWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Stack(
+      children: [
+        DBInitializer(),
+        ProcessSchedulerWarnings(), //PackageActionsList(),
+      ],
     );
   }
 }
