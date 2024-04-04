@@ -1,10 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/widget_assets/app_locale.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
+import '../global_app_data.dart';
 import '../helpers/log_stream.dart';
 import '../helpers/route_parameter.dart';
 import '../routes.dart';
@@ -21,7 +21,7 @@ class LogsPage extends StatefulWidget {
   static Widget header(LogMessage log, BuildContext context) {
     Type? displayType = log.sourceObject?.runtimeType ?? log.sourceType;
     DateFormat formatter =
-        DateFormat.Hms(AppLocale.of(context).guiLocale?.toLanguageTag());
+        DateFormat.Hms(AppLocales.of(context).guiLocale?.toLanguageTag());
     String metaInfo =
         [log.severity.displayName, displayType.toString()].join(' ');
     metaInfo += ':';

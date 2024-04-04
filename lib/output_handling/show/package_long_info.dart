@@ -7,8 +7,8 @@ import 'package:winget_gui/output_handling/show/compartments/screenshots_widget.
 import 'package:winget_gui/output_handling/show/compartments/tags_widget.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
 import 'package:winget_gui/output_handling/show/stateful_installer_widget.dart';
-import 'package:winget_gui/widget_assets/app_locale.dart';
 
+import '../../global_app_data.dart';
 import '../../helpers/log_stream.dart';
 import '../package_infos/package_infos_full.dart';
 import 'compartments/agreement_widget.dart';
@@ -23,7 +23,7 @@ class PackageLongInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Locale? guiLocale = AppLocale.of(context).guiLocale;
+    Locale? guiLocale = AppLocales.of(context).guiLocale;
     return Column(
       children: [
         TitleWidget(infos: infos),

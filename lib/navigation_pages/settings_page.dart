@@ -1,14 +1,14 @@
-import 'package:app_theme_mode/app_theme_mode.dart';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
+import '../global_app_data.dart';
 import '../helpers/route_parameter.dart';
 import '../output_handling/output_handler.dart';
 import '../routes.dart';
-import '../widget_assets/app_locale.dart';
 import '../widget_assets/decorated_card.dart';
 import '../widget_assets/pane_item_body.dart';
 import '../winget_commands.dart';
@@ -31,9 +31,10 @@ class _SettingsPageSate extends State<SettingsPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    guiLocale = AppLocale.of(context).guiLocale;
-    themeMode = AppThemeMode.of(context).themeMode;
-    wingetLocale = AppLocale.of(context).wingetLocale;
+    AppLocales appLocales = AppLocales.of(context);
+    guiLocale = appLocales.guiLocale;
+    themeMode = AppThemeMode.of(context).value;
+    wingetLocale = appLocales.wingetLocale;
   }
 
   @override
@@ -97,7 +98,7 @@ class _SettingsPageSate extends State<SettingsPage> {
           setState(() {
             themeMode = mode;
             if (themeMode != null) {
-              AppThemeMode.of(context).setThemeMode(themeMode!);
+              AppThemeMode.of(context).value =themeMode!;
             }
           });
         },
@@ -121,7 +122,7 @@ class _SettingsPageSate extends State<SettingsPage> {
         onChanged: (value) {
           setState(() {
             guiLocale = value;
-            AppLocale.of(context).setGuiLocale(guiLocale);
+            AppLocales.of(context).guiLocale =guiLocale;
           });
         },
         items: [
@@ -151,7 +152,7 @@ class _SettingsPageSate extends State<SettingsPage> {
         onChanged: (value) {
           setState(() {
             wingetLocale = value;
-            AppLocale.of(context).setWingetLocale(wingetLocale);
+            AppLocales.of(context).wingetLocale =wingetLocale;
           });
         },
         items: [

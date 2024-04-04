@@ -7,7 +7,7 @@ import 'package:winget_gui/output_handling/package_infos/installer_objects/insta
 import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/output_handling/show/installer_selector.dart';
 
-import '../../widget_assets/app_locale.dart';
+import '../../global_app_data.dart';
 import '../package_infos/info.dart';
 import '../package_infos/installer_objects/computer_architecture.dart';
 import '../package_infos/installer_objects/install_scope.dart';
@@ -87,7 +87,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
 
   List<Info<String>?> shownDetails(BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
-    Locale? locale = AppLocale.of(context).guiLocale;
+    Locale? locale = AppLocales.of(context).guiLocale;
     return [
       selectedInstaller?.architecture.toStringInfo(),
       selectedInstaller?.type?.toStringInfo(),

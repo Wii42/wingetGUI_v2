@@ -4,7 +4,7 @@ import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
 import 'package:winget_gui/output_handling/parsed_output.dart';
 import 'package:winget_gui/output_handling/table/table_scanner.dart';
 
-import '../widget_assets/app_locale.dart';
+import '../global_app_data.dart';
 import './list/list_scanner.dart';
 import './loading_bar/loading_bar_scanner.dart';
 import './one_line_info/one_line_info_scanner.dart';
@@ -81,7 +81,7 @@ class OutputHandler {
 
   static AppLocalizations getWingetLocale(BuildContext context) {
     AppLocalizations wingetLocale =
-        AppLocale.of(context).getWingetAppLocalization() ??
+        AppLocales.of(context).getWingetAppLocalization() ??
             AppLocalizations.of(context)!;
     return wingetLocale;
   }

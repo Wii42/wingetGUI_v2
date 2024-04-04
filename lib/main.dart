@@ -58,7 +58,11 @@ class WingetGui extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlobalAppData(
-      builder: (context, themeMode, guiLocale, systemAccentColor) {
+      builder: (context, _) {
+        SystemAccentColor systemAccentColor =
+            context.watch<SystemAccentColor>();
+        ThemeMode themeMode = context.watch<AppThemeMode>().value;
+        Locale? guiLocale = context.watch<AppLocales>().guiLocale;
         return FluentApp(
           title: appTitle,
           theme: theme(Brightness.light, systemAccentColor.dark),
@@ -76,13 +80,7 @@ class WingetGui extends StatelessWidget {
               child: Stack(
                 children: [
                   DBInitializer(),
-                  ProcessSchedulerWarnings(),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: SizedBox(),//PackageActionsList(),
-                  )
+                  ProcessSchedulerWarnings(), //PackageActionsList(),
                 ],
               ),
             ),
@@ -110,7 +108,6 @@ class WindowBrightnessSetter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //wingetDB(context);
     Brightness brightness = FluentTheme.of(context).brightness;
     WindowManager.instance.setBrightness(brightness);
     return child;

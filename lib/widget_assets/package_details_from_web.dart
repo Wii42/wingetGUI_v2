@@ -10,10 +10,10 @@ import 'package:winget_gui/package_sources/no_internet_exception.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
 
+import '../global_app_data.dart';
 import '../helpers/log_stream.dart';
 import '../package_sources/package_source.dart';
 import '../winget_commands.dart';
-import 'app_locale.dart';
 import 'link_text.dart';
 
 class PackageDetailsFromWeb extends StatelessWidget {
@@ -58,7 +58,7 @@ class PackageDetailsFromWeb extends StatelessWidget {
       );
 
   Widget _buildFromWeb(BuildContext context) {
-    Locale? locale = AppLocale.of(context).guiLocale;
+    Locale? locale = AppLocales.of(context).guiLocale;
     AppLocalizations localization = AppLocalizations.of(context)!;
     return FutureBuilder<PackageInfosFull>(
       future: getInfos(locale),

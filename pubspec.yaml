@@ -22,11 +22,10 @@ dependencies:
   url_launcher: ^6.2.5
   expandable_text: ^2.3.0
   string_validator: ^1.0.2
-  intl: ^0.18.1
+  intl: any
   open_store: ^0.5.0
   favicon: ^1.1.2
   flutter_svg: ^2.0.10+1
-  app_theme_mode: ^1.0.0
   shared_preferences: ^2.2.2
   ribs_json: ^1.0.0-dev.9
   ribs_core: ^1.0.0-dev.9
@@ -35,7 +34,6 @@ dependencies:
   yaml: ^3.1.2
   flutter_localized_locales: ^2.0.5
   collection: any
-  csv: ^6.0.0
   internet_connection_checker: ^1.0.0+1
   fluentui_system_icons: ^1.1.232
   provider: ^6.1.2
