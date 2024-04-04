@@ -33,7 +33,7 @@ enum InstallScope implements IdentifyingProperty {
 
   @override
   String shortTitle([AppLocalizations? locale]) {
-    if(locale == null) throw ArgumentError.notNull("locale");
+    if (locale == null) throw ArgumentError.notNull("locale");
     switch (this) {
       case InstallScope.user:
         return locale.userScope;

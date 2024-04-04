@@ -1,12 +1,10 @@
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../helpers/log_stream.dart';
 import '../output_handling/one_line_info/one_line_info_parser.dart';
 import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../output_handling/parsed_output.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../output_handling/table/table_parser.dart';
 import '../widget_assets/buttons/tooltips.dart';
 import '../winget_commands.dart';

@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
 import 'package:winget_gui/output_handling/show/show_parser.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
+import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/custom_expander.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
-import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/full_width_progress_bar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
 import 'output_handling/parsed_output.dart';
@@ -100,9 +100,12 @@ class PackageActionWidget extends StatelessWidget {
                         ),
                       Row(
                         children: [
-                          Icon(action.type?.winget.icon, size: 15,),
+                          Icon(
+                            action.type?.winget.icon,
+                            size: 15,
+                          ),
                           actionTitle(localization),
-                        ].withSpaceBetween(width:5),
+                        ].withSpaceBetween(width: 5),
                       ),
                       outputField(exitCode, context),
                       buttonAtEnd(exitCode, context),
@@ -152,14 +155,13 @@ class PackageActionWidget extends StatelessWidget {
       Text(action.output.isNotEmpty ? action.output.last : locale.waiting);
 
   void closeActionWidget(BuildContext context) {
-    Provider.of<PackageActionsNotifier>(context, listen: false).remove(action);
+    PackageActionsNotifier.of(context).remove(action);
   }
 
   void closeWidgetAfterDone(
       BuildContext context, AsyncSnapshot<int> snapshot) async {
     if (snapshot.connectionState == ConnectionState.done) {
-      PackageActionsNotifier actions =
-          Provider.of<PackageActionsNotifier>(context, listen: false);
+      PackageActionsNotifier actions = PackageActionsNotifier.of(context);
       int exitCode = await action.process.process.exitCode;
       if (exitCode == 0) {
         Future.delayed(const Duration(seconds: 5))

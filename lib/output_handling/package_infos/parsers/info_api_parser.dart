@@ -1,5 +1,5 @@
-import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
 
 import '../info.dart';
 import '../info_with_link.dart';

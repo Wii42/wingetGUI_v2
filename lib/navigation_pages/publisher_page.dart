@@ -49,8 +49,10 @@ class PublisherPage extends StatelessWidget {
               .toList(),
           content: (locale) =>
               locale.infoTitle(PackageAttribute.publisher.name),
-          wingetCommand: [], parentDB: FaviconDB.instance,
-          status: DBStatus.ready, tableName: 'publisher',
+          wingetCommand: [],
+          parentDB: FaviconDB.instance,
+          status: DBStatus.ready,
+          tableName: 'publisher',
           saveToDB: false,
         ),
         customReloadStream: PackageTables.instance.available.stream,

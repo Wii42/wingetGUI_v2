@@ -117,9 +117,7 @@ class CustomExpanderState extends State<CustomExpander>
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               Expanded(child: widget.header),
               Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  start: 5
-                ),
+                padding: const EdgeInsetsDirectional.only(start: 5),
                 child: FocusBorder(
                   focused: states.isFocused,
                   child: Container(

@@ -96,12 +96,14 @@ class CustomInfoBar extends InfoBar {
                   title,
                   if (content != null)
                     Padding(
-                      padding: EdgeInsetsDirectional.only(top: isSmallHeight? 0: 6.0),
+                      padding: EdgeInsetsDirectional.only(
+                          top: isSmallHeight ? 0 : 6.0),
                       child: content,
                     ),
                   if (action != null)
                     Padding(
-                      padding: EdgeInsetsDirectional.only(top:isSmallHeight? 0: 12.0),
+                      padding: EdgeInsetsDirectional.only(
+                          top: isSmallHeight ? 0 : 12.0),
                       child: action,
                     ),
                 ],

@@ -1,9 +1,11 @@
 import '../output_handling/package_infos/package_infos_peek.dart';
 import 'log_stream.dart';
+
 /// Parameters for a route.
 class RouteParameter {
   /// Parameter added to the winget command.
   final List<String>? commandParameter;
+
   /// String added to the page title.
   final String? titleAddon;
 
@@ -20,18 +22,21 @@ class PackageRouteParameter extends RouteParameter {
 class StringRouteParameter extends RouteParameter {
   final String string;
 
-  const StringRouteParameter({required this.string, super.commandParameter, super.titleAddon});
+  const StringRouteParameter(
+      {required this.string, super.commandParameter, super.titleAddon});
 }
 
 class LogRouteParameter extends RouteParameter {
   /// Log message to display on the page.
   final LogMessage log;
 
-  const LogRouteParameter({required this.log, super.commandParameter, super.titleAddon});
+  const LogRouteParameter(
+      {required this.log, super.commandParameter, super.titleAddon});
 }
 
 class SearchRouteParameter extends RouteParameter {
   final bool Function(PackageInfosPeek)? packageFilter;
 
-  const SearchRouteParameter({this.packageFilter, super.commandParameter, super.titleAddon});
+  const SearchRouteParameter(
+      {this.packageFilter, super.commandParameter, super.titleAddon});
 }

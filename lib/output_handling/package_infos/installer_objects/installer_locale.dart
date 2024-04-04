@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 
 import 'identifying_property.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InstallerLocale extends Locale
     with LocaleTitleMixin

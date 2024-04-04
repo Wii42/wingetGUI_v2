@@ -4,8 +4,7 @@ enum UpgradeBehavior {
   install(key: 'install'),
   uninstallPrevious(key: 'uninstallPrevious'),
   deny(key: 'deny'),
-  custom(key: '_')
-  ;
+  custom(key: '_');
 
   final String key;
   const UpgradeBehavior({required this.key});

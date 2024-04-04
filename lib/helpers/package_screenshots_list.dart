@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
+import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
-import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/screenshots_list_load_helper.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
@@ -86,11 +86,11 @@ class PackageScreenshotsList with ScreenshotsListLoadHelper {
       PackageScreenshots? screenshots = customScreenshots[id];
       if (screenshots != null) {
         idToPackageKeyMap[id] = id;
-      }
-      else{
-        for(String possibleKey in packageInfos.idWithWildcards) {
-          PackageScreenshots? possibleScreenshots = customScreenshots[possibleKey];
-          if(possibleScreenshots != null){
+      } else {
+        for (String possibleKey in packageInfos.idWithWildcards) {
+          PackageScreenshots? possibleScreenshots =
+              customScreenshots[possibleKey];
+          if (possibleScreenshots != null) {
             idToPackageKeyMap[id] = possibleKey;
             return possibleScreenshots;
           }
@@ -117,5 +117,6 @@ extension PublisherUsingDefaultSource on JsonPublisher {
       nameUsingSource(PackageScreenshotsList.instance.publisherIcons);
   Uri? get iconUsingDefaultSource =>
       iconUsingSource(PackageScreenshotsList.instance.publisherIcons);
-  Uri? get solidIconUsingDefaultSource => solidIconUsingSource(PackageScreenshotsList.instance.publisherIcons);
+  Uri? get solidIconUsingDefaultSource =>
+      solidIconUsingSource(PackageScreenshotsList.instance.publisherIcons);
 }

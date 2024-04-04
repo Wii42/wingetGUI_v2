@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
@@ -8,8 +9,6 @@ import '../global_app_data.dart';
 import '../helpers/log_stream.dart';
 import '../helpers/route_parameter.dart';
 import '../routes.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../widget_assets/buttons/page_button.dart';
 
 class LogsPage extends StatefulWidget {

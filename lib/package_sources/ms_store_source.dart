@@ -14,9 +14,7 @@ class MSStoreSource extends PackageSource {
     }
     Map<String, dynamic> map = await api!.getJson();
     return PackageInfosFull.fromMSJson(
-        file: map,
-        locale: guiLocale,
-        source: 'msstore');
+        file: map, locale: guiLocale, source: 'msstore');
   }
 
   @override

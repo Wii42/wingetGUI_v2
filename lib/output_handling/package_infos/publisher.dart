@@ -1,10 +1,10 @@
 import 'dart:collection';
 
 import 'package:diacritic/diacritic.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/package_id.dart';
 
 import '../../helpers/json_publisher.dart';

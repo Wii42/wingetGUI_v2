@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/winget_process/package_action_process.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../output_handling/output_handler.dart';
 import '../output_handling/parsed_output.dart';

@@ -1,4 +1,3 @@
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
@@ -98,7 +97,7 @@ class _SettingsPageSate extends State<SettingsPage> {
           setState(() {
             themeMode = mode;
             if (themeMode != null) {
-              AppThemeMode.of(context).value =themeMode!;
+              AppThemeMode.of(context).value = themeMode!;
             }
           });
         },
@@ -122,7 +121,7 @@ class _SettingsPageSate extends State<SettingsPage> {
         onChanged: (value) {
           setState(() {
             guiLocale = value;
-            AppLocales.of(context).guiLocale =guiLocale;
+            AppLocales.of(context).guiLocale = guiLocale;
           });
         },
         items: [
@@ -152,7 +151,7 @@ class _SettingsPageSate extends State<SettingsPage> {
         onChanged: (value) {
           setState(() {
             wingetLocale = value;
-            AppLocales.of(context).wingetLocale =wingetLocale;
+            AppLocales.of(context).wingetLocale = wingetLocale;
           });
         },
         items: [

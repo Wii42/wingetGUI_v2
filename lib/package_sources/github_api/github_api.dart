@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-
 import 'package:winget_gui/helpers/log_stream.dart';
+
 import '../../output_handling/package_infos/package_id.dart';
+import '../no_internet_exception.dart';
 import 'exceptions/github_load_exception.dart';
 import 'exceptions/github_rate_limit_exception.dart';
-import '../no_internet_exception.dart';
 import 'github_api_file_info.dart';
 
 class GithubApi {
@@ -54,7 +54,10 @@ class GithubApi {
         pathFragments: pathFragments,
       );
 
-  Uri get apiUri => Uri(scheme: 'https', host: 'api.github.com', pathSegments: ['repos', owner, repository, 'contents', ...pathFragments]);
+  Uri get apiUri => Uri(
+      scheme: 'https',
+      host: 'api.github.com',
+      pathSegments: ['repos', owner, repository, 'contents', ...pathFragments]);
 
   Future<List<GithubApiFileInfo>> getFiles(
       {Future<List<GithubApiFileInfo>> Function()? onError}) async {

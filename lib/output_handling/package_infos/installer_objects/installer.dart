@@ -1,18 +1,18 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
-import 'package:winget_gui/output_handling/package_infos/parsers/full_yaml_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_mode.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/install_scope.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/upgrade_behavior.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/full_yaml_parser.dart';
 
 import '../../../helpers/version_or_string.dart';
 import '../info.dart';
+import '../package_attribute.dart';
 import '../parsers/full_json_parser.dart';
 import '../parsers/full_map_parser.dart';
-import '../package_attribute.dart';
 import 'computer_architecture.dart';
 import 'dependencies.dart';
 import 'expected_return_code.dart';

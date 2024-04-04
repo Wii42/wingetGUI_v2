@@ -42,8 +42,7 @@ class AgreementInfos {
   }
 
   bool isEmpty() {
-    return (
-        license == null &&
+    return (license == null &&
         copyright == null &&
         privacyUrl == null &&
         buyUrl == null &&

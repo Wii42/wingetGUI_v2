@@ -14,7 +14,8 @@ class DecoratedCard extends StatelessWidget {
       this.padding,
       this.solidColor = false,
       this.borderRadius,
-      this.border, this.hasBorder = true});
+      this.border,
+      this.hasBorder = true});
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +23,15 @@ class DecoratedCard extends StatelessWidget {
     Color cardColor = FluentTheme.of(context).cardColor;
     return DecoratedBox(
         decoration: BoxDecoration(
-          border: hasBorder? border ??
-              Border.fromBorderSide(
-                BorderSide(
-                  color:
-                      theme.resources.controlStrokeColorSecondary,
-                  width: 0.33,
-                ),
-              ): null,
+          border: hasBorder
+              ? border ??
+                  Border.fromBorderSide(
+                    BorderSide(
+                      color: theme.resources.controlStrokeColorSecondary,
+                      width: 0.33,
+                    ),
+                  )
+              : null,
           color: solidColor
               ? FluentTheme.of(context).inactiveBackgroundColor
               : cardColor,

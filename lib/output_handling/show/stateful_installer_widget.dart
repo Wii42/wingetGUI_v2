@@ -1,10 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
+import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
+import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
-import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/output_handling/show/installer_selector.dart';
 
 import '../../global_app_data.dart';
@@ -16,7 +17,6 @@ import '../package_infos/installer_objects/installer_locale.dart';
 import '../package_infos/installer_objects/installer_type.dart';
 import '../package_infos/package_attribute.dart';
 import 'compartments/expander_compartment.dart';
-import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 
 class StatefulInstallerWidget extends StatefulWidget {
   late final _InstallerCompartmentStub _template;

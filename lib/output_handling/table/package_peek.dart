@@ -1,10 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/buttons/right_side_buttons.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
+
 import '../../../package_sources/package_source.dart';
 import '../../../routes.dart';
 import '../../../widget_assets/buttons/page_button.dart';
@@ -156,7 +157,8 @@ class PackagePeek extends StatelessWidget {
     bool showId = infos.id != null &&
         infos.id!.value.string.isNotEmpty &&
         (infos.publisher?.id != null ||
-            infos.publisher?.nameFittingId != null ||infos.publisher?.nameFromDBbyPublisherId() != null ||
+            infos.publisher?.nameFittingId != null ||
+            infos.publisher?.nameFromDBbyPublisherId() != null ||
             Publisher.nameFromDBbyPackageId(infos.id?.value) != null);
     //AppLocalizations locale = AppLocalizations.of(context)!;
     return Row(

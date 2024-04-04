@@ -1,7 +1,7 @@
+import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/package_id.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/output_handling/package_infos/publisher.dart';
 import 'package:winget_gui/widget_assets/favicon_db.dart';
 

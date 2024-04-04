@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:winget_gui/winget_process/package_action_process.dart';
 
@@ -8,7 +9,6 @@ import '../output_handling/package_infos/package_infos_peek.dart';
 import '../package_actions_notifier.dart';
 import '../winget_commands.dart';
 import '../winget_db/winget_db.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum PackageActionType {
   uninstall(Winget.uninstall, reloadUninstall),
@@ -55,7 +55,8 @@ enum PackageActionType {
       return;
     }
     if (info != null && exitCode == 0) {
-      PackageTables.instance.installed.removeInfoWhere(info.probablySamePackage);
+      PackageTables.instance.installed
+          .removeInfoWhere(info.probablySamePackage);
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);
     }
     if (wingetLocale != null && exitCode == 0) {

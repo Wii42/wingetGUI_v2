@@ -37,7 +37,8 @@ class RunButtonTooltip extends ButtonTooltip {
   });
 
   @override
-  LocalizedString get message => (locale) => locale.runCommandTooltip('winget ${command.join(' ')}');
+  LocalizedString get message =>
+      (locale) => locale.runCommandTooltip('winget ${command.join(' ')}');
 }
 
 class LinkToolTip extends ButtonTooltip {

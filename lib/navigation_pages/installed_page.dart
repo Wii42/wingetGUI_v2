@@ -4,7 +4,6 @@ import 'package:winget_gui/widget_assets/winget_db_table_page.dart';
 
 import '../widget_assets/sort_by.dart';
 import '../winget_commands.dart';
-
 import '../winget_db/db_table.dart';
 import '../winget_db/winget_db.dart';
 

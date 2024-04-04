@@ -1,10 +1,10 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../winget_db/winget_db.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PackageActionProcess extends WingetProcess {
   final PackageActionType type;
@@ -35,7 +35,7 @@ class PackageActionProcess extends WingetProcess {
 
   void _reloadDB(
       int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
-    if(exitCode != 0){
+    if (exitCode != 0) {
       return;
     }
     type.reloadDB(exitCode, info, wingetLocale);

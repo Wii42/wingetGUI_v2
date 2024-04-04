@@ -35,7 +35,7 @@ enum PackageSources {
     if (source == null || source.isEmpty) {
       return PackageSources.none;
     }
-    for(PackageSources packageSource in PackageSources.values) {
+    for (PackageSources packageSource in PackageSources.values) {
       if (packageSource.key == source) {
         return packageSource;
       }

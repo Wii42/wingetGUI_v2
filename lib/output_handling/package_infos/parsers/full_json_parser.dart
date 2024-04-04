@@ -117,8 +117,11 @@ class FullJsonParser extends FullAbstractMapParser<String, dynamic> {
   @override
   Iterable<Map<String, dynamic>> flattenedInstallerList() {
     String key = PackageAttribute.installers.apiKey!;
-    List<Map<String, dynamic>>? installers = _getVersionMap()?[key].cast<Map<String, dynamic>>();
-    installers?.forEach((element) {element.remove('\$type');});
+    List<Map<String, dynamic>>? installers =
+        _getVersionMap()?[key].cast<Map<String, dynamic>>();
+    installers?.forEach((element) {
+      element.remove('\$type');
+    });
     return installers ?? [];
   }
 

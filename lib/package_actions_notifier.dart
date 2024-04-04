@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
@@ -36,6 +37,10 @@ class PackageActionsNotifier extends ChangeNotifier {
 
   void notify() {
     notifyListeners();
+  }
+
+  static PackageActionsNotifier of(BuildContext context) {
+    return Provider.of<PackageActionsNotifier>(context, listen: false);
   }
 }
 

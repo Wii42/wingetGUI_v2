@@ -14,12 +14,11 @@ class OutputPage extends ProcessOutput {
 
   factory OutputPage.fromCommand(List<String> command, {String? title}) {
     return OutputPage(
-        process: WingetProcess.fromCommand(command), title: title != null? (_) => title : null);
+        process: WingetProcess.fromCommand(command),
+        title: title != null ? (_) => title : null);
   }
   factory OutputPage.fromWinget(Winget winget,
-      {
-      String? titleInput,
-      List<String> parameters = const []}) {
+      {String? titleInput, List<String> parameters = const []}) {
     return OutputPage(
         process: WingetProcess.fromWinget(winget, parameters: parameters),
         title: (locale) => titleInput != null
@@ -33,7 +32,7 @@ class OutputPage extends ProcessOutput {
     return FullWidthProgressBarOnTop(
       hasProgressBar: streamSnapshot.connectionState != ConnectionState.done,
       child: PaneItemBody(
-        title: title!= null?title!(AppLocalizations.of(context)!): null,
+        title: title != null ? title!(AppLocalizations.of(context)!) : null,
         process: process,
         child: processOutput(streamSnapshot, context),
       ),

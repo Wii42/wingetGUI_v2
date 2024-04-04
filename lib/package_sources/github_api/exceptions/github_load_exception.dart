@@ -6,9 +6,9 @@ class GithubLoadException implements Exception {
 
   GithubLoadException(
       {required this.url,
-        required this.statusCode,
-        this.reasonPhrase,
-        this.responseBody});
+      required this.statusCode,
+      this.reasonPhrase,
+      this.responseBody});
 
   @override
   String toString() {

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:cron/cron.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../helpers/log_stream.dart';
 import '../helpers/version_or_string.dart';
@@ -13,7 +14,6 @@ import '../output_handling/package_infos/package_infos_peek.dart';
 import '../widget_assets/favicon_db.dart';
 import 'db_message.dart';
 import 'db_table.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PackageTables {
   late final Logger log;

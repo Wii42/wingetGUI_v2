@@ -9,7 +9,7 @@ abstract class IdentifyingProperty {
 
 extension Titles on IdentifyingProperty {
   String fullTitle([AppLocalizations? locale, LocaleNames? localeNames]) {
-    if(!fullTitleHasShortAlways) {
+    if (!fullTitleHasShortAlways) {
       return title(locale, localeNames);
     }
     String short = shortTitle(locale);

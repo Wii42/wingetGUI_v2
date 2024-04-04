@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:ribs_json/ribs_json.dart';
 
 import '../../output_handling/package_infos/package_infos_peek.dart';
+import '../json_publisher.dart';
 import '../package_screenshots.dart';
 import '../package_screenshots_list.dart';
-import '../json_publisher.dart';
 
 extension ScreenshotsListLoader on PackageScreenshotsList {
   static const String wingetUIScreenshotDatabaseUrl =

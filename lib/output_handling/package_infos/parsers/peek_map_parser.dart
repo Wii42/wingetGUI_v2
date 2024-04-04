@@ -1,6 +1,7 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/parsers/peek_abstract_map_parser.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'info_map_parser.dart';
 
 class PeekMapParser extends PeekAbstractMapParser<String, String> {

@@ -1,5 +1,5 @@
-import 'package:winget_gui/output_handling/package_infos/parsers/full_abstract_map_parser.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/package_infos/parsers/full_abstract_map_parser.dart';
 
 import 'info_map_parser.dart';
 
@@ -16,7 +16,7 @@ class FullMapParser extends FullAbstractMapParser<String, String> {
   Map<String, String> flattenedDetailsMap() => details;
 
   @override
-  Iterable<Map<String,String>> flattenedInstallerList() => [installerDetails];
+  Iterable<Map<String, String>> flattenedInstallerList() => [installerDetails];
 
   @override
   InfoMapParser getParser(Map<String, String> map) {

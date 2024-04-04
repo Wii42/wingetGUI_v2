@@ -112,7 +112,7 @@ class PackageId {
   String? get idPartsAsName {
     if (idParts.isEmpty) return null;
     String result = idParts.join(' ');
-    if(hasEllipsis) {
+    if (hasEllipsis) {
       result += ellipsis;
     }
     return result;

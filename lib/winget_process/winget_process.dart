@@ -43,7 +43,8 @@ class WingetProcess {
   }
 
   static void printReady(ProcessWrap process) {
-    process.waitForReady.then((value) => staticLog.info('${process.name} ready'));
+    process.waitForReady
+        .then((value) => staticLog.info('${process.name} ready'));
     process.exitCode.then((value) => staticLog.info('${process.name} done'));
   }
 

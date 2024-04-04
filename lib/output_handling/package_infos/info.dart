@@ -15,8 +15,7 @@ class Info<T extends Object> {
       this.couldBeLink = true,
       this.customTitle});
 
-  factory Info.fromAttribute(
-      PackageAttribute attribute, {required T value}) {
+  factory Info.fromAttribute(PackageAttribute attribute, {required T value}) {
     return Info<T>(
         title: attribute.title,
         value: value,
@@ -46,11 +45,12 @@ class Info<T extends Object> {
         couldBeLink: couldBeLink,
         customTitle: customTitle);
   }
+
   Type get valueType {
     return T;
   }
 
-  cast<A extends Object>(){
+  cast<A extends Object>() {
     return Info<A>(
         title: title,
         value: value as A,

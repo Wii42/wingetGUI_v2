@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
@@ -15,8 +16,6 @@ import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../output_handling/table/package_peek.dart';
 import '../winget_db/db_table.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../winget_process/package_action_type.dart';
 import 'buttons/search_button.dart';
 import 'loading_widget.dart';

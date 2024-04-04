@@ -21,7 +21,7 @@ class GithubRateLimitException implements Exception {
       {required Uri url,
       required int statusCode,
       required String reasonPhrase,
-      required String jsonBody}){
+      required String jsonBody}) {
     Map<String, dynamic> body = json.decode(jsonBody);
     String message = body['message'];
     body.remove('message');
@@ -33,12 +33,10 @@ class GithubRateLimitException implements Exception {
       reasonPhrase: reasonPhrase,
       message: message,
       documentationUrl: documentationUrl,
-      responseBodyRest: body.map((key, value) => MapEntry(key, value.toString())),
+      responseBodyRest:
+          body.map((key, value) => MapEntry(key, value.toString())),
     );
   }
-
-
-
 
   @override
   String toString() {

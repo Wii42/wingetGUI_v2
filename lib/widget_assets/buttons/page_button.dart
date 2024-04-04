@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/widget_assets/buttons/abstract_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/widget_assets/buttons/abstract_button.dart';
 
 import '../../helpers/route_parameter.dart';
 import '../../routes.dart';
@@ -72,7 +72,11 @@ class CustomPageButton extends NormalButton
 }
 
 class InlinePageButton extends NormalButton
-    with TextButtonMixin, InlineLinkButtonMixin, CustomToolTipMixin, PushPageMixin {
+    with
+        TextButtonMixin,
+        InlineLinkButtonMixin,
+        CustomToolTipMixin,
+        PushPageMixin {
   @override
   final Routes pageRoute;
   @override

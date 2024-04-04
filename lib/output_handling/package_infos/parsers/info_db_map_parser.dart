@@ -1,11 +1,7 @@
 import 'package:winget_gui/output_handling/package_infos/info.dart';
-
 import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
-
 import 'package:winget_gui/output_handling/package_infos/installer_objects/dependencies.dart';
-
 import 'package:winget_gui/output_handling/package_infos/installer_objects/installer.dart';
-
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 
 import 'info_abstract_map_parser.dart';
@@ -19,12 +15,14 @@ class InfoDBMapParser extends InfoAbstractMapParser<String, dynamic> {
   }
 
   @override
-  Info<List<InfoWithLink>>? maybeDocumentationsFromMap(PackageAttribute attribute) {
+  Info<List<InfoWithLink>>? maybeDocumentationsFromMap(
+      PackageAttribute attribute) {
     throw UnimplementedError();
   }
 
   @override
-  InfoWithLink? maybeInfoWithLinkFromMap({required PackageAttribute textInfo, required PackageAttribute urlInfo}) {
+  InfoWithLink? maybeInfoWithLinkFromMap(
+      {required PackageAttribute textInfo, required PackageAttribute urlInfo}) {
     throw UnimplementedError();
   }
 
@@ -34,17 +32,18 @@ class InfoDBMapParser extends InfoAbstractMapParser<String, dynamic> {
   }
 
   @override
-  Info<List<T>>? maybeListFromMap<T>(PackageAttribute attribute, {required T Function(dynamic p1) parser}) {
+  Info<List<T>>? maybeListFromMap<T>(PackageAttribute attribute,
+      {required T Function(dynamic p1) parser}) {
     throw UnimplementedError();
   }
 
   @override
   Info<String>? maybeStringFromMap(PackageAttribute attribute) {
     String? value = map[attribute.name];
-    if(value == 'null'){
+    if (value == 'null') {
       value = null;
     }
-    if(value == null){
+    if (value == null) {
       return null;
     }
     return Info.fromAttribute(attribute, value: value);
@@ -54,6 +53,4 @@ class InfoDBMapParser extends InfoAbstractMapParser<String, dynamic> {
   List<String>? maybeTagsFromMap() {
     throw UnimplementedError();
   }
-
-
 }

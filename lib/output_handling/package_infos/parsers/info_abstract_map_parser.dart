@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
+import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
 import '../../../helpers/locale_parser.dart';
@@ -144,7 +144,9 @@ abstract class InfoAbstractMapParser<A, B> {
           PackageAttribute expectedReturnCodes) =>
       maybeListFromMap(expectedReturnCodes, parser: ExpectedReturnCode.fromMap);
 
-  Info<PackageId>? maybePackageIdFromMap(PackageAttribute packageId, {required PackageSources source}) {
-    return maybeValueFromMap(packageId, (element) => PackageId.parse(element, source: source));
+  Info<PackageId>? maybePackageIdFromMap(PackageAttribute packageId,
+      {required PackageSources source}) {
+    return maybeValueFromMap(
+        packageId, (element) => PackageId.parse(element, source: source));
   }
 }

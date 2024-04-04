@@ -37,7 +37,8 @@ class LinkText extends StatelessWidget {
       maxLines: maxLines,
       animation: true,
       linkStyle: const TextStyle(
-    decoration: TextDecoration.underline,),
+        decoration: TextDecoration.underline,
+      ),
       linkColor: FluentTheme.of(context).accentColor,
       onUrlTap: launch,
       urlStyle: linkTextStyle(theme),
@@ -57,7 +58,7 @@ class LinkText extends StatelessWidget {
 
   void launch(String url) {
     Uri link = Uri.parse(url);
-   if (link.scheme.isEmpty) {
+    if (link.scheme.isEmpty) {
       link = link.replace(scheme: 'https');
     }
     launchUrl(link);

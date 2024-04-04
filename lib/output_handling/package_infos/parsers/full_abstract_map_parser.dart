@@ -50,7 +50,8 @@ abstract class FullAbstractMapParser<A, B>
       publisherInfo: p.maybeInfoWithLinkFromMap(
           textInfo: PackageAttribute.publisher,
           urlInfo: PackageAttribute.publisherUrl),
-      installationNotes: p.maybeStringFromMap(PackageAttribute.installationNotes),
+      installationNotes:
+          p.maybeStringFromMap(PackageAttribute.installationNotes),
       otherInfos: p.otherDetails(),
     );
     return infos..setImplicitInfos();

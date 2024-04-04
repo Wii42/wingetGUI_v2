@@ -1,13 +1,15 @@
 import 'dart:collection';
 import 'dart:ui';
+
 import 'package:collection/collection.dart';
 import 'package:http/http.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
+import 'package:winget_gui/helpers/locale_parser.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:yaml/yaml.dart';
-import 'package:winget_gui/helpers/locale_parser.dart';
+
 import '../helpers/version.dart';
 import '../output_handling/package_infos/package_id.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
@@ -57,7 +59,8 @@ class WingetSource extends PackageSource {
     String lastPart = endsWithPoint ? '' : idParts.last;
 
     GithubApiFileInfo matchingFiles = await guessIdPartsBasedOnRepo(
-        soundIdPart: PackageId.parse(soundParts.join('.')), lastKnownPart: lastPart);
+        soundIdPart: PackageId.parse(soundParts.join('.')),
+        lastKnownPart: lastPart);
     soundParts.add(matchingFiles.name);
     return PackageId.parse(soundParts.join('.'), source: PackageSources.winget);
   }

@@ -26,15 +26,18 @@ class WingetPackageVersionManifest {
     );
   }
 
-  static bool isInstaller(GithubApiFileInfo file, {required PackageId packageId}) {
-    return file.name == '${packageId.string}.installer.yaml' && file.type.isFile;
+  static bool isInstaller(GithubApiFileInfo file,
+      {required PackageId packageId}) {
+    return file.name == '${packageId.string}.installer.yaml' &&
+        file.type.isFile;
   }
 
   static bool isLocale(GithubApiFileInfo file) {
     return file.name.contains('.locale.') && file.type.isFile;
   }
 
-  static bool isManifest(GithubApiFileInfo file, {required PackageId packageId}) {
+  static bool isManifest(GithubApiFileInfo file,
+      {required PackageId packageId}) {
     return file.name == "${packageId.string}.yaml" && file.type.isFile;
   }
 
