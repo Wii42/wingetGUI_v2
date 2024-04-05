@@ -4,18 +4,16 @@ import 'package:collection/collection.dart';
 import 'package:cron/cron.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
+import 'package:winget_gui/helpers/version_or_string.dart';
+import 'package:winget_gui/output_handling/output_handler.dart';
+import 'package:winget_gui/output_handling/package_infos/package_id.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/widget_assets/favicon_db.dart';
 
-import '../helpers/log_stream.dart';
-import '../helpers/version_or_string.dart';
-import '../output_handling/one_line_info/one_line_info_parser.dart';
-import '../output_handling/output_handler.dart';
-import '../output_handling/package_infos/package_id.dart';
-import '../output_handling/package_infos/package_infos.dart';
-import '../output_handling/package_infos/package_infos_peek.dart';
-import '../widget_assets/favicon_db.dart';
-import '../winget_commands.dart';
 import 'db_message.dart';
-import 'db_table.dart';
+import 'winget_table.dart';
 
 class PackageTables {
   late final Logger log;
@@ -125,23 +123,5 @@ class PackageTables {
     cron.schedule(Schedule(hours: '*/1'), () {
       reloadDBs(wingetLocale);
     });
-  }
-
-  WingetTable getDBTable({
-    List<PackageInfosPeek> infos = const [],
-    List<OneLineInfo> hints = const [],
-    PackageFilter? creatorFilter,
-    required Winget winget,
-    required WingetDBTable internTable,
-  }) {
-    return WingetTable(
-      infos,
-      hints: hints,
-      content: (locale) => locale.wingetTitle(winget.name),
-      wingetCommand: winget.fullCommand,
-      creatorFilter: creatorFilter,
-      parent: PackageTables.instance,
-      internTable: internTable,
-    );
   }
 }

@@ -2,18 +2,18 @@ import 'dart:async';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
+import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
+import 'package:winget_gui/output_handling/package_infos/info.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
-import 'package:winget_gui/winget_db/db_message.dart';
-import 'package:winget_gui/winget_db/winget_db.dart';
+import 'package:winget_gui/output_handling/package_infos/package_id.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/widget_assets/favicon_db.dart';
 
-import '../helpers/log_stream.dart';
-import '../output_handling/one_line_info/one_line_info_parser.dart';
-import '../output_handling/package_infos/info.dart';
-import '../output_handling/package_infos/package_id.dart';
-import '../output_handling/package_infos/package_infos_peek.dart';
-import '../widget_assets/favicon_db.dart';
-import 'db_table_creator.dart';
+import 'db_message.dart';
+import 'package_tables.dart';
+import 'winget_table_loader.dart';
 
 typedef PackageFilter = List<PackageInfosPeek> Function(List<PackageInfosPeek>);
 
@@ -73,7 +73,7 @@ class WingetTable {
   }
 
   Stream<LocalizedString> reloadDBTable(AppLocalizations wingetLocale) async* {
-    DBTableCreator creator = DBTableCreator(
+    WingetTableLoader creator = WingetTableLoader(
       content: content,
       command: wingetCommand,
       filter: creatorFilter,

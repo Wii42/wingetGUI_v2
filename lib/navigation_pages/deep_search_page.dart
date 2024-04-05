@@ -1,13 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_tables/winget_table.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import 'package:winget_gui/widget_assets/winget_db_table_page.dart';
-
-import '../helpers/route_parameter.dart';
-import '../output_handling/package_infos/package_infos_peek.dart';
-import '../winget_commands.dart';
-import '../winget_db/db_table.dart';
+import 'package:winget_gui/winget_commands.dart';
 
 class DeepSearchPage extends StatelessWidget {
   final List<String> searchFor;

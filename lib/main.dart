@@ -10,15 +10,15 @@ import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/main_navigation.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
+import 'package:winget_gui/package_tables/package_tables.dart';
 import 'package:winget_gui/widget_assets/favicon_db.dart';
 import 'package:winget_gui/widget_assets/loading_widget.dart';
-import 'package:winget_gui/winget_db/winget_db.dart';
 import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
 import 'global_app_data.dart';
 import 'helpers/package_screenshots_list.dart';
 import 'output_handling/one_line_info/one_line_info_builder.dart';
-import 'winget_db/db_message.dart';
+import 'package_tables/db_message.dart';
 
 const String appTitle = 'WingetGUI';
 

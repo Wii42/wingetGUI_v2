@@ -1,11 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/package_tables/package_tables.dart';
+import 'package:winget_gui/package_tables/winget_table.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
+import 'package:winget_gui/widget_assets/sort_by.dart';
 import 'package:winget_gui/widget_assets/winget_db_table_page.dart';
-
-import '../widget_assets/sort_by.dart';
-import '../winget_commands.dart';
-import '../winget_db/db_table.dart';
-import '../winget_db/winget_db.dart';
+import 'package:winget_gui/winget_commands.dart';
 
 class InstalledPage extends StatelessWidget {
   final WingetTable dbTable = PackageTables.instance.installed;

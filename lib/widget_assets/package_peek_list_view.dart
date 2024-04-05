@@ -7,16 +7,16 @@ import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/output_handling/table/package_peek.dart';
+import 'package:winget_gui/package_tables/db_message.dart';
+import 'package:winget_gui/package_tables/winget_table.dart';
 import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/sort_by.dart';
-import 'package:winget_gui/winget_db/db_message.dart';
+import 'package:winget_gui/winget_process/package_action_type.dart';
 
-import '../output_handling/package_infos/package_infos.dart';
-import '../output_handling/package_infos/package_infos_peek.dart';
-import '../output_handling/table/package_peek.dart';
-import '../winget_db/db_table.dart';
-import '../winget_process/package_action_type.dart';
 import 'buttons/search_button.dart';
 import 'loading_widget.dart';
 

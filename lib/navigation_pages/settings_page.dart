@@ -1,17 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/helpers/route_parameter.dart';
+import 'package:winget_gui/output_handling/output_handler.dart';
+import 'package:winget_gui/package_tables/package_tables.dart';
+import 'package:winget_gui/routes.dart';
+import 'package:winget_gui/widget_assets/decorated_card.dart';
+import 'package:winget_gui/widget_assets/pane_item_body.dart';
+import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
-
-import '../global_app_data.dart';
-import '../helpers/route_parameter.dart';
-import '../output_handling/output_handler.dart';
-import '../routes.dart';
-import '../widget_assets/decorated_card.dart';
-import '../widget_assets/pane_item_body.dart';
-import '../winget_commands.dart';
-import '../winget_db/winget_db.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

@@ -2,22 +2,22 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
+import 'package:winget_gui/package_tables/db_message.dart';
+import 'package:winget_gui/package_tables/package_tables.dart';
+import 'package:winget_gui/routes.dart';
+import 'package:winget_gui/widget_assets/app_icon.dart';
+import 'package:winget_gui/widget_assets/buttons/link_button.dart';
+import 'package:winget_gui/widget_assets/buttons/page_button.dart';
 import 'package:winget_gui/widget_assets/buttons/right_side_buttons.dart';
+import 'package:winget_gui/widget_assets/buttons/search_button.dart';
 import 'package:winget_gui/widget_assets/buttons/store_button.dart';
+import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 
-import '../../../helpers/route_parameter.dart';
-import '../../../routes.dart';
-import '../../../widget_assets/app_icon.dart';
-import '../../../widget_assets/buttons/link_button.dart';
-import '../../../widget_assets/buttons/page_button.dart';
-import '../../../widget_assets/buttons/search_button.dart';
-import '../../../widget_assets/decorated_card.dart';
-import '../../../winget_db/db_message.dart';
-import '../../../winget_db/winget_db.dart';
 import '../../package_infos/info.dart';
 
 class TitleWidget extends Compartment {

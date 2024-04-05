@@ -1,8 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-
-import '../winget_db/db_message.dart';
+import 'package:winget_gui/package_tables/db_message.dart';
 
 class LoadingWidget extends StatelessWidget {
   final LocalizedString text;

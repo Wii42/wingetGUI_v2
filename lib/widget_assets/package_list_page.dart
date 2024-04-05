@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/package_tables/db_message.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
-import 'package:winget_gui/winget_db/db_message.dart';
 
 import 'full_width_progress_bar_on_top.dart';
 

@@ -1,18 +1,17 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';
+import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
+import 'package:winget_gui/package_tables/db_message.dart';
+import 'package:winget_gui/package_tables/package_tables.dart';
+import 'package:winget_gui/package_tables/winget_table.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
+import 'package:winget_gui/widget_assets/favicon_db.dart' as favicon_db;
+import 'package:winget_gui/widget_assets/package_list_page.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
-
-import '../helpers/json_publisher.dart';
-import '../helpers/route_parameter.dart';
-import '../widget_assets/favicon_db.dart' as favicon_db;
-import '../widget_assets/package_list_page.dart';
-import '../widget_assets/sort_by.dart';
-import '../winget_db/db_message.dart';
-import '../winget_db/db_table.dart';
-import '../winget_db/winget_db.dart';
+import 'package:winget_gui/widget_assets/sort_by.dart';
 
 class PublisherPage extends StatelessWidget {
   final String publisherId;

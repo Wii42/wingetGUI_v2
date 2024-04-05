@@ -1,14 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:winget_gui/output_handling/output_handler.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
+import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_actions_notifier.dart';
+import 'package:winget_gui/package_tables/package_tables.dart';
+import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process/package_action_process.dart';
-
-import '../output_handling/output_handler.dart';
-import '../output_handling/package_infos/package_infos.dart';
-import '../output_handling/package_infos/package_infos_peek.dart';
-import '../package_actions_notifier.dart';
-import '../winget_commands.dart';
-import '../winget_db/winget_db.dart';
 
 enum PackageActionType {
   uninstall(Winget.uninstall, reloadUninstall),

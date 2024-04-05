@@ -1,10 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/output_handling/output_handler.dart';
+import 'package:winget_gui/package_tables/winget_table.dart';
 import 'package:winget_gui/widget_assets/package_list_page.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
-
-import '../output_handling/output_handler.dart';
-import '../winget_db/db_table.dart';
 
 class WingetDBTablePage extends StatelessWidget {
   final WingetTable dbTable;
