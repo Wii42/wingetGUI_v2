@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
-import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
+import 'package:winget_gui/package_infos/package_infos.dart';
 
 class PackageActionsNotifier extends ChangeNotifier {
   final List<PackageAction> _actions = [];

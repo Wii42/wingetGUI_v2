@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
+import 'package:winget_gui/package_infos/package_attribute.dart';
 import 'package:winget_gui/widget_assets/buttons/search_button.dart';
 
-import '../../package_infos/info.dart';
+import 'package:winget_gui/package_infos/info.dart';
 import 'expander_compartment.dart';
 
 class TagsWidget extends ExpanderCompartment {

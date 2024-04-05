@@ -4,14 +4,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
-import '../package_infos/installer_objects/computer_architecture.dart';
-import '../package_infos/installer_objects/identifying_property.dart';
-import '../package_infos/installer_objects/install_scope.dart';
-import '../package_infos/installer_objects/installer.dart';
-import '../package_infos/installer_objects/installer_list_extension.dart';
-import '../package_infos/installer_objects/installer_locale.dart';
-import '../package_infos/installer_objects/installer_type.dart';
-import '../package_infos/package_attribute.dart';
+import 'package:winget_gui/package_infos/installer_objects/computer_architecture.dart';
+import 'package:winget_gui/package_infos/installer_objects/identifying_property.dart';
+import 'package:winget_gui/package_infos/installer_objects/install_scope.dart';
+import 'package:winget_gui/package_infos/installer_objects/installer.dart';
+import 'package:winget_gui/package_infos/installer_objects/installer_list_extension.dart';
+import 'package:winget_gui/package_infos/installer_objects/installer_locale.dart';
+import 'package:winget_gui/package_infos/installer_objects/installer_type.dart';
+import 'package:winget_gui/package_infos/package_attribute.dart';
 import 'box_select_installer.dart';
 
 class InstallerSelector extends StatelessWidget {

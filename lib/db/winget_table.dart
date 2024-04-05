@@ -5,10 +5,10 @@ import 'package:sqflite/sqflite.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
-import 'package:winget_gui/output_handling/package_infos/info.dart';
-import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
-import 'package:winget_gui/output_handling/package_infos/package_id.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_infos/info.dart';
+import 'package:winget_gui/package_infos/package_attribute.dart';
+import 'package:winget_gui/package_infos/package_id.dart';
+import 'package:winget_gui/package_infos/package_infos_peek.dart';
 
 import 'db_message.dart';
 import 'favicon_db.dart';

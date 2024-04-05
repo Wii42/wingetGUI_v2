@@ -4,7 +4,7 @@ import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 
-import '../package_infos/package_infos_full.dart';
+import 'package:winget_gui/package_infos/package_infos_full.dart';
 import 'compartments/agreement_widget.dart';
 import 'compartments/details_widget.dart';
 import 'compartments/expandable_text_compartment.dart';

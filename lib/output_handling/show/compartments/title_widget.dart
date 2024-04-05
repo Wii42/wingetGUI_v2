@@ -5,8 +5,8 @@ import 'package:winget_gui/db/db_message.dart';
 import 'package:winget_gui/db/package_tables.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
-import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
+import 'package:winget_gui/package_infos/info_extensions.dart';
+import 'package:winget_gui/package_infos/package_infos_full.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/buttons/link_button.dart';
@@ -17,7 +17,7 @@ import 'package:winget_gui/widget_assets/buttons/store_button.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 
-import '../../package_infos/info.dart';
+import 'package:winget_gui/package_infos/info.dart';
 import 'compartment.dart';
 
 class TitleWidget extends Compartment {

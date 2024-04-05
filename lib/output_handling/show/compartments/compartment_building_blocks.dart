@@ -6,8 +6,8 @@ import 'package:winget_gui/widget_assets/buttons/link_button.dart';
 import 'package:winget_gui/widget_assets/buttons/mini_icon_copy_button.dart';
 import 'package:winget_gui/widget_assets/buttons/mini_icon_link_button.dart';
 
-import '../../package_infos/info.dart';
-import '../../package_infos/info_with_link.dart';
+import 'package:winget_gui/package_infos/info.dart';
+import 'package:winget_gui/package_infos/info_with_link.dart';
 
 mixin CompartmentBuildingBlocks on Compartment {
   Wrap wrapInWrap({required String title, required Widget body}) {

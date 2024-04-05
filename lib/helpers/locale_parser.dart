@@ -1,5 +1,5 @@
 import 'package:intl/locale.dart' as intl;
-import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_locale.dart';
+import 'package:winget_gui/package_infos/installer_objects/installer_locale.dart';
 
 class LocaleParser {
   static InstallerLocale? tryParse(final String rawLocale) {

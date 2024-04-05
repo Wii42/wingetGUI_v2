@@ -9,8 +9,8 @@ import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 
 import '../output_parser.dart';
-import '../package_infos/package_attribute.dart';
-import '../package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_infos/package_attribute.dart';
+import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import '../parsed_output.dart';
 import 'table_builder.dart';
 

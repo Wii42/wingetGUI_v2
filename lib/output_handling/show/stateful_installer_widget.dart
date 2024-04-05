@@ -4,17 +4,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
-import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_list_extension.dart';
+import 'package:winget_gui/package_infos/info_extensions.dart';
+import 'package:winget_gui/package_infos/installer_objects/identifying_property.dart';
+import 'package:winget_gui/package_infos/installer_objects/installer_list_extension.dart';
 
-import '../package_infos/info.dart';
-import '../package_infos/installer_objects/computer_architecture.dart';
-import '../package_infos/installer_objects/install_scope.dart';
-import '../package_infos/installer_objects/installer.dart';
-import '../package_infos/installer_objects/installer_locale.dart';
-import '../package_infos/installer_objects/installer_type.dart';
-import '../package_infos/package_attribute.dart';
+import 'package:winget_gui/package_infos/info.dart';
+import 'package:winget_gui/package_infos/installer_objects/computer_architecture.dart';
+import 'package:winget_gui/package_infos/installer_objects/install_scope.dart';
+import 'package:winget_gui/package_infos/installer_objects/installer.dart';
+import 'package:winget_gui/package_infos/installer_objects/installer_locale.dart';
+import 'package:winget_gui/package_infos/installer_objects/installer_type.dart';
+import 'package:winget_gui/package_infos/package_attribute.dart';
 import 'compartments/expander_compartment.dart';
 import 'installer_selector.dart';
 

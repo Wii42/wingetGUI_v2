@@ -2,7 +2,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/parsed_output.dart';
 import 'package:winget_gui/output_handling/table/table_parser.dart';
 import 'package:winget_gui/widget_assets/buttons/tooltips.dart';

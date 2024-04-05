@@ -4,9 +4,9 @@ import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 
 import '../output_parser.dart';
-import '../package_infos/info.dart';
-import '../package_infos/package_attribute.dart';
-import '../package_infos/package_infos_full.dart';
+import 'package:winget_gui/package_infos/info.dart';
+import 'package:winget_gui/package_infos/package_attribute.dart';
+import 'package:winget_gui/package_infos/package_infos_full.dart';
 import '../parsed_output.dart';
 import 'show_builder.dart';
 

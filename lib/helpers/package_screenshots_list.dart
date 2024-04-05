@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
-import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
+import 'package:winget_gui/package_infos/package_infos.dart';
+import 'package:winget_gui/package_infos/package_screenshot_identifiers.dart';
 
 import 'extensions/screenshots_list_loader.dart';
 import 'json_publisher.dart';

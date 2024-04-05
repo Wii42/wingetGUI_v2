@@ -9,8 +9,8 @@ import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/buttons/page_button.dart';
 import 'package:winget_gui/widget_assets/buttons/right_side_buttons.dart';
 
-import '../package_infos/package_infos_peek.dart';
-import '../package_infos/publisher.dart';
+import 'package:winget_gui/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_infos/publisher.dart';
 
 class PackagePeek extends StatelessWidget {
   final PackageInfosPeek infos;

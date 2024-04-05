@@ -1,6 +1,6 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/db/package_tables.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_infos/package_infos_peek.dart';
 
 import 'package_action_type.dart';
 import 'winget_process.dart';

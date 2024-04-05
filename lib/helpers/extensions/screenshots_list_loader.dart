@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:ribs_json/ribs_json.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_infos/package_infos_peek.dart';
 
 import '../json_publisher.dart';
 import '../package_screenshots.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
+import 'package:winget_gui/package_infos/package_attribute.dart';
 
 import '../output_scanner.dart';
 import '../responsibility.dart';

@@ -9,8 +9,8 @@ import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_infos/package_infos.dart';
+import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/table/package_peek.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 
