@@ -2,12 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 
-import '../../../helpers/log_stream.dart';
 import '../info.dart';
 import '../package_attribute.dart';
 import 'computer_architecture.dart';
+import 'identifying_property.dart';
 import 'install_scope.dart';
 import 'installer.dart';
 import 'installer_locale.dart';

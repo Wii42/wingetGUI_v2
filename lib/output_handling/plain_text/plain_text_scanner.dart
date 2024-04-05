@@ -1,8 +1,8 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/output_handling/plain_text/plain_text_parser.dart';
 
 import '../output_scanner.dart';
 import '../responsibility.dart';
+import 'plain_text_parser.dart';
 
 class PlainTextScanner extends OutputScanner {
   PlainTextScanner(super.respList);

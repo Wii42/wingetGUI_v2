@@ -1,12 +1,12 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/output_handling/package_infos/package_id.dart';
-import 'package:winget_gui/output_handling/package_infos/parsers/peek_db_map_parser.dart';
-import 'package:winget_gui/output_handling/package_infos/parsers/peek_map_parser.dart';
+import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
-import '../../helpers/version_or_string.dart';
-import './package_infos.dart';
 import 'info.dart';
+import 'package_id.dart';
+import 'package_infos.dart';
+import 'parsers/peek_db_map_parser.dart';
+import 'parsers/peek_map_parser.dart';
 
 class PackageInfosPeek extends PackageInfos {
   final Info<String>? match;

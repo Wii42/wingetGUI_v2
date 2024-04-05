@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:intl/intl.dart';
-import 'package:winget_gui/helpers/extensions/stream_modifier.dart';
+
+import 'extensions/stream_modifier.dart';
 
 class LogStream {
   static final LogStream instance = LogStream._();

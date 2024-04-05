@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:winget_gui/helpers/extensions/stream_modifier.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/winget_commands.dart';
-import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
-import '../helpers/log_stream.dart';
+import 'winget_process_scheduler.dart';
 
 class WingetProcess {
   static final Logger staticLog = Logger(null, sourceType: WingetProcess);

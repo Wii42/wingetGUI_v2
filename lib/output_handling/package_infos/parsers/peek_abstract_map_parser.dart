@@ -1,10 +1,10 @@
-import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
+import 'package:winget_gui/package_sources/package_source.dart';
 
-import '../../../package_sources/package_source.dart';
 import '../info.dart';
 import '../package_attribute.dart';
 import '../package_infos_peek.dart';
 import 'abstract_map_parser.dart';
+import 'info_abstract_map_parser.dart';
 
 abstract class PeekAbstractMapParser<A, B>
     extends AbstractMapParser<A, B, PackageInfosPeek> {

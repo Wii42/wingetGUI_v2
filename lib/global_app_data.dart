@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 
-import 'helpers/settings_cache.dart';
+import 'package:winget_gui/helpers/settings_cache.dart';
 
 class GlobalAppData extends StatelessWidget {
   final Widget Function(BuildContext context, Widget? _) builder;

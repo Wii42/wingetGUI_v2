@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
+import 'package:winget_gui/widget_assets/buttons/inline_link_button.dart';
+import 'package:winget_gui/widget_assets/decorated_card.dart';
 
-import '../../helpers/extensions/string_extension.dart';
-import '../../widget_assets/buttons/inline_link_button.dart';
-import '../../widget_assets/decorated_card.dart';
 import 'table_parser.dart';
 
 class TableBuilder extends StatelessWidget {

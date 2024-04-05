@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../helpers/log_stream.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 
 const double opacity = 0.5;
 const opaqueWhite = Color.fromRGBO(255, 255, 255, opacity);

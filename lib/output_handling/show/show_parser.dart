@@ -2,13 +2,13 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
-import 'package:winget_gui/output_handling/output_parser.dart';
-import 'package:winget_gui/output_handling/parsed_output.dart';
-import 'package:winget_gui/output_handling/show/show_builder.dart';
 
+import '../output_parser.dart';
 import '../package_infos/info.dart';
 import '../package_infos/package_attribute.dart';
 import '../package_infos/package_infos_full.dart';
+import '../parsed_output.dart';
+import 'show_builder.dart';
 
 const maxIdentifierLength = 100;
 

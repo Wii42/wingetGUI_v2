@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
-import '../winget_commands.dart';
-import './process_output.dart';
+import 'process_output.dart';
 
 class SimpleOutput extends ProcessOutput {
   const SimpleOutput({super.key, required super.process});

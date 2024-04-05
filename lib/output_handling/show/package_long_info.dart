@@ -1,17 +1,17 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/output_handling/show/compartments/details_widget.dart';
-import 'package:winget_gui/output_handling/show/compartments/expandable_text_compartment.dart';
-import 'package:winget_gui/output_handling/show/compartments/screenshots_widget.dart';
-import 'package:winget_gui/output_handling/show/compartments/tags_widget.dart';
-import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
-import 'package:winget_gui/output_handling/show/stateful_installer_widget.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 
-import '../../global_app_data.dart';
-import '../../helpers/log_stream.dart';
 import '../package_infos/package_infos_full.dart';
 import 'compartments/agreement_widget.dart';
+import 'compartments/details_widget.dart';
+import 'compartments/expandable_text_compartment.dart';
+import 'compartments/screenshots_widget.dart';
+import 'compartments/tags_widget.dart';
+import 'compartments/title_widget.dart';
+import 'stateful_installer_widget.dart';
 
 class PackageLongInfo extends StatelessWidget {
   late final Logger log;

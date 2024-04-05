@@ -1,12 +1,11 @@
 import 'dart:ui';
 
-import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
-import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
+import 'package:winget_gui/helpers/locale_parser.dart';
+import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
-import '../../../helpers/locale_parser.dart';
-import '../../../helpers/version_or_string.dart';
 import '../info.dart';
+import '../info_extensions.dart';
 import '../info_with_link.dart';
 import '../installer_objects/computer_architecture.dart';
 import '../installer_objects/dependencies.dart';
@@ -18,6 +17,7 @@ import '../installer_objects/installer_locale.dart';
 import '../installer_objects/installer_type.dart';
 import '../installer_objects/upgrade_behavior.dart';
 import '../installer_objects/windows_platform.dart';
+import '../package_attribute.dart';
 import '../package_id.dart';
 
 abstract class InfoAbstractMapParser<A, B> {

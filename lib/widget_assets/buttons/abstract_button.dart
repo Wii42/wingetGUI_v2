@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
+
+import 'tooltips.dart';
 
 abstract class AbstractButton extends StatelessWidget {
   final bool disabled;

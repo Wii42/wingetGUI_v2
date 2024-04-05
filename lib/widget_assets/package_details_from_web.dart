@@ -2,19 +2,19 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:winget_gui/global_app_data.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/show/package_long_info.dart';
-import 'package:winget_gui/package_sources/github_api/exceptions/github_rate_limit_exception.dart';
+import 'package:winget_gui/package_sources/github_api/github_rate_limit_exception.dart';
 import 'package:winget_gui/package_sources/no_internet_exception.dart';
-import 'package:winget_gui/widget_assets/pane_item_body.dart';
-import 'package:winget_gui/widget_assets/scroll_list_widget.dart';
+import 'package:winget_gui/package_sources/package_source.dart';
+import 'package:winget_gui/winget_commands.dart';
 
-import '../global_app_data.dart';
-import '../helpers/log_stream.dart';
-import '../package_sources/package_source.dart';
-import '../winget_commands.dart';
 import 'link_text.dart';
+import 'pane_item_body.dart';
+import 'scroll_list_widget.dart';
 
 class PackageDetailsFromWeb extends StatelessWidget {
   late final Logger log;

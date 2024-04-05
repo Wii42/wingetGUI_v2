@@ -12,13 +12,13 @@ import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.da
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/table/package_peek.dart';
-import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
-import 'package:winget_gui/widget_assets/decorated_card.dart';
-import 'package:winget_gui/widget_assets/sort_by.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 
 import 'buttons/search_button.dart';
+import 'buttons/tooltips.dart';
+import 'decorated_card.dart';
 import 'loading_widget.dart';
+import 'sort_by.dart';
 
 class PackagePeekListView extends StatefulWidget {
   final WingetTable dbTable;

@@ -1,6 +1,5 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../winget_commands.dart';
+import 'package:winget_gui/winget_commands.dart';
 
 enum PackageAttribute {
   id(copyable: true, couldBeLink: false, apiKey: 'PackageIdentifier'),

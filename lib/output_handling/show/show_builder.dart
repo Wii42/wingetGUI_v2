@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/output_handling/show/compartments/title_widget.dart';
-import 'package:winget_gui/output_handling/show/package_long_info.dart';
+import 'package:winget_gui/winget_commands.dart';
 
-import '../../winget_commands.dart';
 import '../package_infos/package_infos_full.dart';
+import 'compartments/title_widget.dart';
+import 'package_long_info.dart';
 
 class ShowBuilder extends StatelessWidget {
   final PackageInfosFull infos;

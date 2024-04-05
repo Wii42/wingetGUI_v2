@@ -1,9 +1,8 @@
-import 'package:winget_gui/output_handling/package_infos/info.dart';
-import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/dependencies.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/installer.dart';
-import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
-
+import '../info.dart';
+import '../info_with_link.dart';
+import '../installer_objects/dependencies.dart';
+import '../installer_objects/installer.dart';
+import '../package_attribute.dart';
 import 'info_abstract_map_parser.dart';
 
 class InfoDBMapParser extends InfoAbstractMapParser<String, dynamic> {

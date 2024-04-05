@@ -2,9 +2,9 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/widget_assets/custom_info_bar.dart';
+import 'package:winget_gui/widget_assets/link_text.dart';
 
-import '../../widget_assets/custom_info_bar.dart';
-import '../../widget_assets/link_text.dart';
 import '../output_parser.dart';
 import '../parsed_output.dart';
 

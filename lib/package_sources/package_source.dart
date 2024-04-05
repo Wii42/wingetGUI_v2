@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
 
-import '../helpers/log_stream.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 import '../output_handling/package_infos/package_infos.dart';
 
 abstract class PackageSource {

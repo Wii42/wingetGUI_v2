@@ -1,11 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/winget_process/winget_process.dart';
+import 'package:winget_gui/widget_assets/full_width_progress_bar_on_top.dart';
+import 'package:winget_gui/widget_assets/pane_item_body.dart';
+import 'package:winget_gui/winget_commands.dart';
 
-import '../widget_assets/full_width_progress_bar_on_top.dart';
-import '../widget_assets/pane_item_body.dart';
-import '../winget_commands.dart';
-import './process_output.dart';
+import 'process_output.dart';
+import 'winget_process.dart';
 
 class OutputPage extends ProcessOutput {
   final String Function(AppLocalizations)? title;

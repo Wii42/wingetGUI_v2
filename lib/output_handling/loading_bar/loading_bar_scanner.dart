@@ -1,9 +1,9 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/output_handling/loading_bar/loading_bar_parser.dart';
-import 'package:winget_gui/output_handling/output_scanner.dart';
 
+import '../output_scanner.dart';
 import '../responsibility.dart';
+import 'loading_bar_parser.dart';
 
 class LoadingBarScanner extends OutputScanner {
   LoadingBarScanner(super.respList);

@@ -1,9 +1,9 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
+import 'package:winget_gui/winget_commands.dart';
 
 import '../output_handling/package_infos/info.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
-import '../winget_commands.dart';
 
 enum SortBy {
   name(sort: sortName),

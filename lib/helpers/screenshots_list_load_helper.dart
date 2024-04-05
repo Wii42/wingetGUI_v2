@@ -1,9 +1,9 @@
 import 'package:http/http.dart';
 import 'package:ribs_core/ribs_core.dart';
 import 'package:ribs_json/ribs_json.dart';
-import 'package:winget_gui/helpers/package_screenshots.dart';
 
 import 'log_stream.dart';
+import 'package_screenshots.dart';
 
 mixin class ScreenshotsListLoadHelper {
   static final Logger log = Logger(null, sourceType: ScreenshotsListLoadHelper);

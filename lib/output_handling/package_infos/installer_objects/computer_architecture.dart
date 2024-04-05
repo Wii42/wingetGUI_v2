@@ -1,6 +1,7 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
+
+import 'identifying_property.dart';
 
 enum ComputerArchitecture implements IdentifyingProperty {
   x86(key: 'x86', title: 'x86'),

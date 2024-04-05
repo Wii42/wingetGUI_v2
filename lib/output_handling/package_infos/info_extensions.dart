@@ -3,20 +3,20 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:intl/intl.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/computer_architecture.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/identifying_property.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/installer_type.dart';
-import 'package:winget_gui/output_handling/package_infos/installer_objects/windows_platform.dart';
-import 'package:winget_gui/output_handling/package_infos/package_id.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
 import 'info.dart';
+import 'installer_objects/computer_architecture.dart';
 import 'installer_objects/dependencies.dart';
 import 'installer_objects/expected_return_code.dart';
+import 'installer_objects/identifying_property.dart';
 import 'installer_objects/install_mode.dart';
 import 'installer_objects/install_scope.dart';
 import 'installer_objects/installer_locale.dart';
+import 'installer_objects/installer_type.dart';
 import 'installer_objects/upgrade_behavior.dart';
+import 'installer_objects/windows_platform.dart';
+import 'package_id.dart';
 
 extension StringInfo on Info<String> {
   Info<Uri>? tryToUriInfo() {

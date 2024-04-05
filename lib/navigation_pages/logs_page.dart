@@ -5,11 +5,11 @@ import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
-import '../global_app_data.dart';
-import '../helpers/log_stream.dart';
-import '../helpers/route_parameter.dart';
-import '../routes.dart';
-import '../widget_assets/buttons/page_button.dart';
+import 'package:winget_gui/global_app_data.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
+import 'package:winget_gui/helpers/route_parameter.dart';
+import 'package:winget_gui/routes.dart';
+import 'package:winget_gui/widget_assets/buttons/page_button.dart';
 
 class LogsPage extends StatefulWidget {
   const LogsPage({super.key});

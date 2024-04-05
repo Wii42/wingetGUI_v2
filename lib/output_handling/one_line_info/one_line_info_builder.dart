@@ -1,10 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/widget_assets/buttons/link_button.dart';
+import 'package:winget_gui/widget_assets/link_text.dart';
 
-import '../../helpers/extensions/string_extension.dart';
-import '../../widget_assets/link_text.dart';
+import 'one_line_info_parser.dart';
 
 class OneLineInfoBuilder extends StatelessWidget {
   final List<OneLineInfo> infos;

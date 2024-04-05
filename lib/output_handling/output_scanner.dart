@@ -1,5 +1,5 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/output_handling/responsibility.dart';
+import 'responsibility.dart';
 
 abstract class OutputScanner {
   List<Responsibility> respList;

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:winget_gui/package_sources/package_source.dart';
+import 'package_source.dart';
 
 import '../output_handling/package_infos/package_infos_full.dart';
 import 'microsoft_store_api/microsoft_store_manifest_api.dart';

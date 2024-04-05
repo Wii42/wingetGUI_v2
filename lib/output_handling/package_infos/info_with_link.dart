@@ -1,7 +1,7 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 
-import '../../helpers/extensions/string_extension.dart';
-import '../../helpers/log_stream.dart';
 import 'info.dart';
 import 'package_attribute.dart';
 

@@ -7,9 +7,9 @@ import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/winget_commands.dart';
 
-import '../widget_assets/buttons/command_button.dart';
-import '../widget_assets/buttons/page_button.dart';
-import '../winget_process/simple_output.dart';
+import 'package:winget_gui/widget_assets/buttons/command_button.dart';
+import 'package:winget_gui/widget_assets/buttons/page_button.dart';
+import 'package:winget_gui/winget_process/simple_output.dart';
 
 class CommandPromptPage extends StatelessWidget {
   const CommandPromptPage({super.key});

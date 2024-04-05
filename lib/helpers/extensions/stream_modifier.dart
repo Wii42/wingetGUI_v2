@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:winget_gui/helpers/extensions/string_extension.dart';
+
+import 'string_extension.dart';
 
 extension StringStreamModifier on Stream<String> {
   Stream<String> splitStreamElementsOnNewLine() {

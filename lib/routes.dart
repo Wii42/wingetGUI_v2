@@ -1,19 +1,18 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/navigation_pages/advanced_options_page.dart';
 import 'package:winget_gui/navigation_pages/command_prompt_page.dart';
+import 'package:winget_gui/navigation_pages/deep_search_page.dart';
+import 'package:winget_gui/navigation_pages/installed_page.dart';
+import 'package:winget_gui/navigation_pages/logs_page.dart';
+import 'package:winget_gui/navigation_pages/publisher_page.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/navigation_pages/settings_page.dart';
+import 'package:winget_gui/navigation_pages/updates_page.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/widget_assets/package_details_from_web.dart';
 import 'package:winget_gui/winget_commands.dart';
-
-import 'helpers/route_parameter.dart';
-import 'navigation_pages/deep_search_page.dart';
-import 'navigation_pages/installed_page.dart';
-import 'navigation_pages/logs_page.dart';
-import 'navigation_pages/publisher_page.dart';
-import 'navigation_pages/updates_page.dart';
 
 enum Routes {
   updates(

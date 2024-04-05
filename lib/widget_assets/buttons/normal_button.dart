@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/widget_assets/buttons/abstract_button.dart';
+
+import 'abstract_button.dart';
 
 abstract class NormalButton extends AbstractButton {
   const NormalButton({super.key, super.disabled = false});

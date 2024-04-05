@@ -1,10 +1,10 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
-import 'package:winget_gui/output_handling/output_scanner.dart';
-import 'package:winget_gui/output_handling/responsibility.dart';
-import 'package:winget_gui/output_handling/show/show_parser.dart';
 
 import '../output_parser.dart';
+import '../output_scanner.dart';
+import '../responsibility.dart';
+import '../show/show_parser.dart';
+import 'one_line_info_parser.dart';
 
 const String identifierColon = ': ';
 

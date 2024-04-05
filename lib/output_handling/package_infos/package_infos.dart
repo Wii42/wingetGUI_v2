@@ -1,18 +1,18 @@
 import 'package:winget_gui/db/favicon_db.dart';
-import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
-import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
-import 'package:winget_gui/output_handling/package_infos/package_id.dart';
-import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/output_handling/package_infos/publisher.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
+import 'package:winget_gui/helpers/package_screenshots.dart';
+import 'package:winget_gui/helpers/package_screenshots_list.dart';
+import 'package:winget_gui/helpers/version_or_string.dart';
+import 'package:winget_gui/package_sources/ms_store_source.dart';
+import 'package:winget_gui/package_sources/package_source.dart';
+import 'package:winget_gui/package_sources/winget_source.dart';
 
-import '../../helpers/log_stream.dart';
-import '../../helpers/package_screenshots.dart';
-import '../../helpers/package_screenshots_list.dart';
-import '../../helpers/version_or_string.dart';
-import '../../package_sources/ms_store_source.dart';
-import '../../package_sources/package_source.dart';
-import '../../package_sources/winget_source.dart';
 import 'info.dart';
+import 'info_extensions.dart';
+import 'package_attribute.dart';
+import 'package_id.dart';
+import 'package_infos_peek.dart';
+import 'publisher.dart';
 
 abstract class PackageInfos {
   late final Logger log;

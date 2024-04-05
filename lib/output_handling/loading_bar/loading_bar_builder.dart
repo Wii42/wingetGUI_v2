@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/output_handling/loading_bar/loading_bar_parser.dart';
+
+import 'loading_bar_parser.dart';
 
 class LoadingBarBuilder extends StatelessWidget {
   final LoadingBar loadingBar;

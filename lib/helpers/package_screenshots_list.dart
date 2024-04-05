@@ -1,12 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
-import 'package:winget_gui/helpers/json_publisher.dart';
-import 'package:winget_gui/helpers/log_stream.dart';
-import 'package:winget_gui/helpers/package_screenshots.dart';
-import 'package:winget_gui/helpers/screenshots_list_load_helper.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_screenshot_identifiers.dart';
+
+import 'extensions/screenshots_list_loader.dart';
+import 'json_publisher.dart';
+import 'log_stream.dart';
+import 'package_screenshots.dart';
+import 'screenshots_list_load_helper.dart';
 
 class PackageScreenshotsList with ScreenshotsListLoadHelper {
   late final Logger log;

@@ -1,4 +1,4 @@
-import 'package:winget_gui/helpers/version.dart';
+import 'version.dart';
 
 class VersionOrString {
   final String? stringVersion;

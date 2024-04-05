@@ -1,10 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/widget_assets/buttons/run_button.dart';
+import 'package:winget_gui/winget_process/output_page.dart';
+import 'package:winget_gui/winget_process/winget_process.dart';
 
-import '../../winget_process/output_page.dart';
-import '../../winget_process/winget_process.dart';
 import 'abstract_button.dart';
+import 'run_button.dart';
 
 /// A button that runs a winget command and shows the output in a new page.
 class CommandButton extends RunButton

@@ -1,9 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/db/db_message.dart';
-import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
-import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 import 'full_width_progress_bar_on_top.dart';
+import 'package_peek_list_view.dart';
+import 'pane_item_body.dart';
 
 class PackageListPage extends StatelessWidget {
   final String? title;

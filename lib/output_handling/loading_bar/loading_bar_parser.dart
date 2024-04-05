@@ -1,9 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/output_handling/loading_bar/loading_bar_builder.dart';
-import 'package:winget_gui/output_handling/output_parser.dart';
-import 'package:winget_gui/output_handling/parsed_output.dart';
+
+import '../output_parser.dart';
+import '../parsed_output.dart';
+import 'loading_bar_builder.dart';
 
 class LoadingBarParser extends OutputParser {
   static const String progressBarKey = 'progressBar', restKey = 'rest';

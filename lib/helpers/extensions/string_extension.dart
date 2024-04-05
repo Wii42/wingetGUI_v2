@@ -1,5 +1,6 @@
 import 'package:string_validator/string_validator.dart' as validator;
-import 'package:winget_gui/helpers/extensions/int_extension.dart';
+
+import 'int_extension.dart';
 
 extension StringHelper on String {
   bool isLoadingSymbols() {

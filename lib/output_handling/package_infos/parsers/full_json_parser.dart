@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:dart_casing/dart_casing.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
+import 'package:winget_gui/helpers/locale_parser.dart';
+import 'package:winget_gui/helpers/version.dart';
 
-import '../../../helpers/locale_parser.dart';
-import '../../../helpers/version.dart';
 import '../package_attribute.dart';
 import 'full_abstract_map_parser.dart';
 import 'info_json_parser.dart';

@@ -1,4 +1,4 @@
-import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
+import 'package_infos.dart';
 
 extension PackageScreenshotIdentifiers on PackageInfos {
   String? get nameWithoutVersion {

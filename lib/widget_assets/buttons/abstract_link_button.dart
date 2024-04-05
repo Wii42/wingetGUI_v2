@@ -1,7 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:url_launcher/link.dart';
-import 'package:winget_gui/widget_assets/buttons/abstract_button.dart';
-import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
+
+import 'abstract_button.dart';
+import 'tooltips.dart';
 
 abstract class AbstractLinkButton extends AbstractButton {
   final Uri url;

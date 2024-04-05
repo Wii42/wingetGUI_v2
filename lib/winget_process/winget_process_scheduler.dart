@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'dart:core';
 import 'dart:io';
 
-import '../helpers/log_stream.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 
 class ProcessScheduler {
   late final Logger log;

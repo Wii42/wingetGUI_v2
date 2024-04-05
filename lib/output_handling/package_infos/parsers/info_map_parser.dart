@@ -1,13 +1,13 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
-import 'package:winget_gui/output_handling/package_infos/parsers/info_abstract_map_parser.dart';
 
 import '../info.dart';
+import '../info_extensions.dart';
 import '../info_with_link.dart';
 import '../installer_objects/computer_architecture.dart';
 import '../installer_objects/dependencies.dart';
 import '../installer_objects/installer.dart';
 import '../package_attribute.dart';
+import 'info_abstract_map_parser.dart';
 
 class InfoMapParser extends InfoAbstractMapParser<String, String> {
   AppLocalizations locale;

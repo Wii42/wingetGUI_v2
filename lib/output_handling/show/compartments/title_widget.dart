@@ -7,7 +7,6 @@ import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/output_handling/package_infos/info_extensions.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_full.dart';
-import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/buttons/link_button.dart';
@@ -19,6 +18,7 @@ import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 
 import '../../package_infos/info.dart';
+import 'compartment.dart';
 
 class TitleWidget extends Compartment {
   final PackageInfosFull infos;
