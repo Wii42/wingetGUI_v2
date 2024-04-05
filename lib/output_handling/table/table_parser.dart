@@ -4,9 +4,9 @@ import 'dart:math';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/db/winget_table.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/output_handling/table/table_builder.dart';
-import 'package:winget_gui/package_tables/winget_table.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 
 import '../output_parser.dart';

@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/package_tables/package_tables.dart';
-import 'package:winget_gui/package_tables/winget_table.dart';
+import 'package:winget_gui/db/package_tables.dart';
+import 'package:winget_gui/db/winget_table.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import 'package:winget_gui/widget_assets/sort_by.dart';
 import 'package:winget_gui/widget_assets/winget_db_table_page.dart';

@@ -7,9 +7,9 @@ import 'package:winget_gui/output_handling/package_infos/info_with_link.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/output_handling/package_infos/package_id.dart';
 
+import '../../db/favicon_db.dart';
 import '../../helpers/json_publisher.dart';
 import '../../helpers/package_screenshots_list.dart';
-import '../../widget_assets/favicon_db.dart';
 
 class Publisher {
   final String? id;

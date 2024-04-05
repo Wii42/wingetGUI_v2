@@ -6,19 +6,19 @@ import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:winget_gui/helpers/settings_cache.dart';
-import 'package:winget_gui/main_navigation.dart';
-import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
-import 'package:winget_gui/package_actions_notifier.dart';
-import 'package:winget_gui/package_tables/package_tables.dart';
-import 'package:winget_gui/widget_assets/favicon_db.dart';
-import 'package:winget_gui/widget_assets/loading_widget.dart';
-import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
+import 'db/db_message.dart';
+import 'db/favicon_db.dart';
+import 'db/package_tables.dart';
 import 'global_app_data.dart';
 import 'helpers/package_screenshots_list.dart';
+import 'helpers/settings_cache.dart';
+import 'main_navigation.dart';
 import 'output_handling/one_line_info/one_line_info_builder.dart';
-import 'package_tables/db_message.dart';
+import 'output_handling/one_line_info/one_line_info_parser.dart';
+import 'package_actions_notifier.dart';
+import 'widget_assets/loading_widget.dart';
+import 'winget_process/winget_process_scheduler.dart';
 
 const String appTitle = 'WingetGUI';
 

@@ -6,13 +6,13 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/widget_assets/web_image.dart';
 
+import '../db/favicon_db.dart';
 import '../helpers/log_stream.dart';
 import '../output_handling/package_infos/package_id.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_full.dart';
 import '../package_sources/package_source.dart';
 import 'decorated_card.dart';
-import 'favicon_db.dart';
 
 class AppIcon extends StatefulWidget {
   late final Logger log;

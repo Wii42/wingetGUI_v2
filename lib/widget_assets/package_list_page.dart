@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/package_tables/db_message.dart';
+import 'package:winget_gui/db/db_message.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 

@@ -6,10 +6,11 @@ import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/package_tables/db_message.dart';
-import 'package:winget_gui/package_tables/package_tables.dart';
-import 'package:winget_gui/package_tables/winget_table.dart';
 import 'package:winget_gui/winget_commands.dart';
+
+import 'db_message.dart';
+import 'package_tables.dart';
+import 'winget_table.dart';
 
 class FaviconDB {
   static final FaviconDB instance = FaviconDB._();

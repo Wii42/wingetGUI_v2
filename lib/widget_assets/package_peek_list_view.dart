@@ -3,6 +3,8 @@ import 'dart:collection';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/db/db_message.dart';
+import 'package:winget_gui/db/winget_table.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/one_line_info/one_line_info_builder.dart';
@@ -10,8 +12,6 @@ import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.da
 import 'package:winget_gui/output_handling/package_infos/package_infos.dart';
 import 'package:winget_gui/output_handling/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/output_handling/table/package_peek.dart';
-import 'package:winget_gui/package_tables/db_message.dart';
-import 'package:winget_gui/package_tables/winget_table.dart';
 import 'package:winget_gui/widget_assets/buttons/tooltips.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/sort_by.dart';
