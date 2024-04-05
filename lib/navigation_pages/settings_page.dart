@@ -12,6 +12,8 @@ import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
+import '../db/package_db.dart';
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -58,10 +60,29 @@ class _SettingsPageSate extends State<SettingsPage> {
               ),
             ),
             buildDBSettings(wingetLocale),
+            settingsItem(
+                'View DB Tables',
+                Column(
+                  children: [
+                    dbButton(context, PackageDB.instance.favicons),
+                    dbButton(context, PackageDB.instance.publisherNamesByPackageId),
+                    dbButton(context, PackageDB.instance.publisherNamesByPublisherId),
+                  ],
+                )),
           ].withSpaceBetween(height: 10),
         ),
       ),
     );
+  }
+
+  Button dbButton(BuildContext context, DBTable table) {
+    return Button(
+                    child: Text(table.tableName),
+                    onPressed: () => Navigator.of(context).pushNamed(
+                        Routes.dbTablePage.route,
+                        arguments: DBRouteParameter(
+                            dbTable: table)),
+                  );
   }
 
   Widget buildDBSettings(AppLocalizations wingetLocale) {

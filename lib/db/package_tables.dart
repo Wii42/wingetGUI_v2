@@ -12,7 +12,7 @@ import 'package:winget_gui/package_infos/package_infos.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 
 import 'db_message.dart';
-import 'favicon_db.dart';
+import 'package_db.dart';
 import 'winget_table.dart';
 
 class PackageTables {
@@ -38,9 +38,9 @@ class PackageTables {
       return;
     }
 
-    installed = FaviconDB.instance.installed.parent;
-    updates = FaviconDB.instance.updates.parent;
-    available = FaviconDB.instance.available.parent;
+    installed = PackageDB.instance.installed.parent;
+    updates = PackageDB.instance.updates.parent;
+    available = PackageDB.instance.available.parent;
     installed.reloadFuture(wingetLocale);
     updates.reloadFuture(wingetLocale);
     available.reloadFuture(wingetLocale);

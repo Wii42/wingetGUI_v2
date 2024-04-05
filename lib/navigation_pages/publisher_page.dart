@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/db/db_message.dart';
-import 'package:winget_gui/db/favicon_db.dart' as favicon_db;
+import 'package:winget_gui/db/package_db.dart' as favicon_db;
 import 'package:winget_gui/db/package_tables.dart';
 import 'package:winget_gui/db/winget_table.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
@@ -29,7 +29,7 @@ class PublisherPage extends StatelessWidget {
     String? publisherName = parameters.titleAddon ??
         PackageScreenshotsList
             .instance.publisherIcons[publisherId]?.nameUsingDefaultSource ??
-        favicon_db.FaviconDB.instance.publisherNamesByPublisherId[publisherId];
+        favicon_db.PackageDB.instance.publisherNamesByPublisherId[publisherId];
 
     return PublisherPage(
         publisherId: publisherId, publisherName: publisherName);

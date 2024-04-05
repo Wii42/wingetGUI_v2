@@ -11,7 +11,7 @@ import 'package:winget_gui/package_infos/package_id.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 
 import 'db_message.dart';
-import 'favicon_db.dart';
+import 'package_db.dart';
 import 'package_tables.dart';
 import 'winget_table_loader.dart';
 
@@ -145,7 +145,7 @@ class WingetDBTable
 
   WingetDBTable({
     required this.tableName,
-    required FaviconDB parentDB,
+    required PackageDB parentDB,
     required this.parent,
   }) : super(parentDB);
 

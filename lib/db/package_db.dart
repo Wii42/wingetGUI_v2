@@ -12,8 +12,8 @@ import 'db_message.dart';
 import 'package_tables.dart';
 import 'winget_table.dart';
 
-class FaviconDB {
-  static final FaviconDB instance = FaviconDB._();
+class PackageDB {
+  static final PackageDB instance = PackageDB._();
   static const String dbName = 'favicon_database.db';
   late final FaviconTable favicons;
   late final PublisherNameTable publisherNamesByPackageId;
@@ -32,7 +32,7 @@ class FaviconDB {
   Database? _database;
   late final Logger log;
 
-  FaviconDB._() {
+  PackageDB._() {
     log = Logger(this);
     favicons = FaviconTable(this);
     publisherNamesByPackageId = PublisherNameTable(
@@ -103,7 +103,7 @@ abstract class DBTable<K extends Object, V extends Object> {
   Map<String, dynamic> toMap((K, V) entry);
 
   Map<K, V> _entries = {};
-  final FaviconDB parentDB;
+  final PackageDB parentDB;
 
   DBTable(this.parentDB);
 
@@ -255,7 +255,7 @@ class PublisherNameTable extends DBTable<String, String> {
   PublisherNameTable(
       {required this.tableName,
       required this.idKey,
-      required FaviconDB parentDB})
+      required PackageDB parentDB})
       : super(parentDB);
 
   @override

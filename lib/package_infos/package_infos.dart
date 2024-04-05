@@ -1,4 +1,4 @@
-import 'package:winget_gui/db/favicon_db.dart';
+import 'package:winget_gui/db/package_db.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';
@@ -60,7 +60,7 @@ abstract class PackageInfos {
     screenshots = screenshotsList.getPackage(this);
     checkedForScreenshots = true;
     if (id != null) {
-      automaticFoundFavicons = FaviconDB.instance.favicons[id!.value.string];
+      automaticFoundFavicons = PackageDB.instance.favicons[id!.value.string];
     }
   }
 

@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/db/favicon_db.dart';
+import 'package:winget_gui/db/package_db.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';
@@ -69,7 +69,7 @@ class Publisher {
 
   static String? nameFromDBbyPackageId(PackageId? packageId) {
     if (packageId != null && packageId.string.isNotEmpty) {
-      return FaviconDB.instance.publisherNamesByPackageId[packageId.string];
+      return PackageDB.instance.publisherNamesByPackageId[packageId.string];
     }
     return null;
   }
@@ -208,7 +208,7 @@ class _PublisherBuilder {
 
   static String? nameFromDBbyPublisherId(String? publisherId) {
     if (publisherId != null) {
-      return FaviconDB.instance.publisherNamesByPublisherId[publisherId];
+      return PackageDB.instance.publisherNamesByPublisherId[publisherId];
     }
     return null;
   }
@@ -218,10 +218,10 @@ class _PublisherBuilder {
       return;
     }
     if (publisherId != null) {
-      FaviconDB.instance.publisherNamesByPublisherId[publisherId!] = name;
+      PackageDB.instance.publisherNamesByPublisherId[publisherId!] = name;
     }
     if (packageId != null) {
-      FaviconDB.instance.publisherNamesByPackageId[packageId!.string] = name;
+      PackageDB.instance.publisherNamesByPackageId[packageId!.string] = name;
     }
   }
 

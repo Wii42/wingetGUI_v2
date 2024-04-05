@@ -8,7 +8,7 @@ import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'db/db_message.dart';
-import 'db/favicon_db.dart';
+import 'db/package_db.dart';
 import 'db/package_tables.dart';
 import 'global_app_data.dart';
 import 'helpers/package_screenshots_list.dart';
@@ -25,7 +25,7 @@ const String appTitle = 'WingetGUI';
 void main() async {
   await initAppPrerequisites();
   await PackageScreenshotsList.instance.fetchScreenshots();
-  await FaviconDB.instance.ensureInitialized();
+  await PackageDB.instance.ensureInitialized();
   runApp(const WingetGui());
 }
 

@@ -14,6 +14,8 @@ import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/widget_assets/package_details_from_web.dart';
 import 'package:winget_gui/winget_commands.dart';
 
+import 'navigation_pages/db_table_page.dart';
+
 enum Routes {
   updates(
       icon: FluentIcons.substitutions_in,
@@ -72,6 +74,7 @@ enum Routes {
       route: '/logPage',
       body: LogsPage.inRoute),
   logDetailsPage(route: '/logDetailsPage', body: LogDetailsPage.inRoute),
+  dbTablePage(route: '/dbTablePage', body: DBTableWidget.inRoute),
   ;
 
   final String route;

@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:favicon/favicon.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
-import 'package:winget_gui/db/favicon_db.dart';
+import 'package:winget_gui/db/package_db.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/package_infos/package_id.dart';
@@ -132,7 +132,7 @@ class _AppIconState extends State<AppIcon> {
     if (widget.packageId == null) {
       return null;
     }
-    return FaviconDB.instance.favicons[widget.packageId!.string];
+    return PackageDB.instance.favicons[widget.packageId!.string];
   }
 
   Widget findFavicon() {
@@ -253,7 +253,7 @@ class FaviconGetter {
       return null;
     }
     if (packageId != null) {
-      FaviconDB.instance.favicons[packageId.string] = Uri.parse(favicon.url);
+      PackageDB.instance.favicons[packageId.string] = Uri.parse(favicon.url);
     }
     return favicon;
   }

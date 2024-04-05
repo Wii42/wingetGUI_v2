@@ -60,12 +60,13 @@ extension UriInfo on Info<Uri> {
 }
 
 extension ListInfo<T> on Info<List<T>> {
-  Info<String> toStringInfoFromList(String Function(T)? toString) {
+  Info<String> toStringInfoFromList(String Function(T)? toString,
+      {String separator = ', '}) {
     return toStringInfoFromObject((object) {
       List<dynamic> list = object
           .map((e) => toString != null ? toString(e) : e.toString())
           .toList();
-      return list.join(', ');
+      return list.join(separator);
     });
   }
 }
@@ -159,9 +160,10 @@ extension InstallerLocaleInfo on Info<InstallerLocale> {
 }
 
 extension ExpectedReturnCodeModeInfo on Info<List<ExpectedReturnCode>> {
-  Info<String> toStringInfo(AppLocalizations locale) =>
-      toStringInfoFromList((object) =>
-          "${object.returnCode}: ${object.response.title(locale)}${object.returnResponseUrl != null ? ' (${object.returnResponseUrl})' : ''}");
+  Info<String> toStringInfo(AppLocalizations locale) => toStringInfoFromList(
+      (object) =>
+          "${object.returnCode}: ${object.response.title(locale)}${object.returnResponseUrl != null ? ' (${object.returnResponseUrl})' : ''}",
+      separator: '\n');
 }
 
 extension SourceInfo on Info<PackageSources> {

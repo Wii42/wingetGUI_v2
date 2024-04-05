@@ -1,5 +1,6 @@
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 
+import 'package:winget_gui/db/package_db.dart';
 import 'log_stream.dart';
 
 /// Parameters for a route.
@@ -40,4 +41,11 @@ class SearchRouteParameter extends RouteParameter {
 
   const SearchRouteParameter(
       {this.packageFilter, super.commandParameter, super.titleAddon});
+}
+
+class DBRouteParameter extends RouteParameter {
+  final DBTable dbTable;
+
+  const DBRouteParameter(
+      {required this.dbTable, super.commandParameter, super.titleAddon});
 }
