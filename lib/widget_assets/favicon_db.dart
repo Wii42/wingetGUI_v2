@@ -6,7 +6,6 @@ import 'package:winget_gui/helpers/version_or_string.dart';
 
 import '../helpers/log_stream.dart';
 import '../output_handling/one_line_info/one_line_info_parser.dart';
-import '../output_handling/package_infos/package_attribute.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../winget_commands.dart';
 import '../winget_db/db_message.dart';
@@ -71,8 +70,8 @@ class FaviconDB {
     }
     for (WingetDBTable table in wingetTables) {
       await table._setEntriesFromDB();
-      table.infos = table._entries.values.toList();
-      table.status = DBStatus.ready;
+      table.parent.infos = table._entries.values.toList();
+      table.parent.status = DBStatus.ready;
     }
   }
 
@@ -82,16 +81,18 @@ class FaviconDB {
     PackageFilter? creatorFilter,
     required Winget winget,
   }) {
-    return WingetDBTable(
+    WingetTable wingetTable = WingetTable(
       infos,
       hints: hints,
       content: (locale) => locale.wingetTitle(winget.name),
       wingetCommand: winget.fullCommand,
       creatorFilter: creatorFilter,
       parent: PackageTables.instance,
-      parentDB: this,
-      tableName: winget.name,
     );
+    WingetDBTable table = WingetDBTable(
+        parentDB: this, tableName: winget.name, parent: wingetTable);
+    wingetTable.internTable = table;
+    return table;
   }
 }
 
@@ -281,53 +282,8 @@ class PublisherNameTable extends DBTable<String, String> {
   }
 }
 
-mixin PackageTableMixin
+mixin PackageTableSetListMixin
     on DBTable<(String, VersionOrString), PackageInfosPeek> {
-  @override
-  initTable(Database db) {
-    db.execute(
-      '''CREATE TABLE $tableName(
-          $idKey TEXT,
-          ${PackageAttribute.name.name} TEXT,
-          ${PackageAttribute.version.name} TEXT,
-          ${PackageAttribute.availableVersion.name} TEXT,
-          ${PackageAttribute.source.name} TEXT,
-          ${PackageAttribute.match.name} TEXT,
-          CONSTRAINT PK_Info PRIMARY KEY ($idKey,${PackageAttribute.version.name})
-          )''',
-    );
-  }
-
-  @override
-  ((String, VersionOrString), PackageInfosPeek) fromMap(
-      Map<String, dynamic> map) {
-    Map<String, String> tempMap =
-        map.map((key, value) => MapEntry(key, value.toString()));
-    PackageInfosPeek info = PackageInfosPeek.fromDBMap(tempMap);
-    return (
-      (info.id!.value.string, info.version!.value),
-      info..setImplicitInfos()
-    );
-  }
-
-  @override
-  Map<String, dynamic> toMap(
-      ((String, VersionOrString), PackageInfosPeek) entry) {
-    (String, VersionOrString) primaryKey = entry.$1;
-    String id = primaryKey.$1;
-    VersionOrString version = primaryKey.$2;
-    PackageInfosPeek info = entry.$2;
-    return {
-      idKey: id,
-      PackageAttribute.name.name: info.name?.value,
-      PackageAttribute.version.name: version.stringValue,
-      PackageAttribute.availableVersion.name:
-          info.availableVersion?.value.stringValue,
-      PackageAttribute.source.name: info.source.value.key,
-      PackageAttribute.match.name: info.match?.value,
-    };
-  }
-
   void setList(Iterable<PackageInfosPeek> list, {bool saveToDB = true}) {
     _entries = Map<(String, VersionOrString), PackageInfosPeek>.fromEntries(
         list.map((PackageInfosPeek e) =>

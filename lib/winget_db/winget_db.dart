@@ -7,11 +7,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../helpers/log_stream.dart';
 import '../helpers/version_or_string.dart';
+import '../output_handling/one_line_info/one_line_info_parser.dart';
 import '../output_handling/output_handler.dart';
 import '../output_handling/package_infos/package_id.dart';
 import '../output_handling/package_infos/package_infos.dart';
 import '../output_handling/package_infos/package_infos_peek.dart';
 import '../widget_assets/favicon_db.dart';
+import '../winget_commands.dart';
 import 'db_message.dart';
 import 'db_table.dart';
 
@@ -19,8 +21,8 @@ class PackageTables {
   late final Logger log;
   DBStatus status = DBStatus.loading;
   static final PackageTables instance = PackageTables._();
-  late WingetDBTable updates, installed, available;
-  List<WingetDBTable> get tables => [updates, installed, available];
+  late WingetTable updates, installed, available;
+  List<WingetTable> get tables => [updates, installed, available];
 
   PackageTables._() {
     log = Logger(this);
@@ -38,9 +40,9 @@ class PackageTables {
       return;
     }
 
-    installed = FaviconDB.instance.installed;
-    updates = FaviconDB.instance.updates;
-    available = FaviconDB.instance.available;
+    installed = FaviconDB.instance.installed.parent;
+    updates = FaviconDB.instance.updates.parent;
+    available = FaviconDB.instance.available.parent;
     installed.reloadFuture(wingetLocale);
     updates.reloadFuture(wingetLocale);
     available.reloadFuture(wingetLocale);
@@ -113,7 +115,7 @@ class PackageTables {
   }
 
   void reloadDBs(AppLocalizations wingetLocale) {
-    for (WingetDBTable table in tables) {
+    for (WingetTable table in tables) {
       table.reloadFuture(wingetLocale);
     }
   }
@@ -123,5 +125,23 @@ class PackageTables {
     cron.schedule(Schedule(hours: '*/1'), () {
       reloadDBs(wingetLocale);
     });
+  }
+
+  WingetTable getDBTable({
+    List<PackageInfosPeek> infos = const [],
+    List<OneLineInfo> hints = const [],
+    PackageFilter? creatorFilter,
+    required Winget winget,
+    required WingetDBTable internTable,
+  }) {
+    return WingetTable(
+      infos,
+      hints: hints,
+      content: (locale) => locale.wingetTitle(winget.name),
+      wingetCommand: winget.fullCommand,
+      creatorFilter: creatorFilter,
+      parent: PackageTables.instance,
+      internTable: internTable,
+    );
   }
 }

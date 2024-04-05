@@ -1,7 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
-import 'package:winget_gui/widget_assets/favicon_db.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import 'package:winget_gui/widget_assets/winget_db_table_page.dart';
 
@@ -20,13 +19,10 @@ class DeepSearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
-    WingetDBTable table = WingetDBTable(
+    WingetTable table = WingetTable(
       [],
       content: (locale) => locale.extendedSearch,
       wingetCommand: [Winget.search.baseCommand, ...searchFor],
-      parentDB: FaviconDB.instance,
-      tableName: 'extended_search',
-      saveToDB: false,
     );
     table.reloadFuture(wingetLocale);
     return WingetDBTablePage(

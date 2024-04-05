@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/package_infos/package_attribute.dart';
 import 'package:winget_gui/winget_db/db_message.dart';
@@ -16,19 +17,14 @@ import 'db_table_creator.dart';
 
 typedef PackageFilter = List<PackageInfosPeek> Function(List<PackageInfosPeek>);
 
-class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
-    with PackageTableMixin {
+class WingetTable {
   late final Logger log;
   List<PackageInfosPeek> infos;
   Map<PackageId, List<PackageInfosPeek>>? _idMap;
   List<OneLineInfo> hints;
   PackageTables? parent;
   DBStatus status;
-  bool saveToDB;
-  @override
-  final String tableName;
-  @override
-  final String idKey = PackageAttribute.id.name;
+  WingetDBTable? internTable;
 
   final LocalizedString content;
   final List<String> wingetCommand;
@@ -36,7 +32,7 @@ class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
   final StreamController<DBMessage> _streamController =
       StreamController<DBMessage>.broadcast();
 
-  WingetDBTable(
+  WingetTable(
     this.infos, {
     this.hints = const [],
     required this.content,
@@ -44,10 +40,8 @@ class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
     this.creatorFilter,
     this.parent,
     this.status = DBStatus.loading,
-    required this.tableName,
-    required FaviconDB parentDB,
-    this.saveToDB = true,
-  }) : super(parentDB) {
+    this.internTable,
+  }) {
     log = Logger(this);
   }
 
@@ -88,7 +82,7 @@ class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
     infos = creator.extractInfos();
     hints = creator.extractHints();
     updateIDMap();
-    setList(infos, saveToDB: saveToDB);
+    internTable?.setList(infos);
     parent?.notifyListeners();
   }
 
@@ -101,9 +95,6 @@ class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
   void notifyLoading() {
     _streamController.add(DBMessage(DBStatus.loading));
   }
-
-  //UnmodifiableListView<PackageInfosPeek> get infos =>
-  //    UnmodifiableListView(infos);
 
   void addInfo(PackageInfosPeek info) {
     infos.add(info);
@@ -140,5 +131,65 @@ class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
 
   void sendLoadingMessage() {
     _streamController.add(DBMessage(DBStatus.loading));
+  }
+}
+
+class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
+    with PackageTableSetListMixin {
+  @override
+  final String tableName;
+  @override
+  final String idKey = PackageAttribute.id.name;
+  WingetTable parent;
+
+  WingetDBTable({
+    required this.tableName,
+    required FaviconDB parentDB,
+    required this.parent,
+  }) : super(parentDB);
+
+  @override
+  initTable(Database db) {
+    db.execute(
+      '''CREATE TABLE $tableName(
+          $idKey TEXT,
+          ${PackageAttribute.name.name} TEXT,
+          ${PackageAttribute.version.name} TEXT,
+          ${PackageAttribute.availableVersion.name} TEXT,
+          ${PackageAttribute.source.name} TEXT,
+          ${PackageAttribute.match.name} TEXT,
+          CONSTRAINT PK_Info PRIMARY KEY ($idKey,${PackageAttribute.version.name})
+          )''',
+    );
+  }
+
+  @override
+  ((String, VersionOrString), PackageInfosPeek) fromMap(
+      Map<String, dynamic> map) {
+    Map<String, String> tempMap =
+        map.map((key, value) => MapEntry(key, value.toString()));
+    PackageInfosPeek info = PackageInfosPeek.fromDBMap(tempMap);
+    return (
+      (info.id!.value.string, info.version!.value),
+      info..setImplicitInfos()
+    );
+  }
+
+  @override
+  Map<String, dynamic> toMap(
+      ((String, VersionOrString), PackageInfosPeek) entry) {
+    (String, VersionOrString) primaryKey = entry.$1;
+    String id = primaryKey.$1;
+    VersionOrString version = primaryKey.$2;
+    PackageInfosPeek info = entry.$2;
+    return {
+      idKey: id,
+      PackageAttribute.name.name: info.name?.value,
+      PackageAttribute.version.name: version.stringValue,
+      PackageAttribute.availableVersion.name:
+          info.availableVersion?.value.stringValue,
+      PackageAttribute.source.name: info.source.value.key,
+      PackageAttribute.match.name: info.match?.value,
+    };
   }
 }

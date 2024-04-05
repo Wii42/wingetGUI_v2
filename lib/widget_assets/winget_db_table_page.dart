@@ -7,7 +7,7 @@ import '../output_handling/output_handler.dart';
 import '../winget_db/db_table.dart';
 
 class WingetDBTablePage extends StatelessWidget {
-  final WingetDBTable dbTable;
+  final WingetTable dbTable;
   final String Function(AppLocalizations)? title;
   final PackageListMenuOptions menuOptions;
   final PackageListPackageOptions packageOptions;

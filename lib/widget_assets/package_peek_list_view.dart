@@ -21,7 +21,7 @@ import 'buttons/search_button.dart';
 import 'loading_widget.dart';
 
 class PackagePeekListView extends StatefulWidget {
-  final WingetDBTable dbTable;
+  final WingetTable dbTable;
   late final Stream<DBMessage> reloadStream;
   final PackageListMenuOptions menuOptions;
   final PackageListPackageOptions packageOptions;
