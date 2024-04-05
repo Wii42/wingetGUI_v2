@@ -1,13 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/output_handling/show/compartments/compartment.dart';
+import 'package:winget_gui/package_infos/info.dart';
+import 'package:winget_gui/package_infos/info_with_link.dart';
 import 'package:winget_gui/widget_assets/buttons/link_button.dart';
 import 'package:winget_gui/widget_assets/buttons/mini_icon_copy_button.dart';
 import 'package:winget_gui/widget_assets/buttons/mini_icon_link_button.dart';
 
-import 'package:winget_gui/package_infos/info.dart';
-import 'package:winget_gui/package_infos/info_with_link.dart';
+import 'compartment.dart';
 
 mixin CompartmentBuildingBlocks on Compartment {
   Wrap wrapInWrap({required String title, required Widget body}) {

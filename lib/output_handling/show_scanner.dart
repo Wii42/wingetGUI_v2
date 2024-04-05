@@ -1,8 +1,8 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/package_infos/package_attribute.dart';
 
-import '../output_scanner.dart';
-import '../responsibility.dart';
+import 'output_scanner.dart';
+import 'responsibility.dart';
 import 'show_parser.dart';
 
 class ShowScanner extends OutputScanner {

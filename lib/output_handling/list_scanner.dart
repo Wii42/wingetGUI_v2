@@ -1,9 +1,9 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../output_parser.dart';
-import '../output_scanner.dart';
-import '../responsibility.dart';
 import 'list_parser.dart';
+import 'output_parser.dart';
+import 'output_scanner.dart';
+import 'responsibility.dart';
 
 class ListScanner extends OutputScanner {
   ListScanner(super.respList);

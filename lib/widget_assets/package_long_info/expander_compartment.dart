@@ -1,11 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/package_infos/info.dart';
 import 'package:winget_gui/package_infos/info_extensions.dart';
 
-import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/package_infos/info.dart';
 import 'compartment.dart';
 import 'compartment_building_blocks.dart';
 

@@ -6,10 +6,10 @@ import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/output_handling/show/package_long_info.dart';
 import 'package:winget_gui/package_sources/github_api/github_rate_limit_exception.dart';
 import 'package:winget_gui/package_sources/no_internet_exception.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
+import 'package:winget_gui/widget_assets/package_long_info/package_long_info.dart';
 import 'package:winget_gui/winget_commands.dart';
 
 import 'link_text.dart';

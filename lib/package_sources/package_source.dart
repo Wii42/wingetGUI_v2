@@ -1,9 +1,8 @@
 import 'dart:ui';
 
-import 'package:winget_gui/package_infos/package_infos_full.dart';
-
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/package_infos/package_infos.dart';
+import 'package:winget_gui/package_infos/package_infos_full.dart';
 
 abstract class PackageSource {
   late final Logger log;

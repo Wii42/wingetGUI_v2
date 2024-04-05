@@ -1,8 +1,8 @@
 import 'package:http/http.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
-
 import 'package:winget_gui/package_infos/package_id.dart';
+
 import '../no_internet_exception.dart';
 
 abstract class MicrosoftStoreApi {

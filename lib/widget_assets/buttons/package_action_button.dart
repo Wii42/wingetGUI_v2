@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/package_infos/package_infos.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 
-import 'package:winget_gui/package_infos/package_infos.dart';
 import 'abstract_button.dart';
 import 'run_button.dart';
 

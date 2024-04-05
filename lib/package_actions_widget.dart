@@ -6,15 +6,14 @@ import 'package:provider/provider.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/output_handling/output_parser.dart';
-import 'package:winget_gui/output_handling/show/show_parser.dart';
+import 'package:winget_gui/output_handling/parsed_output.dart';
+import 'package:winget_gui/output_handling/show_parser.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/custom_expander.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/full_width_progress_bar.dart';
 import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
-
-import 'package:winget_gui/output_handling/parsed_output.dart';
 
 class PackageActionsList extends StatelessWidget {
   final double maxListHeight;

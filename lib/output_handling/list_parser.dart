@@ -4,9 +4,9 @@ import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';
 
-import '../output_parser.dart';
-import '../parsed_output.dart';
 import 'list_builder.dart';
+import 'output_parser.dart';
+import 'parsed_output.dart';
 
 class ListParser extends OutputParser {
   ListParser(super.lines);

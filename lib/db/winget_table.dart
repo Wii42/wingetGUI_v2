@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
-import 'package:winget_gui/output_handling/one_line_info/one_line_info_parser.dart';
+import 'package:winget_gui/output_handling/one_line_info_parser.dart';
 import 'package:winget_gui/package_infos/info.dart';
 import 'package:winget_gui/package_infos/package_attribute.dart';
 import 'package:winget_gui/package_infos/package_id.dart';

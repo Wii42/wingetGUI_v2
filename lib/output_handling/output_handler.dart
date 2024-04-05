@@ -1,18 +1,18 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
-import 'parsed_output.dart';
-import 'table/table_scanner.dart';
-
 import 'package:winget_gui/global_app_data.dart';
-import 'list/list_scanner.dart';
-import 'loading_bar/loading_bar_scanner.dart';
-import 'one_line_info/one_line_info_scanner.dart';
-import 'output_scanner.dart';
-import 'plain_text/plain_text_scanner.dart';
-import 'responsibility.dart';
-import 'show/show_scanner.dart';
+import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
+
+import 'list_scanner.dart';
+import 'loading_bar_scanner.dart';
+import 'one_line_info_scanner.dart';
 import 'output_parser.dart';
+import 'output_scanner.dart';
+import 'parsed_output.dart';
+import 'plain_text_scanner.dart';
+import 'responsibility.dart';
+import 'show_scanner.dart';
+import 'table_scanner.dart';
 
 class OutputHandler {
   final List<String> output;

@@ -3,15 +3,15 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
-
 import 'package:winget_gui/package_infos/package_infos_full.dart';
-import 'compartments/agreement_widget.dart';
-import 'compartments/details_widget.dart';
-import 'compartments/expandable_text_compartment.dart';
-import 'compartments/screenshots_widget.dart';
-import 'compartments/tags_widget.dart';
-import 'compartments/title_widget.dart';
+
+import 'agreement_widget.dart';
+import 'details_widget.dart';
+import 'expandable_text_compartment.dart';
+import 'screenshots_widget.dart';
 import 'stateful_installer_widget.dart';
+import 'tags_widget.dart';
+import 'title_widget.dart';
 
 class PackageLongInfo extends StatelessWidget {
   late final Logger log;

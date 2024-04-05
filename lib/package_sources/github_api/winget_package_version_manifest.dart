@@ -1,4 +1,5 @@
 import 'package:winget_gui/package_infos/package_id.dart';
+
 import 'github_api_file_info.dart';
 
 class WingetPackageVersionManifest {
