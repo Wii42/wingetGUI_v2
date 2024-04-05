@@ -283,11 +283,13 @@ class PublisherNameTable extends DBTable<String, String> {
 }
 
 mixin PackageTableSetListMixin
-    on DBTable<(String, VersionOrString), PackageInfosPeek> {
+    on DBTable<(String, VersionOrString, String), PackageInfosPeek> {
   void setList(Iterable<PackageInfosPeek> list, {bool saveToDB = true}) {
-    _entries = Map<(String, VersionOrString), PackageInfosPeek>.fromEntries(
-        list.map((PackageInfosPeek e) =>
-            MapEntry((e.id!.value.string, e.version!.value), e)));
+    _entries =
+        Map<(String, VersionOrString, String), PackageInfosPeek>.fromEntries(
+            list.map((PackageInfosPeek e) => MapEntry(
+                (e.id!.value.string, e.version!.value, e.name?.value ?? ''),
+                e)));
     if (saveToDB) {
       _deleteAllInDB();
       _insertMultipleDB(_entries);

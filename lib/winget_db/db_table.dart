@@ -134,7 +134,8 @@ class WingetTable {
   }
 }
 
-class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
+class WingetDBTable
+    extends DBTable<(String, VersionOrString, String), PackageInfosPeek>
     with PackageTableSetListMixin {
   @override
   final String tableName;
@@ -158,27 +159,27 @@ class WingetDBTable extends DBTable<(String, VersionOrString), PackageInfosPeek>
           ${PackageAttribute.availableVersion.name} TEXT,
           ${PackageAttribute.source.name} TEXT,
           ${PackageAttribute.match.name} TEXT,
-          CONSTRAINT PK_Info PRIMARY KEY ($idKey,${PackageAttribute.version.name})
+          CONSTRAINT PK_Info PRIMARY KEY ($idKey,${PackageAttribute.version.name}, ${PackageAttribute.name.name})
           )''',
     );
   }
 
   @override
-  ((String, VersionOrString), PackageInfosPeek) fromMap(
+  ((String, VersionOrString, String), PackageInfosPeek) fromMap(
       Map<String, dynamic> map) {
     Map<String, String> tempMap =
         map.map((key, value) => MapEntry(key, value.toString()));
     PackageInfosPeek info = PackageInfosPeek.fromDBMap(tempMap);
     return (
-      (info.id!.value.string, info.version!.value),
+      (info.id!.value.string, info.version!.value, info.name!.value),
       info..setImplicitInfos()
     );
   }
 
   @override
   Map<String, dynamic> toMap(
-      ((String, VersionOrString), PackageInfosPeek) entry) {
-    (String, VersionOrString) primaryKey = entry.$1;
+      ((String, VersionOrString, String), PackageInfosPeek) entry) {
+    (String, VersionOrString, String) primaryKey = entry.$1;
     String id = primaryKey.$1;
     VersionOrString version = primaryKey.$2;
     PackageInfosPeek info = entry.$2;
