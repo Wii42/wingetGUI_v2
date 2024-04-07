@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
+import 'package:winget_gui/db/package_tables.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 
 class GlobalAppData extends StatelessWidget {
@@ -41,6 +42,7 @@ class AppLocales extends ChangeNotifier {
   set guiLocale(Locale? locale) {
     if (_guiLocale != locale) {
       _guiLocale = locale;
+      SettingsCache.instance.guiLocale = locale;
       notifyListeners();
     }
   }
@@ -48,6 +50,10 @@ class AppLocales extends ChangeNotifier {
   set wingetLocale(Locale? locale) {
     if (_wingetLocale != locale) {
       _wingetLocale = locale;
+      SettingsCache.instance.wingetLocale = locale;
+      if (locale != null) {
+        PackageTables.instance.reloadDBs(lookupAppLocalizations(locale));
+      }
       notifyListeners();
     }
   }
@@ -76,5 +82,11 @@ class AppThemeMode extends ValueNotifier<ThemeMode> {
 
   static AppThemeMode of(BuildContext context) {
     return Provider.of<AppThemeMode>(context, listen: false);
+  }
+
+  @override
+  set value(ThemeMode themeMode) {
+    super.value = themeMode;
+    SettingsCache.instance.themeMode = themeMode;
   }
 }
