@@ -15,6 +15,7 @@ import 'package:winget_gui/winget_process/package_action_type.dart';
 
 import 'buttons/search_button.dart';
 import 'buttons/tooltips.dart';
+import 'custom_combo_box.dart';
 import 'decorated_card.dart';
 import 'loading_widget.dart';
 import 'package_peek.dart';
@@ -290,8 +291,8 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     );
   }
 
-  ComboBox<SortBy> sortByComboBox(AppLocalizations locale) {
-    return ComboBox<SortBy>(
+  Widget sortByComboBox(AppLocalizations locale) {
+    return CustomComboBox<SortBy>(
       items: [
         for (SortBy value in widget.menuOptions.sortOptions)
           ComboBoxItem(value: value, child: Text(value.title(locale))),

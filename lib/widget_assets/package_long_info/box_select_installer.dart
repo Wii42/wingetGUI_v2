@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../custom_combo_box.dart';
+
 class BoxSelectInstaller<T> extends StatelessWidget {
   final String categoryName;
   final List<T> options;
@@ -28,7 +30,7 @@ class BoxSelectInstaller<T> extends StatelessWidget {
       children: [
         if (categoryName.isNotEmpty)
           Text(categoryName, style: FluentTheme.of(context).typography.caption),
-        ComboBox<T>(
+        CustomComboBox<T>(
           items: [
             for (T item in options) comboBoxItem(item, context),
             if (matchAll != null) comboBoxItem(matchAll as T, context),

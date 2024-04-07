@@ -36,7 +36,6 @@ Future<void> initAppPrerequisites() async {
   await Future.wait([
     Window.initialize().then((_) async => await Future.wait([
           Window.setEffect(effect: WindowEffect.mica),
-          //Window.setWindowBackgroundColorToClear(),
         ])),
     WindowManager.instance.ensureInitialized().then((_) async =>
         await WindowManager.instance
@@ -121,7 +120,6 @@ class WindowBrightnessSetter extends StatelessWidget {
   Widget build(BuildContext context) {
     Brightness brightness = FluentTheme.of(context).brightness;
     WindowManager.instance.setBrightness(brightness);
-    Window.setEffect(effect: WindowEffect.mica, dark: brightness == Brightness.dark);
     return child;
   }
 }
