@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  fluent_ui: ^4.8.6
+  fluent_ui: ^4.8.7
   system_theme: ^2.3.1
   window_manager: ^0.3.8
   flutter_acrylic: ^1.1.3
@@ -35,7 +35,7 @@ dependencies:
   flutter_localized_locales: ^2.0.5
   collection: any
   internet_connection_checker: ^1.0.0+1
-  fluentui_system_icons: ^1.1.232
+  fluentui_system_icons: ^1.1.234
   provider: ^6.1.2
   dart_casing: ^3.0.1
   cron: ^0.6.0
@@ -50,9 +50,18 @@ dev_dependencies:
     sdk: flutter
   dependency_validator: ^3.2.3
   flutter_lints: ^3.0.2
+  msix: ^3.16.7
 
 flutter:
   generate: true
   uses-material-design: true
   assets:
     - assets/
+
+msix_config:
+  display_name: WingetGUI
+  publisher_display_name: Wi42
+  publisher: CN=Wi42, O=Wi42, C=Switzerland
+  identity_name: wi42.winget-gui
+  msix_version: 0.0.0.1
+  capabilities: internetClient

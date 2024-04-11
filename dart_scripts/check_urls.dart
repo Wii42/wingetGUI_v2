@@ -1,20 +1,21 @@
-// ignore_for_file: avoid_print
-
 import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:ribs_json/ribs_json.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/screenshots_list_load_helper.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 
 ScreenshotsListLoadHelper loadHelper = ScreenshotsListLoadHelper();
+Logger log = Logger('UrlChecker');
 void main() async {
+  LogStream.instance.toStdOut();
   List<UrlTestResponse> failedCustomIcons = await checkCustomIcons();
   List<UrlTestResponse> failedPublisherIcons = await checkPublisherIcons();
-  print(
+  log.info(
       'Failed custom icons:\n${failedCustomIcons.map((e) => e.toShortString()).join('\n')}');
-  print(
+  log.info(
       'Failed publisher icons:\n${failedPublisherIcons.map((e) => e.toShortString()).join('\n')}');
 }
 
@@ -70,19 +71,19 @@ Future<List<UrlTestResponse>> check<T extends Object>({
   required String Function(T) objectId,
 }) async {
   List<UrlTestResponse> responseList = [];
-  print("Checking ${testName ?? fileName}");
+  log.info("Checking ${testName ?? fileName}");
   String? fileString = await loadString(fileName);
   if (fileString == null || fileString.isEmpty) {
-    print('$fileName is empty');
+    log.info('$fileName is empty');
     return responseList;
   }
   Map<String, T>? maybeMap = parseJsonMap(fileString);
   if (maybeMap == null) {
-    print('Map of $fileName is null');
+    log.info('Map of $fileName is null');
     return responseList;
   }
   Map<String, T> map = maybeMap;
-  print('entries: ${map.length}');
+  log.info('entries: ${map.length}');
   for (T object in map.values) {
     for (MapEntry<String, Uri?> entry in urlMap(object).entries) {
       Uri? uri = entry.value;
@@ -100,7 +101,7 @@ Future<List<UrlTestResponse>> check<T extends Object>({
           }
         } catch (e) {
           responseMsg.error = e;
-          print(responseMsg.toShortString());
+          log.warning(responseMsg.toShortString());
           responseList.add(responseMsg);
         }
       }
@@ -126,7 +127,7 @@ Map<String, Uri> urlMapEntriesFromList(List<Uri>? urls, String keyPrefix) {
 Map<String, PackageScreenshots>? parseCustomIcons(String fileString) {
   JsonObject? object = getJson(fileString);
   if (object == null) {
-    print('Json in custom icons is not an object');
+    log.error('Json in custom icons is not an object');
     return null;
   }
   return loadHelper.parseScreenshotsMap(object);

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:intl/intl.dart';
 
@@ -10,9 +11,7 @@ class LogStream {
   final StreamController<LogMessage> _streamController =
       StreamController<LogMessage>.broadcast();
   final List<LogMessage> _messages = [];
-  LogStream._() {
-    addToStdOut();
-  }
+  LogStream._();
 
   Stream<LogMessage> get logStream => _streamController.stream;
   Stream<LogMessage> get errorLogsStream => _streamController.stream
@@ -27,11 +26,9 @@ class LogStream {
     _streamController.add(message);
   }
 
-  void addToStdOut() {
-    logStream.listen((event) {
-      // ignore: avoid_print
-      print(event);
-    });
+  /// Pipes the log stream to stdout, should be used only once
+  void toStdOut() {
+    logStream.map((event) => '$event\n'.codeUnits).pipe(stdout);
   }
 
   UnmodifiableListView<LogMessage> get messages =>

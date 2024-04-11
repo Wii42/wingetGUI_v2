@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 
 import 'db/db_message.dart';
 import 'db/package_db.dart';
@@ -23,6 +25,9 @@ import 'winget_process/winget_process_scheduler.dart';
 const String appTitle = 'WingetGUI';
 
 void main() async {
+  if(kDebugMode) {
+    LogStream.instance.toStdOut();
+  }
   await initAppPrerequisites();
   await PackageScreenshotsList.instance.fetchScreenshots();
   await PackageDB.instance.ensureInitialized();

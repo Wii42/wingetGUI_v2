@@ -5,6 +5,7 @@ import 'package:winget_gui/helpers/log_stream.dart';
 
 void main() async {
   Logger log = Logger('Post Test');
+  LogStream.instance.toStdOut();
   Response r = await post(
     Uri.parse("https://storeedgefd.dsx.mp.microsoft.com/v9.0/manifestSearch"),
     body: json.encode({
