@@ -165,7 +165,7 @@ class WingetDBTable
   }
 
   @override
-  ((String, VersionOrString, String), PackageInfosPeek) fromMap(
+  ((String, VersionOrString, String), PackageInfosPeek) entryFromMap(
       Map<String, dynamic> map) {
     Map<String, String> tempMap =
         map.map((key, value) => MapEntry(key, value.toString()));
@@ -177,7 +177,7 @@ class WingetDBTable
   }
 
   @override
-  Map<String, dynamic> toMap(
+  Map<String, dynamic> entryToMap(
       ((String, VersionOrString, String), PackageInfosPeek) entry) {
     (String, VersionOrString, String) primaryKey = entry.$1;
     String id = primaryKey.$1;

@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
@@ -17,33 +21,55 @@ class DBTableWidget extends StatelessWidget {
           Row(
             children: [
               Text('Entries: ${table.entries.length}'),
-              //Button(onPressed: () {  },
-              //child: Text('toJson'),)
+              Button(
+                onPressed: () {
+                  table.deleteAll();
+                },
+                child: const Text('Delete All Entries'),
+              ),
+              Button(
+                onPressed: () async {
+                  String? outputFile = await FilePicker.platform.saveFile(
+                    dialogTitle: 'Please select an output folder:',
+                    fileName: '${table.tableName}.json',
+                    allowedExtensions: ['json'],
+                  );
+
+                  if (outputFile != null) {
+                    await File(outputFile).writeAsString(table.toJson());
+                  }
+                },
+                child: const Text('Save Json file'),
+              ),
             ],
           ),
           Expanded(
             child: SingleChildScrollView(
-              child: Column(children: [
-                Table(
-                  children: [
-                    if (table.entries.isNotEmpty)
-                      TableRow(children: [
-                        for (String s in table.toMap((
-                          table.entries.entries.first.key,
-                          table.entries.entries.first.value
-                        )).keys)
-                          Text(s,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                      ]),
-                    for (MapEntry e in table.entries.entries)
-                      TableRow(children: [
-                        for (dynamic s in table.toMap((e.key, e.value)).values)
-                          Text(s.toString())
-                      ])
-                  ],
-                ), //Text(jsonEncode(table.entries.entries.map((e) => table.toMap((e.key, e.value))).toList())),
-              ]),
+              child: Column(
+                children: [
+                  Table(
+                    children: [
+                      if (table.entries.isNotEmpty)
+                        TableRow(children: [
+                          for (String s in table.entryToMap((
+                            table.entries.entries.first.key,
+                            table.entries.entries.first.value
+                          )).keys)
+                            Text(s,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                        ]),
+                      for (MapEntry e in table.entries.entries)
+                        TableRow(children: [
+                          for (dynamic s
+                              in table.entryToMap((e.key, e.value)).values)
+                            Text(s.toString())
+                        ])
+                    ],
+                  ),
+                  //Text(table.toJson())
+                ],
+              ),
             ),
           ),
         ],

@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "WingetGUI"
-#define MyAppVersion "1.5"
-#define MyAppPublisher "My Company, Inc."
+#define MyAppVersion "0.0.1"
+#define MyAppPublisher "Wi42"
 #define MyAppURL "https://www.example.com/"
 #define MyAppExeName "winget_gui.exe"
 
@@ -39,11 +39,11 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "C:\Users\lukik\OneDrive - Universitaet Bern\Privat\Programmieren\winget_gui\build\windows\x64\runner\Release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\lukik\OneDrive - Universitaet Bern\Privat\Programmieren\winget_gui\build\windows\x64\runner\Release\flutter_acrylic_plugin.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\lukik\OneDrive - Universitaet Bern\Privat\Programmieren\winget_gui\build\windows\x64\runner\Release\flutter_windows.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\lukik\OneDrive - Universitaet Bern\Privat\Programmieren\winget_gui\build\windows\x64\runner\Release\native_assets.yaml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\lukik\OneDrive - Universitaet Bern\Privat\Programmieren\winget_gui\build\windows\x64\runner\Release\screen_retriever_plugin.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\lukik\OneDrive - Universitaet Bern\Privat\Programmieren\winget_gui\build\windows\x64\runner\Release\system_theme_plugin.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\lukik\OneDrive - Universitaet Bern\Privat\Programmieren\winget_gui\build\windows\x64\runner\Release\url_launcher_windows_plugin.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\lukik\OneDrive - Universitaet Bern\Privat\Programmieren\winget_gui\build\windows\x64\runner\Release\window_manager_plugin.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\lukik\OneDrive - Universitaet Bern\Privat\Programmieren\winget_gui\build\windows\x64\runner\Release\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\lukik\OneDrive - Universitaet Bern\Privat\Programmieren\winget_gui\build\windows\x64\runner\Release\data\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

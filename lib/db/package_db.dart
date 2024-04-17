@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:winget_gui/db/publisher_name_table.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';
@@ -9,6 +12,7 @@ import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/winget_commands.dart';
 
 import 'db_message.dart';
+import 'favicon_table.dart';
 import 'package_tables.dart';
 import 'winget_table.dart';
 
@@ -99,8 +103,8 @@ class PackageDB {
 abstract class DBTable<K extends Object, V extends Object> {
   String get tableName;
   String get idKey;
-  (K, V) fromMap(Map<String, dynamic> map);
-  Map<String, dynamic> toMap((K, V) entry);
+  (K, V) entryFromMap(Map<String, dynamic> map);
+  Map<String, dynamic> entryToMap((K, V) entry);
 
   Map<K, V> _entries = {};
   final PackageDB parentDB;
@@ -138,7 +142,7 @@ abstract class DBTable<K extends Object, V extends Object> {
     await _ensureDBInitialized();
     List<Map<String, dynamic>> maps =
         await parentDB._database!.query(tableName);
-    return maps.map((e) => fromMap(e)).toList();
+    return maps.map((e) => entryFromMap(e)).toList();
   }
 
   Future<void> _deleteInDB(K id) async {
@@ -154,7 +158,7 @@ abstract class DBTable<K extends Object, V extends Object> {
     await _ensureDBInitialized();
     await parentDB._database!.insert(
       tableName,
-      toMap(entry),
+      entryToMap(entry),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -164,7 +168,7 @@ abstract class DBTable<K extends Object, V extends Object> {
     for (var entry in entries.entries) {
       await parentDB._database!.insert(
         tableName,
-        toMap((entry.key, entry.value)),
+        entryToMap((entry.key, entry.value)),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }
@@ -180,7 +184,7 @@ abstract class DBTable<K extends Object, V extends Object> {
     if (maps.isEmpty) {
       return null;
     }
-    return fromMap(maps.first);
+    return entryFromMap(maps.first);
   }
 
   Future<Map<K, V>> _dbToMap() async {
@@ -210,75 +214,10 @@ abstract class DBTable<K extends Object, V extends Object> {
 
   operator []=(K id, V value) => insert(id, value);
   operator [](K id) => getEntry(id);
-}
 
-class FaviconTable extends DBTable<String, Uri> {
-  @override
-  final String tableName = 'favicon';
-  @override
-  final String idKey = 'packageId';
-  final urlKey = 'url';
-
-  FaviconTable(super.parentDB);
-
-  @override
-  void initTable(Database db) {
-    db.execute(
-      '''CREATE TABLE $tableName(
-          $idKey TEXT PRIMARY KEY,
-          $urlKey TEXT
-          )''',
-    );
-  }
-
-  @override
-  (String, Uri) fromMap(Map<String, dynamic> map) {
-    return (map[idKey], Uri.parse(map[urlKey]));
-  }
-
-  @override
-  Map<String, dynamic> toMap((String, Uri) entry) {
-    return {
-      idKey: entry.$1,
-      urlKey: entry.$2.toString(),
-    };
-  }
-}
-
-class PublisherNameTable extends DBTable<String, String> {
-  @override
-  final String tableName;
-  @override
-  final String idKey;
-  final publisherNameKey = 'publisherName';
-
-  PublisherNameTable(
-      {required this.tableName,
-      required this.idKey,
-      required PackageDB parentDB})
-      : super(parentDB);
-
-  @override
-  void initTable(Database db) {
-    db.execute(
-      '''CREATE TABLE $tableName(
-          $idKey TEXT PRIMARY KEY,
-          $publisherNameKey TEXT
-          )''',
-    );
-  }
-
-  @override
-  (String, String) fromMap(Map<String, dynamic> map) {
-    return (map[idKey], map[publisherNameKey]);
-  }
-
-  @override
-  Map<String, dynamic> toMap((String, String) entry) {
-    return {
-      idKey: entry.$1,
-      publisherNameKey: entry.$2,
-    };
+  String toJson() {
+    return jsonEncode(
+        entries.entries.map((e) => entryToMap((e.key, e.value))).toList());
   }
 }
 

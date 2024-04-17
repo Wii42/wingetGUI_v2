@@ -19,14 +19,14 @@ dependencies:
   system_theme: ^2.3.1
   window_manager: ^0.3.8
   flutter_acrylic: ^1.1.3
-  url_launcher: ^6.2.5
+  url_launcher: ^6.2.6
   expandable_text: ^2.3.0
   string_validator: ^1.0.2
   intl: any
   open_store: ^0.5.0
   favicon: ^1.1.2
   flutter_svg: ^2.0.10+1
-  shared_preferences: ^2.2.2
+  shared_preferences: ^2.2.3
   ribs_json: ^1.0.0-dev.9
   ribs_core: ^1.0.0-dev.9
   http: ^1.2.1
@@ -44,6 +44,7 @@ dependencies:
   sqflite_common_ffi: any
   diacritic: ^0.1.5
   cached_network_image: ^3.3.1
+  file_picker: ^8.0.0+1
 
 dev_dependencies:
   flutter_test:

@@ -73,6 +73,31 @@ class Publisher {
     }
     return null;
   }
+
+  /// Canonicalizes a string so it could match a publisher id.
+  /// Removes all spaces, dots and commas and convert to lowercase.
+  /// [customDiacritics] if true, use custom diacritics, like ä -> ae.
+  static String canonicalize(String string, {bool customDiacritics = false}) {
+    if (customDiacritics) {
+      string = _replaceDiacriticsWithCustom(string);
+    }
+    string = removeDiacritics(string);
+    return string.replaceAll(RegExp(r"[ .,\-&'´’]"), '').toLowerCase();
+  }
+
+  static String _replaceDiacriticsWithCustom(String string) {
+    return string.replaceAllMapped(RegExp(r'[äöüÄÖÜ]'), (match) {
+      return switch (match.group(0)!) {
+        'ä' => 'ae',
+        'ö' => 'oe',
+        'ü' => 'ue',
+        'Ä' => 'ae',
+        'Ö' => 'oe',
+        'Ü' => 'ue',
+        _ => match.group(0)!
+      };
+    });
+  }
 }
 
 class _PublisherBuilder {
@@ -145,26 +170,37 @@ class _PublisherBuilder {
     if (names.isEmpty || packageId?.probablyPublisherId() == null) {
       return null;
     }
-    String? publisherID = _canonicalize(packageId!.probablyPublisherId()!);
+    String? publisherID =
+        Publisher.canonicalize(packageId!.probablyPublisherId()!);
     for ((int, String) indexedName in names.indexed) {
       String name = indexedName.$2;
       int index = indexedName.$1;
-      String nameAsId = _canonicalize(name);
+      String nameAsId = Publisher.canonicalize(name);
       if (nameAsId == publisherID) {
-        if (name.contains(RegExp(r'[a-zA-Z],$')) && index >= lengthFullNames) {
-          name = name.take(name.length - 1);
-        }
+        name = _stripOfEndingChars(name, index, lengthFullNames);
         return name;
       }
-      String nameAsIdCustom = _canonicalize(name, customDiacritics: true);
+      String nameAsIdCustom =
+          Publisher.canonicalize(name, customDiacritics: true);
       if (nameAsIdCustom == publisherID) {
-        if (name.contains(RegExp(r'[a-zA-Z],$')) && index >= lengthFullNames) {
-          name = name.take(name.length - 1);
-        }
+        name = _stripOfEndingChars(name, index, lengthFullNames);
         return name;
       }
     }
     return null;
+  }
+
+  String _stripOfEndingChars(String name, int index, int lengthFullNames) {
+    if (index < lengthFullNames) {
+      return name;
+    }
+    if (name.contains(RegExp(r'[a-zA-Z0-9],$'))) {
+      name = name.take(name.length - 1);
+    }
+    if (name.contains(RegExp(r'[a-zA-Z0-9]\s&$'))) {
+      name = name.take(name.length - 2);
+    }
+    return name;
   }
 
   /// Add all partial names, e.g. "Microsoft Corporation Ltd." -> ["Microsoft Corporation", "Microsoft"]
@@ -180,30 +216,6 @@ class _PublisherBuilder {
       }
     }
     names.addAll(partNames.where((element) => element.isNotEmpty));
-  }
-
-  ///remove all spaces, dots and commas and convert to lowercase.
-  /// [customDiacritics] if true, use custom diacritics, like ä -> ae.
-  String _canonicalize(String string, {bool customDiacritics = false}) {
-    if (customDiacritics) {
-      string = _replaceDiacriticsWithCustom(string);
-    }
-    string = removeDiacritics(string);
-    return string.replaceAll(RegExp(r'[ .,\-&]'), '').toLowerCase();
-  }
-
-  String _replaceDiacriticsWithCustom(String string) {
-    return string.replaceAllMapped(RegExp(r'[äöüÄÖÜ]'), (match) {
-      return switch (match.group(0)!) {
-        'ä' => 'ae',
-        'ö' => 'oe',
-        'ü' => 'ue',
-        'Ä' => 'ae',
-        'Ö' => 'oe',
-        'Ü' => 'ue',
-        _ => match.group(0)!
-      };
-    });
   }
 
   static String? nameFromDBbyPublisherId(String? publisherId) {
