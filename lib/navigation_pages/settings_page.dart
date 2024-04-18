@@ -66,13 +66,14 @@ class _SettingsPageSate extends State<SettingsPage> {
             settingsItem(
                 'View DB Tables',
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     dbButton(context, PackageDB.instance.favicons),
                     dbButton(
                         context, PackageDB.instance.publisherNamesByPackageId),
                     dbButton(context,
                         PackageDB.instance.publisherNamesByPublisherId),
-                  ],
+                  ].withSpaceBetween(height: 10),
                 )),
           ].withSpaceBetween(height: 10),
         ),

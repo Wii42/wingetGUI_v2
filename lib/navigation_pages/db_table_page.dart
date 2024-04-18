@@ -1,8 +1,9 @@
-import 'dart:convert';
+
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 import 'package:winget_gui/db/package_db.dart';
@@ -41,7 +42,7 @@ class DBTableWidget extends StatelessWidget {
                 },
                 child: const Text('Save Json file'),
               ),
-            ],
+            ].withSpaceBetween(width: 10),
           ),
           Expanded(
             child: SingleChildScrollView(
