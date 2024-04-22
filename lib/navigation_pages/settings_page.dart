@@ -137,11 +137,8 @@ class _SettingsPageSate extends State<SettingsPage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
-                    themeModeIcon(themeMode),
-                    size: 12,
-                  ),
-                  const SizedBox(width: 10,),
+                  Icon(themeModeIcon(themeMode), size: 12),
+                  const SizedBox(width: 10),
                   Text(localizations.themeMode(themeMode.name)),
                 ],
               ),

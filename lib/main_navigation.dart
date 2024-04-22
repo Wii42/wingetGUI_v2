@@ -53,10 +53,11 @@ class MainNavigationState extends State<MainNavigation>
     super.build(context);
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
+      bool displayModeIsOpen = constraints.maxWidth >= 1008;
       bool displayModeIsMinimal = constraints.maxWidth <= 640;
       return NavigationView(
         contentShape: contentShape(context, displayModeIsMinimal),
-        appBar: displayModeIsMinimal
+        appBar: false
             ? NavigationAppBar(
                 automaticallyImplyLeading: false,
                 height: 52,
@@ -69,7 +70,10 @@ class MainNavigationState extends State<MainNavigation>
                 ))
             : null,
         pane: NavigationPane(
-          header: displayModeIsMinimal
+          displayMode: displayModeIsOpen
+              ? PaneDisplayMode.open
+              : PaneDisplayMode.compact,
+          header: false
               ? null
               : Padding(
                   padding: const EdgeInsets.all(13.5),

@@ -82,7 +82,7 @@ class Publisher {
       string = _replaceDiacriticsWithCustom(string);
     }
     string = removeDiacritics(string);
-    return string.replaceAll(RegExp(r"[ .,\-&'´’]"), '').toLowerCase();
+    return string.replaceAll(RegExp(r"[\s.,\-&'´’!?\\/|()]"), '').toLowerCase();
   }
 
   static String _replaceDiacriticsWithCustom(String string) {

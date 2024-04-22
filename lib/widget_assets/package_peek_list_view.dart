@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart'
+    as system_icons;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/db/db_message.dart';
 import 'package:winget_gui/db/winget_table.dart';
@@ -13,6 +15,7 @@ import 'package:winget_gui/package_infos/package_infos.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 
+import 'buttons/package_multi_action_button.dart';
 import 'buttons/search_button.dart';
 import 'buttons/tooltips.dart';
 import 'custom_combo_box.dart';
@@ -230,54 +233,24 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   Widget menuOptions(BuildContext context, List<PackageInfos> visiblePackages) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     List<Widget> children = [
-      if (widget.menuOptions.onlyWithSourceButton)
-        CustomTooltip(
-          message: (locale) => locale.onlyAppsWithSourceTooltip,
-          button: Checkbox(
-            checked: onlyWithSource,
-            onChanged: (value) {
-              if (value != null) {
-                setState(() {
-                  onlyWithSource = value;
-                });
-              }
-            },
-            content: Text(locale.onlyAppsWithSource),
-          ),
-        ),
-      if (widget.menuOptions.onlyWithExactVersionButton)
-        CustomTooltip(
-          message: (locale) => locale.onlyAppsWithExactVersionTooltip,
-          button: Checkbox(
-            checked: onlyWithExactVersion,
-            onChanged: (value) {
-              if (value != null) {
-                setState(() {
-                  onlyWithExactVersion = value;
-                });
-              }
-            },
-            content: Text(locale.onlyAppsWithExactVersion),
-          ),
-        ),
       if (prefilteredInfos.length >= 5 && widget.menuOptions.filterField) ...[
         searchField(),
         if (widget.menuOptions.deepSearchButton) deepSearchButton()
+
       ],
-      Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(locale.sortBy),
-          sortByComboBox(locale),
-          IconButton(
-              icon: Icon(
-                  sortReversed ? FluentIcons.sort_up : FluentIcons.sort_down),
-              onPressed: () => setState(() => sortReversed = !sortReversed)),
-          for (PackageActionType action
-              in widget.menuOptions.runActionOnAllPackagesButtons)
-            packageActionOnAll(visiblePackages, action),
-        ].withSpaceBetween(width: 5),
-      ),
+      for (PackageActionType action
+      in widget.menuOptions.runActionOnAllPackagesButtons)
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            packageActionOnAll(visiblePackages, action)
+          ],
+        ),
+      sortWidget(locale, visiblePackages),
+      if (widget.menuOptions.onlyWithSourceButton)
+        onlyWithSourceCheckbox(locale),
+      if (widget.menuOptions.onlyWithExactVersionButton)
+        onlyWithExactVersionCheckbox(locale),
     ];
 
     return Padding(
@@ -288,6 +261,55 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         crossAxisAlignment: WrapCrossAlignment.center,
         children: children,
       ),
+    );
+  }
+
+  CustomTooltip onlyWithExactVersionCheckbox(AppLocalizations locale) {
+    return CustomTooltip(
+      message: (locale) => locale.onlyAppsWithExactVersionTooltip,
+      button: Checkbox(
+        checked: onlyWithExactVersion,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              onlyWithExactVersion = value;
+            });
+          }
+        },
+        content: Text(locale.onlyAppsWithExactVersion),
+      ),
+    );
+  }
+
+  CustomTooltip onlyWithSourceCheckbox(AppLocalizations locale) {
+    return CustomTooltip(
+      message: (locale) => locale.onlyAppsWithSourceTooltip,
+      button: Checkbox(
+        checked: onlyWithSource,
+        onChanged: (value) {
+          if (value != null) {
+            setState(() {
+              onlyWithSource = value;
+            });
+          }
+        },
+        content: Text(locale.onlyAppsWithSource),
+      ),
+    );
+  }
+
+  Row sortWidget(AppLocalizations locale, List<PackageInfos> visiblePackages) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(locale.sortBy),
+        sortByComboBox(locale),
+        IconButton(
+            icon: Icon(sortReversed
+                ? system_icons.FluentIcons.text_sort_descending_16_regular
+                : system_icons.FluentIcons.text_sort_ascending_16_regular),
+            onPressed: () => setState(() => sortReversed = !sortReversed)),
+      ].withSpaceBetween(width: 5),
     );
   }
 
@@ -339,13 +361,13 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   Widget packageActionOnAll(
       List<PackageInfos> packages, PackageActionType action) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    return FilledButton(
-        onPressed: () {
-          for (PackageInfos package in packages) {
-            action.runAction(package, context);
-          }
-        },
-        child: Text(locale.actionOnAll(action.winget.title(locale))));
+    return PackageMultiActionButton(
+      type: action,
+      packages: packages,
+      locale: locale,
+      tooltipMessage: (locale) =>
+          locale.actionOnAll(action.winget.title(locale)),
+    );
   }
 
   String get filter => filterController.text;
