@@ -54,31 +54,16 @@ class MainNavigationState extends State<MainNavigation>
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       bool displayModeIsOpen = constraints.maxWidth >= 1008;
-      bool displayModeIsMinimal = constraints.maxWidth <= 640;
       return NavigationView(
-        contentShape: contentShape(context, displayModeIsMinimal),
-        appBar: false
-            ? NavigationAppBar(
-                automaticallyImplyLeading: false,
-                height: 52,
-                title: Text(
-                  widget.title,
-                  style: FluentTheme.of(context)
-                      .typography
-                      .body
-                      ?.merge(const TextStyle(fontWeight: FontWeight.w600)),
-                ))
-            : null,
+        contentShape: contentShape(),
         pane: NavigationPane(
           displayMode: displayModeIsOpen
               ? PaneDisplayMode.open
               : PaneDisplayMode.compact,
-          header: false
-              ? null
-              : Padding(
-                  padding: const EdgeInsets.all(13.5),
-                  child: Text(widget.title),
-                ),
+          header: Padding(
+            padding: const EdgeInsets.all(13.5),
+            child: Text(widget.title),
+          ),
           items: createNavItems(widget.mainItems),
           footerItems: [
             _navExpander(
@@ -94,7 +79,7 @@ class MainNavigationState extends State<MainNavigation>
     });
   }
 
-  ShapeBorder contentShape(BuildContext context, bool displayModeIsMinimal) {
+  ShapeBorder contentShape() {
     return const RoundedRectangleBorder();
   }
 
