@@ -29,40 +29,48 @@ class TitleWidget extends Compartment {
   Widget build(BuildContext context) {
     return DecoratedCard(
       padding: 20,
-      child: StreamBuilder<DBMessage>(
-          stream: PackageTables.instance.installed.stream,
-          builder: (context, snapshot) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: buildCompartment(context),
-            );
-          }),
+      child: LayoutBuilder(builder: (context, constraints) {
+        return StreamBuilder<DBMessage>(
+            stream: PackageTables.instance.installed.stream,
+            builder: (context, snapshot) {
+              double width = constraints.maxWidth;
+              bool isWide = width > 420;
+              return isWide
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: titleParts(context, isWide),
+                    )
+                  : Column(
+                      //crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: titleParts(context, isWide),
+                    );
+            });
+      }),
     );
   }
 
   @override
-  List<Widget> buildCompartment(BuildContext context) {
-    return <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          favicon(faviconSize()),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                nameAndVersion(context),
-                _detailsBelow(context),
-              ].withSpaceBetween(height: 10),
-            ),
-          ),
-          if (infos.id != null)
-            Padding(
-              padding: const EdgeInsets.only(left: 25),
-              child: buildRightSide(),
-            ),
-        ],
-      ),
+  List<Widget> buildCompartment(BuildContext context) =>
+      titleParts(context, true);
+
+  List<Widget> titleParts(BuildContext context, bool isWide) {
+    Widget nameAndCenter = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        nameAndVersion(context),
+        _detailsBelow(context),
+      ].withSpaceBetween(height: 10, width: 10),
+    );
+    return [
+      favicon(faviconSize()),
+      if (isWide) Expanded(child: nameAndCenter) else nameAndCenter,
+      if (infos.id != null)
+        Padding(
+          padding: isWide? const EdgeInsets.only(left: 25): const EdgeInsets.only(top: 10),
+          child: buildRightSide(),
+        ),
     ];
   }
 
