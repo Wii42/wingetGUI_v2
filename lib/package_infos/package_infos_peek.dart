@@ -93,5 +93,6 @@ class PackageInfosPeek extends PackageInfos {
         value: VersionOrString.parse('1.0.1')),
     source: Info.fromAttribute(PackageAttribute.source,
         value: PackageSources.unknownSource),
+    match: Info.fromAttribute(PackageAttribute.match, value: 'Tags: prototype'),
   );
 }

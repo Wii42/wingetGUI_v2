@@ -3,9 +3,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
-import 'package:winget_gui/helpers/version_or_string.dart';
-import 'package:winget_gui/package_infos/package_attribute.dart';
-import 'package:winget_gui/package_infos/package_id.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/package_infos/publisher.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
@@ -13,8 +10,6 @@ import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/buttons/page_button.dart';
 import 'package:winget_gui/widget_assets/buttons/right_side_buttons.dart';
-
-import '../package_infos/info.dart';
 
 class PackagePeek extends StatelessWidget {
   final PackageInfosPeek infos;
@@ -63,7 +58,12 @@ class PackagePeek extends StatelessWidget {
       useMousePosition: true,
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: SizedBox(height: 90, child: _shortInfo(context)),
+        child: LayoutBuilder(builder: (context, constraints) {
+          double width = constraints.maxWidth;
+          bool isWide = width > 410;
+          return SizedBox(
+              height: isWide ? 90 : 150, child: _shortInfo(context, isWide));
+        }),
       ),
     );
   }
@@ -78,37 +78,57 @@ class PackagePeek extends StatelessWidget {
         ], titleAddon: infos.name?.value, package: infos));
   }
 
-  Widget _shortInfo(BuildContext context) {
+  Widget _shortInfo(BuildContext context, bool isWide) {
     AppLocalizations locale = AppLocalizations.of(context)!;
+    List<Widget> versionsMatchAndInstalledMark = [
+      if (showInstalledIcon)
+        Row(
+          children: [
+            const Icon(
+              icons.FluentIcons.checkmark_circle_20_regular,
+            ),
+            const SizedBox(width: 5),
+            smallText(locale.installed, context),
+          ],
+        ),
+      _versions(locale,
+          alignment:
+              isWide ? CrossAxisAlignment.end : CrossAxisAlignment.start),
+      if (showMatch &&
+          infos.match != null &&
+          infos.match!.value.trim().isNotEmpty)
+        Text(
+          "${infos.match!.title(locale)}: ${infos.match!.value}",
+          softWrap: false,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.start,
+        )
+    ];
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         favicon(faviconSize()),
-        Expanded(
-          child: nameAndSource(context),
-        ),
-        Column(
-          mainAxisAlignment: columnAlign,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            if (showInstalledIcon)
-              Row(
-                children: [
-                  const Icon(
-                    icons.FluentIcons.checkmark_circle_20_regular,
-                  ),
-                  const SizedBox(width: 5),
-                  smallText(locale.installed, context),
-                ],
-              ),
-            _versions(locale),
-            if (showMatch &&
-                infos.match != null &&
-                infos.match!.value.trim().isNotEmpty)
-              Text("${infos.match!.title(locale)}: ${infos.match!.value}")
-          ].withSpaceBetween(height: 5),
-        ),
+        if (isWide) ...[
+          Expanded(
+            child: nameAndSource(context),
+          ),
+          Column(
+            mainAxisAlignment: columnAlign,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: versionsMatchAndInstalledMark.withSpaceBetween(height: 5),
+          ),
+        ] else
+          Expanded(
+              child: Column(
+            mainAxisAlignment: columnAlign,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              nameAndSource(context),
+              const SizedBox(height: 5),
+              ...versionsMatchAndInstalledMark,
+            ],
+          )),
         if (isClickable()) ...[
           const SizedBox(width: 20),
           RightSideButtons(
@@ -232,17 +252,24 @@ class PackagePeek extends StatelessWidget {
     );
   }
 
-  Widget _versions(AppLocalizations locale) {
+  Widget _versions(AppLocalizations locale,
+      {CrossAxisAlignment alignment = CrossAxisAlignment.end}) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: alignment,
       children: [
         if (infos.version != null)
           Text(
-              "${infos.version!.title(locale)}: ${infos.version!.value.stringValue}"),
+            "${infos.version!.title(locale)}: ${infos.version!.value.stringValue}",
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+          ),
         if (infos.availableVersion != null &&
             infos.availableVersion!.value.isVersion())
           Text(
-              "${infos.availableVersion!.title(locale)}: ${infos.availableVersion!.value.stringValue}"),
+            "${infos.availableVersion!.title(locale)}: ${infos.availableVersion!.value.stringValue}",
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+          ),
       ],
     );
   }
@@ -256,6 +283,9 @@ class PackagePeek extends StatelessWidget {
 
   static double faviconSize() => 60;
 
-  static final Widget prototypeWidget =
-      PackagePeek(PackageInfosPeek.exampleInfos);
+  static final Widget prototypeWidget = PackagePeek(
+    PackageInfosPeek.exampleInfos,
+    showInstalledIcon: true,
+    showMatch: true,
+  );
 }

@@ -14,8 +14,8 @@ import 'package:winget_gui/winget_process/winget_process.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart'
     as fluent_icons;
 
-import '../db/package_db.dart';
-import '../widget_assets/custom_combo_box.dart';
+import 'package:winget_gui/db/package_db.dart';
+import 'package:winget_gui/widget_assets/custom_combo_box.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -46,37 +46,35 @@ class _SettingsPageSate extends State<SettingsPage> {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     return PaneItemBody(
       title: Routes.settingsPage.title(localizations),
-      child: Padding(
+      child: ListView(
         padding: const EdgeInsets.all(10),
-        child: ListView(
-          children: [
-            themeModeOption(localizations, context),
-            guiLocaleOption(localizations, context),
-            wingetLocaleOption(localizations, context),
-            settingsItem(
-              Winget.settings.title(localizations),
-              Button(
-                onPressed: () {
-                  WingetProcess.fromWinget(Winget.settings);
-                },
-                child: Text(localizations.openWingetSettingsFile),
-              ),
+        children: [
+          themeModeOption(localizations, context),
+          guiLocaleOption(localizations, context),
+          wingetLocaleOption(localizations, context),
+          settingsItem(
+            Winget.settings.title(localizations),
+            Button(
+              onPressed: () {
+                WingetProcess.fromWinget(Winget.settings);
+              },
+              child: Text(localizations.openWingetSettingsFile),
             ),
-            buildDBSettings(wingetLocale),
-            settingsItem(
-                'View DB Tables',
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    dbButton(context, PackageDB.instance.favicons),
-                    dbButton(
-                        context, PackageDB.instance.publisherNamesByPackageId),
-                    dbButton(context,
-                        PackageDB.instance.publisherNamesByPublisherId),
-                  ].withSpaceBetween(height: 10),
-                )),
-          ].withSpaceBetween(height: 10),
-        ),
+          ),
+          buildDBSettings(wingetLocale),
+          settingsItem(
+            'View DB Tables',
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                dbButton(context, PackageDB.instance.favicons),
+                dbButton(context, PackageDB.instance.publisherNamesByPackageId),
+                dbButton(
+                    context, PackageDB.instance.publisherNamesByPublisherId),
+              ].withSpaceBetween(height: 10),
+            ),
+          ),
+        ].withSpaceBetween(height: 10),
       ),
     );
   }
