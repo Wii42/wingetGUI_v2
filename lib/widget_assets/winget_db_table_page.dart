@@ -9,6 +9,7 @@ import 'package_peek_list_view.dart';
 class WingetDBTablePage extends StatelessWidget {
   final WingetTable dbTable;
   final String Function(AppLocalizations)? title;
+  final IconData? icon;
   final PackageListMenuOptions menuOptions;
   final PackageListPackageOptions packageOptions;
 
@@ -18,6 +19,7 @@ class WingetDBTablePage extends StatelessWidget {
     required this.title,
     this.menuOptions = const PackageListMenuOptions(),
     this.packageOptions = const PackageListPackageOptions(),
+    this.icon,
   });
 
   @override
@@ -26,6 +28,7 @@ class WingetDBTablePage extends StatelessWidget {
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     return PackageListPage(
       title: (title != null) ? title!(locale) : null,
+      icon: icon,
       listView: PackagePeekListView(
         dbTable: dbTable,
         menuOptions: menuOptions,

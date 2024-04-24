@@ -7,16 +7,20 @@ import 'pane_item_body.dart';
 
 class PackageListPage extends StatelessWidget {
   final String? title;
+  final IconData? icon;
   final PackagePeekListView listView;
   final void Function()? customReload;
   final Widget? bodyHeader;
 
-  const PackageListPage(
-      {super.key,
-      required this.title,
-      required this.listView,
-      this.customReload,
-      this.bodyHeader});
+  const PackageListPage({
+    super.key,
+    required this.title,
+    required this.listView,
+    this.customReload,
+    this.bodyHeader,
+    this.icon,
+  });
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DBMessage>(
@@ -28,6 +32,7 @@ class PackageListPage extends StatelessWidget {
               snapshot.hasData && snapshot.data?.status == DBStatus.loading,
           child: PaneItemBody(
             title: title,
+            icon: icon,
             bodyHeader: bodyHeader,
             customReload: customReload,
             goBackWithoutPreviousPage: () {

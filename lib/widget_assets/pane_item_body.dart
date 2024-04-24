@@ -9,6 +9,7 @@ class PaneItemBody extends StatelessWidget {
 
   final String? title;
   final Widget child;
+  final IconData? icon;
   final WingetProcess? process;
   final void Function()? customReload;
   final void Function()? goBackWithoutPreviousPage;
@@ -21,7 +22,8 @@ class PaneItemBody extends StatelessWidget {
       this.process,
       this.customReload,
       this.bodyHeader,
-      this.goBackWithoutPreviousPage});
+      this.goBackWithoutPreviousPage,
+      this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,8 @@ class PaneItemBody extends StatelessWidget {
             if (title != null ||
                 process != null ||
                 canGoBack(context) ||
-                customReload != null)
+                customReload != null ||
+                icon != null)
               titleRow(context),
             if (bodyHeader != null) bodyHeader!,
             Expanded(child: child),
@@ -62,6 +65,8 @@ class PaneItemBody extends StatelessWidget {
                   icon: const Icon(
                     FluentIcons.back,
                   ))),
+          if (icon != null || title != null) const SizedBox(width: 0),
+          if (icon != null) Icon(icon),
           if (title != null)
             Expanded(
               child: Text(
