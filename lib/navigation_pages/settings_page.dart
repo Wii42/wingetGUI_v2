@@ -1,11 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
-import 'package:winget_gui/db/package_tables.dart';
 import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
-import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
@@ -14,7 +12,6 @@ import 'package:winget_gui/winget_process/winget_process.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart'
     as fluent_icons;
 
-import 'package:winget_gui/db/package_db.dart';
 import 'package:winget_gui/widget_assets/custom_combo_box.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -24,6 +21,15 @@ class SettingsPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _SettingsPageSate();
+
+  static Widget settingsItem(String title, Widget options) {
+    return DecoratedCard(
+      padding: 20,
+      child: Row(
+        children: [Expanded(child: Text(title)), options],
+      ),
+    );
+  }
 }
 
 class _SettingsPageSate extends State<SettingsPage> {
@@ -43,7 +49,6 @@ class _SettingsPageSate extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
-    AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     return PaneItemBody(
       title: Routes.settingsPage.title(localizations),
       child: ListView(
@@ -52,7 +57,7 @@ class _SettingsPageSate extends State<SettingsPage> {
           themeModeOption(localizations, context),
           guiLocaleOption(localizations, context),
           wingetLocaleOption(localizations, context),
-          settingsItem(
+          SettingsPage.settingsItem(
             Winget.settings.title(localizations),
             Button(
               onPressed: () {
@@ -61,51 +66,7 @@ class _SettingsPageSate extends State<SettingsPage> {
               child: Text(localizations.openWingetSettingsFile),
             ),
           ),
-          buildDBSettings(wingetLocale),
-          settingsItem(
-            'View DB Tables',
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                dbButton(context, PackageDB.instance.favicons),
-                dbButton(context, PackageDB.instance.publisherNamesByPackageId),
-                dbButton(
-                    context, PackageDB.instance.publisherNamesByPublisherId),
-              ].withSpaceBetween(height: 10),
-            ),
-          ),
         ].withSpaceBetween(height: 10),
-      ),
-    );
-  }
-
-  Button dbButton(BuildContext context, DBTable table) {
-    return Button(
-      child: Text(table.tableName),
-      onPressed: () => Navigator.of(context).pushNamed(Routes.dbTablePage.route,
-          arguments: DBRouteParameter(dbTable: table)),
-    );
-  }
-
-  Widget buildDBSettings(AppLocalizations wingetLocale) {
-    return settingsItem(
-      'WingetDB',
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Button(
-            onPressed: () async {
-              PackageTables.instance.updates.reloadFuture(wingetLocale);
-            },
-            child: const Text('Reload updates'),
-          ),
-          Button(
-            onPressed: () {
-              PackageTables.instance.updates.removeAllInfos();
-            },
-            child: const Text('Remove all updates'),
-          ),
-        ].withSpaceBetween(height: 20),
       ),
     );
   }
@@ -116,7 +77,7 @@ class _SettingsPageSate extends State<SettingsPage> {
           ThemeMode.light => FluentIcons.brightness,
           ThemeMode.dark => FluentIcons.clear_night,
         };
-    return settingsItem(
+    return SettingsPage.settingsItem(
       localizations.chooseDisplayMode,
       CustomComboBox<ThemeMode>(
         value: themeMode,
@@ -147,7 +108,7 @@ class _SettingsPageSate extends State<SettingsPage> {
   }
 
   Widget guiLocaleOption(AppLocalizations localizations, BuildContext context) {
-    return settingsItem(
+    return SettingsPage.settingsItem(
       localizations.chooseLanguage,
       CustomComboBox<Locale>(
         value: guiLocale,
@@ -177,7 +138,7 @@ class _SettingsPageSate extends State<SettingsPage> {
 
   Widget wingetLocaleOption(
       AppLocalizations localizations, BuildContext context) {
-    return settingsItem(
+    return SettingsPage.settingsItem(
       localizations.chooseWingetLanguage,
       CustomComboBox<Locale>(
         value: wingetLocale,
@@ -192,15 +153,6 @@ class _SettingsPageSate extends State<SettingsPage> {
           for (Locale language in AppLocalizations.supportedLocales)
             languageItem(language),
         ],
-      ),
-    );
-  }
-
-  Widget settingsItem(String title, Widget options) {
-    return DecoratedCard(
-      padding: 20,
-      child: Row(
-        children: [Expanded(child: Text(title)), options],
       ),
     );
   }

@@ -54,6 +54,7 @@ mixin TextButtonWithIconMixin on AbstractButton {
   @override
   Widget get child => icon != null
       ? Row(
+    mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon),
             Text(buttonText),

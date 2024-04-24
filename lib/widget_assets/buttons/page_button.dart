@@ -48,6 +48,28 @@ class PageIconButton extends NormalButton
   });
 }
 
+class PageButtonWithIcon extends NormalButton
+    with TextButtonWithIconMixin, FilledButtonMixin, CustomToolTipMixin, PushPageMixin {
+  @override
+  final Routes pageRoute;
+  @override
+  final String buttonText;
+  @override
+  final IconData icon;
+  @override
+  final String Function(AppLocalizations) tooltipMessage;
+  @override
+  final RouteParameter? routeParameter;
+  PageButtonWithIcon({
+    super.key,
+    required this.pageRoute,
+    required this.buttonText,
+    required this.icon,
+    required this.tooltipMessage,
+    this.routeParameter,
+  });
+}
+
 class CustomPageButton extends NormalButton
     with PlainButtonMixin, CustomToolTipMixin, PushPageMixin {
   @override

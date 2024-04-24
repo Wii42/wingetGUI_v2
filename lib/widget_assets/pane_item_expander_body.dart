@@ -1,7 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:winget_gui/routes.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart'
+    as system_icons;
 
+import 'buttons/page_button.dart';
 import 'pane_item_body.dart';
 
 class PaneItemExpanderBody extends StatelessWidget {
@@ -34,10 +37,10 @@ class PaneItemExpanderBody extends StatelessWidget {
   Widget linkToChild(Routes child, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     NavigatorState navigator = Navigator.of(context);
-    return FilledButton(
-        onPressed: () {
-          navigator.pushNamed(child.route);
-        },
-        child: Text(child.title(locale)));
+    return PageButtonWithIcon(
+        pageRoute: child,
+        buttonText: child.title(locale),
+        icon: child.icon ?? system_icons.FluentIcons.question_circle_24_regular,
+        tooltipMessage: (locale) => child.title(locale));
   }
 }

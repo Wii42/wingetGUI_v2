@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/navigation_pages/advanced_options_page.dart';
 import 'package:winget_gui/navigation_pages/command_prompt_page.dart';
@@ -12,9 +13,14 @@ import 'package:winget_gui/navigation_pages/settings_page.dart';
 import 'package:winget_gui/navigation_pages/updates_page.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/widget_assets/package_details_from_web.dart';
+import 'package:winget_gui/widget_assets/package_peek.dart';
+import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/winget_commands.dart';
 
+import 'db/package_db.dart';
+import 'db/package_tables.dart';
 import 'navigation_pages/db_table_page.dart';
+import 'output_handling/output_handler.dart';
 
 enum Routes {
   updates(
@@ -75,6 +81,10 @@ enum Routes {
       body: LogsPage.inRoute),
   logDetailsPage(route: '/logDetailsPage', body: LogDetailsPage.inRoute),
   dbTablePage(route: '/dbTablePage', body: DBTableWidget.inRoute),
+  tinkeringSection(
+      route: '/tinkeringSection',
+      body: TinkeringSection.inRoute,
+      icon: FluentIcons.rocket),
   ;
 
   final String route;
@@ -119,5 +129,71 @@ enum Routes {
       }
     }
     return Winget.show.processPage(parameters);
+  }
+}
+
+class TinkeringSection extends StatelessWidget {
+  const TinkeringSection({super.key});
+
+  static Widget inRoute([RouteParameter? parameters]) {
+    return const TinkeringSection();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
+    return PaneItemBody(
+      title: Routes.tinkeringSection.title(AppLocalizations.of(context)!),
+      child: ListView(
+        padding: const EdgeInsets.all(10),
+        children: [
+          buildDBSettings(wingetLocale),
+          SettingsPage.settingsItem(
+            'View DB Tables',
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                dbButton(context, PackageDB.instance.favicons),
+                dbButton(context, PackageDB.instance.publisherNamesByPackageId),
+                dbButton(
+                    context, PackageDB.instance.publisherNamesByPublisherId),
+              ].withSpaceBetween(height: 10),
+            ),
+          ),
+          PackagePeek.prototypeWidget,
+        ].withSpaceBetween(height: 10),
+      ),
+    );
+  }
+
+  Widget buildDBSettings(AppLocalizations wingetLocale) {
+    return SettingsPage.settingsItem(
+      'WingetDB',
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Button(
+            onPressed: () async {
+              PackageTables.instance.updates.reloadFuture(wingetLocale);
+            },
+            child: const Text('Reload updates'),
+          ),
+          Button(
+            onPressed: () {
+              PackageTables.instance.updates.removeAllInfos();
+            },
+            child: const Text('Remove all updates'),
+          ),
+        ].withSpaceBetween(height: 20),
+      ),
+    );
+  }
+
+  Button dbButton(BuildContext context, DBTable table) {
+    return Button(
+      child: Text(table.tableName),
+      onPressed: () => Navigator.of(context).pushNamed(Routes.dbTablePage.route,
+          arguments: DBRouteParameter(dbTable: table)),
+    );
   }
 }

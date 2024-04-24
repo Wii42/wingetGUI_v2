@@ -4,8 +4,10 @@ import 'package:winget_gui/package_actions_widget.dart';
 import 'package:winget_gui/routes.dart';
 
 class MainNavigation extends StatefulWidget {
-  MainNavigation({super.key, required this.title});
+  static const double minWidthForOpenPane = 1008;
+
   final String title;
+  MainNavigation({super.key, required this.title});
 
   final List<Routes> mainItems = [
     Routes.updatesPage,
@@ -17,7 +19,8 @@ class MainNavigation extends StatefulWidget {
     Routes.about,
     Routes.sources,
     Routes.commandPromptPage,
-    Routes.logsPage
+    Routes.logsPage,
+    Routes.tinkeringSection,
   ];
 
   final Routes expanderFooterItem = Routes.advancedOptions;
@@ -53,7 +56,8 @@ class MainNavigationState extends State<MainNavigation>
     super.build(context);
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      bool displayModeIsOpen = constraints.maxWidth >= 1008;
+      bool displayModeIsOpen =
+          constraints.maxWidth >= MainNavigation.minWidthForOpenPane;
       return NavigationView(
         contentShape: contentShape(),
         pane: NavigationPane(

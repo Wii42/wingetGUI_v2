@@ -25,7 +25,7 @@ import 'winget_process/winget_process_scheduler.dart';
 const String appTitle = 'WingetGUI';
 
 void main() async {
-  if(kDebugMode) {
+  if (kDebugMode) {
     LogStream.instance.toStdOut();
   }
   await initAppPrerequisites();
@@ -65,14 +65,12 @@ class WingetGui extends StatelessWidget {
       builder: (context, _) {
         SystemAccentColor systemAccentColor =
             context.watch<SystemAccentColor>();
-        ThemeMode themeMode = context.watch<AppThemeMode>().value;
-        Locale? guiLocale = context.watch<AppLocales>().guiLocale;
         return FluentApp(
           title: appTitle,
           theme: theme(Brightness.light, systemAccentColor.dark),
           darkTheme: theme(Brightness.dark, systemAccentColor.light),
-          themeMode: themeMode,
-          locale: guiLocale,
+          themeMode: context.watch<AppThemeMode>().value,
+          locale: context.watch<AppLocales>().guiLocale,
           localizationsDelegates: const [
             ...AppLocalizations.localizationsDelegates,
             LocaleNamesLocalizationsDelegate()
@@ -119,6 +117,7 @@ class MainWidget extends StatelessWidget {
 
 class WindowBrightnessSetter extends StatelessWidget {
   final Widget child;
+
   const WindowBrightnessSetter({super.key, required this.child});
 
   @override
