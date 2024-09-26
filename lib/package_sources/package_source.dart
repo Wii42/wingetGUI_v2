@@ -38,6 +38,12 @@ enum PackageSources {
       if (packageSource.key == source) {
         return packageSource;
       }
+      if(source.endsWith('…')){
+        String startOfSourceName = source.substring(0, source.length - 1);
+        if (packageSource.key.startsWith(startOfSourceName)) {
+          return packageSource;
+        }
+      }
     }
     return PackageSources.unknownSource;
   }
