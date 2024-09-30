@@ -56,6 +56,8 @@ abstract class PersistentStorage {
   ///
   /// Used to get the available packages before Winget is called.
   BulkListStorage<PackageInfosPeek> get availablePackages;
+
+  KeyValueSyncStorage<String, String> get settings;
 }
 
 /// Bulk storage for Collections.
@@ -147,4 +149,26 @@ abstract class KeyValueStorage<K, V> {
 
   /// Deletes all work entries from the persistent storage.
   Future<void> deleteAllEntries();
+}
+
+/// Storage for key-value pairs. Allows CRUD operations.
+/// Same as [KeyValueStorage], but without async.
+abstract class KeyValueSyncStorage<K, V> {
+  /// Gets all key-value pairs from the persistent storage.
+  Map<K, V> loadAllPairs();
+
+  /// Saves the given work entries to the persistent storage.
+  void saveEntries(Map<K, V> entries);
+
+  /// Gets a single entry from the persistent storage. Returns null if not found.
+  V? getEntry(K key);
+
+  /// Adds a new work entry to the persistent storage.
+  void addEntry(K key, V value);
+
+  /// Deletes the given work entry from the persistent storage.
+  void deleteEntry(K key);
+
+  /// Deletes all work entries from the persistent storage.
+  void deleteAllEntries();
 }

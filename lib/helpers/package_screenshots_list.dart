@@ -1,5 +1,3 @@
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:winget_gui/package_infos/package_infos.dart';
 import 'package:winget_gui/package_infos/package_screenshot_identifiers.dart';
 
@@ -11,7 +9,6 @@ import 'package_screenshots.dart';
 class PackageScreenshotsList {
   late final Logger log;
 
-  SharedPreferences? _prefs;
   static final PackageScreenshotsList instance = PackageScreenshotsList._();
   Map<String, PackageScreenshots> screenshotMap = {};
   List<Uri> invalidScreenshotUrls = [];
@@ -23,19 +20,7 @@ class PackageScreenshotsList {
     log = Logger(this);
   }
 
-  Future<void> ensureInitialized() async {
-    _prefs ??= await SharedPreferences.getInstance();
-  }
-
-  @visibleForTesting
-  void setMockSharedPreferences(SharedPreferences prefs) {
-    _prefs = prefs;
-  }
-
-  SharedPreferences? get prefs => _prefs;
-
   Future<void> fetchScreenshots() async {
-    await ensureInitialized();
     await fetchWebInvalidScreenshots();
     await Future.wait([
       //loadPublisherIcons(),

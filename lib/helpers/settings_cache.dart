@@ -1,18 +1,17 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage_interface.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
 
 import 'locale_parser.dart';
 
 class SettingsCache {
   static const String _guiLocaleKey = 'guiLocale',
       _wingetLocaleKey = 'wingetLocale';
-  SharedPreferences? _prefs;
+  KeyValueSyncStorage<String, String> get _settingsStorage =>
+      PersistentStorageService.instance.settings;
   static final SettingsCache instance = SettingsCache._();
   SettingsCache._();
-
-  Future<void> ensureInitialized() async {
-    _prefs ??= await SharedPreferences.getInstance();
-  }
 
   set guiLocale(Locale? guiLocale) {
     _setLocale(guiLocale, _guiLocaleKey);
@@ -32,40 +31,35 @@ class SettingsCache {
 
   set themeMode(ThemeMode? themeMode) {
     if (themeMode == null) {
-      _prefs!.remove('themeMode');
+      _settingsStorage.deleteEntry('themeMode');
       return;
     }
-    _prefs!.setString('themeMode', themeMode.toString());
+    _settingsStorage.addEntry('themeMode', themeMode.toString());
   }
 
   ThemeMode? get themeMode {
-    String? string = _prefs!.getString('themeMode');
+    String? string = _settingsStorage.getEntry('themeMode');
     if (string == null) {
       return null;
     }
     return ThemeMode.values.firstWhere((e) => e.toString() == string);
   }
 
-  get initialized => _prefs != null;
+  get initialized => PersistentStorageService.instance.isInitialized;
 
   void _setLocale(Locale? locale, String key) {
     if (locale == null) {
-      _prefs!.remove(key);
+      _settingsStorage.deleteEntry(key);
       return;
     }
-    _prefs!.setString(key, locale.toLanguageTag());
+    _settingsStorage.addEntry(key, locale.toLanguageTag());
   }
 
   Locale? _getLocale(String key) {
-    String? string = _prefs!.getString(key);
+    String? string = _settingsStorage.getEntry(key);
     if (string == null) {
       return null;
     }
     return LocaleParser.parse(string);
-  }
-
-  @visibleForTesting
-  void setMockSharedPreferences(SharedPreferences prefs) {
-    _prefs = prefs;
   }
 }

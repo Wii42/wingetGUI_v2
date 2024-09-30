@@ -55,10 +55,8 @@ Future<void> initAppPrerequisites() async {
                   WindowManager.instance.setAlignment(Alignment.center),
                 ]))),
     SystemTheme.accentColor.load(),
-    SettingsCache.instance.ensureInitialized(),
     PersistentStorageService.initializeImplementation(
         JsonSharedPrefsSqflitePersistentStorage()),
-    PackageScreenshotsList.instance.ensureInitialized(),
   ]);
   ServerInterfaceService.setImplementation(MartiClientServerInterface());
 }

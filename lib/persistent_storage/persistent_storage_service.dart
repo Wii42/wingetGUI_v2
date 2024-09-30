@@ -112,4 +112,7 @@ class PersistentStorageService implements PersistentStorage {
   @override
   bool get isInitialized =>
       _implementation != null && _implementation!.isInitialized;
+
+  @override
+  KeyValueSyncStorage<String, String> get settings => _implementation!.settings;
 }

@@ -14,6 +14,7 @@ import 'package:winget_gui/persistent_storage/web_fetcher.dart';
 
 import 'persistent_storage_interface.dart';
 
+/// A persistent storage implementation that uses shared preferences, json files and sqflite.
 class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
   JsonFileLoader fileLoader = JsonFileLoader();
   WebFetcher webFetcher = WebFetcher();
@@ -79,6 +80,9 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
   // TODO: implement updatePackages
   BulkListStorage<PackageInfosPeek> get updatePackages =>
       throw UnimplementedError();
+
+  @override
+  SettingsStorage get settings => SettingsStorage(prefs, 'settings');
 }
 
 class ScreenshotBulkStorage
@@ -110,5 +114,58 @@ class ScreenshotBulkStorage
     String json = jsonEncode(PackageScreenshots.mapToJson(map));
     prefs.setString(prefsKey, json);
     return Future.value();
+  }
+}
+
+class SettingsStorage implements KeyValueSyncStorage<String, String> {
+  Logger log = Logger(null, sourceType: SettingsStorage);
+  SharedPreferences prefs;
+  String keyPrefix;
+  List<String> keys = [];
+
+  SettingsStorage(this.prefs, this.keyPrefix);
+
+  @override
+  void addEntry(String key, value) {
+    prefs.setString(_prefKey(key), value);
+    keys.add(key);
+  }
+
+  @override
+  void deleteAllEntries() {
+    for (String key in keys) {
+      prefs.remove(_prefKey(key));
+    }
+    keys.clear();
+  }
+
+  @override
+  void deleteEntry(String key) {
+    prefs.remove(_prefKey(key));
+    keys.remove(key);
+  }
+
+  @override
+  String? getEntry(String key) {
+    return prefs.getString(_prefKey(key));
+  }
+
+  String _prefKey(String key) => '$keyPrefix:$key';
+
+  @override
+  Map<String, String> loadAllPairs() {
+    Map<String, String> map = {};
+    for (String key in keys) {
+      map[key] = prefs.getString(_prefKey(key))!;
+    }
+    return map;
+  }
+
+  @override
+  void saveEntries(Map<String, String> entries) {
+    for (MapEntry<String, String> entry in entries.entries) {
+      prefs.setString(_prefKey(entry.key), entry.value);
+      keys.add(entry.key);
+    }
   }
 }
