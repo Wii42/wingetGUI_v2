@@ -46,10 +46,31 @@ dependencies:
   diacritic: ^0.1.6
   cached_network_image: ^3.4.1
   file_picker: ^8.1.2
+  # ----- isar -----
+  # Using the isar-community.dev because the official isar package is not updated
+  isar:
+    hosted:
+      name: isar
+      url: https://pub.isar-community.dev/
+    version: ^3.0.0
+  isar_flutter_libs:
+    hosted:
+      name: isar_flutter_libs
+      url: https://pub.isar-community.dev/
+    version: ^3.0.0
+  path_provider: ^2.1.4
+  #path_provider_linux: 2.2.0
+    # ----- \isar -----
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  isar_generator:
+    hosted:
+      name: isar_generator
+      url: https://pub.isar-community.dev/
+    version: ^3.0.0
+  build_runner: any
   dependency_validator: ^4.1.1
   flutter_lints: ^5.0.0
   msix: ^3.16.8
