@@ -1,6 +1,5 @@
 import 'package:winget_gui/helpers/package_screenshots.dart';
 
-import '../helpers/log_stream.dart';
 import 'json_web_core.dart';
 
 class WebFetcher {

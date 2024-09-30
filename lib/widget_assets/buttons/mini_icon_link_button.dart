@@ -20,7 +20,7 @@ mixin MiniIconButton on AbstractButton {
         icon: child,
         onPressed: onPressed,
         style: ButtonStyle(
-          padding: ButtonState.all(
+          padding: WidgetStateProperty.all(
               const EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
         ));
   }

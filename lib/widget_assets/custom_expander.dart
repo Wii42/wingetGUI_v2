@@ -12,14 +12,14 @@ class CustomExpander extends Expander {
     super.direction = ExpanderDirection.down,
     super.initiallyExpanded = false,
     super.onStateChanged,
-    ButtonState<Color>? headerBackgroundColor,
+    WidgetStateProperty<Color>? headerBackgroundColor,
     super.headerShape = _headerShape,
     super.contentBackgroundColor = Colors.transparent,
     super.contentPadding = EdgeInsets.zero,
     super.contentShape,
   }) : super(
             headerBackgroundColor:
-                headerBackgroundColor ?? ButtonState.all(Colors.transparent));
+                headerBackgroundColor ?? WidgetStateProperty.all(Colors.transparent));
 
   @override
   State<Expander> createState() => CustomExpanderState();
@@ -150,7 +150,7 @@ class CustomExpanderState extends State<CustomExpander>
                           child: AnimatedSlide(
                             duration: theme.fastAnimationDuration,
                             curve: Curves.easeInCirc,
-                            offset: states.isPressing
+                            offset: states.isPressed
                                 ? const Offset(0, 0.1)
                                 : Offset.zero,
                             child: Icon(

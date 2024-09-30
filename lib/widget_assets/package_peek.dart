@@ -223,7 +223,7 @@ class PackagePeek extends StatelessWidget {
     if (!isClickable()) {
       style = style?.apply(
           color: ButtonThemeData.buttonForegroundColor(
-              context, {ButtonStates.disabled}));
+              context, {WidgetState.disabled}));
     }
     return style;
   }

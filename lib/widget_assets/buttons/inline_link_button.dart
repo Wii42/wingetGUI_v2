@@ -17,7 +17,7 @@ mixin InlineLinkButtonMixin on AbstractButton {
       {required Widget child, required VoidCallback? onPressed}) {
     return HyperlinkButton(
       style: ButtonStyle(
-        padding: ButtonState.all(EdgeInsets.zero),
+        padding: WidgetStateProperty.all(EdgeInsets.zero),
       ),
       onPressed: onPressed,
       child: child,
