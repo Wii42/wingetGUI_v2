@@ -27,7 +27,7 @@ dependencies:
   favicon: ^1.1.2
   flutter_svg: ^2.0.10+1
   shared_preferences: ^2.2.3
-  shared_preferences_linux: 2.3.2 # needed because with 2.4.0 it crashes because source file is not found
+  #shared_preferences_linux: 2.4.0 # needed because with 2.4.0 it crashes because source file is not found
   ribs_json: ^1.0.0-dev.10
   ribs_core: ^1.0.0-dev.12
   http: ^1.2.2
@@ -59,7 +59,7 @@ dependencies:
       url: https://pub.isar-community.dev/
     version: ^3.0.0
   path_provider: ^2.1.4
-  #path_provider_linux: 2.2.0
+  path_provider_linux: 2.2.0 # needed because of isar build_runner
     # ----- \isar -----
 
 dev_dependencies:

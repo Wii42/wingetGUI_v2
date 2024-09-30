@@ -4,10 +4,10 @@ import 'package:http/http.dart';
 import 'package:ribs_json/ribs_json.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
-import 'package:winget_gui/helpers/screenshots_list_load_helper.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
+import 'package:winget_gui/persistent_storage/json_web_core.dart';
 
-ScreenshotsListLoadHelper loadHelper = ScreenshotsListLoadHelper();
+JsonWebCore loadHelper = JsonWebCore();
 Logger log = Logger('UrlChecker');
 void main() async {
   LogStream.instance.toStdOut();

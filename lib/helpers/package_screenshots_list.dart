@@ -7,9 +7,8 @@ import 'extensions/screenshots_list_loader.dart';
 import 'json_publisher.dart';
 import 'log_stream.dart';
 import 'package_screenshots.dart';
-import 'screenshots_list_load_helper.dart';
 
-class PackageScreenshotsList with ScreenshotsListLoadHelper {
+class PackageScreenshotsList {
   late final Logger log;
 
   SharedPreferences? _prefs;

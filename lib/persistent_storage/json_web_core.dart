@@ -1,12 +1,14 @@
 import 'package:http/http.dart';
 import 'package:ribs_core/ribs_core.dart';
 import 'package:ribs_json/ribs_json.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
+import 'package:winget_gui/helpers/package_screenshots.dart';
 
-import 'log_stream.dart';
-import 'package_screenshots.dart';
-
-mixin class ScreenshotsListLoadHelper {
-  static final Logger log = Logger(null, sourceType: ScreenshotsListLoadHelper);
+/// Helper class for parsing PackageScreenshots and getting string from web.
+///
+/// Intentionally not using any Flutter dependencies, so it can be used in Dart scripts.
+class JsonWebCore {
+  static final Logger log = Logger(null, sourceType: JsonWebCore);
 
   Future<String> getStringFromWeb(Uri url) async {
     Response request = await get(url);
@@ -40,5 +42,30 @@ mixin class ScreenshotsListLoadHelper {
       return null;
     }
     return fromJson(packageName, packageObject);
+  }
+
+  Future<Map<String, PackageScreenshots>>
+      parseScreenshotsMapFromMartiClimentRepo(String data) async {
+    Json json = Json.parse(data).getOrElse(
+      () {
+        throw Exception('Error parsing JSON');
+      },
+    );
+    JsonObject? object = json.asObject().toNullable();
+    if (object == null) {
+      log.error('Json is not an object');
+      return {};
+    }
+    if (!object.contains("icons_and_screenshots")) {
+      log.error('json does not contain icons_and_screenshots');
+      return {};
+    }
+    JsonObject? packageScreenshotsMap =
+        object.getUnsafe("icons_and_screenshots").asObject().toNullable();
+    if (packageScreenshotsMap == null) {
+      log.error('"icons_and_screenshots" not an object');
+      return {};
+    }
+    return parseScreenshotsMap(packageScreenshotsMap);
   }
 }
