@@ -15,7 +15,7 @@ class WebFetcher {
       Uri.parse(wingetUIInvalidScreenshotsUrl);
 
   /// Fetches invalid image URLs from the marticliment/wingetUI GithHub repo.
-  Future<List<Uri>> fetchInvalidImageUrlsFromMartiClimentRepo() async{
+  Future<List<Uri>> fetchInvalidImageUrlsFromMartiClimentRepo() async {
     String data = await jsonWebCore.getStringFromWeb(invalidScreenshotsSource);
     List<String> lines = data.split('\n');
     return lines
@@ -25,12 +25,13 @@ class WebFetcher {
         .toList();
   }
 
-  Future<Map<String, PackageScreenshots>> fetchPackageScreenshotsFromMartiClimentRepo() async{
+  Future<Map<String, PackageScreenshots>>
+      fetchPackageScreenshotsFromMartiClimentRepo() async {
     String data = await jsonWebCore.getStringFromWeb(screenshotsSource);
     return jsonWebCore.parseScreenshotsMapFromMartiClimentRepo(data);
   }
 
-  Future<String> fetchPackageScreenshotsFromMartiClimentRepoRaw() async{
+  Future<String> fetchPackageScreenshotsFromMartiClimentRepoRaw() async {
     return jsonWebCore.getStringFromWeb(screenshotsSource);
   }
 }

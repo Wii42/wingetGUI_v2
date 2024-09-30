@@ -95,6 +95,8 @@ class PersistentStorageService implements PersistentStorage {
   void _assertInitialized() {
     _assertHasImplementation();
     if (!isInitialized) {
+      print(
+          'isInitialized: $isInitialized, implementation: ${_implementation?.isInitialized}.');
       throw Exception('PersistentStorageService not initialized: '
           'Make sure to call PersistentStorageService.initializeImplementation() beforehand');
     }
@@ -109,5 +111,5 @@ class PersistentStorageService implements PersistentStorage {
 
   @override
   bool get isInitialized =>
-      _implementation == null && _implementation!.isInitialized;
+      _implementation != null && _implementation!.isInitialized;
 }

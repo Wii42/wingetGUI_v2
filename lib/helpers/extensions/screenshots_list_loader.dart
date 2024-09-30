@@ -6,11 +6,6 @@ import '../package_screenshots.dart';
 import '../package_screenshots_list.dart';
 
 extension ScreenshotsListLoader on PackageScreenshotsList {
-  static const String _packageScreenshotsKey = 'packagePictures';
-
-  String _getStringFromSharedPreferences() =>
-      prefs!.getString(_packageScreenshotsKey) ?? '';
-
   Future<void> screenshotsFromWingetUIJson(
       Map<String, PackageScreenshots> screenshots) async {
     screenshotMap = screenshots;
@@ -65,7 +60,9 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
 
   Future<void> loadScreenshots() async {
     try {
-      String data = _getStringFromSharedPreferences();
+      Map<String, PackageScreenshots> data =
+          await PersistentStorageService.instance.packageScreenshots.loadAll();
+      log.warning('loaded data from storage', message: data.toString());
       await screenshotsFromWingetUIJson(data);
       log.info('stored data fetched');
     } catch (e) {
@@ -79,9 +76,8 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
           .instance
           .fetchPackageScreenshotsFromServer();
       await screenshotsFromWingetUIJson(data);
-      //TODO: data was the original input, needs changing
-      //if (prefs != null && prefs!.getString(_packageScreenshotsKey) != data) {
-      //  prefs!.setString(_packageScreenshotsKey, data);
+      await PersistentStorageService.instance.packageScreenshots
+          .saveAll(screenshotMap);
       log.info('web data fetched');
     } catch (e) {
       log.error(e.toString());

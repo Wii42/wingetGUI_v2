@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
 
 import 'package:winget_gui/helpers/json_publisher.dart';
+import 'package:winget_gui/helpers/log_stream.dart';
 
 import 'package:winget_gui/helpers/package_screenshots.dart';
 
@@ -13,6 +17,11 @@ import 'persistent_storage_interface.dart';
 class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
   JsonFileLoader fileLoader = JsonFileLoader();
   WebFetcher webFetcher = WebFetcher();
+
+  late SharedPreferences prefs;
+  late ScreenshotBulkStorage _packageScreenshots;
+
+  bool _isInitialized = false;
   @override
   // TODO: implement availablePackages
   BulkListStorage<PackageInfosPeek> get availablePackages =>
@@ -23,9 +32,10 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
   KeyValueStorage<String, Uri> get favicon => throw UnimplementedError();
 
   @override
-  Future<void> initialize() {
-    // TODO: implement initialize
-    throw UnimplementedError();
+  Future<void> initialize() async {
+    prefs = await SharedPreferences.getInstance();
+    _packageScreenshots = ScreenshotBulkStorage(prefs, 'packagePictures');
+    _isInitialized = true;
   }
 
   @override
@@ -34,8 +44,7 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
       throw UnimplementedError();
 
   @override
-  // TODO: implement isInitialized
-  bool get isInitialized => throw UnimplementedError();
+  bool get isInitialized => _isInitialized;
 
   @override
   Future<List<String>> loadBannedIcons() => fileLoader.loadBannedIconsTxt();
@@ -53,9 +62,8 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
       fileLoader.loadCustomPublisherData();
 
   @override
-  // TODO: implement packageScreenshots
   BulkMapStorage<String, PackageScreenshots> get packageScreenshots =>
-      throw UnimplementedError();
+      _packageScreenshots;
 
   @override
   // TODO: implement publisherNameByPackageId
@@ -71,4 +79,36 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
   // TODO: implement updatePackages
   BulkListStorage<PackageInfosPeek> get updatePackages =>
       throw UnimplementedError();
+}
+
+class ScreenshotBulkStorage
+    implements BulkMapStorage<String, PackageScreenshots> {
+  Logger log = Logger(null, sourceType: ScreenshotBulkStorage);
+  SharedPreferences prefs;
+  String prefsKey;
+
+  ScreenshotBulkStorage(this.prefs, this.prefsKey);
+
+  @override
+  Future<void> deleteAll() {
+    prefs.remove(prefsKey);
+    return Future.value();
+  }
+
+  @override
+  Future<Map<String, PackageScreenshots>> loadAll() {
+    final json = prefs.getString(prefsKey);
+    if (json == null) {
+      log.warning('No screenshots found in shared prefs');
+      return Future.value({});
+    }
+    return Future.value(PackageScreenshots.mapFromJson(jsonDecode(json)));
+  }
+
+  @override
+  Future<void> saveAll(Map<String, PackageScreenshots> map) {
+    String json = jsonEncode(PackageScreenshots.mapToJson(map));
+    prefs.setString(prefsKey, json);
+    return Future.value();
+  }
 }

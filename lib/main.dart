@@ -8,6 +8,10 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
+import 'package:winget_gui/persistent_storage/json_sharedprefs_sqflite_persistent_storage.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
+import 'package:winget_gui/server_interface/marti_clement_server_interface.dart';
+import 'package:winget_gui/server_interface/server_interface.dart';
 
 import 'db/db_message.dart';
 import 'db/package_db.dart';
@@ -52,8 +56,11 @@ Future<void> initAppPrerequisites() async {
                 ]))),
     SystemTheme.accentColor.load(),
     SettingsCache.instance.ensureInitialized(),
+    PersistentStorageService.initializeImplementation(
+        JsonSharedPrefsSqflitePersistentStorage()),
     PackageScreenshotsList.instance.ensureInitialized(),
   ]);
+  ServerInterfaceService.setImplementation(MartiClientServerInterface());
 }
 
 class WingetGui extends StatelessWidget {
