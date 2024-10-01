@@ -1,16 +1,15 @@
-
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage_interface.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
-import 'package:winget_gui/db/package_db.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 
 class DBTableWidget extends StatelessWidget {
-  final DBTable table;
+  final TableRepresentation table;
   const DBTableWidget(this.table, {super.key});
 
   @override
@@ -24,7 +23,7 @@ class DBTableWidget extends StatelessWidget {
               Text('Entries: ${table.entries.length}'),
               Button(
                 onPressed: () {
-                  table.deleteAll();
+                  table.deleteAllEntries();
                 },
                 child: const Text('Delete All Entries'),
               ),
@@ -37,7 +36,7 @@ class DBTableWidget extends StatelessWidget {
                   );
 
                   if (outputFile != null) {
-                    await File(outputFile).writeAsString(table.toJson());
+                    await File(outputFile).writeAsString(table.toJsonString());
                   }
                 },
                 child: const Text('Save Json file'),
@@ -86,7 +85,7 @@ class DBTableWidget extends StatelessWidget {
       throw Exception(
           "Route parameter of DBTableWidget must be of type DBRouteParameter");
     }
-    DBTable table = parameters.dbTable;
+    TableRepresentation table = parameters.dbTable;
     return DBTableWidget(table);
   }
 }

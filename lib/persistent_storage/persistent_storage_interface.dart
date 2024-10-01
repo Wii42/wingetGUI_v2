@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:winget_gui/db/winget_table.dart';
 import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
@@ -32,30 +35,30 @@ abstract class PersistentStorage {
   BulkMapStorage<String, PackageScreenshots> get packageScreenshots;
 
   /// Stores automatically fetched favicons in the persistent storage.
-  KeyValueStorage<String, Uri> get favicon;
+  KeyValueSyncStorage<String, Uri> get favicon;
 
   /// Stores automatically fetched publisher icons in the persistent storage.
   /// Key is the package id. Used if no publisher name is available.
-  KeyValueStorage<String, String> get publisherNameByPackageId;
+  KeyValueSyncStorage<String, String> get publisherNameByPackageId;
 
   /// Stores automatically fetched publisher icons in the persistent storage.
   /// Key is the publisher id.
-  KeyValueStorage<String, String> get publisherNameByPublisherId;
+  KeyValueSyncStorage<String, String> get publisherNameByPublisherId;
 
   /// Stores all packages with an update available.
   ///
   /// Used to get the updates before Winget is called.
-  BulkListStorage<PackageInfosPeek> get updatePackages;
+  BulkListSyncStorage<PackageInfosPeek> get updatePackages;
 
   /// Stores all installed packages.
   ///
   /// Used to get the installed packages before Winget is called.
-  BulkListStorage<PackageInfosPeek> get installedPackages;
+  BulkListSyncStorage<PackageInfosPeek> get installedPackages;
 
   /// Stores all available packages.
   ///
   /// Used to get the available packages before Winget is called.
-  BulkListStorage<PackageInfosPeek> get availablePackages;
+  BulkListSyncStorage<PackageInfosPeek> get availablePackages;
 
   KeyValueSyncStorage<String, String> get settings;
 }
@@ -93,7 +96,8 @@ abstract class BulkMapStorage<K, V> implements BulkStorage<Map<K, V>> {
   Future<void> deleteAll();
 }
 
-abstract class BulkListStorage<T> implements BulkStorage<List<T>> {
+abstract class BulkListStorage<T>
+    implements BulkStorage<List<T>>, TableRepresentation<int, T> {
   /// Loads all entries from the storage.
   @override
   Future<List<T>> loadAll();
@@ -105,6 +109,19 @@ abstract class BulkListStorage<T> implements BulkStorage<List<T>> {
   /// Deletes all entries from the storage.
   @override
   Future<void> deleteAll();
+}
+
+abstract class BulkListSyncStorage<T> {
+  /// Loads all entries from the storage.
+  List<T> get entries;
+
+  /// Saves all entries to the storage. Overwrites all old entries in storage.
+  void saveAll(List<T> list);
+
+  /// Deletes all entries from the storage.
+  void deleteAll();
+
+  late WingetTable parent;
 }
 
 /// Storage for a table of entries. Allows CRUD operations.
@@ -153,9 +170,12 @@ abstract class KeyValueStorage<K, V> {
 
 /// Storage for key-value pairs. Allows CRUD operations.
 /// Same as [KeyValueStorage], but without async.
-abstract class KeyValueSyncStorage<K, V> {
-  /// Gets all key-value pairs from the persistent storage.
-  Map<K, V> loadAllPairs();
+abstract class KeyValueSyncStorage<K, V> implements TableRepresentation<K, V> {
+  /// Get all key-value pairs from the persistent storage.
+  ///
+  /// Changes to the returned map will not be saved to the storage.
+  @override
+  Map<K, V> get entries;
 
   /// Saves the given work entries to the persistent storage.
   void saveEntries(Map<K, V> entries);
@@ -170,5 +190,31 @@ abstract class KeyValueSyncStorage<K, V> {
   void deleteEntry(K key);
 
   /// Deletes all work entries from the persistent storage.
+  @override
   void deleteAllEntries();
+
+  operator []=(K key, V value) => addEntry(key, value);
+  operator [](K key) => getEntry(key);
+
+  @override
+  Map<String, dynamic> entryToMap((K, V) entry) {
+    return {'key': entry.$1, 'value': entry.$2};
+  }
+
+  @override
+  String toJsonString() {
+    return jsonEncode(entries);
+  }
+}
+
+abstract class TableRepresentation<K, V> {
+  String get tableName;
+
+  Map<K, V> get entries;
+
+  void deleteAllEntries();
+
+  String toJsonString();
+
+  Map<String, dynamic> entryToMap((K, V) entry);
 }

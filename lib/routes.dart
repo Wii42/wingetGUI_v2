@@ -12,6 +12,8 @@ import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/navigation_pages/settings_page.dart';
 import 'package:winget_gui/navigation_pages/updates_page.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage_interface.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
 import 'package:winget_gui/widget_assets/package_details_from_web.dart';
 import 'package:winget_gui/widget_assets/package_peek.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
@@ -153,10 +155,10 @@ class TinkeringSection extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                dbButton(context, PackageDB.instance.favicons),
-                dbButton(context, PackageDB.instance.publisherNamesByPackageId),
+                dbButton(context, PersistentStorageService.instance.favicon),
+                dbButton(context, PersistentStorageService.instance.publisherNameByPackageId),
                 dbButton(
-                    context, PackageDB.instance.publisherNamesByPublisherId),
+                    context, PersistentStorageService.instance.publisherNameByPublisherId),
               ].withSpaceBetween(height: 10),
             ),
           ),
@@ -189,7 +191,7 @@ class TinkeringSection extends StatelessWidget {
     );
   }
 
-  Button dbButton(BuildContext context, DBTable table) {
+  Button dbButton(BuildContext context, TableRepresentation table) {
     return Button(
       child: Text(table.tableName),
       onPressed: () => Navigator.of(context).pushNamed(Routes.dbTablePage.route,

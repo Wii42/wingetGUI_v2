@@ -2,10 +2,10 @@ import 'dart:collection';
 
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:winget_gui/db/package_db.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
 
 import 'info_with_link.dart';
 import 'package_attribute.dart';
@@ -69,7 +69,8 @@ class Publisher {
 
   static String? nameFromDBbyPackageId(PackageId? packageId) {
     if (packageId != null && packageId.string.isNotEmpty) {
-      return PackageDB.instance.publisherNamesByPackageId[packageId.string];
+      return PersistentStorageService
+          .instance.publisherNameByPackageId[packageId.string];
     }
     return null;
   }
@@ -220,7 +221,8 @@ class _PublisherBuilder {
 
   static String? nameFromDBbyPublisherId(String? publisherId) {
     if (publisherId != null) {
-      return PackageDB.instance.publisherNamesByPublisherId[publisherId];
+      return PersistentStorageService
+          .instance.publisherNameByPublisherId[publisherId];
     }
     return null;
   }
@@ -230,10 +232,12 @@ class _PublisherBuilder {
       return;
     }
     if (publisherId != null) {
-      PackageDB.instance.publisherNamesByPublisherId[publisherId!] = name;
+      PersistentStorageService
+          .instance.publisherNameByPublisherId[publisherId!] = name;
     }
     if (packageId != null) {
-      PackageDB.instance.publisherNamesByPackageId[packageId!.string] = name;
+      PersistentStorageService
+          .instance.publisherNameByPackageId[packageId!.string] = name;
     }
   }
 

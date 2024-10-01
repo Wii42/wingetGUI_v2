@@ -10,9 +10,9 @@ import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/package_infos/package_id.dart';
 import 'package:winget_gui/package_infos/package_infos.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
 
 import 'db_message.dart';
-import 'package_db.dart';
 import 'winget_table.dart';
 
 class PackageTables {
@@ -38,9 +38,9 @@ class PackageTables {
       return;
     }
 
-    installed = PackageDB.instance.installed.parent;
-    updates = PackageDB.instance.updates.parent;
-    available = PackageDB.instance.available.parent;
+    installed = PersistentStorageService.instance.installedPackages.parent;
+    updates = PersistentStorageService.instance.updatePackages.parent;
+    available = PersistentStorageService.instance.availablePackages.parent;
     installed.reloadFuture(wingetLocale);
     updates.reloadFuture(wingetLocale);
     available.reloadFuture(wingetLocale);

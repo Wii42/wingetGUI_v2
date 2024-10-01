@@ -6,6 +6,7 @@ import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/package_sources/ms_store_source.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 import 'package:winget_gui/package_sources/winget_source.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
 
 import 'info.dart';
 import 'info_extensions.dart';
@@ -60,7 +61,7 @@ abstract class PackageInfos {
     screenshots = screenshotsList.getPackage(this);
     checkedForScreenshots = true;
     if (id != null) {
-      automaticFoundFavicons = PackageDB.instance.favicons[id!.value.string];
+      automaticFoundFavicons = PersistentStorageService.instance.favicon[id!.value.string];
     }
   }
 

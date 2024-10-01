@@ -14,11 +14,9 @@ import 'package:winget_gui/server_interface/marti_clement_server_interface.dart'
 import 'package:winget_gui/server_interface/server_interface.dart';
 
 import 'db/db_message.dart';
-import 'db/package_db.dart';
 import 'db/package_tables.dart';
 import 'global_app_data.dart';
 import 'helpers/package_screenshots_list.dart';
-import 'helpers/settings_cache.dart';
 import 'main_navigation.dart';
 import 'output_handling/one_line_info_builder.dart';
 import 'output_handling/one_line_info_parser.dart';
@@ -34,7 +32,6 @@ void main() async {
   }
   await initAppPrerequisites();
   await PackageScreenshotsList.instance.fetchScreenshots();
-  await PackageDB.instance.ensureInitialized();
   runApp(const WingetGui());
 }
 

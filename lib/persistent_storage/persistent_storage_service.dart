@@ -21,13 +21,13 @@ class PersistentStorageService implements PersistentStorage {
   }
 
   @override
-  BulkListStorage<PackageInfosPeek> get availablePackages {
+  BulkListSyncStorage<PackageInfosPeek> get availablePackages {
     _assertInitialized();
     return _implementation!.availablePackages;
   }
 
   @override
-  KeyValueStorage<String, Uri> get favicon {
+  KeyValueSyncStorage<String, Uri> get favicon {
     _assertInitialized();
     return _implementation!.favicon;
   }
@@ -39,7 +39,7 @@ class PersistentStorageService implements PersistentStorage {
   }
 
   @override
-  BulkListStorage<PackageInfosPeek> get installedPackages {
+  BulkListSyncStorage<PackageInfosPeek> get installedPackages {
     _assertInitialized();
     return _implementation!.installedPackages;
   }
@@ -75,19 +75,19 @@ class PersistentStorageService implements PersistentStorage {
   }
 
   @override
-  KeyValueStorage<String, String> get publisherNameByPackageId {
+  KeyValueSyncStorage<String, String> get publisherNameByPackageId {
     _assertInitialized();
     return _implementation!.publisherNameByPackageId;
   }
 
   @override
-  KeyValueStorage<String, String> get publisherNameByPublisherId {
+  KeyValueSyncStorage<String, String> get publisherNameByPublisherId {
     _assertInitialized();
     return _implementation!.publisherNameByPublisherId;
   }
 
   @override
-  BulkListStorage<PackageInfosPeek> get updatePackages {
+  BulkListSyncStorage<PackageInfosPeek> get updatePackages {
     _assertInitialized();
     return _implementation!.updatePackages;
   }

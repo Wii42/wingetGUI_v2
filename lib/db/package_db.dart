@@ -17,8 +17,7 @@ import 'package_tables.dart';
 import 'winget_table.dart';
 
 class PackageDB {
-  static final PackageDB instance = PackageDB._();
-  static const String dbName = 'favicon_database.db';
+  final String dbName;
   late final FaviconTable favicons;
   late final PublisherNameTable publisherNamesByPackageId;
   late final PublisherNameTable publisherNamesByPublisherId;
@@ -36,7 +35,7 @@ class PackageDB {
   Database? _database;
   late final Logger log;
 
-  PackageDB._() {
+  PackageDB({required this.dbName}) {
     log = Logger(this);
     favicons = FaviconTable(this);
     publisherNamesByPackageId = PublisherNameTable(
@@ -69,6 +68,9 @@ class PackageDB {
       },
       version: 1,
     );
+  }
+
+  Future<void> finishInitializing() async {
     for (DBTable table in faviconTables) {
       await table._setEntriesFromDB();
     }
@@ -209,6 +211,11 @@ abstract class DBTable<K extends Object, V extends Object> {
   void setEntries(Map<K, V> entries) {
     _entries = entries;
     _deleteAllInDB();
+    _insertMultipleDB(entries);
+  }
+
+  void addEntries(Map<K, V> entries) {
+    _entries.addAll(entries);
     _insertMultipleDB(entries);
   }
 
