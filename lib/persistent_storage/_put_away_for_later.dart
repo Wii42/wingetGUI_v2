@@ -1,6 +1,5 @@
 import 'package:winget_gui/db/favicon_table.dart';
 import 'package:winget_gui/db/publisher_name_table.dart';
-import 'package:winget_gui/db/winget_table.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/package_infos/package_infos.dart';
@@ -27,15 +26,4 @@ abstract class PublisherNames {
   final PublisherNameTable byPublisherId;
 
   PublisherNames({required this.byPackageId, required this.byPublisherId});
-}
-
-abstract class PackageTables {
-  final WingetDBTable updates;
-  final WingetDBTable installed;
-  final WingetDBTable available;
-
-  PackageTables(
-      {required this.updates,
-        required this.installed,
-        required this.available});
 }

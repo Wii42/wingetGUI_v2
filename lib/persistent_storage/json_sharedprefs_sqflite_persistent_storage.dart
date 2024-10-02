@@ -1,17 +1,13 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:winget_gui/db/favicon_table.dart';
 import 'package:winget_gui/db/package_db.dart';
-import 'package:winget_gui/db/winget_table.dart';
+import 'package:winget_gui/db/winget_db_table.dart';
 import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
-
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
-
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
-
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/persistent_storage/json_file_loader.dart';
 import 'package:winget_gui/persistent_storage/web_fetcher.dart';
@@ -28,7 +24,7 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
 
   bool _isInitialized = false;
   @override
-  late BulkListSyncStorage<PackageInfosPeek> availablePackages;
+  late BulkListStorage<PackageInfosPeek> availablePackages;
 
   @override
   late final FaviconsStorage<Uri> favicon;
@@ -53,7 +49,7 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
   }
 
   @override
-  late final BulkListSyncStorage<PackageInfosPeek> installedPackages;
+  late final BulkListStorage<PackageInfosPeek> installedPackages;
 
   @override
   bool get isInitialized => _isInitialized;
@@ -83,7 +79,7 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
   late final FaviconsStorage<String> publisherNameByPublisherId;
 
   @override
-  late final BulkListSyncStorage<PackageInfosPeek> updatePackages;
+  late final BulkListStorage<PackageInfosPeek> updatePackages;
 
   @override
   SettingsStorage get settings => SettingsStorage(prefs, 'settings');
@@ -207,22 +203,25 @@ class FaviconsStorage<V extends Object> extends KeyValueSyncStorage<String, V> {
   String tableName;
 }
 
-class WingetDBTableWrap implements BulkListSyncStorage<PackageInfosPeek> {
+class WingetDBTableWrap implements BulkListStorage<PackageInfosPeek> {
   final WingetDBTable _table;
 
-  WingetDBTableWrap(this._table) : parent = _table.parent;
+  WingetDBTableWrap(this._table);
 
   @override
-  late WingetTable parent;
+  Future<void> deleteAll() {
+    _table.deleteAll();
+    return Future.value();
+  }
 
   @override
-  void deleteAll() => _table.deleteAll();
+  Future<List<PackageInfosPeek>> loadAll() async {
+    Map<Object, PackageInfosPeek> entries = await _table.loadEntriesFromDB();
+    return entries.values.toList();
+  }
 
   @override
-  List<PackageInfosPeek> get entries => _table.entries.values.toList();
-
-  @override
-  void saveAll(List<PackageInfosPeek> list) {
+  Future<void> saveAll(List<PackageInfosPeek> list) {
     Map<(String, VersionOrString, String), PackageInfosPeek> map = {};
     for (PackageInfosPeek info in list) {
       map[(
@@ -232,5 +231,6 @@ class WingetDBTableWrap implements BulkListSyncStorage<PackageInfosPeek> {
       )] = info;
     }
     _table.addEntries(map);
+    return Future.value();
   }
 }

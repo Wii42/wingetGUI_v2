@@ -19,7 +19,6 @@ import 'package:winget_gui/widget_assets/package_peek.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/winget_commands.dart';
 
-import 'db/package_db.dart';
 import 'db/package_tables.dart';
 import 'navigation_pages/db_table_page.dart';
 import 'output_handling/output_handler.dart';

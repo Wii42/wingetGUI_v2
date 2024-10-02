@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:winget_gui/persistent_storage/persistent_storage_interface.dart';
 import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
 

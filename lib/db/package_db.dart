@@ -7,14 +7,11 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:winget_gui/db/publisher_name_table.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
-import 'package:winget_gui/output_handling/one_line_info_parser.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/winget_commands.dart';
 
-import 'db_message.dart';
 import 'favicon_table.dart';
-import 'package_tables.dart';
-import 'winget_table.dart';
+import 'winget_db_table.dart';
 
 class PackageDB {
   final String dbName;
@@ -50,8 +47,7 @@ class PackageDB {
     );
 
     installed = getDBTable(winget: Winget.installed);
-    updates = getDBTable(
-        winget: Winget.updates, creatorFilter: PackageTables.filterUpdates);
+    updates = getDBTable(winget: Winget.updates);
     available = getDBTable(winget: Winget.availablePackages);
   }
 
@@ -59,8 +55,9 @@ class PackageDB {
     if (_database != null) {
       return;
     }
+    String databasesPath = await getDatabasesPath();
     _database = await openDatabase(
-      path.join(await getDatabasesPath(), dbName),
+      path.join(databasesPath, dbName),
       onCreate: (db, version) {
         for (DBTable table in tables) {
           table.initTable(db);
@@ -74,30 +71,12 @@ class PackageDB {
     for (DBTable table in faviconTables) {
       await table._setEntriesFromDB();
     }
-    for (WingetDBTable table in wingetTables) {
-      await table._setEntriesFromDB();
-      table.parent.infos = table._entries.values.toList();
-      table.parent.status = DBStatus.ready;
-    }
   }
 
   WingetDBTable getDBTable({
-    List<PackageInfosPeek> infos = const [],
-    List<OneLineInfo> hints = const [],
-    PackageFilter? creatorFilter,
     required Winget winget,
   }) {
-    WingetTable wingetTable = WingetTable(
-      infos,
-      hints: hints,
-      content: (locale) => locale.wingetTitle(winget.name),
-      wingetCommand: winget.fullCommand,
-      creatorFilter: creatorFilter,
-      parent: PackageTables.instance,
-    );
-    WingetDBTable table = WingetDBTable(
-        parentDB: this, tableName: winget.name, parent: wingetTable);
-    wingetTable.internTable = table;
+    WingetDBTable table = WingetDBTable(parentDB: this, tableName: winget.name);
     return table;
   }
 }
@@ -187,6 +166,12 @@ abstract class DBTable<K extends Object, V extends Object> {
       return null;
     }
     return entryFromMap(maps.first);
+  }
+
+  Future<Map<K,V>> loadEntriesFromDB() async {
+    await _ensureDBInitialized();
+    await _setEntriesFromDB();
+    return _entries;
   }
 
   Future<Map<K, V>> _dbToMap() async {

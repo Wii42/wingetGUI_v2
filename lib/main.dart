@@ -31,7 +31,6 @@ void main() async {
     LogStream.instance.toStdOut();
   }
   await initAppPrerequisites();
-  await PackageScreenshotsList.instance.fetchScreenshots();
   runApp(const WingetGui());
 }
 
@@ -56,6 +55,7 @@ Future<void> initAppPrerequisites() async {
         JsonSharedPrefsSqflitePersistentStorage()),
   ]);
   ServerInterfaceService.setImplementation(MartiClientServerInterface());
+  await PackageScreenshotsList.instance.fetchScreenshots();
 }
 
 class WingetGui extends StatelessWidget {

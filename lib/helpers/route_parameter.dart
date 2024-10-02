@@ -1,7 +1,6 @@
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
-
-import 'package:winget_gui/db/package_db.dart';
 import 'package:winget_gui/persistent_storage/persistent_storage_interface.dart';
+
 import 'log_stream.dart';
 
 /// Parameters for a route.

@@ -21,7 +21,7 @@ class PersistentStorageService implements PersistentStorage {
   }
 
   @override
-  BulkListSyncStorage<PackageInfosPeek> get availablePackages {
+  BulkListStorage<PackageInfosPeek> get availablePackages {
     _assertInitialized();
     return _implementation!.availablePackages;
   }
@@ -39,7 +39,7 @@ class PersistentStorageService implements PersistentStorage {
   }
 
   @override
-  BulkListSyncStorage<PackageInfosPeek> get installedPackages {
+  BulkListStorage<PackageInfosPeek> get installedPackages {
     _assertInitialized();
     return _implementation!.installedPackages;
   }
@@ -87,7 +87,7 @@ class PersistentStorageService implements PersistentStorage {
   }
 
   @override
-  BulkListSyncStorage<PackageInfosPeek> get updatePackages {
+  BulkListStorage<PackageInfosPeek> get updatePackages {
     _assertInitialized();
     return _implementation!.updatePackages;
   }

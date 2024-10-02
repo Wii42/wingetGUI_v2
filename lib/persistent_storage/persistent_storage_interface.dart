@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:winget_gui/db/winget_table.dart';
 import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
@@ -48,17 +47,17 @@ abstract class PersistentStorage {
   /// Stores all packages with an update available.
   ///
   /// Used to get the updates before Winget is called.
-  BulkListSyncStorage<PackageInfosPeek> get updatePackages;
+  BulkListStorage<PackageInfosPeek> get updatePackages;
 
   /// Stores all installed packages.
   ///
   /// Used to get the installed packages before Winget is called.
-  BulkListSyncStorage<PackageInfosPeek> get installedPackages;
+  BulkListStorage<PackageInfosPeek> get installedPackages;
 
   /// Stores all available packages.
   ///
   /// Used to get the available packages before Winget is called.
-  BulkListSyncStorage<PackageInfosPeek> get availablePackages;
+  BulkListStorage<PackageInfosPeek> get availablePackages;
 
   KeyValueSyncStorage<String, String> get settings;
 }
@@ -97,7 +96,7 @@ abstract class BulkMapStorage<K, V> implements BulkStorage<Map<K, V>> {
 }
 
 abstract class BulkListStorage<T>
-    implements BulkStorage<List<T>>, TableRepresentation<int, T> {
+    implements BulkStorage<List<T>> {
   /// Loads all entries from the storage.
   @override
   Future<List<T>> loadAll();
@@ -120,8 +119,6 @@ abstract class BulkListSyncStorage<T> {
 
   /// Deletes all entries from the storage.
   void deleteAll();
-
-  late WingetTable parent;
 }
 
 /// Storage for a table of entries. Allows CRUD operations.

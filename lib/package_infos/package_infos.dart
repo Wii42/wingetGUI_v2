@@ -1,4 +1,3 @@
-import 'package:winget_gui/db/package_db.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';
