@@ -150,8 +150,10 @@ class _PublisherBuilder {
     }
     String? reconstructedName = reconstructPublisherNameByCompareTo(
         [fullName, ...possiblePublisherNames]);
-    if (publisherId == null && reconstructedName == null) {
-      reconstructedName = fullName ?? anyPublisherNames.nonNulls.firstOrNull;
+    if (publisherId == null) {
+      reconstructedName ??= fullName ??
+          anyPublisherNames.nonNulls.firstOrNull ??
+          reconstructFromWebsite();
     }
     if (reconstructedName != null) {
       publisherName = reconstructedName;
@@ -190,6 +192,8 @@ class _PublisherBuilder {
     }
     return null;
   }
+
+  String? reconstructFromWebsite() => website?.host;
 
   String _stripOfEndingChars(String name, int index, int lengthFullNames) {
     if (index < lengthFullNames) {

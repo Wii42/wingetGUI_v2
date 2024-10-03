@@ -8,6 +8,7 @@ import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/package_infos/info.dart';
 import 'package:winget_gui/package_infos/info_extensions.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
+import 'package:winget_gui/package_infos/publisher.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/buttons/link_button.dart';
@@ -175,8 +176,9 @@ class TitleWidget extends Compartment {
 
   Widget publisher(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    String? publisherId = infos.publisher!.id;
-    String? publisherName = infos.publisher?.nameFittingId ?? publisherId;
+    Publisher? publisher = infos.publisher;
+    String? publisherId = publisher?.id;
+    String? publisherName = publisher?.nameFittingId ?? publisherId ?? formattedPublisherUrl();
     if (publisherId != null) {
       return InlinePageButton(
         pageRoute: Routes.publisherPage,
@@ -195,7 +197,11 @@ class TitleWidget extends Compartment {
     return Text(
       infos.author?.value ??
           infos.id?.value.probablyPublisherId() ??
-          '<unknown>',
+          '<Unknown Publisher>',
     );
+  }
+
+  String? formattedPublisherUrl(){
+    return infos.publisher?.website?.host;
   }
 }

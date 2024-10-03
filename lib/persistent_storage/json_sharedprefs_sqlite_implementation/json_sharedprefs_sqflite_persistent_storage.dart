@@ -45,7 +45,7 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
     updatePackages = WingetDBTableWrap(packageDB.updates);
     availablePackages = WingetDBTableWrap(packageDB.available);
     _isInitialized = true;
-    await packageDB.finishInitializing();
+    await packageDB.loadFaviconTables();
   }
 
   @override

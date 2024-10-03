@@ -70,7 +70,7 @@ class PackageDB {
     );
   }
 
-  Future<void> finishInitializing() async {
+  Future<void> loadFaviconTables() async {
     for (DBTable table in faviconTables) {
       await table._setEntriesFromDB();
     }
