@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:winget_gui/db/publisher_name_table.dart';
+import 'package:winget_gui/persistent_storage/json_sharedprefs_sqlite_implementation/sqflite_db/publisher_name_table.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';

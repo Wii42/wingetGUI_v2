@@ -1,5 +1,3 @@
-import 'package:winget_gui/db/favicon_table.dart';
-import 'package:winget_gui/db/publisher_name_table.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/package_infos/package_infos.dart';
@@ -13,7 +11,7 @@ abstract class PackagePictures {
   PackageScreenshots? getPackage(PackageInfos packageInfos);
 
   /// Automatically fetched favicons while using app.
-  final FaviconTable faviconsTable;
+  final faviconsTable;
 
   PackagePictures({
     required this.publisherIcons,
@@ -22,8 +20,8 @@ abstract class PackagePictures {
 }
 
 abstract class PublisherNames {
-  final PublisherNameTable byPackageId;
-  final PublisherNameTable byPublisherId;
+  final byPackageId;
+  final byPublisherId;
 
   PublisherNames({required this.byPackageId, required this.byPublisherId});
 }

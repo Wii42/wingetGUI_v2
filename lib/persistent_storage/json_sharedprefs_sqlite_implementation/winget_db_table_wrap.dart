@@ -1,6 +1,7 @@
-import 'package:winget_gui/db/winget_db_table.dart';
+
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
+import 'sqflite_db/winget_db_table.dart';
 
 import '../persistent_storage.dart';
 

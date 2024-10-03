@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:winget_gui/db/package_db.dart';
+import 'sqflite_db/package_db.dart';
 import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';

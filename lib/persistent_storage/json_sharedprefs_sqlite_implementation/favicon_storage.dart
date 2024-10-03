@@ -1,4 +1,4 @@
-import 'package:winget_gui/db/package_db.dart';
+import 'package:winget_gui/persistent_storage/json_sharedprefs_sqlite_implementation/sqflite_db/package_db.dart';
 import 'package:winget_gui/persistent_storage/persistent_storage.dart';
 
 /// Abstraction to wrap DB table with two columns: key and value.

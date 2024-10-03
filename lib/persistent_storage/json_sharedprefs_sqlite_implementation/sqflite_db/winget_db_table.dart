@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:winget_gui/db/package_db.dart';
+import 'package:winget_gui/persistent_storage/json_sharedprefs_sqlite_implementation/sqflite_db/package_db.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/package_infos/package_attribute.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
