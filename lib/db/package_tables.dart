@@ -11,8 +11,7 @@ import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/package_infos/package_id.dart';
 import 'package:winget_gui/package_infos/package_infos.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage_interface.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage.dart';
 import 'package:winget_gui/winget_commands.dart';
 
 import 'db_message.dart';

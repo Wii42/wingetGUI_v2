@@ -2,7 +2,10 @@ import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage_interface.dart';
+import 'package:winget_gui/persistent_storage/interface/persistent_storage.dart';
+
+import 'interface/bulk_storage.dart';
+import 'interface/key_value_storage.dart';
 
 class PersistentStorageService implements PersistentStorage {
   static PersistentStorageService instance = PersistentStorageService._();
@@ -95,8 +98,6 @@ class PersistentStorageService implements PersistentStorage {
   void _assertInitialized() {
     _assertHasImplementation();
     if (!isInitialized) {
-      print(
-          'isInitialized: $isInitialized, implementation: ${_implementation?.isInitialized}.');
       throw Exception('PersistentStorageService not initialized: '
           'Make sure to call PersistentStorageService.initializeImplementation() beforehand');
     }

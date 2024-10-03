@@ -6,7 +6,7 @@ import 'package:winget_gui/output_handling/one_line_info_parser.dart';
 import 'package:winget_gui/package_infos/info.dart';
 import 'package:winget_gui/package_infos/package_id.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage_interface.dart';
+import 'package:winget_gui/persistent_storage/persistent_storage.dart';
 
 import 'db_message.dart';
 import 'package_tables.dart';
