@@ -232,31 +232,50 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
 
   Widget menuOptions(BuildContext context, List<PackageInfos> visiblePackages) {
     AppLocalizations locale = AppLocalizations.of(context)!;
+    PackageListMenuOptions options = widget.menuOptions;
     List<Widget> children = [
-      if (prefilteredInfos.length >= 5 && widget.menuOptions.filterField) ...[
+      if (prefilteredInfos.length >= 5 && options.filterField) ...[
         searchField(),
-        if (widget.menuOptions.deepSearchButton) deepSearchButton()
+        if (options.deepSearchButton) deepSearchButton()
       ],
       for (PackageActionType action
-          in widget.menuOptions.runActionOnAllPackagesButtons)
+          in options.runActionOnAllPackagesButtons)
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [packageActionOnAll(visiblePackages, action)],
         ),
       sortWidget(locale, visiblePackages),
-      if (widget.menuOptions.onlyWithSourceButton)
+      if (options.onlyWithSourceButton)
         onlyWithSourceCheckbox(locale),
-      if (widget.menuOptions.onlyWithExactVersionButton)
+      if (options.onlyWithExactVersionButton)
+        onlyWithExactVersionCheckbox(locale),
+    ];
+
+    List<Widget> moreOptions = [
+      if (options.onlyWithSourceButton)
+        onlyWithSourceCheckbox(locale),
+      if (options.onlyWithExactVersionButton)
         onlyWithExactVersionCheckbox(locale),
     ];
 
     return Padding(
       padding: EdgeInsets.all(children.isNotEmpty ? horizontalPadding : 0),
-      child: Wrap(
-        spacing: 20,
-        runSpacing: 10,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: children,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(),
+          Expanded(
+            child: Wrap(
+              spacing: 20,
+              runSpacing: 10,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.center,
+              runAlignment: WrapAlignment.center,
+              children: children,
+            ),
+          ),
+          //if(moreOptions.isNotEmpty) IconButton(icon: Icon(FluentIcons.more_vertical), onPressed: () { showDialog(context: context, builder: (_){return Text('test');}); },) else SizedBox(),
+        ],
       ),
     );
   }
@@ -295,18 +314,23 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     );
   }
 
-  Row sortWidget(AppLocalizations locale, List<PackageInfos> visiblePackages) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(locale.sortBy),
-        sortByComboBox(locale),
-        IconButton(
-            icon: Icon(sortReversed
-                ? system_icons.FluentIcons.text_sort_descending_16_regular
-                : system_icons.FluentIcons.text_sort_ascending_16_regular),
-            onPressed: () => setState(() => sortReversed = !sortReversed)),
-      ].withSpaceBetween(width: 5),
+  Widget sortWidget(AppLocalizations locale, List<PackageInfos> visiblePackages) {
+    Typography textTheme = FluentTheme.of(context).typography;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [Text(locale.sortBy, style: textTheme.caption,),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            sortByComboBox(locale),
+            IconButton(
+                icon: Icon(sortReversed
+                    ? system_icons.FluentIcons.text_sort_descending_16_regular
+                    : system_icons.FluentIcons.text_sort_ascending_16_regular),
+                onPressed: () => setState(() => sortReversed = !sortReversed)),
+          ].withSpaceBetween(width: 5),
+        ),
+      ],
     );
   }
 

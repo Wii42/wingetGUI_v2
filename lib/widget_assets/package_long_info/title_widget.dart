@@ -178,7 +178,8 @@ class TitleWidget extends Compartment {
     AppLocalizations locale = AppLocalizations.of(context)!;
     Publisher? publisher = infos.publisher;
     String? publisherId = publisher?.id;
-    String? publisherName = publisher?.nameFittingId ?? publisherId ?? formattedPublisherUrl();
+    String? publisherName =
+        publisher?.nameFittingId ?? publisherId ?? formattedPublisherUrl();
     if (publisherId != null) {
       return InlinePageButton(
         pageRoute: Routes.publisherPage,
@@ -201,7 +202,7 @@ class TitleWidget extends Compartment {
     );
   }
 
-  String? formattedPublisherUrl(){
+  String? formattedPublisherUrl() {
     return infos.publisher?.website?.host;
   }
 }

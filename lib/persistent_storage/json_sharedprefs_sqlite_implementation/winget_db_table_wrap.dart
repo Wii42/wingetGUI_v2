@@ -31,7 +31,7 @@ class WingetDBTableWrap implements BulkListStorage<PackageInfosPeek> {
         info.name?.value ?? ''
       )] = info;
     }
-    _table.addEntries(map);
+    _table.setEntries(map);
     return Future.value();
   }
 }
