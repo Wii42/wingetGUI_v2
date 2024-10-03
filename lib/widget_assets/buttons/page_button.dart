@@ -17,6 +17,7 @@ class PageButton extends NormalButton
   final String Function(AppLocalizations) tooltipMessage;
   @override
   final RouteParameter? routeParameter;
+
   PageButton({
     super.key,
     required this.pageRoute,
@@ -38,6 +39,7 @@ class PageIconButton extends NormalButton
   final String Function(AppLocalizations) tooltipMessage;
   @override
   final RouteParameter? routeParameter;
+
   PageIconButton({
     super.key,
     required this.pageRoute,
@@ -49,7 +51,11 @@ class PageIconButton extends NormalButton
 }
 
 class PageButtonWithIcon extends NormalButton
-    with TextButtonWithIconMixin, FilledButtonMixin, CustomToolTipMixin, PushPageMixin {
+    with
+        TextButtonWithIconMixin,
+        FilledButtonMixin,
+        CustomToolTipMixin,
+        PushPageMixin {
   @override
   final Routes pageRoute;
   @override
@@ -60,6 +66,7 @@ class PageButtonWithIcon extends NormalButton
   final String Function(AppLocalizations) tooltipMessage;
   @override
   final RouteParameter? routeParameter;
+
   PageButtonWithIcon({
     super.key,
     required this.pageRoute,
@@ -82,6 +89,7 @@ class CustomPageButton extends NormalButton
   final RouteParameter? routeParameter;
   @override
   final bool useMousePosition;
+
   CustomPageButton({
     super.key,
     required this.pageRoute,
@@ -125,5 +133,6 @@ mixin PushPageMixin on NormalButton {
   }
 
   Routes get pageRoute;
+
   RouteParameter? get routeParameter;
 }

@@ -80,6 +80,7 @@ class AppIcon extends StatefulWidget {
 
 class _AppIconState extends State<AppIcon> {
   List<Uri> automaticFoundFavicons = [];
+
   @override
   void initState() {
     super.initState();

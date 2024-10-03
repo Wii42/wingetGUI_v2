@@ -14,6 +14,7 @@ class SearchButton extends RunButton with TextButtonMixin, PlainButtonMixin {
   final bool Function(PackageInfosPeek)? packageFilter;
   final String searchTarget;
   final String? customButtonText;
+
   @override
   SearchButton({
     super.key,
@@ -27,6 +28,7 @@ class SearchButton extends RunButton with TextButtonMixin, PlainButtonMixin {
   @override
   void onPressed(BuildContext context) =>
       SearchPage.search(context, packageFilter: packageFilter)(searchTarget);
+
   @override
   String get buttonText => customButtonText ?? searchTarget;
 }

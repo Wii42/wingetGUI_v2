@@ -7,6 +7,7 @@ import 'package_source.dart';
 
 class MSStoreSource extends PackageSource {
   MSStoreSource(super.package);
+
   @override
   Future<PackageInfosFull> fetchInfos(Locale? guiLocale) async {
     if (package.id == null) {

@@ -9,6 +9,7 @@ enum InstallScope implements IdentifyingProperty {
   matchAll(key: '_');
 
   final String key;
+
   const InstallScope({required this.key});
 
   factory InstallScope.fromYaml(dynamic string) {

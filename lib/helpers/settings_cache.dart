@@ -6,9 +6,11 @@ import 'locale_parser.dart';
 class SettingsCache {
   static const String _guiLocaleKey = 'guiLocale',
       _wingetLocaleKey = 'wingetLocale';
+
   KeyValueSyncStorage<String, String> get _settingsStorage =>
       PersistentStorageService.instance.settings;
   static final SettingsCache instance = SettingsCache._();
+
   SettingsCache._();
 
   set guiLocale(Locale? guiLocale) {

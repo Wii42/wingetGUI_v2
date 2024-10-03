@@ -13,6 +13,7 @@ class ProcessScheduler {
   final StreamController<int> _streamController =
       StreamController<int>.broadcast();
   static final instance = ProcessScheduler._();
+
   ProcessScheduler._() {
     log = Logger(this, sourceType: ProcessScheduler);
   }
@@ -123,6 +124,7 @@ class ProcessWrap implements Process {
   }
 
   Future<void> get waitForReady async => await _processAwaiter.future;
+
   Future<void> get waitOnDone async => await exitCode;
 
   @override

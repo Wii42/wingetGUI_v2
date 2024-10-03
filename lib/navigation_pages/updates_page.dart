@@ -11,6 +11,7 @@ WingetTable dbTable = PackageTables.instance.updates;
 
 class UpdatesPage extends StatelessWidget {
   final WingetTable dbTable = PackageTables.instance.updates;
+
   UpdatesPage({super.key});
 
   static Widget inRoute([dynamic parameters]) {

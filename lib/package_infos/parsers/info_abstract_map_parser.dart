@@ -22,6 +22,7 @@ import '../package_id.dart';
 
 abstract class InfoAbstractMapParser<A, B> {
   Map<A, B> map;
+
   InfoAbstractMapParser({required this.map});
 
   Info<String>? maybeStringFromMap(PackageAttribute attribute);

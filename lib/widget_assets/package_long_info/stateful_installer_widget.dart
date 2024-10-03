@@ -22,6 +22,7 @@ class StatefulInstallerWidget extends StatefulWidget {
   late final _InstallerCompartmentStub _template;
   final Info<List<Installer>> infos;
   final Locale? guiLocale, defaultLocale;
+
   StatefulInstallerWidget(
       {required this.infos, super.key, this.guiLocale, this.defaultLocale})
       : _template = _InstallerCompartmentStub(infos: infos);
@@ -114,6 +115,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   }
 
   List<Installer> get installers => widget.infos.value;
+
   ExpanderCompartment get template => widget._template;
 
   List<Installer> get fittingInstallers {

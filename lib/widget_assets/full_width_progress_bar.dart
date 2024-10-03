@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 class FullWidthProgressbar extends StatelessWidget {
   final double strokeWidth;
+
   const FullWidthProgressbar({super.key, this.strokeWidth = 4.5});
 
   @override

@@ -70,6 +70,7 @@ enum PackageAttribute {
   final bool copyable;
   final String? apiKey;
   final bool couldBeLink;
+
   const PackageAttribute(
       {this.copyable = false, this.couldBeLink = true, this.apiKey});
 

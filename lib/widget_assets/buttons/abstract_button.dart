@@ -49,12 +49,13 @@ mixin TextButtonMixin on AbstractButton {
 
 mixin TextButtonWithIconMixin on AbstractButton {
   IconData? get icon;
+
   String get buttonText;
 
   @override
   Widget get child => icon != null
       ? Row(
-    mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon),
             Text(buttonText),
@@ -65,6 +66,7 @@ mixin TextButtonWithIconMixin on AbstractButton {
 
 mixin IconButtonMixin on AbstractButton {
   IconData get icon;
+
   EdgeInsetsGeometry get padding;
 
   @override
@@ -97,6 +99,7 @@ mixin PlainButtonMixin on AbstractButton {
 
 mixin CustomToolTipMixin on AbstractButton {
   LocalizedString get tooltipMessage;
+
   @override
   ButtonTooltip buildTooltip(BuildContext context, {required Widget child}) {
     return CustomTooltip(

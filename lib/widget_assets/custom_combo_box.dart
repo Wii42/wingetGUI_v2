@@ -42,6 +42,7 @@ class CustomComboBox<T> extends StatelessWidget {
     this.autofocus = false,
     this.popupColor,
   });
+
   @override
   Widget build(BuildContext context) {
     return ComboBox(

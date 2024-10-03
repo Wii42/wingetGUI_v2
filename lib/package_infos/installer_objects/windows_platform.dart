@@ -4,6 +4,7 @@ enum WindowsPlatform {
   ;
 
   final String title;
+
   const WindowsPlatform(this.title);
 
   static WindowsPlatform fromYaml(dynamic platform) {

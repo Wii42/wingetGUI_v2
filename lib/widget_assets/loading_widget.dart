@@ -5,6 +5,7 @@ import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
 class LoadingWidget extends StatelessWidget {
   final LocalizedString text;
+
   const LoadingWidget({
     super.key,
     required this.text,

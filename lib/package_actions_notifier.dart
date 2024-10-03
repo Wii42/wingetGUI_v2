@@ -50,6 +50,7 @@ class PackageAction {
   Key uniqueKey;
   List<String> output = [];
   StreamSubscription<List<String>>? _outputSubscription;
+
   PackageAction({required this.process, this.infos, this.type})
       : uniqueKey = UniqueKey();
 

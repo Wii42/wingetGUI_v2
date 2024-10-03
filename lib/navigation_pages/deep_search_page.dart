@@ -12,6 +12,7 @@ class DeepSearchPage extends StatelessWidget {
   final List<String> searchFor;
   final String? titleAddon;
   final bool Function(PackageInfosPeek)? packageFilter;
+
   const DeepSearchPage(this.searchFor,
       {super.key, this.titleAddon, this.packageFilter});
 

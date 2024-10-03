@@ -29,7 +29,8 @@ class PublisherPage extends StatelessWidget {
     String? publisherName = parameters.titleAddon ??
         PackageScreenshotsList
             .instance.publisherIcons[publisherId]?.nameUsingDefaultSource ??
-        PersistentStorageService.instance.publisherNameByPublisherId[publisherId];
+        PersistentStorageService
+            .instance.publisherNameByPublisherId[publisherId];
 
     return PublisherPage(
         publisherId: publisherId, publisherName: publisherName);

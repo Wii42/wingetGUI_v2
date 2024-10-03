@@ -210,6 +210,7 @@ class MultiProperty {
   final bool hasScope;
   final InstallerType? nestedInstaller;
   final bool hasNestedInstaller;
+
   MultiProperty({
     required this.architecture,
     required this.hasArchitecture,

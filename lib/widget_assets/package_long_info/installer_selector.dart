@@ -27,6 +27,7 @@ class InstallerSelector extends StatelessWidget {
       required IdentifyingProperty? value}) setInstallerProperty;
 
   final Installer? selectedInstaller;
+
   const InstallerSelector({
     super.key,
     required this.installers,

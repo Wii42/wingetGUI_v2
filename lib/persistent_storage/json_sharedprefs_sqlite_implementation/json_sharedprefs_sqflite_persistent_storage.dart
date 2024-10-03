@@ -1,17 +1,17 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'sqflite_db/package_db.dart';
 import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/persistent_storage/json_file_loader.dart';
-import 'winget_db_table_wrap.dart';
-import 'favicon_storage.dart';
-import 'screenshot_bulk_storage.dart';
 import 'package:winget_gui/persistent_storage/web_fetcher.dart';
 
 import '../persistent_storage.dart';
+import 'favicon_storage.dart';
+import 'screenshot_bulk_storage.dart';
 import 'settings_storage.dart';
+import 'sqflite_db/package_db.dart';
+import 'winget_db_table_wrap.dart';
 
 /// A persistent storage implementation that uses shared preferences,
 /// json files and sqflite.

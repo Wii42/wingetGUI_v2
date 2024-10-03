@@ -68,7 +68,9 @@ class TitleWidget extends Compartment {
       if (isWide) Expanded(child: nameAndCenter) else nameAndCenter,
       if (infos.id != null)
         Padding(
-          padding: isWide? const EdgeInsets.only(left: 25): const EdgeInsets.only(top: 10),
+          padding: isWide
+              ? const EdgeInsets.only(left: 25)
+              : const EdgeInsets.only(top: 10),
           child: buildRightSide(),
         ),
     ];

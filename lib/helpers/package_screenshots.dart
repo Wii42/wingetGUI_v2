@@ -91,6 +91,7 @@ class PackageScreenshots {
     return json
         .map((key, value) => MapEntry(key, PackageScreenshots.fromJson(value)));
   }
+
   /// Encodes a map of [PackageScreenshots] to a JSON object.
   static Map<String, dynamic> mapToJson(Map<String, PackageScreenshots> map) {
     return map.map((key, value) => MapEntry(key, value.toJson()));

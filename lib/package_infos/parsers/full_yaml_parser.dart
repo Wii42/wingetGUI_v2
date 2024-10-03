@@ -7,6 +7,7 @@ import 'info_yaml_parser.dart';
 class FullYamlParser extends FullAbstractMapParser<dynamic, dynamic> {
   Map<dynamic, dynamic> installerDetails;
   String? source;
+
   FullYamlParser(
       {Map<dynamic, dynamic> details = const {},
       this.installerDetails = const {},

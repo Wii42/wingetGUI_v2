@@ -48,6 +48,7 @@ class LogsPage extends StatefulWidget {
 
 class _LogsPageState extends State<LogsPage> {
   LogSeverity filter = LogSeverity.info;
+
   @override
   Widget build(BuildContext context) {
     return PaneItemBody(
@@ -147,6 +148,7 @@ class _LogsPageState extends State<LogsPage> {
 
 class LogDetailsPage extends StatelessWidget {
   final LogMessage log;
+
   const LogDetailsPage(this.log, {super.key});
 
   @override

@@ -7,6 +7,7 @@ import 'package:winget_gui/winget_commands.dart';
 class ShowBuilder extends StatelessWidget {
   final PackageInfosFull infos;
   final List<String> command;
+
   const ShowBuilder({super.key, required this.infos, required this.command});
 
   @override

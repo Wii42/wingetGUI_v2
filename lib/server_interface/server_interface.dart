@@ -16,6 +16,7 @@ class ServerInterfaceService {
   static final ServerInterfaceService instance = ServerInterfaceService._();
 
   ServerInterfaceService._();
+
   static ServerInterface? _implementation;
 
   static void setImplementation(ServerInterface implementation) {

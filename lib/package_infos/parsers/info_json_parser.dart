@@ -9,6 +9,7 @@ import 'info_api_parser.dart';
 
 class InfoJsonParser extends InfoApiParser<String> {
   List<dynamic>? agreements;
+
   InfoJsonParser({required super.map, this.agreements});
 
   @override

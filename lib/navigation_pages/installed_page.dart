@@ -8,6 +8,7 @@ import 'package:winget_gui/winget_commands.dart';
 
 class InstalledPage extends StatelessWidget {
   final WingetTable dbTable = PackageTables.instance.installed;
+
   InstalledPage({super.key});
 
   static Widget inRoute([dynamic parameters]) {

@@ -6,6 +6,7 @@ enum InstallMode {
   silentWithProgress(key: 'silentWithProgress');
 
   final String key;
+
   const InstallMode({required this.key});
 
   factory InstallMode.fromApi(dynamic string) {

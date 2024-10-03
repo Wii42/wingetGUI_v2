@@ -236,15 +236,12 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       if (prefilteredInfos.length >= 5 && widget.menuOptions.filterField) ...[
         searchField(),
         if (widget.menuOptions.deepSearchButton) deepSearchButton()
-
       ],
       for (PackageActionType action
-      in widget.menuOptions.runActionOnAllPackagesButtons)
+          in widget.menuOptions.runActionOnAllPackagesButtons)
         Row(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            packageActionOnAll(visiblePackages, action)
-          ],
+          children: [packageActionOnAll(visiblePackages, action)],
         ),
       sortWidget(locale, visiblePackages),
       if (widget.menuOptions.onlyWithSourceButton)

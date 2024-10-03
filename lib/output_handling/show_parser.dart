@@ -14,6 +14,7 @@ const maxIdentifierLength = 100;
 
 class ShowParser extends OutputParser {
   final List<String> command;
+
   ShowParser(super.lines, {required this.command});
 
   @override
@@ -117,6 +118,7 @@ class ShowParser extends OutputParser {
 class ParsedShow extends ParsedOutput {
   final PackageInfosFull infos;
   final List<String> command;
+
   ParsedShow({required this.infos, required this.command});
 
   @override

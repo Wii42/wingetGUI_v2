@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 class CustomExpander extends Expander {
   static ShapeBorder _headerShape(bool _) => const RoundedRectangleBorder();
+
   CustomExpander({
     super.key,
     super.leading,
@@ -18,8 +19,8 @@ class CustomExpander extends Expander {
     super.contentPadding = EdgeInsets.zero,
     super.contentShape,
   }) : super(
-            headerBackgroundColor:
-                headerBackgroundColor ?? WidgetStateProperty.all(Colors.transparent));
+            headerBackgroundColor: headerBackgroundColor ??
+                WidgetStateProperty.all(Colors.transparent));
 
   @override
   State<Expander> createState() => CustomExpanderState();
@@ -30,7 +31,9 @@ class CustomExpanderState extends State<CustomExpander>
   late FluentThemeData _theme;
 
   late bool _isExpanded;
+
   bool get isExpanded => _isExpanded;
+
   set isExpanded(bool value) {
     if (_isExpanded != value) _handlePressed();
   }

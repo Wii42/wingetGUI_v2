@@ -102,6 +102,7 @@ class PaneItemBody extends StatelessWidget {
   }
 
   bool hasPreviousPage(BuildContext context) => Navigator.of(context).canPop();
+
   bool canGoBack(BuildContext context) =>
       goBackWithoutPreviousPage != null || hasPreviousPage(context);
 

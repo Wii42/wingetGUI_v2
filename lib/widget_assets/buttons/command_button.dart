@@ -14,6 +14,7 @@ class CommandButton extends RunButton
   @override
   final IconData? icon;
   final String? title;
+
   const CommandButton(
       {super.key,
       required super.command,
@@ -33,6 +34,7 @@ class CommandIconButton extends RunButton
   @override
   final IconData icon;
   final String title;
+
   const CommandIconButton(
       {super.key,
       required super.command,

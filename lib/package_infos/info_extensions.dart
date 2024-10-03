@@ -48,6 +48,7 @@ extension StringInfo on Info<String> {
   }
 
   bool get isEmpty => value.isEmpty;
+
   bool get isNotEmpty => !isEmpty;
 }
 
@@ -56,6 +57,7 @@ extension UriInfo on Info<Uri> {
       toStringInfoFromObject((object) => object.toString());
 
   bool get isEmpty => value.toString().isEmpty;
+
   bool get isNotEmpty => !isEmpty;
 }
 

@@ -6,6 +6,7 @@ import 'abstract_link_button.dart';
 class MiniIconLinkButton extends AbstractLinkButton with MiniIconButton {
   @override
   final IconData icon;
+
   const MiniIconLinkButton(
       {super.key,
       required super.url,
@@ -27,5 +28,6 @@ mixin MiniIconButton on AbstractButton {
 
   @override
   Widget get child => Icon(icon);
+
   IconData get icon;
 }

@@ -4,10 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:winget_gui/persistent_storage/json_sharedprefs_sqlite_implementation/sqflite_db/publisher_name_table.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/persistent_storage/json_sharedprefs_sqlite_implementation/sqflite_db/publisher_name_table.dart';
 import 'package:winget_gui/winget_commands.dart';
 
 import 'favicon_table.dart';
@@ -19,11 +19,14 @@ class PackageDB {
   late final PublisherNameTable publisherNamesByPackageId;
   late final PublisherNameTable publisherNamesByPublisherId;
   late final WingetDBTable updates, installed, available;
+
   List<DBTable> get tables => [
         ...faviconTables,
         ...wingetTables,
       ];
+
   List<WingetDBTable> get wingetTables => [installed, updates, available];
+
   List<DBTable> get faviconTables => [
         favicons,
         publisherNamesByPackageId,
@@ -83,8 +86,11 @@ class PackageDB {
 
 abstract class DBTable<K extends Object, V extends Object> {
   String get tableName;
+
   String get idKey;
+
   (K, V) entryFromMap(Map<String, dynamic> map);
+
   Map<String, dynamic> entryToMap((K, V) entry);
 
   Map<K, V> _entries = {};
@@ -168,7 +174,7 @@ abstract class DBTable<K extends Object, V extends Object> {
     return entryFromMap(maps.first);
   }
 
-  Future<Map<K,V>> loadEntriesFromDB() async {
+  Future<Map<K, V>> loadEntriesFromDB() async {
     await _ensureDBInitialized();
     await _setEntriesFromDB();
     return _entries;
@@ -205,6 +211,7 @@ abstract class DBTable<K extends Object, V extends Object> {
   }
 
   operator []=(K id, V value) => insert(id, value);
+
   operator [](K id) => getEntry(id);
 
   String toJson() {

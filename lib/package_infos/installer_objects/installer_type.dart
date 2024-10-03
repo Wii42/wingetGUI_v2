@@ -24,6 +24,7 @@ enum InstallerType implements IdentifyingProperty {
   final String key;
   final String _shortTitle;
   final String? _longTitle;
+
   const InstallerType(
       {required this.key, required String shortTitle, String? longTitle})
       : _longTitle = longTitle,
@@ -47,8 +48,10 @@ enum InstallerType implements IdentifyingProperty {
 
   @override
   String shortTitle([AppLocalizations? _]) => _shortTitle;
+
   @override
   String? longTitle([AppLocalizations? _, LocaleNames? __]) => _longTitle;
+
   @override
   bool get fullTitleHasShortAlways => true;
 }

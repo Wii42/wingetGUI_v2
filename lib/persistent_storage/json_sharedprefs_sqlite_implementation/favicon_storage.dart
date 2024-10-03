@@ -9,6 +9,7 @@ class FaviconsStorage<V extends Object> extends KeyValueSyncStorage<String, V> {
   final DBTable<String, V> _table;
 
   FaviconsStorage(this._table, {this.tableName = 'Favicon'});
+
   @override
   void addEntry(String key, V value) => _table.insert(key, value);
 

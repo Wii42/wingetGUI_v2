@@ -38,7 +38,9 @@ class ListBuilder extends StatelessWidget {
 class ListEntry extends StatelessWidget {
   final String title;
   final String? value;
+
   const ListEntry({super.key, required this.title, this.value});
+
   @override
   Widget build(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;

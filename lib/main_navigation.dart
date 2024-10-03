@@ -7,6 +7,7 @@ class MainNavigation extends StatefulWidget {
   static const double minWidthForOpenPane = 1008;
 
   final String title;
+
   MainNavigation({super.key, required this.title});
 
   final List<Routes> mainItems = [
@@ -147,6 +148,7 @@ class PackageActionWrap extends StatelessWidget {
   final Widget child;
 
   const PackageActionWrap(this.child, {super.key});
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -162,6 +164,7 @@ class PackageActionWrap extends StatelessWidget {
 
 class NavigationNavigator extends StatefulWidget {
   final Routes winget;
+
   const NavigationNavigator(this.winget, {super.key});
 
   @override

@@ -8,6 +8,7 @@ import 'tooltips.dart';
 abstract class RunButton extends NormalButton {
   /// The command to be run when the button is pressed. Needed for the tooltip.
   final List<String> command;
+
   const RunButton({
     super.key,
     required this.command,

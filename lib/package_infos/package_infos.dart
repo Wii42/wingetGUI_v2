@@ -52,6 +52,7 @@ abstract class PackageInfos {
 
   bool hasVersion() =>
       (version != null && version?.value.stringVersion != 'Unknown');
+
   bool hasSpecificVersion() =>
       version != null && version!.value.isSpecificVersion();
 
@@ -60,11 +61,13 @@ abstract class PackageInfos {
     screenshots = screenshotsList.getPackage(this);
     checkedForScreenshots = true;
     if (id != null) {
-      automaticFoundFavicons = PersistentStorageService.instance.favicon[id!.value.string];
+      automaticFoundFavicons =
+          PersistentStorageService.instance.favicon[id!.value.string];
     }
   }
 
   bool isWinget();
+
   bool isMicrosoftStore();
 
   PackageSource? get packageSource {

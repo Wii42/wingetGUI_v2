@@ -29,6 +29,7 @@ abstract class ButtonTooltip extends StatelessWidget {
 
 class RunButtonTooltip extends ButtonTooltip {
   final List<String> command;
+
   const RunButtonTooltip({
     super.key,
     required this.command,

@@ -100,8 +100,10 @@ class PackageScreenshotsList {
 extension PublisherUsingDefaultSource on JsonPublisher {
   String? get nameUsingDefaultSource =>
       nameUsingSource(PackageScreenshotsList.instance.publisherIcons);
+
   Uri? get iconUsingDefaultSource =>
       iconUsingSource(PackageScreenshotsList.instance.publisherIcons);
+
   Uri? get solidIconUsingDefaultSource =>
       solidIconUsingSource(PackageScreenshotsList.instance.publisherIcons);
 }

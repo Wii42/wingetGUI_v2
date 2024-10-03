@@ -8,6 +8,7 @@ import 'package:winget_gui/package_infos/package_infos.dart';
 /// Includes also manually
 abstract class PackagePictures {
   final Map<String, JsonPublisher> publisherIcons;
+
   PackageScreenshots? getPackage(PackageInfos packageInfos);
 
   /// Automatically fetched favicons while using app.

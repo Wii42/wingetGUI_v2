@@ -4,6 +4,7 @@ import 'json_web_core.dart';
 
 class WebFetcher {
   JsonWebCore jsonWebCore = JsonWebCore();
+
   //static final Logger log = Logger(null, sourceType: WebFetcher);
 
   static const String wingetUIScreenshotDatabaseUrl =

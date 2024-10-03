@@ -9,6 +9,7 @@ import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 class DBTableWidget extends StatelessWidget {
   final TableRepresentation table;
+
   const DBTableWidget(this.table, {super.key});
 
   @override

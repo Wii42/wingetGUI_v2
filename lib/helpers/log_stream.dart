@@ -11,13 +11,17 @@ class LogStream {
   final StreamController<LogMessage> _streamController =
       StreamController<LogMessage>.broadcast();
   final List<LogMessage> _messages = [];
+
   LogStream._();
 
   Stream<LogMessage> get logStream => _streamController.stream;
+
   Stream<LogMessage> get errorLogsStream => _streamController.stream
       .where((element) => element.severity == LogSeverity.error);
+
   Stream<List<LogMessage>> get logsListStream =>
       _streamController.stream.rememberingStream();
+
   Stream<List<LogMessage>> get errorLogsListStream =>
       errorLogsStream.rememberingStream();
 
@@ -71,6 +75,7 @@ enum LogSeverity {
   error('ERROR');
 
   final String displayName;
+
   const LogSeverity(this.displayName);
 }
 

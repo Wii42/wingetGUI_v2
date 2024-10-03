@@ -33,7 +33,9 @@ class Version implements Comparable<Version> {
   }
 
   int get major => intSegments[0];
+
   int? get minor => intSegments.get(1);
+
   int? get patch => intSegments.get(2);
 
   List<int> get intSegments => stringSegments.map((e) => int.parse(e)).toList();
@@ -144,8 +146,11 @@ class Version implements Comparable<Version> {
   }
 
   bool operator <(Version other) => compareTo(other) < 0;
+
   bool operator <=(Version other) => compareTo(other) <= 0;
+
   bool operator >(Version other) => compareTo(other) > 0;
+
   bool operator >=(Version other) => compareTo(other) >= 0;
 }
 

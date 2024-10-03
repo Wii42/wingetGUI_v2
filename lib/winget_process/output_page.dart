@@ -17,6 +17,7 @@ class OutputPage extends ProcessOutput {
         process: WingetProcess.fromCommand(command),
         title: title != null ? (_) => title : null);
   }
+
   factory OutputPage.fromWinget(Winget winget,
       {String? titleInput, List<String> parameters = const []}) {
     return OutputPage(

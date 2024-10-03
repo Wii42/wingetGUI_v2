@@ -1,63 +1,43 @@
 {
-  "@@locale" : "en",
-
+  "@@locale": "en",
   "runCommand": "Run Command",
-
   "wingetTitle": "{command, select, updates{Updates}  updatesPage{Updates} installed{Installed}  installedPage{Installed} about{About Winget} help{Help} search{Search Apps} settings{Winget Settings} sources{Sources} install{Install} upgrade{Upgrade} uninstall{Uninstall}  show{Show}  searchPage{Explore Apps} commandPromptPage{Run Command} upgradeAll{Upgrade All} advancedOptions{Advanced} settingsPage{Settings} logsPage{Logs} logDetailsPage{Log Details} availablePackages{Available Apps} tinkeringSection{Tinkering Section} other{NotFoundError}}",
   "wingetTitlePrefix": "{command, select, search{Search} show {} other{NotFoundError}}",
-
   "history": "History",
-
   "infoKey": "{info, select, id{ID} description{Description} name{Name} publisher{Publisher} publisherUrl{PublisherUrl} publisherSupportUrl{PublisherSupportUrl} version{Version}  availableVersion{Available} tags{Tags} releaseNotes{ReleaseNotes} releaseNotesUrl{ReleaseNotesUrl} installer{Installationsprogramm} source{Source} website{Homepage} license{License} licenseUrl{LicenseUrl} copyright{Copyright} copyrightUrl{CopyrightUrl} privacyUrl{PrivacyUrl} buyUrl{BuyUrl} termsOfTransaction{Terms of Transaction} seizureWarning{Seizure Warning} storeLicenseTerms{Store License Terms} author{Author} moniker{AppMoniker} documentation{Documentation} agreement{Agreement} category{Category} pricing{Pricing} freeTrial{Free Trial} ageRating{Age Ratings} installerType{Type} storeProductID{Store Product ID} installerURL{Download Url} sha256Installer{SHA256} installerLocale{Language} releaseDate{Freigabedatum}  match{Match} other{NotFoundError}}",
-
   "infoTitle": "{info, select, id{App ID} description{About} name{Name} publisher{Publisher} publisherUrl{Publisher URL} publisherSupportUrl{Support} version{Version}  availableVersion{Available} tags{Tags} releaseNotes{Release Notes} releaseNotesUrl{Show Online} installer{Installer} source{Source} website{Website} license{License} licenseUrl{License} copyright{Copyright} copyrightUrl{Copyright} privacyUrl{Privacy} buyUrl{Buy} termsOfTransaction{Terms of Transaction} seizureWarning{Seizure Warning} storeLicenseTerms{Store License Terms} author{Author} moniker{Moniker} documentation{Documentation} agreement{Agreement} category{Category} pricing{Pricing} freeTrial{Free Trial} ageRating{Age Rating} installerType{Installer Type} storeProductID{Store Product ID} installerURL{Download Installer Manually} sha256Installer{SHA256 Hash} installerLocale{Locale} releaseDate{Release Date} manifest{Manifest} match{Match} installers{Available Installers} upgradeBehavior{Upgrade Behavior} fileExtensions{Supported File Types} packageLocale{Locale} platform{Plattform} architecture{Architecture} minimumOSVersion{Minimal OS Version} installScope{Installation Scope} signatureSha256{Signature Hash} elevationRequirement{Elevation requirement} productCode{Product Code} appsAndFeaturesEntries{'Apps and Features' Entries} installerSwitches{Installer Switches} installModes{Install Modes} shortDescription{Short Description} nestedInstallerType{Typ of the Nested Installer} availableCommands{Available Commands} dependencies{Package Dependencies} protocols{Supported Protocols}  auto{Auto} random{Random}  packageFamilyName{Package Family Name} markets{Markets} expectedReturnCodes{Expected Response Codes} installerSuccessCodes{Installer Success Codes} installationNotes{Installation Notes} other{NotFoundError}}",
-
   "details": "Details",
   "fromSource": "from {source}",
-
   "found": "Found",
   "agreementsFor": "Agreements for",
   "showInStore": "Show in Store",
   "showMore": "show more",
   "showLess": "show less",
-
   "endProcess": "End Current Process",
-
   "showInSeparatePage": "Open in separate window",
-
   "waitOnData": "waiting on data...",
-
   "showOnlyClickablePackages": "show only selectable apps",
   "showOnlyPackagesWithSpecificVersion": "show only apps with known specific version",
   "nrOfPackagesShown": "{number} of {total} apps are displayed",
   "nrOfPackages": "{total} apps",
-
   "chooseDisplayMode": "Choose mode",
   "chooseLanguage": "Choose language",
-  "chooseWingetLanguage" : "Choose language of Winget",
+  "chooseWingetLanguage": "Choose language of Winget",
   "openWingetSettingsFile": "Open Winget settings file",
-
   "themeMode": "{mode, select, system{System} light{Light} dark{Dark} other{NotFoundError}}",
   "autoLanguage": "auto",
-
   "error": "Error",
   "unexpectedError": "Unexpected error",
-
   "installed": "Installed",
   "installSuccessful": "Installation successful",
   "uninstallSuccessful": "Uninstall successful",
-
   "userScope": "User",
   "machineScope": "Machine Wide",
-
   "installMode": "{mode, select, interactive{interactive} silent{silent} silentWithProgress{silent with progress} other{NotFoundError}}",
-
   "upgradeBehavior": "{behavior, select, install{Install} uninstallPrevious{Uninstall previous version} deny{Deny} custom{<Custom>} other{NotFoundError}}",
-
   "cantLoadDetails": "Can't load details",
   "noInternetConnection": "No internet connection",
   "reason": "Reason",
-
   "moreFromPublisher": "More from {publisher}",
   "downloadManually": "Download {installerDescription} manually",
   "installer": "{description} installer",
@@ -65,9 +45,7 @@
   "multipleFittingInstallersFound": "{nrOfInstallers} installers found for the selected options. Select one:",
   "noInstallerFound": "No installer found for the selected options",
   "close": "Close",
-
   "localPC": "local PC",
-
   "noAppsFound": "No apps found",
   "noFittingAppsFound": "No fitting apps found",
   "onlyAppsWithSource": "Only apps with source",
@@ -75,11 +53,8 @@
   "sortBy": "Sort by",
   "extendedSearch": "Extended search",
   "searchFor": "Search for",
-
   "waiting": "waiting...",
-
   "returnResponse": "{response, select, packageInUse{Package in Use} packageInUseByApplication{Package in Use by Application} installInProgress{Install in Progress} fileInUse{File in Use} missingDependency{Missing Dependency} diskFull{Disk Full}  insufficientMemory{Insufficient Memory} invalidParameter{Invalid Parameter} noNetwork{No Network} contactSupport{Contact Support} rebootRequiredToFinish{Reboot Required to Finish} rebootRequiredForInstall{Reboot Required for Install} rebootInitiated{Reboot Initiated} cancelledByUser{Cancelled by User} alreadyInstalled{Already Installed} downgrade{Downgrade} blockedByPolicy{Blocked by Policy} systemNotSupported{System Not Supported} custom{Custom Response} other{NotFoundError}}",
-
   "copyToClipboardTooltip": "Copy to clipboard",
   "openMSStorePageTooltip": "Open the Microsoft Store page for this app",
   "openHelpTooltip": "Open help in a new page",
@@ -87,7 +62,6 @@
   "moreFromPublisherTooltip": "Show all Apps from this Publisher",
   "packagePeekTooltip": "Show app details",
   "runCommandTooltip": "Run command '{command}'",
-
   "readOutputOfCommand": "Reading output of '{command}'...",
   "loading": "Loading...",
   "output": "Output",
@@ -98,10 +72,8 @@
   "errorOccurred": "An error occurred",
   "warning": "Warning",
   "processesQueued": "{nrOfProcesses} processes are in queue for execution",
-
   "onlyAppsWithSourceTooltip": "Show only apps from a known package source",
   "onlyAppsWithExactVersionTooltip": "Show only apps with a known specific version",
   "actionOnAll": "{action} all",
-
   "ok": "Ok"
 }

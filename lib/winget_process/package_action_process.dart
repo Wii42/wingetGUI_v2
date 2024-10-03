@@ -8,6 +8,7 @@ import 'winget_process_scheduler.dart';
 
 class PackageActionProcess extends WingetProcess {
   final PackageActionType type;
+
   PackageActionProcess._(
       {required super.process,
       super.name,

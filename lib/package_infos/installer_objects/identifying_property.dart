@@ -3,7 +3,9 @@ import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 
 abstract class IdentifyingProperty {
   String shortTitle([AppLocalizations? locale]);
+
   String? longTitle([AppLocalizations? locale, LocaleNames? localeNames]);
+
   bool get fullTitleHasShortAlways;
 }
 

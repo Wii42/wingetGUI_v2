@@ -22,6 +22,7 @@ class PackageTables {
   DBStatus status = DBStatus.loading;
   static final PackageTables instance = PackageTables._();
   late WingetTable updates, installed, available;
+
   List<WingetTable> get tables => [updates, installed, available];
 
   bool _isInitialized = false;
@@ -31,7 +32,7 @@ class PackageTables {
   }
 
   Stream<LocalizedString> init(BuildContext context) async* {
-    if(_isInitialized){
+    if (_isInitialized) {
       return;
     }
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
@@ -65,7 +66,7 @@ class PackageTables {
   }
 
   Future<void> initDB() async {
-    if(_isInitialized){
+    if (_isInitialized) {
       return;
     }
     PersistentStorageService storage = PersistentStorageService.instance;
@@ -87,7 +88,7 @@ class PackageTables {
     PackageFilter? creatorFilter,
     required BulkListStorage<PackageInfosPeek> persistentStorage,
     required Winget winget,
-  }) async{
+  }) async {
     WingetTable wingetTable = WingetTable(
       infos,
       hints: hints,

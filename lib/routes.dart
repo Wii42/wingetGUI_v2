@@ -50,7 +50,6 @@ enum Routes {
       icon: FluentIcons.delete, route: '/uninstall', winget: Winget.uninstall),
   show(route: 'show', body: packageDetailsPage),
   upgradeAll(route: '/upgradeAll', winget: Winget.upgradeAll),
-
   searchPage(
       icon: FluentIcons.search, route: '/searchPage', body: SearchPage.inRoute),
   commandPromptPage(
@@ -154,9 +153,12 @@ class TinkeringSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 dbButton(context, PersistentStorageService.instance.favicon),
-                dbButton(context, PersistentStorageService.instance.publisherNameByPackageId),
+                dbButton(context,
+                    PersistentStorageService.instance.publisherNameByPackageId),
                 dbButton(
-                    context, PersistentStorageService.instance.publisherNameByPublisherId),
+                    context,
+                    PersistentStorageService
+                        .instance.publisherNameByPublisherId),
               ].withSpaceBetween(height: 10),
             ),
           ),

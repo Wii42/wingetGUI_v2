@@ -13,8 +13,8 @@ class PublisherNameTable extends DBTable<String, String> {
 
   PublisherNameTable(
       {required this.tableName,
-        required this.idKey,
-        required PackageDB parentDB})
+      required this.idKey,
+      required PackageDB parentDB})
       : super(parentDB);
 
   @override
@@ -42,7 +42,7 @@ class PublisherNameTable extends DBTable<String, String> {
 
   @override
   String toJson() {
-    return jsonEncode(
-        entries.map((key, value) => MapEntry(key, {'publisher_name': value.toString()})));
+    return jsonEncode(entries.map(
+        (key, value) => MapEntry(key, {'publisher_name': value.toString()})));
   }
 }

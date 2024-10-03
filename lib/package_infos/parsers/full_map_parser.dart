@@ -6,6 +6,7 @@ import 'info_map_parser.dart';
 class FullMapParser extends FullAbstractMapParser<String, String> {
   Map<String, String> installerDetails;
   AppLocalizations locale;
+
   FullMapParser(
       {Map<String, String> details = const {},
       this.installerDetails = const {},

@@ -8,6 +8,7 @@ import 'one_line_info_parser.dart';
 
 class OneLineInfoBuilder extends StatelessWidget {
   final List<OneLineInfo> infos;
+
   const OneLineInfoBuilder({super.key, required this.infos});
 
   @override
@@ -66,6 +67,7 @@ const quotationMarks = [
 class OneLineInfoWidget extends StatelessWidget {
   final OneLineInfo info;
   final void Function()? onClose;
+
   const OneLineInfoWidget(this.info, {super.key, this.onClose});
 
   @override

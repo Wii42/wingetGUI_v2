@@ -14,6 +14,7 @@ class PackageActionButton extends RunButton
   final PackageInfos infos;
   final bool showIcon;
   final AppLocalizations locale;
+
   PackageActionButton({
     super.key,
     required this.type,
@@ -42,6 +43,7 @@ class PackageActionIconButton extends RunButton
   final IconData icon;
   @override
   final EdgeInsetsGeometry padding;
+
   PackageActionIconButton({
     super.key,
     required this.icon,

@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 class CustomInfoBar extends InfoBar {
   final bool isSmallHeight;
+
   const CustomInfoBar(
       {required super.title,
       super.key,

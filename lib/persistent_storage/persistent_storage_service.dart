@@ -9,6 +9,7 @@ import 'interface/key_value_storage.dart';
 
 class PersistentStorageService implements PersistentStorage {
   static PersistentStorageService instance = PersistentStorageService._();
+
   PersistentStorageService._();
 
   PersistentStorage? _implementation;

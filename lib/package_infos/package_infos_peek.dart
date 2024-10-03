@@ -83,11 +83,10 @@ class PackageInfosPeek extends PackageInfos {
   PackageInfosPeek toPeek() => this;
 
   static final PackageInfosPeek exampleInfos = PackageInfosPeek(
-    name:
-    Info.fromAttribute(PackageAttribute.name, value: 'Prototype Widget'),
+    name: Info.fromAttribute(PackageAttribute.name, value: 'Prototype Widget'),
     id: Info.fromAttribute(PackageAttribute.id,
         value: PackageId.parse('Prototype.Widget')),
-    version:Info.fromAttribute(PackageAttribute.version,
+    version: Info.fromAttribute(PackageAttribute.version,
         value: VersionOrString.parse('1.0.0')),
     availableVersion: Info.fromAttribute(PackageAttribute.availableVersion,
         value: VersionOrString.parse('1.0.1')),

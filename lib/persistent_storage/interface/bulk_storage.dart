@@ -31,8 +31,7 @@ abstract class BulkMapStorage<K, V> implements BulkStorage<Map<K, V>> {
   Future<void> deleteAll();
 }
 
-abstract class BulkListStorage<T>
-    implements BulkStorage<List<T>> {
+abstract class BulkListStorage<T> implements BulkStorage<List<T>> {
   /// Loads all entries from the storage.
   @override
   Future<List<T>> loadAll();

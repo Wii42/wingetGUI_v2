@@ -20,6 +20,7 @@ class PackageDetailsFromWeb extends StatelessWidget {
   late final Logger log;
   final PackageInfosPeek package;
   final String? titleInput;
+
   PackageDetailsFromWeb({super.key, required this.package, this.titleInput}) {
     log = Logger(this);
   }

@@ -18,6 +18,7 @@ import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 class PackageActionsList extends StatelessWidget {
   final double maxListHeight;
   static const double spaceBetweenItems = 5;
+
   const PackageActionsList({super.key, required this.maxListHeight});
 
   @override

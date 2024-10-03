@@ -1,8 +1,8 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:winget_gui/persistent_storage/json_sharedprefs_sqlite_implementation/sqflite_db/package_db.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/package_infos/package_attribute.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/persistent_storage/json_sharedprefs_sqlite_implementation/sqflite_db/package_db.dart';
 
 class WingetDBTable
     extends DBTable<(String, VersionOrString, String), PackageInfosPeek>
@@ -36,11 +36,11 @@ class WingetDBTable
   ((String, VersionOrString, String), PackageInfosPeek) entryFromMap(
       Map<String, dynamic> map) {
     Map<String, String> tempMap =
-    map.map((key, value) => MapEntry(key, value.toString()));
+        map.map((key, value) => MapEntry(key, value.toString()));
     PackageInfosPeek info = PackageInfosPeek.fromDBMap(tempMap);
     return (
-    (info.id!.value.string, info.version!.value, info.name!.value),
-    info..setImplicitInfos()
+      (info.id!.value.string, info.version!.value, info.name!.value),
+      info..setImplicitInfos()
     );
   }
 
@@ -56,7 +56,7 @@ class WingetDBTable
       PackageAttribute.name.name: info.name?.value,
       PackageAttribute.version.name: version.stringValue,
       PackageAttribute.availableVersion.name:
-      info.availableVersion?.value.stringValue,
+          info.availableVersion?.value.stringValue,
       PackageAttribute.source.name: info.source.value.key,
       PackageAttribute.match.name: info.match?.value,
     };

@@ -18,6 +18,7 @@ class VersionOrString {
 
   Type get nestedType =>
       isTypeVersion() ? version.runtimeType : stringVersion.runtimeType;
+
   @override
   String toString() {
     return "VersionOrString: $nestedType: ${version ?? stringVersion}";

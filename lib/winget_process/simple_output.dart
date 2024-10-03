@@ -6,9 +6,11 @@ import 'process_output.dart';
 
 class SimpleOutput extends ProcessOutput {
   const SimpleOutput({super.key, required super.process});
+
   factory SimpleOutput.fromCommand(List<String> command, {String? titleInput}) {
     return SimpleOutput(process: WingetProcess.fromCommand(command));
   }
+
   factory SimpleOutput.fromWinget(Winget winget) {
     return SimpleOutput(process: WingetProcess.fromWinget(winget));
   }

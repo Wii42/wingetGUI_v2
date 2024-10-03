@@ -7,6 +7,7 @@ import 'expander_compartment.dart';
 
 class ScreenshotsWidget extends ExpanderCompartment {
   final PackageScreenshots screenshots;
+
   const ScreenshotsWidget(this.screenshots, {super.key});
 
   @override

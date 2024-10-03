@@ -17,5 +17,6 @@ enum GithubApiFileType {
   }
 
   bool get isFile => this == GithubApiFileType.file;
+
   bool get isDir => this == GithubApiFileType.dir;
 }

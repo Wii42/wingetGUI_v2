@@ -12,6 +12,7 @@ enum ComputerArchitecture implements IdentifyingProperty {
   matchAll(key: '_', title: '<match all>');
 
   final String key, _title;
+
   const ComputerArchitecture({required this.key, required String title})
       : _title = title;
 
@@ -33,8 +34,10 @@ enum ComputerArchitecture implements IdentifyingProperty {
 
   @override
   String shortTitle([AppLocalizations? _]) => _title;
+
   @override
   String? longTitle([AppLocalizations? _, LocaleNames? __]) => null;
+
   @override
   bool get fullTitleHasShortAlways => true;
 }

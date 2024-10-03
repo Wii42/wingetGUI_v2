@@ -32,6 +32,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   late TextEditingController controller;
   final WingetTable dbTable = PackageTables.instance.available;
+
   @override
   void initState() {
     super.initState();

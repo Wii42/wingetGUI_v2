@@ -7,6 +7,7 @@ enum UpgradeBehavior {
   custom(key: '_');
 
   final String key;
+
   const UpgradeBehavior({required this.key});
 
   factory UpgradeBehavior.parse(String behavior) {

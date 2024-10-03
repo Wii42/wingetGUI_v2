@@ -7,6 +7,7 @@ class InlineLinkButton extends AbstractLinkButton
     with TextButtonMixin, InlineLinkButtonMixin {
   @override
   final String buttonText;
+
   const InlineLinkButton(
       {super.key, required super.url, required this.buttonText});
 }

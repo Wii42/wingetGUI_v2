@@ -18,6 +18,7 @@ typedef TableData = List<Map<String, String>>;
 
 class TableParser extends OutputParser {
   final List<String> command;
+
   TableParser(super.lines, {required this.command});
 
   @override
@@ -174,6 +175,7 @@ class TableParser extends OutputParser {
 
 class ParsedTable extends ParsedOutput {
   TableData table;
+
   ParsedTable(this.table);
 
   bool isAppTable() => false;

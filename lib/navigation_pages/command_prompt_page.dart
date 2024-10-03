@@ -75,6 +75,7 @@ class CommandPromptPage extends StatelessWidget {
 
 class CommandPromptField extends StatefulWidget {
   final String title;
+
   const CommandPromptField({super.key, required this.title});
 
   @override

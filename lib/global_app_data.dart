@@ -7,6 +7,7 @@ import 'package:winget_gui/helpers/settings_cache.dart';
 
 class GlobalAppData extends StatelessWidget {
   final Widget Function(BuildContext context, Widget? _) builder;
+
   const GlobalAppData({super.key, required this.builder});
 
   @override
@@ -37,6 +38,7 @@ class AppLocales extends ChangeNotifier {
   }
 
   Locale? get guiLocale => _guiLocale;
+
   Locale? get wingetLocale => _wingetLocale;
 
   set guiLocale(Locale? locale) {

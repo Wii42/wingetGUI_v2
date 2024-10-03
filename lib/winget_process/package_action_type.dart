@@ -18,6 +18,7 @@ enum PackageActionType {
   final void Function(
           int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale)
       reloadDB;
+
   const PackageActionType(this.winget, this.reloadDB);
 
   List<String> createCommand(PackageInfos package) {

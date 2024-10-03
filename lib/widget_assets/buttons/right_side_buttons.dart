@@ -122,6 +122,7 @@ class RightSideButtons extends StatelessWidget {
 class ButtonInfo {
   final PackageActionType type;
   final ButtonVisibility visibility;
+
   const ButtonInfo({required this.type, required this.visibility});
 }
 
@@ -131,6 +132,7 @@ enum ButtonVisibility {
   invisible;
 
   const ButtonVisibility();
+
   factory ButtonVisibility.from(
       {required bool active, bool showIfInactive = false}) {
     if (active) {
@@ -143,7 +145,10 @@ enum ButtonVisibility {
       }
     }
   }
+
   bool get isVisible => this == ButtonVisibility.visible;
+
   bool get isDisabled => this == ButtonVisibility.disabled;
+
   bool get isInvisible => this == ButtonVisibility.invisible;
 }

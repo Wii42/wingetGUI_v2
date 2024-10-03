@@ -11,6 +11,7 @@ import 'info_abstract_map_parser.dart';
 
 class InfoMapParser extends InfoAbstractMapParser<String, String> {
   AppLocalizations locale;
+
   InfoMapParser({required super.map, required this.locale});
 
   @override

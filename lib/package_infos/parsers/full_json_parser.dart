@@ -12,6 +12,7 @@ import 'info_json_parser.dart';
 class FullJsonParser extends FullAbstractMapParser<String, dynamic> {
   Locale? locale;
   String? source;
+
   FullJsonParser(
       {Map<String, dynamic> details = const {}, this.locale, this.source})
       : super(details);
