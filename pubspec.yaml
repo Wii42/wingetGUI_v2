@@ -61,9 +61,9 @@ dependencies:
   path_provider: ^2.1.4
   path_provider_linux: 2.2.0 # needed because of isar build_runner
     # ----- \isar -----
-  isar_key_value:
-    git: https://github.com/Wii42/isar_key_value_fork
-  json_annotation: ^4.9.0
+  #isar_key_value:
+  #  git: https://github.com/Wii42/isar_key_value_fork
+  #json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:

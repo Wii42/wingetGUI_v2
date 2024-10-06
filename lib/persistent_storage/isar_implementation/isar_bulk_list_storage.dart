@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:isar/isar.dart';
-import 'package:isar_key_value/isar_key_value.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/package_infos/package_attribute.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
