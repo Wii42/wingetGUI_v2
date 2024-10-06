@@ -27,10 +27,10 @@ const String appTitle = 'WingetGUI';
 
 void main() async {
   if (kDebugMode) {
-    LogStream.instance.toStdOut();
+    //LogStream.instance.toStdOut();
   }
   PersistentStorageService.setImplementation(
-      JsonSharedPrefsSqflitePersistentStorage());
+      JsonIsarPersistentStorage());
   ServerInterfaceService.setImplementation(MartiClientServerInterface());
   await initAppPrerequisites();
   runApp(const WingetGui());

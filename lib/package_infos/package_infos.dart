@@ -1,3 +1,4 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';

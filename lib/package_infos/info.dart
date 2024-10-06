@@ -1,7 +1,6 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package_attribute.dart';
-
 class Info<T extends Object> {
   final String Function(AppLocalizations) title;
   final T value;

@@ -1,11 +1,8 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:winget_gui/helpers/extensions/screenshots_list_loader.dart';
-import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/persistent_storage/json_file_loader.dart';
-import 'package:winget_gui/persistent_storage/web_fetcher.dart';
 
+import '../json_file_loader_mixin.dart';
 import '../persistent_storage.dart';
 import 'favicon_storage.dart';
 import 'screenshot_bulk_storage.dart';
@@ -15,14 +12,12 @@ import 'winget_db_table_wrap.dart';
 
 /// A persistent storage implementation that uses shared preferences,
 /// json files and sqflite.
-class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
-  JsonFileLoader fileLoader = JsonFileLoader();
-  WebFetcher webFetcher = WebFetcher();
-
+class JsonSharedPrefsSqflitePersistentStorage extends PersistentStorage
+    with JsonFileLoaderMixin {
   late SharedPreferences prefs;
   PackageDB packageDB = PackageDB(dbName: 'favicon_database.db');
-
   bool _isInitialized = false;
+
   @override
   late BulkListStorage<PackageInfosPeek> availablePackages;
 
@@ -31,6 +26,9 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
 
   @override
   Future<void> initialize() async {
+    if (isInitialized) {
+      return;
+    }
     prefs = await SharedPreferences.getInstance();
     packageScreenshots = ScreenshotBulkStorage(prefs, 'packagePictures');
     await packageDB.ensureInitialized();
@@ -44,8 +42,8 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
     installedPackages = WingetDBTableWrap(packageDB.installed);
     updatePackages = WingetDBTableWrap(packageDB.updates);
     availablePackages = WingetDBTableWrap(packageDB.available);
-    _isInitialized = true;
     await packageDB.loadFaviconTables();
+    _isInitialized = true;
   }
 
   @override
@@ -53,21 +51,6 @@ class JsonSharedPrefsSqflitePersistentStorage implements PersistentStorage {
 
   @override
   bool get isInitialized => _isInitialized;
-
-  @override
-  Future<List<String>> loadBannedIcons() => fileLoader.loadBannedIconsTxt();
-
-  @override
-  Future<Map<String, CustomIconKey>> loadCustomIconKeys() =>
-      fileLoader.loadCustomIconKeys();
-
-  @override
-  Future<Map<String, PackageScreenshots>> loadCustomPackageScreenshots() =>
-      fileLoader.loadCustomPackageScreenshots();
-
-  @override
-  Future<Map<String, JsonPublisher>> loadCustomPublisherData() =>
-      fileLoader.loadCustomPublisherData();
 
   @override
   late final BulkMapStorage<String, PackageScreenshots> packageScreenshots;
