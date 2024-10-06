@@ -1,33 +1,49 @@
-import 'package:isar_key_value/isar_key_value.dart';
+import 'package:isar/isar.dart';
+import 'package:winget_gui/persistent_storage/isar_implementation/isar_models/publisher_name_by_package_id.dart';
 
 import '../persistent_storage.dart';
+import 'isar_models/favicon.dart';
+import 'isar_models/model.dart';
+import 'isar_models/publisher_name_by_publisher_id.dart';
+import 'isar_models/setting.dart';
 
-class IsarKeyValueSyncStorage<T> extends KeyValueSyncStorage<String, T>{
-  final IsarKeyValue _storage;
+abstract class IsarKeyValueSyncStorage<T extends Object, M extends Model<T>>
+    extends KeyValueSyncStorage<String, T> {
+  final IsarCollection<M> _table;
+  final Isar _isar;
 
-  Map<String,T> _cache = {};
+  Map<String, T> _cache = {};
 
-  IsarKeyValueSyncStorage(this._storage, {required this.tableName});
+  IsarKeyValueSyncStorage(this._table, this._isar, {required this.tableName});
+
+  M fromMapEntry(MapEntry<String, T> entry) {
+    return createModel(entry.key, entry.value);
+  }
+
+  M createModel(String key, T value);
 
   Future<void> loadCache() async {
-    _cache = await _storage.getAll<T>();
+    List<M> list = await _isar.txn(() => _table.where().findAll());
+    _cache = Map.fromEntries(list.map((e) => e.toMapEntry()));
+    print('Loaded $_cache form $tableName');
   }
 
   @override
   void addEntry(String key, T value) {
-    _storage.set(key, value);
+    M model = createModel(key, value);
+    _isar.writeTxn(() => _table.put(model));
     _cache[key] = value;
   }
 
   @override
   void deleteAllEntries() {
-    _storage.clear();
+    _table.clear();
     _cache.clear();
   }
 
   @override
   void deleteEntry(String key) {
-    _storage.remove(key);
+    _table.deleteByIndex(r'key', [key]);
     _cache.remove(key);
   }
 
@@ -41,13 +57,51 @@ class IsarKeyValueSyncStorage<T> extends KeyValueSyncStorage<String, T>{
 
   @override
   void saveEntries(Map<String, T> entries) {
-    for (var entry in entries.entries) {
-      _storage.set<T>(entry.key, entry.value);
-      _cache[entry.key] = entry.value;
-    }
+    Iterable<M> models = entries.entries.map((e) => fromMapEntry(e));
+    _isar.writeTxn(() => _table.putAll(models.toList()));
+    _cache.addAll(entries);
   }
 
   @override
   String tableName;
+}
 
+class SettingsStorage extends IsarKeyValueSyncStorage<String, Setting> {
+  SettingsStorage(super.table, super.isar, {required super.tableName});
+
+  @override
+  Setting createModel(String key, String value) {
+    return Setting(key: key, value: value);
+  }
+}
+
+class FaviconStorage extends IsarKeyValueSyncStorage<Uri, Favicon> {
+  FaviconStorage(super.table, super.isar, {required super.tableName});
+
+  @override
+  Favicon createModel(String key, Uri value) {
+    return Favicon.fromUrl(key: key, uri: value);
+  }
+}
+
+class PublisherNameByPackageIdStorage
+    extends IsarKeyValueSyncStorage<String, PublisherNameByPackageId> {
+  PublisherNameByPackageIdStorage(super.table, super.isar,
+      {required super.tableName});
+
+  @override
+  PublisherNameByPackageId createModel(String key, String value) {
+    return PublisherNameByPackageId(key: key, value: value);
+  }
+}
+
+class PublisherNameByPublisherIdStorage
+    extends IsarKeyValueSyncStorage<String, PublisherNameByPublisherId> {
+  PublisherNameByPublisherIdStorage(super.table, super.isar,
+      {required super.tableName});
+
+  @override
+  PublisherNameByPublisherId createModel(String key, String value) {
+    return PublisherNameByPublisherId(key: key, value: value);
+  }
 }

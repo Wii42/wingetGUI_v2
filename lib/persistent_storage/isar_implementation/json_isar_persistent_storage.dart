@@ -1,24 +1,26 @@
 import 'dart:io';
 
+import 'package:isar/isar.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
-import 'package:isar_key_value/isar_key_value.dart';
+import 'package:winget_gui/persistent_storage/isar_implementation/isar_models/publisher_name_by_package_id.dart';
+import 'package:winget_gui/persistent_storage/isar_implementation/isar_models/setting.dart';
 
 import '../json_file_loader_mixin.dart';
 import '../persistent_storage.dart';
 import 'isar_bulk_list_storage.dart';
 import 'isar_key_value_sync_storage.dart';
+import 'isar_models/bulk_storage.dart';
+import 'isar_models/favicon.dart';
+import 'isar_models/publisher_name_by_publisher_id.dart';
 
 /// A persistent storage implementation that uses JSO files and the Isar database.
 class JsonIsarPersistentStorage extends PersistentStorage
     with JsonFileLoaderMixin {
-  late final Directory _path;
-  late final IsarKeyValue _settingsIsar;
-  late final IsarKeyValue _faviconIsar;
-  late final IsarKeyValue _publisherNameByPackageIdIsar;
-  late final IsarKeyValue _publisherNameByPublisherIdIsar;
-  late final IsarKeyValue _bulkListIsar;
+  late final Directory isarPath;
+
+  late final Isar _isar;
   final String settingsTableName = 'settings';
   final String faviconTableName = 'favicon';
   final String publisherNameByPackageIdTableName = 'publisherNameByPackageId';
@@ -33,52 +35,6 @@ class JsonIsarPersistentStorage extends PersistentStorage
   late final FaviconStorage favicon;
 
   @override
-  Future<void> initialize() async {
-    if (isInitialized) {
-      return;
-    }
-    Directory applicationsDocuments = await getApplicationDocumentsDirectory();
-    String isarDir = join(applicationsDocuments.path, '.wingetGUI_Isar');
-    _path = await Directory(isarDir).create(recursive: false);
-    print(_path.path);
-    _settingsIsar =
-        IsarKeyValue(name: settingsTableName, directory: _path.path);
-    await _settingsIsar.ensureInitialized();
-    settings = IsarKeyValueSyncStorage<String>(_settingsIsar,
-        tableName: settingsTableName);
-
-    _faviconIsar = IsarKeyValue(name: faviconTableName, directory: _path.path);
-    await _faviconIsar.ensureInitialized();
-    favicon = FaviconStorage(_faviconIsar, tableName: faviconTableName);
-
-    _publisherNameByPackageIdIsar = IsarKeyValue(
-        name: publisherNameByPackageIdTableName, directory: _path.path);
-    await _publisherNameByPackageIdIsar.ensureInitialized();
-    publisherNameByPackageId = IsarKeyValueSyncStorage<String>(
-        _publisherNameByPackageIdIsar,
-        tableName: publisherNameByPackageIdTableName);
-
-    _publisherNameByPublisherIdIsar = IsarKeyValue(
-        name: publisherNameByPublisherIdTableName, directory: _path.path);
-    await _publisherNameByPublisherIdIsar.ensureInitialized();
-    publisherNameByPublisherId = IsarKeyValueSyncStorage<String>(
-        _publisherNameByPublisherIdIsar,
-        tableName: publisherNameByPublisherIdTableName);
-    _bulkListIsar =
-        IsarKeyValue(name: 'bulkListStorage', directory: _path.path);
-    await _bulkListIsar.ensureInitialized();
-    availablePackages = PackageInfosPeekBulkListStorage(_bulkListIsar,
-        listName: 'availablePackages');
-    installedPackages = PackageInfosPeekBulkListStorage(_bulkListIsar,
-        listName: 'installedPackages');
-    updatePackages = PackageInfosPeekBulkListStorage(_bulkListIsar,
-        listName: 'updatePackages');
-    packageScreenshots = PackageScreenshotsBulkMapStorage(_bulkListIsar,
-        mapName: 'packageScreenshots');
-    _isInitialized = true;
-  }
-
-  @override
   late final PackageInfosPeekBulkListStorage installedPackages;
 
   @override
@@ -88,58 +44,68 @@ class JsonIsarPersistentStorage extends PersistentStorage
   late final BulkMapStorage<String, PackageScreenshots> packageScreenshots;
 
   @override
-  late final IsarKeyValueSyncStorage<String> publisherNameByPackageId;
+  late final PublisherNameByPackageIdStorage publisherNameByPackageId;
 
   @override
-  late final IsarKeyValueSyncStorage<String> publisherNameByPublisherId;
+  late final PublisherNameByPublisherIdStorage publisherNameByPublisherId;
 
   @override
-  late final IsarKeyValueSyncStorage<String> settings;
+  late final SettingsStorage settings;
 
   @override
   late final PackageInfosPeekBulkListStorage updatePackages;
-}
-
-class FaviconStorage extends KeyValueSyncStorage<String, Uri> {
-  late final IsarKeyValueSyncStorage<String> _storage;
-
-  FaviconStorage(IsarKeyValue persistent, {required String tableName}) {
-    _storage = IsarKeyValueSyncStorage(persistent, tableName: tableName);
-  }
-  @override
-  void addEntry(String key, Uri value) {
-    _storage.addEntry(key, value.toString());
-  }
 
   @override
-  void deleteAllEntries() {
-    _storage.deleteAllEntries();
-  }
-
-  @override
-  void deleteEntry(String key) {
-    _storage.deleteEntry(key);
-  }
-
-  @override
-  Map<String, Uri> get entries =>
-      _storage.entries.map((key, value) => MapEntry(key, Uri.parse(value)));
-
-  @override
-  Uri? getEntry(String key) {
-    var value = _storage.getEntry(key);
-    if (value == null) {
-      return null;
+  Future<void> initialize() async {
+    if (isInitialized) {
+      return;
     }
-    return Uri.parse(value);
-  }
+    Directory applicationsDocuments = await getApplicationDocumentsDirectory();
+    String isarDir = join(applicationsDocuments.path, '.wingetGUI_Isar');
+    isarPath = await Directory(isarDir).create(recursive: false);
+    print(isarPath.path);
+    _isar = await Isar.open(
+      [
+        IsarBulkStorageSchema,
+        FaviconSchema,
+        PublisherNameByPackageIdSchema,
+        PublisherNameByPublisherIdSchema,
+        SettingSchema,
+      ],
+      directory: isarPath.path,
+      name: 'wingetGUI',
+    );
+    _isar.settings;
+    settings =
+        SettingsStorage(_isar.settings, _isar, tableName: settingsTableName);
 
-  @override
-  void saveEntries(Map<String, Uri> entries) {
-    _storage.saveEntries(
-        entries.map((key, value) => MapEntry(key, value.toString())));
-  }
+    favicon =
+        FaviconStorage(_isar.favicons, _isar, tableName: faviconTableName);
 
-  @override
-  String get tableName => _storage.tableName;
+    publisherNameByPackageId = PublisherNameByPackageIdStorage(
+        _isar.publisherNameByPackageId, _isar,
+        tableName: publisherNameByPackageIdTableName);
+
+    publisherNameByPublisherId = PublisherNameByPublisherIdStorage(
+        _isar.publisherNameByPublisherId, _isar,
+        tableName: publisherNameByPublisherIdTableName);
+    availablePackages = PackageInfosPeekBulkListStorage(
+        _isar.bulkStorage, _isar,
+        listName: 'availablePackages');
+    installedPackages = PackageInfosPeekBulkListStorage(
+        _isar.bulkStorage, _isar,
+        listName: 'installedPackages');
+    updatePackages = PackageInfosPeekBulkListStorage(_isar.bulkStorage, _isar,
+        listName: 'updatePackages');
+    packageScreenshots = PackageScreenshotsBulkMapStorage(
+        _isar.bulkStorage, _isar,
+        listName: 'packageScreenshots');
+    Future.wait([
+      settings.loadCache(),
+      favicon.loadCache(),
+      publisherNameByPackageId.loadCache(),
+      publisherNameByPublisherId.loadCache(),
+    ]);
+    _isInitialized = true;
+  }
 }

@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/json_publisher.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';
@@ -12,8 +11,6 @@ import 'info_with_link.dart';
 import 'package_attribute.dart';
 import 'package_id.dart';
 
-part 'publisher.g.dart';
-@JsonSerializable()
 class Publisher {
   final String? id;
 

@@ -1,5 +1,4 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/package_infos/package_attribute.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
