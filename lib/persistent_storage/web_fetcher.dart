@@ -28,7 +28,10 @@ class WebFetcher {
 
   Future<Map<String, PackageScreenshots>>
       fetchPackageScreenshotsFromMartiClimentRepo() async {
+    print('    fetchPackageScreenshotsFromMartiClimentRepo()...');
     String data = await jsonWebCore.getStringFromWeb(screenshotsSource);
+    print(data);
+    print('    jsonWebCore.getStringFromWeb(screenshotsSource) done');
     return jsonWebCore.parseScreenshotsMapFromMartiClimentRepo(data);
   }
 

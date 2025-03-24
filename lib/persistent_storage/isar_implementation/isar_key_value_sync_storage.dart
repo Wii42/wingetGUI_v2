@@ -25,7 +25,6 @@ abstract class IsarKeyValueSyncStorage<T extends Object, M extends Model<T>>
   Future<void> loadCache() async {
     List<M> list = await _isar.txn(() => _table.where().findAll());
     _cache = Map.fromEntries(list.map((e) => e.toMapEntry()));
-    print('Loaded $_cache form $tableName');
   }
 
   @override

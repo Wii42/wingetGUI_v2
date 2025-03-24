@@ -11,7 +11,9 @@ class JsonWebCore {
   static final Logger log = Logger(null, sourceType: JsonWebCore);
 
   Future<String> getStringFromWeb(Uri url) async {
-    Response request = await get(url);
+    print('    getStringFromWeb($url)...');
+    Response request = await get(url).timeout(const Duration(seconds: 5));
+    print('    get($url) done');
     return request.body;
   }
 

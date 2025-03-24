@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:winget_gui/helpers/package_screenshots.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 
@@ -29,6 +30,8 @@ class JsonSharedPrefsSqflitePersistentStorage extends PersistentStorage
     if (isInitialized) {
       return;
     }
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
     prefs = await SharedPreferences.getInstance();
     packageScreenshots = ScreenshotBulkStorage(prefs, 'packagePictures');
     await packageDB.ensureInitialized();

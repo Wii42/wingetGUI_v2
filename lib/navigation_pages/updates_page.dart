@@ -20,6 +20,7 @@ class UpdatesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('build UpdatesPage');
     return WingetDBTablePage(
       dbTable: dbTable,
       title: Winget.updates.title,

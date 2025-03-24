@@ -4,10 +4,8 @@ import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/persistent_storage/persistent_storage.dart';
 import 'package:winget_gui/server_interface/marti_clement_server_interface.dart';
 import 'package:winget_gui/server_interface/server_interface.dart';
@@ -26,11 +24,7 @@ import 'winget_process/winget_process_scheduler.dart';
 const String appTitle = 'WingetGUI';
 
 void main() async {
-  if (kDebugMode) {
-    //LogStream.instance.toStdOut();
-  }
-  PersistentStorageService.setImplementation(
-      JsonIsarPersistentStorage());
+  PersistentStorageService.setImplementation(JsonIsarPersistentStorage());
   ServerInterfaceService.setImplementation(MartiClientServerInterface());
   await initAppPrerequisites();
   runApp(const WingetGui());
@@ -38,23 +32,20 @@ void main() async {
 
 Future<void> initAppPrerequisites() async {
   WidgetsFlutterBinding.ensureInitialized();
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
-  await Future.wait([
-    Window.initialize().then((_) async => await Future.wait([
-          Window.setEffect(effect: WindowEffect.mica),
-        ])),
-    WindowManager.instance.ensureInitialized().then((_) async =>
-        await WindowManager.instance
-            .waitUntilReadyToShow()
-            .then((_) async => await Future.wait([
-                  WindowManager.instance.setTitle(appTitle),
-                  WindowManager.instance.setMinimumSize(const Size(460, 300)),
-                  WindowManager.instance.setAlignment(Alignment.center),
-                ]))),
-    SystemTheme.accentColor.load(),
-    PersistentStorageService.instance.initialize(),
-  ]);
+
+  await Window.initialize().then((_) async => await Future.wait([
+        Window.setEffect(effect: WindowEffect.mica),
+      ]));
+  await WindowManager.instance.ensureInitialized().then((_) async =>
+      await WindowManager.instance
+          .waitUntilReadyToShow()
+          .then((_) async => await Future.wait([
+                WindowManager.instance.setTitle(appTitle),
+                WindowManager.instance.setMinimumSize(const Size(460, 300)),
+                WindowManager.instance.setAlignment(Alignment.center),
+              ])));
+  await SystemTheme.accentColor.load();
+  await PersistentStorageService.instance.initialize();
   await PackageScreenshotsList.instance.fetchScreenshots();
 }
 

@@ -63,7 +63,7 @@ class JsonIsarPersistentStorage extends PersistentStorage
     Directory applicationsDocuments = await getApplicationDocumentsDirectory();
     String isarDir = join(applicationsDocuments.path, '.wingetGUI_Isar');
     isarPath = await Directory(isarDir).create(recursive: false);
-    print(isarPath.path);
+    //print(isarPath.path);
     _isar = await Isar.open(
       [
         IsarBulkStorageSchema,
