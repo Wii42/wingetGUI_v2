@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
 
 import 'agreement_infos.dart';

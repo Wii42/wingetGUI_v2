@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart'
     as system_icons;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/routes.dart';
 
 import 'buttons/page_button.dart';

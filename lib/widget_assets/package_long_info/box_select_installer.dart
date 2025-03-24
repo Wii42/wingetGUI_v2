@@ -53,7 +53,7 @@ class BoxSelectInstaller<T> extends StatelessWidget {
           style: TextStyle(
               color: greyOutItem != null
                   ? (greyOutItem!(item)
-                      ? theme.typography.body?.color?.withOpacity(0.3)
+                      ? theme.typography.body?.color?.withValues(alpha: 0.3)
                       : null)
                   : null),
         ));

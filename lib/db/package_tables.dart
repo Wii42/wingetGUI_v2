@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:cron/cron.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';

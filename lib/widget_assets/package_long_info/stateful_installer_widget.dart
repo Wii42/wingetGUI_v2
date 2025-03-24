@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';

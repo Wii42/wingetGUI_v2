@@ -21,24 +21,15 @@ class PackageScreenshotsList {
   }
 
   Future<void> fetchScreenshots() async {
-    print(' start fetchScreenshots()...');
+
     await fetchWebInvalidScreenshots();
-    print('fetchWebInvalidScreenshots() done');
-    //await Future.wait([
-      //loadPublisherIcons(),
     await loadPublisherJson();
-    print('loadPublisherJson() done');
+
     await fetchWebScreenshots();
-    print('fetchWebScreenshots() done');
     await loadCustomPackageScreenshots();
-    print('loadCustomPackageScreenshots() done');
-    //]);
-    //print('loadPublisherJson(), fetchWebScreenshots(), loadCustomPackageScreenshots() done');
     if (screenshotMap.isEmpty) {
       await loadScreenshots();
-      print('loadScreenshots() done');
     }
-    print('fetchScreenshots() done');
   }
 
   PackageScreenshots? getPackage(PackageInfos packageInfos) {

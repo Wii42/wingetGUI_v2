@@ -72,21 +72,15 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
 
   Future<void> fetchWebScreenshots() async {
     try {
-      print('  started fetchWebScreenshots()...');
       Map<String, PackageScreenshots> data = await ServerInterfaceService
           .instance
           .fetchPackageScreenshotsFromServer();
-      print('  fetchWebScreenshots() done');
       await screenshotsFromWingetUIJson(data);
-      print('  screenshotsFromWingetUIJson() done');
       await PersistentStorageService.instance.packageScreenshots
           .saveAll(screenshotMap);
-      print('  saveAll() done');
       log.info('web data fetched');
-      print('  web data fetched');
     } catch (e) {
       log.error(e.toString());
-      print('  error: $e');
     }
   }
 

@@ -1,4 +1,4 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/db/package_tables.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 

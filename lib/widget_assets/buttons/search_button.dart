@@ -1,5 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/winget_commands.dart';
