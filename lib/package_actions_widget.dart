@@ -42,12 +42,14 @@ class PackageActionsList extends StatelessWidget {
   Widget actionsWidget(PackageActionsNotifier actionsNotifier) {
     if (actionsNotifier.actions.length == 1) {
       PackageAction action = actionsNotifier.actions.single;
-      return PackageActionWidget(action: action, key: action.uniqueKey);
+      return PackageActionWidget(
+          action: action, key: action.uniqueKey, expanded: true);
     }
     return CustomExpander(
       header: PackageActionWidget(
           action: actionsNotifier.actions.first,
-          key: actionsNotifier.actions.first.uniqueKey),
+          key: actionsNotifier.actions.first.uniqueKey,
+          expanded: true),
       direction: ExpanderDirection.up,
       content: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: maxListHeight),
@@ -68,12 +70,16 @@ class PackageActionsList extends StatelessWidget {
 }
 
 class PackageActionWidget extends StatelessWidget {
+  double get contentHeight => expanded ? 60 : 40;
+
+  final PackageAction action;
+  final bool expanded;
+
   const PackageActionWidget({
     super.key,
     required this.action,
+    this.expanded = false,
   });
-
-  final PackageAction action;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +90,7 @@ class PackageActionWidget extends StatelessWidget {
           builder: (context, exitCode) {
             closeWidgetAfterDone(context, exitCode);
             return SizedBox(
-              height: 40,
+              height: contentHeight,
               child: Row(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -188,7 +194,7 @@ class PackageActionWidget extends StatelessWidget {
       child: Stack(
         children: [
           ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 40),
+            constraints: BoxConstraints(maxHeight: contentHeight),
             child: Center(
               child: SingleChildScrollView(
                 child: Builder(
