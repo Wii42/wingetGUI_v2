@@ -24,13 +24,10 @@ void main() {
   };
 
   test('screenshotsFromWingetUIJson', () async {
-    print(packageScreenshots);
     dynamic json = jsonEncode(PackageScreenshots.mapToJson(packageScreenshots));
-    print(json);
     Map<String, dynamic> transformedScreenshots = jsonDecode(json);
     Map<String, PackageScreenshots> transformedScreenshots2 =
         PackageScreenshots.mapFromJson(transformedScreenshots);
-    print(transformedScreenshots2);
     for (String key in transformedScreenshots2.keys) {
       expect(transformedScreenshots2[key]?.packageKey,
           packageScreenshots[key]?.packageKey);

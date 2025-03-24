@@ -3,8 +3,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 
-const double opacity = 0.5;
-const opaqueWhite = Color.fromRGBO(255, 255, 255, opacity);
+const int alpha = 127;
+const opaqueWhite = Color.fromARGB(alpha, 255, 255, 255);
 
 class WebImage extends StatelessWidget {
   late final Logger log;
@@ -84,7 +84,7 @@ class WebImage extends StatelessWidget {
     if (imageConfig.solidColor != null) {
       Color color = imageConfig.solidColor!;
       return isHalfTransparent
-          ? color.withOpacity(opacity * color.opacity)
+          ? color.withValues(alpha: alpha * color.a)
           : color;
     }
     return isHalfTransparent ? opaqueWhite : null;
@@ -95,7 +95,7 @@ class WebImage extends StatelessWidget {
       Color color = imageConfig.solidColor!;
       return isHalfTransparent
           ? ColorFilter.mode(
-              color.withOpacity(opacity * color.opacity), BlendMode.srcIn)
+          color.withValues(alpha: alpha * color.a), BlendMode.srcIn)
           : ColorFilter.mode(color, BlendMode.srcIn);
     }
     return isHalfTransparent
