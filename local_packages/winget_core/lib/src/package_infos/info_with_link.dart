@@ -1,11 +1,9 @@
 import 'dart:developer';
 
-
-import '../string_extension.dart';
-import 'package_attribute.dart';
-
 import '../package_localizer.dart';
+import '../string_extension.dart';
 import 'info.dart';
+import 'package_attribute.dart';
 
 class InfoWithLink {
   final String Function(PackageLocalizer) title;

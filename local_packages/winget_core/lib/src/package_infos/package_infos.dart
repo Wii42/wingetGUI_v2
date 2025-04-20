@@ -3,11 +3,11 @@
 import '../package_screenshots.dart';
 import '../version_or_string.dart';
 import 'info.dart';
-import 'package_infos_peek.dart';
-import 'publisher.dart';
-import 'package_sources.dart';
-import 'package_id.dart';
 import 'package_attribute.dart';
+import 'package_id.dart';
+import 'package_infos_peek.dart';
+import 'package_sources.dart';
+import 'publisher.dart';
 
 
 abstract class PackageInfos {

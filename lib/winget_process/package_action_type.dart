@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_core/winget_core.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/db/package_tables.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/winget_commands.dart';

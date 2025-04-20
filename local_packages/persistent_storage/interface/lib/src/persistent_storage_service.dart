@@ -1,8 +1,8 @@
 import 'package:winget_core/winget_core.dart';
-import 'persistent_storage.dart';
 
 import 'bulk_storage.dart';
 import 'key_value_storage.dart';
+import 'persistent_storage.dart';
 
 class PersistentStorageService implements PersistentStorage {
   static PersistentStorageService instance = PersistentStorageService._();

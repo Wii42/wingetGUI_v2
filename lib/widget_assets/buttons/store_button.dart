@@ -1,6 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:open_store/open_store.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 
 import 'abstract_button.dart';
 import 'normal_button.dart';

@@ -1,5 +1,4 @@
 import 'package:intl/locale.dart';
-
 import 'package:winget_gui/package_infos/package_infos_full.dart';
 
 import 'microsoft_store_api/microsoft_store_manifest_api.dart';

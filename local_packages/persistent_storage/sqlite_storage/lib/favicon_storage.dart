@@ -1,4 +1,5 @@
 import 'package:persistent_storage_interface/interface.dart';
+
 import 'sqflite_db/package_db.dart';
 
 /// Abstraction to wrap DB table with two columns: key and value.

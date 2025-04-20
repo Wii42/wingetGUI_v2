@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/app_localizer.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
 
 import 'output_parser.dart';

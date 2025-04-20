@@ -1,8 +1,9 @@
+import 'package:json_file_loader/json_file_loader_mixin.dart';
+import 'package:persistent_storage_interface/interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:winget_core/winget_core.dart';
-import 'package:persistent_storage_interface/interface.dart';
-import 'package:json_file_loader/json_file_loader_mixin.dart';
+
 import 'favicon_storage.dart';
 import 'screenshot_bulk_storage.dart';
 import 'settings_storage.dart';

@@ -1,12 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 import 'package:winget_core/winget_core.dart';
-import 'package:winget_gui/helpers/app_localizer.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/db/db_message.dart';
 import 'package:winget_gui/db/package_tables.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';

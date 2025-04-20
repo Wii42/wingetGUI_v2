@@ -1,6 +1,6 @@
 import 'package:winget_core/winget_core.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/db/package_tables.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 
 import 'package_action_type.dart';
 import 'winget_process.dart';

@@ -4,16 +4,16 @@ import 'package:isar/isar.dart';
 import 'package:json_file_loader/json_file_loader_mixin.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:winget_core/winget_core.dart';
-import 'isar_models/publisher_name_by_package_id.dart';
-import 'isar_models/setting.dart';
-
 import 'package:persistent_storage_interface/interface.dart';
+import 'package:winget_core/winget_core.dart';
+
 import 'isar_bulk_list_storage.dart';
 import 'isar_key_value_sync_storage.dart';
 import 'isar_models/bulk_storage.dart';
 import 'isar_models/favicon.dart';
+import 'isar_models/publisher_name_by_package_id.dart';
 import 'isar_models/publisher_name_by_publisher_id.dart';
+import 'isar_models/setting.dart';
 
 /// A persistent storage implementation that uses JSO files and the Isar database.
 class JsonIsarPersistentStorage extends PersistentStorage

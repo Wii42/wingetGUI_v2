@@ -1,6 +1,7 @@
 import 'package:persistent_storage_interface/parsers.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:winget_core/winget_core.dart';
+
 import 'package_db.dart';
 
 class WingetDBTable

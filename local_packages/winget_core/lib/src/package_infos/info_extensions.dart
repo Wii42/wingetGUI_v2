@@ -1,7 +1,6 @@
-import 'package:winget_core/winget_core.dart';
-
 import 'package:intl/intl.dart';
 import 'package:intl/locale.dart';
+import 'package:winget_core/winget_core.dart';
 
 extension StringInfo on Info<String> {
   Info<Uri>? tryToUriInfo() {

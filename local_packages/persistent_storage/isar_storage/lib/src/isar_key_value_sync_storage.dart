@@ -1,9 +1,9 @@
 import 'package:isar/isar.dart';
-import 'isar_models/publisher_name_by_package_id.dart';
-
 import 'package:persistent_storage_interface/interface.dart';
+
 import 'isar_models/favicon.dart';
 import 'isar_models/model.dart';
+import 'isar_models/publisher_name_by_package_id.dart';
 import 'isar_models/publisher_name_by_publisher_id.dart';
 import 'isar_models/setting.dart';
 

@@ -1,9 +1,9 @@
 import "../version_or_string.dart";
-import "package_infos.dart";
 import "info.dart";
-import "package_sources.dart";
-import "package_id.dart";
 import "package_attribute.dart";
+import "package_id.dart";
+import "package_infos.dart";
+import "package_sources.dart";
 
 
 class PackageInfosPeek extends PackageInfos {

@@ -1,8 +1,8 @@
 import 'package:diacritic/diacritic.dart';
-import 'package_attribute.dart';
 
 import '../package_localizer.dart';
 import 'info_with_link.dart';
+import 'package_attribute.dart';
 
 class Publisher {
   final String? id;

@@ -21,7 +21,6 @@ dependencies:
   flutter_acrylic: ^1.1.4
   url_launcher: ^6.3.1
   expandable_text: ^2.3.0
-  #string_validator: ^1.1.0
   intl: any
   open_store: ^0.5.0
   favicon: ^1.1.2
@@ -36,7 +35,6 @@ dependencies:
   provider: ^6.1.4
   dart_casing: ^3.0.1
   cron: ^0.6.1
-  #diacritic: ^0.1.6
   cached_network_image: ^3.4.1
   file_picker: ^10.1.2
   persistent_storage_interface:

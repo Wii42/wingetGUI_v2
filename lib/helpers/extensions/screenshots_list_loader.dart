@@ -2,7 +2,6 @@ import 'package:persistent_storage_interface/service.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/server_interface/server_interface.dart';
 
-
 import '../package_screenshots_list.dart';
 
 extension ScreenshotsListLoader on PackageScreenshotsList {

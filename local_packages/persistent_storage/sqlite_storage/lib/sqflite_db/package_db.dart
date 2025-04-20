@@ -5,9 +5,9 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:winget_core/winget_core.dart';
-import 'publisher_name_table.dart';
 
 import 'favicon_table.dart';
+import 'publisher_name_table.dart';
 import 'winget_db_table.dart';
 
 class PackageDB {

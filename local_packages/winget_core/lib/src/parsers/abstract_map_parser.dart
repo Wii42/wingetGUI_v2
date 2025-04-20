@@ -1,4 +1,5 @@
 import 'package:winget_core/winget_core.dart';
+
 import 'info_abstract_map_parser.dart';
 
 abstract class AbstractMapParser<A, B, T extends PackageInfos> {

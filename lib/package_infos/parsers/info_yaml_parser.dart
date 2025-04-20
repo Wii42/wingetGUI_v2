@@ -1,6 +1,7 @@
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/package_infos/parsers/full_yaml_parser.dart';
 import 'package:yaml/yaml.dart';
+
 import 'info_api_parser.dart';
 
 class InfoYamlParser extends InfoApiParser<dynamic> {

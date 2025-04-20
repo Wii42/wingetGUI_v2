@@ -1,6 +1,6 @@
 import 'package:winget_core/winget_core.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/output_handling/parsed_output.dart';

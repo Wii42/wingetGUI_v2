@@ -1,6 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_core/winget_core.dart';
-
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/widget_assets/buttons/link_button.dart';
 import 'package:winget_gui/widget_assets/link_text.dart';

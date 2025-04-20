@@ -1,14 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:intl/locale.dart' as intl;
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:intl/locale.dart' as intl;
 import 'package:winget_core/winget_core.dart';
-import 'package:winget_gui/helpers/app_localizer.dart';
-import 'package:winget_gui/helpers/localized_name.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/global_app_data.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
 import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
+import 'package:winget_gui/helpers/localized_name.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 
 import 'expander_compartment.dart';
 import 'installer_selector.dart';

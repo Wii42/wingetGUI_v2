@@ -1,5 +1,6 @@
-import 'package:intl/locale.dart' as intl;
 import 'dart:ui' as ui;
+
+import 'package:intl/locale.dart' as intl;
 
 extension BestFittingLocale on intl.Locale {
   intl.Locale? bestFittingLocale(List<intl.Locale> availableLocales) {

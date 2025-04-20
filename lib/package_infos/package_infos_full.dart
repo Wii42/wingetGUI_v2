@@ -1,7 +1,8 @@
 import 'package:intl/locale.dart';
 import 'package:winget_core/winget_core.dart';
-import 'package_infos_extension.dart';
+
 import 'agreement_infos.dart';
+import 'package_infos_extension.dart';
 import 'parsers/full_json_parser.dart';
 import 'parsers/full_map_parser.dart';
 import 'parsers/full_yaml_parser.dart';

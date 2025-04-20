@@ -1,5 +1,5 @@
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 
 import 'output_parser.dart';
 import 'output_scanner.dart';

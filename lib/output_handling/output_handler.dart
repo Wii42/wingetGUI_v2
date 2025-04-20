@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/extensions/string_list_extension.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 
 import 'list_scanner.dart';
 import 'loading_bar_scanner.dart';

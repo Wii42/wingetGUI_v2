@@ -1,11 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/app_localizer.dart';
+import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/localized_name.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:flutter_localized_locales/flutter_localized_locales.dart';
-import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 
 import 'box_select_installer.dart';
 

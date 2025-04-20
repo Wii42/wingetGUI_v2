@@ -1,6 +1,7 @@
 import 'package:dart_casing/dart_casing.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/package_infos/parsers/full_json_parser.dart';
+
 import 'info_api_parser.dart';
 
 class InfoJsonParser extends InfoApiParser<String> {

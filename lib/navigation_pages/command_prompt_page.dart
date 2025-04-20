@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
+import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/buttons/command_button.dart';
 import 'package:winget_gui/widget_assets/buttons/page_button.dart';

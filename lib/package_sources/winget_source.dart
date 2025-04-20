@@ -1,8 +1,8 @@
 import 'dart:collection';
-import 'package:intl/locale.dart';
 
 import 'package:collection/collection.dart';
 import 'package:http/http.dart';
+import 'package:intl/locale.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';

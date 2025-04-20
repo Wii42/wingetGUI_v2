@@ -1,6 +1,5 @@
-import 'package:intl/locale.dart';
-
 import 'package:dart_casing/dart_casing.dart';
+import 'package:intl/locale.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 

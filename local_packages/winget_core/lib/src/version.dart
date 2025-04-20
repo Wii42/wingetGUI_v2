@@ -1,8 +1,7 @@
 import 'dart:math';
 
-import 'string_extension.dart';
-
 import 'list_extension.dart';
+import 'string_extension.dart';
 
 class Version implements Comparable<Version> {
   static const List<String> rangeIndicators = ['<=', '>=', '<', '>', '^'];
