@@ -238,22 +238,13 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         searchField(),
         if (options.deepSearchButton) deepSearchButton()
       ],
-      for (PackageActionType action
-          in options.runActionOnAllPackagesButtons)
+      for (PackageActionType action in options.runActionOnAllPackagesButtons)
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [packageActionOnAll(visiblePackages, action)],
         ),
       sortWidget(locale, visiblePackages),
-      if (options.onlyWithSourceButton)
-        onlyWithSourceCheckbox(locale),
-      if (options.onlyWithExactVersionButton)
-        onlyWithExactVersionCheckbox(locale),
-    ];
-
-    List<Widget> moreOptions = [
-      if (options.onlyWithSourceButton)
-        onlyWithSourceCheckbox(locale),
+      if (options.onlyWithSourceButton) onlyWithSourceCheckbox(locale),
       if (options.onlyWithExactVersionButton)
         onlyWithExactVersionCheckbox(locale),
     ];
@@ -314,11 +305,16 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     );
   }
 
-  Widget sortWidget(AppLocalizations locale, List<PackageInfos> visiblePackages) {
+  Widget sortWidget(
+      AppLocalizations locale, List<PackageInfos> visiblePackages) {
     Typography textTheme = FluentTheme.of(context).typography;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [Text(locale.sortBy, style: textTheme.caption,),
+      children: [
+        Text(
+          locale.sortBy,
+          style: textTheme.caption,
+        ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [

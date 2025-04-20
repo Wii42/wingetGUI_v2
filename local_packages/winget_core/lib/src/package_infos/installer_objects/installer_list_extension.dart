@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:collection/collection.dart';
-import 'package:winget_core/src/localization_name.dart';
-import 'package:winget_core/winget_core.dart';
 
+import '../../localization_name.dart';
+import '../../package_localizer.dart';
+import '../info.dart';
+import '../package_attribute.dart';
 import 'computer_architecture.dart';
 import 'identifying_property.dart';
 import 'install_scope.dart';

@@ -54,6 +54,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   msix: ^3.16.8
   json_serializable: ^6.9.5
+  ribs_json: ^1.0.0-dev.14
 
 flutter:
   generate: true

@@ -1,7 +1,4 @@
-
-
 import 'package:intl/locale.dart';
-import 'package:winget_core/src/package_infos/info_extensions.dart';
 import 'package:winget_core/winget_core.dart';
 
 abstract class InfoAbstractMapParser<A, B> {

@@ -61,7 +61,6 @@ class SettingsCache {
     if (string == null) {
       return null;
     }
-    print(string);
     InstallerLocale? installerLocale = InstallerLocale.parse(string);
     return installerLocale.asUiLocale;
   }
