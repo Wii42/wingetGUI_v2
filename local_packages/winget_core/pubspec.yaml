@@ -1,0 +1,21 @@
+name: winget_core
+description: core components used in WingetGUI
+version: 0.0.1
+
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  collection: any
+  intl: any
+  ribs_json: ^1.0.0-dev.14
+  ribs_core: ^1.0.0-dev.13
+  json_annotation: ^4.9.0
+  http: ^1.3.0
+  string_validator: ^1.1.0
+  diacritic: ^0.1.6
+
+
+dev_dependencies:
+  json_serializable: ^6.9.5

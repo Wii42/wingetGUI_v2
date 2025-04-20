@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:winget_gui/package_infos/publisher.dart';
+import 'package:winget_core/winget_core.dart';
 
 void main(){
   test('test publisher canonicalize', () {

@@ -1,0 +1,37 @@
+
+
+import 'package:winget_core/src/package_localizer.dart';
+
+enum InstallMode {
+  interactive(key: 'interactive'),
+  silent(key: 'silent'),
+  silentWithProgress(key: 'silentWithProgress');
+
+  final String key;
+
+  const InstallMode({required this.key});
+
+  factory InstallMode.fromApi(dynamic string) {
+    return maybeParse(string)!;
+  }
+
+  static InstallMode parse(String string) {
+    return maybeParse(string)!;
+  }
+
+  static InstallMode? maybeParse(String? mode) {
+    if (mode == null) {
+      return null;
+    }
+    for (InstallMode m in InstallMode.values) {
+      if (m.key == mode) {
+        return m;
+      }
+    }
+    throw ArgumentError('Unknown mode: $mode');
+  }
+
+  String title(PackageLocalizer locale) {
+    return locale.installMode(key);
+  }
+}

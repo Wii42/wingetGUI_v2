@@ -1,11 +1,9 @@
-import 'dart:ui';
+import 'package:intl/locale.dart';
 
 import 'package:dart_casing/dart_casing.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
-import 'package:winget_gui/helpers/locale_parser.dart';
-import 'package:winget_gui/helpers/version.dart';
 
-import '../package_attribute.dart';
 import 'full_abstract_map_parser.dart';
 import 'info_json_parser.dart';
 
@@ -81,14 +79,14 @@ class FullJsonParser extends FullAbstractMapParser<String, dynamic> {
     if (locales != null && locale != null && locales.isNotEmpty) {
       List<Locale> availableLocales = locales
           .map<Locale?>((e) =>
-              LocaleParser.tryParse(e[PackageAttribute.packageLocale.apiKey]))
+              InstallerLocale.tryParse(e[PackageAttribute.packageLocale.apiKey]))
           .nonNulls
           .toList();
       Locale? bestFitting = locale?.bestFittingLocale(availableLocales);
       if (bestFitting != null) {
         selectedLocale = locales.firstWhere(
             (element) =>
-                LocaleParser.tryParse(
+                InstallerLocale.tryParse(
                     element[PackageAttribute.packageLocale.apiKey]) ==
                 bestFitting,
             orElse: () => defaultLocale);

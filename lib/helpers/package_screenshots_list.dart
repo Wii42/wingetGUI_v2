@@ -1,10 +1,8 @@
-import 'package:winget_gui/package_infos/package_infos.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/package_infos/package_screenshot_identifiers.dart';
 
 import 'extensions/screenshots_list_loader.dart';
-import 'json_publisher.dart';
 import 'log_stream.dart';
-import 'package_screenshots.dart';
 
 class PackageScreenshotsList {
   late final Logger log;

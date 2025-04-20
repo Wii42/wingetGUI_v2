@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:winget_gui/global_app_data.dart';
+import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
@@ -52,7 +53,7 @@ class PackageLongInfo extends StatelessWidget {
         if (infos.installer != null)
           StatefulInstallerWidget(
             infos: infos.installer!,
-            guiLocale: guiLocale,
+            guiLocale: guiLocale?.asIntlLocale,
             defaultLocale: infos.packageLocale?.value,
           ),
       ].withSpaceBetween(height: 10),

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:winget_gui/helpers/version_or_string.dart';
+import 'package:winget_core/winget_core.dart';
 
 void main(){
   test('parse', () { VersionOrString vos = VersionOrString.parse('1.0.0');

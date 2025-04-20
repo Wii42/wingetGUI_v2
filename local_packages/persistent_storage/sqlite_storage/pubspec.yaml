@@ -1,0 +1,29 @@
+name: sqlite_persistent_storage
+description: Persistent storage implementation for WingetGUI using sqlite.
+version: 0.0.1
+
+publish_to: 'none'
+
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  collection: any
+  path: ^1.9.1
+  persistent_storage_interface:
+    path: ../interface
+  winget_core:
+    path: ../../winget_core
+  json_file_loader:
+    path: ../json_file_loader
+  sqflite: ^2.4.2
+  sqflite_common_ffi: any
+  shared_preferences: ^2.5.3
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

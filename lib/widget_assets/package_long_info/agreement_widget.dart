@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/package_infos/agreement_infos.dart';
-import 'package:winget_gui/package_infos/info_extensions.dart';
-import 'package:winget_gui/package_infos/package_attribute.dart';
 
 import 'expander_compartment.dart';
 
@@ -41,6 +41,6 @@ class AgreementWidget extends ExpanderCompartment {
 
   @override
   String compartmentTitle(AppLocalizations locale) {
-    return PackageAttribute.agreement.title(locale);
+    return PackageAttribute.agreement.title(locale.asLocalizer);
   }
 }

@@ -3,11 +3,13 @@ import 'dart:isolate';
 import 'dart:math';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/db/winget_table.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/package_infos/package_attribute.dart';
-import 'package:winget_gui/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_infos/package_infos_extension.dart';
+import 'package:winget_gui/package_infos/parsers/peek_map_parser.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 
 import 'output_parser.dart';
@@ -27,7 +29,9 @@ class TableParser extends OutputParser {
     if (isAppTable(table, wingetLocale)) {
       List<PackageInfosPeek> packages = [
         for (Map<String, String> tableRow in table)
-          PackageInfosPeek.fromMap(details: tableRow, locale: wingetLocale),
+          PeekMapParser(details: tableRow, locale: wingetLocale.asLocalizer)
+              .parse()
+            ..setPublisher(),
       ];
 
       return ParsedAppTable(table, packages: packages, command: command);
@@ -167,9 +171,10 @@ class TableParser extends OutputParser {
   }
 
   bool isAppTable(TableData table, AppLocalizations wingetLocale) {
+    AppLocalizer localizer = AppLocalizer(wingetLocale);
     List<String> columnTitles = table.first.keys.toList();
-    return columnTitles.contains(PackageAttribute.name.key(wingetLocale)) &&
-        columnTitles.contains(PackageAttribute.id.key(wingetLocale));
+    return columnTitles.contains(PackageAttribute.name.key(localizer)) &&
+        columnTitles.contains(PackageAttribute.id.key(localizer));
   }
 }
 

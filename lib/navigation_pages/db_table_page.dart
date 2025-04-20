@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:persistent_storage_interface/interface.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 
 class DBTableWidget extends StatelessWidget {

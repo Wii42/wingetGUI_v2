@@ -1,16 +1,7 @@
-import 'dart:ui';
-
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/package_sources/package_source.dart';
-
+import 'package:intl/locale.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package_infos_extension.dart';
 import 'agreement_infos.dart';
-import 'info.dart';
-import 'info_with_link.dart';
-import 'installer_objects/installer.dart';
-import 'installer_objects/installer_type.dart';
-import 'package_attribute.dart';
-import 'package_infos.dart';
-import 'package_infos_peek.dart';
 import 'parsers/full_json_parser.dart';
 import 'parsers/full_map_parser.dart';
 import 'parsers/full_yaml_parser.dart';
@@ -68,11 +59,11 @@ class PackageInfosFull extends PackageInfos {
   factory PackageInfosFull.fromMap(
       {required Map<String, String>? details,
       Map<String, String>? installerDetails,
-      required AppLocalizations locale}) {
+      required PackageLocalizer locale}) {
     return FullMapParser(
             details: details ?? {},
             installerDetails: installerDetails ?? {},
-            locale: locale)
+            localizer: locale)
         .parse();
   }
 

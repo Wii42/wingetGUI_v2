@@ -57,6 +57,36 @@
       <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/isar_flutter_libs/build" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/interface/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/interface/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/interface/build" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/isar_storage/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/isar_storage/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/isar_storage/build" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/json_file_loader/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/json_file_loader/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/json_file_loader/build" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/winget_core/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/winget_core/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/winget_core/build" />
+      <excludeFolder url="file://$MODULE_DIR$/persistent_storage/interface/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/persistent_storage/interface/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/persistent_storage/interface/build" />
+      <excludeFolder url="file://$MODULE_DIR$/persistent_storage/isar_storage/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/persistent_storage/isar_storage/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/persistent_storage/isar_storage/build" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/sqlite_storage/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/sqlite_storage/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/local_packages/persistent_storage/sqlite_storage/build" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/connectivity_plus/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/connectivity_plus/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/connectivity_plus/build" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/connectivity_plus/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/connectivity_plus/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/connectivity_plus/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever_windows/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever_windows/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/windows/flutter/ephemeral/.plugin_symlinks/screen_retriever_windows/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

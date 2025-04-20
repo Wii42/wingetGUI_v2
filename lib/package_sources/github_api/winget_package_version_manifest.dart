@@ -1,4 +1,4 @@
-import 'package:winget_gui/package_infos/package_id.dart';
+import 'package:winget_core/winget_core.dart';
 
 import 'github_api_file_info.dart';
 

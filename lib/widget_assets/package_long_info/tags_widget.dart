@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/package_infos/info.dart';
-import 'package:winget_gui/package_infos/package_attribute.dart';
 import 'package:winget_gui/widget_assets/buttons/search_button.dart';
 
 import 'expander_compartment.dart';
@@ -23,7 +23,7 @@ class TagsWidget extends ExpanderCompartment {
 
   @override
   String compartmentTitle(AppLocalizations locale) {
-    return PackageAttribute.tags.title(locale);
+    return PackageAttribute.tags.title(locale.asLocalizer);
   }
 
   @override

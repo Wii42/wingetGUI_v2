@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:intl/locale.dart';
 
 import 'package:winget_gui/package_infos/package_infos_full.dart';
 

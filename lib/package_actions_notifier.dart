@@ -3,7 +3,7 @@ import 'dart:collection';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
-import 'package:winget_gui/package_infos/package_infos.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 

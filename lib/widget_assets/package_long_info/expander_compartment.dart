@@ -1,10 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/package_infos/info.dart';
-import 'package:winget_gui/package_infos/info_extensions.dart';
 
 import 'compartment.dart';
 import 'compartment_building_blocks.dart';
@@ -96,7 +95,7 @@ abstract class ExpanderCompartment extends Compartment
       for (Info<String>? info in details)
         if (info != null && info.value.isNotEmpty)
           wrapInWrap(
-              title: info.title(locale),
+              title: info.title(locale.asLocalizer),
               body: info.copyable
                   ? copyableInfo(info: info, context: context)
                   : info.couldBeLink

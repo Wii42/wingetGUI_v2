@@ -1,11 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/gestures.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
+import 'package:winget_gui/package_infos/package_infos_extension.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
-import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/package_sources/github_api/github_rate_limit_exception.dart';
 import 'package:winget_gui/package_sources/no_internet_exception.dart';
 import 'package:winget_gui/package_sources/package_source.dart';
@@ -141,6 +143,7 @@ class PackageDetailsFromWeb extends StatelessWidget {
 
   Future<PackageInfosFull> getInfos(Locale? guiLocale) async {
     PackageSource source = package.packageSource!;
-    return source.fetchInfos(guiLocale);
+
+    return source.fetchInfos(guiLocale?.asIntlLocale);
   }
 }

@@ -1,6 +1,6 @@
+import 'package:winget_core/winget_core.dart';
 import 'package:yaml/yaml.dart';
 
-import '../package_attribute.dart';
 import 'full_abstract_map_parser.dart';
 import 'info_yaml_parser.dart';
 

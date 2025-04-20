@@ -1,8 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/package_infos/info.dart';
-import 'package:winget_gui/package_infos/info_with_link.dart';
 import 'package:winget_gui/widget_assets/buttons/link_button.dart';
 import 'package:winget_gui/widget_assets/buttons/mini_icon_copy_button.dart';
 import 'package:winget_gui/widget_assets/buttons/mini_icon_link_button.dart';
@@ -62,7 +61,7 @@ mixin CompartmentBuildingBlocks on Compartment {
     AppLocalizations locale = AppLocalizations.of(context)!;
     if (StringHelper.isLink(text.value)) {
       return LinkButton(
-          url: Uri.parse(text.value), buttonText: text.title(locale));
+          url: Uri.parse(text.value), buttonText: text.title(locale.asLocalizer));
     }
     return textWithLinks(text: text.value, context: context);
   }
@@ -70,7 +69,7 @@ mixin CompartmentBuildingBlocks on Compartment {
   Widget linkButton(
       {required Info<Uri> link, required AppLocalizations locale}) {
     return LinkButton(
-        url: link.value, buttonText: link.customTitle ?? link.title(locale));
+        url: link.value, buttonText: link.customTitle ?? link.title(locale.asLocalizer));
   }
 
   Widget copyableInfo(
@@ -98,7 +97,7 @@ mixin CompartmentBuildingBlocks on Compartment {
 
   Widget wrapInfoWithLink(BuildContext context, InfoWithLink? info) {
     return wrapInWrap(
-        title: info?.title(AppLocalizations.of(context)!) ?? '',
+        title: info?.title(AppLocalizations.of(context)!.asLocalizer) ?? '',
         body: fromInfoWithLink(context, info));
   }
 

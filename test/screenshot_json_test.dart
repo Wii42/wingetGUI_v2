@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:winget_gui/helpers/package_screenshots.dart';
+import 'package:winget_core/winget_core.dart';
 
 void main() {
   Map<String, PackageScreenshots> packageScreenshots = {

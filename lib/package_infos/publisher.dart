@@ -1,70 +1,14 @@
 import 'dart:collection';
 
-import 'package:diacritic/diacritic.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/helpers/json_publisher.dart';
+import 'package:persistent_storage_interface/service.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
 
-import 'info_with_link.dart';
-import 'package_attribute.dart';
-import 'package_id.dart';
+extension PublisherHelper on Publisher {
 
-class Publisher {
-  final String? id;
-
-  /// The name as provided by the manifest file.
-  final String? fullName;
-
-  /// The id but with spaces and dots, or if [id] is null, the name of the publisher.
-  final String? nameFittingId;
-  final Uri? icon;
-  final Uri? website;
-
-  Publisher({
-    this.id,
-    this.fullName,
-    this.nameFittingId,
-    this.icon,
-    this.website,
-  });
-
-  factory Publisher.build({
-    required PackageId? packageId,
-    String? fullName,
-    Uri? website,
-    Iterable<String?> possiblePublisherNames = const [],
-    Iterable<String?> anyPublisherNames = const [],
-    bool isFullInfos = false,
-  }) {
-    return _PublisherBuilder(
-      packageId: packageId,
-      fullName: fullName,
-      website: website,
-      possiblePublisherNames: possiblePublisherNames,
-      anyPublisherNames: anyPublisherNames,
-      isFullInfos: isFullInfos,
-    ).build();
-  }
-
-  /// Title under which the publisher is displayed, is not the publisher name.
-  String title(AppLocalizations locale) =>
-      PackageAttribute.publisher.title(locale);
-
-  InfoWithLink? get infoWithLink {
-    if (fullName == null && website == null) {
-      return null;
-    }
-    return InfoWithLink(
-      title: title,
-      text: fullName,
-      url: website,
-    );
-  }
 
   String? nameFromDBbyPublisherId() {
-    return _PublisherBuilder.nameFromDBbyPublisherId(id);
+    return PublisherBuilder.nameFromDBbyPublisherId(id);
   }
 
   static String? nameFromDBbyPackageId(PackageId? packageId) {
@@ -74,34 +18,9 @@ class Publisher {
     }
     return null;
   }
-
-  /// Canonicalizes a string so it could match a publisher id.
-  /// Removes all spaces, dots and commas and convert to lowercase.
-  /// [customDiacritics] if true, use custom diacritics, like ä -> ae.
-  static String canonicalize(String string, {bool customDiacritics = false}) {
-    if (customDiacritics) {
-      string = _replaceDiacriticsWithCustom(string);
-    }
-    string = removeDiacritics(string);
-    return string.replaceAll(RegExp(r"[\s.,\-&'´’!?\\/|()]"), '').toLowerCase();
-  }
-
-  static String _replaceDiacriticsWithCustom(String string) {
-    return string.replaceAllMapped(RegExp(r'[äöüÄÖÜ]'), (match) {
-      return switch (match.group(0)!) {
-        'ä' => 'ae',
-        'ö' => 'oe',
-        'ü' => 'ue',
-        'Ä' => 'ae',
-        'Ö' => 'oe',
-        'Ü' => 'ue',
-        _ => match.group(0)!
-      };
-    });
-  }
 }
 
-class _PublisherBuilder {
+class PublisherBuilder {
   PackageId? packageId;
   String? publisherId;
   String? fullName;
@@ -116,7 +35,7 @@ class _PublisherBuilder {
   /// If the publisher id is null, the first non-null name is used.
   Iterable<String?> anyPublisherNames;
 
-  _PublisherBuilder({
+  PublisherBuilder({
     this.packageId,
     this.fullName,
     this.website,
@@ -144,7 +63,7 @@ class _PublisherBuilder {
             .publisherIcons[packageId?.probablyPublisherId()]
             ?.nameUsingDefaultSource ??
         nameFromDBbyPublisherId(publisherId) ??
-        Publisher.nameFromDBbyPackageId(packageId);
+        PublisherHelper.nameFromDBbyPackageId(packageId);
     if (publisherName != null) {
       return publisherName;
     }

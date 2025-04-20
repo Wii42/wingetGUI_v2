@@ -1,11 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
-import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:winget_gui/package_infos/publisher.dart';
-import 'package:winget_gui/package_sources/package_source.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/buttons/page_button.dart';
@@ -98,7 +98,7 @@ class PackagePeek extends StatelessWidget {
           infos.match != null &&
           infos.match!.value.trim().isNotEmpty)
         Text(
-          "${infos.match!.title(locale)}: ${infos.match!.value}",
+          "${infos.match!.title(locale.asLocalizer)}: ${infos.match!.value}",
           softWrap: false,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.start,
@@ -161,7 +161,7 @@ class PackagePeek extends StatelessWidget {
           Text(
             infos.publisher?.nameFittingId ??
                 infos.publisher?.nameFromDBbyPublisherId() ??
-                Publisher.nameFromDBbyPackageId(infos.id?.value) ??
+                PublisherHelper.nameFromDBbyPackageId(infos.id?.value) ??
                 infos.publisher?.id ??
                 infos.id?.value.string ??
                 '<ID>',
@@ -183,7 +183,7 @@ class PackagePeek extends StatelessWidget {
         (infos.publisher?.id != null ||
             infos.publisher?.nameFittingId != null ||
             infos.publisher?.nameFromDBbyPublisherId() != null ||
-            Publisher.nameFromDBbyPackageId(infos.id?.value) != null);
+            PublisherHelper.nameFromDBbyPackageId(infos.id?.value) != null);
     //AppLocalizations locale = AppLocalizations.of(context)!;
     return Row(
       children: [
@@ -259,14 +259,14 @@ class PackagePeek extends StatelessWidget {
       children: [
         if (infos.version != null)
           Text(
-            "${infos.version!.title(locale)}: ${infos.version!.value.stringValue}",
+            "${infos.version!.title(locale.asLocalizer)}: ${infos.version!.value.stringValue}",
             softWrap: false,
             overflow: TextOverflow.ellipsis,
           ),
         if (infos.availableVersion != null &&
             infos.availableVersion!.value.isVersion())
           Text(
-            "${infos.availableVersion!.title(locale)}: ${infos.availableVersion!.value.stringValue}",
+            "${infos.availableVersion!.title(locale.asLocalizer)}: ${infos.availableVersion!.value.stringValue}",
             softWrap: false,
             overflow: TextOverflow.ellipsis,
           ),

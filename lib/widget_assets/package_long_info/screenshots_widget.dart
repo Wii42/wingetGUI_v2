@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
-import 'package:winget_gui/helpers/package_screenshots.dart';
 
 import 'expander_compartment.dart';
 

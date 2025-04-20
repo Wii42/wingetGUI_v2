@@ -1,0 +1,23 @@
+name: json_file_loader
+description: Json File loader as part of the persistent storage implementation for WingetGUI
+version: 0.0.1
+
+publish_to: 'none'
+
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  persistent_storage_interface:
+    path: ../interface
+  winget_core:
+    path: ../../winget_core
+  ribs_json: ^1.0.0-dev.14
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

@@ -1,10 +1,6 @@
 import 'package:dart_casing/dart_casing.dart';
-
-import '../info.dart';
-import '../info_with_link.dart';
-import '../installer_objects/dependencies.dart';
-import '../installer_objects/installer.dart';
-import '../package_attribute.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/package_infos/parsers/full_json_parser.dart';
 import 'info_api_parser.dart';
 
 class InfoJsonParser extends InfoApiParser<String> {
@@ -94,7 +90,7 @@ class InfoJsonParser extends InfoApiParser<String> {
   Info<List<Installer>>? maybeInstallersFromMap(PackageAttribute installers) {
     return maybeListFromMap<Installer>(PackageAttribute.installers,
         parser: (map) {
-      return Installer.fromJson(map);
+      return FullJsonParser().parseInstaller(map);
     });
   }
 

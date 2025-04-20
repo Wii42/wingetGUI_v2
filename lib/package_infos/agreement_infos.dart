@@ -1,13 +1,11 @@
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
+import 'package:winget_core/winget_core.dart';
 
-import 'info.dart';
-import 'info_with_link.dart';
 import 'parsers/full_json_parser.dart';
 import 'parsers/full_map_parser.dart';
 import 'parsers/full_yaml_parser.dart';
 
 class AgreementInfos {
-  final String Function(AppLocalizations) title;
+  final String Function(PackageLocalizer) title;
   final InfoWithLink? license, copyright;
   final Info<Uri>? privacyUrl, buyUrl;
   final Info<String>? termsOfTransaction, seizureWarning, storeLicenseTerms;
@@ -24,8 +22,8 @@ class AgreementInfos {
   });
 
   static AgreementInfos? maybeFromMap(
-      {required Map<String, String>? map, required AppLocalizations locale}) {
-    return FullMapParser(details: map ?? {}, locale: locale)
+      {required Map<String, String>? map, required PackageLocalizer locale}) {
+    return FullMapParser(details: map ?? {}, localizer: locale)
         .parseAgreementInfos();
   }
 

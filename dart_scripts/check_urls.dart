@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:ribs_json/ribs_json.dart';
-import 'package:winget_gui/helpers/json_publisher.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
-import 'package:winget_gui/helpers/package_screenshots.dart';
-import 'package:winget_gui/persistent_storage/json_web_core.dart';
 
 JsonWebCore loadHelper = JsonWebCore();
 Logger log = Logger('UrlChecker');

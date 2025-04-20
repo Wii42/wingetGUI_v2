@@ -3,15 +3,14 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:cron/cron.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:persistent_storage_interface/interface.dart';
+import 'package:persistent_storage_interface/service.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
-import 'package:winget_gui/helpers/version_or_string.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
-import 'package:winget_gui/package_infos/package_id.dart';
-import 'package:winget_gui/package_infos/package_infos.dart';
-import 'package:winget_gui/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage.dart';
+import 'package:winget_gui/package_infos/package_infos_extension.dart';
 import 'package:winget_gui/winget_commands.dart';
 
 import 'db_message.dart';
@@ -99,6 +98,10 @@ class PackageTables {
       persistentStorage: persistentStorage,
     );
     wingetTable.infos = await persistentStorage.loadAll();
+    for (PackageInfosPeek info in wingetTable.infos) {
+      info.setPublisher();
+      info.setImplicitInfos();
+    }
     wingetTable.status = DBStatus.ready;
     return wingetTable;
   }

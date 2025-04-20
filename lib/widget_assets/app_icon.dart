@@ -3,13 +3,10 @@ import 'dart:collection';
 import 'package:favicon/favicon.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
+import 'package:persistent_storage_interface/service.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
-import 'package:winget_gui/helpers/package_screenshots.dart';
-import 'package:winget_gui/package_infos/package_id.dart';
-import 'package:winget_gui/package_infos/package_infos.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
-import 'package:winget_gui/package_sources/package_source.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
 import 'package:winget_gui/widget_assets/web_image.dart';
 
 import 'decorated_card.dart';

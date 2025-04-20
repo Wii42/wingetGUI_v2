@@ -1,3 +1,4 @@
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 
 extension AppLocalizationExtension on AppLocalizations {

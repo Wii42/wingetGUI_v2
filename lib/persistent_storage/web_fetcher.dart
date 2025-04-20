@@ -1,6 +1,4 @@
-import 'package:winget_gui/helpers/package_screenshots.dart';
-
-import 'json_web_core.dart';
+import 'package:winget_core/winget_core.dart';
 
 class WebFetcher {
   JsonWebCore jsonWebCore = JsonWebCore();
@@ -13,7 +11,7 @@ class WebFetcher {
       "https://raw.githubusercontent.com/marticliment/WingetUI/main/WebBasedData/invalid_urls.txt";
   static final Uri screenshotsSource = Uri.parse(wingetUIScreenshotDatabaseUrl);
   static final Uri invalidScreenshotsSource =
-      Uri.parse(wingetUIInvalidScreenshotsUrl);
+  Uri.parse(wingetUIInvalidScreenshotsUrl);
 
   /// Fetches invalid image URLs from the marticliment/wingetUI GithHub repo.
   Future<List<Uri>> fetchInvalidImageUrlsFromMartiClimentRepo() async {
@@ -27,7 +25,7 @@ class WebFetcher {
   }
 
   Future<Map<String, PackageScreenshots>>
-      fetchPackageScreenshotsFromMartiClimentRepo() async {
+  fetchPackageScreenshotsFromMartiClimentRepo() async {
     String data = await jsonWebCore.getStringFromWeb(screenshotsSource);
     return jsonWebCore.parseScreenshotsMapFromMartiClimentRepo(data);
   }

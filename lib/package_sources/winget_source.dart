@@ -1,16 +1,13 @@
 import 'dart:collection';
-import 'dart:ui';
+import 'package:intl/locale.dart';
 
 import 'package:collection/collection.dart';
 import 'package:http/http.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/helpers/locale_parser.dart';
-import 'package:winget_gui/helpers/version.dart';
-import 'package:winget_gui/helpers/version_or_string.dart';
-import 'package:winget_gui/package_infos/package_id.dart';
+import 'package:winget_gui/package_infos/package_infos_extension.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
-import 'package:winget_gui/package_infos/package_infos_peek.dart';
 import 'package:yaml/yaml.dart';
 
 import 'github_api/github_api.dart';
@@ -236,14 +233,14 @@ class WingetSource extends PackageSource {
         .replaceFirst("${(packageID ?? package.id!.value).string}.locale.", '')
         .split('.')
         .first;
-    return LocaleParser.parse(localeString);
+    return InstallerLocale.parse(localeString);
   }
 
   Future<Locale?> getDefaultLocale(
       WingetPackageVersionManifest manifest) async {
     Map? map = await getYaml(manifest.manifest.downloadUrl!);
     if (map != null) {
-      return LocaleParser.tryParse(map['DefaultLocale']);
+      return InstallerLocale.tryParse(map['DefaultLocale']);
     }
     return null;
   }

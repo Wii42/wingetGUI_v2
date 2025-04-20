@@ -1,7 +1,5 @@
-import '../info.dart';
-import '../info_with_link.dart';
-import '../package_attribute.dart';
-import 'info_abstract_map_parser.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_core/winget_parsers.dart';
 
 abstract class InfoApiParser<A> extends InfoAbstractMapParser<A, dynamic> {
   InfoApiParser({required super.map});

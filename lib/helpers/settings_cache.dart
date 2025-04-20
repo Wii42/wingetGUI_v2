@@ -1,7 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage.dart';
-
-import 'locale_parser.dart';
+import 'package:persistent_storage_interface/interface.dart';
+import 'package:persistent_storage_interface/service.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 
 class SettingsCache {
   static const String _guiLocaleKey = 'guiLocale',
@@ -60,6 +61,8 @@ class SettingsCache {
     if (string == null) {
       return null;
     }
-    return LocaleParser.parse(string);
+    print(string);
+    InstallerLocale? installerLocale = InstallerLocale.parse(string);
+    return installerLocale.asUiLocale;
   }
 }

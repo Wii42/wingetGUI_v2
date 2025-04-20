@@ -1,14 +1,9 @@
-import 'package:winget_gui/helpers/extensions/string_extension.dart';
-import 'package:winget_gui/package_sources/package_source.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_core/winget_parsers.dart';
+import 'package:winget_gui/package_infos/package_infos_extension.dart';
 
 import '../agreement_infos.dart';
-import '../info.dart';
-import '../installer_objects/computer_architecture.dart';
-import '../installer_objects/installer.dart';
-import '../package_attribute.dart';
 import '../package_infos_full.dart';
-import 'abstract_map_parser.dart';
-import 'info_abstract_map_parser.dart';
 
 abstract class FullAbstractMapParser<A, B>
     extends AbstractMapParser<A, B, PackageInfosFull> {

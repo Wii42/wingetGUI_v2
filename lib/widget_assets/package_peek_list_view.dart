@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart'
     as system_icons;
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/db/db_message.dart';
 import 'package:winget_gui/db/winget_table.dart';
@@ -11,8 +12,7 @@ import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/output_handling/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';
-import 'package:winget_gui/package_infos/package_infos.dart';
-import 'package:winget_gui/package_infos/package_infos_peek.dart';
+import 'package:winget_gui/package_infos/package_infos_extension.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 
 import 'buttons/package_multi_action_button.dart';

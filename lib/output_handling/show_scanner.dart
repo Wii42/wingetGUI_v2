@@ -1,5 +1,5 @@
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/package_infos/package_attribute.dart';
 
 import 'output_scanner.dart';
 import 'responsibility.dart';

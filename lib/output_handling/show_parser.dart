@@ -1,9 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/string_map_extension.dart';
-import 'package:winget_gui/helpers/version_or_string.dart';
-import 'package:winget_gui/package_infos/info.dart';
-import 'package:winget_gui/package_infos/package_attribute.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
 
 import 'output_parser.dart';
@@ -23,17 +22,18 @@ class ShowParser extends OutputParser {
   }
 
   PackageInfosFull _extractInfos(AppLocalizations locale) {
+    AppLocalizer localizer = locale.asLocalizer;
     Map<String, String> infos = {};
     infos.addAll(_extractMainInfos(locale));
     infos.addAll(_extractOtherInfos());
 
     Map<String, String>? installerDetails;
-    if (infos.hasInfo(PackageAttribute.installer, locale)) {
+    if (infos.hasInfo(PackageAttribute.installer, localizer)) {
       installerDetails = extractInstallerDetails(infos, locale);
-      infos.remove(PackageAttribute.installer.key(locale));
+      infos.remove(PackageAttribute.installer.key(locale.asLocalizer));
     }
     PackageInfosFull parsedInfos = PackageInfosFull.fromMap(
-        details: infos, installerDetails: installerDetails, locale: locale);
+        details: infos, installerDetails: installerDetails, locale: localizer);
 
     if (!parsedInfos.hasVersion()) {
       extractVersionFromCommand(parsedInfos, '--version');
@@ -53,6 +53,7 @@ class ShowParser extends OutputParser {
   }
 
   Map<String, String> _extractMainInfos(AppLocalizations wingetLocale) {
+    AppLocalizer localizer = wingetLocale.asLocalizer;
     Map<String, String> infos = {};
     List<String> firstLine = lines[0].trim().split(' ');
 
@@ -63,15 +64,15 @@ class ShowParser extends OutputParser {
     }
     int startOffset = lines[0].trim().startsWith(wingetLocale.found) ? 1 : 2;
 
-    infos[PackageAttribute.name.key(wingetLocale)] =
+    infos[PackageAttribute.name.key(localizer)] =
         firstLine.sublist(startOffset, idIndex).join(' ');
     String id = firstLine[idIndex].trim();
-    infos[PackageAttribute.id.key(wingetLocale)] =
+    infos[PackageAttribute.id.key(localizer)] =
         id.replaceAll('[', '').replaceAll(']', '');
     if (idIndex < firstLine.length - 1) {
       if (firstLine[idIndex + 1].trim() ==
           wingetLocale.infoKey(PackageAttribute.version.name)) {
-        infos[PackageAttribute.version.key(wingetLocale)] =
+        infos[PackageAttribute.version.key(localizer)] =
             firstLine.sublist(idIndex + 2).join(' ');
       }
     }

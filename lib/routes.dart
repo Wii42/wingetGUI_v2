@@ -1,4 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:persistent_storage_interface/interface.dart';
+import 'package:persistent_storage_interface/service.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
@@ -11,8 +14,6 @@ import 'package:winget_gui/navigation_pages/publisher_page.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/navigation_pages/settings_page.dart';
 import 'package:winget_gui/navigation_pages/updates_page.dart';
-import 'package:winget_gui/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage.dart';
 import 'package:winget_gui/widget_assets/package_details_from_web.dart';
 import 'package:winget_gui/widget_assets/package_peek.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';

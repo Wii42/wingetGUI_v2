@@ -1,4 +1,4 @@
-import 'package:winget_gui/helpers/package_screenshots.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/persistent_storage/web_fetcher.dart';
 import 'package:winget_gui/server_interface/server_interface.dart';
 

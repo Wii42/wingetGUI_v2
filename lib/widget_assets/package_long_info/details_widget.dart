@@ -1,9 +1,11 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
+import 'package:winget_gui/helpers/localized_name.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/package_infos/info_extensions.dart';
-import 'package:winget_gui/package_infos/info_with_link.dart';
+import 'package:winget_gui/package_infos/package_infos_extension.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
-import 'package:winget_gui/package_sources/package_source.dart';
 
 import 'expander_compartment.dart';
 
@@ -31,11 +33,12 @@ class DetailsWidget extends ExpanderCompartment {
             infos.id?.toStringInfo(),
             if (infos.version?.value.stringValue != 'Unknown')
               infos.version?.toStringInfo(),
-            infos.packageLocale?.toStringInfo(context),
+            infos.packageLocale?.toStringInfo(
+                locale.asLocalizer, LocaleNames.of(context)?.asLocalizedName),
           ], context),
           if (infos.documentation != null)
             wrapInWrap(
-              title: infos.documentation!.title(locale),
+              title: infos.documentation!.title(locale.asLocalizer),
               body: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

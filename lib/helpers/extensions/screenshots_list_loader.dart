@@ -1,8 +1,8 @@
-import 'package:winget_gui/package_infos/package_infos_peek.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage_service.dart';
+import 'package:persistent_storage_interface/service.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/server_interface/server_interface.dart';
 
-import '../package_screenshots.dart';
+
 import '../package_screenshots_list.dart';
 
 extension ScreenshotsListLoader on PackageScreenshotsList {
@@ -124,27 +124,5 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
             value.backup == null);
       },
     );
-  }
-}
-
-class CustomIconKey {
-  final String oldKey;
-  final String? newKey;
-  final List<String> otherKeys;
-
-  CustomIconKey({required this.oldKey, this.newKey, this.otherKeys = const []});
-
-  factory CustomIconKey.fromJson(Map<String, dynamic> json, String key) {
-    List<dynamic> otherKeys = json['other_keys'] ?? const [];
-    return CustomIconKey(
-      oldKey: key,
-      newKey: json['new_key'],
-      otherKeys: otherKeys.cast<String>(),
-    );
-  }
-
-  @override
-  String toString() {
-    return 'CustomIconKey{oldKey: $oldKey, newKey: $newKey, otherKeys: $otherKeys}';
   }
 }

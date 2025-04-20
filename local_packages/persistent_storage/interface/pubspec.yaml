@@ -1,0 +1,22 @@
+name: persistent_storage_interface
+description: persistent storage interface for WingetGUI
+version: 0.0.1
+
+publish_to: 'none'
+
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  winget_core:
+    path: ../../winget_core
+  json_file_loader:
+    path: ../json_file_loader
+  #flutter:
+    #sdk: flutter
+
+
+dev_dependencies:
+  #flutter_test:
+    #sdk: flutter

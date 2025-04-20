@@ -1,7 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:persistent_storage_interface/interface.dart';
+import 'package:persistent_storage_interface/service.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
-import 'package:winget_gui/persistent_storage/persistent_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

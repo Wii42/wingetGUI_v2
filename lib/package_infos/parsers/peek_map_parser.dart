@@ -1,11 +1,10 @@
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_core/winget_parsers.dart';
 
-import 'info_abstract_map_parser.dart';
 import 'info_map_parser.dart';
-import 'peek_abstract_map_parser.dart';
 
 class PeekMapParser extends PeekAbstractMapParser<String, String> {
-  AppLocalizations locale;
+  PackageLocalizer locale;
 
   PeekMapParser({required Map<String, String> details, required this.locale})
       : super(details);

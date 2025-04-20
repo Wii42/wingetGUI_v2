@@ -1,4 +1,4 @@
-import 'package:winget_gui/helpers/package_screenshots.dart';
+import 'package:winget_core/winget_core.dart';
 
 /// Service that provides a abstract Interface co communicate with the server,
 /// at the moment the WingetUI Githhub repo of marticliment.

@@ -1,5 +1,4 @@
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/package_infos/package_attribute.dart';
+import 'package:winget_core/winget_core.dart';
 
 extension HasEntryExtension<T> on Map<T, String> {
   bool hasEntry(T key) {
@@ -8,7 +7,7 @@ extension HasEntryExtension<T> on Map<T, String> {
 }
 
 extension HasInfoExtension on Map<String, String> {
-  bool hasInfo(PackageAttribute attribute, AppLocalizations local) {
+  bool hasInfo(PackageAttribute attribute, PackageLocalizer local) {
     return hasEntry(attribute.key(local));
   }
 }

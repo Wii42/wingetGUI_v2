@@ -1,16 +1,16 @@
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
+import 'package:winget_core/winget_core.dart';
 
 import 'full_abstract_map_parser.dart';
 import 'info_map_parser.dart';
 
 class FullMapParser extends FullAbstractMapParser<String, String> {
   Map<String, String> installerDetails;
-  AppLocalizations locale;
+  PackageLocalizer localizer;
 
   FullMapParser(
       {Map<String, String> details = const {},
       this.installerDetails = const {},
-      required this.locale})
+      required this.localizer})
       : super(details);
 
   @override
@@ -21,6 +21,6 @@ class FullMapParser extends FullAbstractMapParser<String, String> {
 
   @override
   InfoMapParser getParser(Map<String, String> map) {
-    return InfoMapParser(map: map, locale: locale);
+    return InfoMapParser(map: map, locale: localizer);
   }
 }

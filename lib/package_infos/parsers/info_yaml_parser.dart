@@ -1,10 +1,6 @@
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/package_infos/parsers/full_yaml_parser.dart';
 import 'package:yaml/yaml.dart';
-
-import '../info.dart';
-import '../info_with_link.dart';
-import '../installer_objects/dependencies.dart';
-import '../installer_objects/installer.dart';
-import '../package_attribute.dart';
 import 'info_api_parser.dart';
 
 class InfoYamlParser extends InfoApiParser<dynamic> {
@@ -109,7 +105,7 @@ class InfoYamlParser extends InfoApiParser<dynamic> {
   Info<List<Installer>>? maybeInstallersFromMap(PackageAttribute installers) {
     return maybeListFromMap<Installer>(PackageAttribute.installers,
         parser: (map) {
-      return Installer.fromYaml(map);
+      return FullYamlParser().parseInstaller(map);
     });
   }
 }

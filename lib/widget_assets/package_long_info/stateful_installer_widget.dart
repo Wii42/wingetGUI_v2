@@ -1,19 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:intl/locale.dart' as intl;
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/helpers/app_localizer.dart';
+import 'package:winget_gui/helpers/localized_name.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/extensions/app_localizations_extension.dart';
 import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
-import 'package:winget_gui/package_infos/info.dart';
-import 'package:winget_gui/package_infos/info_extensions.dart';
-import 'package:winget_gui/package_infos/installer_objects/computer_architecture.dart';
-import 'package:winget_gui/package_infos/installer_objects/identifying_property.dart';
-import 'package:winget_gui/package_infos/installer_objects/install_scope.dart';
-import 'package:winget_gui/package_infos/installer_objects/installer.dart';
-import 'package:winget_gui/package_infos/installer_objects/installer_list_extension.dart';
-import 'package:winget_gui/package_infos/installer_objects/installer_locale.dart';
-import 'package:winget_gui/package_infos/installer_objects/installer_type.dart';
-import 'package:winget_gui/package_infos/package_attribute.dart';
 
 import 'expander_compartment.dart';
 import 'installer_selector.dart';
@@ -21,7 +16,7 @@ import 'installer_selector.dart';
 class StatefulInstallerWidget extends StatefulWidget {
   late final _InstallerCompartmentStub _template;
   final Info<List<Installer>> infos;
-  final Locale? guiLocale, defaultLocale;
+  final intl.Locale? guiLocale, defaultLocale;
 
   StatefulInstallerWidget(
       {required this.infos, super.key, this.guiLocale, this.defaultLocale})
@@ -80,26 +75,30 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
             buttonRow: template.buttonRow([
               selectedInstaller?.url?.copyWith(
                   customTitle: localization.downloadInstallerManually(
-                      selectedInstaller?.uniqueProperties(installers, context)))
+                      selectedInstaller?.uniqueProperties(
+                          installers,
+                          localization.asLocalizer,
+                          LocaleNames.of(context)?.asLocalizedName)))
             ], context),
             context: context));
     return widget._template.buildWithoutContent(context, content);
   }
 
   List<Info<String>?> shownDetails(BuildContext context) {
-    AppLocalizations localization = AppLocalizations.of(context)!;
-    Locale? locale = AppLocales.of(context).guiLocale;
+    AppLocalizer localizer = AppLocalizations.of(context)!.asLocalizer;
+    LocalizedName? localeName = LocaleNames.of(context)?.asLocalizedName;
+    intl.Locale? locale = AppLocales.of(context).guiLocale?.asIntlLocale;
     return [
       selectedInstaller?.architecture.toStringInfo(),
       selectedInstaller?.type?.toStringInfo(),
-      selectedInstaller?.locale?.toStringInfo(context),
+      selectedInstaller?.locale?.toStringInfo(localizer, localeName),
       selectedInstaller?.releaseDate?.toStringInfo(locale),
-      selectedInstaller?.scope?.toStringInfo(context),
+      selectedInstaller?.scope?.toStringInfo(localizer),
       selectedInstaller?.minimumOSVersion?.toStringInfo(),
       selectedInstaller?.platform?.toStringInfo(),
       selectedInstaller?.nestedInstallerType?.toStringInfo(),
-      selectedInstaller?.upgradeBehavior?.toStringInfo(context),
-      selectedInstaller?.modes?.toStringInfo(localization),
+      selectedInstaller?.upgradeBehavior?.toStringInfo(localizer),
+      selectedInstaller?.modes?.toStringInfo(localizer),
       selectedInstaller?.storeProductID,
       selectedInstaller?.sha256Hash,
       selectedInstaller?.elevationRequirement,
@@ -108,7 +107,7 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       selectedInstaller?.signatureSha256,
       selectedInstaller?.markets,
       selectedInstaller?.packageFamilyName,
-      selectedInstaller?.expectedReturnCodes?.toStringInfo(localization),
+      selectedInstaller?.expectedReturnCodes?.toStringInfo(localizer),
       selectedInstaller?.successCodes
           ?.toStringInfoFromList((e) => e.toString()),
     ];
@@ -130,12 +129,12 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
 
   Installer? getBestFittingLocaleInstaller() {
     if (widget.guiLocale != null) {
-      List<Locale> installerLocales =
+      List<intl.Locale> installerLocales =
           installers.map((e) => e.locale?.value).nonNulls.toList();
       if (installerLocales.length <= 1) {
         return installers.firstOrNull;
       }
-      Locale? bestFitting = getBestFittingLocale(installerLocales);
+      intl.Locale? bestFitting = getBestFittingLocale(installerLocales);
       if (bestFitting != null) {
         return installers
             .firstWhereOrNull((e) => e.locale?.value == bestFitting);
@@ -144,9 +143,9 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
     return installers.firstOrNull;
   }
 
-  Locale? getBestFittingLocale(List<Locale> installerLocales) {
+  intl.Locale? getBestFittingLocale(List<intl.Locale> installerLocales) {
     if (widget.guiLocale != null) {
-      Locale? bestFitting =
+      intl.Locale? bestFitting =
           widget.guiLocale?.bestFittingLocale(installerLocales);
       if (bestFitting != null) {
         return bestFitting;
@@ -208,7 +207,7 @@ class _InstallerCompartmentStub extends ExpanderCompartment {
 
   @override
   String compartmentTitle(AppLocalizations locale) {
-    return PackageAttribute.installer.title(locale);
+    return PackageAttribute.installer.title(locale.asLocalizer);
   }
 
   @override
