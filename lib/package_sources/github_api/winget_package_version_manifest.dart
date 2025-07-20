@@ -42,7 +42,7 @@ class WingetPackageVersionManifest {
     return file.name == "${packageId.string}.yaml" && file.type.isFile;
   }
 
-  static isVersionManifest(List<GithubApiFileInfo> files,
+  static bool isVersionManifest(List<GithubApiFileInfo> files,
       {required PackageId packageId}) {
     return files.any((element) => isInstaller(element, packageId: packageId)) &&
         files.any(isLocale) &&

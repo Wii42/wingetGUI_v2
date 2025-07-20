@@ -93,7 +93,7 @@ abstract class DBTable<K extends Object, V extends Object> {
 
   DBTable(this.parentDB);
 
-  initTable(Database db);
+  void initTable(Database db);
 
   void insert(K id, V value) {
     _entries[id] = value;
@@ -205,9 +205,9 @@ abstract class DBTable<K extends Object, V extends Object> {
     _insertMultipleDB(entries);
   }
 
-  operator []=(K id, V value) => insert(id, value);
+  void operator []=(K id, V value) => insert(id, value);
 
-  operator [](K id) => getEntry(id);
+  V? operator [](K id) => getEntry(id);
 
   String toJson() {
     return jsonEncode(

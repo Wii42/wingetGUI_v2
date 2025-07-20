@@ -114,7 +114,7 @@ class MainNavigationState extends State<MainNavigation>
   Widget navigator(Routes winget) {
     return Navigator(
       initialRoute: winget.route,
-      onGenerateInitialRoutes: (state, __) => [
+      onGenerateInitialRoutes: (state, _) => [
         FluentPageRoute<dynamic>(builder: (context) {
           return winget.buildPage();
         })
@@ -178,7 +178,7 @@ class _NavigationNavigatorState extends State<NavigationNavigator>
     super.build(context);
     return Navigator(
       initialRoute: widget.winget.route,
-      onGenerateInitialRoutes: (state, __) => [
+      onGenerateInitialRoutes: (state, _) => [
         FluentPageRoute<dynamic>(builder: (context) {
           return widget.winget.buildPage();
         })

@@ -148,7 +148,7 @@ class Cluster<T extends IdentifyingProperty> {
 
   Cluster(this.partitions);
 
-  merge(Cluster<T> other) {
+  void merge(Cluster<T> other) {
     partitions.addAll(other.partitions);
   }
 

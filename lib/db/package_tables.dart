@@ -125,7 +125,7 @@ class PackageTables {
             .join(('\n')));
   }
 
-  static List<PackageInfosPeek> filterUpdates(infos) {
+  static List<PackageInfosPeek> filterUpdates(List<PackageInfosPeek> infos) {
     List<PackageInfosPeek> toRemoveFromUpdates = [];
     for (PackageInfosPeek package in infos) {
       PackageId id = package.id!.value;

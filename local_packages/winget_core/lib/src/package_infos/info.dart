@@ -56,7 +56,7 @@ class Info<T extends Object> {
     return T;
   }
 
-  cast<A extends Object>() {
+  Info<A> cast<A extends Object>() {
     return Info<A>(
         title: title,
         value: value as A,

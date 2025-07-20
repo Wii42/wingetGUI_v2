@@ -8,7 +8,7 @@ class LocalizedName extends LocalizationName {
 
   @override
   nameOf(languageTag) {
-    names.nameOf(languageTag);
+    return names.nameOf(languageTag);
   }
 }
 

@@ -11,7 +11,7 @@ abstract class OutputParser {
 
   FutureOr<ParsedOutput> parse(AppLocalizations wingetLocale);
 
-  addLine(String line) {
+  void addLine(String line) {
     lines.add(line);
   }
 }

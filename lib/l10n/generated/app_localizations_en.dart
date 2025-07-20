@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -14,47 +13,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String wingetTitle(String command) {
-    String _temp0 = intl.Intl.selectLogic(
-      command,
-      {
-        'updates': 'Updates',
-        'updatesPage': 'Updates',
-        'installed': 'Installed',
-        'installedPage': 'Installed',
-        'about': 'About Winget',
-        'help': 'Help',
-        'search': 'Search Apps',
-        'settings': 'Winget Settings',
-        'sources': 'Sources',
-        'install': 'Install',
-        'upgrade': 'Upgrade',
-        'uninstall': 'Uninstall',
-        'show': 'Show',
-        'searchPage': 'Explore Apps',
-        'commandPromptPage': 'Run Command',
-        'upgradeAll': 'Upgrade All',
-        'advancedOptions': 'Advanced',
-        'settingsPage': 'Settings',
-        'logsPage': 'Logs',
-        'logDetailsPage': 'Log Details',
-        'availablePackages': 'Available Apps',
-        'tinkeringSection': 'Tinkering Section',
-        'other': 'NotFoundError',
-      },
-    );
+    String _temp0 = intl.Intl.selectLogic(command, {
+      'updates': 'Updates',
+      'updatesPage': 'Updates',
+      'installed': 'Installed',
+      'installedPage': 'Installed',
+      'about': 'About Winget',
+      'help': 'Help',
+      'search': 'Search Apps',
+      'settings': 'Winget Settings',
+      'sources': 'Sources',
+      'install': 'Install',
+      'upgrade': 'Upgrade',
+      'uninstall': 'Uninstall',
+      'show': 'Show',
+      'searchPage': 'Explore Apps',
+      'commandPromptPage': 'Run Command',
+      'upgradeAll': 'Upgrade All',
+      'advancedOptions': 'Advanced',
+      'settingsPage': 'Settings',
+      'logsPage': 'Logs',
+      'logDetailsPage': 'Log Details',
+      'availablePackages': 'Available Apps',
+      'tinkeringSection': 'Tinkering Section',
+      'other': 'NotFoundError',
+    });
     return '$_temp0';
   }
 
   @override
   String wingetTitlePrefix(String command) {
-    String _temp0 = intl.Intl.selectLogic(
-      command,
-      {
-        'search': 'Search',
-        'show': '',
-        'other': 'NotFoundError',
-      },
-    );
+    String _temp0 = intl.Intl.selectLogic(command, {
+      'search': 'Search',
+      'show': '',
+      'other': 'NotFoundError',
+    });
     return '$_temp0';
   }
 
@@ -63,126 +56,120 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String infoKey(String info) {
-    String _temp0 = intl.Intl.selectLogic(
-      info,
-      {
-        'id': 'ID',
-        'description': 'Description',
-        'name': 'Name',
-        'publisher': 'Publisher',
-        'publisherUrl': 'PublisherUrl',
-        'publisherSupportUrl': 'PublisherSupportUrl',
-        'version': 'Version',
-        'availableVersion': 'Available',
-        'tags': 'Tags',
-        'releaseNotes': 'ReleaseNotes',
-        'releaseNotesUrl': 'ReleaseNotesUrl',
-        'installer': 'Installationsprogramm',
-        'source': 'Source',
-        'website': 'Homepage',
-        'license': 'License',
-        'licenseUrl': 'LicenseUrl',
-        'copyright': 'Copyright',
-        'copyrightUrl': 'CopyrightUrl',
-        'privacyUrl': 'PrivacyUrl',
-        'buyUrl': 'BuyUrl',
-        'termsOfTransaction': 'Terms of Transaction',
-        'seizureWarning': 'Seizure Warning',
-        'storeLicenseTerms': 'Store License Terms',
-        'author': 'Author',
-        'moniker': 'AppMoniker',
-        'documentation': 'Documentation',
-        'agreement': 'Agreement',
-        'category': 'Category',
-        'pricing': 'Pricing',
-        'freeTrial': 'Free Trial',
-        'ageRating': 'Age Ratings',
-        'installerType': 'Type',
-        'storeProductID': 'Store Product ID',
-        'installerURL': 'Download Url',
-        'sha256Installer': 'SHA256',
-        'installerLocale': 'Language',
-        'releaseDate': 'Freigabedatum',
-        'match': 'Match',
-        'other': 'NotFoundError',
-      },
-    );
+    String _temp0 = intl.Intl.selectLogic(info, {
+      'id': 'ID',
+      'description': 'Description',
+      'name': 'Name',
+      'publisher': 'Publisher',
+      'publisherUrl': 'PublisherUrl',
+      'publisherSupportUrl': 'PublisherSupportUrl',
+      'version': 'Version',
+      'availableVersion': 'Available',
+      'tags': 'Tags',
+      'releaseNotes': 'ReleaseNotes',
+      'releaseNotesUrl': 'ReleaseNotesUrl',
+      'installer': 'Installationsprogramm',
+      'source': 'Source',
+      'website': 'Homepage',
+      'license': 'License',
+      'licenseUrl': 'LicenseUrl',
+      'copyright': 'Copyright',
+      'copyrightUrl': 'CopyrightUrl',
+      'privacyUrl': 'PrivacyUrl',
+      'buyUrl': 'BuyUrl',
+      'termsOfTransaction': 'Terms of Transaction',
+      'seizureWarning': 'Seizure Warning',
+      'storeLicenseTerms': 'Store License Terms',
+      'author': 'Author',
+      'moniker': 'AppMoniker',
+      'documentation': 'Documentation',
+      'agreement': 'Agreement',
+      'category': 'Category',
+      'pricing': 'Pricing',
+      'freeTrial': 'Free Trial',
+      'ageRating': 'Age Ratings',
+      'installerType': 'Type',
+      'storeProductID': 'Store Product ID',
+      'installerURL': 'Download Url',
+      'sha256Installer': 'SHA256',
+      'installerLocale': 'Language',
+      'releaseDate': 'Freigabedatum',
+      'match': 'Match',
+      'other': 'NotFoundError',
+    });
     return '$_temp0';
   }
 
   @override
   String infoTitle(String info) {
-    String _temp0 = intl.Intl.selectLogic(
-      info,
-      {
-        'id': 'App ID',
-        'description': 'About',
-        'name': 'Name',
-        'publisher': 'Publisher',
-        'publisherUrl': 'Publisher URL',
-        'publisherSupportUrl': 'Support',
-        'version': 'Version',
-        'availableVersion': 'Available',
-        'tags': 'Tags',
-        'releaseNotes': 'Release Notes',
-        'releaseNotesUrl': 'Show Online',
-        'installer': 'Installer',
-        'source': 'Source',
-        'website': 'Website',
-        'license': 'License',
-        'licenseUrl': 'License',
-        'copyright': 'Copyright',
-        'copyrightUrl': 'Copyright',
-        'privacyUrl': 'Privacy',
-        'buyUrl': 'Buy',
-        'termsOfTransaction': 'Terms of Transaction',
-        'seizureWarning': 'Seizure Warning',
-        'storeLicenseTerms': 'Store License Terms',
-        'author': 'Author',
-        'moniker': 'Moniker',
-        'documentation': 'Documentation',
-        'agreement': 'Agreement',
-        'category': 'Category',
-        'pricing': 'Pricing',
-        'freeTrial': 'Free Trial',
-        'ageRating': 'Age Rating',
-        'installerType': 'Installer Type',
-        'storeProductID': 'Store Product ID',
-        'installerURL': 'Download Installer Manually',
-        'sha256Installer': 'SHA256 Hash',
-        'installerLocale': 'Locale',
-        'releaseDate': 'Release Date',
-        'manifest': 'Manifest',
-        'match': 'Match',
-        'installers': 'Available Installers',
-        'upgradeBehavior': 'Upgrade Behavior',
-        'fileExtensions': 'Supported File Types',
-        'packageLocale': 'Locale',
-        'platform': 'Plattform',
-        'architecture': 'Architecture',
-        'minimumOSVersion': 'Minimal OS Version',
-        'installScope': 'Installation Scope',
-        'signatureSha256': 'Signature Hash',
-        'elevationRequirement': 'Elevation requirement',
-        'productCode': 'Product Code',
-        'appsAndFeaturesEntries': '\'Apps and Features\' Entries',
-        'installerSwitches': 'Installer Switches',
-        'installModes': 'Install Modes',
-        'shortDescription': 'Short Description',
-        'nestedInstallerType': 'Typ of the Nested Installer',
-        'availableCommands': 'Available Commands',
-        'dependencies': 'Package Dependencies',
-        'protocols': 'Supported Protocols',
-        'auto': 'Auto',
-        'random': 'Random',
-        'packageFamilyName': 'Package Family Name',
-        'markets': 'Markets',
-        'expectedReturnCodes': 'Expected Response Codes',
-        'installerSuccessCodes': 'Installer Success Codes',
-        'installationNotes': 'Installation Notes',
-        'other': 'NotFoundError',
-      },
-    );
+    String _temp0 = intl.Intl.selectLogic(info, {
+      'id': 'App ID',
+      'description': 'About',
+      'name': 'Name',
+      'publisher': 'Publisher',
+      'publisherUrl': 'Publisher URL',
+      'publisherSupportUrl': 'Support',
+      'version': 'Version',
+      'availableVersion': 'Available',
+      'tags': 'Tags',
+      'releaseNotes': 'Release Notes',
+      'releaseNotesUrl': 'Show Online',
+      'installer': 'Installer',
+      'source': 'Source',
+      'website': 'Website',
+      'license': 'License',
+      'licenseUrl': 'License',
+      'copyright': 'Copyright',
+      'copyrightUrl': 'Copyright',
+      'privacyUrl': 'Privacy',
+      'buyUrl': 'Buy',
+      'termsOfTransaction': 'Terms of Transaction',
+      'seizureWarning': 'Seizure Warning',
+      'storeLicenseTerms': 'Store License Terms',
+      'author': 'Author',
+      'moniker': 'Moniker',
+      'documentation': 'Documentation',
+      'agreement': 'Agreement',
+      'category': 'Category',
+      'pricing': 'Pricing',
+      'freeTrial': 'Free Trial',
+      'ageRating': 'Age Rating',
+      'installerType': 'Installer Type',
+      'storeProductID': 'Store Product ID',
+      'installerURL': 'Download Installer Manually',
+      'sha256Installer': 'SHA256 Hash',
+      'installerLocale': 'Locale',
+      'releaseDate': 'Release Date',
+      'manifest': 'Manifest',
+      'match': 'Match',
+      'installers': 'Available Installers',
+      'upgradeBehavior': 'Upgrade Behavior',
+      'fileExtensions': 'Supported File Types',
+      'packageLocale': 'Locale',
+      'platform': 'Plattform',
+      'architecture': 'Architecture',
+      'minimumOSVersion': 'Minimal OS Version',
+      'installScope': 'Installation Scope',
+      'signatureSha256': 'Signature Hash',
+      'elevationRequirement': 'Elevation requirement',
+      'productCode': 'Product Code',
+      'appsAndFeaturesEntries': '\'Apps and Features\' Entries',
+      'installerSwitches': 'Installer Switches',
+      'installModes': 'Install Modes',
+      'shortDescription': 'Short Description',
+      'nestedInstallerType': 'Typ of the Nested Installer',
+      'availableCommands': 'Available Commands',
+      'dependencies': 'Package Dependencies',
+      'protocols': 'Supported Protocols',
+      'auto': 'Auto',
+      'random': 'Random',
+      'packageFamilyName': 'Package Family Name',
+      'markets': 'Markets',
+      'expectedReturnCodes': 'Expected Response Codes',
+      'installerSuccessCodes': 'Installer Success Codes',
+      'installationNotes': 'Installation Notes',
+      'other': 'NotFoundError',
+    });
     return '$_temp0';
   }
 
@@ -222,7 +209,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showOnlyClickablePackages => 'show only selectable apps';
 
   @override
-  String get showOnlyPackagesWithSpecificVersion => 'show only apps with known specific version';
+  String get showOnlyPackagesWithSpecificVersion =>
+      'show only apps with known specific version';
 
   @override
   String nrOfPackagesShown(Object number, Object total) {
@@ -248,15 +236,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String themeMode(String mode) {
-    String _temp0 = intl.Intl.selectLogic(
-      mode,
-      {
-        'system': 'System',
-        'light': 'Light',
-        'dark': 'Dark',
-        'other': 'NotFoundError',
-      },
-    );
+    String _temp0 = intl.Intl.selectLogic(mode, {
+      'system': 'System',
+      'light': 'Light',
+      'dark': 'Dark',
+      'other': 'NotFoundError',
+    });
     return '$_temp0';
   }
 
@@ -286,30 +271,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String installMode(String mode) {
-    String _temp0 = intl.Intl.selectLogic(
-      mode,
-      {
-        'interactive': 'interactive',
-        'silent': 'silent',
-        'silentWithProgress': 'silent with progress',
-        'other': 'NotFoundError',
-      },
-    );
+    String _temp0 = intl.Intl.selectLogic(mode, {
+      'interactive': 'interactive',
+      'silent': 'silent',
+      'silentWithProgress': 'silent with progress',
+      'other': 'NotFoundError',
+    });
     return '$_temp0';
   }
 
   @override
   String upgradeBehavior(String behavior) {
-    String _temp0 = intl.Intl.selectLogic(
-      behavior,
-      {
-        'install': 'Install',
-        'uninstallPrevious': 'Uninstall previous version',
-        'deny': 'Deny',
-        'custom': '<Custom>',
-        'other': 'NotFoundError',
-      },
-    );
+    String _temp0 = intl.Intl.selectLogic(behavior, {
+      'install': 'Install',
+      'uninstallPrevious': 'Uninstall previous version',
+      'deny': 'Deny',
+      'custom': '<Custom>',
+      'other': 'NotFoundError',
+    });
     return '$_temp0';
   }
 
@@ -382,31 +361,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String returnResponse(String response) {
-    String _temp0 = intl.Intl.selectLogic(
-      response,
-      {
-        'packageInUse': 'Package in Use',
-        'packageInUseByApplication': 'Package in Use by Application',
-        'installInProgress': 'Install in Progress',
-        'fileInUse': 'File in Use',
-        'missingDependency': 'Missing Dependency',
-        'diskFull': 'Disk Full',
-        'insufficientMemory': 'Insufficient Memory',
-        'invalidParameter': 'Invalid Parameter',
-        'noNetwork': 'No Network',
-        'contactSupport': 'Contact Support',
-        'rebootRequiredToFinish': 'Reboot Required to Finish',
-        'rebootRequiredForInstall': 'Reboot Required for Install',
-        'rebootInitiated': 'Reboot Initiated',
-        'cancelledByUser': 'Cancelled by User',
-        'alreadyInstalled': 'Already Installed',
-        'downgrade': 'Downgrade',
-        'blockedByPolicy': 'Blocked by Policy',
-        'systemNotSupported': 'System Not Supported',
-        'custom': 'Custom Response',
-        'other': 'NotFoundError',
-      },
-    );
+    String _temp0 = intl.Intl.selectLogic(response, {
+      'packageInUse': 'Package in Use',
+      'packageInUseByApplication': 'Package in Use by Application',
+      'installInProgress': 'Install in Progress',
+      'fileInUse': 'File in Use',
+      'missingDependency': 'Missing Dependency',
+      'diskFull': 'Disk Full',
+      'insufficientMemory': 'Insufficient Memory',
+      'invalidParameter': 'Invalid Parameter',
+      'noNetwork': 'No Network',
+      'contactSupport': 'Contact Support',
+      'rebootRequiredToFinish': 'Reboot Required to Finish',
+      'rebootRequiredForInstall': 'Reboot Required for Install',
+      'rebootInitiated': 'Reboot Initiated',
+      'cancelledByUser': 'Cancelled by User',
+      'alreadyInstalled': 'Already Installed',
+      'downgrade': 'Downgrade',
+      'blockedByPolicy': 'Blocked by Policy',
+      'systemNotSupported': 'System Not Supported',
+      'custom': 'Custom Response',
+      'other': 'NotFoundError',
+    });
     return '$_temp0';
   }
 
@@ -414,7 +390,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get copyToClipboardTooltip => 'Copy to clipboard';
 
   @override
-  String get openMSStorePageTooltip => 'Open the Microsoft Store page for this app';
+  String get openMSStorePageTooltip =>
+      'Open the Microsoft Store page for this app';
 
   @override
   String get openHelpTooltip => 'Open help in a new page';
@@ -456,7 +433,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get checkingWingetAvailability => 'Checking winget availability...';
 
   @override
-  String get errorWingetNotAvailable => 'Winget is not available\nPlease install the winget command line tool and restart the app.';
+  String get errorWingetNotAvailable =>
+      'Winget is not available\nPlease install the winget command line tool and restart the app.';
 
   @override
   String get errorOccurred => 'An error occurred';
@@ -470,10 +448,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get onlyAppsWithSourceTooltip => 'Show only apps from a known package source';
+  String get onlyAppsWithSourceTooltip =>
+      'Show only apps from a known package source';
 
   @override
-  String get onlyAppsWithExactVersionTooltip => 'Show only apps with a known specific version';
+  String get onlyAppsWithExactVersionTooltip =>
+      'Show only apps with a known specific version';
 
   @override
   String actionOnAll(Object action) {

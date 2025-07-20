@@ -59,7 +59,7 @@ class TableScanner extends OutputScanner {
     return -1;
   }
 
-  _makeTable() {
+  void _makeTable() {
     int tableStart = _findHorizontalLine() - 1;
     int tableEnd = _findTableEnd(tableStart);
     if (_linesAvailable(tableStart, tableEnd)) {
@@ -123,7 +123,7 @@ class TableScanner extends OutputScanner {
     return true;
   }
 
-  _markLines(int tableStart, int tableEnd, OutputParser part) {
+  void _markLines(int tableStart, int tableEnd, OutputParser part) {
     for (int i = tableStart; i <= tableEnd; i++) {
       respList[i].respParser = part;
     }

@@ -12,7 +12,7 @@ abstract class PackagePictures {
   PackageScreenshots? getPackage(PackageInfos packageInfos);
 
   /// Automatically fetched favicons while using app.
-  final faviconsTable;
+  final dynamic faviconsTable;
 
   PackagePictures({
     required this.publisherIcons,
@@ -21,8 +21,8 @@ abstract class PackagePictures {
 }
 
 abstract class PublisherNames {
-  final byPackageId;
-  final byPublisherId;
+  final String? byPackageId;
+  final String? byPublisherId;
 
   PublisherNames({required this.byPackageId, required this.byPublisherId});
 }

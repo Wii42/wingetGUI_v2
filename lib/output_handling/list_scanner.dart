@@ -48,13 +48,13 @@ class ListScanner extends OutputScanner {
     return respList.length - 1;
   }
 
-  _markLines(int start, int end) {
+  void _markLines(int start, int end) {
     List<String> lines = [for (int i = start; i <= end; i++) respList[i].line];
     ListParser part = ListParser(lines);
     _setPartForLines(start, end, part);
   }
 
-  _setPartForLines(int listStart, int listEnd, OutputParser part) {
+  void _setPartForLines(int listStart, int listEnd, OutputParser part) {
     for (int i = listStart; i <= listEnd; i++) {
       respList[i].respParser = part;
     }

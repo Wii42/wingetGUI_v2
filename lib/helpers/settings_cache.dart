@@ -46,7 +46,7 @@ class SettingsCache {
     return ThemeMode.values.firstWhere((e) => e.toString() == string);
   }
 
-  get initialized => PersistentStorageService.instance.isInitialized;
+  bool get initialized => PersistentStorageService.instance.isInitialized;
 
   void _setLocale(Locale? locale, String key) {
     if (locale == null) {

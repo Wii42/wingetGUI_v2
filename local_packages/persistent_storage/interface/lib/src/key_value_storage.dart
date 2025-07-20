@@ -45,9 +45,9 @@ abstract class KeyValueSyncStorage<K, V> implements TableRepresentation<K, V> {
   @override
   void deleteAllEntries();
 
-  operator []=(K key, V value) => addEntry(key, value);
+  void operator []=(K key, V value) => addEntry(key, value);
 
-  operator [](K key) => getEntry(key);
+  V? operator [](K key) => getEntry(key);
 
   @override
   Map<String, dynamic> entryToMap((K, V) entry) {

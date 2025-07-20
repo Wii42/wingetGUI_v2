@@ -1,3 +1,3 @@
 abstract class LocalizationName{
-  nameOf(String languageTag);
+  String? nameOf(String languageTag);
 }

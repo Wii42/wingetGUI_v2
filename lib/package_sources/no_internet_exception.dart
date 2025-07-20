@@ -1,7 +1,7 @@
 class NoInternetException implements Exception {
   String? message;
 
-  NoInternetException([message]);
+  NoInternetException([this.message]);
 
   @override
   String toString() {

@@ -305,7 +305,7 @@ class _VersionComparator {
     return 0;
   }
 
-  static nullableCompare(Comparable<dynamic>? a, Comparable<dynamic>? b) {
+  static int nullableCompare(Comparable<dynamic>? a, Comparable<dynamic>? b) {
     if (a != null && b != null) {
       return a.compareTo(b);
     }
