@@ -15,13 +15,14 @@ class CommandButton extends RunButton
   final IconData? icon;
   final String? title;
 
-  const CommandButton(
-      {super.key,
-      required super.command,
-      super.disabled,
-      required this.buttonText,
-      this.icon,
-      this.title});
+  const CommandButton({
+    super.key,
+    required super.command,
+    super.disabled,
+    required this.buttonText,
+    this.icon,
+    this.title,
+  });
 
   @override
   String pageTitle(AppLocalizations locale) => title ?? "'$buttonText'";
@@ -35,13 +36,14 @@ class CommandIconButton extends RunButton
   final IconData icon;
   final String title;
 
-  const CommandIconButton(
-      {super.key,
-      required super.command,
-      required this.title,
-      required this.icon,
-      this.padding = EdgeInsets.zero,
-      super.disabled});
+  const CommandIconButton({
+    super.key,
+    required super.command,
+    required this.title,
+    required this.icon,
+    this.padding = EdgeInsets.zero,
+    super.disabled,
+  });
 
   @override
   String pageTitle(AppLocalizations locale) => title;
@@ -49,25 +51,20 @@ class CommandIconButton extends RunButton
 
 mixin RunAndOutputMixin on RunButton {
   @override
-  void onPressed(BuildContext context) => runCommand(
-        context: context,
-        command: command,
-        title: pageTitle,
-      );
+  void onPressed(BuildContext context) =>
+      runCommand(context: context, command: command, title: pageTitle);
 
   String pageTitle(AppLocalizations locale);
 
-  static void runCommand(
-      {required BuildContext context,
-      required List<String> command,
-      String Function(AppLocalizations)? title}) {
+  static void runCommand({
+    required BuildContext context,
+    required List<String> command,
+    String Function(AppLocalizations)? title,
+  }) {
     WingetProcess process = WingetProcess.fromCommand(command);
     Navigator.of(context).push(
       FluentPageRoute(
-        builder: (_) => OutputPage(
-          process: process,
-          title: title,
-        ),
+        builder: (_) => OutputPage(process: process, title: title),
       ),
     );
   }

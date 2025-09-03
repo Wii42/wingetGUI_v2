@@ -16,9 +16,10 @@ class TagsWidget extends ExpanderCompartment {
   List<Widget> buildCompartment(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
-        title: compartmentTitle(locale),
-        buttonRow: _tagButtons(context),
-        context: context);
+      title: compartmentTitle(locale),
+      buttonRow: _tagButtons(context),
+      context: context,
+    );
   }
 
   @override
@@ -36,15 +37,9 @@ class TagsWidget extends ExpanderCompartment {
       spacing: 5,
       children: [
         if (moniker != null)
-          SearchButton(
-            searchTarget: moniker!.value,
-            localization: locale,
-          ),
+          SearchButton(searchTarget: moniker!.value, localization: locale),
         for (String tag in tags)
-          SearchButton(
-            searchTarget: tag,
-            localization: locale,
-          )
+          SearchButton(searchTarget: tag, localization: locale),
       ],
     );
   }

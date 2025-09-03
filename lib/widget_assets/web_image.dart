@@ -45,9 +45,10 @@ class WebImage extends StatelessWidget {
       height: imageWidth,
       filterQuality: imageConfig.filterQuality,
       errorWidget: imageConfig.errorBuilder,
-      placeholder: imageConfig.loadingBuilder != null
-          ? (context, _) => imageConfig.loadingBuilder!(context)
-          : null,
+      placeholder:
+          imageConfig.loadingBuilder != null
+              ? (context, _) => imageConfig.loadingBuilder!(context)
+              : null,
       fit: BoxFit.contain,
       color: color(),
       colorBlendMode: colorBlendMode(),
@@ -62,9 +63,10 @@ class WebImage extends StatelessWidget {
   /// Returns the ratio of the image width to the image height.
   /// If the image is taller than it is wide, the ratio will be smaller than 1.
   /// if either the image width or height is null, the ratio will be 1.
-  double get ratio => imageWidth != null && imageHeight != null
-      ? imageWidth! / imageHeight!
-      : 1;
+  double get ratio =>
+      imageWidth != null && imageHeight != null
+          ? imageWidth! / imageHeight!
+          : 1;
 
   static int? calculatePixels(double? imageDimension, BuildContext context) {
     if (imageDimension == null) {
@@ -95,7 +97,9 @@ class WebImage extends StatelessWidget {
       Color color = imageConfig.solidColor!;
       return isHalfTransparent
           ? ColorFilter.mode(
-          color.withValues(alpha: alpha * color.a), BlendMode.srcIn)
+            color.withValues(alpha: alpha * color.a),
+            BlendMode.srcIn,
+          )
           : ColorFilter.mode(color, BlendMode.srcIn);
     }
     return isHalfTransparent
@@ -108,7 +112,7 @@ class ImageConfig {
   final FilterQuality filterQuality;
   final bool isAntiAlias;
   final Widget Function(BuildContext context, String string, Object object)?
-      errorBuilder;
+  errorBuilder;
   final Color? solidColor;
   final Widget Function(BuildContext context)? loadingBuilder;
 

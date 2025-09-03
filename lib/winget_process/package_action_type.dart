@@ -15,8 +15,11 @@ enum PackageActionType {
 
   final Winget winget;
   final void Function(
-          int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale)
-      reloadDB;
+    int exitCode,
+    PackageInfosPeek? info,
+    AppLocalizations? wingetLocale,
+  )
+  reloadDB;
 
   const PackageActionType(this.winget, this.reloadDB);
 
@@ -30,7 +33,7 @@ enum PackageActionType {
       package.id!.value.string,
       if (winget != Winget.upgrade && package.hasVersion()) ...[
         '-v',
-        package.version!.value.stringValue
+        package.version!.value.stringValue,
       ],
     ];
   }
@@ -42,33 +45,41 @@ enum PackageActionType {
       info: package.toPeek(),
       wingetLocale: OutputHandler.getWingetLocale(context),
     );
-    PackageAction action =
-        PackageAction(process: process, infos: package, type: this);
+    PackageAction action = PackageAction(
+      process: process,
+      infos: package,
+      type: this,
+    );
     Provider.of<PackageActionsNotifier>(context, listen: false).add(action);
   }
 
   static void reloadUninstall(
-      int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
+    int exitCode,
+    PackageInfosPeek? info,
+    AppLocalizations? wingetLocale,
+  ) {
     PackageTables wingetDB = PackageTables.instance;
     if (exitCode != 0) {
       return;
     }
     if (info != null && exitCode == 0) {
-      PackageTables.instance.installed
-          .removeInfoWhere(info.probablySamePackage);
+      PackageTables.instance.installed.removeInfoWhere(
+        info.probablySamePackage,
+      );
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);
     }
     if (wingetLocale != null && exitCode == 0) {
-      (wingetDB.installed.reloadFuture(wingetLocale)).then(
-        (_) {
-          wingetDB.updates.reloadFuture(wingetLocale);
-        },
-      );
+      (wingetDB.installed.reloadFuture(wingetLocale)).then((_) {
+        wingetDB.updates.reloadFuture(wingetLocale);
+      });
     }
   }
 
   static void reloadInstall(
-      int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
+    int exitCode,
+    PackageInfosPeek? info,
+    AppLocalizations? wingetLocale,
+  ) {
     PackageTables wingetDB = PackageTables.instance;
     if (info != null && exitCode == 0) {
       wingetDB.installed.addInfo(info);
@@ -77,7 +88,10 @@ enum PackageActionType {
   }
 
   static void reloadUpdate(
-      int exitCode, PackageInfosPeek? info, AppLocalizations? wingetLocale) {
+    int exitCode,
+    PackageInfosPeek? info,
+    AppLocalizations? wingetLocale,
+  ) {
     PackageTables wingetDB = PackageTables.instance;
     if (info != null && exitCode == 0) {
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);

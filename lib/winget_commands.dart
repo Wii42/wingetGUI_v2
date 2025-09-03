@@ -23,15 +23,17 @@ enum Winget {
     aliases: ['add'],
     icon: FluentIcons.installation,
   ),
-  upgrade('upgrade',
-      options: [
-        '--include-unknown',
-        '--disable-interactivity',
-        '--accept-source-agreements',
-        '--accept-package-agreements',
-      ],
-      aliases: ['update'],
-      icon: FluentIcons.substitutions_in),
+  upgrade(
+    'upgrade',
+    options: [
+      '--include-unknown',
+      '--disable-interactivity',
+      '--accept-source-agreements',
+      '--accept-package-agreements',
+    ],
+    aliases: ['update'],
+    icon: FluentIcons.substitutions_in,
+  ),
   upgradeAll('upgrade', options: ['--all'], aliases: ['update']),
   uninstall('uninstall', aliases: ['remove', 'rm'], icon: FluentIcons.delete),
   show('show', aliases: ['view']);
@@ -41,8 +43,12 @@ enum Winget {
   final List<String> aliases;
   final IconData? icon;
 
-  const Winget(this.baseCommand,
-      {this.options = const [], this.aliases = const [], this.icon});
+  const Winget(
+    this.baseCommand, {
+    this.options = const [],
+    this.aliases = const [],
+    this.icon,
+  });
 
   String title(AppLocalizations local) {
     String title = local.wingetTitle(name);
@@ -52,8 +58,10 @@ enum Winget {
     return title;
   }
 
-  String titleWithInput(String input,
-      {required AppLocalizations localization}) {
+  String titleWithInput(
+    String input, {
+    required AppLocalizations localization,
+  }) {
     String titlePrefix = localization.wingetTitlePrefix(name);
     String prefix;
     if (titlePrefix != notFoundError) {
@@ -67,13 +75,15 @@ enum Winget {
   List<String> get fullCommand => [baseCommand, ...options];
 
   Widget processPage(RouteParameter? parameters) {
-    return Builder(builder: (context) {
-      return OutputPage.fromWinget(
-        this,
-        parameters: [...?parameters?.commandParameter],
-        titleInput: parameters?.titleAddon,
-      );
-    });
+    return Builder(
+      builder: (context) {
+        return OutputPage.fromWinget(
+          this,
+          parameters: [...?parameters?.commandParameter],
+          titleInput: parameters?.titleAddon,
+        );
+      },
+    );
   }
 
   List<String> get allNames => [baseCommand, ...aliases];

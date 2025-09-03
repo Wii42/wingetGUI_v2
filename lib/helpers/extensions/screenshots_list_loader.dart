@@ -6,7 +6,8 @@ import '../package_screenshots_list.dart';
 
 extension ScreenshotsListLoader on PackageScreenshotsList {
   Future<void> screenshotsFromWingetUIJson(
-      Map<String, PackageScreenshots> screenshots) async {
+    Map<String, PackageScreenshots> screenshots,
+  ) async {
     screenshotMap = screenshots;
     await _removeBannedIconsFromScreenshotMap();
     _removeInvalidUrlsFromScreenshotMap();
@@ -29,8 +30,9 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
         }
         if (customKeys.otherKeys.isNotEmpty) {
           for (String otherKey in customKeys.otherKeys) {
-            screenshotMap[otherKey] =
-                screenshots.copyWith(packageKey: otherKey);
+            screenshotMap[otherKey] = screenshots.copyWith(
+              packageKey: otherKey,
+            );
           }
         }
       }
@@ -51,8 +53,9 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
         screenshots.icon = null;
       }
       if (screenshots.screenshots != null) {
-        screenshots.screenshots!
-            .removeWhere((element) => invalidScreenshotUrls.contains(element));
+        screenshots.screenshots!.removeWhere(
+          (element) => invalidScreenshotUrls.contains(element),
+        );
       }
     }
   }
@@ -71,12 +74,13 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
 
   Future<void> fetchWebScreenshots() async {
     try {
-      Map<String, PackageScreenshots> data = await ServerInterfaceService
-          .instance
-          .fetchPackageScreenshotsFromServer();
+      Map<String, PackageScreenshots> data =
+          await ServerInterfaceService.instance
+              .fetchPackageScreenshotsFromServer();
       await screenshotsFromWingetUIJson(data);
-      await PersistentStorageService.instance.packageScreenshots
-          .saveAll(screenshotMap);
+      await PersistentStorageService.instance.packageScreenshots.saveAll(
+        screenshotMap,
+      );
       log.info('web data fetched');
     } catch (e) {
       log.error(e.toString());
@@ -85,8 +89,9 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
 
   Future<void> fetchWebInvalidScreenshots() async {
     try {
-      invalidScreenshotUrls = await ServerInterfaceService.instance
-          .fetchInvalidImageUrlsFromServer();
+      invalidScreenshotUrls =
+          await ServerInterfaceService.instance
+              .fetchInvalidImageUrlsFromServer();
       log.info('invalid icons fetched');
     } catch (e) {
       log.error(e.toString());
@@ -98,8 +103,9 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
         await PersistentStorageService.instance.loadCustomPackageScreenshots();
 
     for (String packageId in customScreenshots.keys) {
-      PackageScreenshots? found =
-          getPackage(PackageInfosPeek.onlyId(packageId));
+      PackageScreenshots? found = getPackage(
+        PackageInfosPeek.onlyId(packageId),
+      );
       if (found == null) {
         if (!packageId.endsWith('.*')) {
           idToPackageKeyMap[packageId] = packageId;
@@ -116,12 +122,10 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
   }
 
   void _removeEmptyScreenshotsFromScreenshotsMap() {
-    screenshotMap.removeWhere(
-      (key, value) {
-        return (value.icon == null &&
-            (value.screenshots == null || value.screenshots!.isEmpty) &&
-            value.backup == null);
-      },
-    );
+    screenshotMap.removeWhere((key, value) {
+      return (value.icon == null &&
+          (value.screenshots == null || value.screenshots!.isEmpty) &&
+          value.backup == null);
+    });
   }
 }

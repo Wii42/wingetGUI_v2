@@ -17,9 +17,11 @@ class InstallerSelector extends StatelessWidget {
   final InstallScope? installerScope;
   final InstallerType? nestedInstallerType;
   final void Function(Installer?) setSelectedInstaller;
-  final void Function(
-      {required PackageAttribute attribute,
-      required IdentifyingProperty? value}) setInstallerProperty;
+  final void Function({
+    required PackageAttribute attribute,
+    required IdentifyingProperty? value,
+  })
+  setInstallerProperty;
 
   final Installer? selectedInstaller;
 
@@ -47,9 +49,7 @@ class InstallerSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (installers.length > 1)
-          Text(
-            localizations.multipleInstallersFound(installers.length),
-          ),
+          Text(localizations.multipleInstallersFound(installers.length)),
         if (equivalenceClasses.isNotEmpty)
           Wrap(
             spacing: 10,
@@ -62,20 +62,25 @@ class InstallerSelector extends StatelessWidget {
                       .nonNulls
                       .join(' / '),
                   options: cluster.options,
-                  title: (item) => item.title(
-                      localizations.asLocalizer, localeNames.asLocalizedName),
+                  title:
+                      (item) => item.title(
+                        localizations.asLocalizer,
+                        localeNames.asLocalizedName,
+                      ),
                   value: getMultiPropertyValue(cluster),
                   onChanged: (value) {
                     for (int i = 0; i < cluster.attributes.length; i++) {
                       setInstallerProperty(
-                          attribute: cluster.attributes.toList()[i],
-                          value: value?.properties[i]);
+                        attribute: cluster.attributes.toList()[i],
+                        value: value?.properties[i],
+                      );
                     }
                   },
-                  matchAll: !hasAllPossibleClusterCombinations &&
-                          equivalenceClasses.length > 1
-                      ? getMultiPropertyMatchAll(cluster)
-                      : null,
+                  matchAll:
+                      !hasAllPossibleClusterCombinations &&
+                              equivalenceClasses.length > 1
+                          ? getMultiPropertyMatchAll(cluster)
+                          : null,
                   greyOutItem: (value) {
                     if (value == null) {
                       return true;
@@ -87,11 +92,16 @@ class InstallerSelector extends StatelessWidget {
           ),
         if (fittingInstallers.length > 1)
           BoxSelectInstaller<Installer>(
-            categoryName: localizations
-                .multipleFittingInstallersFound(fittingInstallers.length),
+            categoryName: localizations.multipleFittingInstallersFound(
+              fittingInstallers.length,
+            ),
             options: fittingInstallers,
-            title: (item) => item.uniqueProperties(fittingInstallers,
-                localizations.asLocalizer, localeNames.asLocalizedName),
+            title:
+                (item) => item.uniqueProperties(
+                  fittingInstallers,
+                  localizations.asLocalizer,
+                  localeNames.asLocalizedName,
+                ),
             value: selectedInstaller,
             onChanged: setSelectedInstaller,
           ),
@@ -157,7 +167,8 @@ class InstallerSelector extends StatelessWidget {
 
   MultiProperty getMultiPropertyMatchAll(Cluster cluster) {
     Map<PackageAttribute, IdentifyingProperty?> map = Map.fromEntries(
-        cluster.attributes.map((e) => MapEntry(e, getMatchAll(e))));
+      cluster.attributes.map((e) => MapEntry(e, getMatchAll(e))),
+    );
     return MultiProperty.fromMap(map);
   }
 

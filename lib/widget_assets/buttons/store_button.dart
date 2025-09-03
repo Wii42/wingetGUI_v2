@@ -11,8 +11,12 @@ class StoreButton extends NormalButton
   final String? text;
   final AppLocalizations locale;
 
-  const StoreButton(
-      {super.key, required this.storeId, this.text, required this.locale});
+  const StoreButton({
+    super.key,
+    required this.storeId,
+    this.text,
+    required this.locale,
+  });
 
   @override
   void onPressed(BuildContext context) {

@@ -1,5 +1,3 @@
-
-
 import 'package:winget_core/winget_core.dart';
 
 extension PackageScreenshotIdentifiers on PackageInfos {
@@ -9,8 +7,10 @@ extension PackageScreenshotIdentifiers on PackageInfos {
     }
     String nameWithoutVersion = name!.value;
     if (hasVersion()) {
-      nameWithoutVersion =
-          name!.value.replaceFirst(' ${version!.value.stringValue}', '');
+      nameWithoutVersion = name!.value.replaceFirst(
+        ' ${version!.value.stringValue}',
+        '',
+      );
     }
     String string = nameWithoutVersion.replaceAll(' ', '').toLowerCase();
     return string;
@@ -25,8 +25,10 @@ extension PackageScreenshotIdentifiers on PackageInfos {
       nameWithoutVersion = name!.value.replaceFirst(' ${version!.value}', '');
     }
     if (publisher?.id != null) {
-      nameWithoutVersion =
-          nameWithoutVersion.replaceFirst('${publisher?.id}', '');
+      nameWithoutVersion = nameWithoutVersion.replaceFirst(
+        '${publisher?.id}',
+        '',
+      );
     }
     String string = nameWithoutVersion.replaceAll(' ', '').toLowerCase();
     return string;
@@ -69,7 +71,8 @@ extension PackageScreenshotIdentifiers on PackageInfos {
     return idWithWildcards.reversed.toList();
   }
 
-  Set<String> get possibleScreenshotKeys => [
+  Set<String> get possibleScreenshotKeys =>
+      [
         id?.value.string,
         iconIdAsPerWingetUI,
         nameWithoutVersion,

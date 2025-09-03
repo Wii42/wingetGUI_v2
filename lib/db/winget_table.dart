@@ -113,14 +113,17 @@ class WingetTable {
 
   Future<void> reloadFuture(AppLocalizations wingetLocale) {
     Completer completer = Completer<void>();
-    reloadDBTable(wingetLocale).listen((LocalizedString event) {
-      log.info(event(wingetLocale));
-      _streamController.add(DBMessage(DBStatus.loading, message: event));
-    }, onDone: () {
-      completer.complete();
-      status = DBStatus.ready;
-      _streamController.add(DBMessage(DBStatus.ready));
-    });
+    reloadDBTable(wingetLocale).listen(
+      (LocalizedString event) {
+        log.info(event(wingetLocale));
+        _streamController.add(DBMessage(DBStatus.loading, message: event));
+      },
+      onDone: () {
+        completer.complete();
+        status = DBStatus.ready;
+        _streamController.add(DBMessage(DBStatus.ready));
+      },
+    );
     return completer.future;
   }
 

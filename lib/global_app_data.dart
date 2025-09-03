@@ -13,18 +13,25 @@ class GlobalAppData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SettingsCache settings = SettingsCache.instance;
-    return MultiProvider(providers: [
-      ChangeNotifierProvider(
-        create: (_) => AppLocales(
-            initialGuiLocale: settings.guiLocale,
-            initialWingetLocale: settings.wingetLocale),
-      ),
-      ChangeNotifierProvider(
-          create: (_) => AppThemeMode(settings.themeMode ?? ThemeMode.system)),
-      StreamProvider<SystemAccentColor>(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create:
+              (_) => AppLocales(
+                initialGuiLocale: settings.guiLocale,
+                initialWingetLocale: settings.wingetLocale,
+              ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AppThemeMode(settings.themeMode ?? ThemeMode.system),
+        ),
+        StreamProvider<SystemAccentColor>(
           create: (_) => SystemTheme.onChange,
-          initialData: SystemTheme.accentColor),
-    ], builder: builder);
+          initialData: SystemTheme.accentColor,
+        ),
+      ],
+      builder: builder,
+    );
   }
 }
 

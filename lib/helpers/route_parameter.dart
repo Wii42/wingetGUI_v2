@@ -17,35 +17,50 @@ class RouteParameter {
 class PackageRouteParameter extends RouteParameter {
   final PackageInfosPeek package;
 
-  const PackageRouteParameter(
-      {required this.package, super.commandParameter, super.titleAddon});
+  const PackageRouteParameter({
+    required this.package,
+    super.commandParameter,
+    super.titleAddon,
+  });
 }
 
 class StringRouteParameter extends RouteParameter {
   final String string;
 
-  const StringRouteParameter(
-      {required this.string, super.commandParameter, super.titleAddon});
+  const StringRouteParameter({
+    required this.string,
+    super.commandParameter,
+    super.titleAddon,
+  });
 }
 
 class LogRouteParameter extends RouteParameter {
   /// Log message to display on the page.
   final LogMessage log;
 
-  const LogRouteParameter(
-      {required this.log, super.commandParameter, super.titleAddon});
+  const LogRouteParameter({
+    required this.log,
+    super.commandParameter,
+    super.titleAddon,
+  });
 }
 
 class SearchRouteParameter extends RouteParameter {
   final bool Function(PackageInfosPeek)? packageFilter;
 
-  const SearchRouteParameter(
-      {this.packageFilter, super.commandParameter, super.titleAddon});
+  const SearchRouteParameter({
+    this.packageFilter,
+    super.commandParameter,
+    super.titleAddon,
+  });
 }
 
 class DBRouteParameter extends RouteParameter {
   final TableRepresentation dbTable;
 
-  const DBRouteParameter(
-      {required this.dbTable, super.commandParameter, super.titleAddon});
+  const DBRouteParameter({
+    required this.dbTable,
+    super.commandParameter,
+    super.titleAddon,
+  });
 }

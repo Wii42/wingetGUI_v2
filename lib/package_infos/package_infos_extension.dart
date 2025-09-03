@@ -22,8 +22,10 @@ extension PackageInfosExtension on PackageInfos {
     if (manifestUrl == null) {
       return null;
     }
-    return Info<Uri>.fromAttribute(PackageAttribute.manifest,
-        value: manifestUrl);
+    return Info<Uri>.fromAttribute(
+      PackageAttribute.manifest,
+      value: manifestUrl,
+    );
   }
 
   String? versionWithoutEllipsis() => _withoutEllipsis(version?.toStringInfo());
@@ -44,19 +46,23 @@ extension PackageInfosExtension on PackageInfos {
     checkedForScreenshots = true;
     if (id != null) {
       automaticFoundFavicons =
-      PersistentStorageService.instance.favicon[id!.value.string];
+          PersistentStorageService.instance.favicon[id!.value.string];
     }
   }
 
-  void setPublisher(
-      {String? fullName, Uri? publisherWebsite, bool isFullInfos = false}) {
-    publisher ??= PublisherBuilder(
-      packageId: id?.value,
-      fullName: fullName,
-      website: publisherWebsite,
-      possiblePublisherNames: possiblePublisherNames,
-      anyPublisherNames: anyPublisherNames,
-      isFullInfos: isFullInfos,
-    ).build();
+  void setPublisher({
+    String? fullName,
+    Uri? publisherWebsite,
+    bool isFullInfos = false,
+  }) {
+    publisher ??=
+        PublisherBuilder(
+          packageId: id?.value,
+          fullName: fullName,
+          website: publisherWebsite,
+          possiblePublisherNames: possiblePublisherNames,
+          anyPublisherNames: anyPublisherNames,
+          isFullInfos: isFullInfos,
+        ).build();
   }
 }

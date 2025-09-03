@@ -33,23 +33,22 @@ class PackageLongInfo extends StatelessWidget {
           ScreenshotsWidget(infos.screenshots!),
         if (infos.hasDescription())
           ExpandableTextCompartment(
-            text: infos.additionalDescription ??
+            text:
+                infos.additionalDescription ??
                 infos.description ??
                 infos.shortDescription!,
-            title: (infos.description != null &&
-                    infos.additionalDescription != null)
-                ? infos.shortDescription
-                : null,
+            title:
+                (infos.description != null &&
+                        infos.additionalDescription != null)
+                    ? infos.shortDescription
+                    : null,
             titleIcon: FluentIcons.edit,
           ),
         if (infos.hasReleaseNotes()) releaseNotesCompartment(),
         DetailsWidget(infos: infos),
         if (infos.agreement != null) AgreementWidget(infos: infos.agreement!),
         if (infos.hasTags())
-          TagsWidget(
-            tags: infos.tags!,
-            moniker: infos.moniker,
-          ),
+          TagsWidget(tags: infos.tags!, moniker: infos.moniker),
         if (infos.installer != null)
           StatefulInstallerWidget(
             infos: infos.installer!,
@@ -81,8 +80,11 @@ class PackageLongInfo extends StatelessWidget {
     if (releaseNotesUrl != null && releaseNotesUrl.host == 'github.com') {
       launchHashtag = (String tag) {
         log.info('Mention tapped: $tag');
-        launchUrl(Uri.parse(
-            "https://github.com/${releaseNotesUrl.pathSegments.take(2).join('/')}/pull/$tag"));
+        launchUrl(
+          Uri.parse(
+            "https://github.com/${releaseNotesUrl.pathSegments.take(2).join('/')}/pull/$tag",
+          ),
+        );
       };
     }
 

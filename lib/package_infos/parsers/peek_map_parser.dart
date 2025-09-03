@@ -7,7 +7,7 @@ class PeekMapParser extends PeekAbstractMapParser<String, String> {
   PackageLocalizer locale;
 
   PeekMapParser({required Map<String, String> details, required this.locale})
-      : super(details);
+    : super(details);
 
   @override
   Map<String, String> flattenedDetailsMap() => details;

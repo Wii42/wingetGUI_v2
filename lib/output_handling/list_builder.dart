@@ -22,13 +22,10 @@ class ListBuilder extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                LinkText(
-                  line: key,
-                  style: typography.bodyStrong,
-                ),
-                if (list[key]!.isNotEmpty) LinkText(line: list[key]!)
+                LinkText(line: key, style: typography.bodyStrong),
+                if (list[key]!.isNotEmpty) LinkText(line: list[key]!),
               ],
-            )
+            ),
         ].withSpaceBetween(height: 15),
       ),
     );
@@ -47,11 +44,8 @@ class ListEntry extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LinkText(
-          line: title,
-          style: typography.bodyStrong,
-        ),
-        if (value != null) LinkText(line: value!)
+        LinkText(line: title, style: typography.bodyStrong),
+        if (value != null) LinkText(line: value!),
       ],
     );
   }

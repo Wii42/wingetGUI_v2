@@ -6,17 +6,11 @@ import 'tooltips.dart';
 abstract class AbstractButton extends StatelessWidget {
   final bool disabled;
 
-  const AbstractButton({
-    super.key,
-    this.disabled = false,
-  });
+  const AbstractButton({super.key, this.disabled = false});
 
   @override
   Widget build(BuildContext context) {
-    return buildTooltip(
-      context,
-      child: buildButton(context),
-    );
+    return buildTooltip(context, child: buildButton(context));
   }
 
   /// The button to be displayed. should only be overridden by the higher level classes.
@@ -28,16 +22,19 @@ abstract class AbstractButton extends StatelessWidget {
 
   /// The button type to be used, e.g. Button, IconButton, FilledButton.
   /// [child] and [onPressed] should be passed to the button type, without changing them.
-  BaseButton buttonType(
-      {required Widget child, required VoidCallback? onPressed});
+  BaseButton buttonType({
+    required Widget child,
+    required VoidCallback? onPressed,
+  });
 
   /// The button's child widget, e.g. what is displayed on the button.
   Widget get child;
 
   /// If the button is disabled, it returns null, otherwise it returns the onPressed function.
   void Function()? disabledOr(
-          void Function(BuildContext)? onPressed, BuildContext context) =>
-      disabled || onPressed == null ? null : () => onPressed(context);
+    void Function(BuildContext)? onPressed,
+    BuildContext context,
+  ) => disabled || onPressed == null ? null : () => onPressed(context);
 }
 
 mixin TextButtonMixin on AbstractButton {
@@ -53,15 +50,16 @@ mixin TextButtonWithIconMixin on AbstractButton {
   String get buttonText;
 
   @override
-  Widget get child => icon != null
-      ? Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon),
-            Text(buttonText),
-          ].withSpaceBetween(width: 10),
-        )
-      : Text(buttonText);
+  Widget get child =>
+      icon != null
+          ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon),
+              Text(buttonText),
+            ].withSpaceBetween(width: 10),
+          )
+          : Text(buttonText);
 }
 
 mixin IconButtonMixin on AbstractButton {
@@ -70,31 +68,33 @@ mixin IconButtonMixin on AbstractButton {
   EdgeInsetsGeometry get padding;
 
   @override
-  Widget get child => Padding(
-        padding: padding,
-        child: Icon(icon),
-      );
+  Widget get child => Padding(padding: padding, child: Icon(icon));
 
   @override
-  BaseButton buttonType(
-      {required Widget child, required VoidCallback? onPressed}) {
+  BaseButton buttonType({
+    required Widget child,
+    required VoidCallback? onPressed,
+  }) {
     return IconButton(icon: child, onPressed: onPressed);
   }
 }
 
 mixin FilledButtonMixin on AbstractButton {
   @override
-  BaseButton buttonType(
-      {required Widget child, required VoidCallback? onPressed}) {
+  BaseButton buttonType({
+    required Widget child,
+    required VoidCallback? onPressed,
+  }) {
     return FilledButton(onPressed: onPressed, child: child);
   }
 }
 
 mixin PlainButtonMixin on AbstractButton {
   @override
-  BaseButton buttonType(
-          {required Widget child, required VoidCallback? onPressed}) =>
-      Button(onPressed: onPressed, child: child);
+  BaseButton buttonType({
+    required Widget child,
+    required VoidCallback? onPressed,
+  }) => Button(onPressed: onPressed, child: child);
 }
 
 mixin CustomToolTipMixin on AbstractButton {

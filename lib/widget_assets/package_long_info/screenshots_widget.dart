@@ -17,7 +17,8 @@ class ScreenshotsWidget extends ExpanderCompartment {
   List<Widget> buildCompartment(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
 
-    List<ImageProvider> imageProviders = screenshots.screenshots
+    List<ImageProvider> imageProviders =
+        screenshots.screenshots
             ?.map((Uri uri) => NetworkImage(uri.toString(), scale: 1))
             .toList() ??
         [];
@@ -26,15 +27,17 @@ class ScreenshotsWidget extends ExpanderCompartment {
       context: context,
       title: compartmentTitle(locale),
       mainColumn: [
-        LayoutBuilder(builder: (context, constraints) {
-          return GalleryImageView(
-            boxFit: BoxFit.scaleDown,
-            listImage: imageProviders,
-            width: constraints.maxWidth,
-            height: 200,
-            galleryType: 1,
-          );
-        }),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return GalleryImageView(
+              boxFit: BoxFit.scaleDown,
+              listImage: imageProviders,
+              width: constraints.maxWidth,
+              height: 200,
+              galleryType: 1,
+            );
+          },
+        ),
       ],
     );
   }

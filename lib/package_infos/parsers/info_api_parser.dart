@@ -20,8 +20,10 @@ abstract class InfoApiParser<A> extends InfoAbstractMapParser<A, dynamic> {
   }
 
   @override
-  InfoWithLink? maybeInfoWithLinkFromMap(
-      {required PackageAttribute textInfo, required PackageAttribute urlInfo}) {
+  InfoWithLink? maybeInfoWithLinkFromMap({
+    required PackageAttribute textInfo,
+    required PackageAttribute urlInfo,
+  }) {
     return InfoWithLink.maybeFromApiMap(
       map: map,
       textInfo: textInfo,
@@ -32,14 +34,17 @@ abstract class InfoApiParser<A> extends InfoAbstractMapParser<A, dynamic> {
   Map<String, String>? getOtherInfos() {
     map.remove('\$type');
     if (map.isEmpty) return null;
-    Map<String, String?> other =
-        map.map((key, value) => MapEntry(key.toString(), valueToString(value)));
+    Map<String, String?> other = map.map(
+      (key, value) => MapEntry(key.toString(), valueToString(value)),
+    );
     other.removeWhere((key, value) => value == null);
     return other.cast<String, String>();
   }
 
-  Info<T>? maybeFromMap<T extends Object>(PackageAttribute attribute,
-      {required T Function(dynamic) parser}) {
+  Info<T>? maybeFromMap<T extends Object>(
+    PackageAttribute attribute, {
+    required T Function(dynamic) parser,
+  }) {
     Object? node = map[attribute.apiKey];
     if (node == null) {
       return null;

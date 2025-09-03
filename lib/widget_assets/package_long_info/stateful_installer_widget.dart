@@ -18,9 +18,12 @@ class StatefulInstallerWidget extends StatefulWidget {
   final Info<List<Installer>> infos;
   final intl.Locale? guiLocale, defaultLocale;
 
-  StatefulInstallerWidget(
-      {required this.infos, super.key, this.guiLocale, this.defaultLocale})
-      : _template = _InstallerCompartmentStub(infos: infos);
+  StatefulInstallerWidget({
+    required this.infos,
+    super.key,
+    this.guiLocale,
+    this.defaultLocale,
+  }) : _template = _InstallerCompartmentStub(infos: infos);
 
   @override
   State<StatefulWidget> createState() => _StatefulInstallerWidgetState();
@@ -52,35 +55,40 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
 
     bool multipleInstallers = installers.length > 1;
     Widget content = Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: template.fullCompartment(
-            title: template.compartmentTitle(localization),
-            mainColumn: [
-              if (multipleInstallers)
-                InstallerSelector(
-                  installers: installers,
-                  installerArchitecture: installerArchitecture,
-                  installerType: installerType,
-                  installerLocale: installerLocale,
-                  installerScope: installerScope,
-                  nestedInstallerType: nestedInstallerType,
-                  setSelectedInstaller: setSelectedInstaller,
-                  setInstallerProperty: setInstallerProperty,
-                  selectedInstaller: selectedInstaller,
-                ),
-              if (multipleInstallers) template.divider(),
-              ...template.detailsList(shownDetails(context), context),
-              ...displayRest(context),
-            ],
-            buttonRow: template.buttonRow([
-              selectedInstaller?.url?.copyWith(
-                  customTitle: localization.downloadInstallerManually(
-                      selectedInstaller?.uniqueProperties(
-                          installers,
-                          localization.asLocalizer,
-                          LocaleNames.of(context)?.asLocalizedName)))
-            ], context),
-            context: context));
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: template.fullCompartment(
+        title: template.compartmentTitle(localization),
+        mainColumn: [
+          if (multipleInstallers)
+            InstallerSelector(
+              installers: installers,
+              installerArchitecture: installerArchitecture,
+              installerType: installerType,
+              installerLocale: installerLocale,
+              installerScope: installerScope,
+              nestedInstallerType: nestedInstallerType,
+              setSelectedInstaller: setSelectedInstaller,
+              setInstallerProperty: setInstallerProperty,
+              selectedInstaller: selectedInstaller,
+            ),
+          if (multipleInstallers) template.divider(),
+          ...template.detailsList(shownDetails(context), context),
+          ...displayRest(context),
+        ],
+        buttonRow: template.buttonRow([
+          selectedInstaller?.url?.copyWith(
+            customTitle: localization.downloadInstallerManually(
+              selectedInstaller?.uniqueProperties(
+                installers,
+                localization.asLocalizer,
+                LocaleNames.of(context)?.asLocalizedName,
+              ),
+            ),
+          ),
+        ], context),
+        context: context,
+      ),
+    );
     return widget._template.buildWithoutContent(context, content);
   }
 
@@ -108,8 +116,9 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       selectedInstaller?.markets,
       selectedInstaller?.packageFamilyName,
       selectedInstaller?.expectedReturnCodes?.toStringInfo(localizer),
-      selectedInstaller?.successCodes
-          ?.toStringInfoFromList((e) => e.toString()),
+      selectedInstaller?.successCodes?.toStringInfoFromList(
+        (e) => e.toString(),
+      ),
     ];
   }
 
@@ -136,8 +145,9 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
       }
       intl.Locale? bestFitting = getBestFittingLocale(installerLocales);
       if (bestFitting != null) {
-        return installers
-            .firstWhereOrNull((e) => e.locale?.value == bestFitting);
+        return installers.firstWhereOrNull(
+          (e) => e.locale?.value == bestFitting,
+        );
       }
     }
     return installers.firstOrNull;
@@ -145,8 +155,9 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
 
   intl.Locale? getBestFittingLocale(List<intl.Locale> installerLocales) {
     if (widget.guiLocale != null) {
-      intl.Locale? bestFitting =
-          widget.guiLocale?.bestFittingLocale(installerLocales);
+      intl.Locale? bestFitting = widget.guiLocale?.bestFittingLocale(
+        installerLocales,
+      );
       if (bestFitting != null) {
         return bestFitting;
       }
@@ -157,9 +168,10 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
     return null;
   }
 
-  void setInstallerProperty(
-      {required PackageAttribute attribute,
-      required IdentifyingProperty? value}) {
+  void setInstallerProperty({
+    required PackageAttribute attribute,
+    required IdentifyingProperty? value,
+  }) {
     setState(() {
       switch (attribute) {
         case PackageAttribute.architecture:
@@ -191,8 +203,8 @@ class _StatefulInstallerWidgetState extends State<StatefulInstallerWidget> {
   }
 
   List<Widget> displayRest(BuildContext context) => [
-        ...template.displayRest(selectedInstaller?.other, context),
-      ];
+    ...template.displayRest(selectedInstaller?.other, context),
+  ];
 }
 
 class _InstallerCompartmentStub extends ExpanderCompartment {

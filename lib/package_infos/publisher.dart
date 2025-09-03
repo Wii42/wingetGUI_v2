@@ -5,8 +5,6 @@ import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/package_screenshots_list.dart';
 
 extension PublisherHelper on Publisher {
-
-
   String? nameFromDBbyPublisherId() {
     return PublisherBuilder.nameFromDBbyPublisherId(id);
   }
@@ -14,7 +12,8 @@ extension PublisherHelper on Publisher {
   static String? nameFromDBbyPackageId(PackageId? packageId) {
     if (packageId != null && packageId.string.isNotEmpty) {
       return PersistentStorageService
-          .instance.publisherNameByPackageId[packageId.string];
+          .instance
+          .publisherNameByPackageId[packageId.string];
     }
     return null;
   }
@@ -58,7 +57,8 @@ class PublisherBuilder {
   }
 
   String? fetchName() {
-    String? publisherName = PackageScreenshotsList
+    String? publisherName =
+        PackageScreenshotsList
             .instance
             .publisherIcons[packageId?.probablyPublisherId()]
             ?.nameUsingDefaultSource ??
@@ -67,10 +67,13 @@ class PublisherBuilder {
     if (publisherName != null) {
       return publisherName;
     }
-    String? reconstructedName = reconstructPublisherNameByCompareTo(
-        [fullName, ...possiblePublisherNames]);
+    String? reconstructedName = reconstructPublisherNameByCompareTo([
+      fullName,
+      ...possiblePublisherNames,
+    ]);
     if (publisherId == null) {
-      reconstructedName ??= fullName ??
+      reconstructedName ??=
+          fullName ??
           anyPublisherNames.nonNulls.firstOrNull ??
           reconstructFromWebsite();
     }
@@ -92,8 +95,9 @@ class PublisherBuilder {
     if (names.isEmpty || packageId?.probablyPublisherId() == null) {
       return null;
     }
-    String? publisherID =
-        Publisher.canonicalize(packageId!.probablyPublisherId()!);
+    String? publisherID = Publisher.canonicalize(
+      packageId!.probablyPublisherId()!,
+    );
     for ((int, String) indexedName in names.indexed) {
       String name = indexedName.$2;
       int index = indexedName.$1;
@@ -102,8 +106,10 @@ class PublisherBuilder {
         name = _stripOfEndingChars(name, index, lengthFullNames);
         return name;
       }
-      String nameAsIdCustom =
-          Publisher.canonicalize(name, customDiacritics: true);
+      String nameAsIdCustom = Publisher.canonicalize(
+        name,
+        customDiacritics: true,
+      );
       if (nameAsIdCustom == publisherID) {
         name = _stripOfEndingChars(name, index, lengthFullNames);
         return name;
@@ -145,7 +151,8 @@ class PublisherBuilder {
   static String? nameFromDBbyPublisherId(String? publisherId) {
     if (publisherId != null) {
       return PersistentStorageService
-          .instance.publisherNameByPublisherId[publisherId];
+          .instance
+          .publisherNameByPublisherId[publisherId];
     }
     return null;
   }
@@ -156,11 +163,14 @@ class PublisherBuilder {
     }
     if (publisherId != null) {
       PersistentStorageService
-          .instance.publisherNameByPublisherId[publisherId!] = name;
+              .instance
+              .publisherNameByPublisherId[publisherId!] =
+          name;
     }
     if (packageId != null) {
-      PersistentStorageService
-          .instance.publisherNameByPackageId[packageId!.string] = name;
+      PersistentStorageService.instance.publisherNameByPackageId[packageId!
+              .string] =
+          name;
     }
   }
 
@@ -168,7 +178,7 @@ class PublisherBuilder {
     PackageScreenshotsList screenshotsList = PackageScreenshotsList.instance;
     JsonPublisher? publisher =
         screenshotsList.publisherIcons[packageId?.probablyPublisherId()] ??
-            screenshotsList.publisherIcons[nameFittingId];
+        screenshotsList.publisherIcons[nameFittingId];
     return publisher?.iconUsingDefaultSource;
   }
 }

@@ -14,22 +14,31 @@ class OutputPage extends ProcessOutput {
 
   factory OutputPage.fromCommand(List<String> command, {String? title}) {
     return OutputPage(
-        process: WingetProcess.fromCommand(command),
-        title: title != null ? (_) => title : null);
+      process: WingetProcess.fromCommand(command),
+      title: title != null ? (_) => title : null,
+    );
   }
 
-  factory OutputPage.fromWinget(Winget winget,
-      {String? titleInput, List<String> parameters = const []}) {
+  factory OutputPage.fromWinget(
+    Winget winget, {
+    String? titleInput,
+    List<String> parameters = const [],
+  }) {
     return OutputPage(
-        process: WingetProcess.fromWinget(winget, parameters: parameters),
-        title: (locale) => titleInput != null
-            ? winget.titleWithInput(titleInput, localization: locale)
-            : winget.title(locale));
+      process: WingetProcess.fromWinget(winget, parameters: parameters),
+      title:
+          (locale) =>
+              titleInput != null
+                  ? winget.titleWithInput(titleInput, localization: locale)
+                  : winget.title(locale),
+    );
   }
 
   @override
   Widget buildPage(
-      AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
+    AsyncSnapshot<List<String>> streamSnapshot,
+    BuildContext context,
+  ) {
     return FullWidthProgressBarOnTop(
       hasProgressBar: streamSnapshot.connectionState != ConnectionState.done,
       child: PaneItemBody(
@@ -41,7 +50,9 @@ class OutputPage extends ProcessOutput {
   }
 
   Column processOutput(
-      AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
+    AsyncSnapshot<List<String>> streamSnapshot,
+    BuildContext context,
+  ) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -56,8 +67,11 @@ class OutputPage extends ProcessOutput {
 
   Padding stopButton(AppLocalizations locale) {
     return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Button(
-            onPressed: process.process.kill, child: Text(locale.endProcess)));
+      padding: const EdgeInsets.all(10),
+      child: Button(
+        onPressed: process.process.kill,
+        child: Text(locale.endProcess),
+      ),
+    );
   }
 }

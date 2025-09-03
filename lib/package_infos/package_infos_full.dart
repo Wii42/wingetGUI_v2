@@ -52,38 +52,46 @@ class PackageInfosFull extends PackageInfos {
     super.otherInfos,
   }) {
     setPublisher(
-        fullName: publisherInfo?.text,
-        publisherWebsite: publisherInfo?.url,
-        isFullInfos: true);
+      fullName: publisherInfo?.text,
+      publisherWebsite: publisherInfo?.url,
+      isFullInfos: true,
+    );
   }
 
-  factory PackageInfosFull.fromMap(
-      {required Map<String, String>? details,
-      Map<String, String>? installerDetails,
-      required PackageLocalizer locale}) {
+  factory PackageInfosFull.fromMap({
+    required Map<String, String>? details,
+    Map<String, String>? installerDetails,
+    required PackageLocalizer locale,
+  }) {
     return FullMapParser(
-            details: details ?? {},
-            installerDetails: installerDetails ?? {},
-            localizer: locale)
-        .parse();
+      details: details ?? {},
+      installerDetails: installerDetails ?? {},
+      localizer: locale,
+    ).parse();
   }
 
-  factory PackageInfosFull.fromYamlMap(
-      {required Map<dynamic, dynamic>? details,
-      required Map<dynamic, dynamic>? installerDetails,
-      String? source}) {
+  factory PackageInfosFull.fromYamlMap({
+    required Map<dynamic, dynamic>? details,
+    required Map<dynamic, dynamic>? installerDetails,
+    String? source,
+  }) {
     return FullYamlParser(
-            details: details ?? {},
-            installerDetails: installerDetails ?? {},
-            source: source)
-        .parse();
+      details: details ?? {},
+      installerDetails: installerDetails ?? {},
+      source: source,
+    ).parse();
   }
 
-  factory PackageInfosFull.fromMSJson(
-      {required Map<String, dynamic>? file, Locale? locale, String? source}) {
+  factory PackageInfosFull.fromMSJson({
+    required Map<String, dynamic>? file,
+    Locale? locale,
+    String? source,
+  }) {
     return FullJsonParser(
-            details: file ?? const {}, locale: locale, source: source)
-        .parse();
+      details: file ?? const {},
+      locale: locale,
+      source: source,
+    ).parse();
   }
 
   bool hasInstallerDetails() => installer != null;
@@ -117,21 +125,26 @@ class PackageInfosFull extends PackageInfos {
     }
     if (!description!.value.startsWith(shortDescription!.value)) {
       return Info<String>(
-          title: description!.title, value: '\n${description!.value}');
+        title: description!.title,
+        value: '\n${description!.value}',
+      );
     }
     if (description!.value == shortDescription!.value) {
       return null;
     }
 
-    String additionalDescription =
-        description!.value.substring(shortDescription!.value.length);
+    String additionalDescription = description!.value.substring(
+      shortDescription!.value.length,
+    );
 
     if (additionalDescription.trim() == '.') {
       return null;
     }
 
     return Info<String>(
-        title: description!.title, value: additionalDescription);
+      title: description!.title,
+      value: additionalDescription,
+    );
   }
 
   @override
@@ -159,19 +172,23 @@ class PackageInfosFull extends PackageInfos {
 
   @override
   PackageInfosPeek toPeek() {
-    PackageSources? source = isWinget()
-        ? PackageSources.winget
-        : isMicrosoftStore()
+    PackageSources? source =
+        isWinget()
+            ? PackageSources.winget
+            : isMicrosoftStore()
             ? PackageSources.microsoftStore
             : null;
     return PackageInfosPeek(
       name: name,
       id: id,
       version: version,
-      source: (source != null)
-          ? Info<PackageSources>.fromAttribute(PackageAttribute.source,
-              value: source)
-          : this.source,
+      source:
+          (source != null)
+              ? Info<PackageSources>.fromAttribute(
+                PackageAttribute.source,
+                value: source,
+              )
+              : this.source,
       otherInfos: otherInfos,
       screenshots: screenshots,
       publisher: publisher,
@@ -180,13 +197,12 @@ class PackageInfosFull extends PackageInfos {
 
   @override
   Iterable<String?> get possiblePublisherNames {
-    return [
-      author?.value,
-      ...super.possiblePublisherNames,
-    ];
+    return [author?.value, ...super.possiblePublisherNames];
   }
 
   @override
-  Iterable<String?> get anyPublisherNames =>
-      [author?.value, ...super.anyPublisherNames];
+  Iterable<String?> get anyPublisherNames => [
+    author?.value,
+    ...super.anyPublisherNames,
+  ];
 }

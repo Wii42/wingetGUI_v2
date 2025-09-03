@@ -10,8 +10,9 @@ class WebFetcher {
   static const String wingetUIInvalidScreenshotsUrl =
       "https://raw.githubusercontent.com/marticliment/WingetUI/main/WebBasedData/invalid_urls.txt";
   static final Uri screenshotsSource = Uri.parse(wingetUIScreenshotDatabaseUrl);
-  static final Uri invalidScreenshotsSource =
-  Uri.parse(wingetUIInvalidScreenshotsUrl);
+  static final Uri invalidScreenshotsSource = Uri.parse(
+    wingetUIInvalidScreenshotsUrl,
+  );
 
   /// Fetches invalid image URLs from the marticliment/wingetUI GithHub repo.
   Future<List<Uri>> fetchInvalidImageUrlsFromMartiClimentRepo() async {

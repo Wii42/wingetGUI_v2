@@ -29,24 +29,27 @@ class TitleWidget extends Compartment {
   Widget build(BuildContext context) {
     return DecoratedCard(
       padding: 20,
-      child: LayoutBuilder(builder: (context, constraints) {
-        return StreamBuilder<DBMessage>(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return StreamBuilder<DBMessage>(
             stream: PackageTables.instance.installed.stream,
             builder: (context, snapshot) {
               double width = constraints.maxWidth;
               bool isWide = width > 420;
               return isWide
                   ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: titleParts(context, isWide),
-                    )
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: titleParts(context, isWide),
+                  )
                   : Column(
-                      //crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.min,
-                      children: titleParts(context, isWide),
-                    );
-            });
-      }),
+                    //crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: titleParts(context, isWide),
+                  );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -68,44 +71,49 @@ class TitleWidget extends Compartment {
       if (isWide) Expanded(child: nameAndCenter) else nameAndCenter,
       if (infos.id != null)
         Padding(
-          padding: isWide
-              ? const EdgeInsets.only(left: 25)
-              : const EdgeInsets.only(top: 10),
+          padding:
+              isWide
+                  ? const EdgeInsets.only(left: 25)
+                  : const EdgeInsets.only(top: 10),
           child: buildRightSide(),
         ),
     ];
   }
 
   Widget buildRightSide() => StreamBuilder<DBMessage>(
-      stream: PackageTables.instance.installed.stream,
-      builder: (context, snapshot) {
-        bool isInstalled =
-            PackageTables.instance.installed.idMap.containsKey(infos.id?.value);
-        bool hasUpdate =
-            PackageTables.instance.updates.idMap.containsKey(infos.id?.value);
-        return RightSideButtons(
-          infos: infos,
-          install: !isInstalled,
-          uninstall: isInstalled,
-          upgrade: hasUpdate,
-          showUnselectedOptionsAsDisabled: true,
-        );
-      });
+    stream: PackageTables.instance.installed.stream,
+    builder: (context, snapshot) {
+      bool isInstalled = PackageTables.instance.installed.idMap.containsKey(
+        infos.id?.value,
+      );
+      bool hasUpdate = PackageTables.instance.updates.idMap.containsKey(
+        infos.id?.value,
+      );
+      return RightSideButtons(
+        infos: infos,
+        install: !isInstalled,
+        uninstall: isInstalled,
+        upgrade: hasUpdate,
+        showUnselectedOptionsAsDisabled: true,
+      );
+    },
+  );
 
   Widget nameAndVersion(BuildContext context) {
     Typography typography = FluentTheme.of(context).typography;
     return RichText(
       text: TextSpan(
-          text:
-              '${infos.name?.value ?? infos.id?.value.idPartsAsName ?? '<unknown>'} ',
-          style: titleStyle(typography),
-          children: [
-            if (infos.hasVersion())
-              TextSpan(
-                text: infos.displayVersion(),
-                style: versionStyle(typography),
-              )
-          ]),
+        text:
+            '${infos.name?.value ?? infos.id?.value.idPartsAsName ?? '<unknown>'} ',
+        style: titleStyle(typography),
+        children: [
+          if (infos.hasVersion())
+            TextSpan(
+              text: infos.displayVersion(),
+              style: versionStyle(typography),
+            ),
+        ],
+      ),
       softWrap: true,
     );
   }
@@ -141,9 +149,7 @@ class TitleWidget extends Compartment {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(
-          icons.FluentIcons.checkmark_circle_20_regular,
-        ),
+        const Icon(icons.FluentIcons.checkmark_circle_20_regular),
         const SizedBox(width: 5),
         Text(AppLocalizations.of(context)!.installed),
       ],
@@ -154,10 +160,12 @@ class TitleWidget extends Compartment {
     if (infos.website == null) return const SizedBox();
     Info<Uri> website = infos.website!;
     return LinkButton(
-        url: website.value,
-        buttonText: website.value.toString().startsWith('https://github.com/')
-            ? 'GitHub'
-            : website.title(locale.asLocalizer));
+      url: website.value,
+      buttonText:
+          website.value.toString().startsWith('https://github.com/')
+              ? 'GitHub'
+              : website.title(locale.asLocalizer),
+    );
   }
 
   StoreButton _showInStore(AppLocalizations locale) {

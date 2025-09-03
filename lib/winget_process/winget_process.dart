@@ -14,10 +14,7 @@ class WingetProcess {
   late final Stream<List<String>> outputStream;
   final List<void Function(int)> _onDoneCallbacks = [];
 
-  WingetProcess({
-    required this.process,
-    this.name,
-  }) {
+  WingetProcess({required this.process, this.name}) {
     outputStream = _outputStream().asBroadcastStream();
     process.exitCode.then((value) => _runOnDoneCallbacks(value));
   }
@@ -43,15 +40,20 @@ class WingetProcess {
   }
 
   static void printReady(ProcessWrap process) {
-    process.waitForReady
-        .then((value) => staticLog.info('${process.name} ready'));
+    process.waitForReady.then(
+      (value) => staticLog.info('${process.name} ready'),
+    );
     process.exitCode.then((value) => staticLog.info('${process.name} done'));
   }
 
-  factory WingetProcess.fromWinget(Winget winget,
-      {List<String> parameters = const []}) {
-    return WingetProcess.fromCommand([...winget.fullCommand, ...parameters],
-        name: winget.name);
+  factory WingetProcess.fromWinget(
+    Winget winget, {
+    List<String> parameters = const [],
+  }) {
+    return WingetProcess.fromCommand([
+      ...winget.fullCommand,
+      ...parameters,
+    ], name: winget.name);
   }
 
   WingetProcess clone() {

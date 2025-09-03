@@ -17,11 +17,12 @@ class GithubRateLimitException implements Exception {
     this.responseBodyRest = const {},
   });
 
-  factory GithubRateLimitException.fromJson(
-      {required Uri url,
-      required int statusCode,
-      required String reasonPhrase,
-      required String jsonBody}) {
+  factory GithubRateLimitException.fromJson({
+    required Uri url,
+    required int statusCode,
+    required String reasonPhrase,
+    required String jsonBody,
+  }) {
     Map<String, dynamic> body = json.decode(jsonBody);
     String message = body['message'];
     body.remove('message');
@@ -33,8 +34,9 @@ class GithubRateLimitException implements Exception {
       reasonPhrase: reasonPhrase,
       message: message,
       documentationUrl: documentationUrl,
-      responseBodyRest:
-          body.map((key, value) => MapEntry(key, value.toString())),
+      responseBodyRest: body.map(
+        (key, value) => MapEntry(key, value.toString()),
+      ),
     );
   }
 
@@ -46,7 +48,7 @@ class GithubRateLimitException implements Exception {
       'reason: $reasonPhrase',
       'message: $message',
       'documentation url: $documentationUrl',
-      if (responseBodyRest.isNotEmpty) 'response body: $responseBodyRest'
+      if (responseBodyRest.isNotEmpty) 'response body: $responseBodyRest',
     ].join(', ');
   }
 }

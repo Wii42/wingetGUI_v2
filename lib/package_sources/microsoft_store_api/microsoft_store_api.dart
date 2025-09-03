@@ -23,8 +23,10 @@ abstract class MicrosoftStoreApi {
     } catch (e) {
       if (e.runtimeType.toString() == '_ClientSocketException' &&
           e.toString().startsWith(
-              'ClientException with SocketException: Failed host lookup:')) {
-        bool hasInternet = await InternetConnectionChecker.instance.hasConnection;
+            'ClientException with SocketException: Failed host lookup:',
+          )) {
+        bool hasInternet =
+            await InternetConnectionChecker.instance.hasConnection;
         if (!hasInternet) {
           throw NoInternetException();
         }

@@ -21,52 +21,48 @@ class DetailsWidget extends ExpanderCompartment {
   List<Widget> buildCompartment(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
-        title: compartmentTitle(locale),
-        mainColumn: [
-          if (infos.publisher?.infoWithLink != null)
-            wrapInfoWithLink(context, infos.publisher?.infoWithLink),
-          ...detailsList([
-            infos.author,
-            infos.pricing,
-            infos.freeTrial,
-            infos.ageRating,
-            infos.id?.toStringInfo(),
-            if (infos.version?.value.stringValue != 'Unknown')
-              infos.version?.toStringInfo(),
-            infos.packageLocale?.toStringInfo(
-                locale.asLocalizer, LocaleNames.of(context)?.asLocalizedName),
-          ], context),
-          if (infos.documentation != null)
-            wrapInWrap(
-              title: infos.documentation!.title(locale.asLocalizer),
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for (InfoWithLink doc in infos.documentation!.value)
-                    fromInfoWithLink(context, doc),
-                ],
-              ),
+      title: compartmentTitle(locale),
+      mainColumn: [
+        if (infos.publisher?.infoWithLink != null)
+          wrapInfoWithLink(context, infos.publisher?.infoWithLink),
+        ...detailsList([
+          infos.author,
+          infos.pricing,
+          infos.freeTrial,
+          infos.ageRating,
+          infos.id?.toStringInfo(),
+          if (infos.version?.value.stringValue != 'Unknown')
+            infos.version?.toStringInfo(),
+          infos.packageLocale?.toStringInfo(
+            locale.asLocalizer,
+            LocaleNames.of(context)?.asLocalizedName,
+          ),
+        ], context),
+        if (infos.documentation != null)
+          wrapInWrap(
+            title: infos.documentation!.title(locale.asLocalizer),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (InfoWithLink doc in infos.documentation!.value)
+                  fromInfoWithLink(context, doc),
+              ],
             ),
-          ...detailsList([
-            infos.installer?.value.firstOrNull?.fileExtensions?.toStringInfo(),
-            infos.installer?.value.firstOrNull?.availableCommands
-                ?.toStringInfo(),
-            infos.installer?.value.firstOrNull?.protocols?.toStringInfo(),
-            infos.source.value != PackageSources.none
-                ? infos.source.toStringInfo()
-                : null,
-            infos.installationNotes,
-          ], context),
-          ...displayRest(infos.otherInfos, context),
-        ],
-        buttonRow: buttonRow(
-          [
-            infos.supportUrl,
-            infos.manifest,
-          ],
-          context,
-        ),
-        context: context);
+          ),
+        ...detailsList([
+          infos.installer?.value.firstOrNull?.fileExtensions?.toStringInfo(),
+          infos.installer?.value.firstOrNull?.availableCommands?.toStringInfo(),
+          infos.installer?.value.firstOrNull?.protocols?.toStringInfo(),
+          infos.source.value != PackageSources.none
+              ? infos.source.toStringInfo()
+              : null,
+          infos.installationNotes,
+        ], context),
+        ...displayRest(infos.otherInfos, context),
+      ],
+      buttonRow: buttonRow([infos.supportUrl, infos.manifest], context),
+      context: context,
+    );
   }
 
   bool showMoreFromPublisherButton() =>

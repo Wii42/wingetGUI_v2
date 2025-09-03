@@ -67,45 +67,45 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return StreamBuilder<DBMessage>(
-        initialData: DBMessage(widget.dbTable.status),
-        stream: widget.reloadStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData &&
-              snapshot.data?.status != DBStatus.ready &&
-              widget.dbTable.status != DBStatus.ready &&
-              prefilteredInfos.isEmpty) {
-            return LoadingWidget(
-                text: snapshot.data?.message != null
+      initialData: DBMessage(widget.dbTable.status),
+      stream: widget.reloadStream,
+      builder: (context, snapshot) {
+        if (snapshot.hasData &&
+            snapshot.data?.status != DBStatus.ready &&
+            widget.dbTable.status != DBStatus.ready &&
+            prefilteredInfos.isEmpty) {
+          return LoadingWidget(
+            text:
+                snapshot.data?.message != null
                     ? snapshot.data!.message!
-                    : (locale) => '');
-          }
-          if (prefilteredInfos.isEmpty) {
-            return Center(
-                child: Text(
-              locale.noAppsFound,
-            ));
-          }
-          List<PackageInfosPeek> packages = getVisiblePackages();
-          return Column(
-            children: [
-              menuOptions(context, packages),
-              const Divider(),
-              Expanded(
-                child: Stack(
-                  children: [
-                    if (packages.isNotEmpty)
-                      buildListView(packages)
-                    else
-                      Center(child: Text(locale.noFittingAppsFound)),
-                    if (widget.dbTable.hints.isNotEmpty)
-                      hintsAndWarnings(context),
-                    numberOfAppsText(packages.length, locale),
-                  ].withSpaceBetween(height: 5),
-                ),
-              ),
-            ],
+                    : (locale) => '',
           );
-        });
+        }
+        if (prefilteredInfos.isEmpty) {
+          return Center(child: Text(locale.noAppsFound));
+        }
+        List<PackageInfosPeek> packages = getVisiblePackages();
+        return Column(
+          children: [
+            menuOptions(context, packages),
+            const Divider(),
+            Expanded(
+              child: Stack(
+                children: [
+                  if (packages.isNotEmpty)
+                    buildListView(packages)
+                  else
+                    Center(child: Text(locale.noFittingAppsFound)),
+                  if (widget.dbTable.hints.isNotEmpty)
+                    hintsAndWarnings(context),
+                  numberOfAppsText(packages.length, locale),
+                ].withSpaceBetween(height: 5),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   List<PackageInfosPeek> getVisiblePackages() {
@@ -142,30 +142,38 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   Positioned numberOfAppsText(int numberOfShownApps, AppLocalizations locale) {
     int totalApps = prefilteredInfos.length;
     return Positioned(
-        bottom: 5,
-        right: horizontalPadding,
-        child: DecoratedCard(
-            solidColor: true,
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: Text((numberOfShownApps != totalApps)
-                  ? locale.nrOfPackagesShown(numberOfShownApps, totalApps)
-                  : locale.nrOfPackages(numberOfShownApps)),
-            )));
+      bottom: 5,
+      right: horizontalPadding,
+      child: DecoratedCard(
+        solidColor: true,
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Text(
+            (numberOfShownApps != totalApps)
+                ? locale.nrOfPackagesShown(numberOfShownApps, totalApps)
+                : locale.nrOfPackages(numberOfShownApps),
+          ),
+        ),
+      ),
+    );
   }
 
   ListView buildListView(List<PackageInfosPeek> packages) {
     return ListView.builder(
-        itemBuilder: buildByIndex(packages),
-        itemCount: packages.length,
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(
-            vertical: 5, horizontal: horizontalPadding),
-        prototypeItem: wrapInPadding(PackagePeek.prototypeWidget));
+      itemBuilder: buildByIndex(packages),
+      itemCount: packages.length,
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(
+        vertical: 5,
+        horizontal: horizontalPadding,
+      ),
+      prototypeItem: wrapInPadding(PackagePeek.prototypeWidget),
+    );
   }
 
   Widget Function(BuildContext, int) buildByIndex(
-      List<PackageInfosPeek> packages) {
+    List<PackageInfosPeek> packages,
+  ) {
     return (BuildContext context, int index) {
       PackageInfosPeek package = packages[index];
       if (!package.checkedForScreenshots) {
@@ -185,7 +193,10 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 
   Widget buildPackagePeek(
-      PackageInfosPeek package, bool installed, bool upgradable) {
+    PackageInfosPeek package,
+    bool installed,
+    bool upgradable,
+  ) {
     return PackagePeek(
       package,
       installButton: !installed || widget.packageOptions.showAllButtons,
@@ -194,8 +205,9 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
       showMatch: widget.packageOptions.showMatch,
       showInstalledIcon: installed && widget.packageOptions.showInstalledIcon,
       defaultSourceIsLocalPC: widget.packageOptions.defaultSourceIsLocalPC,
-      key:
-          ValueKey("${package.id!.value}${package.version?.value.stringValue}"),
+      key: ValueKey(
+        "${package.id!.value}${package.version?.value.stringValue}",
+      ),
     );
   }
 
@@ -209,21 +221,28 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
           packages.where((element) => element.hasSpecificVersion()).toList();
     }
     if (filter.isNotEmpty) {
-      packages = packages
-          .where((element) =>
-              (element.name?.value.containsCaseInsensitive(filter) ?? false) ||
-              (element.id?.value.string.containsCaseInsensitive(filter) ??
-                  false) ||
-              (element.publisher?.nameFittingId
-                      ?.containsCaseInsensitive(filter) ??
-                  false))
-          .toList();
+      packages =
+          packages
+              .where(
+                (element) =>
+                    (element.name?.value.containsCaseInsensitive(filter) ??
+                        false) ||
+                    (element.id?.value.string.containsCaseInsensitive(filter) ??
+                        false) ||
+                    (element.publisher?.nameFittingId?.containsCaseInsensitive(
+                          filter,
+                        ) ??
+                        false),
+              )
+              .toList();
     }
     return packages;
   }
 
   List<PackageInfosPeek> sortPackages(
-      List<PackageInfosPeek> packages, SortBy sortBy) {
+    List<PackageInfosPeek> packages,
+    SortBy sortBy,
+  ) {
     if (packages is UnmodifiableListView) {
       packages = List.of(packages);
     }
@@ -236,7 +255,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     List<Widget> children = [
       if (prefilteredInfos.length >= 5 && options.filterField) ...[
         searchField(),
-        if (options.deepSearchButton) deepSearchButton()
+        if (options.deepSearchButton) deepSearchButton(),
       ],
       for (PackageActionType action in options.runActionOnAllPackagesButtons)
         Row(
@@ -306,24 +325,26 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 
   Widget sortWidget(
-      AppLocalizations locale, List<PackageInfos> visiblePackages) {
+    AppLocalizations locale,
+    List<PackageInfos> visiblePackages,
+  ) {
     Typography textTheme = FluentTheme.of(context).typography;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          locale.sortBy,
-          style: textTheme.caption,
-        ),
+        Text(locale.sortBy, style: textTheme.caption),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             sortByComboBox(locale),
             IconButton(
-                icon: Icon(sortReversed
+              icon: Icon(
+                sortReversed
                     ? system_icons.FluentIcons.text_sort_descending_16_regular
-                    : system_icons.FluentIcons.text_sort_ascending_16_regular),
-                onPressed: () => setState(() => sortReversed = !sortReversed)),
+                    : system_icons.FluentIcons.text_sort_ascending_16_regular,
+              ),
+              onPressed: () => setState(() => sortReversed = !sortReversed),
+            ),
           ].withSpaceBetween(width: 5),
         ),
       ],
@@ -352,16 +373,15 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 400),
       child: TextFormBox(
-          controller: filterController,
-          prefix: Padding(
-            padding: const EdgeInsets.only(
-              left: 10,
-            ),
-            child: Text('${locale.searchFor}:'),
-          ),
-          onChanged: (_) {
-            setState(() {});
-          }),
+        controller: filterController,
+        prefix: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Text('${locale.searchFor}:'),
+        ),
+        onChanged: (_) {
+          setState(() {});
+        },
+      ),
     );
   }
 
@@ -376,22 +396,25 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
 
   /// button which performs the selected [PackageActionType] ((un-)install/upgrade) on all packages
   Widget packageActionOnAll(
-      List<PackageInfos> packages, PackageActionType action) {
+    List<PackageInfos> packages,
+    PackageActionType action,
+  ) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return PackageMultiActionButton(
       type: action,
       packages: packages,
       locale: locale,
-      tooltipMessage: (locale) =>
-          locale.actionOnAll(action.winget.title(locale)),
+      tooltipMessage:
+          (locale) => locale.actionOnAll(action.winget.title(locale)),
     );
   }
 
   String get filter => filterController.text;
 
   void listenToFilterStream() {
-    filterStreamSubscription =
-        widget.filterStreamController.stream.listen((event) {
+    filterStreamSubscription = widget.filterStreamController.stream.listen((
+      event,
+    ) {
       setState(() {
         filterController.text = event;
         setDefaultValues();

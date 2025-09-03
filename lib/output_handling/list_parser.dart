@@ -63,7 +63,7 @@ class ListParser extends OutputParser {
         if (splitPos < 0)
           line.trim(): ''
         else
-          line.substring(0, splitPos).trim(): line.substring(splitPos).trim()
+          line.substring(0, splitPos).trim(): line.substring(splitPos).trim(),
     };
   }
 }
@@ -88,12 +88,14 @@ class ParsedList extends ParsedOutput {
   @override
   List<Widget?> singleLineRepresentations() {
     return [
-      Builder(builder: (context) {
-        Typography typography = FluentTheme.of(context).typography;
-        return LinkText(line: '$title:', style: typography.bodyStrong);
-      }),
+      Builder(
+        builder: (context) {
+          Typography typography = FluentTheme.of(context).typography;
+          return LinkText(line: '$title:', style: typography.bodyStrong);
+        },
+      ),
       for (String key in listEntries.keys)
-        ListEntry(title: key, value: listEntries[key])
+        ListEntry(title: key, value: listEntries[key]),
     ];
   }
 }

@@ -14,15 +14,20 @@ class SearchPage extends StatefulWidget {
   @override
   State<SearchPage> createState() => _SearchPageState();
 
-  static void Function(String) search(BuildContext context,
-      {bool Function(PackageInfosPeek)? packageFilter}) {
+  static void Function(String) search(
+    BuildContext context, {
+    bool Function(PackageInfosPeek)? packageFilter,
+  }) {
     NavigatorState navigator = Navigator.of(context);
     return (input) {
-      navigator.pushNamed(Routes.deepSearchPage.route,
-          arguments: SearchRouteParameter(
-              commandParameter: [input],
-              titleAddon: "'$input'",
-              packageFilter: packageFilter));
+      navigator.pushNamed(
+        Routes.deepSearchPage.route,
+        arguments: SearchRouteParameter(
+          commandParameter: [input],
+          titleAddon: "'$input'",
+          packageFilter: packageFilter,
+        ),
+      );
     };
   }
 

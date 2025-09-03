@@ -7,7 +7,8 @@ class MicrosoftStoreManifestApi extends MicrosoftStoreApi {
 
   @override
   Uri get apiUri => Uri.parse(
-      "https://storeedgefd.dsx.mp.microsoft.com/v9.0/packageManifests/$packageID");
+    "https://storeedgefd.dsx.mp.microsoft.com/v9.0/packageManifests/$packageID",
+  );
 
   Future<Map<String, dynamic>> getJson() async {
     String response = await super.response();

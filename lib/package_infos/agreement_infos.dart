@@ -21,14 +21,19 @@ class AgreementInfos {
     this.storeLicenseTerms,
   });
 
-  static AgreementInfos? maybeFromMap(
-      {required Map<String, String>? map, required PackageLocalizer locale}) {
-    return FullMapParser(details: map ?? {}, localizer: locale)
-        .parseAgreementInfos();
+  static AgreementInfos? maybeFromMap({
+    required Map<String, String>? map,
+    required PackageLocalizer locale,
+  }) {
+    return FullMapParser(
+      details: map ?? {},
+      localizer: locale,
+    ).parseAgreementInfos();
   }
 
-  static AgreementInfos? maybeFromYamlMap(
-      {required Map<dynamic, dynamic>? map}) {
+  static AgreementInfos? maybeFromYamlMap({
+    required Map<dynamic, dynamic>? map,
+  }) {
     return FullYamlParser(details: map ?? {}).parseAgreementInfos();
   }
 

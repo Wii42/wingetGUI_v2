@@ -29,11 +29,11 @@ class MainNavigation extends StatefulWidget {
   final List<Routes> otherFooterItems = [Routes.settingsPage];
 
   List<Routes> get allItems => [
-        ...mainItems,
-        expanderFooterItem,
-        ...advancedFooterItems,
-        ...otherFooterItems
-      ];
+    ...mainItems,
+    expanderFooterItem,
+    ...advancedFooterItems,
+    ...otherFooterItems,
+  ];
 
   @override
   State<MainNavigation> createState() => MainNavigationState();
@@ -48,7 +48,7 @@ class MainNavigationState extends State<MainNavigation>
   void initState() {
     super.initState();
     navigators = {
-      for (Routes route in widget.allItems) route: NavigationNavigator(route)
+      for (Routes route in widget.allItems) route: NavigationNavigator(route),
     };
   }
 
@@ -56,32 +56,36 @@ class MainNavigationState extends State<MainNavigation>
   Widget build(BuildContext context) {
     super.build(context);
     return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      bool displayModeIsOpen =
-          constraints.maxWidth >= MainNavigation.minWidthForOpenPane;
-      return NavigationView(
-        contentShape: contentShape(),
-        pane: NavigationPane(
-          displayMode: displayModeIsOpen
-              ? PaneDisplayMode.open
-              : PaneDisplayMode.compact,
-          header: Padding(
-            padding: const EdgeInsets.all(13.5),
-            child: Text(widget.title),
+      builder: (BuildContext context, BoxConstraints constraints) {
+        bool displayModeIsOpen =
+            constraints.maxWidth >= MainNavigation.minWidthForOpenPane;
+        return NavigationView(
+          contentShape: contentShape(),
+          pane: NavigationPane(
+            displayMode:
+                displayModeIsOpen
+                    ? PaneDisplayMode.open
+                    : PaneDisplayMode.compact,
+            header: Padding(
+              padding: const EdgeInsets.all(13.5),
+              child: Text(widget.title),
+            ),
+            items: createNavItems(widget.mainItems),
+            footerItems: [
+              _navExpander(
+                Routes.advancedOptions,
+                MainNavigation.advancedFooterItems,
+              ),
+              ...createNavItems(widget.otherFooterItems),
+            ],
+            selected: topIndex,
+            onChanged: (index) {
+              setState(() => topIndex = index);
+            },
           ),
-          items: createNavItems(widget.mainItems),
-          footerItems: [
-            _navExpander(
-                Routes.advancedOptions, MainNavigation.advancedFooterItems),
-            ...createNavItems(widget.otherFooterItems)
-          ],
-          selected: topIndex,
-          onChanged: (index) {
-            setState(() => topIndex = index);
-          },
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   ShapeBorder contentShape() {
@@ -114,11 +118,14 @@ class MainNavigationState extends State<MainNavigation>
   Widget navigator(Routes winget) {
     return Navigator(
       initialRoute: winget.route,
-      onGenerateInitialRoutes: (state, _) => [
-        FluentPageRoute<dynamic>(builder: (context) {
-          return winget.buildPage();
-        })
-      ],
+      onGenerateInitialRoutes:
+          (state, _) => [
+            FluentPageRoute<dynamic>(
+              builder: (context) {
+                return winget.buildPage();
+              },
+            ),
+          ],
       onGenerateRoute: (settings) {
         Widget? page;
         for (Routes route in Routes.values) {
@@ -151,14 +158,16 @@ class PackageActionWrap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Column(
-        children: [
-          Expanded(child: child),
-          PackageActionsList(maxListHeight: constraints.maxHeight / 3)
-        ],
-      );
-    });
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          children: [
+            Expanded(child: child),
+            PackageActionsList(maxListHeight: constraints.maxHeight / 3),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -178,11 +187,14 @@ class _NavigationNavigatorState extends State<NavigationNavigator>
     super.build(context);
     return Navigator(
       initialRoute: widget.winget.route,
-      onGenerateInitialRoutes: (state, _) => [
-        FluentPageRoute<dynamic>(builder: (context) {
-          return widget.winget.buildPage();
-        })
-      ],
+      onGenerateInitialRoutes:
+          (state, _) => [
+            FluentPageRoute<dynamic>(
+              builder: (context) {
+                return widget.winget.buildPage();
+              },
+            ),
+          ],
       onGenerateRoute: (settings) {
         Widget? page;
         for (Routes route in Routes.values) {

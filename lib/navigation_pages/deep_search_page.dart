@@ -13,8 +13,12 @@ class DeepSearchPage extends StatelessWidget {
   final String? titleAddon;
   final bool Function(PackageInfosPeek)? packageFilter;
 
-  const DeepSearchPage(this.searchFor,
-      {super.key, this.titleAddon, this.packageFilter});
+  const DeepSearchPage(
+    this.searchFor, {
+    super.key,
+    this.titleAddon,
+    this.packageFilter,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +30,14 @@ class DeepSearchPage extends StatelessWidget {
     );
     table.reloadFuture(wingetLocale);
     return WingetDBTablePage(
-      title: (locale) => titleAddon != null
-          ? Winget.search.titleWithInput(titleAddon!, localization: locale)
-          : Winget.search.title(locale),
+      title:
+          (locale) =>
+              titleAddon != null
+                  ? Winget.search.titleWithInput(
+                    titleAddon!,
+                    localization: locale,
+                  )
+                  : Winget.search.title(locale),
       dbTable: table,
       menuOptions: const PackageListMenuOptions(
         onlyWithSourceButton: false,
@@ -41,11 +50,13 @@ class DeepSearchPage extends StatelessWidget {
   static Widget inRoute(RouteParameter? parameters) {
     if (parameters == null) {
       throw Exception(
-          "Route parameter of DeepSearchPage must not be null null");
+        "Route parameter of DeepSearchPage must not be null null",
+      );
     }
     if (parameters.commandParameter == null) {
       throw Exception(
-          "Title addon of route parameter of DeepSearchPage must not be null");
+        "Title addon of route parameter of DeepSearchPage must not be null",
+      );
     }
     List<String> searchFor = parameters.commandParameter!;
     bool Function(PackageInfosPeek)? packageFilter;

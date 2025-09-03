@@ -22,8 +22,9 @@ class OneLineInfoBuilder extends StatelessWidget {
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [for (OneLineInfo info in infos) OneLineInfoWidget(info)]
-          .withSpaceBetween(height: 5),
+      children: [
+        for (OneLineInfo info in infos) OneLineInfoWidget(info),
+      ].withSpaceBetween(height: 5),
     );
   }
 
@@ -61,7 +62,7 @@ const quotationMarks = [
   '"',
   "'",
   '„',
-  '“'
+  '“',
 ];
 
 class OneLineInfoWidget extends StatelessWidget {

@@ -47,14 +47,18 @@ class PackageTables {
     yield (locale) => 'Loading package tables from disk';
     PersistentStorageService storage = PersistentStorageService.instance;
     installed = await initTable(
-        persistentStorage: storage.installedPackages, winget: Winget.installed);
+      persistentStorage: storage.installedPackages,
+      winget: Winget.installed,
+    );
     updates = await initTable(
-        persistentStorage: storage.updatePackages,
-        winget: Winget.updates,
-        creatorFilter: filterUpdates);
+      persistentStorage: storage.updatePackages,
+      winget: Winget.updates,
+      creatorFilter: filterUpdates,
+    );
     available = await initTable(
-        persistentStorage: storage.availablePackages,
-        winget: Winget.availablePackages);
+      persistentStorage: storage.availablePackages,
+      winget: Winget.availablePackages,
+    );
     installed.reloadFuture(wingetLocale);
     updates.reloadFuture(wingetLocale);
     available.reloadFuture(wingetLocale);
@@ -70,14 +74,18 @@ class PackageTables {
     }
     PersistentStorageService storage = PersistentStorageService.instance;
     installed = await initTable(
-        persistentStorage: storage.installedPackages, winget: Winget.installed);
+      persistentStorage: storage.installedPackages,
+      winget: Winget.installed,
+    );
     updates = await initTable(
-        persistentStorage: storage.updatePackages,
-        winget: Winget.updates,
-        creatorFilter: filterUpdates);
+      persistentStorage: storage.updatePackages,
+      winget: Winget.updates,
+      creatorFilter: filterUpdates,
+    );
     available = await initTable(
-        persistentStorage: storage.availablePackages,
-        winget: Winget.availablePackages);
+      persistentStorage: storage.availablePackages,
+      winget: Winget.availablePackages,
+    );
     return;
   }
 
@@ -118,11 +126,13 @@ class PackageTables {
         map[publisherId] = [package];
       }
     }
-    log.info('Amount of packages per Publisher',
-        message: map.entries
-            .sorted((a, b) => b.value.length.compareTo(a.value.length))
-            .map((e) => '${e.key}: ${e.value.length}')
-            .join(('\n')));
+    log.info(
+      'Amount of packages per Publisher',
+      message: map.entries
+          .sorted((a, b) => b.value.length.compareTo(a.value.length))
+          .map((e) => '${e.key}: ${e.value.length}')
+          .join(('\n')),
+    );
   }
 
   static List<PackageInfosPeek> filterUpdates(List<PackageInfosPeek> infos) {
@@ -134,12 +144,15 @@ class PackageTables {
             PackageTables.instance.installed.idMap[id]!;
         List<VersionOrString?> installedVersions =
             installedPackages.map((e) => e.version?.value).toList();
-        if (installedVersions.any((e) =>
-                e?.stringValue ==
-                package.availableVersion?.value.stringValue) ||
-            installedVersions.any((e) =>
-                e?.stringValue ==
-                "> ${package.availableVersion?.value.stringValue}")) {
+        if (installedVersions.any(
+              (e) =>
+                  e?.stringValue == package.availableVersion?.value.stringValue,
+            ) ||
+            installedVersions.any(
+              (e) =>
+                  e?.stringValue ==
+                  "> ${package.availableVersion?.value.stringValue}",
+            )) {
           toRemoveFromUpdates.add(package);
         }
       }
@@ -156,8 +169,9 @@ class PackageTables {
 
   static bool isPackageInstalled(PackageInfos package) {
     if (package.id == null) return false;
-    return PackageTables.instance.installed.idMap
-        .containsKey(package.id?.value);
+    return PackageTables.instance.installed.idMap.containsKey(
+      package.id?.value,
+    );
   }
 
   static bool isPackageUpgradable(PackageInfosPeek package) =>

@@ -62,7 +62,10 @@ class ShowScanner extends OutputScanner {
   }
 
   bool _isIdentifier(
-      String line, List<String> command, AppLocalizations locale) {
+    String line,
+    List<String> command,
+    AppLocalizations locale,
+  ) {
     line = line.trim();
     if (!line.startsWith(locale.found) &&
         !line.startsWith(locale.agreementsFor)) {
@@ -72,8 +75,10 @@ class ShowScanner extends OutputScanner {
     if (command.contains('--id')) {
       String id = command[command.indexOf('--id') + 1].toLowerCase();
       return (line.endsWith('[$id]') ||
-          line.contains('[$id] ${locale.infoKey(PackageAttribute.version.name)}'
-              .toLowerCase()));
+          line.contains(
+            '[$id] ${locale.infoKey(PackageAttribute.version.name)}'
+                .toLowerCase(),
+          ));
     }
 
     if (command.contains('--name')) {
@@ -107,6 +112,7 @@ class ShowScanner extends OutputScanner {
 
   bool _isStartOfCopyright(String line, AppLocalizations wingetLocale) {
     return line.startsWith(
-        '${wingetLocale.infoKey(PackageAttribute.copyright.name)}:');
+      '${wingetLocale.infoKey(PackageAttribute.copyright.name)}:',
+    );
   }
 }

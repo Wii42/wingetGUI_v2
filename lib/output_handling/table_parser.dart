@@ -29,8 +29,10 @@ class TableParser extends OutputParser {
     if (isAppTable(table, wingetLocale)) {
       List<PackageInfosPeek> packages = [
         for (Map<String, String> tableRow in table)
-          PeekMapParser(details: tableRow, locale: wingetLocale.asLocalizer)
-              .parse()
+          PeekMapParser(
+              details: tableRow,
+              locale: wingetLocale.asLocalizer,
+            ).parse()
             ..setPublisher(),
       ];
 
@@ -111,20 +113,28 @@ class TableParser extends OutputParser {
     List<Map<String, String>> tableData = [];
 
     for (String entry in body) {
-      Map<String, String> infos =
-          _getDictFromLine(entry, columnNames, columnsPos);
+      Map<String, String> infos = _getDictFromLine(
+        entry,
+        columnNames,
+        columnsPos,
+      );
       tableData.add(infos);
     }
     return tableData;
   }
 
   Map<String, String> _getDictFromLine(
-      String entry, List<String> columnNames, List<int> columnsPos) {
+    String entry,
+    List<String> columnNames,
+    List<int> columnsPos,
+  ) {
     Map<String, String> infos = {};
     for (int i = 0; i < columnNames.length; i++) {
       int end = i + 1 < columnNames.length ? columnsPos[i + 1] : entry.length;
       String tableCell = (entry.substring(
-          min(columnsPos[i], entry.length), min(end, entry.length)));
+        min(columnsPos[i], entry.length),
+        min(end, entry.length),
+      ));
       if (tableCell.isNotEmpty) {
         if (tableCell.lastChar() != ' ') {
           int nextCharIndex = end;
@@ -161,9 +171,11 @@ class TableParser extends OutputParser {
     List<int> possibleColumnsPos = [for (Match match in matches) match.end];
     for (int possiblePos in possibleColumnsPos) {
       if (!alreadyKnownCols.contains(possiblePos) &&
-          body.every((line) =>
-              line.containsNonWesternGlyphs() ||
-              (line.codeUnitAt(possiblePos - 1) == ' '.codeUnits.first))) {
+          body.every(
+            (line) =>
+                line.containsNonWesternGlyphs() ||
+                (line.codeUnitAt(possiblePos - 1) == ' '.codeUnits.first),
+          )) {
         additionalPos.add(possiblePos);
       }
     }
@@ -211,14 +223,14 @@ class ParsedAppTable extends ParsedTable {
       SizedBox(
         height: 400,
         child: PackagePeekListView(
-            dbTable: WingetTable(
-              packages,
-              content: (locale) => locale.apps,
-              wingetCommand: [],
-            ),
-            packageOptions:
-                const PackageListPackageOptions(showAllButtons: true)),
-      )
+          dbTable: WingetTable(
+            packages,
+            content: (locale) => locale.apps,
+            wingetCommand: [],
+          ),
+          packageOptions: const PackageListPackageOptions(showAllButtons: true),
+        ),
+      ),
     ];
   }
 }

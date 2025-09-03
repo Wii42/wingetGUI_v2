@@ -52,7 +52,7 @@ class PackageAction {
   StreamSubscription<List<String>>? _outputSubscription;
 
   PackageAction({required this.process, this.infos, this.type})
-      : uniqueKey = UniqueKey();
+    : uniqueKey = UniqueKey();
 
   void listenForOutput(PackageActionsNotifier notifier) {
     _outputSubscription = process.outputStream.listen((event) {

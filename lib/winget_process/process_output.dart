@@ -15,15 +15,19 @@ abstract class ProcessOutput extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<List<String>>(
       stream: process.outputStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<String>> streamSnapshot) {
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<String>> streamSnapshot,
+      ) {
         return buildPage(streamSnapshot, context);
       },
     );
   }
 
   List<Widget> outputList(
-      AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
+    AsyncSnapshot<List<String>> streamSnapshot,
+    BuildContext context,
+  ) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return [
       if (streamSnapshot.hasData) onData(streamSnapshot, context),
@@ -33,14 +37,12 @@ abstract class ProcessOutput extends StatelessWidget {
   }
 
   Widget buildPage(
-      AsyncSnapshot<List<String>> streamSnapshot, BuildContext context);
+    AsyncSnapshot<List<String>> streamSnapshot,
+    BuildContext context,
+  );
 
   Expanded onWaiting(AppLocalizations locale) {
-    return Expanded(
-      child: Center(
-        child: Text(locale.waitOnData),
-      ),
-    );
+    return Expanded(child: Center(child: Text(locale.waitOnData)));
   }
 
   bool isWaitingOnData(AsyncSnapshot<List<String>> streamSnapshot) {
@@ -53,10 +55,15 @@ abstract class ProcessOutput extends StatelessWidget {
       Center(child: Text(streamSnapshot.error.toString()));
 
   FutureBuilder<List<Widget>> onData(
-      AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
+    AsyncSnapshot<List<String>> streamSnapshot,
+    BuildContext context,
+  ) {
     return FutureBuilder<List<Widget>>(
-      future: _displayOutput(streamSnapshot.data!, context,
-          streamSnapshot.connectionState == ConnectionState.done),
+      future: _displayOutput(
+        streamSnapshot.data!,
+        context,
+        streamSnapshot.connectionState == ConnectionState.done,
+      ),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Expanded(
@@ -74,22 +81,26 @@ abstract class ProcessOutput extends StatelessWidget {
           return Text(snapshot.error.toString());
         }
         return const Center(
-            child: ProgressRing(
-          backgroundColor: Colors.transparent,
-        ));
+          child: ProgressRing(backgroundColor: Colors.transparent),
+        );
       },
     );
   }
 
   Future<List<Widget>> _displayOutput(
-      List<String> output, BuildContext context, bool processIsFinished) async {
+    List<String> output,
+    BuildContext context,
+    bool processIsFinished,
+  ) async {
     OutputHandler handler = OutputHandler(output, command: process.command);
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     handler.determineResponsibility(wingetLocale);
     return outputRepresentationHook(handler, context, processIsFinished);
   }
 
-  Future<List<Widget>> outputRepresentationHook(OutputHandler handler,
-          BuildContext context, bool processIsFinished) =>
-      handler.getRepresentation(context);
+  Future<List<Widget>> outputRepresentationHook(
+    OutputHandler handler,
+    BuildContext context,
+    bool processIsFinished,
+  ) => handler.getRepresentation(context);
 }

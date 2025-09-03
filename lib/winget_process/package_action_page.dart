@@ -8,18 +8,24 @@ import 'output_page.dart';
 import 'package_action_process.dart';
 
 class PackageActionPage extends OutputPage {
-  const PackageActionPage(
-      {super.key, required PackageActionProcess process, super.title})
-      : super(process: process);
+  const PackageActionPage({
+    super.key,
+    required PackageActionProcess process,
+    super.title,
+  }) : super(process: process);
 
   @override
-  Future<List<Widget>> outputRepresentationHook(OutputHandler handler,
-      BuildContext context, bool processIsFinished) async {
+  Future<List<Widget>> outputRepresentationHook(
+    OutputHandler handler,
+    BuildContext context,
+    bool processIsFinished,
+  ) async {
     NavigatorState navigator = Navigator.of(context);
     AppLocalizations guiLocale = AppLocalizations.of(context)!;
     AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
-    List<ParsedOutput> parsedOutput =
-        await handler.getParsedOutputList(wingetLocale);
+    List<ParsedOutput> parsedOutput = await handler.getParsedOutputList(
+      wingetLocale,
+    );
     List<Widget> outputList = handler.getWidgets(parsedOutput);
     if (processIsFinished) {
       onFinished(parsedOutput, wingetLocale, navigator, outputList, guiLocale);
@@ -28,16 +34,20 @@ class PackageActionPage extends OutputPage {
   }
 
   void onFinished(
-      List<ParsedOutput> parsedOutput,
-      AppLocalizations wingetLocale,
-      NavigatorState navigator,
-      List<Widget> outputList,
-      AppLocalizations guiLocale) {
+    List<ParsedOutput> parsedOutput,
+    AppLocalizations wingetLocale,
+    NavigatorState navigator,
+    List<Widget> outputList,
+    AppLocalizations guiLocale,
+  ) {
     addBackButton(navigator, outputList, guiLocale);
   }
 
-  void addBackButton(NavigatorState navigator, List<Widget> outputList,
-      AppLocalizations guiLocale) {
+  void addBackButton(
+    NavigatorState navigator,
+    List<Widget> outputList,
+    AppLocalizations guiLocale,
+  ) {
     if (navigator.canPop()) {
       outputList.add(
         Row(
@@ -45,14 +55,15 @@ class PackageActionPage extends OutputPage {
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Button(
-                  onPressed: navigator.maybePop,
-                  child: Row(
-                    children: [
-                      const Icon(FluentIcons.chrome_close),
-                      Text(guiLocale.close),
-                    ].withSpaceBetween(width: 10),
-                  )),
-            )
+                onPressed: navigator.maybePop,
+                child: Row(
+                  children: [
+                    const Icon(FluentIcons.chrome_close),
+                    Text(guiLocale.close),
+                  ].withSpaceBetween(width: 10),
+                ),
+              ),
+            ),
           ],
         ),
       );

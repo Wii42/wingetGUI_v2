@@ -24,8 +24,11 @@ class PackageActionsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<PackageActionsNotifier>(
-      builder: (BuildContext context, PackageActionsNotifier actionsNotifier,
-          Widget? child) {
+      builder: (
+        BuildContext context,
+        PackageActionsNotifier actionsNotifier,
+        Widget? child,
+      ) {
         if (actionsNotifier.actions.isEmpty) return const SizedBox();
         return DecoratedCard(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(5)),
@@ -43,13 +46,17 @@ class PackageActionsList extends StatelessWidget {
     if (actionsNotifier.actions.length == 1) {
       PackageAction action = actionsNotifier.actions.single;
       return PackageActionWidget(
-          action: action, key: action.uniqueKey, expanded: true);
+        action: action,
+        key: action.uniqueKey,
+        expanded: true,
+      );
     }
     return CustomExpander(
       header: PackageActionWidget(
-          action: actionsNotifier.actions.first,
-          key: actionsNotifier.actions.first.uniqueKey,
-          expanded: true),
+        action: actionsNotifier.actions.first,
+        key: actionsNotifier.actions.first.uniqueKey,
+        expanded: true,
+      ),
       direction: ExpanderDirection.up,
       content: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: maxListHeight),
@@ -62,8 +69,9 @@ class PackageActionsList extends StatelessWidget {
           ].withSpaceBetween(height: PackageActionsList.spaceBetweenItems),
         ),
       ),
-      contentPadding:
-          const EdgeInsets.only(bottom: PackageActionsList.spaceBetweenItems),
+      contentPadding: const EdgeInsets.only(
+        bottom: PackageActionsList.spaceBetweenItems,
+      ),
       initiallyExpanded: true,
     );
   }
@@ -86,40 +94,39 @@ class PackageActionWidget extends StatelessWidget {
     AppLocalizations localization = AppLocalizations.of(context)!;
     return DecoratedCard(
       child: FutureBuilder<int>(
-          future: action.process.process.exitCode,
-          builder: (context, exitCode) {
-            closeWidgetAfterDone(context, exitCode);
-            return SizedBox(
-              height: contentHeight,
-              child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(width: 5),
-                    ...[
-                      if (action.infos != null)
-                        AppIcon.fromInfos(
-                          action.infos!,
-                          iconSize: 20,
-                          withRightSidePadding: false,
-                        ),
-                      Row(
-                        children: [
-                          Icon(
-                            action.type?.winget.icon,
-                            size: 15,
-                          ),
-                          actionTitle(localization),
-                        ].withSpaceBetween(width: 5),
-                      ),
-                      outputField(exitCode, context),
-                      buttonAtEnd(exitCode, context),
-                    ].withSpaceBetween(width: 10),
-                    const SizedBox(width: 5)
-                  ]),
-            );
-          }),
+        future: action.process.process.exitCode,
+        builder: (context, exitCode) {
+          closeWidgetAfterDone(context, exitCode);
+          return SizedBox(
+            height: contentHeight,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(width: 5),
+                ...[
+                  if (action.infos != null)
+                    AppIcon.fromInfos(
+                      action.infos!,
+                      iconSize: 20,
+                      withRightSidePadding: false,
+                    ),
+                  Row(
+                    children: [
+                      Icon(action.type?.winget.icon, size: 15),
+                      actionTitle(localization),
+                    ].withSpaceBetween(width: 5),
+                  ),
+                  outputField(exitCode, context),
+                  buttonAtEnd(exitCode, context),
+                ].withSpaceBetween(width: 10),
+                const SizedBox(width: 5),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -127,20 +134,27 @@ class PackageActionWidget extends StatelessWidget {
       Button(
         onPressed: onPressed,
         child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [Icon(icon), Text(text)].withSpaceBetween(width: 10)),
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [Icon(icon), Text(text)].withSpaceBetween(width: 10),
+        ),
       );
 
   Widget buttonAtEnd(AsyncSnapshot<int> exitCode, BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
     if (exitCode.hasData) {
       if (exitCode.data == 0) {
-        return button(FluentIcons.accept, localization.ok,
-            () => closeActionWidget(context));
+        return button(
+          FluentIcons.accept,
+          localization.ok,
+          () => closeActionWidget(context),
+        );
       } else {
-        return button(FluentIcons.error, localization.ok,
-            () => closeActionWidget(context));
+        return button(
+          FluentIcons.error,
+          localization.ok,
+          () => closeActionWidget(context),
+        );
       }
     } else {
       return button(FluentIcons.chrome_close, localization.endProcess, () {
@@ -165,13 +179,16 @@ class PackageActionWidget extends StatelessWidget {
   }
 
   void closeWidgetAfterDone(
-      BuildContext context, AsyncSnapshot<int> snapshot) async {
+    BuildContext context,
+    AsyncSnapshot<int> snapshot,
+  ) async {
     if (snapshot.connectionState == ConnectionState.done) {
       PackageActionsNotifier actions = PackageActionsNotifier.of(context);
       int exitCode = await action.process.process.exitCode;
       if (exitCode == 0) {
-        Future.delayed(const Duration(seconds: 5))
-            .then((value) => actions.remove(action));
+        Future.delayed(
+          const Duration(seconds: 5),
+        ).then((value) => actions.remove(action));
       }
     }
   }
@@ -181,8 +198,10 @@ class PackageActionWidget extends StatelessWidget {
     AppLocalizations locale = AppLocalizations.of(context)!;
     FutureOr<ParsedOutput>? output;
     if (action.output.isNotEmpty) {
-      OutputHandler handler =
-          OutputHandler(action.output, command: action.process.command);
+      OutputHandler handler = OutputHandler(
+        action.output,
+        command: action.process.command,
+      );
       handler.determineResponsibility(wingetLocale);
       OutputParser? lastPart = handler.outputParsers.lastOrNull;
       if (lastPart != null && lastPart is! ShowParser) {
@@ -201,10 +220,12 @@ class PackageActionWidget extends StatelessWidget {
                   builder: (context) {
                     if (output != null && output is Future) {
                       return FutureBuilder<ParsedOutput>(
-                          future: output as Future<ParsedOutput>,
-                          builder: (context, futureSnapshot) =>
-                              futureSnapshot.data?.widgetRepresentation() ??
-                              fallbackText(locale));
+                        future: output as Future<ParsedOutput>,
+                        builder:
+                            (context, futureSnapshot) =>
+                                futureSnapshot.data?.widgetRepresentation() ??
+                                fallbackText(locale),
+                      );
                     } else if (output != null && output is ParsedOutput) {
                       return output.singleLineRepresentations().lastOrNull ??
                           fallbackText(locale);
@@ -218,9 +239,7 @@ class PackageActionWidget extends StatelessWidget {
           ),
           if (exitCode.connectionState != ConnectionState.done &&
               action.output.isNotEmpty)
-            const FullWidthProgressbar(
-              strokeWidth: 2,
-            ),
+            const FullWidthProgressbar(strokeWidth: 2),
         ],
       ),
     );

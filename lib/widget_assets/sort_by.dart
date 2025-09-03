@@ -51,17 +51,18 @@ enum SortBy {
   }
 
   static List<PackageInfosPeek> sortVersion(List<PackageInfosPeek> packages) {
-    return packages
-      ..sort((a, b) {
-        if (a.version != null &&
-            b.version != null &&
-            a.version!.value.isTypeVersion() &&
-            b.version!.value.isTypeVersion()) {
-          return a.version!.value.version!.compareTo(b.version!.value.version!);
-        }
-        return sortNull(
-            a.version?.value.sortingString, b.version?.value.sortingString);
-      });
+    return packages..sort((a, b) {
+      if (a.version != null &&
+          b.version != null &&
+          a.version!.value.isTypeVersion() &&
+          b.version!.value.isTypeVersion()) {
+        return a.version!.value.version!.compareTo(b.version!.value.version!);
+      }
+      return sortNull(
+        a.version?.value.sortingString,
+        b.version?.value.sortingString,
+      );
+    });
   }
 
   static List<PackageInfosPeek> sortSource(List<PackageInfosPeek> packages) {

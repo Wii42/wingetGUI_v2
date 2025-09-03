@@ -3,17 +3,18 @@ import 'package:fluent_ui/fluent_ui.dart';
 class CustomInfoBar extends InfoBar {
   final bool isSmallHeight;
 
-  const CustomInfoBar(
-      {required super.title,
-      super.key,
-      super.content,
-      super.action,
-      super.severity,
-      super.style,
-      super.isLong,
-      super.onClose,
-      super.isIconVisible,
-      this.isSmallHeight = false});
+  const CustomInfoBar({
+    required super.title,
+    super.key,
+    super.content,
+    super.action,
+    super.severity,
+    super.style,
+    super.isLong,
+    super.onClose,
+    super.isIconVisible,
+    this.isSmallHeight = false,
+  });
 
   CustomInfoBar copyWith({
     Widget? title,
@@ -74,7 +75,8 @@ class CustomInfoBar extends InfoBar {
     return Container(
       constraints: isSmallHeight ? null : const BoxConstraints(minHeight: 48.0),
       decoration: style.decoration?.call(severity),
-      padding: style.padding ??
+      padding:
+          style.padding ??
           (isSmallHeight
               ? const EdgeInsets.symmetric(horizontal: 10)
               : const EdgeInsets.all(10)),
@@ -98,13 +100,15 @@ class CustomInfoBar extends InfoBar {
                   if (content != null)
                     Padding(
                       padding: EdgeInsetsDirectional.only(
-                          top: isSmallHeight ? 0 : 6.0),
+                        top: isSmallHeight ? 0 : 6.0,
+                      ),
                       child: content,
                     ),
                   if (action != null)
                     Padding(
                       padding: EdgeInsetsDirectional.only(
-                          top: isSmallHeight ? 0 : 12.0),
+                        top: isSmallHeight ? 0 : 12.0,
+                      ),
                       child: action,
                     ),
                 ],

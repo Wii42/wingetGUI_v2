@@ -6,8 +6,11 @@ class FullWidthProgressBarOnTop extends StatelessWidget {
   final Widget child;
   final bool hasProgressBar;
 
-  const FullWidthProgressBarOnTop(
-      {super.key, required this.child, this.hasProgressBar = true});
+  const FullWidthProgressBarOnTop({
+    super.key,
+    required this.child,
+    this.hasProgressBar = true,
+  });
 
   @override
   Widget build(BuildContext context) {

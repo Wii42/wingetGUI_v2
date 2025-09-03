@@ -35,12 +35,17 @@ class PackagePeek extends StatelessWidget {
     this.defaultSourceIsLocalPC = false,
   });
 
-  factory PackagePeek.fromCommand(PackageInfosPeek infos,
-      {required List<String> command}) {
-    return PackagePeek(infos,
-        installButton: !(command[0] == 'upgrade' || command[0] == 'list'),
-        upgradeButton: infos.availableVersion != null &&
-            infos.availableVersion!.value.isVersion());
+  factory PackagePeek.fromCommand(
+    PackageInfosPeek infos, {
+    required List<String> command,
+  }) {
+    return PackagePeek(
+      infos,
+      installButton: !(command[0] == 'upgrade' || command[0] == 'list'),
+      upgradeButton:
+          infos.availableVersion != null &&
+          infos.availableVersion!.value.isVersion(),
+    );
   }
 
   @override
@@ -48,34 +53,48 @@ class PackagePeek extends StatelessWidget {
     return CustomPageButton(
       pageRoute: Routes.show,
       disabled: !isClickable(),
-      routeParameter: PackageRouteParameter(commandParameter: [
-        '--id',
-        infos.id!.value.string,
-        //if (infos.hasVersion()) ...['-v', infos.version!.value]
-      ], titleAddon: infos.name?.value, package: infos),
-      tooltipMessage: (locale) =>
-          infos.name?.value ?? locale.packagePeekTooltip,
+      routeParameter: PackageRouteParameter(
+        commandParameter: [
+          '--id',
+          infos.id!.value.string,
+          //if (infos.hasVersion()) ...['-v', infos.version!.value]
+        ],
+        titleAddon: infos.name?.value,
+        package: infos,
+      ),
+      tooltipMessage:
+          (locale) => infos.name?.value ?? locale.packagePeekTooltip,
       useMousePosition: true,
       child: Padding(
         padding: const EdgeInsets.all(10),
-        child: LayoutBuilder(builder: (context, constraints) {
-          double width = constraints.maxWidth;
-          bool isWide = width > 410;
-          return SizedBox(
-              height: isWide ? 90 : 150, child: _shortInfo(context, isWide));
-        }),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            double width = constraints.maxWidth;
+            bool isWide = width > 410;
+            return SizedBox(
+              height: isWide ? 90 : 150,
+              child: _shortInfo(context, isWide),
+            );
+          },
+        ),
       ),
     );
   }
 
   Future<void> pushPackageDetails(BuildContext context) async {
     NavigatorState router = Navigator.of(context);
-    router.pushNamed(Routes.show.route,
-        arguments: PackageRouteParameter(commandParameter: [
+    router.pushNamed(
+      Routes.show.route,
+      arguments: PackageRouteParameter(
+        commandParameter: [
           '--id',
           infos.id!.value.string,
           //if (infos.hasVersion()) ...['-v', infos.version!.value]
-        ], titleAddon: infos.name?.value, package: infos));
+        ],
+        titleAddon: infos.name?.value,
+        package: infos,
+      ),
+    );
   }
 
   Widget _shortInfo(BuildContext context, bool isWide) {
@@ -84,16 +103,15 @@ class PackagePeek extends StatelessWidget {
       if (showInstalledIcon)
         Row(
           children: [
-            const Icon(
-              icons.FluentIcons.checkmark_circle_20_regular,
-            ),
+            const Icon(icons.FluentIcons.checkmark_circle_20_regular),
             const SizedBox(width: 5),
             smallText(locale.installed, context),
           ],
         ),
-      _versions(locale,
-          alignment:
-              isWide ? CrossAxisAlignment.end : CrossAxisAlignment.start),
+      _versions(
+        locale,
+        alignment: isWide ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      ),
       if (showMatch &&
           infos.match != null &&
           infos.match!.value.trim().isNotEmpty)
@@ -102,7 +120,7 @@ class PackagePeek extends StatelessWidget {
           softWrap: false,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.start,
-        )
+        ),
     ];
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,9 +128,7 @@ class PackagePeek extends StatelessWidget {
       children: [
         favicon(faviconSize()),
         if (isWide) ...[
-          Expanded(
-            child: nameAndSource(context),
-          ),
+          Expanded(child: nameAndSource(context)),
           Column(
             mainAxisAlignment: columnAlign,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -120,15 +136,16 @@ class PackagePeek extends StatelessWidget {
           ),
         ] else
           Expanded(
-              child: Column(
-            mainAxisAlignment: columnAlign,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              nameAndSource(context),
-              const SizedBox(height: 5),
-              ...versionsMatchAndInstalledMark,
-            ],
-          )),
+            child: Column(
+              mainAxisAlignment: columnAlign,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                nameAndSource(context),
+                const SizedBox(height: 5),
+                ...versionsMatchAndInstalledMark,
+              ],
+            ),
+          ),
         if (isClickable()) ...[
           const SizedBox(width: 20),
           RightSideButtons(
@@ -138,7 +155,7 @@ class PackagePeek extends StatelessWidget {
             install: installButton,
             uninstall: uninstallButton,
             iconsOnly: true,
-          )
+          ),
         ],
       ],
     );
@@ -146,39 +163,42 @@ class PackagePeek extends StatelessWidget {
 
   Widget nameAndSource(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    return Builder(// to ensure rebuild if publisherNameFromDB() changes
-        builder: (context) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: columnAlign,
-        children: [
-          Text(
-            infos.name?.value ?? '<Name>',
-            style: _titleStyle(context),
-            textAlign: TextAlign.start,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            infos.publisher?.nameFittingId ??
-                infos.publisher?.nameFromDBbyPublisherId() ??
-                PublisherHelper.nameFromDBbyPackageId(infos.id?.value) ??
-                infos.publisher?.id ??
-                infos.id?.value.string ??
-                '<ID>',
-            textAlign: TextAlign.start,
-            overflow: TextOverflow.ellipsis,
-          ),
-          sourceAndID(locale, context)
-        ],
-      );
-    });
+    return Builder(
+      // to ensure rebuild if publisherNameFromDB() changes
+      builder: (context) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: columnAlign,
+          children: [
+            Text(
+              infos.name?.value ?? '<Name>',
+              style: _titleStyle(context),
+              textAlign: TextAlign.start,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              infos.publisher?.nameFittingId ??
+                  infos.publisher?.nameFromDBbyPublisherId() ??
+                  PublisherHelper.nameFromDBbyPackageId(infos.id?.value) ??
+                  infos.publisher?.id ??
+                  infos.id?.value.string ??
+                  '<ID>',
+              textAlign: TextAlign.start,
+              overflow: TextOverflow.ellipsis,
+            ),
+            sourceAndID(locale, context),
+          ],
+        );
+      },
+    );
   }
 
   Widget sourceAndID(AppLocalizations locale, BuildContext context) {
     bool hasSource =
         infos.source.value != PackageSources.none || !defaultSourceIsLocalPC;
     bool showSource = true;
-    bool showId = infos.id != null &&
+    bool showId =
+        infos.id != null &&
         infos.id!.value.string.isNotEmpty &&
         (infos.publisher?.id != null ||
             infos.publisher?.nameFittingId != null ||
@@ -189,14 +209,13 @@ class PackagePeek extends StatelessWidget {
       children: [
         if (showSource)
           smallText(
-              locale.fromSource(
-                  hasSource ? infos.source.value.title : locale.localPC),
-              context),
-        if (showSource && showId)
-          SizedBox(
-            width: 15,
-            child: Center(child: smallText('·', context)),
+            locale.fromSource(
+              hasSource ? infos.source.value.title : locale.localPC,
+            ),
+            context,
           ),
+        if (showSource && showId)
+          SizedBox(width: 15, child: Center(child: smallText('·', context))),
         if (showId) Expanded(child: smallText(infos.id!.value.string, context)),
       ],
     );
@@ -222,8 +241,10 @@ class PackagePeek extends StatelessWidget {
   TextStyle? correctColor(TextStyle? style, BuildContext context) {
     if (!isClickable()) {
       style = style?.apply(
-          color: ButtonThemeData.buttonForegroundColor(
-              context, {WidgetState.disabled}));
+        color: ButtonThemeData.buttonForegroundColor(context, {
+          WidgetState.disabled,
+        }),
+      );
     }
     return style;
   }
@@ -252,8 +273,10 @@ class PackagePeek extends StatelessWidget {
     );
   }
 
-  Widget _versions(AppLocalizations locale,
-      {CrossAxisAlignment alignment = CrossAxisAlignment.end}) {
+  Widget _versions(
+    AppLocalizations locale, {
+    CrossAxisAlignment alignment = CrossAxisAlignment.end,
+  }) {
     return Column(
       crossAxisAlignment: alignment,
       children: [
@@ -277,8 +300,11 @@ class PackagePeek extends StatelessWidget {
   bool isClickable() => infos.hasInfosFull();
 
   Widget favicon(double faviconSize) {
-    return AppIcon.fromInfos(infos,
-        iconSize: faviconSize, isClickable: isClickable());
+    return AppIcon.fromInfos(
+      infos,
+      iconSize: faviconSize,
+      isClickable: isClickable(),
+    );
   }
 
   static double faviconSize() => 60;

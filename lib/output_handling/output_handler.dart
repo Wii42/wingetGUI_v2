@@ -45,20 +45,24 @@ class OutputHandler {
   Set<OutputParser> get outputParsers {
     return responsibilityList.map<OutputParser>((Responsibility resp) {
       if (resp.respParser == null) {
-        throw Exception("Not all lines are assigned to a part.\n"
-            "Unassigned line: ${resp.line}");
+        throw Exception(
+          "Not all lines are assigned to a part.\n"
+          "Unassigned line: ${resp.line}",
+        );
       }
       return resp.respParser!;
     }).toSet();
   }
 
   Future<List<ParsedOutput>> getParsedOutputList(
-      AppLocalizations wingetLocale) async {
+    AppLocalizations wingetLocale,
+  ) async {
     Iterable<Future<ParsedOutput>> parsedOutputFutures = outputParsers
         .map<Future<ParsedOutput>>((part) async => part.parse(wingetLocale));
 
-    List<ParsedOutput> parsedOutput =
-        await Future.wait<ParsedOutput>(parsedOutputFutures);
+    List<ParsedOutput> parsedOutput = await Future.wait<ParsedOutput>(
+      parsedOutputFutures,
+    );
 
     return parsedOutput;
   }
@@ -71,8 +75,9 @@ class OutputHandler {
   }
 
   List<Widget> getWidgets(List<ParsedOutput> parsedOutput) {
-    Iterable<Widget?> builders =
-        parsedOutput.map((e) => e.widgetRepresentation());
+    Iterable<Widget?> builders = parsedOutput.map(
+      (e) => e.widgetRepresentation(),
+    );
 
     List<Widget> finalBuilders = builders.nonNulls.toList();
 
@@ -82,7 +87,7 @@ class OutputHandler {
   static AppLocalizations getWingetLocale(BuildContext context) {
     AppLocalizations wingetLocale =
         AppLocales.of(context).getWingetAppLocalization() ??
-            AppLocalizations.of(context)!;
+        AppLocalizations.of(context)!;
     return wingetLocale;
   }
 }

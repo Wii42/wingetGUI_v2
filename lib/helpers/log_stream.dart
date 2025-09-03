@@ -16,8 +16,9 @@ class LogStream {
 
   Stream<LogMessage> get logStream => _streamController.stream;
 
-  Stream<LogMessage> get errorLogsStream => _streamController.stream
-      .where((element) => element.severity == LogSeverity.error);
+  Stream<LogMessage> get errorLogsStream => _streamController.stream.where(
+    (element) => element.severity == LogSeverity.error,
+  );
 
   Stream<List<LogMessage>> get logsListStream =>
       _streamController.stream.rememberingStream();
@@ -47,9 +48,13 @@ class LogMessage {
   final Type? sourceType;
   final Object? sourceObject;
 
-  LogMessage(this.title, this.severity,
-      {this.message, this.sourceType, this.sourceObject})
-      : time = DateTime.now();
+  LogMessage(
+    this.title,
+    this.severity, {
+    this.message,
+    this.sourceType,
+    this.sourceObject,
+  }) : time = DateTime.now();
 
   @override
   String toString() {
@@ -64,8 +69,12 @@ class LogMessage {
   }
 
   factory LogMessage.template() {
-    return LogMessage('template', LogSeverity.info,
-        message: 'template', sourceType: LogMessage);
+    return LogMessage(
+      'template',
+      LogSeverity.info,
+      message: 'template',
+      sourceType: LogMessage,
+    );
   }
 }
 
@@ -87,17 +96,38 @@ class Logger {
   Logger(this.sourceObject, {this.sourceType});
 
   void info(String title, {String? message}) {
-    masterLogger._log(LogMessage(title, LogSeverity.info,
-        message: message, sourceType: sourceType, sourceObject: sourceObject));
+    masterLogger._log(
+      LogMessage(
+        title,
+        LogSeverity.info,
+        message: message,
+        sourceType: sourceType,
+        sourceObject: sourceObject,
+      ),
+    );
   }
 
   void error(String title, {String? message}) {
-    masterLogger._log(LogMessage(title, LogSeverity.error,
-        message: message, sourceType: sourceType, sourceObject: sourceObject));
+    masterLogger._log(
+      LogMessage(
+        title,
+        LogSeverity.error,
+        message: message,
+        sourceType: sourceType,
+        sourceObject: sourceObject,
+      ),
+    );
   }
 
   void warning(String title, {String? message}) {
-    masterLogger._log(LogMessage(title, LogSeverity.warning,
-        message: message, sourceType: sourceType, sourceObject: sourceObject));
+    masterLogger._log(
+      LogMessage(
+        title,
+        LogSeverity.warning,
+        message: message,
+        sourceType: sourceType,
+        sourceObject: sourceObject,
+      ),
+    );
   }
 }

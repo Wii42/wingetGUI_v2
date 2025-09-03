@@ -1,5 +1,6 @@
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_core/winget_parsers.dart';
+
 class InfoMapParser extends InfoAbstractMapParser<String, String> {
   PackageLocalizer locale;
 
@@ -16,14 +17,19 @@ class InfoMapParser extends InfoAbstractMapParser<String, String> {
   }
 
   Info<List<InfoWithLink>>? maybeListWithLinksFromMap(
-      PackageAttribute attribute) {
-    return maybeListFromMap(attribute,
-        parser: (e) => InfoWithLink(title: attribute.title, text: e));
+    PackageAttribute attribute,
+  ) {
+    return maybeListFromMap(
+      attribute,
+      parser: (e) => InfoWithLink(title: attribute.title, text: e),
+    );
   }
 
   @override
-  InfoWithLink? maybeInfoWithLinkFromMap(
-      {required PackageAttribute textInfo, required PackageAttribute urlInfo}) {
+  InfoWithLink? maybeInfoWithLinkFromMap({
+    required PackageAttribute textInfo,
+    required PackageAttribute urlInfo,
+  }) {
     return InfoWithLink.maybeFromMap(
       map: map,
       textInfo: textInfo,
@@ -48,40 +54,53 @@ class InfoMapParser extends InfoAbstractMapParser<String, String> {
     List<String> split = tagString.split('\n');
     return [
       for (String s in split)
-        if (s.isNotEmpty) s.trim()
+        if (s.isNotEmpty) s.trim(),
     ];
   }
 
   @override
-  Info<List<T>>? maybeListFromMap<T>(PackageAttribute attribute,
-      {required T Function(dynamic p1) parser}) {
+  Info<List<T>>? maybeListFromMap<T>(
+    PackageAttribute attribute, {
+    required T Function(dynamic p1) parser,
+  }) {
     Info<String>? list = maybeStringFromMap(attribute);
     if (list == null) {
       return null;
     }
     return list.copyAs<List<T>>(
-        parser: (e) => e.split('\n').map(parser).toList());
+      parser: (e) => e.split('\n').map(parser).toList(),
+    );
   }
 
   @override
   Info<List<InfoWithLink>>? maybeDocumentationsFromMap(
-      PackageAttribute attribute) {
-    return maybeListFromMap(attribute,
-        parser: (p0) => InfoWithLink(
-            title: (locale) => p0.toString(), text: p0.toString()));
+    PackageAttribute attribute,
+  ) {
+    return maybeListFromMap(
+      attribute,
+      parser:
+          (p0) => InfoWithLink(
+            title: (locale) => p0.toString(),
+            text: p0.toString(),
+          ),
+    );
   }
 
   @override
   Info<List<Installer>>? maybeInstallersFromMap(PackageAttribute installers) {
-    return maybeListFromMap<Installer>(PackageAttribute.installers,
-        parser: (map) {
-      return Installer(
+    return maybeListFromMap<Installer>(
+      PackageAttribute.installers,
+      parser: (map) {
+        return Installer(
           architecture: Info<ComputerArchitecture>.fromAttribute(
-              PackageAttribute.architecture,
-              value: ComputerArchitecture.matchAll),
+            PackageAttribute.architecture,
+            value: ComputerArchitecture.matchAll,
+          ),
           url: null,
-          sha256Hash: null);
-    });
+          sha256Hash: null,
+        );
+      },
+    );
   }
 
   @override

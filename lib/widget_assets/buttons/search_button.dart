@@ -34,21 +34,23 @@ class SearchButton extends RunButton with TextButtonMixin, PlainButtonMixin {
 }
 
 class FilledSearchButton extends SearchButton with FilledButtonMixin {
-  FilledSearchButton(
-      {super.key,
-      required super.searchTarget,
-      required super.localization,
-      super.customButtonText,
-      super.title,
-      super.packageFilter});
+  FilledSearchButton({
+    super.key,
+    required super.searchTarget,
+    required super.localization,
+    super.customButtonText,
+    super.title,
+    super.packageFilter,
+  });
 }
 
 class InlineSearchButton extends SearchButton with InlineLinkButtonMixin {
-  InlineSearchButton(
-      {super.key,
-      required super.searchTarget,
-      required super.localization,
-      super.customButtonText,
-      super.title,
-      super.packageFilter});
+  InlineSearchButton({
+    super.key,
+    required super.searchTarget,
+    required super.localization,
+    super.customButtonText,
+    super.title,
+    super.packageFilter,
+  });
 }

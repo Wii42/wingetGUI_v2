@@ -58,8 +58,6 @@ extension StringHelper on String {
     return codePoints.where((codePoint) => isCjkIdeograph(codePoint)).length;
   }
 
-
-
   static bool isCjkIdeograph(int codePoint) {
     return codePoint.isBetween(0x4E00, 0x9FFF) ||
         codePoint.isBetween(0x20000, 0x2A6DF) ||

@@ -14,8 +14,9 @@ abstract class FullAbstractMapParser<A, B>
   PackageInfosFull parse() {
     Map<A, B> detailsMap = flattenedDetailsMap();
     InfoAbstractMapParser<A, B> p = getParser(detailsMap);
-    Info<String>? description =
-        p.maybeStringFromMap(PackageAttribute.description);
+    Info<String>? description = p.maybeStringFromMap(
+      PackageAttribute.description,
+    );
     Info<String>? shortDescription = _getShortDescription(p, description);
     Info<PackageSources>? source = p.sourceFromMap(PackageAttribute.source);
     PackageInfosFull infos = PackageInfosFull(
@@ -28,42 +29,51 @@ abstract class FullAbstractMapParser<A, B>
       website: p.maybeLinkFromMap(PackageAttribute.website),
       author: p.maybeStringFromMap(PackageAttribute.author),
       moniker: p.maybeStringFromMap(PackageAttribute.moniker),
-      documentation:
-          p.maybeDocumentationsFromMap(PackageAttribute.documentation),
+      documentation: p.maybeDocumentationsFromMap(
+        PackageAttribute.documentation,
+      ),
       category: p.maybeStringFromMap(PackageAttribute.category),
       pricing: p.maybeStringFromMap(PackageAttribute.pricing),
       freeTrial: p.maybeStringFromMap(PackageAttribute.freeTrial),
       ageRating: p.maybeStringFromMap(PackageAttribute.ageRating),
       releaseNotes: p.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.releaseNotes,
-          urlInfo: PackageAttribute.releaseNotesUrl),
+        textInfo: PackageAttribute.releaseNotes,
+        urlInfo: PackageAttribute.releaseNotesUrl,
+      ),
       agreement: _parseAgreementInfos(detailsMap),
       tags: p.maybeTagsFromMap(),
       packageLocale: p.maybeLocaleFromMap(PackageAttribute.packageLocale),
       installer: _parseInstallerInfos(),
       source: source,
       publisherInfo: p.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.publisher,
-          urlInfo: PackageAttribute.publisherUrl),
-      installationNotes:
-          p.maybeStringFromMap(PackageAttribute.installationNotes),
+        textInfo: PackageAttribute.publisher,
+        urlInfo: PackageAttribute.publisherUrl,
+      ),
+      installationNotes: p.maybeStringFromMap(
+        PackageAttribute.installationNotes,
+      ),
       otherInfos: p.otherDetails(),
     );
     return infos..setImplicitInfos();
   }
 
   Info<String>? _getShortDescription(
-      InfoAbstractMapParser<dynamic, dynamic> p, Info<String>? description) {
-    Info<String>? shortDescription =
-        p.maybeStringFromMap(PackageAttribute.shortDescription);
+    InfoAbstractMapParser<dynamic, dynamic> p,
+    Info<String>? description,
+  ) {
+    Info<String>? shortDescription = p.maybeStringFromMap(
+      PackageAttribute.shortDescription,
+    );
     if (shortDescription != null &&
         shortDescription.value.trim().endsWith('...') &&
         description != null) {
       String shortWithoutEllipsis =
           shortDescription.value.take(shortDescription.value.length - 3).trim();
       if (description.value.startsWith(shortWithoutEllipsis)) {
-        shortDescription = p.maybeFirstLineFromInfo(description,
-            destination: PackageAttribute.shortDescription);
+        shortDescription = p.maybeFirstLineFromInfo(
+          description,
+          destination: PackageAttribute.shortDescription,
+        );
       }
     }
     return shortDescription;
@@ -74,74 +84,93 @@ abstract class FullAbstractMapParser<A, B>
     if (installerDetailsList.isEmpty) {
       return null;
     }
-    return Info<List<Installer>>.fromAttribute(PackageAttribute.installer,
-        value: installerDetailsList.map<Installer>(parseInstaller).toList());
+    return Info<List<Installer>>.fromAttribute(
+      PackageAttribute.installer,
+      value: installerDetailsList.map<Installer>(parseInstaller).toList(),
+    );
   }
 
   Installer parseInstaller(Map<A, B> map) {
     InfoAbstractMapParser<A, B> p = getParser(map);
     return Installer(
-      architecture: p.maybeArchitectureFromMap(PackageAttribute.architecture) ??
+      architecture:
+          p.maybeArchitectureFromMap(PackageAttribute.architecture) ??
           fallbackArchitecture,
       url: p.maybeLinkFromMap(PackageAttribute.installerURL),
       sha256Hash: p.maybeStringFromMap(PackageAttribute.sha256Installer),
       locale: p.maybeInstallerLocaleFromMap(PackageAttribute.installerLocale),
       platform: p.maybePlatformFromMap(PackageAttribute.platform),
-      minimumOSVersion:
-          p.maybeVersionOrStringFromMap(PackageAttribute.minimumOSVersion),
+      minimumOSVersion: p.maybeVersionOrStringFromMap(
+        PackageAttribute.minimumOSVersion,
+      ),
       type: p.maybeInstallerTypeFromMap(PackageAttribute.installerType),
       scope: p.maybeScopeFromMap(PackageAttribute.installScope),
       signatureSha256: p.maybeStringFromMap(PackageAttribute.signatureSha256),
-      elevationRequirement:
-          p.maybeStringFromMap(PackageAttribute.elevationRequirement),
+      elevationRequirement: p.maybeStringFromMap(
+        PackageAttribute.elevationRequirement,
+      ),
       productCode: p.maybeStringFromMap(PackageAttribute.productCode),
-      appsAndFeaturesEntries:
-          p.maybeStringFromMap(PackageAttribute.appsAndFeaturesEntries),
+      appsAndFeaturesEntries: p.maybeStringFromMap(
+        PackageAttribute.appsAndFeaturesEntries,
+      ),
       switches: p.maybeStringFromMap(PackageAttribute.installerSwitches),
       modes: p.maybeInstallModesFromMap(PackageAttribute.installModes),
-      nestedInstallerType:
-          p.maybeInstallerTypeFromMap(PackageAttribute.nestedInstallerType),
-      upgradeBehavior:
-          p.maybeUpgradeBehaviorFromMap(PackageAttribute.upgradeBehavior),
-      availableCommands:
-          p.maybeStringListFromMap(PackageAttribute.availableCommands),
+      nestedInstallerType: p.maybeInstallerTypeFromMap(
+        PackageAttribute.nestedInstallerType,
+      ),
+      upgradeBehavior: p.maybeUpgradeBehaviorFromMap(
+        PackageAttribute.upgradeBehavior,
+      ),
+      availableCommands: p.maybeStringListFromMap(
+        PackageAttribute.availableCommands,
+      ),
       storeProductID: p.maybeStringFromMap(PackageAttribute.storeProductID),
       markets: p.maybeStringFromMap(PackageAttribute.markets),
-      packageFamilyName:
-          p.maybeStringFromMap(PackageAttribute.packageFamilyName),
+      packageFamilyName: p.maybeStringFromMap(
+        PackageAttribute.packageFamilyName,
+      ),
       expectedReturnCodes: p.maybeExpectedReturnCodesFromMap(
-          PackageAttribute.expectedReturnCodes),
+        PackageAttribute.expectedReturnCodes,
+      ),
       releaseDate: p.maybeDateTimeFromMap(PackageAttribute.releaseDate),
       fileExtensions: p.maybeStringListFromMap(PackageAttribute.fileExtensions),
       protocols: p.maybeStringListFromMap(PackageAttribute.protocols),
       dependencies: p.maybeDependenciesFromMap(PackageAttribute.dependencies),
-      successCodes: p.maybeListFromMap(PackageAttribute.installerSuccessCodes,
-          parser: (e) => int.parse(e.toString())),
+      successCodes: p.maybeListFromMap(
+        PackageAttribute.installerSuccessCodes,
+        parser: (e) => int.parse(e.toString()),
+      ),
       other: p.otherDetails() ?? {},
     );
   }
 
   static final Info<ComputerArchitecture> fallbackArchitecture =
-      Info<ComputerArchitecture>.fromAttribute(PackageAttribute.architecture,
-          value: ComputerArchitecture.matchAll);
+      Info<ComputerArchitecture>.fromAttribute(
+        PackageAttribute.architecture,
+        value: ComputerArchitecture.matchAll,
+      );
 
   AgreementInfos? _parseAgreementInfos(Map<A, B> agreementDetails) {
     InfoAbstractMapParser<A, B> p = getParser(agreementDetails);
     AgreementInfos agreement = AgreementInfos(
       title: PackageAttribute.agreement.title,
       license: p.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.license,
-          urlInfo: PackageAttribute.licenseUrl),
+        textInfo: PackageAttribute.license,
+        urlInfo: PackageAttribute.licenseUrl,
+      ),
       copyright: p.maybeInfoWithLinkFromMap(
-          textInfo: PackageAttribute.copyright,
-          urlInfo: PackageAttribute.copyrightUrl),
+        textInfo: PackageAttribute.copyright,
+        urlInfo: PackageAttribute.copyrightUrl,
+      ),
       privacyUrl: p.maybeLinkFromMap(PackageAttribute.privacyUrl),
       buyUrl: p.maybeLinkFromMap(PackageAttribute.buyUrl),
-      termsOfTransaction:
-          p.maybeStringFromMap(PackageAttribute.termsOfTransaction),
+      termsOfTransaction: p.maybeStringFromMap(
+        PackageAttribute.termsOfTransaction,
+      ),
       seizureWarning: p.maybeStringFromMap(PackageAttribute.seizureWarning),
-      storeLicenseTerms:
-          p.maybeStringFromMap(PackageAttribute.storeLicenseTerms),
+      storeLicenseTerms: p.maybeStringFromMap(
+        PackageAttribute.storeLicenseTerms,
+      ),
     );
     return agreement.isNotEmpty() ? agreement : null;
   }

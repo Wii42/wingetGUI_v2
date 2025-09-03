@@ -36,7 +36,8 @@ class ServerInterfaceService {
   void _assertInitialized() {
     if (_implementation == null) {
       throw Exception(
-          'ServerInterfaceService not initialized, call setImplementation() first.');
+        'ServerInterfaceService not initialized, call setImplementation() first.',
+      );
     }
   }
 }

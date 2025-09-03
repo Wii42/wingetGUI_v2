@@ -19,7 +19,6 @@ class PackageScreenshotsList {
   }
 
   Future<void> fetchScreenshots() async {
-
     await fetchWebInvalidScreenshots();
     await loadPublisherJson();
 
@@ -38,7 +37,8 @@ class PackageScreenshotsList {
     String? packageKey = idToPackageKeyMap[packageInfos.id?.value.string];
     if (packageKey != null) {
       log.info(
-          'found packageKey $packageKey for ${packageInfos.id?.value} in idToPackageKeyMap');
+        'found packageKey $packageKey for ${packageInfos.id?.value} in idToPackageKeyMap',
+      );
 
       return screenshotMap[packageKey] ??
           customScreenshots[packageKey] ??

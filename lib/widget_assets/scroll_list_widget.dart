@@ -19,9 +19,7 @@ class ScrollListWidget extends StatelessWidget {
               style: FluentTheme.of(context).typography.title,
             ),
           ),
-        Expanded(
-          child: view(),
-        ),
+        Expanded(child: view()),
         //)
       ],
       //),

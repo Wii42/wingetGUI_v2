@@ -17,7 +17,9 @@ class SimpleOutput extends ProcessOutput {
 
   @override
   Widget buildPage(
-      AsyncSnapshot<List<String>> streamSnapshot, BuildContext context) {
+    AsyncSnapshot<List<String>> streamSnapshot,
+    BuildContext context,
+  ) {
     return Column(children: outputList(streamSnapshot, context));
   }
 }

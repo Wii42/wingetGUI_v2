@@ -36,9 +36,7 @@ class LinkText extends StatelessWidget {
       collapseText: locale.showLess,
       maxLines: maxLines,
       animation: true,
-      linkStyle: const TextStyle(
-        decoration: TextDecoration.underline,
-      ),
+      linkStyle: const TextStyle(decoration: TextDecoration.underline),
       linkColor: FluentTheme.of(context).accentColor,
       onUrlTap: launch,
       urlStyle: linkTextStyle(theme),

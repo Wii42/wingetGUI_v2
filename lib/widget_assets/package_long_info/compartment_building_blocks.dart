@@ -36,44 +36,59 @@ mixin CompartmentBuildingBlocks on Compartment {
     );
   }
 
-  Widget textOrIconLink(
-      {required BuildContext context,
-      required String? text,
-      required Uri? url}) {
+  Widget textOrIconLink({
+    required BuildContext context,
+    required String? text,
+    required Uri? url,
+  }) {
     if (url != null) {
       return RichText(
-          text: TextSpan(
-              text: text ?? url.toString(),
-              style: FluentTheme.of(context).typography.body,
-              children: [
+        text: TextSpan(
+          text: text ?? url.toString(),
+          style: FluentTheme.of(context).typography.body,
+          children: [
             WidgetSpan(
-                child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxHeight: 19),
-                    child: MiniIconLinkButton(url: url)),
-                alignment: PlaceholderAlignment.middle)
-          ]));
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 19),
+                child: MiniIconLinkButton(url: url),
+              ),
+              alignment: PlaceholderAlignment.middle,
+            ),
+          ],
+        ),
+      );
     }
     return textWithLinks(text: text!, context: context);
   }
 
-  Widget textOrLinkButton(
-      {required BuildContext context, required Info<String> text}) {
+  Widget textOrLinkButton({
+    required BuildContext context,
+    required Info<String> text,
+  }) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     if (StringHelper.isLink(text.value)) {
       return LinkButton(
-          url: Uri.parse(text.value), buttonText: text.title(locale.asLocalizer));
+        url: Uri.parse(text.value),
+        buttonText: text.title(locale.asLocalizer),
+      );
     }
     return textWithLinks(text: text.value, context: context);
   }
 
-  Widget linkButton(
-      {required Info<Uri> link, required AppLocalizations locale}) {
+  Widget linkButton({
+    required Info<Uri> link,
+    required AppLocalizations locale,
+  }) {
     return LinkButton(
-        url: link.value, buttonText: link.customTitle ?? link.title(locale.asLocalizer));
+      url: link.value,
+      buttonText: link.customTitle ?? link.title(locale.asLocalizer),
+    );
   }
 
-  Widget copyableInfo(
-      {required Info<String> info, required BuildContext context}) {
+  Widget copyableInfo({
+    required Info<String> info,
+    required BuildContext context,
+  }) {
     return RichText(
       text: TextSpan(
         text: info.value,
@@ -85,7 +100,7 @@ mixin CompartmentBuildingBlocks on Compartment {
               child: MiniIconCopyButton(copiedData: info.value),
             ),
             alignment: PlaceholderAlignment.middle,
-          )
+          ),
         ],
       ),
     );
@@ -97,8 +112,9 @@ mixin CompartmentBuildingBlocks on Compartment {
 
   Widget wrapInfoWithLink(BuildContext context, InfoWithLink? info) {
     return wrapInWrap(
-        title: info?.title(AppLocalizations.of(context)!.asLocalizer) ?? '',
-        body: fromInfoWithLink(context, info));
+      title: info?.title(AppLocalizations.of(context)!.asLocalizer) ?? '',
+      body: fromInfoWithLink(context, info),
+    );
   }
 
   Widget table(List<(String, Widget)> list) {
@@ -108,11 +124,8 @@ mixin CompartmentBuildingBlocks on Compartment {
         for (var (title, widget) in list)
           TableRow(
             children: [
-              Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              widget
+              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+              widget,
             ],
           ),
       ],

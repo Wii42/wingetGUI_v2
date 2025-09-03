@@ -33,17 +33,19 @@ void main() async {
 Future<void> initAppPrerequisites() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Window.initialize().then((_) async => await Future.wait([
-        Window.setEffect(effect: WindowEffect.mica),
-      ]));
-  await WindowManager.instance.ensureInitialized().then((_) async =>
-      await WindowManager.instance
-          .waitUntilReadyToShow()
-          .then((_) async => await Future.wait([
-                WindowManager.instance.setTitle(appTitle),
-                WindowManager.instance.setMinimumSize(const Size(460, 300)),
-                WindowManager.instance.setAlignment(Alignment.center),
-              ])));
+  await Window.initialize().then(
+    (_) async =>
+        await Future.wait([Window.setEffect(effect: WindowEffect.mica)]),
+  );
+  await WindowManager.instance.ensureInitialized().then(
+    (_) async => await WindowManager.instance.waitUntilReadyToShow().then(
+      (_) async => await Future.wait([
+        WindowManager.instance.setTitle(appTitle),
+        WindowManager.instance.setMinimumSize(const Size(460, 300)),
+        WindowManager.instance.setAlignment(Alignment.center),
+      ]),
+    ),
+  );
   await SystemTheme.accentColor.load();
   await PersistentStorageService.instance.initialize();
   await PackageScreenshotsList.instance.fetchScreenshots();
@@ -66,14 +68,12 @@ class WingetGui extends StatelessWidget {
           locale: context.watch<AppLocales>().guiLocale,
           localizationsDelegates: const [
             ...AppLocalizations.localizationsDelegates,
-            LocaleNamesLocalizationsDelegate()
+            LocaleNamesLocalizationsDelegate(),
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           home: ChangeNotifierProvider(
             create: (context) => PackageActionsNotifier(),
-            child: const WindowBrightnessSetter(
-              child: MainWidget(),
-            ),
+            child: const WindowBrightnessSetter(child: MainWidget()),
           ),
         );
       },
@@ -93,9 +93,7 @@ class WingetGui extends StatelessWidget {
 }
 
 class MainWidget extends StatelessWidget {
-  const MainWidget({
-    super.key,
-  });
+  const MainWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -130,23 +128,25 @@ class DBInitializer extends StatelessWidget {
     return PackageTables.instance.isReady()
         ? MainNavigation(title: appTitle)
         : StreamBuilder<LocalizedString>(
-            builder: (context, snapshot) {
-              if (snapshot.connectionState != ConnectionState.done) {
-                if (snapshot.hasData) {
-                  return LoadingWidget(text: snapshot.data!);
-                }
-                return const Center(child: Text('...'));
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              if (snapshot.hasData) {
+                return LoadingWidget(text: snapshot.data!);
               }
-              return PackageTables.instance.isReady()
-                  ? MainNavigation(title: appTitle)
-                  : Center(
-                      child: Text(snapshot.hasData
-                          ? snapshot.data!(locale)
-                          : snapshot.error?.toString() ??
-                              locale.errorOccurred));
-            },
-            stream: PackageTables.instance.init(context),
-          );
+              return const Center(child: Text('...'));
+            }
+            return PackageTables.instance.isReady()
+                ? MainNavigation(title: appTitle)
+                : Center(
+                  child: Text(
+                    snapshot.hasData
+                        ? snapshot.data!(locale)
+                        : snapshot.error?.toString() ?? locale.errorOccurred,
+                  ),
+                );
+          },
+          stream: PackageTables.instance.init(context),
+        );
   }
 }
 
@@ -161,10 +161,13 @@ class ProcessSchedulerWarnings extends StatelessWidget {
         if (snapshot.hasData) {
           if (snapshot.data! > 0) {
             return Positioned(
-              child: OneLineInfoWidget(OneLineInfo(
+              child: OneLineInfoWidget(
+                OneLineInfo(
                   title: locale.warning,
                   details: locale.processesQueued(snapshot.data!),
-                  severity: InfoBarSeverity.warning)),
+                  severity: InfoBarSeverity.warning,
+                ),
+              ),
             );
           }
         }

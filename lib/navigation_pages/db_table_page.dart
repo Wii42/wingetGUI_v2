@@ -50,21 +50,29 @@ class DBTableWidget extends StatelessWidget {
                   Table(
                     children: [
                       if (table.entries.isNotEmpty)
-                        TableRow(children: [
-                          for (String s in table.entryToMap((
-                            table.entries.entries.first.key,
-                            table.entries.entries.first.value
-                          )).keys)
-                            Text(s,
+                        TableRow(
+                          children: [
+                            for (String s
+                                in table.entryToMap((
+                                  table.entries.entries.first.key,
+                                  table.entries.entries.first.value,
+                                )).keys)
+                              Text(
+                                s,
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                        ]),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                          ],
+                        ),
                       for (MapEntry e in table.entries.entries)
-                        TableRow(children: [
-                          for (dynamic s
-                              in table.entryToMap((e.key, e.value)).values)
-                            Text(s.toString())
-                        ])
+                        TableRow(
+                          children: [
+                            for (dynamic s
+                                in table.entryToMap((e.key, e.value)).values)
+                              Text(s.toString()),
+                          ],
+                        ),
                     ],
                   ),
                   //Text(table.toJson())
@@ -83,7 +91,8 @@ class DBTableWidget extends StatelessWidget {
     }
     if (parameters is! DBRouteParameter) {
       throw Exception(
-          "Route parameter of DBTableWidget must be of type DBRouteParameter");
+        "Route parameter of DBTableWidget must be of type DBRouteParameter",
+      );
     }
     TableRepresentation table = parameters.dbTable;
     return DBTableWidget(table);

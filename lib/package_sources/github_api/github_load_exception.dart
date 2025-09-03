@@ -4,11 +4,12 @@ class GithubLoadException implements Exception {
   String? reasonPhrase;
   String? responseBody;
 
-  GithubLoadException(
-      {required this.url,
-      required this.statusCode,
-      this.reasonPhrase,
-      this.responseBody});
+  GithubLoadException({
+    required this.url,
+    required this.statusCode,
+    this.reasonPhrase,
+    this.responseBody,
+  });
 
   @override
   String toString() {
@@ -16,7 +17,7 @@ class GithubLoadException implements Exception {
       'Failed to load files from Github API: $url',
       'status code: $statusCode',
       if (reasonPhrase != null) 'reason: $reasonPhrase',
-      if (responseBody != null) 'response body: $responseBody'
+      if (responseBody != null) 'response body: $responseBody',
     ].join(', ');
   }
 }

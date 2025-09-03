@@ -31,19 +31,21 @@ class PackageDetailsFromWeb extends StatelessWidget {
   Widget build(BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
     return PaneItemBody(
-      title: titleInput != null
-          ? Winget.show.titleWithInput(titleInput!, localization: localization)
-          : Winget.show.title(localization),
+      title:
+          titleInput != null
+              ? Winget.show.titleWithInput(
+                titleInput!,
+                localization: localization,
+              )
+              : Winget.show.title(localization),
       child: body(context),
     );
   }
 
   Widget body(BuildContext context) {
     Widget putInfo(String text) => Center(
-            child: InfoBar(
-          title: Text(text),
-          severity: InfoBarSeverity.error,
-        ));
+      child: InfoBar(title: Text(text), severity: InfoBarSeverity.error),
+    );
 
     if (package.packageSource == null) {
       return putInfo('package is not from known source');
@@ -54,10 +56,11 @@ class PackageDetailsFromWeb extends StatelessWidget {
   Widget putInfo(String title, {String? content, bool isLong = false}) =>
       Center(
         child: InfoBar(
-            title: Text(title),
-            content: content != null ? LinkText(line: content) : null,
-            severity: InfoBarSeverity.error,
-            isLong: isLong),
+          title: Text(title),
+          content: content != null ? LinkText(line: content) : null,
+          severity: InfoBarSeverity.error,
+          isLong: isLong,
+        ),
       );
 
   Widget _buildFromWeb(BuildContext context) {
@@ -65,28 +68,29 @@ class PackageDetailsFromWeb extends StatelessWidget {
     AppLocalizations localization = AppLocalizations.of(context)!;
     return FutureBuilder<PackageInfosFull>(
       future: getInfos(locale),
-      builder:
-          (BuildContext context, AsyncSnapshot<PackageInfosFull> snapshot) {
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<PackageInfosFull> snapshot,
+      ) {
         if (snapshot.hasData) {
           return ScrollListWidget(
             listElements: [PackageLongInfo(snapshot.data!)],
           );
         }
         if (snapshot.hasError) {
-          log.error(snapshot.error.runtimeType.toString(),
-              message: '${snapshot.error}\n${snapshot.stackTrace}');
+          log.error(
+            snapshot.error.runtimeType.toString(),
+            message: '${snapshot.error}\n${snapshot.stackTrace}',
+          );
           Widget errorMessage = errorWidget(snapshot, localization);
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: errorMessage,
-            ),
+            child: Center(child: errorMessage),
           );
         }
         return const Center(
-            child: ProgressRing(
-          backgroundColor: Colors.transparent,
-        ));
+          child: ProgressRing(backgroundColor: Colors.transparent),
+        );
       },
     );
   }
@@ -94,51 +98,63 @@ class PackageDetailsFromWeb extends StatelessWidget {
   Widget errorWidget(AsyncSnapshot snapshot, AppLocalizations localization) {
     Object? error = snapshot.error;
     if (error.runtimeType == NoInternetException) {
-      return putInfo(localization.cantLoadDetails,
-          content:
-              '${localization.reason}: ${localization.noInternetConnection}',
-          isLong: true);
+      return putInfo(
+        localization.cantLoadDetails,
+        content: '${localization.reason}: ${localization.noInternetConnection}',
+        isLong: true,
+      );
     }
     if (error.runtimeType == GithubRateLimitException) {
       GithubRateLimitException e = error as GithubRateLimitException;
-      List<String> messageWithoutDocumentation =
-          e.message.split('documentation');
+      List<String> messageWithoutDocumentation = e.message.split(
+        'documentation',
+      );
       return Center(
         child: InfoBar(
-            title: const Text('Too much requests to Github API'),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text.rich(TextSpan(children: [
-                  for (int i = 0;
+          title: const Text('Too much requests to Github API'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text.rich(
+                TextSpan(
+                  children: [
+                    for (
+                      int i = 0;
                       i < messageWithoutDocumentation.length;
-                      i++) ...[
-                    if (i > 0)
-                      TextSpan(
-                        text: 'documentation',
-                        style: const TextStyle(
-                          decoration: TextDecoration.underline,
+                      i++
+                    ) ...[
+                      if (i > 0)
+                        TextSpan(
+                          text: 'documentation',
+                          style: const TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer:
+                              TapGestureRecognizer()
+                                ..onTap = () {
+                                  launchUrl(e.documentationUrl);
+                                },
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            launchUrl(e.documentationUrl);
-                          },
-                      ),
-                    TextSpan(text: messageWithoutDocumentation[i]),
+                      TextSpan(text: messageWithoutDocumentation[i]),
+                    ],
                   ],
-                ])),
-                for (MapEntry<String, String> entry
-                    in e.responseBodyRest.entries)
-                  Text('${entry.key}: ${entry.value}'),
-              ],
-            ),
-            severity: InfoBarSeverity.error,
-            isLong: true),
+                ),
+              ),
+              for (MapEntry<String, String> entry in e.responseBodyRest.entries)
+                Text('${entry.key}: ${entry.value}'),
+            ],
+          ),
+          severity: InfoBarSeverity.error,
+          isLong: true,
+        ),
       );
     }
 
-    return putInfo(error.runtimeType.toString(),
-        content: '$error\n${snapshot.stackTrace}', isLong: true);
+    return putInfo(
+      error.runtimeType.toString(),
+      content: '$error\n${snapshot.stackTrace}',
+      isLong: true,
+    );
   }
 
   Future<PackageInfosFull> getInfos(Locale? guiLocale) async {

@@ -10,9 +10,11 @@ class FullJsonParser extends FullAbstractMapParser<String, dynamic> {
   Locale? locale;
   String? source;
 
-  FullJsonParser(
-      {Map<String, dynamic> details = const {}, this.locale, this.source})
-      : super(details);
+  FullJsonParser({
+    Map<String, dynamic> details = const {},
+    this.locale,
+    this.source,
+  }) : super(details);
 
   @override
   Map<String, dynamic> flattenedDetailsMap() {
@@ -20,8 +22,10 @@ class FullJsonParser extends FullAbstractMapParser<String, dynamic> {
     flattenedDetails?.remove(PackageAttribute.installers.apiKey);
     Map<String, dynamic> defaultLocale =
         _extractElement(flattenedDetails, 'DefaultLocale') ?? {};
-    Map<String, dynamic>? selectedLocale =
-        _getOptimalLocaleMap(defaultLocale, flattenedDetails);
+    Map<String, dynamic>? selectedLocale = _getOptimalLocaleMap(
+      defaultLocale,
+      flattenedDetails,
+    );
     defaultLocale.addAll(selectedLocale ?? defaultLocale);
     flattenedDetails?.addAll(defaultLocale);
     flattenedDetails?.remove('Locales');
@@ -54,41 +58,52 @@ class FullJsonParser extends FullAbstractMapParser<String, dynamic> {
   Map<String, dynamic>? _getOptimalVersionMap(List<dynamic>? versions) {
     Map<String, dynamic>? version = versions?.lastOrNull;
     if (versions != null) {
-      List<Version> availableVersions = versions
-          .map<Version?>(
-              (e) => Version.tryParse(e[PackageAttribute.version.apiKey]))
-          .nonNulls
-          .toList();
+      List<Version> availableVersions =
+          versions
+              .map<Version?>(
+                (e) => Version.tryParse(e[PackageAttribute.version.apiKey]),
+              )
+              .nonNulls
+              .toList();
       Version? bestFitting = Version.primary(availableVersions);
       if (bestFitting != null) {
         version = versions.firstWhere(
-            (element) =>
-                Version.tryParse(element[PackageAttribute.version.apiKey]) ==
-                bestFitting,
-            orElse: () => version);
+          (element) =>
+              Version.tryParse(element[PackageAttribute.version.apiKey]) ==
+              bestFitting,
+          orElse: () => version,
+        );
       }
     }
     return version;
   }
 
   Map<String, dynamic>? _getOptimalLocaleMap(
-      Map<String, dynamic>? defaultLocale, Map<String, dynamic>? version) {
+    Map<String, dynamic>? defaultLocale,
+    Map<String, dynamic>? version,
+  ) {
     Map<String, dynamic>? selectedLocale = defaultLocale;
     List<dynamic>? locales = version?['Locales'];
     if (locales != null && locale != null && locales.isNotEmpty) {
-      List<Locale> availableLocales = locales
-          .map<Locale?>((e) =>
-              InstallerLocale.tryParse(e[PackageAttribute.packageLocale.apiKey]))
-          .nonNulls
-          .toList();
+      List<Locale> availableLocales =
+          locales
+              .map<Locale?>(
+                (e) => InstallerLocale.tryParse(
+                  e[PackageAttribute.packageLocale.apiKey],
+                ),
+              )
+              .nonNulls
+              .toList();
       Locale? bestFitting = locale?.bestFittingLocale(availableLocales);
       if (bestFitting != null) {
         selectedLocale = locales.firstWhere(
-            (element) =>
-                InstallerLocale.tryParse(
-                    element[PackageAttribute.packageLocale.apiKey]) ==
-                bestFitting,
-            orElse: () => defaultLocale);
+          (element) =>
+              InstallerLocale.tryParse(
+                element[PackageAttribute.packageLocale.apiKey],
+              ) ==
+              bestFitting,
+          orElse: () => defaultLocale,
+        );
       }
     }
     return selectedLocale ?? defaultLocale;
@@ -96,15 +111,15 @@ class FullJsonParser extends FullAbstractMapParser<String, dynamic> {
 
   Map<String, String>? _extractAgreementMap(List<dynamic>? agreements) {
     if (agreements == null) return null;
-    Iterable<MapEntry<String?, String?>> nullableMap =
-        agreements.map<MapEntry<String?, String?>>((e) {
-      String? key = e['AgreementLabel'];
-      if (key != null) {
-        key = Casing.pascalCase(key);
-      }
-      String? value = e['AgreementUrl'] ?? e['Agreement'];
-      return MapEntry(key, value);
-    });
+    Iterable<MapEntry<String?, String?>> nullableMap = agreements
+        .map<MapEntry<String?, String?>>((e) {
+          String? key = e['AgreementLabel'];
+          if (key != null) {
+            key = Casing.pascalCase(key);
+          }
+          String? value = e['AgreementUrl'] ?? e['Agreement'];
+          return MapEntry(key, value);
+        });
     Iterable<MapEntry<String, String>> nonNulls = nullableMap
         .where((element) => element.key != null && element.value != null)
         .map((e) => MapEntry(e.key!, e.value!));

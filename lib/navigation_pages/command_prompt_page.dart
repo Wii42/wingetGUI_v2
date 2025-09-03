@@ -24,28 +24,26 @@ class CommandPromptPage extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: PaneItemBody(
         title: title,
-        child: LayoutBuilder(builder: (context, constraints) {
-          return Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 500),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  CommandPromptField(title: title),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  expandingHelpWindow(locale, constraints.maxHeight - 250)
-                ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title),
+                    const SizedBox(height: 10),
+                    CommandPromptField(title: title),
+                    const SizedBox(height: 40),
+                    expandingHelpWindow(locale, constraints.maxHeight - 250),
+                  ],
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          },
+        ),
       ),
     );
   }
@@ -62,13 +60,16 @@ class CommandPromptPage extends StatelessWidget {
             pageRoute: Routes.help,
             buttonText: locale.showInSeparatePage,
             tooltipMessage: (locale) => locale.openHelpTooltip,
-          )
+          ),
         ],
       ),
       content: ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: max(maxHeight, 0), maxWidth: 500),
-          child: SimpleOutput.fromWinget(Winget.help)),
+        constraints: BoxConstraints(
+          maxHeight: max(maxHeight, 0),
+          maxWidth: 500,
+        ),
+        child: SimpleOutput.fromWinget(Winget.help),
+      ),
     );
   }
 }
@@ -102,23 +103,22 @@ class _CommandPromptFieldState extends State<CommandPromptField> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         TextFormBox(
           controller: controller,
-          onFieldSubmitted: (input) => RunAndOutputMixin.runCommand(
-              context: context,
-              command: input.split(' '),
-              title: (locale) => outputPageTitle(input)),
+          onFieldSubmitted:
+              (input) => RunAndOutputMixin.runCommand(
+                context: context,
+                command: input.split(' '),
+                title: (locale) => outputPageTitle(input),
+              ),
         ),
-        const SizedBox(
-          height: 20,
-        ),
+        const SizedBox(height: 20),
         CommandButton(
-            command: controller.text.split(' '),
-            buttonText: widget.title,
-            title: outputPageTitle(controller.text)),
+          command: controller.text.split(' '),
+          buttonText: widget.title,
+          title: outputPageTitle(controller.text),
+        ),
       ],
     );
   }

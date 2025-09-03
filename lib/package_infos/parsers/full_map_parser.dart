@@ -7,11 +7,11 @@ class FullMapParser extends FullAbstractMapParser<String, String> {
   Map<String, String> installerDetails;
   PackageLocalizer localizer;
 
-  FullMapParser(
-      {Map<String, String> details = const {},
-      this.installerDetails = const {},
-      required this.localizer})
-      : super(details);
+  FullMapParser({
+    Map<String, String> details = const {},
+    this.installerDetails = const {},
+    required this.localizer,
+  }) : super(details);
 
   @override
   Map<String, String> flattenedDetailsMap() => details;

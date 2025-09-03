@@ -10,14 +10,17 @@ extension StringStreamModifier on Stream<String> {
     final controller = StreamController<String>();
     LineSplitter splitter = const LineSplitter();
 
-    listen((newData) {
-      List<String> splitList = splitter.convert(newData);
-      for (String string in splitList) {
-        controller.add(string);
-      }
-    }, onDone: () {
-      controller.close();
-    });
+    listen(
+      (newData) {
+        List<String> splitList = splitter.convert(newData);
+        for (String string in splitList) {
+          controller.add(string);
+        }
+      },
+      onDone: () {
+        controller.close();
+      },
+    );
 
     return controller.stream;
   }
@@ -25,13 +28,16 @@ extension StringStreamModifier on Stream<String> {
   Stream<String> removeLoadingElementsFromStream() {
     final controller = StreamController<String>();
 
-    listen((newData) {
-      if (!newData.isLoadingSymbols()) {
-        controller.add(newData);
-      }
-    }, onDone: () {
-      controller.close();
-    });
+    listen(
+      (newData) {
+        if (!newData.isLoadingSymbols()) {
+          controller.add(newData);
+        }
+      },
+      onDone: () {
+        controller.close();
+      },
+    );
 
     return controller.stream;
   }
@@ -40,14 +46,17 @@ extension StringStreamModifier on Stream<String> {
     final controller = StreamController<String>();
 
     bool isFirstData = true;
-    listen((newData) {
-      if (newData.isNotEmpty || !isFirstData) {
-        controller.add(newData);
-        isFirstData = false;
-      }
-    }, onDone: () {
-      controller.close();
-    });
+    listen(
+      (newData) {
+        if (newData.isNotEmpty || !isFirstData) {
+          controller.add(newData);
+          isFirstData = false;
+        }
+      },
+      onDone: () {
+        controller.close();
+      },
+    );
 
     return controller.stream;
   }
@@ -55,13 +64,16 @@ extension StringStreamModifier on Stream<String> {
   Stream<String> removeLoadingBarsFromStream() {
     final controller = StreamController<String>();
 
-    listen((newData) {
-      if (!newData.isProgressBar()) {
-        controller.add(newData);
-      }
-    }, onDone: () {
-      controller.close();
-    });
+    listen(
+      (newData) {
+        if (!newData.isProgressBar()) {
+          controller.add(newData);
+        }
+      },
+      onDone: () {
+        controller.close();
+      },
+    );
 
     return controller.stream;
   }
@@ -74,12 +86,15 @@ extension RememberingStream<T> on Stream<T> {
     final controller = StreamController<List<T>>();
     List<T> previousData = [];
 
-    listen((newData) {
-      previousData.add(newData);
-      controller.add(previousData);
-    }, onDone: () {
-      controller.close();
-    });
+    listen(
+      (newData) {
+        previousData.add(newData);
+        controller.add(previousData);
+      },
+      onDone: () {
+        controller.close();
+      },
+    );
 
     return controller.stream;
   }
@@ -91,14 +106,17 @@ extension RemoveDuplicatesFromList<T extends List> on Stream<T> {
     const ListEquality equality = ListEquality();
     T? previousData;
 
-    listen((newData) {
-      if (equality.equals(previousData, newData) == false) {
-        previousData = newData;
-        controller.add(newData);
-      }
-    }, onDone: () {
-      controller.close();
-    });
+    listen(
+      (newData) {
+        if (equality.equals(previousData, newData) == false) {
+          previousData = newData;
+          controller.add(newData);
+        }
+      },
+      onDone: () {
+        controller.close();
+      },
+    );
 
     return controller.stream;
   }

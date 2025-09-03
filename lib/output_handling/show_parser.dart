@@ -33,7 +33,10 @@ class ShowParser extends OutputParser {
       infos.remove(PackageAttribute.installer.key(locale.asLocalizer));
     }
     PackageInfosFull parsedInfos = PackageInfosFull.fromMap(
-        details: infos, installerDetails: installerDetails, locale: localizer);
+      details: infos,
+      installerDetails: installerDetails,
+      locale: localizer,
+    );
 
     if (!parsedInfos.hasVersion()) {
       extractVersionFromCommand(parsedInfos, '--version');
@@ -47,8 +50,10 @@ class ShowParser extends OutputParser {
   void extractVersionFromCommand(PackageInfosFull parsedInfos, String keyword) {
     if (command.contains(keyword) &&
         command.indexOf(keyword) < command.length - 1) {
-      parsedInfos.version = Info.fromAttribute(PackageAttribute.version,
-          value: VersionOrString.parse(command[command.indexOf(keyword) + 1]));
+      parsedInfos.version = Info.fromAttribute(
+        PackageAttribute.version,
+        value: VersionOrString.parse(command[command.indexOf(keyword) + 1]),
+      );
     }
   }
 
@@ -57,23 +62,28 @@ class ShowParser extends OutputParser {
     Map<String, String> infos = {};
     List<String> firstLine = lines[0].trim().split(' ');
 
-    int idIndex = firstLine.indexWhere((element) =>
-        element.trim().startsWith('[') && element.trim().endsWith(']'));
+    int idIndex = firstLine.indexWhere(
+      (element) =>
+          element.trim().startsWith('[') && element.trim().endsWith(']'),
+    );
     if (idIndex == -1) {
       throw Exception('No id found in first line of show part: $firstLine');
     }
     int startOffset = lines[0].trim().startsWith(wingetLocale.found) ? 1 : 2;
 
-    infos[PackageAttribute.name.key(localizer)] =
-        firstLine.sublist(startOffset, idIndex).join(' ');
+    infos[PackageAttribute.name.key(localizer)] = firstLine
+        .sublist(startOffset, idIndex)
+        .join(' ');
     String id = firstLine[idIndex].trim();
-    infos[PackageAttribute.id.key(localizer)] =
-        id.replaceAll('[', '').replaceAll(']', '');
+    infos[PackageAttribute.id.key(localizer)] = id
+        .replaceAll('[', '')
+        .replaceAll(']', '');
     if (idIndex < firstLine.length - 1) {
       if (firstLine[idIndex + 1].trim() ==
           wingetLocale.infoKey(PackageAttribute.version.name)) {
-        infos[PackageAttribute.version.key(localizer)] =
-            firstLine.sublist(idIndex + 2).join(' ');
+        infos[PackageAttribute.version.key(localizer)] = firstLine
+            .sublist(idIndex + 2)
+            .join(' ');
       }
     }
     return infos;
@@ -85,11 +95,15 @@ class ShowParser extends OutputParser {
   }
 
   Map<String, String> extractInstallerDetails(
-      Map<String, String> infos, wingetLocale) {
-    return extractDetails(infos[PackageAttribute.installer.key(wingetLocale)]!
-        .split('\n')
-        .map((String line) => line.trim())
-        .toList());
+    Map<String, String> infos,
+    wingetLocale,
+  ) {
+    return extractDetails(
+      infos[PackageAttribute.installer.key(wingetLocale)]!
+          .split('\n')
+          .map((String line) => line.trim())
+          .toList(),
+    );
   }
 
   static Map<String, String> extractDetails(List<String> data) {

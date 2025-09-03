@@ -64,10 +64,13 @@ class TableScanner extends OutputScanner {
     int tableEnd = _findTableEnd(tableStart);
     if (_linesAvailable(tableStart, tableEnd)) {
       List<String> tableLines = [
-        for (int i = tableStart; i <= tableEnd; i++) respList[i].line
+        for (int i = tableStart; i <= tableEnd; i++) respList[i].line,
       ];
       _markLines(
-          tableStart, tableEnd, TableParser(tableLines, command: command));
+        tableStart,
+        tableEnd,
+        TableParser(tableLines, command: command),
+      );
     }
   }
 

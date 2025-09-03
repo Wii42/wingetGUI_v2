@@ -30,19 +30,20 @@ class ExpandableTextCompartment extends ExpanderCompartment {
   List<Widget> buildCompartment(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
-        title: compartmentTitle(locale),
-        mainColumn: ([
-          LinkText(
-            line: text.value,
-            title: title?.value,
-            maxLines: 10,
-            onHashtagTap: onHashtagTap,
-            onMentionTap: onMentionTap,
-          )
-        ]),
-        buttonRow:
-            (buttonInfos != null ? buttonRow(buttonInfos!, context) : null),
-        context: context);
+      title: compartmentTitle(locale),
+      mainColumn: ([
+        LinkText(
+          line: text.value,
+          title: title?.value,
+          maxLines: 10,
+          onHashtagTap: onHashtagTap,
+          onMentionTap: onMentionTap,
+        ),
+      ]),
+      buttonRow:
+          (buttonInfos != null ? buttonRow(buttonInfos!, context) : null),
+      context: context,
+    );
   }
 
   @override

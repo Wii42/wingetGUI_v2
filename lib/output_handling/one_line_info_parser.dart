@@ -21,23 +21,29 @@ class OneLineInfoParser extends OutputParser {
     for (String line in lines) {
       List<String> parts = line.split(identifierColon);
       if (parts.length == 1) {
-        infos.add(OneLineInfo(
-          title: parts.single.trim(),
-          severity: determineSeverity(line.trim(), wingetLocale),
-        ));
+        infos.add(
+          OneLineInfo(
+            title: parts.single.trim(),
+            severity: determineSeverity(line.trim(), wingetLocale),
+          ),
+        );
       } else {
-        infos.add(OneLineInfo(
-          title: parts[0].trim(),
-          details: parts.sublist(1).join(identifierColon).trim(),
-          severity: determineSeverity(line.trim(), wingetLocale),
-        ));
+        infos.add(
+          OneLineInfo(
+            title: parts[0].trim(),
+            details: parts.sublist(1).join(identifierColon).trim(),
+            severity: determineSeverity(line.trim(), wingetLocale),
+          ),
+        );
       }
     }
     return infos;
   }
 
   InfoBarSeverity determineSeverity(
-      String line, AppLocalizations wingetLocale) {
+    String line,
+    AppLocalizations wingetLocale,
+  ) {
     if (line.startsWith('${wingetLocale.error} ')) {
       return InfoBarSeverity.warning;
     }
@@ -71,8 +77,9 @@ class OneLineInfo {
   final String title, details;
   final InfoBarSeverity severity;
 
-  OneLineInfo(
-      {required this.title,
-      this.details = '',
-      this.severity = InfoBarSeverity.info});
+  OneLineInfo({
+    required this.title,
+    this.details = '',
+    this.severity = InfoBarSeverity.info,
+  });
 }

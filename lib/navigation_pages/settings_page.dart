@@ -24,9 +24,7 @@ class SettingsPage extends StatefulWidget {
   static Widget settingsItem(String title, Widget options) {
     return DecoratedCard(
       padding: 20,
-      child: Row(
-        children: [Expanded(child: Text(title)), options],
-      ),
+      child: Row(children: [Expanded(child: Text(title)), options]),
     );
   }
 }
@@ -72,10 +70,10 @@ class _SettingsPageSate extends State<SettingsPage> {
 
   Widget themeModeOption(AppLocalizations localizations, BuildContext context) {
     IconData themeModeIcon(ThemeMode mode) => switch (mode) {
-          ThemeMode.system => fluent_icons.FluentIcons.dark_theme_24_filled,
-          ThemeMode.light => FluentIcons.brightness,
-          ThemeMode.dark => FluentIcons.clear_night,
-        };
+      ThemeMode.system => fluent_icons.FluentIcons.dark_theme_24_filled,
+      ThemeMode.light => FluentIcons.brightness,
+      ThemeMode.dark => FluentIcons.clear_night,
+    };
     return SettingsPage.settingsItem(
       localizations.chooseDisplayMode,
       CustomComboBox<ThemeMode>(
@@ -131,12 +129,15 @@ class _SettingsPageSate extends State<SettingsPage> {
     return ComboBoxItem<Locale>(
       value: locale,
       child: Text(
-          "${localeNames.nameOf(locale.toLanguageTag())} (${locale.toString()})"),
+        "${localeNames.nameOf(locale.toLanguageTag())} (${locale.toString()})",
+      ),
     );
   }
 
   Widget wingetLocaleOption(
-      AppLocalizations localizations, BuildContext context) {
+    AppLocalizations localizations,
+    BuildContext context,
+  ) {
     return SettingsPage.settingsItem(
       localizations.chooseWingetLanguage,
       CustomComboBox<Locale>(

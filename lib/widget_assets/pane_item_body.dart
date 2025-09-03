@@ -15,15 +15,16 @@ class PaneItemBody extends StatelessWidget {
   final void Function()? goBackWithoutPreviousPage;
   final Widget? bodyHeader;
 
-  const PaneItemBody(
-      {super.key,
-      required this.title,
-      required this.child,
-      this.process,
-      this.customReload,
-      this.bodyHeader,
-      this.goBackWithoutPreviousPage,
-      this.icon});
+  const PaneItemBody({
+    super.key,
+    required this.title,
+    required this.child,
+    this.process,
+    this.customReload,
+    this.bodyHeader,
+    this.goBackWithoutPreviousPage,
+    this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,15 +57,16 @@ class PaneItemBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(
-              width: iconSize,
-              height: iconSize,
-              child: IconButton(
-                  onPressed: hasPreviousPage(context)
+            width: iconSize,
+            height: iconSize,
+            child: IconButton(
+              onPressed:
+                  hasPreviousPage(context)
                       ? navigator.maybePop
                       : goBackWithoutPreviousPage,
-                  icon: const Icon(
-                    FluentIcons.back,
-                  ))),
+              icon: const Icon(FluentIcons.back),
+            ),
+          ),
           if (icon != null || title != null) const SizedBox(width: 0),
           if (icon != null) Icon(icon),
           if (title != null)
@@ -81,21 +83,23 @@ class PaneItemBody extends StatelessWidget {
               width: iconSize,
               height: iconSize,
               child: IconButton(
-                onPressed: customReload ??
+                onPressed:
+                    customReload ??
                     () {
                       WingetProcess newProcess = process!.clone();
                       navigator.pushReplacement(
                         FluentPageRoute(
-                          builder: (_) => OutputPage(
-                            process: newProcess,
-                            title: title != null ? (_) => title! : null,
-                          ),
+                          builder:
+                              (_) => OutputPage(
+                                process: newProcess,
+                                title: title != null ? (_) => title! : null,
+                              ),
                         ),
                       );
                     },
                 icon: const Icon(FluentIcons.update_restore),
               ),
-            )
+            ),
         ].withSpaceBetween(width: 10),
       ),
     );

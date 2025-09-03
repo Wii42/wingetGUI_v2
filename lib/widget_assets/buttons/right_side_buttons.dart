@@ -15,17 +15,18 @@ class RightSideButtons extends StatelessWidget {
   final bool iconsOnly;
   final bool showUnselectedOptionsAsDisabled;
 
-  RightSideButtons(
-      {required this.infos,
-      super.key,
-      this.mainAlignment = MainAxisAlignment.center,
-      this.crossAlignment = CrossAxisAlignment.stretch,
-      this.install = true,
-      this.upgrade = true,
-      this.uninstall = true,
-      this.showIcons = true,
-      this.iconsOnly = false,
-      this.showUnselectedOptionsAsDisabled = false}) {
+  RightSideButtons({
+    required this.infos,
+    super.key,
+    this.mainAlignment = MainAxisAlignment.center,
+    this.crossAlignment = CrossAxisAlignment.stretch,
+    this.install = true,
+    this.upgrade = true,
+    this.uninstall = true,
+    this.showIcons = true,
+    this.iconsOnly = false,
+    this.showUnselectedOptionsAsDisabled = false,
+  }) {
     assert(!iconsOnly || showIcons, 'iconsOnly requires showIcons to be true');
   }
 
@@ -33,20 +34,26 @@ class RightSideButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return buttons([
       ButtonInfo(
-          type: PackageActionType.install,
-          visibility: ButtonVisibility.from(
-              active: install,
-              showIfInactive: showUnselectedOptionsAsDisabled)),
+        type: PackageActionType.install,
+        visibility: ButtonVisibility.from(
+          active: install,
+          showIfInactive: showUnselectedOptionsAsDisabled,
+        ),
+      ),
       ButtonInfo(
-          type: PackageActionType.update,
-          visibility: ButtonVisibility.from(
-              active: upgrade,
-              showIfInactive: showUnselectedOptionsAsDisabled)),
+        type: PackageActionType.update,
+        visibility: ButtonVisibility.from(
+          active: upgrade,
+          showIfInactive: showUnselectedOptionsAsDisabled,
+        ),
+      ),
       ButtonInfo(
-          type: PackageActionType.uninstall,
-          visibility: ButtonVisibility.from(
-              active: uninstall,
-              showIfInactive: showUnselectedOptionsAsDisabled)),
+        type: PackageActionType.uninstall,
+        visibility: ButtonVisibility.from(
+          active: uninstall,
+          showIfInactive: showUnselectedOptionsAsDisabled,
+        ),
+      ),
     ], context);
   }
 
@@ -62,9 +69,12 @@ class RightSideButtons extends StatelessWidget {
   }
 
   List<Widget> buttonList(
-      List<ButtonInfo> buttonInfos, AppLocalizations locale) {
-    Iterable<Widget?> list =
-        buttonInfos.map<Widget?>((e) => createButton(e, locale));
+    List<ButtonInfo> buttonInfos,
+    AppLocalizations locale,
+  ) {
+    Iterable<Widget?> list = buttonInfos.map<Widget?>(
+      (e) => createButton(e, locale),
+    );
     List<Widget> finalList = list.nonNulls.toList();
     if (iconsOnly) {
       return finalList;
@@ -78,15 +88,25 @@ class RightSideButtons extends StatelessWidget {
     PackageActionType command = buttonInfo.type;
     if (iconsOnly) {
       assert(command.winget.icon != null);
-      return iconButton(command, locale, appName,
-          disabled: buttonInfo.visibility.isDisabled);
+      return iconButton(
+        command,
+        locale,
+        appName,
+        disabled: buttonInfo.visibility.isDisabled,
+      );
     }
-    return textButton(command, locale,
-        disabled: buttonInfo.visibility.isDisabled);
+    return textButton(
+      command,
+      locale,
+      disabled: buttonInfo.visibility.isDisabled,
+    );
   }
 
-  Widget textButton(PackageActionType action, AppLocalizations locale,
-      {required bool disabled}) {
+  Widget textButton(
+    PackageActionType action,
+    AppLocalizations locale, {
+    required bool disabled,
+  }) {
     return PackageActionButton(
       type: action,
       infos: infos,
@@ -97,13 +117,17 @@ class RightSideButtons extends StatelessWidget {
   }
 
   Widget iconButton(
-      PackageActionType action, AppLocalizations locale, String appName,
-      {required bool disabled}) {
+    PackageActionType action,
+    AppLocalizations locale,
+    String appName, {
+    required bool disabled,
+  }) {
     return PackageActionIconButton(
       icon: action.winget.icon ?? FluentIcons.error,
-      padding: numberOfButtons < 3
-          ? const EdgeInsets.all(5)
-          : const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      padding:
+          numberOfButtons < 3
+              ? const EdgeInsets.all(5)
+              : const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       type: action,
       infos: infos,
       disabled: disabled,
@@ -133,8 +157,10 @@ enum ButtonVisibility {
 
   const ButtonVisibility();
 
-  factory ButtonVisibility.from(
-      {required bool active, bool showIfInactive = false}) {
+  factory ButtonVisibility.from({
+    required bool active,
+    bool showIfInactive = false,
+  }) {
     if (active) {
       return ButtonVisibility.visible;
     } else {

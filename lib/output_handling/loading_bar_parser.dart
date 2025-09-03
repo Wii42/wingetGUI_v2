@@ -16,8 +16,10 @@ class LoadingBarParser extends OutputParser {
     if (lines.isEmpty) {
       return ParsedLoadingBars([]);
     }
-    return ParsedLoadingBars(lines.map(progressBar).toList(),
-        isLastCutOff: isLastCutOff());
+    return ParsedLoadingBars(
+      lines.map(progressBar).toList(),
+      isLastCutOff: isLastCutOff(),
+    );
   }
 
   Map<String, String> separateLoadingBar(String line) {
@@ -58,7 +60,9 @@ class LoadingBarParser extends OutputParser {
   LoadingBar progressBar(String line) {
     Map<String, String> parts = separateLoadingBar(line);
     return LoadingBar(
-        text: parts[restKey], value: loadingBarValue(parts[progressBarKey]!));
+      text: parts[restKey],
+      value: loadingBarValue(parts[progressBarKey]!),
+    );
   }
 
   bool isLastCutOff() {
@@ -69,8 +73,9 @@ class LoadingBarParser extends OutputParser {
     String lastProgressBar = lastLine[progressBarKey]!;
     String? lastRest = lastLine[restKey];
 
-    Map<String, String> secondLastLine =
-        separateLoadingBar(lines[lines.length - 2]);
+    Map<String, String> secondLastLine = separateLoadingBar(
+      lines[lines.length - 2],
+    );
     String secondLastProgressBar = secondLastLine[progressBarKey]!;
     String? secondLastRest = secondLastLine[restKey];
 

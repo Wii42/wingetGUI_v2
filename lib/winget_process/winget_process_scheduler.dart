@@ -79,28 +79,36 @@ class ProcessWrap implements Process {
   final int id = ProcessScheduler.instance.getProcessId();
   Process? _process;
 
-  ProcessWrap(this.executable, this.arguments,
-      {this.workingDirectory,
-      this.environment,
-      this.includeParentEnvironment = true,
-      this.runInShell = false,
-      this.mode = ProcessStartMode.normal}) {
+  ProcessWrap(
+    this.executable,
+    this.arguments, {
+    this.workingDirectory,
+    this.environment,
+    this.includeParentEnvironment = true,
+    this.runInShell = false,
+    this.mode = ProcessStartMode.normal,
+  }) {
     log = Logger(this);
     ProcessScheduler.instance.addProcess(this);
   }
 
-  factory ProcessWrap.winget(List<String> arguments,
-      {String? workingDirectory,
-      Map<String, String>? environment,
-      bool includeParentEnvironment = true,
-      bool runInShell = false,
-      ProcessStartMode mode = ProcessStartMode.normal}) {
-    return ProcessWrap('winget', arguments,
-        workingDirectory: workingDirectory,
-        environment: environment,
-        includeParentEnvironment: includeParentEnvironment,
-        runInShell: runInShell,
-        mode: mode);
+  factory ProcessWrap.winget(
+    List<String> arguments, {
+    String? workingDirectory,
+    Map<String, String>? environment,
+    bool includeParentEnvironment = true,
+    bool runInShell = false,
+    ProcessStartMode mode = ProcessStartMode.normal,
+  }) {
+    return ProcessWrap(
+      'winget',
+      arguments,
+      workingDirectory: workingDirectory,
+      environment: environment,
+      includeParentEnvironment: includeParentEnvironment,
+      runInShell: runInShell,
+      mode: mode,
+    );
   }
 
   void start() async {
@@ -168,7 +176,8 @@ class ProcessWrap implements Process {
   Stream<List<int>> get stdout => _handleStream((p) => p.stdout);
 
   Stream<List<int>> _handleStream(
-      Stream<List<int>> Function(Process) selectStream) {
+    Stream<List<int>> Function(Process) selectStream,
+  ) {
     if (hasStarted()) {
       return selectStream(_process!);
     }
@@ -177,14 +186,19 @@ class ProcessWrap implements Process {
     return controller.stream;
   }
 
-  void _waitForStream(StreamController<List<int>> controller,
-      Stream<List<int>> Function(Process) selectStream) async {
+  void _waitForStream(
+    StreamController<List<int>> controller,
+    Stream<List<int>> Function(Process) selectStream,
+  ) async {
     Process p = await _processAwaiter.future;
-    selectStream(p).listen((event) {
-      controller.add(event);
-    }, onDone: () {
-      controller.close();
-    });
+    selectStream(p).listen(
+      (event) {
+        controller.add(event);
+      },
+      onDone: () {
+        controller.close();
+      },
+    );
   }
 
   @override

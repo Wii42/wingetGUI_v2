@@ -14,10 +14,7 @@ abstract class PackagePictures {
   /// Automatically fetched favicons while using app.
   final dynamic faviconsTable;
 
-  PackagePictures({
-    required this.publisherIcons,
-    required this.faviconsTable,
-  });
+  PackagePictures({required this.publisherIcons, required this.faviconsTable});
 }
 
 abstract class PublisherNames {

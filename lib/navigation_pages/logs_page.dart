@@ -18,10 +18,13 @@ class LogsPage extends StatefulWidget {
 
   static Widget header(LogMessage log, BuildContext context) {
     Type? displayType = log.sourceObject?.runtimeType ?? log.sourceType;
-    DateFormat formatter =
-        DateFormat.Hms(AppLocales.of(context).guiLocale?.toLanguageTag());
-    String metaInfo =
-        [log.severity.displayName, displayType.toString()].join(' ');
+    DateFormat formatter = DateFormat.Hms(
+      AppLocales.of(context).guiLocale?.toLanguageTag(),
+    );
+    String metaInfo = [
+      log.severity.displayName,
+      displayType.toString(),
+    ].join(' ');
     metaInfo += ':';
     Widget header = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,12 +33,18 @@ class LogsPage extends StatefulWidget {
           children: [
             Text(metaInfo),
             Expanded(
-                child: Text(log.title,
-                    maxLines: 1, overflow: TextOverflow.ellipsis)),
+              child: Text(
+                log.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ].withSpaceBetween(width: 5),
         ),
-        Text(formatter.format(log.time),
-            style: FluentTheme.of(context).typography.caption),
+        Text(
+          formatter.format(log.time),
+          style: FluentTheme.of(context).typography.caption,
+        ),
       ],
     );
     return header;
@@ -59,24 +68,32 @@ class _LogsPageState extends State<LogsPage> {
           Expanded(
             child: StreamBuilder(
               stream: LogStream.instance.logsListStream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<LogMessage>> snapshot) {
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<List<LogMessage>> snapshot,
+              ) {
                 List<LogMessage> data = LogStream.instance.messages;
                 switch (filter) {
                   case LogSeverity.info:
                     break;
                   case LogSeverity.warning:
-                    data = data
-                        .where((element) =>
-                            element.severity == LogSeverity.warning ||
-                            element.severity == LogSeverity.error)
-                        .toList();
+                    data =
+                        data
+                            .where(
+                              (element) =>
+                                  element.severity == LogSeverity.warning ||
+                                  element.severity == LogSeverity.error,
+                            )
+                            .toList();
                     break;
                   case LogSeverity.error:
-                    data = data
-                        .where(
-                            (element) => element.severity == LogSeverity.error)
-                        .toList();
+                    data =
+                        data
+                            .where(
+                              (element) =>
+                                  element.severity == LogSeverity.error,
+                            )
+                            .toList();
                     break;
                 }
                 if (data.isEmpty) {
@@ -105,21 +122,21 @@ class _LogsPageState extends State<LogsPage> {
         for (LogSeverity severity in LogSeverity.values)
           filter == severity
               ? FilledButton(
-                  child: Text(severity.displayName),
-                  onPressed: () {
-                    setState(() {
-                      filter = severity;
-                    });
-                  },
-                )
+                child: Text(severity.displayName),
+                onPressed: () {
+                  setState(() {
+                    filter = severity;
+                  });
+                },
+              )
               : Button(
-                  child: Text(severity.displayName),
-                  onPressed: () {
-                    setState(() {
-                      filter = severity;
-                    });
-                  },
-                )
+                child: Text(severity.displayName),
+                onPressed: () {
+                  setState(() {
+                    filter = severity;
+                  });
+                },
+              ),
       ].withSpaceBetween(width: 10),
     );
   }
@@ -169,8 +186,10 @@ class LogDetailsPage extends StatelessWidget {
   }
 
   static Widget inRoute(RouteParameter? parameters) {
-    assert(parameters != null && parameters is LogRouteParameter,
-        'LogDetailsPage: parameters must be a LogRouteParameter');
+    assert(
+      parameters != null && parameters is LogRouteParameter,
+      'LogDetailsPage: parameters must be a LogRouteParameter',
+    );
     LogRouteParameter log = parameters! as LogRouteParameter;
     return LogDetailsPage(log.log);
   }

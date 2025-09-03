@@ -25,67 +25,89 @@ import 'output_handling/output_handler.dart';
 
 enum Routes {
   updates(
-      icon: FluentIcons.substitutions_in,
-      route: '/updates',
-      winget: Winget.updates),
+    icon: FluentIcons.substitutions_in,
+    route: '/updates',
+    winget: Winget.updates,
+  ),
   installed(
-      icon: FluentIcons.library, route: '/installed', winget: Winget.installed),
+    icon: FluentIcons.library,
+    route: '/installed',
+    winget: Winget.installed,
+  ),
   about(icon: FluentIcons.info, route: '/about', winget: Winget.about),
   help(icon: FluentIcons.help, route: '/help', winget: Winget.help),
   search(icon: FluentIcons.search, route: '/search', winget: Winget.search),
   settings(
-      icon: FluentIcons.settings, route: '/settings', winget: Winget.settings),
+    icon: FluentIcons.settings,
+    route: '/settings',
+    winget: Winget.settings,
+  ),
   sources(
-      icon: FluentIcons.database_source,
-      route: '/sources',
-      winget: Winget.sources),
+    icon: FluentIcons.database_source,
+    route: '/sources',
+    winget: Winget.sources,
+  ),
   install(
-      icon: FluentIcons.installation,
-      route: '/install',
-      winget: Winget.install),
+    icon: FluentIcons.installation,
+    route: '/install',
+    winget: Winget.install,
+  ),
   upgrade(
-      icon: FluentIcons.substitutions_in,
-      route: '/upgrade',
-      winget: Winget.upgrade),
+    icon: FluentIcons.substitutions_in,
+    route: '/upgrade',
+    winget: Winget.upgrade,
+  ),
   uninstall(
-      icon: FluentIcons.delete, route: '/uninstall', winget: Winget.uninstall),
+    icon: FluentIcons.delete,
+    route: '/uninstall',
+    winget: Winget.uninstall,
+  ),
   show(route: 'show', body: packageDetailsPage),
   upgradeAll(route: '/upgradeAll', winget: Winget.upgradeAll),
   searchPage(
-      icon: FluentIcons.search, route: '/searchPage', body: SearchPage.inRoute),
+    icon: FluentIcons.search,
+    route: '/searchPage',
+    body: SearchPage.inRoute,
+  ),
   commandPromptPage(
-      icon: FluentIcons.command_prompt,
-      route: '/commandPromptPage',
-      body: CommandPromptPage.inRoute),
+    icon: FluentIcons.command_prompt,
+    route: '/commandPromptPage',
+    body: CommandPromptPage.inRoute,
+  ),
   advancedOptions(
-      icon: FluentIcons.lightning_bolt,
-      route: '/advancedOptions',
-      body: AdvancedOptionsPage.inRoute),
+    icon: FluentIcons.lightning_bolt,
+    route: '/advancedOptions',
+    body: AdvancedOptionsPage.inRoute,
+  ),
   settingsPage(
-      icon: FluentIcons.settings,
-      route: '/settingsPage',
-      body: SettingsPage.inRoute),
+    icon: FluentIcons.settings,
+    route: '/settingsPage',
+    body: SettingsPage.inRoute,
+  ),
   updatesPage(
-      icon: FluentIcons.substitutions_in,
-      route: '/updatesPage',
-      body: UpdatesPage.inRoute),
+    icon: FluentIcons.substitutions_in,
+    route: '/updatesPage',
+    body: UpdatesPage.inRoute,
+  ),
   installedPage(
-      icon: FluentIcons.library,
-      route: '/installedPage',
-      body: InstalledPage.inRoute),
+    icon: FluentIcons.library,
+    route: '/installedPage',
+    body: InstalledPage.inRoute,
+  ),
   publisherPage(route: '/publisherPage', body: PublisherPage.inRoute),
   deepSearchPage(route: '/deepSearchPage', body: DeepSearchPage.inRoute),
   logsPage(
-      icon: FluentIcons.text_document,
-      route: '/logPage',
-      body: LogsPage.inRoute),
+    icon: FluentIcons.text_document,
+    route: '/logPage',
+    body: LogsPage.inRoute,
+  ),
   logDetailsPage(route: '/logDetailsPage', body: LogDetailsPage.inRoute),
   dbTablePage(route: '/dbTablePage', body: DBTableWidget.inRoute),
   tinkeringSection(
-      route: '/tinkeringSection',
-      body: TinkeringSection.inRoute,
-      icon: FluentIcons.rocket),
-  ;
+    route: '/tinkeringSection',
+    body: TinkeringSection.inRoute,
+    icon: FluentIcons.rocket,
+  );
 
   final String route;
   final IconData? icon;
@@ -108,8 +130,10 @@ enum Routes {
     return title;
   }
 
-  String titleWithInput(String input,
-      {required AppLocalizations localization}) {
+  String titleWithInput(
+    String input, {
+    required AppLocalizations localization,
+  }) {
     String titlePrefix = localization.wingetTitlePrefix(name);
     String prefix;
     if (titlePrefix != notFoundError) {
@@ -125,7 +149,9 @@ enum Routes {
       PackageInfosPeek package = parameters.package;
       if (package.isWinget() || package.isMicrosoftStore()) {
         return PackageDetailsFromWeb(
-            package: package, titleInput: parameters.titleAddon);
+          package: package,
+          titleInput: parameters.titleAddon,
+        );
       }
     }
     return Winget.show.processPage(parameters);
@@ -154,12 +180,14 @@ class TinkeringSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 dbButton(context, PersistentStorageService.instance.favicon),
-                dbButton(context,
-                    PersistentStorageService.instance.publisherNameByPackageId),
                 dbButton(
-                    context,
-                    PersistentStorageService
-                        .instance.publisherNameByPublisherId),
+                  context,
+                  PersistentStorageService.instance.publisherNameByPackageId,
+                ),
+                dbButton(
+                  context,
+                  PersistentStorageService.instance.publisherNameByPublisherId,
+                ),
               ].withSpaceBetween(height: 10),
             ),
           ),
@@ -195,8 +223,11 @@ class TinkeringSection extends StatelessWidget {
   Button dbButton(BuildContext context, TableRepresentation table) {
     return Button(
       child: Text(table.tableName),
-      onPressed: () => Navigator.of(context).pushNamed(Routes.dbTablePage.route,
-          arguments: DBRouteParameter(dbTable: table)),
+      onPressed:
+          () => Navigator.of(context).pushNamed(
+            Routes.dbTablePage.route,
+            arguments: DBRouteParameter(dbTable: table),
+          ),
     );
   }
 }

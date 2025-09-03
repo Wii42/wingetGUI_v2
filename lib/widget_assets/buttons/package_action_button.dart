@@ -22,9 +22,7 @@ class PackageActionButton extends RunButton
     super.disabled,
     this.showIcon = true,
     required this.locale,
-  }) : super(
-          command: type.createCommand(infos),
-        );
+  }) : super(command: type.createCommand(infos));
 
   @override
   IconData? get icon => showIcon ? type.winget.icon : null;

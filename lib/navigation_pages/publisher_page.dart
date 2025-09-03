@@ -16,23 +16,33 @@ class PublisherPage extends StatelessWidget {
   final String publisherId;
   final String? publisherName;
 
-  const PublisherPage(
-      {super.key, required this.publisherId, this.publisherName});
+  const PublisherPage({
+    super.key,
+    required this.publisherId,
+    this.publisherName,
+  });
 
   static Widget inRoute(RouteParameter? parameters) {
     if (parameters! is! StringRouteParameter) {
       throw (Exception(
-          'Invalid route parameters, must be StringRouteParameter'));
+        'Invalid route parameters, must be StringRouteParameter',
+      ));
     }
     String publisherId = (parameters as StringRouteParameter).string;
-    String? publisherName = parameters.titleAddon ??
+    String? publisherName =
+        parameters.titleAddon ??
         PackageScreenshotsList
-            .instance.publisherIcons[publisherId]?.nameUsingDefaultSource ??
+            .instance
+            .publisherIcons[publisherId]
+            ?.nameUsingDefaultSource ??
         PersistentStorageService
-            .instance.publisherNameByPublisherId[publisherId];
+            .instance
+            .publisherNameByPublisherId[publisherId];
 
     return PublisherPage(
-        publisherId: publisherId, publisherName: publisherName);
+      publisherId: publisherId,
+      publisherName: publisherName,
+    );
   }
 
   @override
@@ -45,8 +55,8 @@ class PublisherPage extends StatelessWidget {
           PackageTables.instance.available.infos
               .where((element) => element.publisher?.id == publisherId)
               .toList(),
-          content: (locale) =>
-              locale.infoTitle(PackageAttribute.publisher.name),
+          content:
+              (locale) => locale.infoTitle(PackageAttribute.publisher.name),
           wingetCommand: [],
           status: DBStatus.ready,
         ),
@@ -80,7 +90,7 @@ class PublisherPage extends StatelessWidget {
           AppIcon(
             iconUrls: [
               publisher?.solidIconUsingDefaultSource,
-              publisher?.iconUsingDefaultSource
+              publisher?.iconUsingDefaultSource,
             ],
             iconSize: TitleWidget.faviconSize(),
           ),

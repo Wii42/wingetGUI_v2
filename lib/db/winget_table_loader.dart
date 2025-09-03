@@ -26,8 +26,10 @@ class WingetTableLoader {
     this.filter,
   }) {
     log = Logger(this);
-    assert(winget != null || command != null,
-        'winget or command must be provided');
+    assert(
+      winget != null || command != null,
+      'winget or command must be provided',
+    );
 
     if (winget != null) {
       wingetCommand = winget.fullCommand;
@@ -60,8 +62,11 @@ class WingetTableLoader {
     return output;
   }
 
-  Future<List<ParsedOutput>> parsedOutputList(List<String> raw,
-      List<String> command, AppLocalizations wingetLocale) async {
+  Future<List<ParsedOutput>> parsedOutputList(
+    List<String> raw,
+    List<String> command,
+    AppLocalizations wingetLocale,
+  ) async {
     OutputHandler handler = OutputHandler(raw, command: command);
     handler.determineResponsibility(wingetLocale);
     List<ParsedOutput> output = await handler.getParsedOutputList(wingetLocale);
@@ -83,8 +88,10 @@ class WingetTableLoader {
   }
 
   static List<PackageInfosPeek> extractInfosStatic(
-      List<ParsedOutput> parsed, LocalizedString content,
-      {List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter}) {
+    List<ParsedOutput> parsed,
+    LocalizedString content, {
+    List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter,
+  }) {
     Iterable<ParsedAppTable> appTables = parsed.whereType<ParsedAppTable>();
     if (appTables.isEmpty) {
       staticLog.error("No AppTables found in $content, $parsed");
@@ -101,7 +108,9 @@ class WingetTableLoader {
   }
 
   static List<OneLineInfo> extractHintsStatic(
-      List<ParsedOutput> parsed, LocalizedString content) {
+    List<ParsedOutput> parsed,
+    LocalizedString content,
+  ) {
     Iterable<ParsedOneLineInfos> appTables =
         parsed.whereType<ParsedOneLineInfos>();
     List<OneLineInfo> infos = [];

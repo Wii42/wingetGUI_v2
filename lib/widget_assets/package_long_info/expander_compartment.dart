@@ -37,14 +37,15 @@ abstract class ExpanderCompartment extends Compartment
           Icon(
             titleIcon,
             size: 16,
-            color: FluentTheme.of(context)
-                .accentColor
-                .defaultBrushFor(FluentTheme.of(context).brightness),
+            color: FluentTheme.of(
+              context,
+            ).accentColor.defaultBrushFor(FluentTheme.of(context).brightness),
           ),
           Expanded(
-            child: Text(compartmentTitle(locale),
-                style:
-                    compartmentTitleStyle(FluentTheme.of(context).typography)),
+            child: Text(
+              compartmentTitle(locale),
+              style: compartmentTitleStyle(FluentTheme.of(context).typography),
+            ),
           ),
         ].withSpaceBetween(width: 10),
       ),
@@ -54,11 +55,12 @@ abstract class ExpanderCompartment extends Compartment
     );
   }
 
-  List<Widget> fullCompartment(
-      {String? title,
-      List<Widget>? mainColumn,
-      Wrap? buttonRow,
-      required BuildContext context}) {
+  List<Widget> fullCompartment({
+    String? title,
+    List<Widget>? mainColumn,
+    Wrap? buttonRow,
+    required BuildContext context,
+  }) {
     return [
       ...?mainColumn,
       if (mainColumn != null &&
@@ -66,12 +68,15 @@ abstract class ExpanderCompartment extends Compartment
           buttonRow != null &&
           buttonRow.children.isNotEmpty)
         divider(),
-      if (buttonRow != null && buttonRow.children.isNotEmpty) buttonRow
+      if (buttonRow != null && buttonRow.children.isNotEmpty) buttonRow,
     ].withSpaceBetween(height: 10);
   }
 
-  Wrap buttonRow(List<Info<Uri>?> links, BuildContext context,
-      {List<Widget> otherButtons = const []}) {
+  Wrap buttonRow(
+    List<Info<Uri>?> links,
+    BuildContext context, {
+    List<Widget> otherButtons = const [],
+  }) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Wrap(
       spacing: 5,
@@ -80,11 +85,8 @@ abstract class ExpanderCompartment extends Compartment
       children: [
         for (Info<Uri>? link in links)
           if (link != null && link.isNotEmpty)
-            linkButton(
-              locale: locale,
-              link: link,
-            ),
-        ...otherButtons
+            linkButton(locale: locale, link: link),
+        ...otherButtons,
       ],
     );
   }
@@ -95,17 +97,21 @@ abstract class ExpanderCompartment extends Compartment
       for (Info<String>? info in details)
         if (info != null && info.value.isNotEmpty)
           wrapInWrap(
-              title: info.title(locale.asLocalizer),
-              body: info.copyable
-                  ? copyableInfo(info: info, context: context)
-                  : info.couldBeLink
-                      ? textOrIconLink(
-                          context: context,
-                          text: info.value,
-                          url: StringHelper.isLink(info.value)
+            title: info.title(locale.asLocalizer),
+            body:
+                info.copyable
+                    ? copyableInfo(info: info, context: context)
+                    : info.couldBeLink
+                    ? textOrIconLink(
+                      context: context,
+                      text: info.value,
+                      url:
+                          StringHelper.isLink(info.value)
                               ? Uri.tryParse(info.value)
-                              : null)
-                      : Text(info.value)),
+                              : null,
+                    )
+                    : Text(info.value),
+          ),
     ];
   }
 
@@ -120,7 +126,9 @@ abstract class ExpanderCompartment extends Compartment
   }
 
   List<Widget> displayRest(
-      Map<String, String>? otherInfos, BuildContext context) {
+    Map<String, String>? otherInfos,
+    BuildContext context,
+  ) {
     if (otherInfos == null) {
       return [];
     }
@@ -132,11 +140,13 @@ abstract class ExpanderCompartment extends Compartment
           wrapInWrap(
             title: key,
             body: textOrIconLink(
-                context: context,
-                text: value(key),
-                url: StringHelper.isLink(value(key))
-                    ? Uri.tryParse(value(key))
-                    : null),
+              context: context,
+              text: value(key),
+              url:
+                  StringHelper.isLink(value(key))
+                      ? Uri.tryParse(value(key))
+                      : null,
+            ),
           ),
     ];
   }

@@ -6,23 +6,19 @@ import 'package:winget_gui/l10n/generated/app_localizations.dart';
 class LoadingWidget extends StatelessWidget {
   final LocalizedString text;
 
-  const LoadingWidget({
-    super.key,
-    required this.text,
-  });
+  const LoadingWidget({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const ProgressRing(
-          backgroundColor: Colors.transparent,
-        ),
-        Text(text(locale)),
-      ].withSpaceBetween(height: 20),
-    ));
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const ProgressRing(backgroundColor: Colors.transparent),
+          Text(text(locale)),
+        ].withSpaceBetween(height: 20),
+      ),
+    );
   }
 }

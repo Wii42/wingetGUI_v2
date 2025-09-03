@@ -17,8 +17,10 @@ class PlainTextParser extends OutputParser {
     if (lines.isEmpty) {
       return ParsedPlainText([]);
     }
-    return ParsedPlainText(lines.trim(),
-        lastIsSuccessMessage: isSuccessMessage(lines.last, wingetLocale));
+    return ParsedPlainText(
+      lines.trim(),
+      lastIsSuccessMessage: isSuccessMessage(lines.last, wingetLocale),
+    );
   }
 
   bool isSuccessMessage(String line, AppLocalizations locale) {
@@ -55,10 +57,10 @@ class ParsedPlainText extends ParsedOutput {
       for ((int, String) line in lines.indexed)
         (line.$1 == lines.length - 1 && lastIsSuccessMessage)
             ? CustomInfoBar(
-                title: LinkText(line: line.$2),
-                severity: InfoBarSeverity.success,
-                isSmallHeight: true,
-              )
+              title: LinkText(line: line.$2),
+              severity: InfoBarSeverity.success,
+              isSmallHeight: true,
+            )
             : LinkText(line: line.$2),
     ];
   }

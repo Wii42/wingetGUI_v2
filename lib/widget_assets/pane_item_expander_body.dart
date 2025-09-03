@@ -22,31 +22,33 @@ class PaneItemExpanderBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PaneItemBody(
-        title: title,
-        icon: icon,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: Wrap(
-              spacing: 20,
-              runSpacing: 20,
-              runAlignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              alignment: WrapAlignment.center,
-              children: [
-                for (Routes child in children) linkToChild(child, context)
-              ],
-            ),
+      title: title,
+      icon: icon,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Center(
+          child: Wrap(
+            spacing: 20,
+            runSpacing: 20,
+            runAlignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.center,
+            children: [
+              for (Routes child in children) linkToChild(child, context),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget linkToChild(Routes child, BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return PageButtonWithIcon(
-        pageRoute: child,
-        buttonText: child.title(locale),
-        icon: child.icon ?? system_icons.FluentIcons.question_circle_24_regular,
-        tooltipMessage: (locale) => child.title(locale));
+      pageRoute: child,
+      buttonText: child.title(locale),
+      icon: child.icon ?? system_icons.FluentIcons.question_circle_24_regular,
+      tooltipMessage: (locale) => child.title(locale),
+    );
   }
 }

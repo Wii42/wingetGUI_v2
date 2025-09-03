@@ -18,25 +18,24 @@ class AgreementWidget extends ExpanderCompartment {
   List<Widget> buildCompartment(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return fullCompartment(
-        title: compartmentTitle(locale),
-        mainColumn: [
-          if (infos.license?.text != null && infos.license!.text!.isNotEmpty)
-            wrapInfoWithLink(context, infos.license),
-          if (infos.copyright?.text != null &&
-              infos.copyright!.text!.isNotEmpty)
-            wrapInfoWithLink(context, infos.copyright),
-        ],
-        buttonRow: buttonRow([
-          if (infos.license?.text == null) infos.license?.toUriInfoIfHasUrl(),
-          if (infos.copyright?.text == null)
-            infos.copyright?.toUriInfoIfHasUrl(),
-          infos.privacyUrl,
-          infos.buyUrl,
-          infos.termsOfTransaction?.tryToUriInfo(),
-          infos.seizureWarning?.tryToUriInfo(),
-          infos.storeLicenseTerms?.tryToUriInfo(),
-        ], context),
-        context: context);
+      title: compartmentTitle(locale),
+      mainColumn: [
+        if (infos.license?.text != null && infos.license!.text!.isNotEmpty)
+          wrapInfoWithLink(context, infos.license),
+        if (infos.copyright?.text != null && infos.copyright!.text!.isNotEmpty)
+          wrapInfoWithLink(context, infos.copyright),
+      ],
+      buttonRow: buttonRow([
+        if (infos.license?.text == null) infos.license?.toUriInfoIfHasUrl(),
+        if (infos.copyright?.text == null) infos.copyright?.toUriInfoIfHasUrl(),
+        infos.privacyUrl,
+        infos.buyUrl,
+        infos.termsOfTransaction?.tryToUriInfo(),
+        infos.seizureWarning?.tryToUriInfo(),
+        infos.storeLicenseTerms?.tryToUriInfo(),
+      ], context),
+      context: context,
+    );
   }
 
   @override

@@ -66,7 +66,7 @@ class AppIcon extends StatefulWidget {
       isClickable: isClickable,
       packageId: infos.id?.value,
       automaticFoundFavicons: [
-        if (infos.automaticFoundFavicons != null) infos.automaticFoundFavicons!
+        if (infos.automaticFoundFavicons != null) infos.automaticFoundFavicons!,
       ],
     );
   }
@@ -87,9 +87,10 @@ class _AppIconState extends State<AppIcon> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: widget.withRightSidePadding
-          ? const EdgeInsets.only(right: 25)
-          : EdgeInsets.zero,
+      padding:
+          widget.withRightSidePadding
+              ? const EdgeInsets.only(right: 25)
+              : EdgeInsets.zero,
       child: DecoratedCard(
         padding: 0.17 * widget.iconSize,
         child: SizedBox(
@@ -135,16 +136,21 @@ class _AppIconState extends State<AppIcon> {
 
   Widget findFavicon() {
     return FutureBuilder<Favicon?>(
-      future: FaviconGetter.getFavicon(widget.faviconUrl,
-          packageId: widget.packageId),
+      future: FaviconGetter.getFavicon(
+        widget.faviconUrl,
+        packageId: widget.packageId,
+      ),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           Favicon? favicon = snapshot.data;
           if (favicon != null) {
             automaticFoundFavicons.add(Uri.parse(favicon.url));
             widget.log.info(favicon.url);
-            return loadFavicon(favicon.url,
-                size: widget.iconSize, onError: () => defaultIcon());
+            return loadFavicon(
+              favicon.url,
+              size: widget.iconSize,
+              onError: () => defaultIcon(),
+            );
           }
         }
         return defaultIcon();
@@ -157,23 +163,21 @@ class _AppIconState extends State<AppIcon> {
     if (widget.packageSource == PackageSources.microsoftStore) {
       icon = icons.FluentIcons.store_microsoft_20_regular;
     }
-    return Icon(
-      icon,
-      size: widget.iconSize,
-      color: defaultColor(),
-    );
+    return Icon(icon, size: widget.iconSize, color: defaultColor());
   }
 
   Color? defaultColor() {
-    return FluentTheme.of(context)
-        .inactiveColor
-        .withAlpha(widget.isClickable ? 100 : 50);
+    return FluentTheme.of(
+      context,
+    ).inactiveColor.withAlpha(widget.isClickable ? 100 : 50);
   }
 
-  Widget loadFavicon(String url,
-      {required double size,
-      required Widget Function() onError,
-      Color? color}) {
+  Widget loadFavicon(
+    String url, {
+    required double size,
+    required Widget Function() onError,
+    Color? color,
+  }) {
     Widget image;
 
     image = WebImage(
@@ -187,13 +191,14 @@ class _AppIconState extends State<AppIcon> {
         errorBuilder: (context, error, stackTrace) {
           return onError();
         },
-        loadingBuilder: (context) =>
-            Stack(alignment: Alignment.center, children: [
-          const ProgressRing(
-            backgroundColor: Colors.transparent,
-          ),
-          defaultIcon()
-        ]),
+        loadingBuilder:
+            (context) => Stack(
+              alignment: Alignment.center,
+              children: [
+                const ProgressRing(backgroundColor: Colors.transparent),
+                defaultIcon(),
+              ],
+            ),
         solidColor: color,
       ),
     );
@@ -211,17 +216,23 @@ class _AppIconState extends State<AppIcon> {
   }
 
   Iterable<UrlColor> asUrlColors(Iterable<Uri?> urls, {Color? color}) {
-    Iterable<Uri> goodUrls = urls
-        .where((element) =>
-            element != null && element.toString().trim().isNotEmpty)
-        .cast<Uri>();
+    Iterable<Uri> goodUrls =
+        urls
+            .where(
+              (element) =>
+                  element != null && element.toString().trim().isNotEmpty,
+            )
+            .cast<Uri>();
     return goodUrls.map((e) => UrlColor(url: e, color: color));
   }
 }
 
 class DefaultFavicon extends AppIcon {
-  DefaultFavicon(
-      {super.key, required super.iconSize, super.isClickable = true});
+  DefaultFavicon({
+    super.key,
+    required super.iconSize,
+    super.isClickable = true,
+  });
 }
 
 class UrlColor {
@@ -251,8 +262,9 @@ class FaviconGetter {
       return null;
     }
     if (packageId != null) {
-      PersistentStorageService.instance.favicon[packageId.string] =
-          Uri.parse(favicon.url);
+      PersistentStorageService.instance.favicon[packageId.string] = Uri.parse(
+        favicon.url,
+      );
     }
     return favicon;
   }

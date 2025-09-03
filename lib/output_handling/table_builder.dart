@@ -25,22 +25,24 @@ class TableBuilder extends StatelessWidget {
   List<material.DataColumn> tableColumns(List<Map<String, String>> tableData) {
     return [
       for (String columnName in tableData.first.keys)
-        material.DataColumn(label: Text(columnName))
+        material.DataColumn(label: Text(columnName)),
     ];
   }
 
   List<material.DataRow> tableRows(List<Map<String, String>> tableData) {
     return [
       for (Map<String, String> dataRow in tableData)
-        material.DataRow(cells: tableEntry(tableData, dataRow))
+        material.DataRow(cells: tableEntry(tableData, dataRow)),
     ];
   }
 
   List<material.DataCell> tableEntry(
-      List<Map<String, String>> tableData, Map<String, String> dataRow) {
+    List<Map<String, String>> tableData,
+    Map<String, String> dataRow,
+  ) {
     return [
       for (String column in tableData.first.keys)
-        material.DataCell(tableCell(dataRow[column]!))
+        material.DataCell(tableCell(dataRow[column]!)),
     ];
   }
 

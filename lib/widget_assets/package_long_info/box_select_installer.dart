@@ -46,16 +46,19 @@ class BoxSelectInstaller<T> extends StatelessWidget {
   ComboBoxItem<T> comboBoxItem(T item, BuildContext context) {
     FluentThemeData theme = FluentTheme.of(context);
     return ComboBoxItem(
-        value: item,
-        child: Text(
-          title(item),
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              color: greyOutItem != null
+      value: item,
+      child: Text(
+        title(item),
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color:
+              greyOutItem != null
                   ? (greyOutItem!(item)
                       ? theme.typography.body?.color?.withValues(alpha: 75)
                       : null)
-                  : null),
-        ));
+                  : null,
+        ),
+      ),
+    );
   }
 }

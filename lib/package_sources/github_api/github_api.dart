@@ -25,42 +25,45 @@ class GithubApi {
     log = Logger(this);
   }
 
-  factory GithubApi.wingetVersionManifest(
-          {required PackageId packageID, required String version}) =>
-      GithubApi(
-        repository: 'winget-pkgs',
-        owner: 'microsoft',
-        pathFragments: [
-          'manifests',
-          packageID.initialLetter!,
-          ...packageID.allParts,
-          version
-        ],
-      );
+  factory GithubApi.wingetVersionManifest({
+    required PackageId packageID,
+    required String version,
+  }) => GithubApi(
+    repository: 'winget-pkgs',
+    owner: 'microsoft',
+    pathFragments: [
+      'manifests',
+      packageID.initialLetter!,
+      ...packageID.allParts,
+      version,
+    ],
+  );
 
   factory GithubApi.wingetManifest({required PackageId packageId}) => GithubApi(
-        repository: 'winget-pkgs',
-        owner: 'microsoft',
-        pathFragments: [
-          'manifests',
-          packageId.initialLetter!,
-          ...packageId.allParts
-        ],
-      );
+    repository: 'winget-pkgs',
+    owner: 'microsoft',
+    pathFragments: [
+      'manifests',
+      packageId.initialLetter!,
+      ...packageId.allParts,
+    ],
+  );
 
   factory GithubApi.wingetRepo(List<String> pathFragments) => GithubApi(
-        repository: 'winget-pkgs',
-        owner: 'microsoft',
-        pathFragments: pathFragments,
-      );
+    repository: 'winget-pkgs',
+    owner: 'microsoft',
+    pathFragments: pathFragments,
+  );
 
   Uri get apiUri => Uri(
-      scheme: 'https',
-      host: 'api.github.com',
-      pathSegments: ['repos', owner, repository, 'contents', ...pathFragments]);
+    scheme: 'https',
+    host: 'api.github.com',
+    pathSegments: ['repos', owner, repository, 'contents', ...pathFragments],
+  );
 
-  Future<List<GithubApiFileInfo>> getFiles(
-      {Future<List<GithubApiFileInfo>> Function()? onError}) async {
+  Future<List<GithubApiFileInfo>> getFiles({
+    Future<List<GithubApiFileInfo>> Function()? onError,
+  }) async {
     log.info('Fetching files from $apiUri');
     Response response;
     try {
@@ -68,8 +71,10 @@ class GithubApi {
     } catch (e) {
       if (e.runtimeType.toString() == '_ClientSocketException' &&
           e.toString().startsWith(
-              'ClientException with SocketException: Failed host lookup:')) {
-        bool hasInternet = await InternetConnectionChecker.instance.hasConnection;
+            'ClientException with SocketException: Failed host lookup:',
+          )) {
+        bool hasInternet =
+            await InternetConnectionChecker.instance.hasConnection;
         if (!hasInternet) {
           throw NoInternetException();
         }
@@ -77,9 +82,10 @@ class GithubApi {
       rethrow;
     }
     if (response.statusCode == 200) {
-      final List<GithubApiFileInfo> files = jsonDecode(response.body)
-          .map<GithubApiFileInfo>((e) => GithubApiFileInfo.fromJson(e))
-          .toList();
+      final List<GithubApiFileInfo> files =
+          jsonDecode(response.body)
+              .map<GithubApiFileInfo>((e) => GithubApiFileInfo.fromJson(e))
+              .toList();
       return files;
     }
     if (onError != null) {
@@ -88,15 +94,17 @@ class GithubApi {
     if (response.statusCode == 403 &&
         response.reasonPhrase == 'rate limit exceeded') {
       throw GithubRateLimitException.fromJson(
-          url: apiUri,
-          statusCode: response.statusCode,
-          reasonPhrase: response.reasonPhrase!,
-          jsonBody: response.body);
-    }
-    throw GithubLoadException(
         url: apiUri,
         statusCode: response.statusCode,
-        reasonPhrase: response.reasonPhrase,
-        responseBody: response.body);
+        reasonPhrase: response.reasonPhrase!,
+        jsonBody: response.body,
+      );
+    }
+    throw GithubLoadException(
+      url: apiUri,
+      statusCode: response.statusCode,
+      reasonPhrase: response.reasonPhrase,
+      responseBody: response.body,
+    );
   }
 }

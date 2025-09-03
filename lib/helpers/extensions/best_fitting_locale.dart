@@ -11,16 +11,18 @@ extension BestFittingLocale on intl.Locale {
       return availableLocales.single;
     }
 
-    List<intl.Locale> matchingLocales = availableLocales
-        .where((element) => element.languageCode == languageCode)
-        .toList();
+    List<intl.Locale> matchingLocales =
+        availableLocales
+            .where((element) => element.languageCode == languageCode)
+            .toList();
     if (matchingLocales.isNotEmpty) {
       if (matchingLocales.length == 1) {
         return matchingLocales.single;
       } else {
-        List<intl.Locale> exactMatchingLocales = matchingLocales
-            .where((element) => element.toLanguageTag() == toLanguageTag())
-            .toList();
+        List<intl.Locale> exactMatchingLocales =
+            matchingLocales
+                .where((element) => element.toLanguageTag() == toLanguageTag())
+                .toList();
         if (exactMatchingLocales.isNotEmpty) {
           return exactMatchingLocales.first;
         }
