@@ -4,6 +4,8 @@ import 'package:system_theme/system_theme.dart';
 import 'package:winget_gui/db/package_tables.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
+import 'package:winget_gui/winget_client/cli_winget_client.dart';
+
 
 class GlobalAppData extends StatelessWidget {
   final Widget Function(BuildContext context, Widget? _) builder;
@@ -15,19 +17,32 @@ class GlobalAppData extends StatelessWidget {
     SettingsCache settings = SettingsCache.instance;
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<AppLocales>(
           create:
               (_) => AppLocales(
                 initialGuiLocale: settings.guiLocale,
                 initialWingetLocale: settings.wingetLocale,
               ),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProvider<AppThemeMode>(
           create: (_) => AppThemeMode(settings.themeMode ?? ThemeMode.system),
         ),
         StreamProvider<SystemAccentColor>(
           create: (_) => SystemTheme.onChange,
           initialData: SystemTheme.accentColor,
+        ),
+        ProxyProvider<AppLocales, CliWingetClient>(
+          update: (_, AppLocales value, CliWingetClient? previous) {
+            AppLocalizations wingetLocale = value.getWingetAppLocalization() ?? AppLocalizations.of(context)!;
+            if (previous == null) {
+              return CliWingetClient(wingetLocale);
+            }
+            if (previous.wingetLocale != wingetLocale) {
+              return previous..wingetLocale = wingetLocale;
+            }
+            return previous;
+
+          }
         ),
       ],
       builder: builder,

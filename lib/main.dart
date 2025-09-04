@@ -60,6 +60,7 @@ class WingetGui extends StatelessWidget {
       builder: (context, _) {
         SystemAccentColor systemAccentColor =
             context.watch<SystemAccentColor>();
+
         return FluentApp(
           title: appTitle,
           theme: theme(Brightness.light, systemAccentColor.dark),
