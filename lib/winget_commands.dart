@@ -75,11 +75,12 @@ enum Winget {
   List<String> get fullCommand => [baseCommand, ...options];
 
   Widget processPage(RouteParameter? parameters) {
+    //TODO: add parameters to command
     return Builder(
       builder: (context) {
         return OutputPage.fromWinget(
           this,
-          parameters: [...?parameters?.commandParameter],
+          parameters: [],
           titleInput: parameters?.titleAddon,
         );
       },

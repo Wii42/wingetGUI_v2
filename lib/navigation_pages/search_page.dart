@@ -8,6 +8,8 @@ import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import 'package:winget_gui/widget_assets/sort_by.dart';
 import 'package:winget_gui/widget_assets/winget_db_table_page.dart';
 
+import '../winget_client/winget_command.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
@@ -23,7 +25,7 @@ class SearchPage extends StatefulWidget {
       navigator.pushNamed(
         Routes.deepSearchPage.route,
         arguments: SearchRouteParameter(
-          commandParameter: [input],
+          wingetCommand: CmdSearch(input),
           titleAddon: "'$input'",
           packageFilter: packageFilter,
         ),

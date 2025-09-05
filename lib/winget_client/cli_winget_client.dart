@@ -1,5 +1,4 @@
 import 'package:winget_core/winget_core.dart';
-import 'package:winget_gui/db/winget_table_loader.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
@@ -12,6 +11,7 @@ import '../output_handling/parsed_output.dart';
 import '../output_handling/show_parser.dart';
 import '../package_sources/package_source.dart';
 import '../winget_commands.dart';
+import 'cli_winget_package_list_loader.dart';
 
 class CliWingetClient extends WingetClient {
   CliWingetClient(this.wingetLocale);
@@ -26,7 +26,7 @@ class CliWingetClient extends WingetClient {
 
   @override
   Stream<PackageListWithHints> availablePackages(CmdAvailablePackages cmd) {
-    return search(CmdSearch("", count: cmd.count));
+    return search(CmdSearch("", count: cmd.count, filter: cmd.filter));
   }
 
   @override
@@ -57,7 +57,10 @@ class CliWingetClient extends WingetClient {
 
   @override
   Stream<PackageListWithHints> installed(CmdInstalled cmd) {
-    return _loadPackagesWithTableLoader(Winget.installed.fullCommand);
+    return _loadPackagesWithTableLoader(
+      Winget.installed.fullCommand,
+      filter: cmd.filter,
+    );
   }
 
   @override
@@ -74,7 +77,7 @@ class CliWingetClient extends WingetClient {
         },
       cmd.query,
     ];
-    return _loadPackagesWithTableLoader(command);
+    return _loadPackagesWithTableLoader(command, filter: cmd.filter);
   }
 
   @override
@@ -146,15 +149,24 @@ class CliWingetClient extends WingetClient {
       Winget.upgrade.baseCommand,
       if (cmd.includeUnknown) "--include-unknown",
     ];
-    return _loadPackagesWithTableLoader(command);
+    return _loadPackagesWithTableLoader(command, filter: cmd.filter);
   }
 
   Stream<PackageListWithHints> _loadPackagesWithTableLoader(
-    List<String> command,
-  ) async* {
-    WingetTableLoader loader = WingetTableLoader(command: command);
-    await loader.init(wingetLocale).drain();
+    List<String> command, {
+    List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter,
+  }) async* {
+    CliWingetPackageListLoader loader = CliWingetPackageListLoader(
+      command: command,
+    );
+    await loader.runWingetProcess(wingetLocale);
     List<PackageInfosPeek> infos = loader.extractInfos();
+    if (filter != null) {
+      infos = filter(infos);
+    }
+    if (filter != null) {
+      infos = filter(infos);
+    }
     List<OneLineInfo> hints = loader.extractHints();
     yield PackageListWithHints(infos, hints);
   }

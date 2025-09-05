@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:persistent_storage_interface/interface.dart';
 import 'package:persistent_storage_interface/service.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
@@ -17,6 +18,7 @@ import 'package:winget_gui/navigation_pages/updates_page.dart';
 import 'package:winget_gui/widget_assets/package_details_from_web.dart';
 import 'package:winget_gui/widget_assets/package_peek.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
+import 'package:winget_gui/winget_client/winget_client.dart';
 import 'package:winget_gui/winget_commands.dart';
 
 import 'db/package_tables.dart';
@@ -167,13 +169,13 @@ class TinkeringSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
+    WingetClient client = context.watch<WingetClient>();
     return PaneItemBody(
       title: Routes.tinkeringSection.title(AppLocalizations.of(context)!),
       child: ListView(
         padding: const EdgeInsets.all(10),
         children: [
-          buildDBSettings(wingetLocale),
+          buildDBSettings(client),
           SettingsPage.settingsItem(
             'View DB Tables',
             Column(
@@ -197,7 +199,7 @@ class TinkeringSection extends StatelessWidget {
     );
   }
 
-  Widget buildDBSettings(AppLocalizations wingetLocale) {
+  Widget buildDBSettings(WingetClient client) {
     return SettingsPage.settingsItem(
       'WingetDB',
       Column(
@@ -205,7 +207,7 @@ class TinkeringSection extends StatelessWidget {
         children: [
           Button(
             onPressed: () async {
-              PackageTables.instance.updates.reloadFuture(wingetLocale);
+              PackageTables.instance.updates.reloadFuture(client);
             },
             child: const Text('Reload updates'),
           ),

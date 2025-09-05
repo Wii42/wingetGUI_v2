@@ -5,14 +5,14 @@ import 'package:cron/cron.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:persistent_storage_interface/interface.dart';
 import 'package:persistent_storage_interface/service.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';
-import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/package_infos/package_infos_extension.dart';
-import 'package:winget_gui/winget_commands.dart';
 
+import '../winget_client/winget_client.dart';
+import '../winget_client/winget_command.dart';
 import 'db_message.dart';
 import 'winget_table.dart';
 
@@ -34,7 +34,7 @@ class PackageTables {
     if (_isInitialized) {
       return;
     }
-    AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
+    WingetClient client  = context.read<WingetClient>();
     WidgetsFlutterBinding.ensureInitialized();
 
     yield (locale) => locale.checkingWingetAvailability;
@@ -48,60 +48,36 @@ class PackageTables {
     PersistentStorageService storage = PersistentStorageService.instance;
     installed = await initTable(
       persistentStorage: storage.installedPackages,
-      winget: Winget.installed,
+      wingetCommand: CmdInstalled(),
     );
     updates = await initTable(
       persistentStorage: storage.updatePackages,
-      winget: Winget.updates,
-      creatorFilter: filterUpdates,
+      wingetCommand: CmdUpdates(filter: filterUpdates),
     );
     available = await initTable(
       persistentStorage: storage.availablePackages,
-      winget: Winget.availablePackages,
+      wingetCommand: CmdAvailablePackages(),
     );
-    installed.reloadFuture(wingetLocale);
-    updates.reloadFuture(wingetLocale);
-    available.reloadFuture(wingetLocale);
+    installed.reloadFuture(client);
+    updates.reloadFuture(client);
+    available.reloadFuture(client);
     status = DBStatus.ready;
-    scheduleReloadDBs(wingetLocale);
+    scheduleReloadDBs(client);
     _isInitialized = true;
-    return;
-  }
-
-  Future<void> initDB() async {
-    if (_isInitialized) {
-      return;
-    }
-    PersistentStorageService storage = PersistentStorageService.instance;
-    installed = await initTable(
-      persistentStorage: storage.installedPackages,
-      winget: Winget.installed,
-    );
-    updates = await initTable(
-      persistentStorage: storage.updatePackages,
-      winget: Winget.updates,
-      creatorFilter: filterUpdates,
-    );
-    available = await initTable(
-      persistentStorage: storage.availablePackages,
-      winget: Winget.availablePackages,
-    );
     return;
   }
 
   Future<WingetTable> initTable({
     List<PackageInfosPeek> infos = const [],
     List<OneLineInfo> hints = const [],
-    PackageFilter? creatorFilter,
     required BulkListStorage<PackageInfosPeek> persistentStorage,
-    required Winget winget,
+    required WingetPackageListCommand wingetCommand,
   }) async {
     WingetTable wingetTable = WingetTable(
       infos,
       hints: hints,
-      content: (locale) => locale.wingetTitle(winget.name),
-      wingetCommand: winget.fullCommand,
-      creatorFilter: creatorFilter,
+      content: (locale) => locale.wingetTitle(wingetCommand.telemetryName),
+      wingetCommand: wingetCommand,
       parent: this,
       persistentStorage: persistentStorage,
     );
@@ -183,16 +159,16 @@ class PackageTables {
     return result.exitCode == 0;
   }
 
-  void reloadDBs(AppLocalizations wingetLocale) {
+  void reloadDBs(WingetClient client) {
     for (WingetTable table in tables) {
-      table.reloadFuture(wingetLocale);
+      table.reloadFuture(client);
     }
   }
 
-  void scheduleReloadDBs(AppLocalizations wingetLocale) {
+  void scheduleReloadDBs(WingetClient client) {
     Cron cron = Cron();
     cron.schedule(Schedule(hours: '*/1'), () {
-      reloadDBs(wingetLocale);
+      reloadDBs(client);
     });
   }
 }

@@ -47,9 +47,57 @@ abstract class WingetClient {
   Stream<List<String>> customCommand(CmdCustom cmd);
 }
 
-final class PackageListWithHints{
+final class PackageListWithHints {
   final List<PackageInfosPeek> packages;
   final List<OneLineInfo> hints;
 
   PackageListWithHints(this.packages, this.hints);
+}
+
+extension ExecuteCommand on WingetClient {
+  /// Executes a [WingetCommand] and returns the appropriate result.
+  /// The result type depends on the specific command executed.
+  dynamic executeCommand(WingetCommand command) {
+    switch (command) {
+      case CmdUpdates():
+        return updates(command);
+      case CmdInstalled():
+        return installed(command);
+      case CmdAbout():
+        return about(command);
+      case CmdHelp():
+        return help(command);
+      case CmdSearch():
+        return search(command);
+      case CmdAvailablePackages():
+        return availablePackages(command);
+      case CmdSettings():
+        return settings(command);
+      case CmdInstall():
+        return installPackage(command);
+      case CmdUpdate():
+        return updatePackage(command);
+      case CmdUninstall():
+        return uninstallPackage(command);
+      case CmdShow():
+        return showPackageDetails(command);
+      case CmdCustom():
+        return customCommand(command);
+    }
+  }
+
+  Stream<PackageListWithHints> executePackageListCommand(
+      WingetPackageListCommand command,
+  ) {
+    switch (command) {
+      case CmdUpdates():
+        return updates(command);
+      case CmdInstalled():
+        return installed(command);
+      case CmdSearch():
+        return search(command);
+      case CmdAvailablePackages():
+        return availablePackages(command);
+      }
+  }
 }

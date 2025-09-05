@@ -5,7 +5,9 @@ import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/log_stream.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';
+import 'package:winget_gui/winget_client/winget_command.dart';
 
+import '../winget_client/winget_client.dart';
 import 'db_message.dart';
 import 'package_tables.dart';
 import 'winget_table_loader.dart';
@@ -22,8 +24,7 @@ class WingetTable {
   BulkListStorage<PackageInfosPeek>? persistentStorage;
 
   final LocalizedString content;
-  final List<String> wingetCommand;
-  final PackageFilter? creatorFilter;
+  final WingetPackageListCommand? wingetCommand;
   final StreamController<DBMessage> _streamController =
       StreamController<DBMessage>.broadcast();
 
@@ -32,7 +33,6 @@ class WingetTable {
     this.hints = const [],
     required this.content,
     required this.wingetCommand,
-    this.creatorFilter,
     this.parent,
     this.status = DBStatus.loading,
     this.persistentStorage,
@@ -67,18 +67,22 @@ class WingetTable {
     }
   }
 
-  Stream<LocalizedString> reloadDBTable(AppLocalizations wingetLocale) async* {
+  Stream<LocalizedString> reloadDBTable(WingetClient client) async* {
+    if (wingetCommand == null) {
+      log.warning("No winget command provided, cannot reload table.");
+      return;
+    }
     WingetTableLoader creator = WingetTableLoader(
-      content: content,
-      command: wingetCommand,
-      filter: creatorFilter,
+      wingetCommand!,
     );
-    yield* creator.init(wingetLocale);
-    infos = creator.extractInfos();
-    hints = creator.extractHints();
-    updateIDMap();
+    yield* creator.init(client);
+    await for (PackageListWithHints packageList in creator.packages!) {
+      infos = packageList.packages;
+      hints = packageList.hints;
+      updateIDMap();
+      parent?.notifyListeners();
+    }
     persistentStorage?.saveAll(infos);
-    parent?.notifyListeners();
   }
 
   Stream<DBMessage> get stream => _streamController.stream;
@@ -111,11 +115,10 @@ class WingetTable {
     parent?.notifyListeners();
   }
 
-  Future<void> reloadFuture(AppLocalizations wingetLocale) {
+  Future<void> reloadFuture(WingetClient client) {
     Completer completer = Completer<void>();
-    reloadDBTable(wingetLocale).listen(
+    reloadDBTable(client).listen(
       (LocalizedString event) {
-        log.info(event(wingetLocale));
         _streamController.add(DBMessage(DBStatus.loading, message: event));
       },
       onDone: () {

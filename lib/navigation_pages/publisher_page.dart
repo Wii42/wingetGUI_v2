@@ -57,7 +57,7 @@ class PublisherPage extends StatelessWidget {
               .toList(),
           content:
               (locale) => locale.infoTitle(PackageAttribute.publisher.name),
-          wingetCommand: [],
+          wingetCommand: null,
           status: DBStatus.ready,
         ),
         customReloadStream: PackageTables.instance.available.stream,

@@ -2,6 +2,7 @@ import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/db/package_tables.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 
+import '../winget_client/winget_client.dart';
 import 'package_action_type.dart';
 import 'winget_process.dart';
 import 'winget_process_scheduler.dart';
@@ -16,7 +17,7 @@ class PackageActionProcess extends WingetProcess {
     PackageInfosPeek? info,
     AppLocalizations? wingetLocale,
   }) {
-    addOnDoneCallback((exitCode) => _reloadDB(exitCode, info, wingetLocale));
+    //addOnDoneCallback((exitCode) => _reloadDB(exitCode, info, wingetLocale));
   }
 
   factory PackageActionProcess(
@@ -39,12 +40,12 @@ class PackageActionProcess extends WingetProcess {
   void _reloadDB(
     int exitCode,
     PackageInfosPeek? info,
-    AppLocalizations? wingetLocale,
+      WingetClient? wingetClient,
   ) {
     if (exitCode != 0) {
       return;
     }
-    type.reloadDB(exitCode, info, wingetLocale);
+    type.reloadDB(exitCode, info, wingetClient);
     PackageTables.instance.notifyListeners();
   }
 }

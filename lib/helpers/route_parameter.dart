@@ -1,17 +1,18 @@
 import 'package:persistent_storage_interface/interface.dart';
 import 'package:winget_core/winget_core.dart';
 
+import '../winget_client/winget_command.dart';
 import 'log_stream.dart';
 
 /// Parameters for a route.
 class RouteParameter {
   /// Parameter added to the winget command.
-  final List<String>? commandParameter;
+  final WingetCommand? wingetCommand;
 
   /// String added to the page title.
   final String? titleAddon;
 
-  const RouteParameter({this.commandParameter, this.titleAddon});
+  const RouteParameter({this.wingetCommand, this.titleAddon});
 }
 
 class PackageRouteParameter extends RouteParameter {
@@ -19,7 +20,7 @@ class PackageRouteParameter extends RouteParameter {
 
   const PackageRouteParameter({
     required this.package,
-    super.commandParameter,
+    super.wingetCommand,
     super.titleAddon,
   });
 }
@@ -29,7 +30,7 @@ class StringRouteParameter extends RouteParameter {
 
   const StringRouteParameter({
     required this.string,
-    super.commandParameter,
+    super.wingetCommand,
     super.titleAddon,
   });
 }
@@ -40,7 +41,7 @@ class LogRouteParameter extends RouteParameter {
 
   const LogRouteParameter({
     required this.log,
-    super.commandParameter,
+    super.wingetCommand,
     super.titleAddon,
   });
 }
@@ -48,11 +49,14 @@ class LogRouteParameter extends RouteParameter {
 class SearchRouteParameter extends RouteParameter {
   final bool Function(PackageInfosPeek)? packageFilter;
 
+  @override
+  CmdSearch? get wingetCommand => super.wingetCommand as CmdSearch?;
+
   const SearchRouteParameter({
     this.packageFilter,
-    super.commandParameter,
+    CmdSearch? wingetCommand,
     super.titleAddon,
-  });
+  }) : super(wingetCommand: wingetCommand);
 }
 
 class DBRouteParameter extends RouteParameter {
@@ -60,7 +64,7 @@ class DBRouteParameter extends RouteParameter {
 
   const DBRouteParameter({
     required this.dbTable,
-    super.commandParameter,
+    super.wingetCommand,
     super.titleAddon,
   });
 }

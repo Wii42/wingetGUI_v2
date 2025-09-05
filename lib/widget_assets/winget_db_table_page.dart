@@ -1,8 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_gui/db/winget_table.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
 
+import '../winget_client/winget_client.dart';
 import 'package_list_page.dart';
 import 'package_peek_list_view.dart';
 
@@ -25,7 +27,7 @@ class WingetDBTablePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
-    AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
+    WingetClient client = context.watch<WingetClient>();
     return PackageListPage(
       title: (title != null) ? title!(locale) : null,
       icon: icon,
@@ -34,7 +36,7 @@ class WingetDBTablePage extends StatelessWidget {
         menuOptions: menuOptions,
         packageOptions: packageOptions,
       ),
-      customReload: () => dbTable.reloadFuture(wingetLocale),
+      customReload: () => dbTable.reloadFuture(client),
     );
   }
 }

@@ -9,8 +9,14 @@ sealed class WingetCommand {
   String get telemetryName; // für Logging/Telemetry
 }
 
-final class CmdUpdates extends WingetCommand {
-  const CmdUpdates({this.includeUnknown = true});
+sealed class WingetPackageListCommand extends WingetCommand {
+  const WingetPackageListCommand({this.filter});
+
+  final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter;
+}
+
+final class CmdUpdates extends WingetPackageListCommand {
+  const CmdUpdates({this.includeUnknown = true, super.filter});
 
   /// If true, include packages where the current version is unknown.
   final bool includeUnknown;
@@ -19,8 +25,8 @@ final class CmdUpdates extends WingetCommand {
   String get telemetryName => 'updates';
 }
 
-final class CmdInstalled extends WingetCommand {
-  const CmdInstalled();
+final class CmdInstalled extends WingetPackageListCommand {
+  const CmdInstalled({super.filter});
 
   @override
   String get telemetryName => 'installed';
@@ -40,8 +46,8 @@ final class CmdHelp extends WingetCommand {
   String get telemetryName => 'help';
 }
 
-final class CmdSearch extends WingetCommand {
-  const CmdSearch(this.query, {this.by, this.count});
+final class CmdSearch extends WingetPackageListCommand {
+  const CmdSearch(this.query, {this.by, this.count, super.filter});
 
   final String query;
 
@@ -56,8 +62,8 @@ final class CmdSearch extends WingetCommand {
 
 enum SearchBy { id, name, moniker, tag }
 
-final class CmdAvailablePackages extends WingetCommand {
-  const CmdAvailablePackages({this.count});
+final class CmdAvailablePackages extends WingetPackageListCommand {
+  const CmdAvailablePackages({this.count, super.filter});
 
   final int? count;
 
@@ -124,6 +130,7 @@ final class CmdUninstall extends WingetCommand {
 
 final class CmdShow extends WingetCommand {
   const CmdShow(this.id, {this.source, this.userLocale});
+
   final PackageSource? source;
   final String id;
   final Locale? userLocale;

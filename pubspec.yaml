@@ -43,6 +43,7 @@ dependencies:
     path: local_packages/persistent_storage/isar_storage
   winget_core:
     path: local_packages/winget_core
+  logging: ^1.3.0
 
 dev_dependencies:
   flutter_test:

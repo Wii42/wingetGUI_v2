@@ -2,11 +2,12 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/db/package_tables.dart';
-import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process/package_action_process.dart';
+
+import '../winget_client/winget_client.dart';
 
 enum PackageActionType {
   uninstall(Winget.uninstall, reloadUninstall),
@@ -17,7 +18,7 @@ enum PackageActionType {
   final void Function(
     int exitCode,
     PackageInfosPeek? info,
-    AppLocalizations? wingetLocale,
+    WingetClient? wingetClient,
   )
   reloadDB;
 
@@ -56,7 +57,7 @@ enum PackageActionType {
   static void reloadUninstall(
     int exitCode,
     PackageInfosPeek? info,
-    AppLocalizations? wingetLocale,
+    WingetClient? wingetClient,
   ) {
     PackageTables wingetDB = PackageTables.instance;
     if (exitCode != 0) {
@@ -68,9 +69,9 @@ enum PackageActionType {
       );
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);
     }
-    if (wingetLocale != null && exitCode == 0) {
-      (wingetDB.installed.reloadFuture(wingetLocale)).then((_) {
-        wingetDB.updates.reloadFuture(wingetLocale);
+    if (wingetClient != null && exitCode == 0) {
+      (wingetDB.installed.reloadFuture(wingetClient)).then((_) {
+        wingetDB.updates.reloadFuture(wingetClient);
       });
     }
   }
@@ -78,24 +79,24 @@ enum PackageActionType {
   static void reloadInstall(
     int exitCode,
     PackageInfosPeek? info,
-    AppLocalizations? wingetLocale,
+    WingetClient? wingetClient,
   ) {
     PackageTables wingetDB = PackageTables.instance;
     if (info != null && exitCode == 0) {
       wingetDB.installed.addInfo(info);
     }
-    if (wingetLocale != null) wingetDB.installed.reloadFuture(wingetLocale);
+    if (wingetClient != null) wingetDB.installed.reloadFuture(wingetClient);
   }
 
   static void reloadUpdate(
     int exitCode,
     PackageInfosPeek? info,
-    AppLocalizations? wingetLocale,
+    WingetClient? wingetClient,
   ) {
     PackageTables wingetDB = PackageTables.instance;
     if (info != null && exitCode == 0) {
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);
     }
-    if (wingetLocale != null) wingetDB.updates.reloadFuture(wingetLocale);
+    if (wingetClient != null) wingetDB.updates.reloadFuture(wingetClient);
   }
 }

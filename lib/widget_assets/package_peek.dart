@@ -1,15 +1,21 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
+import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/app_localizer.dart';
+import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
+import 'package:winget_gui/package_infos/package_infos_extension.dart';
 import 'package:winget_gui/package_infos/publisher.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/buttons/page_button.dart';
 import 'package:winget_gui/widget_assets/buttons/right_side_buttons.dart';
+
+import '../winget_client/winget_command.dart';
 
 class PackagePeek extends StatelessWidget {
   final PackageInfosPeek infos;
@@ -50,15 +56,12 @@ class PackagePeek extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Locale? locale = context.watch<AppLocales>().guiLocale;
     return CustomPageButton(
       pageRoute: Routes.show,
       disabled: !isClickable(),
       routeParameter: PackageRouteParameter(
-        commandParameter: [
-          '--id',
-          infos.id!.value.string,
-          //if (infos.hasVersion()) ...['-v', infos.version!.value]
-        ],
+        wingetCommand: CmdShow(infos.id!.value.string, source: infos.packageSource, userLocale: locale?.asIntlLocale),
         titleAddon: infos.name?.value,
         package: infos,
       ),
@@ -77,22 +80,6 @@ class PackagePeek extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
-  }
-
-  Future<void> pushPackageDetails(BuildContext context) async {
-    NavigatorState router = Navigator.of(context);
-    router.pushNamed(
-      Routes.show.route,
-      arguments: PackageRouteParameter(
-        commandParameter: [
-          '--id',
-          infos.id!.value.string,
-          //if (infos.hasVersion()) ...['-v', infos.version!.value]
-        ],
-        titleAddon: infos.name?.value,
-        package: infos,
       ),
     );
   }

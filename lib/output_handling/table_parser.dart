@@ -226,7 +226,7 @@ class ParsedAppTable extends ParsedTable {
           dbTable: WingetTable(
             packages,
             content: (locale) => locale.apps,
-            wingetCommand: [],
+            wingetCommand: null,
           ),
           packageOptions: const PackageListPackageOptions(showAllButtons: true),
         ),
