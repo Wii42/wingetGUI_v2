@@ -1,7 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
-import 'package:winget_gui/db/package_tables.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/winget_client/winget_client.dart';

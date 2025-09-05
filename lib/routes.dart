@@ -23,7 +23,6 @@ import 'package:winget_gui/winget_commands.dart';
 
 import 'db/package_tables.dart';
 import 'navigation_pages/db_table_page.dart';
-import 'output_handling/output_handler.dart';
 
 enum Routes {
   updates(
