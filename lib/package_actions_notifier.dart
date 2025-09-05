@@ -4,8 +4,7 @@ import 'dart:collection';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
-import 'package:winget_gui/winget_process/package_action_type.dart';
-import 'package:winget_gui/winget_process/winget_process.dart';
+import 'package:winget_gui/winget_client/winget_command.dart';
 
 class PackageActionsNotifier extends ChangeNotifier {
   final List<PackageAction> _actions = [];
@@ -45,23 +44,34 @@ class PackageActionsNotifier extends ChangeNotifier {
 
 class PackageAction {
   PackageInfos? infos;
-  PackageActionType? type;
-  WingetProcess process;
+  WingetPackageActionCommand wingetCommand;
+  Stream<List<String>> commandOutputStream;
   Key uniqueKey;
   List<String> output = [];
   StreamSubscription<List<String>>? _outputSubscription;
 
-  PackageAction({required this.process, this.infos, this.type})
-    : uniqueKey = UniqueKey();
+  final Completer<int> _exitCodeCompleter = Completer<int>();
+
+  PackageAction({
+    required this.wingetCommand,
+    this.infos,
+    required this.commandOutputStream,
+  }) : uniqueKey = UniqueKey();
 
   void listenForOutput(PackageActionsNotifier notifier) {
-    _outputSubscription = process.outputStream.listen((event) {
-      output = event;
-      notifier.notify();
-    });
+    _outputSubscription = commandOutputStream.listen(
+      (event) {
+        output = event;
+        notifier.notify();
+      },
+      onDone: () => _exitCodeCompleter.complete(0),
+      onError: (err) => _exitCodeCompleter.complete(1),
+    );
   }
 
   void stopListeningForOutput() {
     _outputSubscription?.cancel();
   }
+
+  Future<int> get exitCode => _exitCodeCompleter.future;
 }

@@ -45,7 +45,15 @@ abstract class WingetClient {
   /// Executes a custom winget command.
   /// Use with caution as this can run any command, when not guarded properly.
   Stream<List<String>> customCommand(CmdCustom cmd);
+
+  /// Returns a stream of the number of currently running winget commands.
+  Stream<int> runningCommandsLength(CmdRunningCommands cmd);
+
+  /// Cancels a running winget command.
+  void cancelCommand(WingetCommand cmd);
 }
+
+
 
 final class PackageListWithHints {
   final List<PackageInfosPeek> packages;
@@ -83,6 +91,8 @@ extension ExecuteCommand on WingetClient {
         return showPackageDetails(command);
       case CmdCustom():
         return customCommand(command);
+      case CmdRunningCommands():
+        return runningCommandsLength(command);
     }
   }
 
@@ -98,6 +108,19 @@ extension ExecuteCommand on WingetClient {
         return search(command);
       case CmdAvailablePackages():
         return availablePackages(command);
+      }
+  }
+
+  Stream<List<String>> executePackageActionCommand(
+      WingetPackageActionCommand command,
+  ) {
+    switch (command) {
+      case CmdInstall():
+        return installPackage(command);
+      case CmdUpdate():
+        return updatePackage(command);
+      case CmdUninstall():
+        return uninstallPackage(command);
       }
   }
 }

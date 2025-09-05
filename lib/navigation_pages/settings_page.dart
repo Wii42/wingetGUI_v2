@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart'
     as fluent_icons;
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_gui/global_app_data.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
@@ -10,8 +11,10 @@ import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/custom_combo_box.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
+import 'package:winget_gui/winget_client/winget_command.dart';
 import 'package:winget_gui/winget_commands.dart';
-import 'package:winget_gui/winget_process/winget_process.dart';
+
+import '../winget_client/winget_client.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -46,6 +49,7 @@ class _SettingsPageSate extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context)!;
+    WingetClient client = context.watch<WingetClient>();
     return PaneItemBody(
       title: Routes.settingsPage.title(localizations),
       child: ListView(
@@ -58,7 +62,7 @@ class _SettingsPageSate extends State<SettingsPage> {
             Winget.settings.title(localizations),
             Button(
               onPressed: () {
-                WingetProcess.fromWinget(Winget.settings);
+                client.settings(CmdSettings());
               },
               child: Text(localizations.openWingetSettingsFile),
             ),

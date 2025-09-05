@@ -9,6 +9,8 @@ import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/server_interface/marti_clement_server_interface.dart';
 import 'package:winget_gui/server_interface/server_interface.dart';
+import 'package:winget_gui/winget_client/winget_client.dart';
+import 'package:winget_gui/winget_client/winget_command.dart';
 
 import 'db/db_message.dart';
 import 'db/package_tables.dart';
@@ -19,7 +21,6 @@ import 'output_handling/one_line_info_builder.dart';
 import 'output_handling/one_line_info_parser.dart';
 import 'package_actions_notifier.dart';
 import 'widget_assets/loading_widget.dart';
-import 'winget_process/winget_process_scheduler.dart';
 
 const String appTitle = 'WingetGUI';
 
@@ -157,6 +158,7 @@ class ProcessSchedulerWarnings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppLocalizations locale = AppLocalizations.of(context)!;
+    WingetClient client = context.watch<WingetClient>();
     return StreamBuilder<int>(
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -174,7 +176,7 @@ class ProcessSchedulerWarnings extends StatelessWidget {
         }
         return const SizedBox();
       },
-      stream: ProcessScheduler.instance.queueLengthStream,
+      stream: client.runningCommandsLength(CmdRunningCommands()),
     );
   }
 }

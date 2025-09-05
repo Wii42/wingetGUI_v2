@@ -11,6 +11,7 @@ import '../output_handling/parsed_output.dart';
 import '../output_handling/show_parser.dart';
 import '../package_sources/package_source.dart';
 import '../winget_commands.dart';
+import '../winget_process/winget_process_scheduler.dart';
 import 'cli_winget_package_list_loader.dart';
 
 class CliWingetClient extends WingetClient {
@@ -169,5 +170,16 @@ class CliWingetClient extends WingetClient {
     }
     List<OneLineInfo> hints = loader.extractHints();
     yield PackageListWithHints(infos, hints);
+  }
+
+  @override
+  Stream<int> runningCommandsLength(CmdRunningCommands cmd) {
+    // TODO: implement runningCommandsLength
+    return ProcessScheduler.instance.queueLengthStream;
+  }
+
+  @override
+  void cancelCommand(WingetCommand cmd) {
+    // TODO: implement cancelCommand
   }
 }

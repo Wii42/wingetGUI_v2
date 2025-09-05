@@ -15,6 +15,16 @@ sealed class WingetPackageListCommand extends WingetCommand {
   final List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter;
 }
 
+/// Command that acts on a specific package identified by [id].
+/// The command changes the state of the package (like install, uninstall, update).
+sealed class WingetPackageActionCommand extends WingetCommand {
+  const WingetPackageActionCommand(this.id);
+
+  final String id;
+
+  WingetPackageActionCommand copyWithId(String id);
+}
+
 final class CmdUpdates extends WingetPackageListCommand {
   const CmdUpdates({this.includeUnknown = true, super.filter});
 
@@ -78,16 +88,15 @@ final class CmdSettings extends WingetCommand {
   String get telemetryName => 'settings';
 }
 
-final class CmdInstall extends WingetCommand {
+final class CmdInstall extends WingetPackageActionCommand {
   const CmdInstall(
-    this.id, {
+    super.id, {
     this.version,
     this.disableInteractivity = true,
     this.autoAcceptSourceAgreements = true,
     this.autoAcceptPackageAgreements = true,
   });
 
-  final String id;
   final VersionOrString? version;
   final bool disableInteractivity;
   final bool autoAcceptSourceAgreements;
@@ -95,18 +104,28 @@ final class CmdInstall extends WingetCommand {
 
   @override
   String get telemetryName => 'install';
+
+  @override
+  CmdInstall copyWithId(String id) {
+    return CmdInstall(
+      id,
+      version: version,
+      disableInteractivity: disableInteractivity,
+      autoAcceptSourceAgreements: autoAcceptSourceAgreements,
+      autoAcceptPackageAgreements: autoAcceptPackageAgreements,
+    );
+  }
 }
 
-final class CmdUpdate extends WingetCommand {
+final class CmdUpdate extends WingetPackageActionCommand {
   const CmdUpdate(
-    this.id, {
+    super.id, {
     this.disableInteractivity = true,
     this.autoAcceptSourceAgreements = true,
     this.autoAcceptPackageAgreements = true,
     this.includeUnknown = true,
   });
 
-  final String id;
   final bool disableInteractivity;
   final bool autoAcceptSourceAgreements;
   final bool autoAcceptPackageAgreements;
@@ -116,16 +135,31 @@ final class CmdUpdate extends WingetCommand {
 
   @override
   String get telemetryName => 'upgrade';
+
+  @override
+  CmdUpdate copyWithId(String id) {
+    return CmdUpdate(
+      id,
+      disableInteractivity: disableInteractivity,
+      autoAcceptSourceAgreements: autoAcceptSourceAgreements,
+      autoAcceptPackageAgreements: autoAcceptPackageAgreements,
+      includeUnknown: includeUnknown,
+    );
+  }
 }
 
-final class CmdUninstall extends WingetCommand {
-  const CmdUninstall(this.id, {this.version});
+final class CmdUninstall extends WingetPackageActionCommand {
+  const CmdUninstall(super.id, {this.version});
 
-  final String id;
   final VersionOrString? version;
 
   @override
   String get telemetryName => 'uninstall';
+
+  @override
+  CmdUninstall copyWithId(String id) {
+    return CmdUninstall(id, version: version);
+  }
 }
 
 final class CmdShow extends WingetCommand {
@@ -147,4 +181,11 @@ final class CmdCustom extends WingetCommand {
 
   @override
   String get telemetryName => name;
+}
+
+final class CmdRunningCommands extends WingetCommand {
+  const CmdRunningCommands();
+
+  @override
+  String get telemetryName => 'running_commands';
 }

@@ -1,63 +1,63 @@
+import 'dart:async';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/db/package_tables.dart';
-import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
-import 'package:winget_gui/winget_commands.dart';
-import 'package:winget_gui/winget_process/package_action_process.dart';
 
 import '../winget_client/winget_client.dart';
+import '../winget_client/winget_command.dart';
 
-enum PackageActionType {
-  uninstall(Winget.uninstall, reloadUninstall),
-  install(Winget.install, reloadInstall),
-  update(Winget.upgrade, reloadUpdate);
+class PackageActionType {
 
-  final Winget winget;
-  final void Function(
-    int exitCode,
-    PackageInfosPeek? info,
-    WingetClient? wingetClient,
-  )
-  reloadDB;
-
-  const PackageActionType(this.winget, this.reloadDB);
-
-  List<String> createCommand(PackageInfos package) {
-    return [...winget.fullCommand, ...commandArgs(package)];
-  }
-
-  List<String> commandArgs(PackageInfos package) {
-    return [
-      '--id',
-      package.id!.value.string,
-      if (winget != Winget.upgrade && package.hasVersion()) ...[
-        '-v',
-        package.version!.value.stringValue,
-      ],
-    ];
-  }
-
-  void runAction(PackageInfos package, BuildContext context) {
-    PackageActionProcess process = PackageActionProcess(
-      this,
-      args: commandArgs(package),
-      info: package.toPeek(),
-      wingetLocale: OutputHandler.getWingetLocale(context),
-    );
+  static void runAction(
+    WingetPackageActionCommand winget,
+    PackageInfos package,
+    BuildContext context,
+  ) {
+    WingetClient client = context.read<WingetClient>();
+    Stream<List<String>> commandOutputStream = client
+        .executePackageActionCommand(winget);
     PackageAction action = PackageAction(
-      process: process,
       infos: package,
-      type: this,
+      wingetCommand: winget,
+      commandOutputStream: onFinished(
+        commandOutputStream,
+        _reloadDbOnDone(winget, package, client),
+      ),
     );
     Provider.of<PackageActionsNotifier>(context, listen: false).add(action);
+  }
+
+  static void Function(bool completed) _reloadDbOnDone(
+    WingetPackageActionCommand winget,
+    PackageInfos package,
+    WingetClient client,
+  ) => (bool completed) {
+    reloadDB(winget)(completed ? 0 : 1, package.toPeek(), client);
+  };
+
+  static void Function(
+    int exitCode,
+    PackageInfosPeek? info,
+    WingetClient wingetClient,
+  )
+  reloadDB(WingetPackageActionCommand winget) {
+    switch (winget) {
+      case CmdInstall():
+        return reloadInstall;
+      case CmdUninstall():
+        return reloadUninstall;
+      case CmdUpdate():
+        return reloadUpdate;
+    }
   }
 
   static void reloadUninstall(
     int exitCode,
     PackageInfosPeek? info,
-    WingetClient? wingetClient,
+    WingetClient wingetClient,
   ) {
     PackageTables wingetDB = PackageTables.instance;
     if (exitCode != 0) {
@@ -69,7 +69,7 @@ enum PackageActionType {
       );
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);
     }
-    if (wingetClient != null && exitCode == 0) {
+    if (exitCode == 0) {
       (wingetDB.installed.reloadFuture(wingetClient)).then((_) {
         wingetDB.updates.reloadFuture(wingetClient);
       });
@@ -79,24 +79,42 @@ enum PackageActionType {
   static void reloadInstall(
     int exitCode,
     PackageInfosPeek? info,
-    WingetClient? wingetClient,
+    WingetClient wingetClient,
   ) {
     PackageTables wingetDB = PackageTables.instance;
     if (info != null && exitCode == 0) {
       wingetDB.installed.addInfo(info);
     }
-    if (wingetClient != null) wingetDB.installed.reloadFuture(wingetClient);
+    wingetDB.installed.reloadFuture(wingetClient);
   }
 
   static void reloadUpdate(
     int exitCode,
     PackageInfosPeek? info,
-    WingetClient? wingetClient,
+    WingetClient wingetClient,
   ) {
     PackageTables wingetDB = PackageTables.instance;
     if (info != null && exitCode == 0) {
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);
     }
-    if (wingetClient != null) wingetDB.updates.reloadFuture(wingetClient);
+    wingetDB.updates.reloadFuture(wingetClient);
+  }
+
+  static Stream<T> onFinished<T>(
+    Stream<T> source,
+    FutureOr<void> Function(bool completed) action, {
+    bool onlyOnComplete = false, // if true: don't run on cancel
+  }) async* {
+    var completed = false;
+    try {
+      await for (final e in source) {
+        yield e;
+      }
+      completed = true; // reached natural "done"
+    } finally {
+      if (!onlyOnComplete || completed) {
+        await action(completed);
+      }
+    }
   }
 }

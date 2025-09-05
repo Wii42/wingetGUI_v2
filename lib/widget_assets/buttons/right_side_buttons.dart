@@ -2,8 +2,9 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/winget_process/package_action_type.dart';
 
+import '../../winget_client/winget_command.dart';
+import '../../winget_commands.dart';
 import 'package_action_button.dart';
 
 class RightSideButtons extends StatelessWidget {
@@ -32,23 +33,27 @@ class RightSideButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? id = infos.id?.value.string;
+    if (id == null) {
+      return const SizedBox.shrink();
+    }
     return buttons([
       ButtonInfo(
-        type: PackageActionType.install,
+        type: CmdInstall(id),
         visibility: ButtonVisibility.from(
           active: install,
           showIfInactive: showUnselectedOptionsAsDisabled,
         ),
       ),
       ButtonInfo(
-        type: PackageActionType.update,
+        type: CmdUpdate(id),
         visibility: ButtonVisibility.from(
           active: upgrade,
           showIfInactive: showUnselectedOptionsAsDisabled,
         ),
       ),
       ButtonInfo(
-        type: PackageActionType.uninstall,
+        type: CmdUninstall(id),
         visibility: ButtonVisibility.from(
           active: uninstall,
           showIfInactive: showUnselectedOptionsAsDisabled,
@@ -85,9 +90,9 @@ class RightSideButtons extends StatelessWidget {
   Widget? createButton(ButtonInfo buttonInfo, AppLocalizations locale) {
     if (buttonInfo.visibility == ButtonVisibility.invisible) return null;
     String appName = infos.name?.value ?? infos.id!.value.string;
-    PackageActionType command = buttonInfo.type;
+    WingetPackageActionCommand command = buttonInfo.type;
     if (iconsOnly) {
-      assert(command.winget.icon != null);
+      assert(Winget.typeFromCmd(command)?.icon != null);
       return iconButton(
         command,
         locale,
@@ -103,7 +108,7 @@ class RightSideButtons extends StatelessWidget {
   }
 
   Widget textButton(
-    PackageActionType action,
+    WingetPackageActionCommand action,
     AppLocalizations locale, {
     required bool disabled,
   }) {
@@ -117,13 +122,13 @@ class RightSideButtons extends StatelessWidget {
   }
 
   Widget iconButton(
-    PackageActionType action,
+    WingetPackageActionCommand action,
     AppLocalizations locale,
     String appName, {
     required bool disabled,
   }) {
     return PackageActionIconButton(
-      icon: action.winget.icon ?? FluentIcons.error,
+      icon: Winget.typeFromCmd(action)?.icon ?? FluentIcons.error,
       padding:
           numberOfButtons < 3
               ? const EdgeInsets.all(5)
@@ -144,7 +149,7 @@ class RightSideButtons extends StatelessWidget {
 }
 
 class ButtonInfo {
-  final PackageActionType type;
+  final WingetPackageActionCommand type;
   final ButtonVisibility visibility;
 
   const ButtonInfo({required this.type, required this.visibility});

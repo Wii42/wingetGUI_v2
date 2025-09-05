@@ -4,16 +4,13 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/output_handling/output_handler.dart';
-import 'package:winget_gui/output_handling/output_parser.dart';
-import 'package:winget_gui/output_handling/parsed_output.dart';
-import 'package:winget_gui/output_handling/show_parser.dart';
 import 'package:winget_gui/package_actions_notifier.dart';
 import 'package:winget_gui/widget_assets/app_icon.dart';
 import 'package:winget_gui/widget_assets/custom_expander.dart';
 import 'package:winget_gui/widget_assets/decorated_card.dart';
 import 'package:winget_gui/widget_assets/full_width_progress_bar.dart';
-import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
+import 'package:winget_gui/winget_client/winget_client.dart';
+import 'package:winget_gui/winget_commands.dart';
 
 class PackageActionsList extends StatelessWidget {
   final double maxListHeight;
@@ -94,7 +91,7 @@ class PackageActionWidget extends StatelessWidget {
     AppLocalizations localization = AppLocalizations.of(context)!;
     return DecoratedCard(
       child: FutureBuilder<int>(
-        future: action.process.process.exitCode,
+        future: action.exitCode,
         builder: (context, exitCode) {
           closeWidgetAfterDone(context, exitCode);
           return SizedBox(
@@ -114,7 +111,10 @@ class PackageActionWidget extends StatelessWidget {
                     ),
                   Row(
                     children: [
-                      Icon(action.type?.winget.icon, size: 15),
+                      Icon(
+                        Winget.typeFromCmd(action.wingetCommand)?.icon,
+                        size: 15,
+                      ),
                       actionTitle(localization),
                     ].withSpaceBetween(width: 5),
                   ),
@@ -158,7 +158,9 @@ class PackageActionWidget extends StatelessWidget {
       }
     } else {
       return button(FluentIcons.chrome_close, localization.endProcess, () {
-        ProcessScheduler.instance.removeProcess(action.process.process);
+        WingetClient client = context.read<WingetClient>();
+        client.cancelCommand(action.wingetCommand);
+        //ProcessScheduler.instance.removeProcess(action.process.process);
         closeActionWidget(context);
       });
     }
@@ -166,7 +168,7 @@ class PackageActionWidget extends StatelessWidget {
 
   Text actionTitle(AppLocalizations locale) {
     return Text(
-      action.infos?.name?.value ?? action.process.command.join(' '),
+      action.infos?.name?.value ?? action.wingetCommand.telemetryName,
       style: const TextStyle(fontWeight: FontWeight.bold),
     );
   }
@@ -184,7 +186,7 @@ class PackageActionWidget extends StatelessWidget {
   ) async {
     if (snapshot.connectionState == ConnectionState.done) {
       PackageActionsNotifier actions = PackageActionsNotifier.of(context);
-      int exitCode = await action.process.process.exitCode;
+      int exitCode = await action.exitCode;
       if (exitCode == 0) {
         Future.delayed(
           const Duration(seconds: 5),
@@ -194,21 +196,21 @@ class PackageActionWidget extends StatelessWidget {
   }
 
   Widget outputField(AsyncSnapshot<int> exitCode, BuildContext context) {
-    AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
+    //AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     AppLocalizations locale = AppLocalizations.of(context)!;
-    FutureOr<ParsedOutput>? output;
-    if (action.output.isNotEmpty) {
-      OutputHandler handler = OutputHandler(
-        action.output,
-        command: action.process.command,
-      );
-      handler.determineResponsibility(wingetLocale);
-      OutputParser? lastPart = handler.outputParsers.lastOrNull;
-      if (lastPart != null && lastPart is! ShowParser) {
-        output = lastPart.parse(wingetLocale);
-      }
-      //output = handler.outputParsers.lastOrNull?.parse(wingetLocale);
-    }
+    //FutureOr<ParsedOutput>? output;
+    //if (action.output.isNotEmpty) {
+    //  OutputHandler handler = OutputHandler(
+    //    action.output,
+    //    command: action.process.command,
+    //  );
+    //  handler.determineResponsibility(wingetLocale);
+    //  OutputParser? lastPart = handler.outputParsers.lastOrNull;
+    //  if (lastPart != null && lastPart is! ShowParser) {
+    //    output = lastPart.parse(wingetLocale);
+    //  }
+    //  //output = handler.outputParsers.lastOrNull?.parse(wingetLocale);
+    //}
     return Expanded(
       child: Stack(
         children: [
@@ -216,24 +218,28 @@ class PackageActionWidget extends StatelessWidget {
             constraints: BoxConstraints(maxHeight: contentHeight),
             child: Center(
               child: SingleChildScrollView(
-                child: Builder(
-                  builder: (context) {
-                    if (output != null && output is Future) {
-                      return FutureBuilder<ParsedOutput>(
-                        future: output as Future<ParsedOutput>,
-                        builder:
-                            (context, futureSnapshot) =>
-                                futureSnapshot.data?.widgetRepresentation() ??
-                                fallbackText(locale),
-                      );
-                    } else if (output != null && output is ParsedOutput) {
-                      return output.singleLineRepresentations().lastOrNull ??
-                          fallbackText(locale);
-                    } else {
-                      return fallbackText(locale);
-                    }
-                  },
-                ),
+                child:
+                    action.output.isNotEmpty
+                        ? Text(action.output.lastWhere((t)=>t.trim().isNotEmpty))
+                        : fallbackText(locale),
+                //Builder(
+                //  builder: (context) {
+                //    if (output != null && output is Future) {
+                //      return FutureBuilder<ParsedOutput>(
+                //        future: output as Future<ParsedOutput>,
+                //        builder:
+                //            (context, futureSnapshot) =>
+                //                futureSnapshot.data?.widgetRepresentation() ??
+                //                fallbackText(locale),
+                //      );
+                //    } else if (output != null && output is ParsedOutput) {
+                //      return output.singleLineRepresentations().lastOrNull ??
+                //          fallbackText(locale);
+                //    } else {
+                //      return fallbackText(locale);
+                //    }
+                //  },
+                //),
               ),
             ),
           ),

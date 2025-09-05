@@ -1,15 +1,19 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 
+import '../../winget_client/winget_client.dart';
+import '../../winget_client/winget_command.dart';
+import '../../winget_commands.dart';
 import 'abstract_button.dart';
 import 'run_button.dart';
 
 class PackageActionButton extends RunButton
     with TextButtonWithIconMixin, FilledButtonMixin, RunPackageActionMixin {
   @override
-  final PackageActionType type;
+  final WingetPackageActionCommand type;
   @override
   final PackageInfos infos;
   final bool showIcon;
@@ -22,19 +26,20 @@ class PackageActionButton extends RunButton
     super.disabled,
     this.showIcon = true,
     required this.locale,
-  }) : super(command: type.createCommand(infos));
+  }) : super(command: [type.telemetryName]);
 
   @override
-  IconData? get icon => showIcon ? type.winget.icon : null;
+  IconData? get icon => showIcon ? Winget.typeFromCmd(type)?.icon : null;
 
   @override
-  String get buttonText => type.winget.title(locale);
+  String get buttonText =>
+      Winget.typeFromCmd(type)?.title(locale) ?? type.telemetryName;
 }
 
 class PackageActionIconButton extends RunButton
     with IconButtonMixin, RunPackageActionMixin {
   @override
-  final PackageActionType type;
+  final WingetPackageActionCommand type;
   @override
   final PackageInfos infos;
   @override
@@ -49,14 +54,16 @@ class PackageActionIconButton extends RunButton
     this.padding = EdgeInsets.zero,
     required this.infos,
     super.disabled,
-  }) : super(command: type.createCommand(infos));
+  }) : super(command: [type.telemetryName]);
 }
 
 mixin RunPackageActionMixin on RunButton {
-  PackageActionType get type;
+  WingetPackageActionCommand get type;
 
   PackageInfos get infos;
 
   @override
-  void onPressed(BuildContext context) => type.runAction(infos, context);
+  void onPressed(BuildContext context) {
+    PackageActionType.runAction(type, infos, context);
+  }
 }

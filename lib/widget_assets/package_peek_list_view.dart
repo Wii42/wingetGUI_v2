@@ -13,8 +13,9 @@ import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/output_handling/one_line_info_builder.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';
 import 'package:winget_gui/package_infos/package_infos_extension.dart';
-import 'package:winget_gui/winget_process/package_action_type.dart';
+import 'package:winget_gui/winget_client/winget_command.dart';
 
+import '../winget_commands.dart';
 import 'buttons/package_multi_action_button.dart';
 import 'buttons/search_button.dart';
 import 'buttons/tooltips.dart';
@@ -257,7 +258,7 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
         searchField(),
         if (options.deepSearchButton) deepSearchButton(),
       ],
-      for (PackageActionType action in options.runActionOnAllPackagesButtons)
+      for (WingetPackageActionCommand action in options.runActionOnAllPackagesButtons)
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [packageActionOnAll(visiblePackages, action)],
@@ -395,17 +396,16 @@ class _PackagePeekListViewState extends State<PackagePeekListView> {
   }
 
   /// button which performs the selected [PackageActionType] ((un-)install/upgrade) on all packages
-  Widget packageActionOnAll(
-    List<PackageInfos> packages,
-    PackageActionType action,
-  ) {
+  Widget packageActionOnAll(List<PackageInfos> packages, WingetPackageActionCommand action) {
     AppLocalizations locale = AppLocalizations.of(context)!;
     return PackageMultiActionButton(
       type: action,
       packages: packages,
       locale: locale,
       tooltipMessage:
-          (locale) => locale.actionOnAll(action.winget.title(locale)),
+          (locale) => locale.actionOnAll(
+            Winget.typeFromCmd(action)?.title(locale) ?? action.telemetryName,
+          ),
     );
   }
 
@@ -447,7 +447,7 @@ class PackageListMenuOptions {
   final bool sortDefaultReversed;
   final bool deepSearchButton;
   final bool filterField;
-  final List<PackageActionType> runActionOnAllPackagesButtons;
+  final List<WingetPackageActionCommand> runActionOnAllPackagesButtons;
 
   const PackageListMenuOptions({
     this.onlyWithSourceButton = true,

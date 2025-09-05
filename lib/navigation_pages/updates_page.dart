@@ -4,6 +4,7 @@ import 'package:winget_gui/db/winget_table.dart';
 import 'package:winget_gui/widget_assets/package_peek_list_view.dart';
 import 'package:winget_gui/widget_assets/sort_by.dart';
 import 'package:winget_gui/widget_assets/winget_db_table_page.dart';
+import 'package:winget_gui/winget_client/winget_command.dart';
 import 'package:winget_gui/winget_commands.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 
@@ -34,7 +35,7 @@ class UpdatesPage extends StatelessWidget {
           SortBy.version,
           SortBy.auto,
         ],
-        runActionOnAllPackagesButtons: [PackageActionType.update],
+        runActionOnAllPackagesButtons: [CmdUpdate('')],
       ),
       packageOptions: PackageListPackageOptions(
         isInstalled: (_) => true,
