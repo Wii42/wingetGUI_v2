@@ -1,9 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/db/db_message.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/winget_client/winget_client.dart';
 import 'package:winget_gui/winget_client/winget_command.dart';
 
 import '../../winget_commands.dart';
@@ -52,7 +50,6 @@ mixin RunPackageActionMixin on NormalButton {
 
   @override
   void onPressed(BuildContext context) {
-    WingetClient client = context.read<WingetClient>();
     for (var info in packages) {
       Info<PackageId>? id = info.id;
       if (id != null) {

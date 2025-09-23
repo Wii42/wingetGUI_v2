@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';
@@ -174,12 +175,16 @@ class CliWingetClient extends WingetClient {
 
   @override
   Stream<int> runningCommandsLength(CmdRunningCommands cmd) {
-    // TODO: implement runningCommandsLength
     return ProcessScheduler.instance.queueLengthStream;
   }
 
   @override
   void cancelCommand(WingetCommand cmd) {
-    // TODO: implement cancelCommand
+    return;
+    ProcessWrap? p = ProcessScheduler.instance
+        .runningProcesses.firstWhereOrNull((a) => false);
+    if(p != null) {
+      ProcessScheduler.instance.removeProcess(p);
+    }
   }
 }

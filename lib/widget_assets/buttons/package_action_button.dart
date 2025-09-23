@@ -1,10 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/winget_process/package_action_type.dart';
 
-import '../../winget_client/winget_client.dart';
 import '../../winget_client/winget_command.dart';
 import '../../winget_commands.dart';
 import 'abstract_button.dart';

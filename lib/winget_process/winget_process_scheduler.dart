@@ -63,6 +63,12 @@ class ProcessScheduler {
     return "$state with Queue ${_processQueue.map((e) => e.name).toList()}";
   }
 
+  /// Returns a lust of currently running and queued processes.
+  List<ProcessWrap> get runningProcesses => List.unmodifiable([
+    if (_currentProcess != null) _currentProcess!,
+    ..._processQueue,
+  ]);
+
   Stream<int> get queueLengthStream => _streamController.stream;
 }
 

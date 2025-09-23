@@ -6,7 +6,6 @@ import 'package:winget_gui/widget_assets/sort_by.dart';
 import 'package:winget_gui/widget_assets/winget_db_table_page.dart';
 import 'package:winget_gui/winget_client/winget_command.dart';
 import 'package:winget_gui/winget_commands.dart';
-import 'package:winget_gui/winget_process/package_action_type.dart';
 
 WingetTable dbTable = PackageTables.instance.updates;
 
