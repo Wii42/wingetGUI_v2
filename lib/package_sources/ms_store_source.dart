@@ -8,12 +8,12 @@ class MSStoreSource extends PackageSource {
   MSStoreSource(super.package);
 
   @override
-  Future<PackageInfosFull> fetchInfos(Locale? guiLocale) async {
+  Stream<PackageInfosFull> fetchInfos(Locale? guiLocale) async* {
     if (package.id == null) {
       throw Exception('Package has no ID');
     }
     Map<String, dynamic> map = await api!.getJson();
-    return PackageInfosFull.fromMSJson(
+    yield PackageInfosFull.fromMSJson(
       file: map,
       locale: guiLocale,
       source: 'msstore',

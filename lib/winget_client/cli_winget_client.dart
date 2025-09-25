@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
@@ -97,11 +98,20 @@ class CliWingetClient extends WingetClient {
 
   @override
   WingetTask<PackageInfosFull> showPackageDetails(CmdShow cmd) {
-    Future<PackageInfosFull> result = _fetchPackageDetails(cmd);
+    Stream<PackageInfosFull> result = _fetchPackageDetails(cmd);
+
+    final StreamSplitter<PackageInfosFull> splitter = StreamSplitter(result);
+
+    final Stream<PackageInfosFull> forwarded =
+        splitter.split(); // für normale Konsumenten
+    final Future<PackageInfosFull> lastFuture =
+        splitter.split().last; // separater Ast nur für .last
+
+    splitter.close();
     return WingetTask(
-      result: result.asStream(),
+      result: forwarded,
       taskId: -1,
-      hasCompletedSuccessfully: result.then(
+      hasCompletedSuccessfully: lastFuture.then(
         (_) => true,
         onError: (error, stacktrace) {
           print("$error\n$stacktrace");
@@ -113,12 +123,13 @@ class CliWingetClient extends WingetClient {
     );
   }
 
-  Future<PackageInfosFull> _fetchPackageDetails(CmdShow cmd) async {
+  Stream<PackageInfosFull> _fetchPackageDetails(CmdShow cmd) async* {
     if (cmd.source != null) {
       PackageSource source = cmd.source!;
       try {
-        PackageInfosFull infos = await source.fetchInfos(cmd.userLocale);
-        return infos;
+        Stream<PackageInfosFull> infos = source.fetchInfos(cmd.userLocale);
+        yield* infos;
+        return;
       } catch (e) {
         // Fallback to winget if the source fails
         print(
@@ -126,21 +137,24 @@ class CliWingetClient extends WingetClient {
         );
       }
     }
+    yield* _fetchInfosLocally(cmd);
+  }
+
+  Stream<PackageInfosFull> _fetchInfosLocally(CmdShow cmd) async* {
     WingetProcess p = WingetProcess.fromWinget(
       Winget.show,
       parameters: ['--id', cmd.id],
     );
-    List<String> rawOutput = await p.outputStream.last;
-    OutputHandler handler = OutputHandler(
-      rawOutput,
-      command: Winget.show.fullCommand,
-    );
-    handler.determineResponsibility(wingetLocale);
-    List<ParsedOutput> parsedOutput = await handler.getParsedOutputList(
-      wingetLocale,
-    );
-    Iterable<ParsedShow> shows = parsedOutput.whereType<ParsedShow>();
-    return shows.firstOrNull?.infos ?? PackageInfosFull();
+    Stream<List<String>> rawOutput = p.outputStream;
+    await for (List<String> event in rawOutput) {
+      OutputHandler handler = OutputHandler(event, command: p.command);
+      handler.determineResponsibility(wingetLocale);
+      List<ParsedOutput> parsedOutput = await handler.getParsedOutputList(
+        wingetLocale,
+      );
+      Iterable<ParsedShow> shows = parsedOutput.whereType<ParsedShow>();
+      yield shows.firstOrNull?.infos ?? PackageInfosFull();
+    }
   }
 
   @override
@@ -176,7 +190,12 @@ class CliWingetClient extends WingetClient {
       Winget.upgrade.baseCommand,
       if (cmd.includeUnknown) "--include-unknown",
     ];
-    return _loadPackagesWithTableLoader(command, cmd, () => updates(cmd), filter: cmd.filter);
+    return _loadPackagesWithTableLoader(
+      command,
+      cmd,
+      () => updates(cmd),
+      filter: cmd.filter,
+    );
   }
 
   WingetTask<List<String>> _getWingetTaskFromProcess(

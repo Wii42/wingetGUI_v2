@@ -76,7 +76,8 @@ enum PackageAttribute {
   String key(PackageLocalizer local) {
     String? key = local.infoKey(this.name);
     if (key == null) {
-      throw Exception("$key: ${this.name} in AppAttributes.key");
+      return "<${this.name}>";
+      //throw Exception("$key: ${this.name} in AppAttributes.key");
     }
     return key;
   }

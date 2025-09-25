@@ -42,10 +42,10 @@ class WingetSource extends PackageSource {
   List<String> get idAsPath => package.id?.value.allParts ?? [];
 
   @override
-  Future<PackageInfosFull> fetchInfos(Locale? guiLocale) async {
+  Stream<PackageInfosFull> fetchInfos(Locale? guiLocale) async* {
     PackageId packageID =
         package.hasCompleteId() ? package.id!.value : await reconstructFullId();
-    return extractInfosOnlineFromId(guiLocale, packageID);
+    yield* extractInfosOnlineFromId(guiLocale, packageID);
   }
 
   Future<PackageId> reconstructFullId() async {
@@ -141,10 +141,10 @@ class WingetSource extends PackageSource {
     return matchingFiles;
   }
 
-  Future<PackageInfosFull> extractInfosOnlineFromId(
+  Stream<PackageInfosFull> extractInfosOnlineFromId(
     Locale? guiLocale,
     PackageId packageID,
-  ) async {
+  ) async* {
     List<GithubApiFileInfo> files = await getFiles(packageID);
     if (!WingetPackageVersionManifest.isVersionManifest(
       files,
@@ -173,6 +173,11 @@ class WingetSource extends PackageSource {
       details.downloadUrl,
       keysToRemove: ['ManifestVersion', 'ManifestType'],
     );
+    yield PackageInfosFull.fromYamlMap(
+      details: detailsMap != null? Map.from(detailsMap) : null,
+      installerDetails: null,
+      source: 'winget',
+    );
     Map<dynamic, dynamic>? installerMap = await getMap(
       manifest.installer.downloadUrl,
       keysToRemove: [
@@ -183,7 +188,7 @@ class WingetSource extends PackageSource {
       ],
     );
 
-    return PackageInfosFull.fromYamlMap(
+    yield PackageInfosFull.fromYamlMap(
       details: detailsMap,
       installerDetails: installerMap,
       source: 'winget',

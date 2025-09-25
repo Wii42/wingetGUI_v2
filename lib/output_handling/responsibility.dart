@@ -7,4 +7,9 @@ class Responsibility {
   Responsibility(this.line, {this.respParser});
 
   bool isHandled() => respParser != null;
+
+  @override
+  String toString() {
+    return 'Responsibility(line: $line, respParser: $respParser)';
+  }
 }

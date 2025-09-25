@@ -11,7 +11,7 @@ abstract class PackageSource {
     log = Logger(this);
   }
 
-  Future<PackageInfosFull> fetchInfos(Locale? guiLocale);
+  Stream<PackageInfosFull> fetchInfos(Locale? guiLocale);
 
   /// The URL to the manifest file/folder of the package for the user, not API.
   /// If not available, returns null.

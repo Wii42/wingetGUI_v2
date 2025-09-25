@@ -160,6 +160,6 @@ class PackageDetailsFromWeb extends StatelessWidget {
   Future<PackageInfosFull> getInfos(Locale? guiLocale) async {
     PackageSource source = package.packageSource!;
 
-    return source.fetchInfos(guiLocale?.asIntlLocale);
+    return source.fetchInfos(guiLocale?.asIntlLocale).last;
   }
 }

@@ -29,7 +29,7 @@ class ShowParser extends OutputParser {
 
     Map<String, String>? installerDetails;
     if (infos.hasInfo(PackageAttribute.installer, localizer)) {
-      installerDetails = extractInstallerDetails(infos, locale);
+      installerDetails = extractInstallerDetails(infos, localizer);
       infos.remove(PackageAttribute.installer.key(locale.asLocalizer));
     }
     PackageInfosFull parsedInfos = PackageInfosFull.fromMap(
@@ -96,7 +96,7 @@ class ShowParser extends OutputParser {
 
   Map<String, String> extractInstallerDetails(
     Map<String, String> infos,
-    wingetLocale,
+    AppLocalizer wingetLocale,
   ) {
     return extractDetails(
       infos[PackageAttribute.installer.key(wingetLocale)]!
