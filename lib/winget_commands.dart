@@ -1,9 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:winget_core/winget_core.dart';
-import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/winget_client/winget_command.dart';
-import 'package:winget_gui/winget_process/result_page.dart';
 
 enum Winget {
   updates('upgrade', options: ['--include-unknown'], aliases: ['update']),
@@ -75,11 +73,10 @@ enum Winget {
 
   List<String> get fullCommand => [baseCommand, ...options];
 
-
   List<String> get allNames => [baseCommand, ...aliases];
 
-  static Winget? typeFromCmd(WingetCommand cmd){
-    switch(cmd){
+  static Winget? typeFromCmd(WingetCommand cmd) {
+    switch (cmd) {
       case CmdInstall():
         return Winget.install;
       case CmdAbout():

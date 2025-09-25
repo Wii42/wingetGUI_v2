@@ -1,10 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:provider/provider.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/winget_process/result_page.dart';
-
-import '../winget_client/winget_client.dart';
-import '../winget_client/winget_command.dart';
 
 class PaneItemBody extends StatelessWidget {
   static const double iconSize = 40;
@@ -83,8 +78,7 @@ class PaneItemBody extends StatelessWidget {
               width: iconSize,
               height: iconSize,
               child: IconButton(
-                onPressed:
-                    customReload,
+                onPressed: customReload,
                 icon: const Icon(FluentIcons.update_restore),
               ),
             ),
