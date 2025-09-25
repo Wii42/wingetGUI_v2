@@ -24,7 +24,7 @@ class WingetTableLoader {
   Stream<LocalizedString> init(WingetClient client) async* {
     yield (locale) =>
         locale.readOutputOfCommand("winget: ${wingetCommand.telemetryName}");
-    packages = client.executePackageListCommand(wingetCommand);
+    packages = client.executePackageListCommand(wingetCommand).result;
 
     yield (locale) => locale.parsingContent(content(locale));
     return;

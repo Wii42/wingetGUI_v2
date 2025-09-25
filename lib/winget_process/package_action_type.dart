@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
@@ -10,23 +8,26 @@ import '../winget_client/winget_client.dart';
 import '../winget_client/winget_command.dart';
 
 class PackageActionType {
-
   static void runAction(
     WingetPackageActionCommand winget,
     PackageInfos package,
     BuildContext context,
   ) {
     WingetClient client = context.read<WingetClient>();
-    Stream<List<String>> commandOutputStream = client
-        .executePackageActionCommand(winget);
+    WingetTask<List<String>> wingetTask = client.executePackageActionCommand(
+      winget,
+    );
     PackageAction action = PackageAction(
       infos: package,
       wingetCommand: winget,
-      commandOutputStream: onFinished(
-        commandOutputStream,
-        _reloadDbOnDone(winget, package, client),
-      ),
+      wingetTask: wingetTask,
     );
+    wingetTask.hasCompletedSuccessfully.then((success) {
+      if (success) {
+        _reloadDbOnDone(winget, package, client);
+      }
+    });
+
     Provider.of<PackageActionsNotifier>(context, listen: false).add(action);
   }
 
@@ -98,23 +99,5 @@ class PackageActionType {
       wingetDB.updates.removeInfoWhere(info.probablySamePackage);
     }
     wingetDB.updates.reloadFuture(wingetClient);
-  }
-
-  static Stream<T> onFinished<T>(
-    Stream<T> source,
-    FutureOr<void> Function(bool completed) action, {
-    bool onlyOnComplete = false, // if true: don't run on cancel
-  }) async* {
-    var completed = false;
-    try {
-      await for (final e in source) {
-        yield e;
-      }
-      completed = true; // reached natural "done"
-    } finally {
-      if (!onlyOnComplete || completed) {
-        await action(completed);
-      }
-    }
   }
 }

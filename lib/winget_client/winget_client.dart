@@ -8,52 +8,50 @@ abstract class WingetClient {
   WingetClient();
 
   /// Returns a stream of packages which have an update available.
-  Stream<PackageListWithHints> updates(CmdUpdates cmd);
+  WingetTask<PackageListWithHints> updates(CmdUpdates cmd);
 
   /// Returns a stream of installed packages.
-  Stream<PackageListWithHints> installed(CmdInstalled cmd);
+  WingetTask<PackageListWithHints> installed(CmdInstalled cmd);
 
   /// Returns infos about the underlying winget installation.
   /// Includes version and other metadata.
-  Future<List<String>> about(CmdAbout cmd);
+  WingetTask<List<String>> about(CmdAbout cmd);
 
   /// Returns help information for a specific command or general help
   /// if no command is specified.
-  Future<List<String>> help(CmdHelp cmd);
+  WingetTask<List<String>> help(CmdHelp cmd);
 
   /// Searches for packages based on the provided criteria.
-  Stream<PackageListWithHints> search(CmdSearch cmd);
+  WingetTask<PackageListWithHints> search(CmdSearch cmd);
 
   /// Returns a stream of all available packages.
-  Stream<PackageListWithHints> availablePackages(CmdAvailablePackages cmd);
+  WingetTask<PackageListWithHints> availablePackages(CmdAvailablePackages cmd);
 
   /// Opens the settings for the underlying winget installation.
-  Future<List<String>> settings(CmdSettings cmd);
+  WingetTask<List<String>> settings(CmdSettings cmd);
 
   /// Installs a package based on the provided criteria.
-  Stream<List<String>> installPackage(CmdInstall cmd);
+  WingetTask<List<String>> installPackage(CmdInstall cmd);
 
   /// Updates a package based on the provided criteria.
-  Stream<List<String>> updatePackage(CmdUpdate cmd);
+  WingetTask<List<String>> updatePackage(CmdUpdate cmd);
 
   /// Uninstalls a package based on the provided criteria.
-  Stream<List<String>> uninstallPackage(CmdUninstall cmd);
+  WingetTask<List<String>> uninstallPackage(CmdUninstall cmd);
 
   /// Shows details of a specific package.
-  Future<PackageInfosFull> showPackageDetails(CmdShow cmd);
+  WingetTask<PackageInfosFull> showPackageDetails(CmdShow cmd);
 
   /// Executes a custom winget command.
   /// Use with caution as this can run any command, when not guarded properly.
-  Stream<List<String>> customCommand(CmdCustom cmd);
+  WingetTask<List<String>> customCommand(CmdCustom cmd);
 
   /// Returns a stream of the number of currently running winget commands.
   Stream<int> runningCommandsLength(CmdRunningCommands cmd);
 
   /// Cancels a running winget command.
-  void cancelCommand(WingetCommand cmd);
+  Future<void> cancelTask(int taskId);
 }
-
-
 
 final class PackageListWithHints {
   final List<PackageInfosPeek> packages;
@@ -96,8 +94,8 @@ extension ExecuteCommand on WingetClient {
     }
   }
 
-  Stream<PackageListWithHints> executePackageListCommand(
-      WingetPackageListCommand command,
+  WingetTask<PackageListWithHints> executePackageListCommand(
+    WingetPackageListCommand command,
   ) {
     switch (command) {
       case CmdUpdates():
@@ -108,11 +106,11 @@ extension ExecuteCommand on WingetClient {
         return search(command);
       case CmdAvailablePackages():
         return availablePackages(command);
-      }
+    }
   }
 
-  Stream<List<String>> executePackageActionCommand(
-      WingetPackageActionCommand command,
+  WingetTask<List<String>> executePackageActionCommand(
+    WingetPackageActionCommand command,
   ) {
     switch (command) {
       case CmdInstall():
@@ -121,6 +119,25 @@ extension ExecuteCommand on WingetClient {
         return updatePackage(command);
       case CmdUninstall():
         return uninstallPackage(command);
-      }
+    }
   }
+}
+
+class WingetTask<T extends Object> {
+  final Stream<T> result;
+  final int taskId;
+
+  /// Completes with true if the task completed successfully, false otherwise.
+  final Future<bool> hasCompletedSuccessfully;
+
+  WingetTask({
+    required this.result,
+    required this.taskId,
+    required this.hasCompletedSuccessfully,
+  });
+
+  Future<void> cancel(WingetClient client) async => client.cancelTask(taskId);
+
+  /// Returns the last value emitted by the result stream as a Future.
+  Future<T> resultAsFuture() => result.last;
 }

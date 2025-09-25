@@ -21,30 +21,30 @@ class CliWingetClient extends WingetClient {
   AppLocalizations wingetLocale;
 
   @override
-  Future<List<String>> about(CmdAbout cmd) async {
+  WingetTask<List<String>> about(CmdAbout cmd) {
     WingetProcess p = WingetProcess.fromWinget(Winget.about);
-    return p.outputStream.last;
+    return _getWingetTaskFromProcess(p);
   }
 
   @override
-  Stream<PackageListWithHints> availablePackages(CmdAvailablePackages cmd) {
+  WingetTask<PackageListWithHints> availablePackages(CmdAvailablePackages cmd) {
     return search(CmdSearch("", count: cmd.count, filter: cmd.filter));
   }
 
   @override
-  Stream<List<String>> customCommand(CmdCustom cmd) {
+  WingetTask<List<String>> customCommand(CmdCustom cmd) {
     WingetProcess p = WingetProcess.fromCommand(cmd.arguments, name: cmd.name);
-    return p.outputStream;
+    return _getWingetTaskFromProcess(p);
   }
 
   @override
-  Future<List<String>> help(CmdHelp cmd) {
+  WingetTask<List<String>> help(CmdHelp cmd) {
     WingetProcess p = WingetProcess.fromWinget(Winget.help);
-    return p.outputStream.last;
+    return _getWingetTaskFromProcess(p);
   }
 
   @override
-  Stream<List<String>> installPackage(CmdInstall cmd) {
+  WingetTask<List<String>> installPackage(CmdInstall cmd) {
     WingetProcess p = WingetProcess.fromCommand([
       Winget.install.baseCommand,
       if (cmd.disableInteractivity) "--disable-interactivity",
@@ -54,11 +54,11 @@ class CliWingetClient extends WingetClient {
       cmd.id,
       if (cmd.version != null) ...["-v", cmd.version!.stringValue],
     ], name: Winget.install.name);
-    return p.outputStream;
+    return _getWingetTaskFromProcess(p);
   }
 
   @override
-  Stream<PackageListWithHints> installed(CmdInstalled cmd) {
+  WingetTask<PackageListWithHints> installed(CmdInstalled cmd) {
     return _loadPackagesWithTableLoader(
       Winget.installed.fullCommand,
       filter: cmd.filter,
@@ -66,7 +66,7 @@ class CliWingetClient extends WingetClient {
   }
 
   @override
-  Stream<PackageListWithHints> search(CmdSearch cmd) {
+  WingetTask<PackageListWithHints> search(CmdSearch cmd) {
     List<String> command = [
       Winget.search.baseCommand,
       if (cmd.count != null) ...["--count", cmd.count.toString()],
@@ -83,17 +83,33 @@ class CliWingetClient extends WingetClient {
   }
 
   @override
-  Future<List<String>> settings(CmdSettings cmd) {
+  WingetTask<List<String>> settings(CmdSettings cmd) {
     WingetProcess p = WingetProcess.fromWinget(Winget.settings);
-    return p.outputStream.last;
+    return _getWingetTaskFromProcess(p);
   }
 
   @override
-  Future<PackageInfosFull> showPackageDetails(CmdShow cmd) async {
+  WingetTask<PackageInfosFull> showPackageDetails(CmdShow cmd) {
+    Future<PackageInfosFull> result = _fetchPackageDetails(cmd);
+    return WingetTask(
+      result: result.asStream(),
+      taskId: -1,
+      hasCompletedSuccessfully: result.then(
+        (_) => true,
+        onError: (error, stacktrace) {
+          print("$error\n$stacktrace");
+          return false;
+        },
+      ),
+    );
+  }
+
+  Future<PackageInfosFull> _fetchPackageDetails(CmdShow cmd) async {
     if (cmd.source != null) {
       PackageSource source = cmd.source!;
       try {
-        return source.fetchInfos(cmd.userLocale);
+        PackageInfosFull infos = await source.fetchInfos(cmd.userLocale);
+        return infos;
       } catch (e) {
         // Fallback to winget if the source fails
         print(
@@ -119,7 +135,7 @@ class CliWingetClient extends WingetClient {
   }
 
   @override
-  Stream<List<String>> uninstallPackage(CmdUninstall cmd) {
+  WingetTask<List<String>> uninstallPackage(CmdUninstall cmd) {
     List<String> command = [
       Winget.uninstall.baseCommand,
       '--id',
@@ -127,11 +143,11 @@ class CliWingetClient extends WingetClient {
       if (cmd.version != null) ...['-v', cmd.version!.stringValue],
     ];
     WingetProcess p = WingetProcess.fromCommand(command);
-    return p.outputStream;
+    return _getWingetTaskFromProcess(p);
   }
 
   @override
-  Stream<List<String>> updatePackage(CmdUpdate cmd) {
+  WingetTask<List<String>> updatePackage(CmdUpdate cmd) {
     List<String> command = [
       Winget.upgrade.baseCommand,
       '--id',
@@ -142,11 +158,11 @@ class CliWingetClient extends WingetClient {
       if (cmd.includeUnknown) "--include-unknown",
     ];
     WingetProcess p = WingetProcess.fromCommand(command);
-    return p.outputStream;
+    return _getWingetTaskFromProcess(p);
   }
 
   @override
-  Stream<PackageListWithHints> updates(CmdUpdates cmd) {
+  WingetTask<PackageListWithHints> updates(CmdUpdates cmd) {
     List<String> command = [
       Winget.upgrade.baseCommand,
       if (cmd.includeUnknown) "--include-unknown",
@@ -154,13 +170,41 @@ class CliWingetClient extends WingetClient {
     return _loadPackagesWithTableLoader(command, filter: cmd.filter);
   }
 
-  Stream<PackageListWithHints> _loadPackagesWithTableLoader(
+  WingetTask<List<String>> _getWingetTaskFromProcess(WingetProcess p) {
+    return WingetTask(
+      result: p.outputStream,
+      taskId: p.process.id,
+      hasCompletedSuccessfully: _hasProcessCompletedSuccessfully(p),
+    );
+  }
+
+  Future<bool> _hasProcessCompletedSuccessfully(WingetProcess p) {
+    return p.process.exitCode.then(
+      (exitCode) => exitCode == 0,
+      onError: (_) => false,
+    );
+  }
+
+  WingetTask<PackageListWithHints> _loadPackagesWithTableLoader(
     List<String> command, {
     List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter,
-  }) async* {
+  }) {
+    WingetProcess p = WingetProcess.fromCommand(command);
     CliWingetPackageListLoader loader = CliWingetPackageListLoader(
-      command: command,
+      process: p,
     );
+    Stream<PackageListWithHints> result = _packageListStream(filter, loader);
+    return WingetTask(
+      result: result,
+      taskId: p.process.id,
+      hasCompletedSuccessfully: _hasProcessCompletedSuccessfully(p),
+    );
+  }
+
+  Stream<PackageListWithHints> _packageListStream(
+    List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter,
+    CliWingetPackageListLoader loader,
+  ) async* {
     await loader.runWingetProcess(wingetLocale);
     List<PackageInfosPeek> infos = loader.extractInfos();
     if (filter != null) {
@@ -179,12 +223,12 @@ class CliWingetClient extends WingetClient {
   }
 
   @override
-  void cancelCommand(WingetCommand cmd) {
-    return;
-    ProcessWrap? p = ProcessScheduler.instance
-        .runningProcesses.firstWhereOrNull((a) => false);
-    if(p != null) {
+  Future<void> cancelTask(int taskId) {
+    ProcessWrap? p = ProcessScheduler.instance.runningProcesses
+        .firstWhereOrNull((a) => a.id == taskId);
+    if (p != null) {
       ProcessScheduler.instance.removeProcess(p);
     }
+    return Future.value();
   }
 }

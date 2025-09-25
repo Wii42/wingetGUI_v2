@@ -18,15 +18,17 @@ class CliWingetPackageListLoader {
   List<ParsedOutput>? parsed;
   late List<String> wingetCommand;
 
-  CliWingetPackageListLoader({Winget? winget, List<String>? command}) {
+  CliWingetPackageListLoader({Winget? winget, List<String>? command, WingetProcess? process}) {
     log = Logger(this);
     assert(
-      winget != null || command != null,
-      'winget or command must be provided',
+      winget != null || command != null || process != null,
+      'winget or command or process must be provided',
     );
 
     if (winget != null) {
       wingetCommand = winget.fullCommand;
+    } else if (process != null) {
+      wingetCommand = process.command;
     } else {
       wingetCommand = command!;
     }
@@ -42,8 +44,12 @@ class CliWingetPackageListLoader {
   }
 
   Future<List<String>> getRawOutput(Winget wingetCommand) async {
-    WingetProcess winget = WingetProcess.fromWinget(wingetCommand);
-    return await winget.outputStream.last;
+    WingetProcess p  = WingetProcess.fromWinget(wingetCommand);
+    return await p.outputStream.last;
+  }
+
+  Future<List<String>> getRawOutputFromProcess(WingetProcess p) async {
+    return await p.outputStream.last;
   }
 
   Future<List<String>> getRawOutputC(List<String> command) async {

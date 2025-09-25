@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:winget_core/winget_core.dart';
+import 'package:winget_gui/winget_client/winget_client.dart';
 import 'package:winget_gui/winget_client/winget_command.dart';
 
 class PackageActionsNotifier extends ChangeNotifier {
@@ -45,33 +46,27 @@ class PackageActionsNotifier extends ChangeNotifier {
 class PackageAction {
   PackageInfos? infos;
   WingetPackageActionCommand wingetCommand;
-  Stream<List<String>> commandOutputStream;
+  WingetTask<List<String>> wingetTask;
   Key uniqueKey;
   List<String> output = [];
   StreamSubscription<List<String>>? _outputSubscription;
 
-  final Completer<int> _exitCodeCompleter = Completer<int>();
-
   PackageAction({
     required this.wingetCommand,
     this.infos,
-    required this.commandOutputStream,
+    required this.wingetTask,
   }) : uniqueKey = UniqueKey();
 
   void listenForOutput(PackageActionsNotifier notifier) {
-    _outputSubscription = commandOutputStream.listen(
+    _outputSubscription = wingetTask.result.listen(
       (event) {
         output = event;
         notifier.notify();
       },
-      onDone: () => _exitCodeCompleter.complete(0),
-      onError: (err) => _exitCodeCompleter.complete(1),
     );
   }
 
   void stopListeningForOutput() {
     _outputSubscription?.cancel();
   }
-
-  Future<int> get exitCode => _exitCodeCompleter.future;
 }

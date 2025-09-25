@@ -90,8 +90,8 @@ class PackageActionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
     return DecoratedCard(
-      child: FutureBuilder<int>(
-        future: action.exitCode,
+      child: FutureBuilder<bool>(
+        future: action.wingetTask.hasCompletedSuccessfully,
         builder: (context, exitCode) {
           closeWidgetAfterDone(context, exitCode);
           return SizedBox(
@@ -140,10 +140,10 @@ class PackageActionWidget extends StatelessWidget {
         ),
       );
 
-  Widget buttonAtEnd(AsyncSnapshot<int> exitCode, BuildContext context) {
+  Widget buttonAtEnd(AsyncSnapshot<bool> hasCompletedSuccessfully, BuildContext context) {
     AppLocalizations localization = AppLocalizations.of(context)!;
-    if (exitCode.hasData) {
-      if (exitCode.data == 0) {
+    if (hasCompletedSuccessfully.hasData) {
+      if (hasCompletedSuccessfully.data == true) {
         return button(
           FluentIcons.accept,
           localization.ok,
@@ -159,7 +159,7 @@ class PackageActionWidget extends StatelessWidget {
     } else {
       return button(FluentIcons.chrome_close, localization.endProcess, () {
         WingetClient client = context.read<WingetClient>();
-        client.cancelCommand(action.wingetCommand);
+        action.wingetTask.cancel(client);
         //ProcessScheduler.instance.removeProcess(action.process.process);
         closeActionWidget(context);
       });
@@ -182,12 +182,13 @@ class PackageActionWidget extends StatelessWidget {
 
   void closeWidgetAfterDone(
     BuildContext context,
-    AsyncSnapshot<int> snapshot,
+    AsyncSnapshot<bool> snapshot,
   ) async {
     if (snapshot.connectionState == ConnectionState.done) {
       PackageActionsNotifier actions = PackageActionsNotifier.of(context);
-      int exitCode = await action.exitCode;
-      if (exitCode == 0) {
+
+      if (snapshot.data == true) {
+        // Close after delay if successful
         Future.delayed(
           const Duration(seconds: 5),
         ).then((value) => actions.remove(action));
@@ -195,7 +196,7 @@ class PackageActionWidget extends StatelessWidget {
     }
   }
 
-  Widget outputField(AsyncSnapshot<int> exitCode, BuildContext context) {
+  Widget outputField(AsyncSnapshot<bool> exitCode, BuildContext context) {
     //AppLocalizations wingetLocale = OutputHandler.getWingetLocale(context);
     AppLocalizations locale = AppLocalizations.of(context)!;
     //FutureOr<ParsedOutput>? output;
