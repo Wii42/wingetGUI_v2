@@ -27,11 +27,15 @@ class InstallerLocale extends Locale
 
   @override
   String toLanguageTag() {
-    return Locale.fromSubtags(
-            languageCode: languageCode,
-            scriptCode: scriptCode,
-            countryCode: countryCode)
-        .toLanguageTag();
+    try {
+      return Locale.fromSubtags(
+          languageCode: languageCode,
+          scriptCode: scriptCode,
+          countryCode: countryCode)
+          .toLanguageTag();
+    }catch (e) {
+      return [languageCode, scriptCode, countryCode].join('-');
+    }
   }
 
   @override

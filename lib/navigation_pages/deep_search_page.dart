@@ -60,7 +60,7 @@ class DeepSearchPage extends StatelessWidget {
         "Title addon of route parameter of DeepSearchPage must not be null",
       );
     }
-    if (parameters.wingetCommand! is CmdSearch) {
+    if (parameters.wingetCommand! is! CmdSearch) {
       throw Exception(
         "Route parameter of DeepSearchPage must be of type CmdSearch",
       );
