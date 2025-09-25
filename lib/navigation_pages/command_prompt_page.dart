@@ -1,14 +1,17 @@
 import 'dart:math';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/routes.dart';
 import 'package:winget_gui/widget_assets/buttons/command_button.dart';
 import 'package:winget_gui/widget_assets/buttons/page_button.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
-import 'package:winget_gui/winget_commands.dart';
+import 'package:winget_gui/winget_client/winget_command.dart';
 import 'package:winget_gui/winget_process/simple_output.dart';
+
+import '../winget_client/winget_client.dart';
 
 class CommandPromptPage extends StatelessWidget {
   const CommandPromptPage({super.key});
@@ -37,7 +40,11 @@ class CommandPromptPage extends StatelessWidget {
                     const SizedBox(height: 10),
                     CommandPromptField(title: title),
                     const SizedBox(height: 40),
-                    expandingHelpWindow(locale, constraints.maxHeight - 250),
+                    expandingHelpWindow(
+                      locale,
+                      constraints.maxHeight - 250,
+                      context.read<WingetClient>(),
+                    ),
                   ],
                 ),
               ),
@@ -48,7 +55,11 @@ class CommandPromptPage extends StatelessWidget {
     );
   }
 
-  Expander expandingHelpWindow(AppLocalizations locale, double maxHeight) {
+  Expander expandingHelpWindow(
+    AppLocalizations locale,
+    double maxHeight,
+    WingetClient client,
+  ) {
     return Expander(
       header: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -68,7 +79,7 @@ class CommandPromptPage extends StatelessWidget {
           maxHeight: max(maxHeight, 0),
           maxWidth: 500,
         ),
-        child: SimpleOutput.fromWinget(Winget.help),
+        child: SimpleStringOutput(task: client.help(CmdHelp())),
       ),
     );
   }

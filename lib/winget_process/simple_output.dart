@@ -1,25 +1,16 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:winget_gui/winget_commands.dart';
-import 'package:winget_gui/winget_process/winget_process.dart';
 
-import 'process_output.dart';
+import 'task_result_skeleton.dart';
 
-class SimpleOutput extends ProcessOutput {
-  const SimpleOutput({super.key, required super.process});
-
-  factory SimpleOutput.fromCommand(List<String> command, {String? titleInput}) {
-    return SimpleOutput(process: WingetProcess.fromCommand(command));
-  }
-
-  factory SimpleOutput.fromWinget(Winget winget) {
-    return SimpleOutput(process: WingetProcess.fromWinget(winget));
-  }
+abstract class SimpleOutput<T extends Object> extends TaskResultSkeleton<T> {
+  const SimpleOutput({super.key, required super.task});
 
   @override
-  Widget buildPage(
-    AsyncSnapshot<List<String>> streamSnapshot,
-    BuildContext context,
-  ) {
+  Widget buildPage(AsyncSnapshot<T> streamSnapshot, BuildContext context) {
     return Column(children: outputList(streamSnapshot, context));
   }
+}
+
+class SimpleStringOutput extends SimpleOutput<List<String>> with TextListMixin {
+  const SimpleStringOutput({super.key, required super.task});
 }

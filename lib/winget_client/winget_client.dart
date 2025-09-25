@@ -124,8 +124,15 @@ extension ExecuteCommand on WingetClient {
 }
 
 class WingetTask<T extends Object> {
+  /// A stream of results from the winget command.
   final Stream<T> result;
+  /// The unique ID of the task.
   final int taskId;
+  /// The command that was executed to create this task.
+  final WingetCommand cmd;
+  /// A function that can be called to retry the task.
+  /// This function returns a new [WingetTask] instance.
+  final WingetTask<T> Function() retry;
 
   /// Completes with true if the task completed successfully, false otherwise.
   final Future<bool> hasCompletedSuccessfully;
@@ -134,6 +141,8 @@ class WingetTask<T extends Object> {
     required this.result,
     required this.taskId,
     required this.hasCompletedSuccessfully,
+    required this.cmd,
+    required this.retry,
   });
 
   Future<void> cancel(WingetClient client) async => client.cancelTask(taskId);

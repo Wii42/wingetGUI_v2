@@ -3,7 +3,7 @@ import 'package:winget_core/winget_core.dart';
 import 'package:winget_gui/helpers/route_parameter.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/winget_client/winget_command.dart';
-import 'package:winget_gui/winget_process/output_page.dart';
+import 'package:winget_gui/winget_process/result_page.dart';
 
 enum Winget {
   updates('upgrade', options: ['--include-unknown'], aliases: ['update']),
@@ -75,18 +75,6 @@ enum Winget {
 
   List<String> get fullCommand => [baseCommand, ...options];
 
-  Widget processPage(RouteParameter? parameters) {
-    //TODO: add parameters to command
-    return Builder(
-      builder: (context) {
-        return OutputPage.fromWinget(
-          this,
-          parameters: [],
-          titleInput: parameters?.titleAddon,
-        );
-      },
-    );
-  }
 
   List<String> get allNames => [baseCommand, ...aliases];
 

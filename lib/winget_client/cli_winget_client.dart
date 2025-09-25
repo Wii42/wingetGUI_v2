@@ -23,7 +23,7 @@ class CliWingetClient extends WingetClient {
   @override
   WingetTask<List<String>> about(CmdAbout cmd) {
     WingetProcess p = WingetProcess.fromWinget(Winget.about);
-    return _getWingetTaskFromProcess(p);
+    return _getWingetTaskFromProcess(p, cmd, () => about(cmd));
   }
 
   @override
@@ -34,13 +34,13 @@ class CliWingetClient extends WingetClient {
   @override
   WingetTask<List<String>> customCommand(CmdCustom cmd) {
     WingetProcess p = WingetProcess.fromCommand(cmd.arguments, name: cmd.name);
-    return _getWingetTaskFromProcess(p);
+    return _getWingetTaskFromProcess(p, cmd, () => customCommand(cmd));
   }
 
   @override
   WingetTask<List<String>> help(CmdHelp cmd) {
     WingetProcess p = WingetProcess.fromWinget(Winget.help);
-    return _getWingetTaskFromProcess(p);
+    return _getWingetTaskFromProcess(p, cmd, () => help(cmd));
   }
 
   @override
@@ -54,13 +54,15 @@ class CliWingetClient extends WingetClient {
       cmd.id,
       if (cmd.version != null) ...["-v", cmd.version!.stringValue],
     ], name: Winget.install.name);
-    return _getWingetTaskFromProcess(p);
+    return _getWingetTaskFromProcess(p, cmd, () => installPackage(cmd));
   }
 
   @override
   WingetTask<PackageListWithHints> installed(CmdInstalled cmd) {
     return _loadPackagesWithTableLoader(
       Winget.installed.fullCommand,
+      cmd,
+      () => installed(cmd),
       filter: cmd.filter,
     );
   }
@@ -79,13 +81,18 @@ class CliWingetClient extends WingetClient {
         },
       cmd.query,
     ];
-    return _loadPackagesWithTableLoader(command, filter: cmd.filter);
+    return _loadPackagesWithTableLoader(
+      command,
+      cmd,
+      () => search(cmd),
+      filter: cmd.filter,
+    );
   }
 
   @override
   WingetTask<List<String>> settings(CmdSettings cmd) {
     WingetProcess p = WingetProcess.fromWinget(Winget.settings);
-    return _getWingetTaskFromProcess(p);
+    return _getWingetTaskFromProcess(p, cmd, () => settings(cmd));
   }
 
   @override
@@ -101,6 +108,8 @@ class CliWingetClient extends WingetClient {
           return false;
         },
       ),
+      cmd: cmd,
+      retry: () => showPackageDetails(cmd),
     );
   }
 
@@ -143,7 +152,7 @@ class CliWingetClient extends WingetClient {
       if (cmd.version != null) ...['-v', cmd.version!.stringValue],
     ];
     WingetProcess p = WingetProcess.fromCommand(command);
-    return _getWingetTaskFromProcess(p);
+    return _getWingetTaskFromProcess(p, cmd, () => uninstallPackage(cmd));
   }
 
   @override
@@ -158,7 +167,7 @@ class CliWingetClient extends WingetClient {
       if (cmd.includeUnknown) "--include-unknown",
     ];
     WingetProcess p = WingetProcess.fromCommand(command);
-    return _getWingetTaskFromProcess(p);
+    return _getWingetTaskFromProcess(p, cmd, () => updatePackage(cmd));
   }
 
   @override
@@ -167,14 +176,20 @@ class CliWingetClient extends WingetClient {
       Winget.upgrade.baseCommand,
       if (cmd.includeUnknown) "--include-unknown",
     ];
-    return _loadPackagesWithTableLoader(command, filter: cmd.filter);
+    return _loadPackagesWithTableLoader(command, cmd, () => updates(cmd), filter: cmd.filter);
   }
 
-  WingetTask<List<String>> _getWingetTaskFromProcess(WingetProcess p) {
+  WingetTask<List<String>> _getWingetTaskFromProcess(
+    WingetProcess p,
+    WingetCommand cmd,
+    WingetTask<List<String>> Function() retry,
+  ) {
     return WingetTask(
       result: p.outputStream,
       taskId: p.process.id,
       hasCompletedSuccessfully: _hasProcessCompletedSuccessfully(p),
+      cmd: cmd,
+      retry: retry,
     );
   }
 
@@ -186,18 +201,20 @@ class CliWingetClient extends WingetClient {
   }
 
   WingetTask<PackageListWithHints> _loadPackagesWithTableLoader(
-    List<String> command, {
+    List<String> command,
+    WingetCommand cmd,
+    WingetTask<PackageListWithHints> Function() retry, {
     List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter,
   }) {
     WingetProcess p = WingetProcess.fromCommand(command);
-    CliWingetPackageListLoader loader = CliWingetPackageListLoader(
-      process: p,
-    );
+    CliWingetPackageListLoader loader = CliWingetPackageListLoader(process: p);
     Stream<PackageListWithHints> result = _packageListStream(filter, loader);
     return WingetTask(
       result: result,
       taskId: p.process.id,
       hasCompletedSuccessfully: _hasProcessCompletedSuccessfully(p),
+      cmd: cmd,
+      retry: retry,
     );
   }
 

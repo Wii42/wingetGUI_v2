@@ -1,7 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_gui/helpers/extensions/widget_list_extension.dart';
-import 'package:winget_gui/winget_process/output_page.dart';
-import 'package:winget_gui/winget_process/winget_process.dart';
+import 'package:winget_gui/winget_process/result_page.dart';
+
+import '../winget_client/winget_client.dart';
+import '../winget_client/winget_command.dart';
 
 class PaneItemBody extends StatelessWidget {
   static const double iconSize = 40;
@@ -10,7 +13,6 @@ class PaneItemBody extends StatelessWidget {
   final String? title;
   final Widget child;
   final IconData? icon;
-  final WingetProcess? process;
   final void Function()? customReload;
   final void Function()? goBackWithoutPreviousPage;
   final Widget? bodyHeader;
@@ -19,7 +21,6 @@ class PaneItemBody extends StatelessWidget {
     super.key,
     required this.title,
     required this.child,
-    this.process,
     this.customReload,
     this.bodyHeader,
     this.goBackWithoutPreviousPage,
@@ -36,7 +37,6 @@ class PaneItemBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (title != null ||
-                process != null ||
                 canGoBack(context) ||
                 customReload != null ||
                 icon != null)
@@ -78,25 +78,13 @@ class PaneItemBody extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-          if (process != null || customReload != null)
+          if (customReload != null)
             SizedBox(
               width: iconSize,
               height: iconSize,
               child: IconButton(
                 onPressed:
-                    customReload ??
-                    () {
-                      WingetProcess newProcess = process!.clone();
-                      navigator.pushReplacement(
-                        FluentPageRoute(
-                          builder:
-                              (_) => OutputPage(
-                                process: newProcess,
-                                title: title != null ? (_) => title! : null,
-                              ),
-                        ),
-                      );
-                    },
+                    customReload,
                 icon: const Icon(FluentIcons.update_restore),
               ),
             ),

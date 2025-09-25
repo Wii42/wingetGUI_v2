@@ -115,34 +115,7 @@ class MainNavigationState extends State<MainNavigation>
     );
   }
 
-  Widget navigator(Routes winget) {
-    return Navigator(
-      initialRoute: winget.route,
-      onGenerateInitialRoutes:
-          (state, _) => [
-            FluentPageRoute<dynamic>(
-              builder: (context) {
-                return winget.buildPage();
-              },
-            ),
-          ],
-      onGenerateRoute: (settings) {
-        Widget? page;
-        for (Routes route in Routes.values) {
-          if (settings.name == route.route) {
-            page = route.buildPage(settings.arguments);
-          }
-        }
 
-        return FluentPageRoute<dynamic>(
-          builder: (context) {
-            return page ?? notFoundMessage();
-          },
-          settings: settings,
-        );
-      },
-    );
-  }
 
   static Center notFoundMessage() =>
       const Center(child: Text('Oops, page not found'));

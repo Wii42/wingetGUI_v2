@@ -1,7 +1,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:provider/provider.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/winget_process/output_page.dart';
-import 'package:winget_gui/winget_process/winget_process.dart';
+import 'package:winget_gui/winget_client/winget_client.dart';
+import 'package:winget_gui/winget_client/winget_command.dart';
+import 'package:winget_gui/winget_process/result_page.dart';
 
 import 'abstract_button.dart';
 import 'run_button.dart';
@@ -61,10 +63,15 @@ mixin RunAndOutputMixin on RunButton {
     required List<String> command,
     String Function(AppLocalizations)? title,
   }) {
-    WingetProcess process = WingetProcess.fromCommand(command);
     Navigator.of(context).push(
       FluentPageRoute(
-        builder: (_) => OutputPage(process: process, title: title),
+        builder: (context) {
+          WingetClient client = context.read<WingetClient>();
+          return TextResultPage(
+            task: client.customCommand(CmdCustom(command)),
+            title: title,
+          );
+        },
       ),
     );
   }

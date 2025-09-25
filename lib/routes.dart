@@ -15,56 +15,36 @@ import 'package:winget_gui/navigation_pages/publisher_page.dart';
 import 'package:winget_gui/navigation_pages/search_page.dart';
 import 'package:winget_gui/navigation_pages/settings_page.dart';
 import 'package:winget_gui/navigation_pages/updates_page.dart';
-import 'package:winget_gui/widget_assets/package_details_from_web.dart';
 import 'package:winget_gui/widget_assets/package_peek.dart';
 import 'package:winget_gui/widget_assets/pane_item_body.dart';
 import 'package:winget_gui/winget_client/winget_client.dart';
+import 'package:winget_gui/winget_client/winget_command.dart';
 import 'package:winget_gui/winget_commands.dart';
+import 'package:winget_gui/winget_process/result_page.dart';
 
 import 'db/package_tables.dart';
 import 'navigation_pages/db_table_page.dart';
 
 enum Routes {
-  updates(
-    icon: FluentIcons.substitutions_in,
-    route: '/updates',
-    winget: Winget.updates,
+  about(
+    icon: FluentIcons.info,
+    route: '/about',
+    winget: Winget.about,
+    body: aboutPage,
   ),
-  installed(
-    icon: FluentIcons.library,
-    route: '/installed',
-    winget: Winget.installed,
-  ),
-  about(icon: FluentIcons.info, route: '/about', winget: Winget.about),
-  help(icon: FluentIcons.help, route: '/help', winget: Winget.help),
-  search(icon: FluentIcons.search, route: '/search', winget: Winget.search),
-  settings(
-    icon: FluentIcons.settings,
-    route: '/settings',
-    winget: Winget.settings,
+  help(
+    icon: FluentIcons.help,
+    route: '/help',
+    winget: Winget.help,
+    body: helpPage,
   ),
   sources(
     icon: FluentIcons.database_source,
     route: '/sources',
     winget: Winget.sources,
-  ),
-  install(
-    icon: FluentIcons.installation,
-    route: '/install',
-    winget: Winget.install,
-  ),
-  upgrade(
-    icon: FluentIcons.substitutions_in,
-    route: '/upgrade',
-    winget: Winget.upgrade,
-  ),
-  uninstall(
-    icon: FluentIcons.delete,
-    route: '/uninstall',
-    winget: Winget.uninstall,
+    body: aboutPage,
   ),
   show(route: 'show', body: packageDetailsPage),
-  upgradeAll(route: '/upgradeAll', winget: Winget.upgradeAll),
   searchPage(
     icon: FluentIcons.search,
     route: '/searchPage',
@@ -113,14 +93,17 @@ enum Routes {
   final String route;
   final IconData? icon;
   final Winget? winget;
-  final Widget Function(RouteParameter? parameters)? body;
+  final Widget Function(RouteParameter? parameters) body;
 
-  const Routes({required this.route, this.body, this.winget, this.icon});
+  const Routes({
+    required this.route,
+    required this.body,
+    this.winget,
+    this.icon,
+  });
 
   Widget buildPage([dynamic parameters]) {
-    assert(winget != null || body != null);
-    if (body != null) return body!(parameters);
-    return winget!.processPage(parameters);
+    return body(parameters);
   }
 
   String title(AppLocalizations local) {
@@ -146,16 +129,40 @@ enum Routes {
   }
 
   static Widget packageDetailsPage(RouteParameter? parameters) {
-    if (parameters is PackageRouteParameter) {
-      PackageInfosPeek package = parameters.package;
-      if (package.isWinget() || package.isMicrosoftStore()) {
-        return PackageDetailsFromWeb(
-          package: package,
+    if (parameters is! PackageRouteParameter) {
+      throw Exception('Parameters must be PackageRouteParameter');
+    }
+    if (parameters.wingetCommand is! CmdShow) {
+      throw Exception('wingetCommand must be CmdShow');
+    }
+    CmdShow cmd = parameters.wingetCommand! as CmdShow;
+    return Builder(
+      builder: (context) {
+        WingetClient client = context.read<WingetClient>();
+        return PackageInfosFullPage(
+          task: client.showPackageDetails(cmd),
           titleInput: parameters.titleAddon,
         );
-      }
-    }
-    return Winget.show.processPage(parameters);
+      },
+    );
+  }
+
+  static Widget aboutPage(RouteParameter? _) {
+    return Builder(
+      builder: (context) {
+        WingetClient client = context.read<WingetClient>();
+        return TextResultPage(task: client.about(CmdAbout()));
+      },
+    );
+  }
+
+  static Widget helpPage(RouteParameter? _) {
+    return Builder(
+      builder: (context) {
+        WingetClient client = context.read<WingetClient>();
+        return TextResultPage(task: client.help(CmdHelp()));
+      },
+    );
   }
 }
 

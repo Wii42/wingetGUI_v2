@@ -472,7 +472,7 @@ class PackageListPackageOptions {
   /// Show an icon indicating if the package is installed
   final bool showInstalledIcon;
 
-  /// If true, if [package.source] is null, it defaults to be the local PC
+  /// If true, if [command.source] is null, it defaults to be the local PC
   final bool defaultSourceIsLocalPC;
   final bool Function(PackageInfosPeek)? packageFilter;
 

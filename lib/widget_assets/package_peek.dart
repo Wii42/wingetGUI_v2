@@ -61,9 +61,8 @@ class PackagePeek extends StatelessWidget {
       pageRoute: Routes.show,
       disabled: !isClickable(),
       routeParameter: PackageRouteParameter(
-        wingetCommand: CmdShow(infos.id!.value.string, source: infos.packageSource, userLocale: locale?.asIntlLocale),
+        wingetCommand: CmdShow(infos.id?.value.string?? "<noID>", source: infos.packageSource, userLocale: locale?.asIntlLocale),
         titleAddon: infos.name?.value,
-        package: infos,
       ),
       tooltipMessage:
           (locale) => infos.name?.value ?? locale.packagePeekTooltip,

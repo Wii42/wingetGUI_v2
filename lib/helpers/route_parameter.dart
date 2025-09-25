@@ -16,11 +16,8 @@ class RouteParameter {
 }
 
 class PackageRouteParameter extends RouteParameter {
-  final PackageInfosPeek package;
-
   const PackageRouteParameter({
-    required this.package,
-    super.wingetCommand,
+    required super.wingetCommand,
     super.titleAddon,
   });
 }
