@@ -46,6 +46,8 @@ class PackageInfosFull extends PackageInfos {
     this.packageLocale,
     this.installationNotes,
     this.installer,
+    super.screenshots,
+    super.checkedForScreenshots = false,
     super.source,
     super.publisher,
     InfoWithLink? publisherInfo, // name and website

@@ -8,6 +8,7 @@ import 'package:winget_gui/helpers/extensions/best_fitting_locale.dart';
 import 'package:winget_gui/helpers/extensions/string_extension.dart';
 import 'package:winget_gui/package_infos/package_infos_extension.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
+import 'package:winget_gui/package_infos/peek_to_full_extension.dart';
 import 'package:yaml/yaml.dart';
 
 import 'github_api/github_api.dart';
@@ -43,6 +44,7 @@ class WingetSource extends PackageSource {
 
   @override
   Stream<PackageInfosFull> fetchInfos(Locale? guiLocale) async* {
+    yield package.toPeek().toFull();
     PackageId packageID =
         package.hasCompleteId() ? package.id!.value : await reconstructFullId();
     yield* extractInfosOnlineFromId(guiLocale, packageID);
