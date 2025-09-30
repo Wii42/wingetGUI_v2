@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
 import 'package:flutter_localized_locales/flutter_localized_locales.dart';
@@ -11,6 +13,7 @@ import 'package:winget_gui/server_interface/marti_clement_server_interface.dart'
 import 'package:winget_gui/server_interface/server_interface.dart';
 import 'package:winget_gui/winget_client/winget_client.dart';
 import 'package:winget_gui/winget_client/winget_command.dart';
+import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
 import 'db/db_message.dart';
 import 'db/package_tables.dart';
@@ -25,6 +28,17 @@ import 'widget_assets/loading_widget.dart';
 const String appTitle = 'WingetGUI';
 
 void main() async {
+  //ProcessWrap p = ProcessWrap.powershell([
+  //  "Get-WingetPackage",
+  //  //"-Id",
+  //  //"Microsoft.Office",
+  //  "|",
+  //  "ForEach-Object { \$_ | ConvertTo-Json -Compress }",
+  //], forceUtf8: true);
+  //p.stdout.transform(utf8.decoder).listen((data) {
+  //  print(data);
+  //});
+
   PersistentStorageService.setImplementation(JsonIsarPersistentStorage());
   ServerInterfaceService.setImplementation(MartiClientServerInterface());
   await initAppPrerequisites();

@@ -5,18 +5,20 @@ import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/output_handling/one_line_info_parser.dart';
 import 'package:winget_gui/output_handling/output_handler.dart';
 import 'package:winget_gui/package_infos/package_infos_full.dart';
+import 'package:winget_gui/package_infos/peek_to_full_extension.dart';
+import 'package:winget_gui/winget_client/cli_winget/process_scheduler_mixin.dart';
 import 'package:winget_gui/winget_client/winget_client.dart';
 import 'package:winget_gui/winget_client/winget_command.dart';
 import 'package:winget_gui/winget_process/winget_process.dart';
 
-import '../output_handling/parsed_output.dart';
-import '../output_handling/show_parser.dart';
-import '../package_sources/package_source.dart';
-import '../winget_commands.dart';
-import '../winget_process/winget_process_scheduler.dart';
+import '../../output_handling/parsed_output.dart';
+import '../../output_handling/show_parser.dart';
+import '../../package_sources/package_source.dart';
+import '../../winget_commands.dart';
+import '../../winget_process/winget_process_scheduler.dart';
 import 'cli_winget_package_list_loader.dart';
 
-class CliWingetClient extends WingetClient {
+class CliWingetClient extends WingetClient with ProcessSchedulerMixin{
   CliWingetClient(this.wingetLocale);
 
   AppLocalizations wingetLocale;
@@ -126,6 +128,7 @@ class CliWingetClient extends WingetClient {
   Stream<PackageInfosFull> _fetchPackageDetails(CmdShow cmd) async* {
     if (cmd.source != null) {
       PackageSource source = cmd.source!;
+      yield source.package.toPeek().toFull();
       try {
         Stream<PackageInfosFull> infos = source.fetchInfos(cmd.userLocale);
         yield* infos;
@@ -206,14 +209,14 @@ class CliWingetClient extends WingetClient {
     return WingetTask(
       result: p.outputStream,
       taskId: p.process.id,
-      hasCompletedSuccessfully: _hasProcessCompletedSuccessfully(p),
+      hasCompletedSuccessfully: hasProcessCompletedSuccessfully(p.process),
       cmd: cmd,
       retry: retry,
     );
   }
 
-  Future<bool> _hasProcessCompletedSuccessfully(WingetProcess p) {
-    return p.process.exitCode.then(
+  static Future<bool> hasProcessCompletedSuccessfully(ProcessWrap p) {
+    return p.exitCode.then(
       (exitCode) => exitCode == 0,
       onError: (_) => false,
     );
@@ -231,7 +234,7 @@ class CliWingetClient extends WingetClient {
     return WingetTask(
       result: result,
       taskId: p.process.id,
-      hasCompletedSuccessfully: _hasProcessCompletedSuccessfully(p),
+      hasCompletedSuccessfully: hasProcessCompletedSuccessfully(p.process),
       cmd: cmd,
       retry: retry,
     );
@@ -251,20 +254,5 @@ class CliWingetClient extends WingetClient {
     }
     List<OneLineInfo> hints = loader.extractHints();
     yield PackageListWithHints(infos, hints);
-  }
-
-  @override
-  Stream<int> runningCommandsLength(CmdRunningCommands cmd) {
-    return ProcessScheduler.instance.queueLengthStream;
-  }
-
-  @override
-  Future<void> cancelTask(int taskId) {
-    ProcessWrap? p = ProcessScheduler.instance.runningProcesses
-        .firstWhereOrNull((a) => a.id == taskId);
-    if (p != null) {
-      ProcessScheduler.instance.removeProcess(p);
-    }
-    return Future.value();
   }
 }

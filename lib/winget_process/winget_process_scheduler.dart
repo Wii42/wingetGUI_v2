@@ -117,6 +117,33 @@ class ProcessWrap implements Process {
     );
   }
 
+  factory ProcessWrap.powershell(
+    List<String> powershellCommand, {
+    bool forceUtf8 = true,
+    List<String> arguments = const [],
+    String? workingDirectory,
+    Map<String, String>? environment,
+    bool includeParentEnvironment = true,
+    bool runInShell = false,
+    ProcessStartMode mode = ProcessStartMode.normal,
+  }) {
+    return ProcessWrap(
+      'powershell',
+      [
+        '-Command',
+        if (forceUtf8) // forces the output to be UTF-8
+          '[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new(\$false); \$OutputEncoding=[System.Text.UTF8Encoding]::new(\$false);',
+        powershellCommand.join(' '),
+        ...arguments,
+      ],
+      workingDirectory: workingDirectory,
+      environment: environment,
+      includeParentEnvironment: includeParentEnvironment,
+      runInShell: runInShell,
+      mode: mode,
+    );
+  }
+
   void start() async {
     if (!hasStarted()) {
       log.info('started $name');

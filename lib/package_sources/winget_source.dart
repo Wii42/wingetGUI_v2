@@ -44,7 +44,6 @@ class WingetSource extends PackageSource {
 
   @override
   Stream<PackageInfosFull> fetchInfos(Locale? guiLocale) async* {
-    yield package.toPeek().toFull();
     PackageId packageID =
         package.hasCompleteId() ? package.id!.value : await reconstructFullId();
     yield* extractInfosOnlineFromId(guiLocale, packageID);

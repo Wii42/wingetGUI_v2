@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
+import 'package:winget_gui/winget_client/ps_client/powershell_winget_client.dart';
 import 'package:winget_gui/winget_client/winget_client.dart';
-import 'package:winget_gui/winget_client/cli_winget_client.dart';
+import 'package:winget_gui/winget_client/cli_winget/cli_winget_client.dart';
 
 
 class GlobalAppData extends StatelessWidget {
@@ -35,7 +36,7 @@ class GlobalAppData extends StatelessWidget {
           update: (_, AppLocales value, WingetClient? previous) {
             AppLocalizations wingetLocale = value.getWingetAppLocalization() ?? AppLocalizations.of(context)!;
             if (previous == null || previous is! CliWingetClient) {
-              return CliWingetClient(wingetLocale);
+              return PowershellWingetClient();
             }
             if (previous.wingetLocale != wingetLocale) {
               return previous..wingetLocale = wingetLocale;
