@@ -48,4 +48,11 @@ class InfoDBMapParser extends InfoAbstractMapParser<String, dynamic> {
   List<String>? maybeTagsFromMap() {
     throw UnimplementedError();
   }
+
+  @override
+  Info<List<VersionOrString>>? maybeVersionOrStringListFromMap(
+      PackageAttribute attribute) {
+    return maybeVersionOrStringFromMap(attribute)
+        ?.castTo<List<VersionOrString>>((value) => [value]);
+  }
 }

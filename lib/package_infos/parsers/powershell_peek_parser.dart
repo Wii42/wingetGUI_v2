@@ -3,6 +3,7 @@ import 'package:winget_core/src/package_infos/info_with_link.dart';
 import 'package:winget_core/src/package_infos/installer_objects/dependencies.dart';
 import 'package:winget_core/src/package_infos/installer_objects/installer.dart';
 import 'package:winget_core/src/package_infos/package_attribute.dart';
+import 'package:winget_core/src/version_or_string.dart';
 import 'package:winget_core/winget_parsers.dart';
 
 import 'info_api_parser.dart';
@@ -87,5 +88,12 @@ class InfoPowershellParser extends InfoAbstractMapParser<String, dynamic>{
     return (detail != null)
         ? Info<String>.fromAttribute(attribute, value: detail)
         : null;
+  }
+
+  @override
+  Info<List<VersionOrString>>? maybeVersionOrStringListFromMap(PackageAttribute attribute) {
+    return maybeListFromMap<VersionOrString>(
+      attribute,
+      parser: (dynamic p1) => VersionOrString.parse(p1.toString()));
   }
 }

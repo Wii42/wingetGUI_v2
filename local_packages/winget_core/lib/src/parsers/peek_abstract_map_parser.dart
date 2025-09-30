@@ -17,8 +17,7 @@ abstract class PeekAbstractMapParser<A, B>
       name: p.maybeStringFromMap(PackageAttribute.name),
       id: p.maybePackageIdFromMap(PackageAttribute.id, source: source.value),
       version: p.maybeVersionOrStringFromMap(PackageAttribute.version),
-      availableVersion:
-          p.maybeVersionOrStringFromMap(PackageAttribute.availableVersion),
+      availableVersions:p.maybeVersionOrStringListFromMap(PackageAttribute.availableVersion),
       match: p.maybeStringFromMap(PackageAttribute.match),
       source: source,
       otherInfos: p.otherDetails(),
@@ -26,3 +25,5 @@ abstract class PeekAbstractMapParser<A, B>
     return infos;
   }
 }
+
+

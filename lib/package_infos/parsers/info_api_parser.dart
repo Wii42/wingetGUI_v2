@@ -52,4 +52,11 @@ abstract class InfoApiParser<A> extends InfoAbstractMapParser<A, dynamic> {
     map.remove(attribute.apiKey!);
     return Info<T>.fromAttribute(attribute, value: parser(node));
   }
+
+  @override
+  Info<List<VersionOrString>>? maybeVersionOrStringListFromMap(
+      PackageAttribute attribute) {
+    return maybeVersionOrStringFromMap(attribute)
+        ?.castTo<List<VersionOrString>>((value) => [value]);
+  }
 }

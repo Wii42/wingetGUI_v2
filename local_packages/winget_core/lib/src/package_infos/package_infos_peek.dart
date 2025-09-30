@@ -8,7 +8,7 @@ import "package_sources.dart";
 
 class PackageInfosPeek extends PackageInfos {
   final Info<String>? match;
-  final Info<VersionOrString>? availableVersion;
+  final Info<List<VersionOrString>>? availableVersions;
 
   PackageInfosPeek({
     super.name,
@@ -16,12 +16,20 @@ class PackageInfosPeek extends PackageInfos {
     super.version,
     super.screenshots,
     super.checkedForScreenshots = false,
-    this.availableVersion,
+    this.availableVersions,
     super.source,
     super.publisher,
     this.match,
     super.otherInfos,
   });
+
+  Info<VersionOrString>? get availableVersion {
+    if (availableVersions == null || availableVersions!.value.isEmpty) {
+      return null;
+    }
+    return Info<VersionOrString>.fromAttribute(PackageAttribute.availableVersion, value: availableVersions!.value.first);
+
+  }
 
   bool hasInfosFull() {
     return source.value != PackageSources.none &&
@@ -73,8 +81,8 @@ class PackageInfosPeek extends PackageInfos {
         value: PackageId.parse('Prototype.Widget')),
     version: Info.fromAttribute(PackageAttribute.version,
         value: VersionOrString.parse('1.0.0')),
-    availableVersion: Info.fromAttribute(PackageAttribute.availableVersion,
-        value: VersionOrString.parse('1.0.1')),
+    availableVersions: Info.fromAttribute(PackageAttribute.availableVersion,
+        value: [VersionOrString.parse('1.0.1')]),
     source: Info.fromAttribute(PackageAttribute.source,
         value: PackageSources.unknownSource),
     match: Info.fromAttribute(PackageAttribute.match, value: 'Tags: prototype'),

@@ -107,4 +107,11 @@ class InfoMapParser extends InfoAbstractMapParser<String, String> {
   Info<Dependencies>? maybeDependenciesFromMap(PackageAttribute dependencies) {
     return maybeValueFromMap<Dependencies>(dependencies, (e) => Dependencies());
   }
+
+  @override
+  Info<List<VersionOrString>>? maybeVersionOrStringListFromMap(
+      PackageAttribute attribute) {
+    return maybeVersionOrStringFromMap(attribute)
+        ?.castTo<List<VersionOrString>>((value) => [value]);
+  }
 }

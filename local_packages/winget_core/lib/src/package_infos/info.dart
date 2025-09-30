@@ -63,4 +63,12 @@ class Info<T extends Object> {
         copyable: copyable,
         couldBeLink: couldBeLink);
   }
+
+  Info<A> castTo<A extends Object>(A Function(T) castFunction) {
+    return Info<A>(
+        title: title,
+        value: castFunction(value),
+        copyable: copyable,
+        couldBeLink: couldBeLink);
+  }
 }

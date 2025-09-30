@@ -131,4 +131,6 @@ abstract class InfoAbstractMapParser<A, B> {
     return maybeValueFromMap(
         packageId, (element) => PackageId.parse(element, source: source));
   }
+
+  Info<List<VersionOrString>>? maybeVersionOrStringListFromMap(PackageAttribute attribute);
 }
