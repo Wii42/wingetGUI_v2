@@ -70,6 +70,30 @@ class ProcessScheduler {
   ]);
 
   Stream<int> get queueLengthStream => _streamController.stream;
+
+  Future<void> killCurrentProcess([ProcessSignal signal = ProcessSignal.sigterm]) async {
+    if (_currentProcess != null) {
+      _currentProcess!.kill(signal);
+      await _currentProcess!.waitOnDone;
+      _currentProcess = null;
+      _startNextProcess();
+      _streamController.add(_processQueue.length);
+    }
+  }
+
+  Future<void> killAllProcesses([ProcessSignal signal = ProcessSignal.sigterm]) async {
+    if (_currentProcess != null) {
+      _currentProcess!.kill(signal);
+      await _currentProcess!.waitOnDone;
+      _currentProcess = null;
+    }
+    while (_processQueue.isNotEmpty) {
+      ProcessWrap process = _processQueue.removeFirst();
+      process.kill(signal);
+      await process.waitOnDone;
+    }
+    _streamController.add(_processQueue.length);
+  }
 }
 
 class ProcessWrap implements Process {

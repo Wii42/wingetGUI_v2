@@ -199,6 +199,13 @@ class TinkeringSection extends StatelessWidget {
               ].withSpaceBetween(height: 10),
             ),
           ),
+          SettingsPage.settingsItem(
+            "Tasks",
+            Button(
+              onPressed: () => client.cancelAllTasks(),
+              child: Text("Cancel all tasks"),
+            ),
+          ),
           PackagePeek.prototypeWidget,
         ].withSpaceBetween(height: 10),
       ),

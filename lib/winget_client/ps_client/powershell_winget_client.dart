@@ -80,7 +80,7 @@ class PowershellWingetClient extends WingetClient with ProcessSchedulerMixin {
   @override
   WingetTask<PackageListWithHints> search(CmdSearch cmd) {
     List<String> command = [
-      "Find-WingGetPackage",
+      "Find-WinGetPackage",
       if (cmd.count != null) ...["-Count", cmd.count.toString()],
       if (cmd.by != null)
         switch (cmd.by!) {

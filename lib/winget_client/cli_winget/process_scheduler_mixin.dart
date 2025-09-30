@@ -19,4 +19,9 @@ mixin ProcessSchedulerMixin on WingetClient{
     }
     return Future.value();
   }
+
+  @override
+  Future<void> cancelAllTasks() {
+    return ProcessScheduler.instance.killAllProcesses();
+  }
 }

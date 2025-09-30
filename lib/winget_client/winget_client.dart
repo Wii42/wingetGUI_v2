@@ -51,6 +51,8 @@ abstract class WingetClient {
 
   /// Cancels a running winget command.
   Future<void> cancelTask(int taskId);
+
+  Future<void> cancelAllTasks();
 }
 
 final class PackageListWithHints {

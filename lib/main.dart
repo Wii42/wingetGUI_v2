@@ -29,7 +29,7 @@ const String appTitle = 'WingetGUI';
 
 void main() async {
   //ProcessWrap p = ProcessWrap.powershell([
-  //  "Get-WingetPackage",
+  //  "Find-WingetPackage",
   //  //"-Id",
   //  //"Microsoft.Office",
   //  "|",
