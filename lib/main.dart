@@ -13,7 +13,6 @@ import 'package:winget_gui/server_interface/marti_clement_server_interface.dart'
 import 'package:winget_gui/server_interface/server_interface.dart';
 import 'package:winget_gui/winget_client/winget_client.dart';
 import 'package:winget_gui/winget_client/winget_command.dart';
-import 'package:winget_gui/winget_process/winget_process_scheduler.dart';
 
 import 'db/db_message.dart';
 import 'db/package_tables.dart';
