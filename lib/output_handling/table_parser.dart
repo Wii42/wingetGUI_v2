@@ -185,7 +185,6 @@ class TableParser extends OutputParser {
   bool isAppTable(TableData table, AppLocalizations wingetLocale) {
     AppLocalizer localizer = AppLocalizer(wingetLocale);
     List<String> columnTitles = table.first.keys.toList();
-    print("required keys: ${PackageAttribute.name.key(localizer)}, ${PackageAttribute.id.key(localizer)}\nfound keys: $columnTitles");
     return columnTitles.contains(PackageAttribute.name.key(localizer)) &&
         columnTitles.contains(PackageAttribute.id.key(localizer));
   }
