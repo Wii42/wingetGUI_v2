@@ -155,6 +155,7 @@ class PackageTables {
       package.availableVersion!.value.isVersion();
 
   static Future<bool> checkWingetAvailable() async {
+    // TODO: make client agnostic; works currently only for CliClient
     ProcessResult result = await Process.run('where', ['winget']);
     return result.exitCode == 0;
   }

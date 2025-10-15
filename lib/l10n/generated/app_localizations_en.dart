@@ -57,7 +57,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String infoKey(String info) {
     String _temp0 = intl.Intl.selectLogic(info, {
-      'id': 'ID',
+      'id': 'Id',
       'description': 'Description',
       'name': 'Name',
       'publisher': 'Publisher',

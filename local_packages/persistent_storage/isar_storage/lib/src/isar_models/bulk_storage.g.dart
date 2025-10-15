@@ -53,7 +53,7 @@ const IsarBulkStorageSchema = CollectionSchema(
   getId: _isarBulkStorageGetId,
   getLinks: _isarBulkStorageGetLinks,
   attach: _isarBulkStorageAttach,
-  version: '3.3.0-dev.1',
+  version: '3.3.0-dev.3',
 );
 
 int _isarBulkStorageEstimateSize(

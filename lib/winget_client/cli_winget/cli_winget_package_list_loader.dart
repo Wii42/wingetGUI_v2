@@ -67,6 +67,7 @@ class CliWingetPackageListLoader {
     OutputHandler handler = OutputHandler(raw, command: command);
     handler.determineResponsibility(wingetLocale);
     List<ParsedOutput> output = await handler.getParsedOutputList(wingetLocale);
+    //print(output);
     return output;
   }
 
