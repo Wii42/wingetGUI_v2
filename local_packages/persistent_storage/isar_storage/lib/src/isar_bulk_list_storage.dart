@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:persistent_storage_interface/interface.dart';
 import 'package:persistent_storage_interface/parsers.dart';
 import 'package:winget_core/winget_core.dart';

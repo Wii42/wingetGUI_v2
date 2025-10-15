@@ -1,4 +1,4 @@
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 abstract class Model<T extends Object>{
   Id id = Isar.autoIncrement;

@@ -1,4 +1,4 @@
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:persistent_storage_interface/interface.dart';
 
 import 'isar_models/favicon.dart';

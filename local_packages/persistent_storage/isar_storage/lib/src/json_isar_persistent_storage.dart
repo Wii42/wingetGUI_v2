@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:json_file_loader/json_file_loader_mixin.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
