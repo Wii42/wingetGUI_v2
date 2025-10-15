@@ -67,6 +67,8 @@ msix_config:
   publisher_display_name: Wi42
   publisher: CN=Wi42, O=Wi42, C=Switzerland
   identity_name: wi42.winget-gui
-  msix_version: 0.0.0.1
+  msix_version: 0.0.0.2
   capabilities: internetClient
   architecture: x64
+  certificate_path: "<path to your pfx file>"
+  certificate_password: "<password for your pfx file>"
