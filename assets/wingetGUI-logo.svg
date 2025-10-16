@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 256 256"
+   aria-labelledby="title desc"
+   role="img"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="wingetGUI-logo.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="2.2695312"
+     inkscape:cx="255.77969"
+     inkscape:cy="286.84337"
+     inkscape:window-width="2172"
+     inkscape:window-height="1464"
+     inkscape:window-x="72"
+     inkscape:window-y="-12"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <title
+     id="title">wingetGUI logo</title>
+  <desc
+     id="desc">A modern blue download arrow entering a gray open box, optimized for small sizes.</desc>
+  <defs
+     id="defs1">
+    <style
+       id="style1">
+      .box { fill: none; stroke: #00579c; stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; }
+      .detail { stroke-width: 10; }
+      .arrow { fill: #53c5f9;}
+    </style>
+  </defs>
+  <!-- slight padding so the glyph feels large but not cramped -->
+  <g
+     transform="translate(12,12) scale(0.91)"
+     id="g3">
+    <!-- Open box base -->
+    <!-- Flaps -->
+    <!-- Center seam -->
+    <!-- Arrow -->
+    <!-- Shaft -->
+    <g
+       inkscape:groupmode="layer"
+       id="layer1"
+       inkscape:label="Layer 1"
+       transform="matrix(1.0989011,0,0,1.0989011,-13.186813,-13.186813)">
+      <rect
+         class="box"
+         x="48"
+         y="120"
+         width="160"
+         height="96"
+         rx="12"
+         ry="12"
+         id="rect2"
+         transform="matrix(0.91,0,0,0.91,12,12)" />
+      <path
+         class="box"
+         d="M48,120 L88,88 L168,88 L208,120"
+         id="path2"
+         transform="matrix(0.91,0,0,0.91,12,12)" />
+      <path
+         class="box detail"
+         d="M128,120 L128,216"
+         id="path3"
+         transform="matrix(0.91,0,0,0.91,12,12)" />
+    </g>
+    <rect
+       class="arrow"
+       x="116"
+       y="40"
+       width="24"
+       height="64"
+       rx="12"
+       ry="12"
+       id="rect1" />
+    <g
+       inkscape:groupmode="layer"
+       id="layer2"
+       inkscape:label="Layer 2"
+       transform="matrix(1.0989011,0,0,1.0989011,-13.186813,-13.186813)">
+      <rect
+         class="arrow"
+         x="175.62013"
+         y="-45.848705"
+         width="24"
+         height="64"
+         rx="12"
+         ry="12"
+         id="rect1-4"
+         style="fill:#53c5f9"
+         transform="matrix(0.64346715,0.64346715,-0.64346715,0.64346715,12,12)" />
+      <rect
+         class="arrow"
+         x="-18.983335"
+         y="134.30037"
+         width="24"
+         height="64"
+         rx="12"
+         ry="12"
+         id="rect1-4-2"
+         style="fill:#53c5f9"
+         transform="matrix(0.64346715,-0.64346715,0.64346715,0.64346715,12,12)" />
+    </g>
+    <!-- Head -->
+  </g>
+  <metadata
+     id="metadata9">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>wingetGUI logo</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>
