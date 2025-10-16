@@ -203,23 +203,43 @@ class PowershellWingetClient extends WingetClient with ProcessSchedulerMixin {
   ) async* {
     final List<PackageInfosPeek> packages = [];
     String lastLine = "";
-    await for (String chunk in data) {
-      chunk = lastLine + chunk;
-      List<String> lines = chunk.split('\n');
-      lastLine = lines.removeLast();
-      for (String line in lines) {
-        line = line.trim();
-        if (line.isEmpty) continue;
-        Map<String, dynamic> map = jsonDecode(line);
-        PowershellPeekParser parser = PowershellPeekParser(map);
-        PackageInfosPeek package = parser.parse();
-        packages.add(package);
-        yield PackageListWithHints(
-          filter != null ? filter(packages) : packages,
-          [],
-        );
+    try {
+      await for (String chunk in data) {
+        chunk = lastLine + chunk;
+        List<String> lines = chunk.split('\n');
+        lastLine = lines.removeLast();
+        for (String line in lines) {
+          line = line.trim();
+          if (line.isEmpty) continue;
+          yield parsePackage(line, packages, filter);
+        }
       }
+      lastLine = lastLine.trim();
+      if (lastLine.isNotEmpty) {
+        yield parsePackage(lastLine, packages, filter);
+      }
+    } finally {
+      // On error or if no data was received, still yield what we have
+      yield PackageListWithHints(
+        filter != null ? filter(packages) : packages,
+        [],
+      );
     }
+  }
+
+  PackageListWithHints parsePackage(
+    String line,
+    List<PackageInfosPeek> packages,
+    List<PackageInfosPeek> Function(List<PackageInfosPeek>)? filter,
+  ) {
+    Map<String, dynamic> map = jsonDecode(line);
+    PowershellPeekParser parser = PowershellPeekParser(map);
+    PackageInfosPeek package = parser.parse();
+    packages.add(package);
+    return PackageListWithHints(
+      filter != null ? filter(packages) : packages,
+      [],
+    );
   }
 
   static const String _forEachToJson =
