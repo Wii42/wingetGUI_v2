@@ -53,7 +53,7 @@ const SettingSchema = CollectionSchema(
   getId: _settingGetId,
   getLinks: _settingGetLinks,
   attach: _settingAttach,
-  version: '3.3.0-dev.3',
+  version: '3.3.2',
 );
 
 int _settingEstimateSize(

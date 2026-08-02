@@ -529,18 +529,18 @@ packages:
     dependency: transitive
     description:
       name: isar_community
-      sha256: "28f59e54636c45ba0bb1b3b7f2656f1c50325f740cea6efcd101900be3fba546"
+      sha256: "683fd093956eac3a660776afb70d65d50a3391b3587b40b89e3d12586b8cc47f"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.0-dev.3"
+    version: "3.3.2"
   isar_community_flutter_libs:
     dependency: transitive
     description:
       name: isar_community_flutter_libs
-      sha256: c2934fe755bb3181cb67602fd5df0d080b3d3eb52799f98623aa4fc5acbea010
+      sha256: c44340fa38c81ef16d924202d443bbe799cde4826be9a31a9dc92ee612e1966f
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.0-dev.3"
+    version: "3.3.2"
   isar_persistent_storage:
     dependency: "direct main"
     description:

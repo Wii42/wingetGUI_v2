@@ -53,7 +53,7 @@ const FaviconSchema = CollectionSchema(
   getId: _faviconGetId,
   getLinks: _faviconGetLinks,
   attach: _faviconAttach,
-  version: '3.3.0-dev.3',
+  version: '3.3.2',
 );
 
 int _faviconEstimateSize(

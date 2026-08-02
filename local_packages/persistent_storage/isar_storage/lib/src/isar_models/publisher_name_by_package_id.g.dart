@@ -54,7 +54,7 @@ const PublisherNameByPackageIdSchema = CollectionSchema(
   getId: _publisherNameByPackageIdGetId,
   getLinks: _publisherNameByPackageIdGetLinks,
   attach: _publisherNameByPackageIdAttach,
-  version: '3.3.0-dev.3',
+  version: '3.3.2',
 );
 
 int _publisherNameByPackageIdEstimateSize(
