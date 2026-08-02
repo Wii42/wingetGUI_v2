@@ -49,8 +49,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^2.6.0
-  dependency_validator: ^5.0.2
+  build_runner: ^2.7.1 # restricted to this version since because of deps resolution with build and dependency_validator
+  dependency_validator: ^5.0.5
   flutter_lints: ^6.0.0
   msix: ^3.16.12
   json_serializable: ^6.11.0
