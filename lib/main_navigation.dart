@@ -64,7 +64,7 @@ class MainNavigationState extends State<MainNavigation>
           pane: NavigationPane(
             displayMode:
                 displayModeIsOpen
-                    ? PaneDisplayMode.open
+                    ? PaneDisplayMode.expanded
                     : PaneDisplayMode.compact,
             header: Padding(
               padding: const EdgeInsets.all(13.5),
@@ -114,8 +114,6 @@ class MainNavigationState extends State<MainNavigation>
       items: createNavItems(children),
     );
   }
-
-
 
   static Center notFoundMessage() =>
       const Center(child: Text('Oops, page not found'));
