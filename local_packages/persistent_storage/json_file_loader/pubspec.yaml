@@ -15,7 +15,7 @@ dependencies:
     path: ../interface
   winget_core:
     path: ../../winget_core
-  ribs_json: ^1.0.0-dev.14
+  ribs_json: ^1.0.0
 
 
 dev_dependencies:
