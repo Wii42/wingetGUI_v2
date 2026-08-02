@@ -5,7 +5,6 @@ import 'package:winget_gui/helpers/settings_cache.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
 import 'package:winget_gui/l10n/generated/app_localizations_en.dart';
 import 'package:winget_gui/winget_client/hybrid_winget_client/hybrid_winget_client.dart';
-import 'package:winget_gui/winget_client/ps_client/powershell_winget_client.dart';
 import 'package:winget_gui/winget_client/winget_client.dart';
 import 'package:winget_gui/winget_client/cli_winget/cli_winget_client.dart';
 

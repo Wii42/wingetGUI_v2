@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:winget_core/winget_core.dart';
@@ -18,7 +20,7 @@ import '../../winget_commands.dart';
 import '../../winget_process/winget_process_scheduler.dart';
 import 'cli_winget_package_list_loader.dart';
 
-class CliWingetClient extends WingetClient with ProcessSchedulerMixin{
+class CliWingetClient extends WingetClient with ProcessSchedulerMixin {
   CliWingetClient(this.wingetLocale);
 
   AppLocalizations wingetLocale;
@@ -116,7 +118,12 @@ class CliWingetClient extends WingetClient with ProcessSchedulerMixin{
       hasCompletedSuccessfully: lastFuture.then(
         (_) => true,
         onError: (error, stacktrace) {
-          print("$error\n$stacktrace");
+          log(
+            "$error\n$stacktrace",
+            name: "CliWingetClient.showPackageDetails",
+            error: error,
+            stackTrace: stacktrace,
+          );
           return false;
         },
       ),
@@ -135,8 +142,10 @@ class CliWingetClient extends WingetClient with ProcessSchedulerMixin{
         return;
       } catch (e) {
         // Fallback to winget if the source fails
-        print(
+        log(
           "Failed to fetch package details from source ${source.manifestUrl}: $e\nFalling back to winget...",
+          name: "CliWingetClient._fetchPackageDetails",
+          error: e,
         );
       }
     }
@@ -216,10 +225,7 @@ class CliWingetClient extends WingetClient with ProcessSchedulerMixin{
   }
 
   static Future<bool> hasProcessCompletedSuccessfully(ProcessWrap p) {
-    return p.exitCode.then(
-      (exitCode) => exitCode == 0,
-      onError: (_) => false,
-    );
+    return p.exitCode.then((exitCode) => exitCode == 0, onError: (_) => false);
   }
 
   WingetTask<PackageListWithHints> _loadPackagesWithTableLoader(

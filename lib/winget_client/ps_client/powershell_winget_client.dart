@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:async/async.dart';
 import 'package:winget_core/winget_core.dart';
@@ -128,7 +129,12 @@ class PowershellWingetClient extends WingetClient with ProcessSchedulerMixin {
       hasCompletedSuccessfully: lastFuture.then(
         (_) => true,
         onError: (error, stacktrace) {
-          print("$error\n$stacktrace");
+          log(
+            "$error\n$stacktrace",
+            name: "PowershellWingetClient.showPackageDetails",
+            error: error,
+            stackTrace: stacktrace,
+          );
           return false;
         },
       ),
@@ -147,8 +153,10 @@ class PowershellWingetClient extends WingetClient with ProcessSchedulerMixin {
         return;
       } catch (e) {
         // Fallback to winget if the source fails
-        print(
+        log(
           "Failed to fetch package details from source ${source.manifestUrl}: $e\nFalling back to winget...",
+          name: "PowershellWingetClient._fetchPackageDetails",
+          error: e,
         );
       }
     } else {

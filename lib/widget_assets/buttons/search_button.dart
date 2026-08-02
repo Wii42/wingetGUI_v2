@@ -15,7 +15,6 @@ class SearchButton extends RunButton with TextButtonMixin, PlainButtonMixin {
   final String searchTarget;
   final String? customButtonText;
 
-  @override
   SearchButton({
     super.key,
     required this.searchTarget,

@@ -33,13 +33,13 @@ class Info<T extends Object> {
       {String Function(PackageLocalizer)? title,
       T? value,
       bool? copyable,
-      bool? couldBe,
+      bool? couldBeLink,
       String? customTitle}) {
     return Info<T>(
         title: title ?? this.title,
         value: value ?? this.value,
         copyable: copyable ?? this.copyable,
-        couldBeLink: couldBe ?? this.couldBeLink,
+        couldBeLink: couldBeLink ?? this.couldBeLink,
         customTitle: customTitle ?? this.customTitle);
   }
 

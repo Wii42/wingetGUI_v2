@@ -1,12 +1,5 @@
-import 'package:winget_core/src/package_infos/info.dart';
-import 'package:winget_core/src/package_infos/info_with_link.dart';
-import 'package:winget_core/src/package_infos/installer_objects/dependencies.dart';
-import 'package:winget_core/src/package_infos/installer_objects/installer.dart';
-import 'package:winget_core/src/package_infos/package_attribute.dart';
-import 'package:winget_core/src/version_or_string.dart';
+import 'package:winget_core/winget_core.dart';
 import 'package:winget_core/winget_parsers.dart';
-
-import 'info_api_parser.dart';
 
 class PowershellPeekParser extends PeekAbstractMapParser<String, dynamic>{
   PowershellPeekParser(super.details);
@@ -38,7 +31,7 @@ class InfoPowershellParser extends InfoAbstractMapParser<String, dynamic>{
         return "AvailableVersions";
       case PackageAttribute.match: return "Match"; // Not used in Powershell
       default:
-        throw ArgumentError("Attribute ${attribute} not supported in Powershell parser");
+        throw ArgumentError("Attribute $attribute not supported in Powershell parser");
     }
   }
 
