@@ -52,7 +52,7 @@ dev_dependencies:
   build_runner: ^2.7.1 # restricted to this version since because of deps resolution with build and dependency_validator
   dependency_validator: ^5.0.5
   flutter_lints: ^6.0.0
-  msix: ^3.16.12
+  msix: ^3.18.0
   json_serializable: ^6.11.0
   ribs_json: ^1.0.0
   flutter_launcher_icons: ^0.14.4
