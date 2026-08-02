@@ -36,7 +36,7 @@ dependencies:
   dart_casing: ^3.0.1
   cron: ^0.6.2
   cached_network_image: ^3.4.1
-  file_picker: ^10.3.2
+  file_picker: ^11.0.3
   persistent_storage_interface:
     path: local_packages/persistent_storage/interface
   isar_persistent_storage:

@@ -29,7 +29,7 @@ class DBTableWidget extends StatelessWidget {
               ),
               Button(
                 onPressed: () async {
-                  String? outputFile = await FilePicker.platform.saveFile(
+                  String? outputFile = await FilePicker.saveFile(
                     dialogTitle: 'Please select an output folder:',
                     fileName: '${table.tableName}.json',
                     allowedExtensions: ['json'],

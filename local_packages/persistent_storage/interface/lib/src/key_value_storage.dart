@@ -56,7 +56,22 @@ abstract class KeyValueSyncStorage<K, V> implements TableRepresentation<K, V> {
 
   @override
   String toJsonString() {
-    return jsonEncode(entries);
+    return jsonEncode(
+        entries.map<String, V>((k, v) => MapEntry(k.toString(), v)),
+        toEncodable: (object) {
+      // Add support for Uri objects, as they are not natively supported by jsonEncode.
+      // If the object is a Uri, convert it to a string. Otherwise, try to call toJson() on the object.
+      if (object is Uri) {
+        return object.toString();
+      }
+      try {
+        return (object as dynamic).toJson();
+      } on NoSuchMethodError {
+        throw UnsupportedError(
+          'Cannot convert ${object.runtimeType} to JSON, object: $object',
+        );
+      }
+    });
   }
 }
 
