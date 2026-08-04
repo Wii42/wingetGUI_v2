@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  fluent_ui: ^4.16.0
+  fluent_ui: ^4.16.1
   system_theme: ^3.3.0
   window_manager: ^0.5.2
   flutter_acrylic: ^1.1.4
