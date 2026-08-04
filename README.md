@@ -8,8 +8,8 @@ WingetGUI is a polished Windows desktop frontend for [Windows Package Manager Wi
 It brings winget into a Fluent UI app with fast package browsing, rich package details, and a cleaner workflow for everyday install and update tasks.
 
 <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-  <img src="assets/screenshot_details_page_light.png" alt="Package details page in light mode" style="max-height: 320px;" />
-  <img src="assets/screenshot_update_page_dark.png" alt="Updates page in dark mode" style="max-height: 320px;" />
+  <img src="assets/screenshot_update_page_dark.png" alt="Updates page in dark mode" style="max-height: 200px;" />
+  <img src="assets/screenshot_details_page_light.png" alt="Package details page in light mode" style="max-height: 200px;" />
 </div>
 
 ## Highlights
