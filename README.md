@@ -4,8 +4,6 @@
   WingetGUI
 </h1>
 
-___
-
 WingetGUI is a polished Windows desktop frontend for [Windows Package Manager WinGet](https://learn.microsoft.com/windows/package-manager/winget/).
 It brings winget into a Fluent UI app with fast package browsing, rich package details, and a cleaner workflow for everyday install and update tasks.
 
