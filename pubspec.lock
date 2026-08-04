@@ -907,7 +907,7 @@ packages:
     source: hosted
     version: "1.0.0"
   ribs_json:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: ribs_json
       sha256: "38c550e0b69738f25bd6a885186b33f56167a69ad9a03a8a7499b1ec6c0cc847"

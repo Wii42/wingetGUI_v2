@@ -9,7 +9,6 @@ import 'package:winget_core/winget_core.dart';
 ///
 /// Intentionally not using any Flutter dependencies, so it can be used in Dart scripts.
 class JsonWebCore {
-
   Future<String> getStringFromWeb(Uri url) async {
     Response request = await get(url).timeout(const Duration(seconds: 5));
     return request.body;
@@ -42,30 +41,5 @@ class JsonWebCore {
       return null;
     }
     return fromJson(packageName, packageObject);
-  }
-
-  Future<Map<String, PackageScreenshots>>
-      parseScreenshotsMapFromMartiClimentRepo(String data) async {
-    Json json = Json.parse(data).getOrElse(
-      () {
-        throw Exception('Error parsing JSON');
-      },
-    );
-    JsonObject? object = json.asObject().toNullable();
-    if (object == null) {
-      log('Json is not an object');
-      return {};
-    }
-    if (!object.contains("icons_and_screenshots")) {
-      log('json does not contain icons_and_screenshots');
-      return {};
-    }
-    JsonObject? packageScreenshotsMap =
-        object.getUnsafe("icons_and_screenshots").asObject().toNullable();
-    if (packageScreenshotsMap == null) {
-      log('"icons_and_screenshots" not an object');
-      return {};
-    }
-    return parseScreenshotsMap(packageScreenshotsMap);
   }
 }
