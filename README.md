@@ -37,9 +37,9 @@ It brings winget into a Fluent UI app with fast package browsing, rich package d
 
 ## Requirements
 
-- Windows 10/11 with desktop support
-- Flutter SDK 3.7 or newer
-- Winget installed and available on the machine
+- Windows 10/11
+- [Winget](https://learn.microsoft.com/de-de/windows/package-manager/winget/#install-winget) installed and available on the machine
+- [WinGet PowerShell Module](https://www.powershellgallery.com/packages/Microsoft.WinGet.Client/) installed and available
 
 ## Getting started
 
@@ -72,7 +72,7 @@ dart run msix:create
 ### Self-signed certificate
 To create a self-signed certificate for testing purposes, follow these steps:
 1. Create a self-signed certificate and add it to "Local Machine Trusted People".
-   See https://learn.microsoft.com/en-us/windows/msix/package/create-certificate-package-signing#use-new-selfsignedcertificate-to-create-a-certificate for reference.
+   See [this guide](https://learn.microsoft.com/en-us/windows/msix/package/create-certificate-package-signing#use-new-selfsignedcertificate-to-create-a-certificate) for reference.
 2. Use the path to the .pfx file created in step 1 and the password to the msix config in the pubspec.yaml file.
 
 
