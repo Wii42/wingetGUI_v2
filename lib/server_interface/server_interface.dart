@@ -1,14 +1,14 @@
 import 'package:winget_core/winget_core.dart';
 
-/// Service that provides a abstract Interface co communicate with the server,
-/// at the moment the WingetUI Githhub repo of marticliment.
+/// Service that provides a abstract Interface to communicate with the server,
+/// at the moment the UniGetUI GitHub repo from Devolutions.
 abstract class ServerInterface {
-  /// Loads pacakge screenshots from  a server,
-  /// at the moment from the WingetUI repo of marticliment.
+  /// Loads package screenshots from  a server,
+  /// at the moment from the UniGetUI repo from Devolutions.
   Future<Map<String, PackageScreenshots>> fetchPackageScreenshotsFromServer();
 
   /// Loads invalid image urls from a server,
-  /// at the moment from the WingetUI repo of marticliment.
+  /// at the moment from the UniGetUI repo from Devolutions.
   Future<List<Uri>> fetchInvalidImageUrlsFromServer();
 }
 

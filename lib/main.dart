@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:winget_gui/l10n/generated/app_localizations.dart';
-import 'package:winget_gui/server_interface/marti_clement_server_interface.dart';
+import 'package:winget_gui/server_interface/unigetui_server_interface.dart';
 import 'package:winget_gui/server_interface/server_interface.dart';
 import 'package:winget_gui/winget_client/winget_client.dart';
 import 'package:winget_gui/winget_client/winget_command.dart';
@@ -37,7 +37,7 @@ void main() async {
   //});
 
   PersistentStorageService.setImplementation(JsonIsarPersistentStorage());
-  ServerInterfaceService.setImplementation(MartiClientServerInterface());
+  ServerInterfaceService.setImplementation(UniGetUIServerInterface());
   await initAppPrerequisites();
   runApp(const WingetGui());
 }
