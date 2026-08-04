@@ -73,6 +73,7 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
   }
 
   Future<void> fetchWebScreenshots() async {
+    log.info("Fetching screenshots from server...");
     try {
       Map<String, PackageScreenshots> data =
           await ServerInterfaceService.instance
@@ -88,6 +89,7 @@ extension ScreenshotsListLoader on PackageScreenshotsList {
   }
 
   Future<void> fetchWebInvalidScreenshots() async {
+    log.info("Fetching invalid screenshots from server...");
     try {
       invalidScreenshotUrls =
           await ServerInterfaceService.instance
