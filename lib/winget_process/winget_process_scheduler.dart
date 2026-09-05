@@ -24,7 +24,7 @@ class ProcessScheduler {
       _startNextProcess();
     }
     log.info(currentState());
-    _streamController.add(_processQueue.length);
+    _notifyProcessQueueLength();
   }
 
   void removeProcess(ProcessWrap process) {
@@ -36,26 +36,35 @@ class ProcessScheduler {
       _processQueue.remove(process);
     }
     log.info(currentState());
-    _streamController.add(_processQueue.length);
+    _notifyProcessQueueLength();
   }
 
   int getProcessId() {
     return _getProcessId++;
   }
 
-  void _startNextProcess() {
-    if (_currentProcess == null) {
-      if (_processQueue.isNotEmpty) {
-        _currentProcess = _processQueue.removeFirst();
-        _currentProcess!.start();
-        log.info(currentState());
-        _streamController.add(_processQueue.length);
-        _currentProcess!.waitOnDone.then((value) {
-          _currentProcess = null;
-          _startNextProcess();
-        });
-      }
+  void _startNextProcess() async {
+    if (_currentProcess != null || _processQueue.isEmpty) {
+      return;
     }
+    _currentProcess = _processQueue.removeFirst();
+    try {
+      await _currentProcess!.start();
+      log.info(currentState());
+      _notifyProcessQueueLength();
+      await _currentProcess!.waitOnDone;
+    } catch (e) {
+      log.error('Error starting process: $e');
+    } finally {
+      _currentProcess = null;
+      _startNextProcess();
+    }
+  }
+
+  void _notifyProcessQueueLength() {
+    _streamController.add(_processQueue.length);
+    //print(_currentProcess);
+    //print(_processQueue.map((e) => e.name));
   }
 
   String currentState() {
@@ -71,17 +80,21 @@ class ProcessScheduler {
 
   Stream<int> get queueLengthStream => _streamController.stream;
 
-  Future<void> killCurrentProcess([ProcessSignal signal = ProcessSignal.sigterm]) async {
+  Future<void> killCurrentProcess([
+    ProcessSignal signal = ProcessSignal.sigterm,
+  ]) async {
     if (_currentProcess != null) {
       _currentProcess!.kill(signal);
       await _currentProcess!.waitOnDone;
       _currentProcess = null;
       _startNextProcess();
-      _streamController.add(_processQueue.length);
+      _notifyProcessQueueLength();
     }
   }
 
-  Future<void> killAllProcesses([ProcessSignal signal = ProcessSignal.sigterm]) async {
+  Future<void> killAllProcesses([
+    ProcessSignal signal = ProcessSignal.sigterm,
+  ]) async {
     if (_currentProcess != null) {
       _currentProcess!.kill(signal);
       await _currentProcess!.waitOnDone;
@@ -92,7 +105,7 @@ class ProcessScheduler {
       process.kill(signal);
       await process.waitOnDone;
     }
-    _streamController.add(_processQueue.length);
+    _notifyProcessQueueLength();
   }
 }
 
@@ -168,7 +181,7 @@ class ProcessWrap implements Process {
     );
   }
 
-  void start() async {
+  Future<void> start() async {
     if (!hasStarted()) {
       log.info('started $name');
       _process = await Process.start(
